@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: RNCB
+glossary-type: term
+header: ''
+level: 1.139
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: zaYE17IUnZoN_9GLEJWznhX-kl7zlumq7h18FJONcOo=
+text: |
+  An acronym for @term{RTEMS-GLOS-TERM-REGIONCONTROLBLOCK}.
+type: glossary

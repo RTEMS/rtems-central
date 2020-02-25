@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: Configuration Table
+glossary-type: term
+header: ''
+level: 1.25
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: UFR4UiVAKBOMG9np8e-ih6H5Dd7cd7jEcsl1y2dvmT4=
+text: |
+  A table which contains information used to tailor RTEMS for a particular
+  application.
+type: glossary

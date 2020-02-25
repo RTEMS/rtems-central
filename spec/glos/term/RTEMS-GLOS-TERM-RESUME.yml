@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: resume
+glossary-type: term
+header: ''
+level: 1.136
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: zOwcxvi8Q1pV7V8xPNB702OCM6lLlNuNonuy6XpWrUU=
+text: |
+  Removing a task from the suspend state.  If the task's state is ready
+  following a call to the ``rtems_task_resume`` directive, then the task is
+  available for scheduling.
+type: glossary

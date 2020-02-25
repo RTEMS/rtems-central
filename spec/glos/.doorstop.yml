@@ -1,0 +1,15 @@
+settings:
+  digits: 3
+  parent: RTEMS
+  prefix: RTEMS-GLOS
+  sep: '-'
+attributes:
+  defaults:
+    SPDX-License-Identifier: CC-BY-SA-4.0
+    enabled-by: []
+    glossary-type: glossary-group
+    type: glossary
+  reviewed:
+  - enabled-by
+  - glossary-type
+  - type

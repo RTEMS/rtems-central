@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: preempt
+glossary-type: term
+header: ''
+level: 1.114
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: GV0GxRMJBqDsX-amDnGCehdpiCJo9X92N3XdoJFZiO0=
+text: |
+  The act of forcing a task to relinquish the processor and dispatching to
+  another task.
+type: glossary

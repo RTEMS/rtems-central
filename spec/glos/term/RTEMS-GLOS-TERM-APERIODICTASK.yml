@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: aperiodic task
+glossary-type: term
+header: ''
+level: 1.2
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: WSyJnx323sssb-5padJEU84ScGf0h2sbgpE2YkvJ7AY=
+text: |
+  A task which must execute only at irregular intervals and has only a soft
+  deadline.
+type: glossary

@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: reentrant
+glossary-type: term
+header: ''
+level: 1.129
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: XUKc42o-HFdOBbI07eKXaFnYvFIXaF4u3jsvxZHWJaM=
+text: |
+  A term used to describe routines which do not modify themselves or global
+  variables.
+type: glossary

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: software item
+glossary-type: term
+header: ''
+level: 1.201
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: h-oC1vE_cuUVjlZQjg9nX7ra2C7rOZ4Gx9aPi7cmc18=
+text: |
+  This term has the same meaning as @term{RTEMS-GLOS-TERM-SOFTWAREPRODUCT}.
+type: glossary

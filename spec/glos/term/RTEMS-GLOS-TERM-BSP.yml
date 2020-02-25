@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: BSP
+glossary-type: term
+header: ''
+level: 1.16
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: Tiv7hHMbE8V-kjIiQim97YcAfn7grnoRejEnFwDHJ18=
+text: |
+  An acronym for @term{RTEMS-GLOS-TERM-BOARDSUPPORTPACKAGE}.
+type: glossary

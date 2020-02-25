@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: sporadic task
+glossary-type: term
+header: ''
+level: 1.159
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: 5fyc7qYcvrGcBtofRk3GYQXT-K1fu3hwfccVa1idcyA=
+text: |
+  A task which executes at irregular intervals and must comply with a hard
+  deadline.  A minimum period of time between successive iterations of the
+  task can be guaranteed.
+type: glossary

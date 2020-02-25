@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: GNU
+glossary-type: term
+header: ''
+level: 1.205
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: FkzB1mSLgsVXYUKUXVfcXYOS0j_Zuqj2IPtWog4hzr0=
+text: |
+  An acronym for `GNU's Not Unix <https://www.gnu.org/>`_.
+type: glossary

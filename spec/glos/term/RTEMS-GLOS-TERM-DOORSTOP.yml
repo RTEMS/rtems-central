@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: Doorstop
+glossary-type: term
+header: ''
+level: 1.196
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: NnytZzXt7TtxFghEpsjWZBHGHBfvPH3O3Cr5t-G3T-0=
+text: |
+  `Doorstop <https://github.com/doorstop-dev/doorstop>`_ is a
+  requirements management tool.
+type: glossary

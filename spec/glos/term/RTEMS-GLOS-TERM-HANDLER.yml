@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: handler
+glossary-type: term
+header: ''
+level: 1.56
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: KAhc4BUBW1uTU1A02wF2B99hULvUUW9487bhiGDaGDM=
+text: |
+  The equivalent of a manager, except that it is internal to RTEMS and
+  forms part of the core.  A handler is a collection of routines which
+  provide a related set of functions.  For example, there is a handler used
+  by RTEMS to manage all objects.
+type: glossary

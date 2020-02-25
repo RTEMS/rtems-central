@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: QCB
+glossary-type: term
+header: ''
+level: 1.124
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: MwUhwLVYFwA3QI7J4HTHUlZapn4zflcfPefAgvjaU3Y=
+text: |
+  An acronym for @term{RTEMS-GLOS-TERM-MESSAGEQUEUECONTROLBLOCK}.
+type: glossary

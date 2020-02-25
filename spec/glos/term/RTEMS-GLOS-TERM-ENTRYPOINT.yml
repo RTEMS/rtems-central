@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: entry point
+glossary-type: term
+header: ''
+level: 1.42
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: 4U-ExQLj-wznrclrq6YNlnB7UqHmy2xVa4ZTvXKobgc=
+text: |
+  The address at which a function or task begins to execute.  In C, the
+  entry point of a function is the function's name.
+type: glossary

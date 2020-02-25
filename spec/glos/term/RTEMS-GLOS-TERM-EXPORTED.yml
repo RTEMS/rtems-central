@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: exported
+glossary-type: term
+header: ''
+level: 1.49
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: 8px3o9DnyoUBnyXNQBll91ME7zy-kXpOxrg7w8Bev8M=
+text: |
+  An object known by all nodes in a multiprocessor system.  An object
+  created with the GLOBAL attribute will be exported.
+type: glossary

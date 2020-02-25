@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: C++11
+glossary-type: term
+header: ''
+level: 1.18
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: Ty54tQKyH1XVfXpHdzJj0c4pKY1VTS3rLGJeCio9EZ4=
+text: |
+  The standard ISO/IEC 14882:2011.
+type: glossary

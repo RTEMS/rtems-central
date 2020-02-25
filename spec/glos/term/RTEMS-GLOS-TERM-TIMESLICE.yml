@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: timeslice
+glossary-type: term
+header: ''
+level: '1.180'
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: Uoz6HmQVnVK5xB5Hkm4EMeHztuh7qkjKTU7D-1VGJUU=
+text: |
+  The application defined unit of time in which the processor is allocated.
+type: glossary

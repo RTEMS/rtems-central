@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: awakened
+glossary-type: term
+header: ''
+level: 1.9
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: MzbW-39nfv3WrfLDzLpvqG4-di8v6y6YUH1DRuoAkNk=
+text: |
+  A term used to describe a task that has been unblocked and may be
+  scheduled to the CPU.
+type: glossary

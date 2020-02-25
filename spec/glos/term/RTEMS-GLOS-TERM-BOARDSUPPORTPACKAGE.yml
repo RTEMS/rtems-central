@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: Board Support Package
+glossary-type: term
+header: ''
+level: 1.14
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: fnVCw1JMTtLxooFiyT7E8qPtYgG0JKOUrT2vQzauCpQ=
+text: |
+  A collection of device initialization and control routines specific to a
+  particular type of board or collection of boards.
+type: glossary

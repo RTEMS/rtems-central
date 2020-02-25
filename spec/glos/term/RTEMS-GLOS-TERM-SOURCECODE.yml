@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: source code
+glossary-type: term
+header: ''
+level: 1.203
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: 2NHMdvl73RaHgZ4gMiNkRppSUGxLA-ZCM5bwJb42MAo=
+text: |
+  This project uses the *source code* definition of the
+  `Linux Information Project <http://www.linfo.org/source_code.html>`_:
+  "Source code (also referred to as source or code) is the version of
+  software as it is originally written (i.e., typed into a computer) by a
+  human in plain text (i.e., human readable alphanumeric characters)."
+type: glossary

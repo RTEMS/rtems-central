@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: major number
+glossary-type: term
+header: ''
+level: 1.78
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: u7h1Theu_l_upYKP2rMuh3AoqiniHQIng07lkVTyVfo=
+text: |
+  The index of a device driver in the Device Driver Table.
+type: glossary

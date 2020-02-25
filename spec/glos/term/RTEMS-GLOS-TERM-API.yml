@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: API
+glossary-type: term
+header: ''
+level: 1.3
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: TWUnYYzCvG1I0QNVqPLZ38LpTlHNzH7tHCVJ_-gM3Ek=
+text: |
+  An acronym for Application Programming Interface.
+type: glossary

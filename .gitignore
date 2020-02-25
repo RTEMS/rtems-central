@@ -1,0 +1,5 @@
+.coverage
+env
+.mypy_cache
+__pycache__
+spec.pickle

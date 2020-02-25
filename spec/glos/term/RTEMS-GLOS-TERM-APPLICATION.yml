@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: application
+glossary-type: term
+header: ''
+level: 1.4
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: XivkI0HVdkAO4DvvR_nw-HjrWdw8vUCWG5XOyUkv7kM=
+text: |
+  In this document, software which makes use of RTEMS.
+type: glossary

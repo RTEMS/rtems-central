@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: priority inversion
+glossary-type: term
+header: ''
+level: 1.118
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: 5z9lL7o4N5fvTtBYP_Wr_i2phROODI3eD3Jd8ipxZkc=
+text: |
+  A form of indefinite postponement which occurs when a high priority tasks
+  requests access to shared resource currently allocated to low priority
+  task.  The high priority task must block until the low priority task
+  releases the resource.
+type: glossary

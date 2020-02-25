@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: poll
+glossary-type: term
+header: ''
+level: '1.110'
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: mg6XHi8POBJ6jXY_peVvOHIAYaMdu1EK-aXNJWekWCM=
+text: |
+  A mechanism used to determine if an event has occurred by periodically
+  checking for a particular status.  Typical events include arrival of
+  data, completion of an action, and errors.
+type: glossary

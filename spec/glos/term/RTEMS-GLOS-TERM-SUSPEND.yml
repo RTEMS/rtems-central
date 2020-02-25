@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: suspend
+glossary-type: term
+header: ''
+level: 1.162
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: GvqTlyNZ74XHlvQOEXUZX-omYmMOlEOj7TZthBGxHjY=
+text: |
+  A term used to describe a task that is not competing for the CPU because it
+  has had a ``rtems_task_suspend`` directive.
+type: glossary

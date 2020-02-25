@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: ISR
+glossary-type: term
+header: ''
+level: '1.70'
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: Kpm8LWc8NJUXN4Q7weGOuPEYyiGLzf2sxYZ43qfmlP0=
+text: |
+  An acronym for @term{RTEMS-GLOS-TERM-INTERRUPTSERVICEROUTINE}.
+type: glossary

@@ -1,0 +1,16 @@
+settings:
+  digits: 3
+  parent: RTEMS-GLOS
+  prefix: RTEMS-GLOS-TERM
+  sep: '-'
+attributes:
+  defaults:
+    SPDX-License-Identifier: CC-BY-SA-4.0
+    enabled-by: []
+    glossary-type: term
+    type: glossary
+  reviewed:
+  - enabled-by
+  - glossary-term
+  - glossary-type
+  - type

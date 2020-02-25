@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: heterogeneous
+glossary-type: term
+header: ''
+level: '1.60'
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: LrmgS52aD_h2sdg_KHczci6TfQlEwUCt_SJTVJOD9sQ=
+text: |
+  A multiprocessor computer system composed of dissimilar processors.
+type: glossary

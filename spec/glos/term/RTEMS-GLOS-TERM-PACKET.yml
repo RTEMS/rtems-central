@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: packet
+glossary-type: term
+header: ''
+level: 1.104
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: sh2QmRA2JnH1Jax6IFvOsG90F1efLQGFysZT1DjoMkI=
+text: |
+  A buffer which contains the messages passed between nodes in a
+  multiprocessor system.  A packet is the contents of an envelope.
+type: glossary

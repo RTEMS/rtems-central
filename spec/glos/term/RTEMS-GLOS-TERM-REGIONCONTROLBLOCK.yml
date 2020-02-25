@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: Region Control Block
+glossary-type: term
+header: ''
+level: 1.131
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: z6vX5l8S933sbSfeeps764orVNQw6BNQjrFcG3foQyI=
+text: |
+  A data structure associated with each region used by RTEMS to manage that
+  region.
+type: glossary

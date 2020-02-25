@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: TCB
+glossary-type: term
+header: ''
+level: 1.172
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: KJcc81zY_4KUf8oXIu-oJZ5DRMiFc9DoDsmhl9PZxac=
+text: |
+  An acronym for @term{RTEMS-GLOS-TERM-TASKCONTROLBLOCK}.
+type: glossary

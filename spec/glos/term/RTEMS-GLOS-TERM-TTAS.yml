@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: TTAS
+glossary-type: term
+header: ''
+level: 1.185
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: fVnxRO5QoF9Cn5eoPDtMmZBtB7o1LHK-3Q9ccZ9yo6U=
+text: |
+  An acronym for Test and Test-And-Set.
+type: glossary

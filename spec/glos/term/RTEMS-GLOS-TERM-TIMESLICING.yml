@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: timeslicing
+glossary-type: term
+header: ''
+level: 1.181
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: JhHhAFVlGo24GNJDYewC5qCcxs-aSSoHL_XAlYmBrTA=
+text: |
+  A task scheduling discipline in which tasks of equal priority are
+  executed for a specific period of time before being preempted by another
+  task.
+type: glossary

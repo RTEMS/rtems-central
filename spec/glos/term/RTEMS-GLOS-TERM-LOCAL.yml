@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: local
+glossary-type: term
+header: ''
+level: 1.74
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: uVcFhuI-FbXFDHs23thCJexNKyrUpLkCGvMlVhtTdkU=
+text: |
+  An object which was created with the LOCAL attribute and is accessible
+  only on the node it was created and resides upon.  In a single processor
+  configuration, all objects are local.
+type: glossary

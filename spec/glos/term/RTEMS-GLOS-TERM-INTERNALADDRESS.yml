@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: internal address
+glossary-type: term
+header: ''
+level: 1.66
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: EbC3-iR4kN6gVTZoITZ6TASlDvziwj1OWS9finsuYrI=
+text: |
+  The address used to access dual-ported memory by the node which owns the
+  memory.
+type: glossary

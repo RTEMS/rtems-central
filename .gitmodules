@@ -1,0 +1,6 @@
+[submodule "external/rtems"]
+	path = external/rtems
+	url = git://git.rtems.org/rtems.git
+[submodule "external/rtems-docs"]
+	path = external/rtems-docs
+	url = git://git.rtems.org/rtems-docs.git

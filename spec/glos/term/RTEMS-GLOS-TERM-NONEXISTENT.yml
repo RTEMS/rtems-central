@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: non-existent
+glossary-type: term
+header: ''
+level: 1.97
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: zc1vyqX-Gki7e3sZjWLPgmlZBSrMyjOiihdKs6nsdG0=
+text: |
+  The state occupied by an uncreated or deleted task.
+type: glossary

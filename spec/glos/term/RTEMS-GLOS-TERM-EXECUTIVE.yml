@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: executive
+glossary-type: term
+header: ''
+level: 1.48
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: zTiPMMXLfgpLOOc8EZ90BkwEDzlwiVnU4OK1iUXWz2U=
+text: |
+  In this document, this term is used to referred to RTEMS.  Commonly, an
+  executive is a small real-time operating system used in embedded systems.
+type: glossary

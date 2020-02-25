@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: directives
+glossary-type: term
+header: ''
+level: 1.37
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: Jwv80TV7liKv42jelrFgR1Ita1007E6QXFowfEnR6po=
+text: |
+  RTEMS' provided routines that provide support mechanisms for real-time
+  applications.
+type: glossary

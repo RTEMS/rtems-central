@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: multiprocessor
+glossary-type: term
+header: ''
+level: '1.90'
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: KlKC79jeuhtRenJRNRqONazQ8ldjajh4xr4XON5hAQA=
+text: |
+  A computer with multiple CPUs available for executing applications.
+type: glossary

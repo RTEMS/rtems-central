@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: ABI
+glossary-type: term
+header: ''
+level: 1.194
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: Sj96lEs0MItYPQJSbhz2Yk2i3ZJCfQD5tBpldib3SpQ=
+text: |
+  An acronym for Application Binary Interface.
+type: glossary

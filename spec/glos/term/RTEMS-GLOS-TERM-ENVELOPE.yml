@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: envelope
+glossary-type: term
+header: ''
+level: 1.43
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: cPlNnYolEjPflcyuDjjagYgcBN9eqrpd1G7F0NWKvaA=
+text: |
+  A buffer provided by the MPCI layer to RTEMS which is used to pass
+  messages between nodes in a multiprocessor system.  It typically contains
+  routing information needed by the MPCI.  The contents of an envelope are
+  referred to as a packet.
+type: glossary

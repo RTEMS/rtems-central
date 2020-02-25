@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: interrupt
+glossary-type: term
+header: ''
+level: 1.67
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: X3Fp9zyCSiV78kbSdOaXMMXu4DX0b5dhJefMUFEa_KA=
+text: |
+  A hardware facility that causes the CPU to suspend execution, save its
+  status, and transfer control to a specific location.
+type: glossary

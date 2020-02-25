@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+glossary-term: pool
+glossary-type: term
+header: ''
+level: 1.111
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: PaYpNc6X1tzq2HoSGItcXheczS-Wn2a2QVnMZ5JdDbk=
+text: |
+  A collection from which resources are allocated.
+type: glossary
