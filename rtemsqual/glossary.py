@@ -59,9 +59,7 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     for item in sorted(terms.values(),
                        key=lambda x: x["glossary-term"].lower()):
         text = macro_to_sphinx.substitute(item["text"].strip())
-        content.register_license(item["SPDX-License-Identifier"])
-        for statement in item["copyrights"]:
-            content.register_copyright(statement)
+        item.register_license_and_copyrights(content)
         content.add_definition_item(item["glossary-term"], text, indent=1)
     content.add_licence_and_copyrights()
     return content
