@@ -118,6 +118,12 @@ class Copyrights(object):
         return statements
 
 
+def _make_lines(lines):
+    if not isinstance(lines, list):
+        return lines.strip("\n").split("\n")
+    return lines
+
+
 class SphinxContent(object):
     """ This class builds Sphinx content. """
     def __init__(self):
@@ -149,6 +155,11 @@ class SphinxContent(object):
             self._content += indent * "    " + line + "\n"
         else:
             self._content += "\n"
+
+    def add_lines(self, lines, indent=0):
+        """ Adds a lines to the content. """
+        for line in _make_lines(lines):
+            self.add_line(line, indent)
 
     def add_index_entries(self, entries):
         """ Adds a list of index entries the content. """

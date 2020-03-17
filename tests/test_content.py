@@ -107,6 +107,15 @@ class TestSphinxContent(object):
         sc.add_line("")
         assert "x\n    y\n\n" == sc.content
 
+    def test_add_lines(self):
+        sc = SphinxContent()
+        sc.add_lines("x")
+        assert sc.content == "x\n"
+        sc.add_lines("y", 1)
+        assert sc.content == "x\n    y\n"
+        sc.add_lines(["a", "b"])
+        assert sc.content == "x\n    y\na\nb\n"
+
     def test_add_index_entries(self):
         sc = SphinxContent()
         sc.add_index_entries(["x", "y"])
