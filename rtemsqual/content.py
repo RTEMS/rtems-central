@@ -179,7 +179,7 @@ class SphinxContent(object):
     def add_definition_item(self, name, lines, indent=0):
         """ Adds a definition item the content. """
         first = True
-        for line in lines:
+        for line in _make_lines(lines):
             if first:
                 first = False
                 self.add_blank_line()

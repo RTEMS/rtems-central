@@ -126,7 +126,10 @@ class TestSphinxContent(object):
     def test_add_definition_item(self):
         sc = SphinxContent()
         sc.add_definition_item("x", ["y", "z"])
-        assert "\nx\n    y\n    z\n" == sc.content
+        assert sc.content == "\nx\n    y\n    z\n"
+        sc = SphinxContent()
+        sc.add_definition_item("a", "\n b\n")
+        assert sc.content == "\na\n     b\n"
 
     def test_license(self):
         sc = SphinxContent()
