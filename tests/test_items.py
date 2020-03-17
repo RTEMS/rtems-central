@@ -25,57 +25,56 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import tempfile
+import pytest
 import shutil
-import unittest
 
 from rtemsqual.items import Item
 from rtemsqual.items import ItemCache
 
 
-class TestItem(unittest.TestCase):
+class TestItem(object):
     def test_uid(self):
         i = Item("x", {})
-        self.assertEqual("x", i.uid)
+        assert i.uid == "x"
 
     def test_getitem(self):
         data = {}
         data["x"] = "y"
         i = Item("z", data)
-        self.assertEqual("y", i["x"])
+        assert i["x"] == "y"
 
     def test_children(self):
         c = Item("c", {})
         p = Item("p", {})
         p.add_child(c)
         x = p.children
-        self.assertEqual(1, len(x))
-        self.assertEqual(c, x[0])
+        assert len(x) == 1
+        assert c == x[0]
 
 
-class TestItemCache(unittest.TestCase):
+class TestItemCache(object):
     def test_config_error(self):
-        self.assertRaises(KeyError, ItemCache, {})
+        with pytest.raises(KeyError):
+            ItemCache({})
 
-    def test_load(self):
-        with tempfile.TemporaryDirectory() as tempdir:
-            config = {}
-            cache_file = tempdir + "/spec.pickle"
-            config["cache-file"] = cache_file
-            spec_dir = tempdir + "/spec"
-            shutil.copytree(
-                os.path.dirname(__file__) + "/spec-item-cache", spec_dir)
-            config["paths"] = [spec_dir]
-            ic = ItemCache(config)
-            self.assertTrue(os.path.exists(cache_file))
-            self.assertEqual("c", ic["c"]["v"])
-            self.assertEqual("p", ic["p"]["v"])
-            t = ic.top_level
-            self.assertEqual(1, len(t))
-            self.assertEqual("p", t["p"]["v"])
-            ic2 = ItemCache(config)
-            self.assertEqual("c", ic2["c"]["v"])
-            with open(tempdir + "/spec/d/c.yml", "w+") as out:
-                out.write("links:\n- p: null\nv: x\n")
-            ic3 = ItemCache(config)
-            self.assertEqual("x", ic3["c"]["v"])
+    def test_load(self, tmpdir):
+        config = {}
+        cache_file = tmpdir + "/spec.pickle"
+        config["cache-file"] = cache_file
+        spec_dir = tmpdir + "/spec"
+        shutil.copytree(
+            os.path.dirname(__file__) + "/spec-item-cache", spec_dir)
+        config["paths"] = [spec_dir]
+        ic = ItemCache(config)
+        assert os.path.exists(cache_file)
+        assert ic["c"]["v"] == "c"
+        assert ic["p"]["v"] == "p"
+        t = ic.top_level
+        assert len(t) == 1
+        assert t["p"]["v"] == "p"
+        ic2 = ItemCache(config)
+        assert ic2["c"]["v"] == "c"
+        with open(tmpdir + "/spec/d/c.yml", "w+") as out:
+            out.write("links:\n- p: null\nv: x\n")
+        ic3 = ItemCache(config)
+        assert ic3["c"]["v"] == "x"

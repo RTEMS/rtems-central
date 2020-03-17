@@ -25,74 +25,70 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import tempfile
 import shutil
-import unittest
 
 from rtemsqual.glossary import generate
 from rtemsqual.items import ItemCache
 
 
-class TestGlossary(unittest.TestCase):
-    def test_glossary(self):
-        with tempfile.TemporaryDirectory() as tempdir:
-            item_cache_config = {}
-            cache_file = tempdir + "/spec.pickle"
-            item_cache_config["cache-file"] = cache_file
-            spec_dir = tempdir + "/spec"
-            shutil.copytree(
-                os.path.dirname(__file__) + "/spec-glossary", spec_dir)
-            item_cache_config["paths"] = [spec_dir]
-            ic = ItemCache(item_cache_config)
+class TestGlossary(object):
+    def test_glossary(self, tmpdir):
+        item_cache_config = {}
+        cache_file = tmpdir + "/spec.pickle"
+        item_cache_config["cache-file"] = cache_file
+        spec_dir = tmpdir + "/spec"
+        shutil.copytree(os.path.dirname(__file__) + "/spec-glossary", spec_dir)
+        item_cache_config["paths"] = [spec_dir]
+        ic = ItemCache(item_cache_config)
 
-            glossary_config = {}
-            glossary_config["project-groups"] = ["g"]
-            project_glossary = tempdir + "/project/glossary.rst"
-            glossary_config["project-target"] = project_glossary
-            doc = {}
-            doc["rest-source-paths"] = [tempdir]
-            document_glossary = tempdir + "/document/glossary.rst"
-            doc["target"] = document_glossary
-            glossary_config["documents"] = [doc]
-            generate(glossary_config, ic)
+        glossary_config = {}
+        glossary_config["project-groups"] = ["g"]
+        project_glossary = tmpdir + "/project/glossary.rst"
+        glossary_config["project-target"] = project_glossary
+        doc = {}
+        doc["rest-source-paths"] = [str(tmpdir)]
+        document_glossary = tmpdir + "/document/glossary.rst"
+        doc["target"] = document_glossary
+        glossary_config["documents"] = [doc]
+        generate(glossary_config, ic)
 
-            with open(project_glossary, "r") as src:
-                content = (
-                    ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
-                    "\n"
-                    ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
-                    "\n"
-                    "Glossary\n"
-                    "********\n"
-                    "\n"
-                    ".. glossary::\n"
-                    "    :sorted:\n"
-                    "\n"
-                    "    T\n"
-                    "        Term text @:term:`U`.\n"
-                    "\n"
-                    "    U\n"
-                    "        Term text U.\n"
-                    "\n"
-                    "    V\n"
-                    "        Term text V.\n")
-                self.assertEqual(content, src.read())
+        with open(project_glossary, "r") as src:
+            content = (
+                ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
+                "\n"
+                ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
+                "\n"
+                "Glossary\n"
+                "********\n"
+                "\n"
+                ".. glossary::\n"
+                "    :sorted:\n"
+                "\n"
+                "    T\n"
+                "        Term text @:term:`U`.\n"
+                "\n"
+                "    U\n"
+                "        Term text U.\n"
+                "\n"
+                "    V\n"
+                "        Term text V.\n")
+            assert content == src.read()
 
-            with open(document_glossary, "r") as src:
-                content = (
-                    ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
-                    "\n"
-                    ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
-                    "\n"
-                    "Glossary\n"
-                    "********\n"
-                    "\n"
-                    ".. glossary::\n"
-                    "    :sorted:\n"
-                    "\n"
-                    "    T\n"
-                    "        Term text @:term:`U`.\n"
-                    "\n"
-                    "    U\n"
-                    "        Term text U.\n")
-                self.assertEqual(content, src.read())
+        with open(document_glossary, "r") as src:
+            content = (
+                ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
+                "\n"
+                ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
+                "\n"
+                "Glossary\n"
+                "********\n"
+                "\n"
+                ".. glossary::\n"
+                "    :sorted:\n"
+                "\n"
+                "    T\n"
+                "        Term text @:term:`U`.\n"
+                "\n"
+                "    U\n"
+                "        Term text U.\n")
+            assert content == src.read()
