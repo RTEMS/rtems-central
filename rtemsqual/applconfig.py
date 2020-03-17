@@ -24,36 +24,73 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rtemsqual.content
+from typing import Dict
+
+from rtemsqual.content import SphinxContent
+from rtemsqual.items import Item, ItemCache
+
+ItemMap = Dict[str, Item]
 
 
-def _application_configuration_option_content(item, content):
-    content.add_index_entries(item["index"])
-    content.add_blank_line()
-    header = item["header"]
-    content.add_label(header)
-    content.add_blank_line()
-    content.add_header(header)
-    content.add_definition_item("DESCRIPTION:",
-                                item["description"].split("\n"))
-    content.add_definition_item("NOTES:", item["notes"].split("\n"))
-
-
-def _application_configuration_group_content(item, document):
-    content = rtemsqual.content.SphinxContent()
+def _gather_groups(item: Item, groups: ItemMap) -> None:
     for child in item.children:
-        if (child["type"] == "interface" and
-                child["interface-type"] == "application-configuration-option"):
-            _application_configuration_option_content(child, content)
-        else:
-            raise Exception("unexpected item type")
+        _gather_groups(child, groups)
+    if item["type"] == "interface" and item[
+            "interface-type"] == "appl-config-group":
+        groups[item.uid] = item
 
 
-def classic_api_guide_content(item, document):
-    """ This is work in progress. """
+def _gather_options(item: Item, options: ItemMap) -> None:
     for child in item.children:
-        if (child["type"] == "interface" and
-                child["interface-type"] == "application-configuration-group"):
-            _application_configuration_group_content(child, document)
-        else:
-            classic_api_guide_content(child, document)
+        _gather_options(child, options)
+    if item["type"] == "interface" and item[
+            "interface-type"] == "appl-config-option":
+        options[item.uid] = item
+
+
+def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
+    content = SphinxContent()
+    group.register_license_and_copyrights(content)
+    content.add_header(group["appl-config-group-name"], level="=")
+    content.add_blank_line()
+    content.add_lines(group["appl-config-group-description"])
+    for item in sorted(options.values(), key=lambda x: x.uid):
+        name = item["appl-config-option-name"]
+        item.register_license_and_copyrights(content)
+        content.add_index_entries([name] + item["appl-config-option-index"])
+        content.add_blank_line()
+        content.add_label(name)
+        content.add_blank_line()
+        content.add_header(name, level="-")
+        content.add_definition_item("CONSTANT:", f"``{name}``")
+        content.add_definition_item("DATA TYPE:",
+                                    item["appl-config-option-data-type"])
+        content.add_definition_item("RANGE:", item["appl-config-option-range"])
+        content.add_definition_item("DEFAULT VALUE:",
+                                    item["appl-config-option-default-value"])
+        content.add_definition_item("DESCRIPTION:",
+                                    item["appl-config-option-description"])
+        content.add_definition_item("NOTES:", item["appl-config-option-notes"])
+    content.add_licence_and_copyrights()
+    return content
+
+
+def generate(config: dict, item_cache: ItemCache) -> None:
+    """
+    Generates application configuration documentation sources according to the
+    configuration.
+
+    :param config: A dictionary with configuration entries.
+    :param item_cache: The specification item cache containing the application
+                       configuration groups and options.
+    """
+    groups = {}  # type: ItemMap
+    for item in item_cache.top_level.values():
+        _gather_groups(item, groups)
+
+    for group_config in config["groups"]:
+        group = groups[group_config["uid"]]
+        options = {}  # type: ItemMap
+        _gather_options(group, options)
+        content = _generate_content(group, options)
+        content.write(group_config["target"])

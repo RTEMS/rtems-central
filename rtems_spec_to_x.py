@@ -27,6 +27,7 @@
 
 import yaml
 
+import rtemsqual.applconfig
 import rtemsqual.items
 import rtemsqual.glossary
 
@@ -37,6 +38,7 @@ def main():
         config = yaml.safe_load(out.read())
     item_cache = rtemsqual.items.ItemCache(config["spec"])
     rtemsqual.glossary.generate(config["glossary"], item_cache)
+    rtemsqual.applconfig.generate(config["appl-config"], item_cache)
 
 
 if __name__ == "__main__":
