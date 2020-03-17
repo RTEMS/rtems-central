@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Function pointer.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_IDLE_TASK_BODY`` is set to the function name corresponding to
+  the application specific IDLE thread body.  If not specified, the BSP or
+  RTEMS default IDLE thread body will be used.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_IDLE_TASK_BODY
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  Undefined or valid function pointer.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.86
+links:
+- RTEMS-ACFG-IDLE: MPU6F9VtN3Et8wrFFFP7VlpO0zGaWoJFOwfuikRpGxs=
+normative: true
+ref: ''
+reviewed: tA22lYVMXLWhTE8ZIPIGkocmsXQdVX2GkdMzLobDCO0=
+text: ''
+type: interface

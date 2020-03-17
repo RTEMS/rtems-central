@@ -1,0 +1,15 @@
+settings:
+  digits: 3
+  parent: RTEMS
+  prefix: RTEMS-ACFG
+  sep: '-'
+attributes:
+  defaults:
+    SPDX-License-Identifier: CC-BY-SA-4.0
+    enabled-by: []
+    interface-type: appl-config-group
+    type: interface
+  reviewed:
+  - enabled-by
+  - interface-type
+  - type

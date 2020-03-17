@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  The default value is 0.
+appl-config-option-description: |
+  Defines the maximum blocks per read-ahead request.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_BDBUF_MAX_READ_AHEAD_BLOCKS
+appl-config-option-notes: |
+  A value of 0 disables the read-ahead task (default).  The read-ahead task
+  will issue speculative read transfers if a sequential access pattern is
+  detected.  This can improve the performance on some systems.
+appl-config-option-range: |
+  Positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.5
+links:
+- RTEMS-ACFG-BDBUF: zcZaMkFYCeiO06I2a44TA1UsUbHOcxyH3xxhSH_pntk=
+normative: true
+ref: ''
+reviewed: Lchcp6brJcQ0aMB3wBlfUD37WjbJ8CbjJUtLPz3u5sM=
+text: ''
+type: interface

@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  This is computed by default, and is set to the number of device drivers
+  configured using the ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER``
+  configuration parameters.
+appl-config-option-description: |
+  ``CONFIGURE_MAXIMUM_DRIVERS`` is defined as the number of device drivers
+  per node.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MAXIMUM_DRIVERS
+appl-config-option-notes: |
+  If the application will dynamically install device drivers, then this
+  configuration parameter must be larger than the number of statically
+  configured device drivers. Drivers configured using the
+  ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER`` configuration parameters are
+  statically installed.
+appl-config-option-range: |
+  Zero or positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.46
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: ACNNr_lLcGVRhoWgoC2uEf3efgPBHW2Zidm-2X5lfqE=
+text: ''
+type: interface

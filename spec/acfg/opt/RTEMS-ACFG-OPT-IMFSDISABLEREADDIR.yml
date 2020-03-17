@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  In case this configuration option is defined, then the support to read a
+  directory is disabled in the root IMFS.  It is still possible to open nodes
+  in a directory.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_IMFS_DISABLE_READDIR
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.56
+links:
+- RTEMS-ACFG-FILESYSTEM: 9RfguldyRuN5UR-zcLUoiTYBDzow1fnI4B_ZnP_UyKk=
+normative: true
+ref: ''
+reviewed: zmO3IMdvDIZktX0p2SnGiHyp3wE0ADvc49lH8dgn1q4=
+text: ''
+type: interface

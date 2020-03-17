@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-group-description: |
+  This section describes configuration options related to the event recording.
+appl-config-group-name: Event Recording Configuration
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-group
+level: 1.5
+links:
+- RTEMS-APPLCONFIG: _UBhDG0InGYgvxZhg-cUyh3flgj_xCc4GH8Rs0qjazE=
+normative: true
+ref: ''
+reviewed: tvw_EOJI4tIu_ZEKuxFvRuetfNZY7SwzZsOweSpi9W0=
+text: ''
+type: interface

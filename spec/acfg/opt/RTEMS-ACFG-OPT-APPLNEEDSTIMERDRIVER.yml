@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`` is defined if the application
+  wishes to include the Timer Driver.  This device driver is used to
+  benchmark execution times by the RTEMS Timing Test Suites.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
+appl-config-option-notes: |
+  If neither the Clock Driver not Benchmark Timer is enabled and the
+  configuration parameter
+  ``CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`` is not defined, then a
+  compile time error will occur.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.42
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: z6pDFVmdbU3gNP-3KPQ8f14ebmZZzUu54GxGIffS9_E=
+text: ''
+type: interface

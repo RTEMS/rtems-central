@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-group-description: |
+  This section describes general system configuration options.
+appl-config-group-name: General System Configuration
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-group
+level: 1.7
+links:
+- RTEMS-APPLCONFIG: _UBhDG0InGYgvxZhg-cUyh3flgj_xCc4GH8Rs0qjazE=
+normative: true
+ref: ''
+reviewed: tQsepmlFchBRHS82XbAeBrN48Kk6-2V6XLryBW_z5Bw=
+text: ''
+type: interface

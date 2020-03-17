@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``unsigned int``).
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  If defined, then a record item buffer of the specified item count is
+  statically allocated for each configured processor
+  (:ref:`CONFIGURE_MAXIMUM_PROCESSORS <CONFIGURE_MAXIMUM_PROCESSORS>`).
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  A power of two greater than or equal to 16.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.48
+links:
+- RTEMS-ACFG-EVENTRECORD: 3xKeMAkaU2zxzN9UNmZQkb0frJf6VDZIRj25tOsaTj0=
+normative: true
+ref: ''
+reviewed: MdiQNRkOJS8RnwGzGcBoMPq3hGjkweX4PnMxDCAg6ng=
+text: ''
+type: interface

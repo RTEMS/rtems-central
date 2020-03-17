@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Function pointer.
+appl-config-option-default-value: |
+  The default value is ``_Workspace_Free``, which indicates that task stacks
+  will be allocated from the RTEMS Workspace.
+appl-config-option-description: |
+  ``CONFIGURE_TASK_STACK_DEALLOCATOR`` may point to a user provided routine
+  to free task stacks.
+appl-config-option-index:
+- task stack deallocator
+appl-config-option-name: CONFIGURE_TASK_STACK_DEALLOCATOR
+appl-config-option-notes: |
+  A correctly configured system must configure the following to be consistent:
+
+  - ``CONFIGURE_TASK_STACK_ALLOCATOR_INIT``
+
+  - ``CONFIGURE_TASK_STACK_ALLOCATOR``
+
+  - ``CONFIGURE_TASK_STACK_DEALLOCATOR``
+appl-config-option-range: |
+  Undefined or valid function pointer.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.118
+links:
+- RTEMS-ACFG-STACKALLOC: RinkAR6bq3NOG7L5KiFW19GxN_mHxMpEd6-axxdk-k4=
+normative: true
+ref: ''
+reviewed: YdVw4bEfKr_GbwiZ3Aq3BIMyoxngs02n3fWxP0sYowY=
+text: ''
+type: interface

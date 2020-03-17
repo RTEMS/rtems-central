@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_UNLIMITED_OBJECTS`` enables ``rtems_resource_unlimited`` mode
+  for Classic API and POSIX API objects that do not already have a specific
+  maximum limit defined.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_UNLIMITED_OBJECTS
+appl-config-option-notes: |
+  When using unlimited objects, it is common practice to also specify
+  ``CONFIGURE_UNIFIED_WORK_AREAS`` so the system operates with a single pool
+  of memory for both RTEMS and application memory allocations.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.83
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: yWeZLUOGPPf3aOctQGi46Xb0wjX-jcxKl8CIV0sPeUI=
+text: ''
+type: interface

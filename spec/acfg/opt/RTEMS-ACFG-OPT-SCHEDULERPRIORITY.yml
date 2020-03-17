@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is defined by default.  This is the default scheduler and specifying
+  this configuration parameter is redundant.
+appl-config-option-description: |
+  If defined, then the :ref:`Deterministic Priority Scheduler
+  <SchedulerPriority>` algorithm is made available to the application.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_SCHEDULER_PRIORITY
+appl-config-option-notes: |
+  This scheduler configuration option is an advanced configuration option.
+  Think twice before you use it.
+
+  In case no explicit :ref:`clustered scheduler configuration
+  <ConfigurationSchedulersClustered>` is present, then it is used as the
+  scheduler for exactly one processor.
+
+  This scheduler algorithm is the default when
+  :ref:`CONFIGURE_MAXIMUM_PROCESSORS <CONFIGURE_MAXIMUM_PROCESSORS>` is
+  exactly one.
+
+  The memory allocated for this scheduler depends on the
+  :ref:`CONFIGURE_MAXIMUM_PRIORITY` configuration option.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 2010 Gedare Bloom
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: '1.110'
+links:
+- RTEMS-ACFG-SCHEDGENERAL: rc4sMdWxd5qw88Gl1zfZxhSAF4EJ3mvQOTYVBtVHtRc=
+normative: true
+ref: ''
+reviewed: kTe7QM8SgueRgDB3BkZXJUcN5xAD4fKr-MOaojql7tA=
+text: ''
+type: interface

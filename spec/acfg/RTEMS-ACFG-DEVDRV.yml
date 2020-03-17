@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-group-description: |
+  This section describes configuration options related to the device drivers.
+  Note that network device drivers are not covered by the following options.
+appl-config-group-name: Device Driver Configuration
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-group
+level: 1.4
+links:
+- RTEMS-APPLCONFIG: _UBhDG0InGYgvxZhg-cUyh3flgj_xCc4GH8Rs0qjazE=
+normative: true
+ref: ''
+reviewed: LjipM-Hewis0-OHSPKwqB_Uffae0qmfBtzppXqrqBDU=
+text: ''
+type: interface

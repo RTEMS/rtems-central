@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This field is not defined by default, as the user MUST select their own API
+  for initialization tasks.
+appl-config-option-description: |
+  ``CONFIGURE_POSIX_INIT_THREAD_TABLE`` is defined if the user wishes to use
+  a POSIX API Initialization Threads Table.  The table built by
+  ``<rtems/confdefs.h>`` specifies the parameters for a single thread. This
+  is sufficient for applications which initialization the system from a
+  single task.
+
+  By default, this field is not defined as the user MUST select their own API
+  for initialization tasks.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_POSIX_INIT_THREAD_TABLE
+appl-config-option-notes: |
+  The application may choose to use the initialization tasks or threads table
+  from another API.
+
+  A compile time error will be generated if the user does not configure any
+  initialization tasks or threads.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.105
+links:
+- RTEMS-ACFG-POSIXINIT: oVe3LoIfxgyisYoH0mXl_PoC1X2Xc1QXF4i_e4KWRpQ=
+normative: true
+ref: ''
+reviewed: PJX5K8XryB0Bh4_e-_llPkPmy42EOQy5xEePVVCuhIE=
+text: ''
+type: interface

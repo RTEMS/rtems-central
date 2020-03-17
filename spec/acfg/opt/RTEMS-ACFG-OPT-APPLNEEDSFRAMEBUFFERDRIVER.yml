@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER`` is defined if the
+  application wishes to include the BSP's Frame Buffer Device Driver.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
+appl-config-option-notes: |
+  Most BSPs do not include support for a Frame Buffer Device Driver. This is
+  because many boards do not include the required hardware.
+
+  If this is defined and the BSP does not have this device driver, then the
+  user will get a link time error for an undefined symbol.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.36
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: 2F01KzXw6CfqnUWhn2AacbqEERlpzY_lGS-MM0kTNMU=
+text: ''
+type: interface

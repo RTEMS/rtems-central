@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  Provides a Block Device Cache configuration.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+appl-config-option-notes: |
+  Each option of the Block Device Cache configuration can be explicitly set
+  by the user with the configuration options below.  The Block Device Cache
+  is used for example by the RFS and DOSFS file systems.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.1
+links:
+- RTEMS-ACFG-BDBUF: zcZaMkFYCeiO06I2a44TA1UsUbHOcxyH3xxhSH_pntk=
+normative: true
+ref: ''
+reviewed: M833U9HGwq-4g4ELB7aIDa_BZow-M0GaFavclYvSffI=
+text: ''
+type: interface

@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  List of user extension initializers (``rtems_extensions_table``).
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  If ``CONFIGURE_INITIAL_EXTENSIONS`` is defined by the application, then
+  this application specific set of initial extensions will be placed in the
+  initial extension table.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_INITIAL_EXTENSIONS
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  Undefined or a list of one or more user extensions.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.69
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: Sd9l4jat5QB1IDZpilTkoIwVqC_yJ6N-s_VrP76irAg=
+text: ''
+type: interface

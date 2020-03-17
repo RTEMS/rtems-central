@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``size_t``).
+appl-config-option-default-value: |
+  The default value is 32768 bytes.
+appl-config-option-description: |
+  Size of the cache memory in bytes.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  Positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.4
+links:
+- RTEMS-ACFG-BDBUF: zcZaMkFYCeiO06I2a44TA1UsUbHOcxyH3xxhSH_pntk=
+normative: true
+ref: ''
+reviewed: ztDCYYeTOq-TfO2EtPIBYz0rowaJG-5EZadtp5Ekr_g=
+text: ''
+type: interface

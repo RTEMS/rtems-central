@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  pointer to ``rtems_mpci_table``
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_MP_MPCI_TABLE_POINTER`` is the pointer to the MPCI
+  Configuration Table.  The default value of this field is``&MPCI_table``.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MP_MPCI_TABLE_POINTER
+appl-config-option-notes: |
+  RTEMS provides a Shared Memory MPCI Device Driver which can be used on any
+  Multiprocessor System assuming the BSP provides the proper set of
+  supporting methods.
+appl-config-option-range: |
+  undefined or valid pointer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.93
+links:
+- RTEMS-ACFG-MPCI: xehdBGNzB079tXh4oemnIjNyYffD-9n2YPdqHwfn7Hs=
+normative: true
+ref: ''
+reviewed: RMAEVgTOEMRezZmsqqRIACmHFRrFWISZNrgHtqrlhdo=
+text: ''
+type: interface

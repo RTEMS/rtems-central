@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-group-description: |
+  This section describes configuration options related to the Classic API
+  initialization task.
+appl-config-group-name: Classic API Initialization Task Configuration
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-group
+level: 1.3
+links:
+- RTEMS-APPLCONFIG: _UBhDG0InGYgvxZhg-cUyh3flgj_xCc4GH8Rs0qjazE=
+normative: true
+ref: ''
+reviewed: mTC3DcfCqElhgdthRiOLV1t1Bw-Si4IM5_d5xP-2GSg=
+text: ''
+type: interface

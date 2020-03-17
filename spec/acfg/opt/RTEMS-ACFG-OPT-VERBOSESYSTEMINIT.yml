@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default, and thus the system initialization is
+  quiet.
+appl-config-option-description: |
+  This configuration option enables to print some information during system
+  initialization.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
+appl-config-option-notes: |
+  You may use this feature to debug system initialization issues.  The
+  printk() function is used to print the information.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.84
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: K9XYyK0XIggO2DNvBAg1Ycr2cRB0tTygG9XCeg5ezN8=
+text: ''
+type: interface

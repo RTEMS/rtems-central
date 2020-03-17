@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  The default value is 4096 bytes.
+appl-config-option-description: |
+  Defines the maximum size of a buffer in bytes.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_BDBUF_BUFFER_MAX_SIZE
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  It must be positive and an integral multiple of the buffer minimum size.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.2
+links:
+- RTEMS-ACFG-BDBUF: zcZaMkFYCeiO06I2a44TA1UsUbHOcxyH3xxhSH_pntk=
+normative: true
+ref: ''
+reviewed: fub05CXZScm_6L83WbMN6tNgzGgpuy9paA-VKGj2VaE=
+text: ''
+type: interface

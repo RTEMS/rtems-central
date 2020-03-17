@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  device driver entry structures
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_APPLICATION_EXTRA_DRIVERS`` is defined if the application has
+  device drivers it needs to include in the Device Driver Table.  This should
+  be defined to the set of device driver entries that will be placed in the
+  table at the *END* of the Device Driver Table.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_APPLICATION_EXTRA_DRIVERS
+appl-config-option-notes: |
+  None.
+appl-config-option-range: |
+  Undefined or set of device driver entry structures
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.33
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: 1UivcEWeu7DQQ3YP0hVHwzRhICaQvtjZIngPW_odEtM=
+text: ''
+type: interface

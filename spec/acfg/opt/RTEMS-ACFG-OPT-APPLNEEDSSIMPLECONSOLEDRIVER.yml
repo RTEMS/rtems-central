@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`` is defined if the
+  application wishes to include the Simple Console Device Driver.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+appl-config-option-notes: |
+  This device driver is responsible for providing the :file:`/dev/console`
+  device file.  This device is used to initialize the standard input, output,
+  and error file descriptors.
+
+  This device driver reads via ``getchark()``.
+
+  This device driver writes via ``rtems_putc()``.
+
+  The Termios framework is not used.  There is no support to change device
+  settings, e.g. baud, stop bits, parity, etc.
+
+  The
+
+  * ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER``,
+
+  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER``, and
+
+  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER``
+
+  configuration options are mutually exclusive.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.39
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: qkHAEqgIdMA19PJTZzuAlwHxp0KIMoT4BbzrDP2ik7M=
+text: ''
+type: interface

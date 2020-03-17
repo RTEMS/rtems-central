@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  If not defined and ``CONFIGURE_UNLIMITED_OBJECTS`` is defined, the default
+  value is eight (8).
+appl-config-option-description: |
+  ``CONFIGURE_UNLIMITED_ALLOCATION_SIZE`` provides an allocation size to use
+  for ``rtems_resource_unlimited`` when using
+  ``CONFIGURE_UNLIMITED_OBJECTS``.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_UNLIMITED_ALLOCATION_SIZE
+appl-config-option-notes: |
+  By allowing users to declare all resources as being unlimited the user can
+  avoid identifying and limiting the resources
+  used. ``CONFIGURE_UNLIMITED_OBJECTS`` does not support varying the
+  allocation sizes for different objects; users who want that much control
+  can define the ``rtems_resource_unlimited`` macros themselves.
+appl-config-option-range: |
+  Positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.82
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: QNMi21v3JbyxxnNzVWeiQ4KUIVtZAO7pb3Df6KRBNU8=
+text: ''
+type: interface

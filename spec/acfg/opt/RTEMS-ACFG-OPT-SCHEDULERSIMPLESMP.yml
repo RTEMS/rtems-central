@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  If defined, then the :ref:`Simple Priority SMP Scheduler
+  <SchedulerSMPPrioritySimple>` algorithm is made available to the
+  application.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_SCHEDULER_SIMPLE_SMP
+appl-config-option-notes: |
+  This scheduler configuration option is an advanced configuration option.
+  Think twice before you use it.
+
+  This scheduler algorithm is only available when RTEMS is built with SMP
+  support enabled.
+
+  In case no explicit :ref:`clustered scheduler configuration
+  <ConfigurationSchedulersClustered>` is present, then it is used as the
+  scheduler for up to 32 processors.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.114
+links:
+- RTEMS-ACFG-SCHEDGENERAL: rc4sMdWxd5qw88Gl1zfZxhSAF4EJ3mvQOTYVBtVHtRc=
+normative: true
+ref: ''
+reviewed: 2uO_iEFGg5nhsJmtg5WyTv0Sf33uWfyEHZrZy64MBuQ=
+text: ''
+type: interface

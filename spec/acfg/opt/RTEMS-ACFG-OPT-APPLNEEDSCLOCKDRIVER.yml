@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`` is defined if the application
+  wishes to include the Clock Device Driver.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+appl-config-option-notes: |
+  This device driver is responsible for providing a regular interrupt which
+  invokes a clock tick directive.
+
+  If neither the Clock Driver not Benchmark Timer is enabled and the
+  configuration parameter
+  ``CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`` is not defined, then a
+  compile time error will occur.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.34
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: iYo4gVJmAy2sTZW86RErx_Si06MJ7ls-YdCePAOJ5JI=
+text: ''
+type: interface

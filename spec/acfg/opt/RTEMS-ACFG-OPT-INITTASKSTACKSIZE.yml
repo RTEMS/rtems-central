@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``size_t``).
+appl-config-option-default-value: |
+  The default value is RTEMS_MINIMUM_STACK_SIZE.
+appl-config-option-description: |
+  ``CONFIGURE_INIT_TASK_STACK_SIZE`` is the stack size of the single
+  initialization task defined by the Classic API Initialization Tasks Table.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_INIT_TASK_STACK_SIZE
+appl-config-option-notes: |
+  If the stack size specified is greater than the configured minimum, it must
+  be accounted for in ``CONFIGURE_EXTRA_TASK_STACKS``.  See :ref:`Reserve
+  Task/Thread Stack Memory Above Minimum` for more information about
+  ``CONFIGURE_EXTRA_TASK_STACKS``.
+appl-config-option-range: |
+  Zero or positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: '1.30'
+links:
+- RTEMS-ACFG-CLASSICINIT: pl9Xp1_wCb3lJBR4Q6dEqZUfxqQWWbUDnEt6SKh38LQ=
+normative: true
+ref: ''
+reviewed: NasAYqLLBgKuwqe3fM4UFybmaqO1xw-ikLf6Swxpotw=
+text: ''
+type: interface

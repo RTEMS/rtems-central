@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  If defined and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
+  <CONFIGURE_RECORD_PER_PROCESSOR_ITEMS>` is also defined properly, then the
+  record extensions are enabled.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_RECORD_EXTENSIONS_ENABLED
+appl-config-option-notes: |
+  The record extensions capture thread create, start, restart, delete,
+  switch, begin, exitted and terminate events.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.47
+links:
+- RTEMS-ACFG-EVENTRECORD: 3xKeMAkaU2zxzN9UNmZQkb0frJf6VDZIRj25tOsaTj0=
+normative: true
+ref: ''
+reviewed: qI6MsDjXn4xTIYt72JHL_vvy1f8Yq9A77D85In8HmLc=
+text: ''
+type: interface

@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  ``CONFIGURE_RTEMS_INIT_TASKS_TABLE`` is defined if the user wishes to use a
+  Classic RTEMS API Initialization Task Table. The table built by
+  ``<rtems/confdefs.h>`` specifies the parameters for a single task. This is
+  sufficient for applications which initialization the system from a single
+  task.
+
+  By default, this field is not defined as the user MUST select their own API
+  for initialization tasks.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_RTEMS_INIT_TASKS_TABLE
+appl-config-option-notes: |
+  The application may choose to use the initialization tasks or threads table
+  from another API.
+
+  A compile time error will be generated if the user does not configure any
+  initialization tasks or threads.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.31
+links:
+- RTEMS-ACFG-CLASSICINIT: pl9Xp1_wCb3lJBR4Q6dEqZUfxqQWWbUDnEt6SKh38LQ=
+normative: true
+ref: ''
+reviewed: tiYa1wK_VBtrW1-IRTub_fZ9M5wIwYBUS-KKyKgRVxA=
+text: ''
+type: interface

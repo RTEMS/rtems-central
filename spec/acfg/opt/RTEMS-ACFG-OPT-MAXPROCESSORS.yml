@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  The default value is 1.
+appl-config-option-description: |
+  ``CONFIGURE_MAXIMUM_PROCESSORS`` must be set to the maximum number of
+  processors an application intends to use.  The number of actually available
+  processors depends on the hardware and may be less.  It is recommended to
+  use the smallest value suitable for the application in order to save
+  memory.  Each processor needs an idle thread and interrupt stack for
+  example.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MAXIMUM_PROCESSORS
+appl-config-option-notes: |
+  If there are more processors available than configured, the rest will be
+  ignored.  This configuration define is ignored in uniprocessor
+  configurations.
+appl-config-option-range: |
+  Positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.73
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: yeUx3ny8N0sfPzVnTPrNj-pf5rJHU_ZwPRfapmGdXTs=
+text: ''
+type: interface

@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default, and thus stack checking is disabled.
+appl-config-option-description: |
+  This configuration parameter is defined when the application wishes to
+  enable run-time stack bounds checking.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_STACK_CHECKER_ENABLED
+appl-config-option-notes: |
+  In 4.9 and older, this configuration parameter was named ``STACK_CHECKER_ON``.
+
+  This increases the time required to create tasks as well as adding overhead
+  to each context switch.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.79
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: oQczTVsafGtaaeNZ_cRs7tkFGeXNI7M78k7m40NQVSg=
+text: ''
+type: interface

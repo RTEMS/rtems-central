@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  The default value is 0.
+appl-config-option-description: |
+  ``CONFIGURE_MAXIMUM_POSIX_SEMAPHORES`` is the maximum number of POSIX API
+  Named Semaphores that can be concurrently active.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+appl-config-option-notes: |
+  This object class can be configured in unlimited allocation mode.
+
+  Named semaphores are created with ``sem_open()``.  Semaphores initialized
+  with ``sem_init()`` are not affected by this configuration option since the
+  storage space for these semaphores is user-provided.
+appl-config-option-range: |
+  Zero or positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.99
+links:
+- RTEMS-ACFG-POSIX: bSf7xgvXVpy1u_mxP7Fk8qCHwxGCpkc9LrwgT9RzWSY=
+normative: true
+ref: ''
+reviewed: ZpB6iOxxNIA9FklsO1O4SmcJlClGEwS-e2yskIMqwvU=
+text: ''
+type: interface

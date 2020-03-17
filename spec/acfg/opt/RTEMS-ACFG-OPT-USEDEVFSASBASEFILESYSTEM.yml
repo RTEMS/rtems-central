@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default. If no other root file system configuration
+  parameters are specified, the IMFS will be used as the root file system.
+appl-config-option-description: |
+  This configuration parameter is defined if the application wishes to use
+  the device-only filesytem as the root file system.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
+appl-config-option-notes: |
+  The device-only filesystem supports only device nodes and is smaller in
+  executable code size than the full IMFS and miniIMFS.
+
+  The devFS is comparable in functionality to the pseudo-filesystem name
+  space provided before RTEMS release 4.5.0.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.65
+links:
+- RTEMS-ACFG-FILESYSTEM: 9RfguldyRuN5UR-zcLUoiTYBDzow1fnI4B_ZnP_UyKk=
+normative: true
+ref: ''
+reviewed: O_eKgQVt3pnNoaQu79QoyR3fQwkhM57DTxh4TOiBqHo=
+text: ''
+type: interface

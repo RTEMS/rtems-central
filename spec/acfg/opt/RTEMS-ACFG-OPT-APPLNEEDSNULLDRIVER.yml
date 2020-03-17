@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  This configuration variable is specified to enable ``/dev/null`` device driver.
+appl-config-option-index:
+- /dev/null
+appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
+appl-config-option-notes: |
+  This device driver is supported by all BSPs.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.37
+links:
+- RTEMS-ACFG-DEVDRV: 75G0LF6n2XEdjSX-qN_FPap1vl0feYAa0HTSDWPm6-8=
+normative: true
+ref: ''
+reviewed: PUE4qQOTUh2GbprwppZoYYsECHdwKECRtfiwbd988C8=
+text: ''
+type: interface

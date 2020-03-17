@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  This is not defined by default.
+appl-config-option-description: |
+  This configuration parameter must be defined to indicate that the
+  application intends to be part of a multiprocessing
+  configuration. Additional configuration parameters are assumed to be
+  provided.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MP_APPLICATION
+appl-config-option-notes: |
+  This has no impact unless RTEMS was built with the
+  ``--enable-multiprocessing`` build configuration option.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.89
+links:
+- RTEMS-ACFG-MPCI: xehdBGNzB079tXh4oemnIjNyYffD-9n2YPdqHwfn7Hs=
+normative: true
+ref: ''
+reviewed: B6AGbeDcGdyhJrG52n8r1M79D9wDZ8eoc-aiq11jlbk=
+text: ''
+type: interface

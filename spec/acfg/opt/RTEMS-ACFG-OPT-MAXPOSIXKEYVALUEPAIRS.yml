@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Unsigned integer (``uint32_t``).
+appl-config-option-default-value: |
+  The default value is
+  :ref:`CONFIGURE_MAXIMUM_POSIX_KEYS <CONFIGURE_MAXIMUM_POSIX_KEYS>` *
+  :ref:`CONFIGURE_MAXIMUM_TASKS <CONFIGURE_MAXIMUM_TASKS>` +
+  :ref:`CONFIGURE_MAXIMUM_POSIX_THREADS <CONFIGURE_MAXIMUM_POSIX_THREADS>`.
+appl-config-option-description: |
+  ``CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS`` is the maximum number of key
+  value pairs used by POSIX API Keys that can be concurrently active.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+appl-config-option-notes: |
+  This object class can be configured in unlimited allocation mode.
+
+  A key value pair is created by :c:func:`pthread_setspecific` if the value
+  is not :c:macro:`NULL`, otherwise it is deleted.
+appl-config-option-range: |
+  Zero or positive.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.96
+links:
+- RTEMS-ACFG-POSIX: bSf7xgvXVpy1u_mxP7Fk8qCHwxGCpkc9LrwgT9RzWSY=
+normative: true
+ref: ''
+reviewed: 9Dv05nMxAQ7fqMTd6hyDBY5q_WkZM2cUS0xdFUersG4=
+text: ''
+type: interface

@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-data-type: |
+  Boolean feature macro.
+appl-config-option-default-value: |
+  By default, the memory used by the RTEMS Workspace and the C Program Heap
+  is uninitialized memory.
+appl-config-option-description: |
+  This macro indicates whether RTEMS should dirty the memory used by the
+  RTEMS Workspace and the C Program Heap as part of its initialization.  If
+  defined, the memory areas are dirtied with a ``0xCF`` byte pattern.
+  Otherwise, they are not.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_DIRTY_MEMORY
+appl-config-option-notes: |
+  Dirtying memory can add significantly to system boot time.  It may assist in
+  finding code that incorrectly assumes the contents of free memory areas is
+  cleared to zero during system initialization.  In case
+  :ref:`CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY` is also defined, then the
+  memory is first dirtied and then zeroed.
+appl-config-option-range: |
+  Defined or undefined.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.67
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: zOyiOMdbdMsmxId-SShr_wXLhsoksxKv9Wq7ZphmPog=
+text: ''
+type: interface
