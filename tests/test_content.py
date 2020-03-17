@@ -119,7 +119,9 @@ class TestSphinxContent(object):
     def test_add_index_entries(self):
         sc = SphinxContent()
         sc.add_index_entries(["x", "y"])
-        assert "\n.. index:: x\n.. index:: y\n", sc.content
+        assert "\n.. index:: x\n.. index:: y\n" == sc.content
+        sc.add_index_entries("z")
+        assert "\n.. index:: x\n.. index:: y\n\n.. index:: z\n" == sc.content
 
     def test_add_definition_item(self):
         sc = SphinxContent()

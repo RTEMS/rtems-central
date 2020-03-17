@@ -124,6 +124,12 @@ def _make_lines(lines):
     return lines
 
 
+def _make_list(value):
+    if not isinstance(value, list):
+        return [value]
+    return value
+
+
 class SphinxContent(object):
     """ This class builds Sphinx content. """
     def __init__(self):
@@ -164,7 +170,7 @@ class SphinxContent(object):
     def add_index_entries(self, entries):
         """ Adds a list of index entries the content. """
         first = True
-        for entry in entries:
+        for entry in _make_list(entries):
             if first:
                 first = False
                 self.add_blank_line()
