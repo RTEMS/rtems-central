@@ -46,6 +46,9 @@ class Item(object):
         self._links = []  # type: ItemList
         self._children = []  # type: ItemList
 
+    def __contains__(self, key: str) -> bool:
+        return key in self._data
+
     def __getitem__(self, name: str) -> Any:
         return self._data[name]
 

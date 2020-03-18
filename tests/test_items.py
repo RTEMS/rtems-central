@@ -37,6 +37,13 @@ class TestItem(object):
         i = Item("x", {})
         assert i.uid == "x"
 
+    def test_contains(self):
+        data = {}
+        data["x"] = "y"
+        i = Item("z", data)
+        assert "x" in i
+        assert "a" not in i
+
     def test_getitem(self):
         data = {}
         data["x"] = "y"
