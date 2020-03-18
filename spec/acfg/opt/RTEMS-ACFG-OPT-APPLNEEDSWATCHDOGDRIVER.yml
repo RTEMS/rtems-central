@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then no Watchdog Driver is
+  initialized during system initialization.
 appl-config-option-description: |
-  ``CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER`` is defined if the
-  application wishes to include the Watchdog Driver.
+  In case this configuration option is defined, then the Watchdog Driver is
+  initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_WATCHDOG_DRIVER
 appl-config-option-notes: |
@@ -15,8 +15,6 @@ appl-config-option-notes: |
 
   If this is defined and the BSP does not have this device driver, then the
   user will get a link time error for an undefined symbol.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

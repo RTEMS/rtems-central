@@ -1,22 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then no Real-Time Clock Driver is
+  initialized during system initialization.
 appl-config-option-description: |
-  ``CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER`` is defined if the application
-  wishes to include the Real-Time Clock Driver.
+  In case this configuration option is defined, then the Real-Time Clock Driver
+  is initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
 appl-config-option-notes: |
-  Most BSPs do not include support for a real-time clock. This is because
+  Most BSPs do not include support for a real-time clock (RTC). This is because
   many boards do not include the required hardware.
 
   If this is defined and the BSP does not have this device driver, then the
   user will get a link time error for an undefined symbol.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,20 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the event record extensions
+  are not enabled.
 appl-config-option-description: |
-  If defined and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
-  <CONFIGURE_RECORD_PER_PROCESSOR_ITEMS>` is also defined properly, then the
-  record extensions are enabled.
+  In case
+
+  * this configuration option is defined
+
+  * and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS` is also properly defined,
+
+  then the event record extensions are enabled.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_RECORD_EXTENSIONS_ENABLED
 appl-config-option-notes: |
-  The record extensions capture thread create, start, restart, delete,
-  switch, begin, exitted and terminate events.
-appl-config-option-range: |
-  Defined or undefined.
+  The record extensions capture thread create, start, restart, delete, switch,
+  begin, exitted and terminate events.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

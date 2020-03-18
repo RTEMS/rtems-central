@@ -1,19 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the Block Device Cache is not
+  initialized during system initialization.
 appl-config-option-description: |
-  Provides a Block Device Cache configuration.
+  In case this configuration option is defined, then the Block Device Cache is
+  initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 appl-config-option-notes: |
-  Each option of the Block Device Cache configuration can be explicitly set
-  by the user with the configuration options below.  The Block Device Cache
-  is used for example by the RFS and DOSFS file systems.
-appl-config-option-range: |
-  Defined or undefined.
+  Each option of the Block Device Cache (bdbuf) configuration can be explicitly
+  set by the user with the configuration options below.  The Block Device Cache
+  is used for example by the RFS and DOSFS filesystems.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

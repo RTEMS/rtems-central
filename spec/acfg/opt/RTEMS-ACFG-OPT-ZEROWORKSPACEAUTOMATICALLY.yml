@@ -1,14 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.  The default is *NOT* to zero out the RTEMS
-  Workspace or C Program Heap.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the memory areas used for the
+  RTEMS Workspace and the C Program Heap are not zeroed.
 appl-config-option-description: |
-  This macro indicates whether RTEMS should zero the RTEMS Workspace and C
-  Program Heap as part of its initialization.  If defined, the memory regions
-  are zeroed.  Otherwise, they are not.
+  In case this configuration option is defined, then the memory areas used for
+  the RTEMS Workspace and the C Program Heap are zeroed with a ``0x0` byte
+  pattern during system initialization.
 appl-config-option-index:
 - clear C Program Heap
 - clear RTEMS Workspace
@@ -16,12 +15,10 @@ appl-config-option-index:
 - zero RTEMS Workspace
 appl-config-option-name: CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
 appl-config-option-notes: |
-  Zeroing memory can add significantly to system boot time. It is not
-  necessary for RTEMS but is often assumed by support libraries.  In case
+  Zeroing memory can add significantly to the system initialization time. It is
+  not necessary for RTEMS but is often assumed by support libraries.  In case
   :ref:`CONFIGURE_DIRTY_MEMORY` is also defined, then the memory is first
   dirtied and then zeroed.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

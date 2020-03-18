@@ -1,13 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is defined by default.  This is the default scheduler and specifying
-  this configuration parameter is redundant.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the
+  :ref:`Deterministic Priority Scheduler <SchedulerPriority>`
+  algorithm is not available to the application.
 appl-config-option-description: |
-  If defined, then the :ref:`Deterministic Priority Scheduler
-  <SchedulerPriority>` algorithm is made available to the application.
+  In case this configuration option is defined, then
+  :ref:`Deterministic Priority Scheduler <SchedulerPriority>`
+  algorithm is made available to the application.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_SCHEDULER_PRIORITY
 appl-config-option-notes: |
@@ -19,13 +20,11 @@ appl-config-option-notes: |
   scheduler for exactly one processor.
 
   This scheduler algorithm is the default when
-  :ref:`CONFIGURE_MAXIMUM_PROCESSORS <CONFIGURE_MAXIMUM_PROCESSORS>` is
+  :ref:`CONFIGURE_MAXIMUM_PROCESSORS` is
   exactly one.
 
   The memory allocated for this scheduler depends on the
   :ref:`CONFIGURE_MAXIMUM_PRIORITY` configuration option.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 2010 Gedare Bloom
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

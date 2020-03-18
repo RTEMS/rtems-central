@@ -1,23 +1,48 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default. If no other root file system configuration
-  parameters are specified, the IMFS will be used as the root file system.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the root IMFS has the full
+  feature set by default.
 appl-config-option-description: |
-  This configuration parameter is defined if the application wishes to use
-  the device-only filesytem as the root file system.
+  In case this configuration option is defined, then an IMFS with a reduced
+  feature set will be the base filesystem (also known as root filesystem).
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM
 appl-config-option-notes: |
-  The device-only filesystem supports only device nodes and is smaller in
-  executable code size than the full IMFS and miniIMFS.
+  In case this configuration option is defined, then the following
+  configuration options will be defined as well
 
-  The devFS is comparable in functionality to the pseudo-filesystem name
-  space provided before RTEMS release 4.5.0.
-appl-config-option-range: |
-  Defined or undefined.
+  - :ref:`CONFIGURE_IMFS_DISABLE_CHMOD`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_CHOWN`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_LINK`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_MKNOD_FILE`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_MOUNT`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_READDIR`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_READLINK`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_RENAME`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_RMNOD`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_SYMLINK`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_UTIME`, and
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_UNMOUNT`.
+
+  In addition, a simplified path evaluation is enabled.  It allows only a look
+  up of absolute paths.
+
+  This configuration of the IMFS is basically a device-only filesystem.  It is
+  comparable in functionality to the pseudo-filesystem name space provided
+  before RTEMS release 4.5.0.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,18 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then no :file:`/dev/null` Driver
+  is initialized during system initialization.
 appl-config-option-description: |
-  This configuration variable is specified to enable ``/dev/null`` device driver.
+  In case this configuration option is defined, then the :file:`/dev/null`
+  Driver is initialized during system initialization.
 appl-config-option-index:
 - /dev/null
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
 appl-config-option-notes: |
   This device driver is supported by all BSPs.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,12 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the
+  :ref:`Constant Bandwidth Server (CBS) Scheduler <SchedulerCBS>`
+  algorithm is not available to the application.
 appl-config-option-description: |
-  If defined, then the :ref:`Constant Bandwidth Server (CBS) Scheduler
-  <SchedulerCBS>` algorithm is made available to the application.
+  In case this configuration option is defined, then
+  :ref:`Constant Bandwidth Server (CBS) Scheduler <SchedulerCBS>`
+  algorithm is made available to the application.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_SCHEDULER_CBS
 appl-config-option-notes: |
@@ -16,8 +18,6 @@ appl-config-option-notes: |
   In case no explicit :ref:`clustered scheduler configuration
   <ConfigurationSchedulersClustered>` is present, then it is used as the
   scheduler for exactly one processor.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

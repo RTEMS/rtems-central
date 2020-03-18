@@ -1,12 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the
+  :ref:`Deterministic Priority SMP Scheduler <SchedulerSMPPriority>`
+  algorithm is not available to the application.
 appl-config-option-description: |
-  If defined, then the :ref:`Deterministic Priority SMP Scheduler
-  <SchedulerSMPPriority>` algorithm is made available to the application.
+  In case this configuration option is defined, then
+  :ref:`Deterministic Priority SMP Scheduler <SchedulerSMPPriority>`
+  algorithm is made available to the application.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_SCHEDULER_PRIORITY_SMP
 appl-config-option-notes: |
@@ -22,8 +24,6 @@ appl-config-option-notes: |
 
   The memory allocated for this scheduler depends on the
   :ref:`CONFIGURE_MAXIMUM_PRIORITY` configuration option.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

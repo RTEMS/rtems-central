@@ -1,34 +1,33 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the root IMFS has the full
+  feature set by default.
 appl-config-option-description: |
-  In case this configuration option is defined, then the following
-  configuration options will be defined as well
-
-  - ``CONFIGURE_IMFS_DISABLE_CHMOD``,
-
-  - ``CONFIGURE_IMFS_DISABLE_CHOWN``,
-
-  - ``CONFIGURE_IMFS_DISABLE_UTIME``,
-
-  - ``CONFIGURE_IMFS_DISABLE_LINK``,
-
-  - ``CONFIGURE_IMFS_DISABLE_SYMLINK``,
-
-  - ``CONFIGURE_IMFS_DISABLE_READLINK``,
-
-  - ``CONFIGURE_IMFS_DISABLE_RENAME``, and
-
-  - ``CONFIGURE_IMFS_DISABLE_UNMOUNT``.
+  In case this configuration option is defined, then an IMFS with a reduced
+  feature set will be the base filesystem (also known as root filesystem).
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM
 appl-config-option-notes: |
-  None.
-appl-config-option-range: |
-  Defined or undefined.
+  In case this configuration option is defined, then the following
+  configuration options will be defined as well
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_CHMOD`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_CHOWN`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_LINK`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_READLINK`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_RENAME`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_SYMLINK`,
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_UTIME`, and
+
+  - :ref:`CONFIGURE_IMFS_DISABLE_UNMOUNT`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

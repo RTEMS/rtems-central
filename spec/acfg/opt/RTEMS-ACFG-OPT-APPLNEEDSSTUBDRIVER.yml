@@ -1,19 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then no Stub Driver is
+  initialized during system initialization.
 appl-config-option-description: |
-  ``CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER`` is defined if the application
-  wishes to include the Stub Device Driver.
+  In case this configuration option is defined, then the Stub Driver is
+  initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 appl-config-option-notes: |
   This device driver simply provides entry points that return successful and
   is primarily a test fixture. It is supported by all BSPs.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

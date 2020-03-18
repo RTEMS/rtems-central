@@ -1,16 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default, which specifies that the C Program Heap and
-  the RTEMS Workspace will be separate.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then there will be separate memory
+  pools for the RTEMS Workspace and C Program Heap.
 appl-config-option-description: |
-  When defined, the C Program Heap and the RTEMS Workspace will be one pool
-  of memory.
-
-  When not defined, there will be separate memory pools for the RTEMS
-  Workspace and C Program Heap.
+  In case this configuration option is defined, then the RTEMS Workspace and
+  the C Program Heap will be one pool of memory.
 appl-config-option-index:
 - unified work areas
 - separate work areas
@@ -24,11 +20,9 @@ appl-config-option-notes: |
   pool is very undesirable.
 
   In high memory environments, this is desirable when you want to use the
-  RTEMS "unlimited" objects option.  You will be able to create objects until
-  you run out of all available memory rather then just until you run out of
-  RTEMS Workspace.
-appl-config-option-range: |
-  Defined or undefined.
+  :ref:`ConfigUnlimitedObjects` option.  You will be able to create objects
+  until you run out of all available memory rather then just until you run out
+  of RTEMS Workspace.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

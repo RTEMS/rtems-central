@@ -1,20 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default, and thus the system initialization is
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the system initialization is
   quiet.
 appl-config-option-description: |
-  This configuration option enables to print some information during system
-  initialization.
+  In case this configuration option is defined, then the system initialization
+  is verbose.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
 appl-config-option-notes: |
   You may use this feature to debug system initialization issues.  The
-  printk() function is used to print the information.
-appl-config-option-range: |
-  Defined or undefined.
+  :c:func:`printk` function is used to print the information.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

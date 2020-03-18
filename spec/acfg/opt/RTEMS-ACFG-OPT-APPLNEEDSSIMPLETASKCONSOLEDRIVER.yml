@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then no Simple Task Console Driver
+  is initialized during system initialization.
 appl-config-option-description: |
-  ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`` is defined if
-  the application wishes to include the Simple Task Console Device Driver.
+  In case this configuration option is defined, then the Simple Task Console
+  Driver is initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER
 appl-config-option-notes: |
@@ -14,15 +14,15 @@ appl-config-option-notes: |
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
 
-  This device driver reads via ``getchark()``.
+  This device driver reads via :c:func:`getchark`.
 
   This device driver writes into a write buffer.  The count of characters
   written into the write buffer is returned.  It might be less than the
   requested count, in case the write buffer is full.  The write is
   non-blocking and may be called from interrupt context.  A dedicated task
   reads from the write buffer and outputs the characters via
-  ``rtems_putc()``.  This task runs with the least important priority.  The
-  write buffer size is 2047 characters and it is not configurable.
+  :c:func:`rtems_putc`.  This task runs with the least important priority.
+  The write buffer size is 2047 characters and it is not configurable.
 
   Use ``fsync(STDOUT_FILENO)`` or ``fdatasync(STDOUT_FILENO)`` to drain the
   write buffer.
@@ -32,15 +32,13 @@ appl-config-option-notes: |
 
   The
 
-  * ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER``,
+  * :ref:`CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`,
 
-  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER``, and
+  * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
 
-  * ``CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER``
+  * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
 
   configuration options are mutually exclusive.
-appl-config-option-range: |
-  Defined or undefined.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

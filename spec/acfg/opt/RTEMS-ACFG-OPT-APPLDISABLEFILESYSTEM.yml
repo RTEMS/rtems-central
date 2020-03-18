@@ -1,20 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default. If no other root file system configuration
-  parameters are specified, the IMFS will be used as the root file system.
-appl-config-option-description: |
-  This configuration parameter is defined if the application dose not intend
-  to use any kind of filesystem support. This include the device
-  infrastructure necessary to support ``printf()``.
-appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then the filesystems are
+  initialized during system initialization.
+appl-config-option-description: |
+  In case this configuration option is defined, then the filesystems are
+  **not** initialized during system initialization.
+appl-config-option-index: []
 appl-config-option-notes: |
-  None.
-appl-config-option-range: |
-  Defined or undefined.
+  Filesystems must be initialized to support file descriptor based device
+  drivers and basic input/output functions such as :c:func:`printf`.
+  Filesystems can be disabled to reduce the memory footprint of an application.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

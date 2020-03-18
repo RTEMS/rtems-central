@@ -1,22 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  This is not defined by default.
+appl-config-option-type: feature
+appl-config-option-default: |
+  If this configuration option is undefined, then no Frame Buffer Driver is
+  initialized during system initialization.
 appl-config-option-description: |
-  ``CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER`` is defined if the
-  application wishes to include the BSP's Frame Buffer Device Driver.
+  In case this configuration option is defined, then the Frame Buffer Driver is
+  initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_FRAME_BUFFER_DRIVER
 appl-config-option-notes: |
-  Most BSPs do not include support for a Frame Buffer Device Driver. This is
+  Most BSPs do not include support for a Frame Buffer Driver. This is
   because many boards do not include the required hardware.
 
-  If this is defined and the BSP does not have this device driver, then the
-  user will get a link time error for an undefined symbol.
-appl-config-option-range: |
-  Defined or undefined.
+  If this option is defined and the BSP does not have this device driver, then
+  the user will get a link time error for an undefined symbol.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false
