@@ -48,6 +48,11 @@ def _gather_options(item: Item, options: ItemMap) -> None:
         options[item.uid] = item
 
 
+_OPTION_TYPES = {
+    "feature": "This configuration option is a boolean feature define."
+}
+
+
 def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
     content = SphinxContent()
     group.register_license_and_copyrights(content)
@@ -63,11 +68,18 @@ def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
         content.add_blank_line()
         content.add_header(name, level="-")
         content.add_definition_item("CONSTANT:", f"``{name}``")
-        content.add_definition_item("DATA TYPE:",
-                                    item["appl-config-option-data-type"])
-        content.add_definition_item("RANGE:", item["appl-config-option-range"])
-        content.add_definition_item("DEFAULT VALUE:",
-                                    item["appl-config-option-default-value"])
+        if "appl-config-option-type" in item:
+            content.add_definition_item(
+                "OPTION TYPE:", _OPTION_TYPES[item["appl-config-option-type"]])
+            content.add_definition_item("DEFAULT CONFIGURATION:",
+                                        item["appl-config-option-default"])
+        else:
+            content.add_definition_item("DATA TYPE:",
+                                        item["appl-config-option-data-type"])
+            content.add_definition_item("RANGE:",
+                                        item["appl-config-option-range"])
+            content.add_definition_item(
+                "DEFAULT VALUE:", item["appl-config-option-default-value"])
         content.add_definition_item("DESCRIPTION:",
                                     item["appl-config-option-description"])
         content.add_definition_item("NOTES:", item["appl-config-option-notes"])
