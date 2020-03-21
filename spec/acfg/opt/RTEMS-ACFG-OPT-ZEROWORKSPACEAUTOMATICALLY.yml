@@ -6,7 +6,7 @@ appl-config-option-default: |
   RTEMS Workspace and the C Program Heap are not zeroed.
 appl-config-option-description: |
   In case this configuration option is defined, then the memory areas used for
-  the RTEMS Workspace and the C Program Heap are zeroed with a ``0x0` byte
+  the RTEMS Workspace and the C Program Heap are zeroed with a ``0x00`` byte
   pattern during system initialization.
 appl-config-option-index:
 - clear C Program Heap
