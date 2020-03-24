@@ -48,8 +48,17 @@ def _gather_options(item: Item, options: ItemMap) -> None:
         options[item.uid] = item
 
 
-_OPTION_TYPES = {
-    "feature": "This configuration option is a boolean feature define."
+_FEATURE = "This configuration option is a boolean feature define."
+
+_OPTION_TYPES = {"feature": _FEATURE, "feature-enable": _FEATURE}
+
+_OPTION_DEFAULTS = {
+    "feature":
+    lambda item: item["appl-config-option-default"],
+    "feature-enable":
+    lambda item:
+    """If this configuration option is undefined, then the described feature is not
+enabled."""
 }
 
 
@@ -69,10 +78,11 @@ def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
         content.add_header(name, level="-")
         content.add_definition_item("CONSTANT:", f"``{name}``")
         if "appl-config-option-type" in item:
-            content.add_definition_item(
-                "OPTION TYPE:", _OPTION_TYPES[item["appl-config-option-type"]])
+            option_type = item["appl-config-option-type"]
+            content.add_definition_item("OPTION TYPE:",
+                                        _OPTION_TYPES[option_type])
             content.add_definition_item("DEFAULT CONFIGURATION:",
-                                        item["appl-config-option-default"])
+                                        _OPTION_DEFAULTS[option_type](item))
         else:
             content.add_definition_item("DATA TYPE:",
                                         item["appl-config-option-data-type"])
