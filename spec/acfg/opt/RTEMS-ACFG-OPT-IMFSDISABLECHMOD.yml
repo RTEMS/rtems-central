@@ -3,7 +3,7 @@ active: true
 appl-config-option-type: feature
 appl-config-option-default: |
   If this configuration option is undefined, then the root IMFS supports
-  changing the mode of a file.
+  changing the mode of files.
 appl-config-option-description: |
   In case this configuration option is defined, then the root IMFS does not
   support changing the mode of files (no support for :c:func:`chmod`).

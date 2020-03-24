@@ -15,7 +15,7 @@ appl-config-option-notes: |
 appl-config-option-range: |
   A power of two greater than or equal to 16.
 copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
 derived: false
 enabled-by: []
 header: ''

@@ -2,10 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
 appl-config-option-type: feature
 appl-config-option-default: |
-  If this configuration option is undefined, then a clock driver may be
+  If this configuration option is undefined, then a Clock Driver may be
   initialized during system initialization.
 appl-config-option-description: |
-  In case this configuration option is defined, then **no** clock driver is
+  In case this configuration option is defined, then **no** Clock Driver is
   initialized during system initialization.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
@@ -22,7 +22,7 @@ appl-config-option-notes: |
 
   * :ref:`CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`,
 
-  otherwise a compile time error will occur.
+  otherwise a compile time error in the configuration file will occur.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

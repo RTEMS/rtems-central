@@ -6,8 +6,8 @@ appl-config-option-default: |
   are not initialized.
 appl-config-option-description: |
   This configuration option is defined to indicate that the application intends
-  to be part of a multiprocessing configuration. Additional configuration
-  parameters are assumed to be provided.
+  to be part of a multiprocessing configuration.  Additional configuration
+  options are assumed to be provided.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MP_APPLICATION
 appl-config-option-notes: |

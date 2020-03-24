@@ -1,11 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-type: feature
-appl-config-option-default: |
-  If this configuration option is undefined, then no Classic API initialization
-  task is configured.
+appl-config-option-type: feature-enable
 appl-config-option-description: |
-  In case this configuration option is defined, then a Classic API
+  In case this configuration option is defined, then exactly one Classic API
   initialization task is configured.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -19,7 +16,7 @@ appl-config-option-notes: |
 
   * :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
 
-  otherwise a compile time error will occur.
+  otherwise a compile time error in the configuration file will occur.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

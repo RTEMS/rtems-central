@@ -19,8 +19,9 @@ appl-config-option-notes: |
 
   The idle task must run at the lowest priority of all tasks in the system.
 
-  Configure a user idle task with the :ref:`CONFIGURE_IDLE_TASK_BODY`
-  configuration option.
+  If this configuration option is defined, then it is mandatory to configure a
+  user idle task with the :ref:`CONFIGURE_IDLE_TASK_BODY` configuration option,
+  otherwise a compile time error in the configuration file will occur.
 
   The application must define exactly one of the following configuration
   options
@@ -31,7 +32,7 @@ appl-config-option-notes: |
 
   * :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
 
-  otherwise a compile time error will occur.
+  otherwise a compile time error in the configuration file will occur.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

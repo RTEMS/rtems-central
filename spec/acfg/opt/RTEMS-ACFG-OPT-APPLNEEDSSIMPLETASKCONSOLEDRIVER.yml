@@ -1,9 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-type: feature
-appl-config-option-default: |
-  If this configuration option is undefined, then no Simple Task Console Driver
-  is initialized during system initialization.
+appl-config-option-type: feature-enable
 appl-config-option-description: |
   In case this configuration option is defined, then the Simple Task Console
   Driver is initialized during system initialization.

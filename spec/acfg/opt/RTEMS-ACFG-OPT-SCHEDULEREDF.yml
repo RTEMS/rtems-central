@@ -1,10 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-type: feature
-appl-config-option-default: |
-  If this configuration option is undefined, then the
-  :ref:`Earliest Deadline First (EDF) Scheduler <SchedulerEDF>`
-  algorithm is not available to the application.
+appl-config-option-type: feature-enable
 appl-config-option-description: |
   In case this configuration option is defined, then
   :ref:`Earliest Deadline First (EDF) Scheduler <SchedulerEDF>`

@@ -1,15 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-type: feature
-appl-config-option-default: |
-  If this configuration option is undefined, then the event record extensions
-  are not enabled.
+appl-config-option-type: feature-enable
 appl-config-option-description: |
   In case
 
   * this configuration option is defined
 
-  * and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS` is also properly defined,
+  * and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS` is properly defined,
 
   then the event record extensions are enabled.
 appl-config-option-index: []
@@ -18,7 +15,7 @@ appl-config-option-notes: |
   The record extensions capture thread create, start, restart, delete, switch,
   begin, exitted and terminate events.
 copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
 derived: false
 enabled-by: []
 header: ''
