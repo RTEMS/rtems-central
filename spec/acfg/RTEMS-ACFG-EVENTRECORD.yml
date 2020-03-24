@@ -4,7 +4,7 @@ appl-config-group-description: |
   This section describes configuration options related to the event recording.
 appl-config-group-name: Event Recording Configuration
 copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 derived: false
 enabled-by: []
 header: ''
