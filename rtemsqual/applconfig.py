@@ -24,7 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from typing import Dict
+from typing import Any, Dict, List
 
 from rtemsqual.content import SphinxContent
 from rtemsqual.items import Item, ItemCache
@@ -50,15 +50,110 @@ def _gather_options(item: Item, options: ItemMap) -> None:
 
 _FEATURE = "This configuration option is a boolean feature define."
 
-_OPTION_TYPES = {"feature": _FEATURE, "feature-enable": _FEATURE}
+_OPTION_TYPES = {
+    "feature": _FEATURE,
+    "feature-enable": _FEATURE,
+    "integer": "This configuration option is an integer define."
+}
 
-_OPTION_DEFAULTS = {
+_OPTION_DEFAULT_CONFIG = {
     "feature":
     lambda item: item["appl-config-option-default"],
     "feature-enable":
     lambda item:
     """If this configuration option is undefined, then the described feature is not
 enabled."""
+}
+
+
+def _generate_feature(content: SphinxContent, item: Item,
+                      option_type: str) -> None:
+    content.add_definition_item("DEFAULT CONFIGURATION:",
+                                _OPTION_DEFAULT_CONFIG[option_type](item))
+
+
+def _generate_min_max(lines: List[str], value: str, word: str) -> None:
+    lines.append("The value of this configuration option must be "
+                 f"{word} than or equal to {value}.")
+
+
+def _generate_set(lines: List[str], values: List[Any]) -> None:
+    value_set = "{" + ", ".join([str(x) for x in values]) + "}"
+    lines.append("The value of this configuration option must be")
+    lines.append(f"an element of {value_set}.")
+
+
+def _start_constraint_list(lines: List[str]) -> None:
+    lines.append("The value of this configuration option must "
+                 "satisfy all of the following")
+    lines.append("constraints:")
+
+
+def _generate_item_min(lines: List[str], constraint: Dict[str, Any]) -> None:
+    if "min" in constraint:
+        value = constraint["min"]
+        lines.append("")
+        lines.append(f"* It must be greater than or equal to {value}.")
+
+
+def _generate_item_max(lines: List[str], constraint: Dict[str, Any]) -> None:
+    if "max" in constraint:
+        value = constraint["max"]
+        lines.append("")
+        lines.append(f"* It must be less than or equal to {value}.")
+
+
+def _generate_item_custom(lines: List[str], constraint: Dict[str,
+                                                             Any]) -> None:
+    for custom in constraint.get("custom", []):
+        lines.append("")
+        custom = custom.strip().split("\n")
+        lines.append(f"* {custom[0]}")
+        lines.extend([f"  {x}" for x in custom[1:]])
+
+
+def _generate_integer(content: SphinxContent, item: Item,
+                      _option_type: str) -> None:
+    default_value = item["appl-config-option-default-value"]
+    if not isinstance(default_value, str) or " " not in default_value:
+        default_value = f"The default value is {default_value}."
+    content.add_definition_item("DEFAULT VALUE:", default_value)
+    constraint = item["appl-config-option-constraint"]
+    count = len(constraint)
+    lines = []  # type: List[str]
+    if count == 1:
+        if "min" in constraint:
+            _generate_min_max(lines, constraint["min"], "greater")
+        elif "max" in constraint:
+            _generate_min_max(lines, constraint["max"], "less")
+        elif "set" in constraint:
+            _generate_set(lines, constraint["set"])
+        elif "custom" in constraint:
+            if len(constraint["custom"]) == 1:
+                lines.extend(constraint["custom"][0].strip().split("\n"))
+            else:
+                _start_constraint_list(lines)
+                _generate_item_custom(lines, constraint)
+        else:
+            raise ValueError
+    elif count == 2 and "min" in constraint and "max" in constraint:
+        minimum = constraint["min"]
+        maximum = constraint["max"]
+        lines.append("The value of this configuration option must be "
+                     f"greater than or equal to {minimum}")
+        lines.append(f"and less than or equal to {maximum}.")
+    else:
+        _start_constraint_list(lines)
+        _generate_item_min(lines, constraint)
+        _generate_item_max(lines, constraint)
+        _generate_item_custom(lines, constraint)
+    content.add_definition_item("VALUE CONSTRAINTS:", lines)
+
+
+_OPTION_GENERATORS = {
+    "feature": _generate_feature,
+    "feature-enable": _generate_feature,
+    "integer": _generate_integer
 }
 
 
@@ -81,8 +176,7 @@ def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
             option_type = item["appl-config-option-type"]
             content.add_definition_item("OPTION TYPE:",
                                         _OPTION_TYPES[option_type])
-            content.add_definition_item("DEFAULT CONFIGURATION:",
-                                        _OPTION_DEFAULTS[option_type](item))
+            _OPTION_GENERATORS[option_type](content, item, option_type)
         else:
             content.add_definition_item("DATA TYPE:",
                                         item["appl-config-option-data-type"])
