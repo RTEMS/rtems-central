@@ -1,19 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  The default value is architecture-specific.
+appl-config-option-type: integer
+appl-config-option-default-value: '``CPU_STACK_MINIMUM_SIZE``'
 appl-config-option-description: |
-  This configuration parameter defines the minimum stack size in bytes for
-  every user task or thread in the system.
+  The value of this configuration option defines the minimum stack size in
+  bytes for every user task or thread in the system.
 appl-config-option-index:
 - minimum task stack size
 appl-config-option-name: CONFIGURE_MINIMUM_TASK_STACK_SIZE
 appl-config-option-notes: |
   Adjusting this parameter should be done with caution.  Examining the actual
   stack usage using the stack checker usage reporting facility is recommended
-  (see also :ref:`CONFIGURE_STACK_CHECKER_ENABLED <CONFIGURE_STACK_CHECKER_ENABLED>`).
+  (see also :ref:`CONFIGURE_STACK_CHECKER_ENABLED`).
 
   This parameter can be used to lower the minimum from that recommended. This
   can be used in low memory systems to reduce memory consumption for
@@ -26,14 +24,20 @@ appl-config-option-notes: |
 
   By default, this configuration parameter defines also the minimum stack
   size of POSIX threads.  This can be changed with the
-  :ref:`CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE <CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE>`
+  :ref:`CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE`
   configuration option.
 
   In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
-  used to define the default value of :ref:`CONFIGURE_INTERRUPT_STACK_SIZE
-  <CONFIGURE_INTERRUPT_STACK_SIZE>`.
-appl-config-option-range: |
-  Positive.
+  used to define the default value of :ref:`CONFIGURE_INTERRUPT_STACK_SIZE`.
+appl-config-option-constraint:
+  custom:
+  - |
+    The system does not ensure a minimum size.  The minimum size is
+    BSP-specific and application-specific.
+  - |
+    It must be small enough so that the task stack space calculation carried
+    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

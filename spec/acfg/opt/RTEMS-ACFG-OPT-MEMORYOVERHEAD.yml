@@ -1,21 +1,26 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``size_t``).
-appl-config-option-default-value: |
-  The default value is 0.
+appl-config-option-type: integer
+appl-config-option-default-value: 0
 appl-config-option-description: |
-  This parameter is set to the number of kilobytes the application wishes to
-  add to the requirements calculated by ``<rtems/confdefs.h>``.
+  The value of this configuration option defines the number of kilobytes the
+  application wishes to add to the RTEMS Workspace size calculated by
+  ``<rtems/confdefs.h>``.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MEMORY_OVERHEAD
 appl-config-option-notes: |
-  This configuration parameter should only be used when it is suspected that
-  a bug in ``<rtems/confdefs.h>`` has resulted in an underestimation.
-  Typically the memory allocation will be too low when an application does
-  not account for all message queue buffers or task stacks.
-appl-config-option-range: |
-  Zero or positive.
+  This configuration option should only be used when it is suspected that a bug
+  in ``<rtems/confdefs.h>`` has resulted in an underestimation.  Typically the
+  memory allocation will be too low when an application does not account for
+  all message queue buffers or task stacks, see
+  :ref:`CONFIGURE_MESSAGE_BUFFER_MEMORY`.
+appl-config-option-constraint:
+  min: 0
+  custom:
+  - |
+    It must be small enough so that the RTEMS Workspace size calculation
+    carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,19 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  RTEMS Mode (``rtems_mode``).
+appl-config-option-type: integer
 appl-config-option-default-value: |
-  The default value is ``RTEMS_NO_PREEMPT``.
+  In SMP  configurations, the default value is ``RTEMS_DEFAULT_MODES``,
+  otherwise the default value is ``RTEMS_NO_PREEMPT``.
 appl-config-option-description: |
-  ``CONFIGURE_INIT_TASK_INITIAL_MODES`` is the initial execution mode of the
-  single initialization task defined by the Classic API Initialization Tasks
-  Table.
+  The value of this configuration option defines the initial execution mode of
+  the Classic API initialization task.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_INIT_TASK_INITIAL_MODES
 appl-config-option-notes: |
   None.
-appl-config-option-range: |
-  Valid task mode sets.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be a valid task mode set.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

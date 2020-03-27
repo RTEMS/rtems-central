@@ -1,22 +1,21 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``size_t``).
-appl-config-option-default-value: |
-  The default value is 2 \* RTEMS_MINIMUM_STACK_SIZE.
+appl-config-option-type: integer
+appl-config-option-default-value: ':ref:`CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE`'
 appl-config-option-description: |
-  ``CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE`` is the stack size of the single
-  initialization thread defined by the POSIX API Initialization Threads
-  Table.
+  The value of this configuration option defines the thread stack size of the
+  POSIX API initialization threads.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
 appl-config-option-notes: |
-  If the stack size specified is greater than the configured minimum, it must
-  be accounted for in ``CONFIGURE_EXTRA_TASK_STACKS``.  See :ref:`Reserve
-  Task/Thread Stack Memory Above Minimum` for more information about
-  ``CONFIGURE_EXTRA_TASK_STACKS``.
-appl-config-option-range: |
-  Zero or positive.
+  None.
+appl-config-option-constraint:
+  min: ':ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`'
+  custom:
+  - |
+    It must be small enough so that the task stack space calculation carried
+    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

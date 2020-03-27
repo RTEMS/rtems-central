@@ -1,24 +1,25 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  If not defined and ``CONFIGURE_UNLIMITED_OBJECTS`` is defined, the default
-  value is eight (8).
+appl-config-option-type: integer
+appl-config-option-default-value: 8
 appl-config-option-description: |
-  ``CONFIGURE_UNLIMITED_ALLOCATION_SIZE`` provides an allocation size to use
-  for ``rtems_resource_unlimited`` when using
-  ``CONFIGURE_UNLIMITED_OBJECTS``.
+  If :ref:`CONFIGURE_UNLIMITED_OBJECTS` is defined, then the value of this
+  configuration option defines the default objects maximum of all object
+  classes supporting :ref:`ConfigUnlimitedObjects` to
+  ``rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)``.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_UNLIMITED_ALLOCATION_SIZE
 appl-config-option-notes: |
   By allowing users to declare all resources as being unlimited the user can
-  avoid identifying and limiting the resources
-  used. ``CONFIGURE_UNLIMITED_OBJECTS`` does not support varying the
-  allocation sizes for different objects; users who want that much control
-  can define the ``rtems_resource_unlimited`` macros themselves.
-appl-config-option-range: |
-  Positive.
+  avoid identifying and limiting the resources used.
+
+  The object maximum of each class can be configured also individually using
+  the :c:func:`rtems_resource_unlimited` macro.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must meet the constraints of all
+    object classes to which it is applied.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

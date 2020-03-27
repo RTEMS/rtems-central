@@ -1,13 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer.
+appl-config-option-type: integer
 appl-config-option-default-value: |
-  The default value is ``BSP_INTERRUPT_STACK_SIZE`` in case it is defined,
+  The default value is :ref:`BSP_INTERRUPT_STACK_SIZE` in case it is defined,
   otherwise the default value is ``CPU_STACK_MINIMUM_SIZE``.
 appl-config-option-description: |
-  The ``CONFIGURE_INTERRUPT_STACK_SIZE`` configuration option defines the
-  size of an interrupt stack in bytes.
+  The value of this configuration option defines the size of an interrupt stack
+  in bytes.
 appl-config-option-index:
 - interrupt stack size
 appl-config-option-name: CONFIGURE_INTERRUPT_STACK_SIZE
@@ -16,10 +15,9 @@ appl-config-option-notes: |
   ``CPU_INTERRUPT_STACK_ALIGNMENT``.
 
   There is one interrupt stack available for each configured processor
-  (:ref:`CONFIGURE_MAXIMUM_PROCESSORS <CONFIGURE_MAXIMUM_PROCESSORS>`).  The
-  interrupt stack areas are statically allocated in a special linker section
-  (``.rtemsstack.interrupt``).  The placement of this linker section is
-  BSP-specific.
+  (:ref:`CONFIGURE_MAXIMUM_PROCESSORS`).  The interrupt stack areas are
+  statically allocated in a special linker section (``.rtemsstack.interrupt``).
+  The placement of this linker section is BSP-specific.
 
   Some BSPs use the interrupt stack as the initialization stack which is used
   to perform the sequential system initialization before the multithreading
@@ -30,10 +28,16 @@ appl-config-option-notes: |
   stack size may still result in undefined behaviour.
 
   In releases before RTEMS 5.1 the default value was
-  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE
-  <CONFIGURE_MINIMUM_TASK_STACK_SIZE>` instead of ``CPU_STACK_MINIMUM_SIZE``.
-appl-config-option-range: |
-  Positive.
+  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE` instead of ``CPU_STACK_MINIMUM_SIZE``.
+appl-config-option-constraint:
+  custom:
+  - |
+    The system does not ensure a minimum size.  The minimum size is
+    BSP-specific and application-specific.
+  - |
+    It must be small enough so that the interrupt stack requirements
+    calculation carried out by ``<rtems/confdefs.h>`` does not overflow an
+    integer of type ``size_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

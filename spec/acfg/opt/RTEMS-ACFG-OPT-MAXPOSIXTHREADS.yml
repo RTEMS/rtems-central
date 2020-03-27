@@ -1,31 +1,39 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  The default value is 0.
+appl-config-option-type: integer
+appl-config-option-default-value: 0
 appl-config-option-description: |
-  ``CONFIGURE_MAXIMUM_POSIX_THREADS`` is the maximum number of POSIX API
-  Threads that can be concurrently active.
+  The value of this configuration option defines the maximum number of POSIX
+  API Threads that can be concurrently active.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MAXIMUM_POSIX_THREADS
 appl-config-option-notes: |
-  This object class can be configured in unlimited allocation mode.
+  This object class can be configured in unlimited allocation mode, see
+  :ref:`ConfigUnlimitedObjects`.
 
   This calculations for the required memory in the RTEMS Workspace for
   threads assume that each thread has a minimum stack size and has floating
-  point support enabled.  The configuration parameter
-  ``CONFIGURE_EXTRA_TASK_STACKS`` is used to specify thread stack
-  requirements *ABOVE* the minimum size required.  See :ref:`Reserve
+  point support enabled.  The configuration option
+  :ref:`CONFIGURE_EXTRA_TASK_STACKS` is used to specify thread stack
+  requirements **above** the minimum size required.  See :ref:`Reserve
   Task/Thread Stack Memory Above Minimum` for more information about
   ``CONFIGURE_EXTRA_TASK_STACKS``.
 
   The maximum number of Classic API Tasks is specified by
-  :ref:`CONFIGURE_MAXIMUM_TASKS <CONFIGURE_MAXIMUM_TASKS>`.
+  :ref:`CONFIGURE_MAXIMUM_TASKS`.
 
   All POSIX threads have floating point enabled.
-appl-config-option-range: |
-  Zero or positive.
+appl-config-option-constraint:
+  min: 0
+  max: 65535
+  custom:
+  - |
+    It must be less than or equal to a BSP-specific value which depends on the
+    memory size of the platform available to the application.
+  - |
+    It must be small enough so that the task stack space calculation carried
+    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

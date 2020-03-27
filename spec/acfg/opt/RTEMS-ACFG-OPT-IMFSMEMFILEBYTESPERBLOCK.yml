@@ -1,18 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Boolean feature macro.
-appl-config-option-default-value: |
-  The default IMFS block size is 128 bytes.
+appl-config-option-type: integer
+appl-config-option-default-value: 128
 appl-config-option-description: |
-  This configuration parameter specifies the block size for in-memory files
-  managed by the IMFS. The configured block size has two impacts. The first
-  is the average amount of unused memory in the last block of each file. For
-  example, when the block size is 512, on average one-half of the last block
-  of each file will remain unused and the memory is wasted. In contrast, when
-  the block size is 16, the average unused memory per file is only 8
-  bytes. However, it requires more allocations for the same size file and
-  thus more overhead per block for the dynamic memory management.
+  The value of this configuration option defines the block size for in-memory
+  files managed by the IMFS.
+appl-config-option-notes: |
+  The configured block size has two impacts. The first is the average amount of
+  unused memory in the last block of each file.  For example, when the block
+  size is 512, on average one-half of the last block of each file will remain
+  unused and the memory is wasted. In contrast, when the block size is 16, the
+  average unused memory per file is only 8 bytes. However, it requires more
+  allocations for the same size file and thus more overhead per block for the
+  dynamic memory management.
 
   Second, the block size has an impact on the maximum size file that can be
   stored in the IMFS. With smaller block size, the maximum file size is
@@ -33,12 +33,14 @@ appl-config-option-description: |
     bytes.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
-appl-config-option-notes: |
-  None.
-appl-config-option-range: |
-  Valid values for this configuration parameter are a power of two (2)
-  between 16 and 512 inclusive.  In other words, valid values are 16, 32, 64,
-  128, 256,and 512.
+appl-config-option-constraint:
+  set:
+  - 16
+  - 32
+  - 64
+  - 128
+  - 256
+  - 512
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

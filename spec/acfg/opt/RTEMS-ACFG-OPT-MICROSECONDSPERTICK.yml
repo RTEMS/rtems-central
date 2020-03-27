@@ -1,12 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  This is not defined by default. When not defined, the clock tick quantum is
-  configured to be 10,000 microseconds which is ten (10) milliseconds.
+appl-config-option-type: integer
+appl-config-option-default-value: 10000
 appl-config-option-description: |
-  This constant is  used to specify the length of time between clock ticks.
+  The value of this configuration option defines the length of time in
+  microseconds between clock ticks (clock tick quantum).
 
   When the clock tick quantum value is too low, the system will spend so much
   time processing clock ticks that it does not have processing time available
@@ -23,16 +21,20 @@ appl-config-option-description: |
   rounding errors will be introduced which may negatively impact the
   application.
 appl-config-option-index:
+- clock tick quantum
 - tick quantum
 appl-config-option-name: CONFIGURE_MICROSECONDS_PER_TICK
 appl-config-option-notes: |
-  This configuration parameter has no impact if the Clock Tick Device driver
-  is not configured.
+  This configuration option has no impact if the Clock Driver is not
+  configured, see :ref:`CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`.
 
-  There may be BSP specific limits on the resolution or maximum value of a
-  clock tick quantum.
-appl-config-option-range: |
-  Positive.
+  There may be Clock Driver specific limits on the resolution or maximum value
+  of a clock tick quantum.
+appl-config-option-constraint:
+  custom:
+  - It must be greater than or equal to a Clock Driver specific value.
+  - It must be less than or equal to a Clock Driver specific value.
+  - The resulting clock ticks per second should be an integer.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,18 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  RTEMS Task Priority (``rtems_task_priority``).
-appl-config-option-default-value: |
-  The default value is 1, which is the highest priority in the Classic API.
+appl-config-option-type: integer
+appl-config-option-default-value: 1
 appl-config-option-description: |
-  ``CONFIGURE_INIT_TASK_PRIORITY`` is the initial priority of the single
-  initialization task defined by the Classic API Initialization Tasks Table.
+  The value of this configuration option defines the initial priority of the
+  Classic API initialization task.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_INIT_TASK_PRIORITY
 appl-config-option-notes: |
   None.
-appl-config-option-range: |
-  One (1) to the maximum user priority value of the scheduler.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be a valid task priority.  The
+    set of valid task priorities is scheduler-specific.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

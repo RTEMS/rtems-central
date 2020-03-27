@@ -1,17 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Task priority (``rtems_task_priority``).
-appl-config-option-default-value: |
-  The default value is 15.
+appl-config-option-type: integer
+appl-config-option-default-value: 15
 appl-config-option-description: |
-  Defines the swapout worker task priority.
+  The value of this configuration option defines the swapout worker task
+  priority.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
 appl-config-option-notes: |
   None.
-appl-config-option-range: |
-  Valid task priority.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be a valid Classic API task
+    priority.  The set of valid task priorities is scheduler-specific.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

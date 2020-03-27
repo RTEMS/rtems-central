@@ -1,16 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  The default value is ``0``.
+appl-config-option-type: integer
+appl-config-option-default-value: 0
 appl-config-option-description: |
-  ``CONFIGURE_MAXIMUM_TASKS`` is the maximum number of Classic API Tasks that
-  can be concurrently active.
+  The value of this configuration option defines the maximum number of Classic
+  API Tasks that can be concurrently active.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MAXIMUM_TASKS
 appl-config-option-notes: |
-  This object class can be configured in unlimited allocation mode.
+  This object class can be configured in unlimited allocation mode, see
+  :ref:`ConfigUnlimitedObjects`.
 
   The calculations for the required memory in the RTEMS Workspace for tasks
   assume that each task has a minimum stack size and has floating point
@@ -21,14 +20,28 @@ appl-config-option-notes: |
   ``CONFIGURE_EXTRA_TASK_STACKS``.
 
   The maximum number of POSIX threads is specified by
-  :ref:`CONFIGURE_MAXIMUM_POSIX_THREADS <CONFIGURE_MAXIMUM_POSIX_THREADS>`.
+  :ref:`CONFIGURE_MAXIMUM_POSIX_THREADS`.
 
   A future enhancement to ``<rtems/confdefs.h>`` could be to eliminate the
   assumption that all tasks have floating point enabled. This would require
   the addition of a new configuration parameter to specify the number of
   tasks which enable floating point support.
-appl-config-option-range: |
-  Zero or positive.
+appl-config-option-constraint:
+  min: 0
+  max: 65535
+  custom:
+  - |
+    It must be less than or equal to a BSP-specific value which depends on the
+    memory size of the platform available to the application.
+  - |
+    It must be small enough so that the task stack space calculation carried
+    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
+  - |
+    The value may be defined through :c:func:`rtems_resource_unlimited` the
+    enable unlimited objects for this object class, if the value passed to
+    :c:func:`rtems_resource_unlimited` satisfies all other constraints of this
+    configuration option.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

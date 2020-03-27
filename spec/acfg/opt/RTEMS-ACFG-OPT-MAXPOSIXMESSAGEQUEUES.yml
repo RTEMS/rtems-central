@@ -1,20 +1,29 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  The default value is 0.
+appl-config-option-type: integer
+appl-config-option-default-value: 0
 appl-config-option-description: |
-  ``CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES`` is the maximum number of POSIX
+  The value of this configuration option defines the maximum number of POSIX
   API Message Queues that can be concurrently active.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
 appl-config-option-notes: |
-  This object class can be configured in unlimited allocation mode.  You have
-  to account for the memory used to store the messages of each message queue,
-  see :ref:`CONFIGURE_MESSAGE_BUFFER_MEMORY`.
-appl-config-option-range: |
-  Zero or positive.
+  This object class can be configured in unlimited allocation mode, see
+  :ref:`ConfigUnlimitedObjects`.  You have to account for the memory used to
+  store the messages of each message queue, see
+  :ref:`CONFIGURE_MESSAGE_BUFFER_MEMORY`.
+appl-config-option-constraint:
+  min: 0
+  max: 65535
+  custom:
+  - |
+    It must be less than or equal to a BSP-specific value which depends on the
+    memory size of the platform available to the application.
+  - |
+    The value may be defined through :c:func:`rtems_resource_unlimited` the
+    enable unlimited objects for this object class, if the value passed to
+    :c:func:`rtems_resource_unlimited` satisfies all other constraints of this
+    configuration option.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

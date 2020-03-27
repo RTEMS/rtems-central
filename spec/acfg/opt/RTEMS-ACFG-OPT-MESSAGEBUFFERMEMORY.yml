@@ -1,12 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  integer summation macro
-appl-config-option-default-value: |
-  The default value is zero.
+appl-config-option-type: integer
+appl-config-option-default-value: 0
 appl-config-option-description: |
-  The value of this configuration option defines the number of bytes
-  resereved for message queue buffers in the RTEMS Workspace.
+  The value of this configuration option defines the number of bytes reserved
+  for message queue buffers in the RTEMS Workspace.
 appl-config-option-index:
 - configure message queue buffer memory
 - CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE
@@ -58,6 +56,13 @@ appl-config-option-notes: |
             sizeof( other_message_type ) \
           ) \
         )
+appl-config-option-constraint:
+  min: 0
+  custom:
+  - |
+    It must be small enough so that the RTEMS Workspace size calculation
+    carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 appl-config-option-range: |
   undefined (zero) or calculation resulting in a positive integer
 copyrights:

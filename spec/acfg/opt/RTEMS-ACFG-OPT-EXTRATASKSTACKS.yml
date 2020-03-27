@@ -1,22 +1,25 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``size_t``).
-appl-config-option-default-value: |
-  The default value is 0.
+appl-config-option-type: integer
+appl-config-option-default-value: 0
 appl-config-option-description: |
-  This configuration parameter is set to the number of bytes the applications
-  wishes to add to the task stack requirements calculated by
+  The value of this configuration option defines the number of bytes the
+  applications wishes to add to the task stack requirements calculated by
   ``<rtems/confdefs.h>``.
 appl-config-option-index:
 - memory for task tasks
 appl-config-option-name: CONFIGURE_EXTRA_TASK_STACKS
 appl-config-option-notes: |
   This parameter is very important.  If the application creates tasks with
-  stacks larger then the minimum, then that memory is NOT accounted for by
+  stacks larger then the minimum, then that memory is **not** accounted for by
   ``<rtems/confdefs.h>``.
-appl-config-option-range: |
-  Undefined or positive.
+appl-config-option-constraint:
+  min: 0
+  custom:
+  - |
+    It must be small enough so that the task stack space calculation carried
+    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

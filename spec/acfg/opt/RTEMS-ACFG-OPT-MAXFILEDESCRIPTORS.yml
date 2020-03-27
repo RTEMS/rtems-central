@@ -1,22 +1,23 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
-appl-config-option-default-value: |
-  If ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`` is defined, then the
-  default value is 3, otherwise the default value is 0.  Three file
-  descriptors allows RTEMS to support standard input, output, and error I/O
-  streams on ``/dev/console``.
+appl-config-option-type: integer
+appl-config-option-default-value: 3
 appl-config-option-description: |
-  This configuration parameter is set to the maximum number of file like
-  objects that can be concurrently open.
+  The value of this configuration option defines the maximum number of file
+  like objects that can be concurrently open.
 appl-config-option-index:
 - maximum file descriptors
 appl-config-option-name: CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
 appl-config-option-notes: |
-  None.
-appl-config-option-range: |
-  Zero or positive.
+  The default value of three file descriptors allows RTEMS to support standard
+  input, output, and error I/O streams on ``/dev/console``.
+appl-config-option-constraint:
+  min: 0
+  max: '``SIZE_MAX``'
+  custom:
+  - |
+    It must be less than or equal to a BSP-specific value which depends on the
+    memory size of the platform available to the application.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

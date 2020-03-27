@@ -1,18 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  RTEMS Attributes (``rtems_attribute``).
-appl-config-option-default-value: |
-  The default value is ``RTEMS_DEFAULT_ATTRIBUTES``.
+appl-config-option-type: integer
+appl-config-option-default-value: '``RTEMS_DEFAULT_ATTRIBUTES``'
 appl-config-option-description: |
-  ``CONFIGURE_INIT_TASK_ATTRIBUTES`` is the task attributes of the single
-  initialization task defined by the Classic API Initialization Tasks Table.
+  The value of this configuration option defines the task attributes of the
+  Classic API initialization task.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_INIT_TASK_ATTRIBUTES
 appl-config-option-notes: |
   None.
-appl-config-option-range: |
-  Valid task attribute sets.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be a valid task attribute set.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

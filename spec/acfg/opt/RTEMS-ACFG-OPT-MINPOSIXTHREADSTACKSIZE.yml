@@ -1,20 +1,24 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``size_t``).
+appl-config-option-type: integer
 appl-config-option-default-value: |
   The default value is two times the value of
-  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE <CONFIGURE_MINIMUM_TASK_STACK_SIZE>`.
+  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`.
 appl-config-option-description: |
-  This configuration parameter defines the minimum stack size in bytes for
-  every POSIX thread in the system.
+  The value of this configuration option defines the minimum stack size in
+  bytes for every POSIX thread in the system.
 appl-config-option-index:
 - minimum POSIX thread stack size
 appl-config-option-name: CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
 appl-config-option-notes: |
   None.
-appl-config-option-range: |
-  Positive.
+appl-config-option-constraint:
+  min: 0
+  custom:
+  - |
+    It must be small enough so that the task stack space calculation carried
+    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``uintptr_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false
