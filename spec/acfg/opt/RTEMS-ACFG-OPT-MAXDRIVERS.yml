@@ -1,7 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Unsigned integer (``uint32_t``).
 appl-config-option-type: integer
 appl-config-option-default-value: |
   This is computed by default, and is set to the number of device drivers
@@ -18,9 +16,11 @@ appl-config-option-notes: |
   ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER`` configuration options are
   statically installed.
 appl-config-option-constraint:
-  min: 0
   max: '``SIZE_MAX``'
   custom:
+  - |
+    It must be greater than or equal than the number of statically configured
+    device drivers.
   - |
     It must be less than or equal to a BSP-specific value which depends on the
     memory size of the platform available to the application.
