@@ -10,7 +10,7 @@ appl-config-option-notes: |
   The application must define exactly one of the following configuration
   options
 
-  * :ref:`CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
+  * `CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
 
   * :ref:`CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
 
