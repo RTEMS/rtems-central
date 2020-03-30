@@ -74,18 +74,18 @@ def _generate_feature(content: SphinxContent, item: Item,
 
 
 def _generate_min_max(lines: List[str], value: str, word: str) -> None:
-    lines.append("The value of this configuration option must be "
+    lines.append("The value of this configuration option shall be "
                  f"{word} than or equal to {value}.")
 
 
 def _generate_set(lines: List[str], values: List[Any]) -> None:
     value_set = "{" + ", ".join([str(x) for x in values]) + "}"
-    lines.append("The value of this configuration option must be")
+    lines.append("The value of this configuration option shall be")
     lines.append(f"an element of {value_set}.")
 
 
 def _start_constraint_list(lines: List[str]) -> None:
-    lines.append("The value of this configuration option must "
+    lines.append("The value of this configuration option shall "
                  "satisfy all of the following")
     lines.append("constraints:")
 
@@ -94,14 +94,14 @@ def _generate_item_min(lines: List[str], constraint: Dict[str, Any]) -> None:
     if "min" in constraint:
         value = constraint["min"]
         lines.append("")
-        lines.append(f"* It must be greater than or equal to {value}.")
+        lines.append(f"* It shall be greater than or equal to {value}.")
 
 
 def _generate_item_max(lines: List[str], constraint: Dict[str, Any]) -> None:
     if "max" in constraint:
         value = constraint["max"]
         lines.append("")
-        lines.append(f"* It must be less than or equal to {value}.")
+        lines.append(f"* It shall be less than or equal to {value}.")
 
 
 def _generate_item_custom(lines: List[str], constraint: Dict[str,
@@ -135,7 +135,7 @@ def _generate_constraint(content: SphinxContent, item: Item) -> None:
     elif count == 2 and "min" in constraint and "max" in constraint:
         minimum = constraint["min"]
         maximum = constraint["max"]
-        lines.append("The value of this configuration option must be "
+        lines.append("The value of this configuration option shall be "
                      f"greater than or equal to {minimum}")
         lines.append(f"and less than or equal to {maximum}.")
     else:
