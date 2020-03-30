@@ -18,7 +18,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must meet the constraints of all
+    The value of this configuration option shall meet the constraints of all
     object classes to which it is applied.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

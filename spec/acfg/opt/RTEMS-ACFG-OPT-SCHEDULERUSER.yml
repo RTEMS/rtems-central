@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
 appl-config-option-type: feature-enable
 appl-config-option-description: |
-  In case this configuration option is defined, then the user must provide a
+  In case this configuration option is defined, then the user shall provide a
   scheduler algorithm to the application.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_SCHEDULER_USER
@@ -11,18 +11,18 @@ appl-config-option-notes: |
   Think twice before you use it.
 
   RTEMS allows the application to provide its own task/thread scheduling
-  algorithm. In order to do this, one must define
+  algorithm. In order to do this, one shall define
   ``CONFIGURE_SCHEDULER_USER`` to indicate the application provides its own
   scheduling algorithm. If ``CONFIGURE_SCHEDULER_USER`` is defined then the
-  following additional macros must be defined:
+  following additional macros shall be defined:
 
-  - ``CONFIGURE_SCHEDULER`` must be defined to a static definition of
+  - ``CONFIGURE_SCHEDULER`` shall be defined to a static definition of
     the scheduler data structures of the user scheduler.
 
-  - ``CONFIGURE_SCHEDULER_TABLE_ENTRIES`` must be defined to a scheduler
+  - ``CONFIGURE_SCHEDULER_TABLE_ENTRIES`` shall be defined to a scheduler
     table entry initializer for the user scheduler.
 
-  - ``CONFIGURE_SCHEDULER_USER_PER_THREAD`` must be defined to the type of
+  - ``CONFIGURE_SCHEDULER_USER_PER_THREAD`` shall be defined to the type of
     the per-thread information of the user scheduler.
 
   At this time, the mechanics and requirements for writing a new scheduler

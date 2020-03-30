@@ -15,7 +15,7 @@ appl-config-option-notes: |
 
   This parameter can be used to lower the minimum from that recommended. This
   can be used in low memory systems to reduce memory consumption for
-  stacks. However, this must be done with caution as it could increase the
+  stacks. However, this shall be done with caution as it could increase the
   possibility of a blown task stack.
 
   This parameter can be used to increase the minimum from that
@@ -32,10 +32,10 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    It must be greater than or equal to a BSP-specific and application-specific
+    It shall be greater than or equal to a BSP-specific and application-specific
     minimum value.
   - |
-    It must be small enough so that the task stack space calculation carried
+    It shall be small enough so that the task stack space calculation carried
     out by ``<rtems/confdefs.h>`` does not overflow an integer of type
     ``uintptr_t``.
 copyrights:

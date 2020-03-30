@@ -16,7 +16,7 @@ appl-config-option-constraint:
   min: 0
   custom:
   - |
-    It must be small enough so that the task stack space calculation carried
+    It shall be small enough so that the task stack space calculation carried
     out by ``<rtems/confdefs.h>`` does not overflow an integer of type
     ``uintptr_t``.
 copyrights:

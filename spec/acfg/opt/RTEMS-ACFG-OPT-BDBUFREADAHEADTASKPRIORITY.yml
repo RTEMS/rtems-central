@@ -11,7 +11,7 @@ appl-config-option-name: CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must be a valid task priority of the
+    The value of this configuration option shall be a valid task priority of the
     configured scheduler.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

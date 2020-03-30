@@ -10,7 +10,7 @@ appl-config-option-notes: |
   The Benchmark Timer Driver is intended for the benchmark tests of the RTEMS
   Testsuite.  Applications should not use this driver.
 
-  The application must define exactly one of the following configuration options
+  The application shall define exactly one of the following configuration options
 
   * :ref:`CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
 

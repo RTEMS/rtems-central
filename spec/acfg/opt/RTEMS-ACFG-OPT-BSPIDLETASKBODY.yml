@@ -21,7 +21,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must be defined to a valid function
+    The value of this configuration option shall be defined to a valid function
     pointer of the type ``void *( *idle_body )( uintptr_t )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

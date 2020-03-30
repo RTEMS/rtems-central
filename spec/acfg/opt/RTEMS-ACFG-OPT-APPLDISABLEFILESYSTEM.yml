@@ -11,7 +11,7 @@ appl-config-option-description: |
   configured.
 appl-config-option-index: []
 appl-config-option-notes: |
-  Filesystems must be initialized to support file descriptor based device
+  Filesystems shall be initialized to support file descriptor based device
   drivers and basic input/output functions such as :c:func:`printf`.
   Filesystems can be disabled to reduce the memory footprint of an application.
 copyrights:

@@ -14,7 +14,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must be a valid task mode set.
+    The value of this configuration option shall be a valid task mode set.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

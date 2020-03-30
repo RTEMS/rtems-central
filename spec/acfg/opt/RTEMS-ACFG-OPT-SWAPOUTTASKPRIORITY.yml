@@ -11,7 +11,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must be a valid Classic API task
+    The value of this configuration option shall be a valid Classic API task
     priority.  The set of valid task priorities is scheduler-specific.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

@@ -14,7 +14,7 @@ appl-config-option-notes: |
   of using the Hello World example as the baseline for an application and
   leaving out a clock tick source.
 
-  The application must define exactly one of the following configuration options
+  The application shall define exactly one of the following configuration options
 
   * :ref:`CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
 

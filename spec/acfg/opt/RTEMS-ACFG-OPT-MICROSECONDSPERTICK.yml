@@ -32,8 +32,8 @@ appl-config-option-notes: |
   of a clock tick quantum.
 appl-config-option-constraint:
   custom:
-  - It must be greater than or equal to a Clock Driver specific value.
-  - It must be less than or equal to a Clock Driver specific value.
+  - It shall be greater than or equal to a Clock Driver specific value.
+  - It shall be less than or equal to a Clock Driver specific value.
   - The resulting clock ticks per second should be an integer.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

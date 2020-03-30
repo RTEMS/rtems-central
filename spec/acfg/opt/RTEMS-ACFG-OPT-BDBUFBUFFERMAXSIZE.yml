@@ -12,7 +12,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   min: 0
   custom:
-  - It must be an integral multiple of :ref:`CONFIGURE_BDBUF_BUFFER_MIN_SIZE`.
+  - It shall be an integral multiple of :ref:`CONFIGURE_BDBUF_BUFFER_MIN_SIZE`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

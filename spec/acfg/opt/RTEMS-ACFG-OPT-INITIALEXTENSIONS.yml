@@ -15,7 +15,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must be a list of initializers for
+    The value of this configuration option shall be a list of initializers for
     structures of type :c:type:`rtems_extensions_table`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

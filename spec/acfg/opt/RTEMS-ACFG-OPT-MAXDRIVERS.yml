@@ -11,7 +11,7 @@ appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MAXIMUM_DRIVERS
 appl-config-option-notes: |
   If the application will dynamically install device drivers, then this
-  configuration parameter must be larger than the number of statically
+  configuration parameter shall be larger than the number of statically
   configured device drivers. Drivers configured using the
   ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER`` configuration options are
   statically installed.
@@ -19,10 +19,10 @@ appl-config-option-constraint:
   max: '``SIZE_MAX``'
   custom:
   - |
-    It must be greater than or equal than the number of statically configured
+    It shall be greater than or equal than the number of statically configured
     device drivers.
   - |
-    It must be less than or equal to a BSP-specific value which depends on the
+    It shall be less than or equal to a BSP-specific value which depends on the
     memory size of the platform available to the application.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

@@ -10,7 +10,7 @@ appl-config-option-notes: |
   The Clock Driver is responsible for providing a regular interrupt
   which invokes a clock tick directive.
 
-  The application must define exactly one of the following configuration options
+  The application shall define exactly one of the following configuration options
 
   * `CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER`,
 

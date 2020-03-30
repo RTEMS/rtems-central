@@ -11,7 +11,7 @@ appl-config-option-index:
 - task stack deallocator
 appl-config-option-name: CONFIGURE_TASK_STACK_DEALLOCATOR
 appl-config-option-notes: |
-  A correctly configured system must configure the following to be consistent:
+  A correctly configured system shall configure the following to be consistent:
 
   - :ref:`CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
 
@@ -21,7 +21,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The value of this configuration option must be defined to a valid function
+    The value of this configuration option shall be defined to a valid function
     pointer of the type ``void ( *deallocate )( void * )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)

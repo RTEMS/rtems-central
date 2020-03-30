@@ -14,16 +14,16 @@ appl-config-option-name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 appl-config-option-notes: |
   If you use this option be careful, the user IDLE task **cannot** block at all
   during the initialization sequence.  Further, once application
-  initialization is complete, it must make itself preemptible and enter an idle
+  initialization is complete, it shall make itself preemptible and enter an idle
   body loop.
 
-  The IDLE task must run at the lowest priority of all tasks in the system.
+  The IDLE task shall run at the lowest priority of all tasks in the system.
 
   If this configuration option is defined, then it is mandatory to configure a
   user IDLE task with the :ref:`CONFIGURE_IDLE_TASK_BODY` configuration option,
   otherwise a compile time error in the configuration file will occur.
 
-  The application must define exactly one of the following configuration
+  The application shall define exactly one of the following configuration
   options
 
   * :ref:`CONFIGURE_RTEMS_INIT_TASKS_TABLE`,

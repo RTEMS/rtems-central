@@ -11,7 +11,7 @@ appl-config-option-index:
 - interrupt stack size
 appl-config-option-name: CONFIGURE_INTERRUPT_STACK_SIZE
 appl-config-option-notes: |
-  The interrupt stack size must be aligned according to
+  The interrupt stack size shall be aligned according to
   ``CPU_INTERRUPT_STACK_ALIGNMENT``.
 
   There is one interrupt stack available for each configured processor
@@ -32,10 +32,10 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    It must be greater than or equal to a BSP-specific and application-specific
+    It shall be greater than or equal to a BSP-specific and application-specific
     minimum value.
   - |
-    It must be small enough so that the interrupt stack area calculation
+    It shall be small enough so that the interrupt stack area calculation
     carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
     ``size_t``.
 copyrights:

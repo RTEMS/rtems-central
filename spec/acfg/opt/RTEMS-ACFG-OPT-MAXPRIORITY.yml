@@ -38,7 +38,7 @@ appl-config-option-notes: |
   priority levels (default), 48 bytes for 4 priority levels
   (``CONFIGURE_MAXIMUM_PRIORITY == 3``).
 
-  The default value is 255, because RTEMS must support 256 priority levels to
+  The default value is 255, because RTEMS shall support 256 priority levels to
   be compliant with various standards.  These priorities range from 0 to 255.
 appl-config-option-constraint:
   set:
