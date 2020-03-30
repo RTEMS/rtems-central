@@ -6,21 +6,21 @@ appl-config-option-default: |
   provide one or more initialization tasks.
 appl-config-option-description: |
   This configuration option is defined to indicate that the user has configured
-  **no** user initialization tasks or threads and that the user provided idle
+  **no** user initialization tasks or threads and that the user provided IDLE
   task will perform application initialization and then transform itself into
-  an idle task.
+  an IDLE task.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 appl-config-option-notes: |
-  If you use this option be careful, the user idle task **cannot** block at all
+  If you use this option be careful, the user IDLE task **cannot** block at all
   during the initialization sequence.  Further, once application
   initialization is complete, it must make itself preemptible and enter an idle
   body loop.
 
-  The idle task must run at the lowest priority of all tasks in the system.
+  The IDLE task must run at the lowest priority of all tasks in the system.
 
   If this configuration option is defined, then it is mandatory to configure a
-  user idle task with the :ref:`CONFIGURE_IDLE_TASK_BODY` configuration option,
+  user IDLE task with the :ref:`CONFIGURE_IDLE_TASK_BODY` configuration option,
   otherwise a compile time error in the configuration file will occur.
 
   The application must define exactly one of the following configuration

@@ -32,12 +32,12 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The system does not ensure a minimum size.  The minimum size is
-    BSP-specific and application-specific.
+    It must be greater than or equal to a BSP-specific and application-specific
+    minimum value.
   - |
-    It must be small enough so that the interrupt stack requirements
-    calculation carried out by ``<rtems/confdefs.h>`` does not overflow an
-    integer of type ``size_t``.
+    It must be small enough so that the interrupt stack area calculation
+    carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ``size_t``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

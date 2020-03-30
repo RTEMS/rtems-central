@@ -32,8 +32,8 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   custom:
   - |
-    The system does not ensure a minimum size.  The minimum size is
-    BSP-specific and application-specific.
+    It must be greater than or equal to a BSP-specific and application-specific
+    minimum value.
   - |
     It must be small enough so that the task stack space calculation carried
     out by ``<rtems/confdefs.h>`` does not overflow an integer of type
