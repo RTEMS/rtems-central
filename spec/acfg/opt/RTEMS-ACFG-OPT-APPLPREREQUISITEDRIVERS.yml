@@ -1,25 +1,25 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  device driver entry structures
+appl-config-option-type: initializer
 appl-config-option-default-value: |
-  This is not defined by default.
+  The default value is the empty list.
 appl-config-option-description: |
-  ``CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS`` is defined if the
-  application has device drivers it needs to include in the Device Driver
-  Table.  This should be defined to the set of device driver entries that
-  will be placed in the table at the *FRONT* of the Device Driver Table and
-  initialized before any other drivers *EXCEPT* any BSP prerequisite drivers.
+  The value of this configuration option is used to initialize the Device
+  Driver Table.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
 appl-config-option-notes: |
-  In some cases, it is used by System On Chip BSPs to support peripheral
-  buses beyond those normally found on the System On Chip. For example, this
-  is used by one RTEMS system which has implemented a SPARC/ERC32 based board
-  with VMEBus. The VMEBus Controller initialization is performed by a device
-  driver configured via this configuration parameter.
-appl-config-option-range: |
-  Undefined or set of device driver entry structures
+  The value of this configuration option is placed after the entries defined by
+  :ref:`CONFIGURE_BSP_PREREQUISITE_DRIVERS` and before all other device driver
+  configuration options.
+
+  See :ref:`CONFIGURE_APPLICATION_EXTRA_DRIVERS` for an alternative placement
+  of application device driver initializers.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be a list of initializers for
+    structures of type :c:type:`rtems_driver_address_table`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,20 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  POSIX thread function pointer (``void *(*entry_point)(void *)``).
-appl-config-option-default-value: |
-  The default value is ``POSIX_Init``.
+appl-config-option-type: initializer
+appl-config-option-default-value: '``POSIX_Init``'
 appl-config-option-description: |
-  ``CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT`` is the entry point
-  (a.k.a. function name) of the single initialization thread defined by the
-  POSIX API Initialization Threads Table.
+  The value of this configuration option initializes the entry point of the
+  POSIX API initialization thread.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
 appl-config-option-notes: |
-  The user must implement the function ``POSIX_Init`` or the function name
-  provided in this configuration parameter.
-appl-config-option-range: |
-  Undefined or a valid POSIX thread function pointer.
+  The user must implement the function referenced by this configuration option.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be defined to a valid function
+    pointer of the type ``void *( *entry_point )( void * )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

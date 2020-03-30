@@ -1,26 +1,28 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Function pointer.
+appl-config-option-type: initializer
 appl-config-option-default-value: |
   The default value is ``_Workspace_Allocate``, which indicates that task
   stacks will be allocated from the RTEMS Workspace.
 appl-config-option-description: |
-  ``CONFIGURE_TASK_STACK_ALLOCATOR`` may point to a user provided routine to
-  allocate task stacks.
+  The value of this configuration option initializes the stack allocator
+  allocate handler.
 appl-config-option-index:
 - task stack allocator
 appl-config-option-name: CONFIGURE_TASK_STACK_ALLOCATOR
 appl-config-option-notes: |
   A correctly configured system must configure the following to be consistent:
 
-  - ``CONFIGURE_TASK_STACK_ALLOCATOR_INIT``
+  - :ref:`CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
 
-  - ``CONFIGURE_TASK_STACK_ALLOCATOR``
+  - `CONFIGURE_TASK_STACK_ALLOCATOR`
 
-  - ``CONFIGURE_TASK_STACK_DEALLOCATOR``
-appl-config-option-range: |
-  Undefined or valid function pointer.
+  - :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be defined to a valid function
+    pointer of the type ``void *( *allocate )( size_t )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

@@ -1,19 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  List of user extension initializers (``rtems_extensions_table``).
+appl-config-option-type: initializer
 appl-config-option-default-value: |
-  This is not defined by default.
+  The default value is the empty list.
 appl-config-option-description: |
-  If ``CONFIGURE_INITIAL_EXTENSIONS`` is defined by the application, then
-  this application specific set of initial extensions will be placed in the
-  initial extension table.
+  The value of this configuration option is used to initialize the table of
+  initial user extensions.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_INITIAL_EXTENSIONS
 appl-config-option-notes: |
-  None.
-appl-config-option-range: |
-  Undefined or a list of one or more user extensions.
+  The value of this configuration option is placed before the entries of
+  :ref:`BSP_INITIAL_EXTENSION` and after the entries of all other initial
+  user extensions.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be a list of initializers for
+    structures of type :c:type:`rtems_extensions_table`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

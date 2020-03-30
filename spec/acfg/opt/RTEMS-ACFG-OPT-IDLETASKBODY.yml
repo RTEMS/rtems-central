@@ -1,19 +1,25 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
-appl-config-option-data-type: |
-  Function pointer.
+appl-config-option-type: initializer
 appl-config-option-default-value: |
-  This is not defined by default.
+  If :ref:`BSP_IDLE_TASK_BODY` is defined, then this will be the default value,
+  otherwise the default value is ``_CPU_Thread_Idle_body``.
 appl-config-option-description: |
-  ``CONFIGURE_IDLE_TASK_BODY`` is set to the function name corresponding to
-  the application specific IDLE thread body.  If not specified, the BSP or
-  RTEMS default IDLE thread body will be used.
+  The value of this configuration option initializes the IDLE thread body.
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_IDLE_TASK_BODY
 appl-config-option-notes: |
-  None.
-appl-config-option-range: |
-  Undefined or valid function pointer.
+  IDLE threads must not block.  A blocking IDLE thread results in undefined
+  system behaviour because the scheduler assume that at least one ready thread
+  exists.
+
+  IDLE threads can be used to initialize the application, see configuration
+  option :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be defined to a valid function
+    pointer of the type ``void *( *idle_body )( uintptr_t )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false
