@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-type: feature-enable
+appl-config-option-description: |
+  In case this configuration option is defined, then the following BSP related
+  configuration options are undefined:
+
+  - :ref:`BSP_IDLE_TASK_BODY`
+
+  - :ref:`BSP_IDLE_TASK_STACK_SIZE`
+
+  - :ref:`BSP_INITIAL_EXTENSION`
+
+  - :ref:`BSP_INTERRUPT_STACK_SIZE`
+
+  - :ref:`CONFIGURE_BSP_PREREQUISITE_DRIVERS`
+
+  - :ref:`CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK`
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_DISABLE_BSP_SETTINGS
+appl-config-option-notes: |
+  None.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.129
+links:
+- RTEMS-ACFG-BSP: _GrDY3wCA-wZIjNaNIwqZBM6OrMLGu0_LLx2H-VYSyA=
+normative: true
+ref: ''
+reviewed: NdV6jdrCvK6mfwAVHiZw-0ftzRA1MlxFQxX85WE2otQ=
+text: ''
+type: interface

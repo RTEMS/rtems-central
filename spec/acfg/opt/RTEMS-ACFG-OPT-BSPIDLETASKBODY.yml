@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-type: initializer
+appl-config-option-default-value: |
+  The default value is BSP-specific.
+appl-config-option-description: |
+  If
+
+  * this configuration option is defined by the BSP
+
+  * and :ref:`CONFIGURE_DISABLE_BSP_SETTINGS` is undefined,
+
+  then the value of this configuration option defines the default value of
+  :ref:`CONFIGURE_IDLE_TASK_BODY`.
+appl-config-option-index: []
+appl-config-option-name: BSP_IDLE_TASK_BODY
+appl-config-option-notes: |
+  As it has knowledge of the specific CPU model, system controller logic, and
+  peripheral buses, a BSP-specific IDLE task may be capable of turning
+  components off to save power during extended periods of no task activity.
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option must be defined to a valid function
+    pointer of the type ``void *( *idle_body )( uintptr_t )``.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.123
+links:
+- RTEMS-ACFG-BSP: _GrDY3wCA-wZIjNaNIwqZBM6OrMLGu0_LLx2H-VYSyA=
+normative: true
+ref: ''
+reviewed: tQwexSVyaofV3ETvezRbUOHChUYBcMxaVp-Gg1XzKdI=
+text: ''
+type: interface
