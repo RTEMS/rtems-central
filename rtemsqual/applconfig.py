@@ -53,7 +53,8 @@ _FEATURE = "This configuration option is a boolean feature define."
 _OPTION_TYPES = {
     "feature": _FEATURE,
     "feature-enable": _FEATURE,
-    "integer": "This configuration option is an integer define."
+    "integer": "This configuration option is an integer define.",
+    "initializer": "This configuration option is an initializer define."
 }
 
 _OPTION_DEFAULT_CONFIG = {
@@ -112,12 +113,7 @@ def _generate_item_custom(lines: List[str], constraint: Dict[str,
         lines.extend([f"  {x}" for x in custom[1:]])
 
 
-def _generate_integer(content: SphinxContent, item: Item,
-                      _option_type: str) -> None:
-    default_value = item["appl-config-option-default-value"]
-    if not isinstance(default_value, str) or " " not in default_value:
-        default_value = f"The default value is {default_value}."
-    content.add_definition_item("DEFAULT VALUE:", default_value)
+def _generate_constraint(content: SphinxContent, item: Item) -> None:
     constraint = item["appl-config-option-constraint"]
     count = len(constraint)
     lines = []  # type: List[str]
@@ -150,10 +146,20 @@ def _generate_integer(content: SphinxContent, item: Item,
     content.add_definition_item("VALUE CONSTRAINTS:", lines)
 
 
+def _generate_initializer_or_integer(content: SphinxContent, item: Item,
+                                     _option_type: str) -> None:
+    default_value = item["appl-config-option-default-value"]
+    if not isinstance(default_value, str) or " " not in default_value:
+        default_value = f"The default value is {default_value}."
+    content.add_definition_item("DEFAULT VALUE:", default_value)
+    _generate_constraint(content, item)
+
+
 _OPTION_GENERATORS = {
     "feature": _generate_feature,
     "feature-enable": _generate_feature,
-    "integer": _generate_integer
+    "initializer": _generate_initializer_or_integer,
+    "integer": _generate_initializer_or_integer
 }
 
 
@@ -172,18 +178,9 @@ def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
         content.add_blank_line()
         content.add_header(name, level="-")
         content.add_definition_item("CONSTANT:", f"``{name}``")
-        if "appl-config-option-type" in item:
-            option_type = item["appl-config-option-type"]
-            content.add_definition_item("OPTION TYPE:",
-                                        _OPTION_TYPES[option_type])
-            _OPTION_GENERATORS[option_type](content, item, option_type)
-        else:
-            content.add_definition_item("DATA TYPE:",
-                                        item["appl-config-option-data-type"])
-            content.add_definition_item("RANGE:",
-                                        item["appl-config-option-range"])
-            content.add_definition_item(
-                "DEFAULT VALUE:", item["appl-config-option-default-value"])
+        option_type = item["appl-config-option-type"]
+        content.add_definition_item("OPTION TYPE:", _OPTION_TYPES[option_type])
+        _OPTION_GENERATORS[option_type](content, item, option_type)
         content.add_definition_item("DESCRIPTION:",
                                     item["appl-config-option-description"])
         content.add_definition_item("NOTES:", item["appl-config-option-notes"])
