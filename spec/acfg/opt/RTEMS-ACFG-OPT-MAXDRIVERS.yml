@@ -21,9 +21,8 @@ appl-config-option-constraint:
   - |
     It shall be greater than or equal than the number of statically configured
     device drivers.
-  - |
-    It shall be less than or equal to a BSP-specific value which depends on the
-    memory size of the platform available to the application.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTMEMSZ
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

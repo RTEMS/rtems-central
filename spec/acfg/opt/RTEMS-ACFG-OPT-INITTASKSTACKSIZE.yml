@@ -11,11 +11,8 @@ appl-config-option-notes: |
   None.
 appl-config-option-constraint:
   min: ':ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`'
-  custom:
-  - |
-    It shall be small enough so that the task stack space calculation carried
-    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ``uintptr_t``.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTSTACKSPACE
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

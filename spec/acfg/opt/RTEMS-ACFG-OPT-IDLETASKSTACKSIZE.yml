@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 active: true
 appl-config-option-type: integer
-appl-config-option-default-value: '``RTEMS_MINIMUM_STACK_SIZE``'
+appl-config-option-default-value: ':ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`'
 appl-config-option-description: |
   The value of this configuration option defines the task stack size for an
   IDLE task.
@@ -11,14 +11,9 @@ appl-config-option-notes: |
   In SMP configurations, there is one IDLE task per configured processor, see
   :ref:`CONFIGURE_MAXIMUM_PROCESSORS`.
 appl-config-option-constraint:
-  custom:
-  - |
-    It shall be greater than or equal to a BSP-specific and application-specific
-    minimum value.
-  - |
-    It shall be small enough so that the IDLE task stack area calculation
-    carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ``size_t``.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTIDLESTACKAREA
+  - RTEMS-ACFG-OPT-CONSTRAINTBSPAPPMIN
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

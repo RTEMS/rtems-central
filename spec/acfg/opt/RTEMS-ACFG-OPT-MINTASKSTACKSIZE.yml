@@ -30,14 +30,9 @@ appl-config-option-notes: |
   In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
   used to define the default value of :ref:`CONFIGURE_INTERRUPT_STACK_SIZE`.
 appl-config-option-constraint:
-  custom:
-  - |
-    It shall be greater than or equal to a BSP-specific and application-specific
-    minimum value.
-  - |
-    It shall be small enough so that the task stack space calculation carried
-    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ``uintptr_t``.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTBSPAPPMIN
+  - RTEMS-ACFG-OPT-CONSTRAINTSTACKSPACE
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

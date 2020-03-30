@@ -12,10 +12,8 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   min: 0
   max: 65535
-  custom:
-  - |
-    It shall be less than or equal to a BSP-specific value which depends on the
-    memory size of the platform available to the application.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTMEMSZ
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

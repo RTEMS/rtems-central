@@ -11,9 +11,6 @@ appl-config-option-index:
 - interrupt stack size
 appl-config-option-name: CONFIGURE_INTERRUPT_STACK_SIZE
 appl-config-option-notes: |
-  The interrupt stack size shall be aligned according to
-  ``CPU_INTERRUPT_STACK_ALIGNMENT``.
-
   There is one interrupt stack available for each configured processor
   (:ref:`CONFIGURE_MAXIMUM_PROCESSORS`).  The interrupt stack areas are
   statically allocated in a special linker section (``.rtemsstack.interrupt``).
@@ -30,14 +27,10 @@ appl-config-option-notes: |
   In releases before RTEMS 5.1 the default value was
   :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE` instead of ``CPU_STACK_MINIMUM_SIZE``.
 appl-config-option-constraint:
-  custom:
-  - |
-    It shall be greater than or equal to a BSP-specific and application-specific
-    minimum value.
-  - |
-    It shall be small enough so that the interrupt stack area calculation
-    carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ``size_t``.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTISRSTACKALIGN
+  - RTEMS-ACFG-OPT-CONSTRAINTISRSTACKAREA
+  - RTEMS-ACFG-OPT-CONSTRAINTBSPAPPMIN
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

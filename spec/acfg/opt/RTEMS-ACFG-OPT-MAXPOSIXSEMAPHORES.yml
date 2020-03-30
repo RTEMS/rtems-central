@@ -17,15 +17,10 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   min: 0
   max: 65535
-  custom:
-  - |
-    It shall be less than or equal to a BSP-specific value which depends on the
-    memory size of the platform available to the application.
-  - |
-    The value may be defined through :c:func:`rtems_resource_unlimited` the
-    enable unlimited objects for this object class, if the value passed to
-    :c:func:`rtems_resource_unlimited` satisfies all other constraints of this
-    configuration option.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTUNLIMITED
+  - RTEMS-ACFG-OPT-CONSTRAINTWKSPACE
+  - RTEMS-ACFG-OPT-CONSTRAINTMEMSZ
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

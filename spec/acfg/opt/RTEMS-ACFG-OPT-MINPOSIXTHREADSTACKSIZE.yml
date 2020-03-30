@@ -13,12 +13,9 @@ appl-config-option-name: CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
 appl-config-option-notes: |
   None.
 appl-config-option-constraint:
-  min: 0
-  custom:
-  - |
-    It shall be small enough so that the task stack space calculation carried
-    out by ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ``uintptr_t``.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTBSPAPPMIN
+  - RTEMS-ACFG-OPT-CONSTRAINTSTACKSPACE
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

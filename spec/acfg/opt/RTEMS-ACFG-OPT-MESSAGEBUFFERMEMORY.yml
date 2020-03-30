@@ -58,13 +58,9 @@ appl-config-option-notes: |
         )
 appl-config-option-constraint:
   min: 0
-  custom:
-  - |
-    It shall be small enough so that the RTEMS Workspace size calculation
-    carried out by ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ``uintptr_t``.
-appl-config-option-range: |
-  undefined (zero) or calculation resulting in a positive integer
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTWKSPACE
+  - RTEMS-ACFG-OPT-CONSTRAINTMEMSZ
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

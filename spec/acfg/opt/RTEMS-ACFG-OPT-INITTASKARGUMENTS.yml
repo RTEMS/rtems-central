@@ -9,8 +9,6 @@ appl-config-option-index: []
 appl-config-option-name: CONFIGURE_INIT_TASK_ARGUMENTS
 appl-config-option-notes: |
   None.
-appl-config-option-range: |
-  Complete range of the type.
 appl-config-option-constraint:
   custom:
   - |
