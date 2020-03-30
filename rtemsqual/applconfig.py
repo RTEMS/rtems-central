@@ -67,8 +67,8 @@ enabled."""
 }
 
 
-def _generate_feature(content: SphinxContent, item: Item,
-                      option_type: str) -> None:
+def _generate_feature(content: SphinxContent, item: Item, option_type: str,
+                      _item_cache: ItemCache) -> None:
     content.add_definition_item("DEFAULT CONFIGURATION:",
                                 _OPTION_DEFAULT_CONFIG[option_type](item))
 
@@ -108,15 +108,29 @@ def _generate_item_custom(lines: List[str], constraint: Dict[str,
                                                              Any]) -> None:
     for custom in constraint.get("custom", []):
         lines.append("")
+        custom = custom.replace("The value of this configuration option", "It")
         custom = custom.strip().split("\n")
         lines.append(f"* {custom[0]}")
         lines.extend([f"  {x}" for x in custom[1:]])
 
 
-def _generate_constraint(content: SphinxContent, item: Item) -> None:
+def _resolve_constraint_links(content: SphinxContent, constraint: Dict[str, Any],
+                              item_cache: ItemCache) -> None:
+    if "links" in constraint:
+        if "custom" not in constraint:
+            constraint["custom"] = []
+        for link in reversed(constraint["links"]):
+            item = item_cache[link]
+            item.register_license_and_copyrights(content)
+            constraint["custom"].append(item["text"])
+
+
+def _generate_constraint(content: SphinxContent, item: Item,
+                         item_cache: ItemCache) -> None:
     constraint = item["appl-config-option-constraint"]
     count = len(constraint)
     lines = []  # type: List[str]
+    _resolve_constraint_links(content, constraint, item_cache)
     if count == 1:
         if "min" in constraint:
             _generate_min_max(lines, constraint["min"], "greater")
@@ -147,12 +161,13 @@ def _generate_constraint(content: SphinxContent, item: Item) -> None:
 
 
 def _generate_initializer_or_integer(content: SphinxContent, item: Item,
-                                     _option_type: str) -> None:
+                                     _option_type: str,
+                                     item_cache: ItemCache) -> None:
     default_value = item["appl-config-option-default-value"]
     if not isinstance(default_value, str) or " " not in default_value:
         default_value = f"The default value is {default_value}."
     content.add_definition_item("DEFAULT VALUE:", default_value)
-    _generate_constraint(content, item)
+    _generate_constraint(content, item, item_cache)
 
 
 _OPTION_GENERATORS = {
@@ -163,7 +178,8 @@ _OPTION_GENERATORS = {
 }
 
 
-def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
+def _generate_content(group: Item, options: ItemMap,
+                      item_cache: ItemCache) -> SphinxContent:
     content = SphinxContent()
     group.register_license_and_copyrights(content)
     content.add_header(group["appl-config-group-name"], level="=")
@@ -180,7 +196,7 @@ def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
         content.add_definition_item("CONSTANT:", f"``{name}``")
         option_type = item["appl-config-option-type"]
         content.add_definition_item("OPTION TYPE:", _OPTION_TYPES[option_type])
-        _OPTION_GENERATORS[option_type](content, item, option_type)
+        _OPTION_GENERATORS[option_type](content, item, option_type, item_cache)
         content.add_definition_item("DESCRIPTION:",
                                     item["appl-config-option-description"])
         content.add_definition_item("NOTES:", item["appl-config-option-notes"])
@@ -205,5 +221,5 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         group = groups[group_config["uid"]]
         options = {}  # type: ItemMap
         _gather_options(group, options)
-        content = _generate_content(group, options)
+        content = _generate_content(group, options, item_cache)
         content.write(group_config["target"])
