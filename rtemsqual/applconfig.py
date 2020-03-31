@@ -111,7 +111,7 @@ def _generate_item_custom(lines: List[str], constraint: Dict[str,
         custom = custom.replace("The value of this configuration option", "It")
         custom = custom.strip().split("\n")
         lines.append(f"* {custom[0]}")
-        lines.extend([f"  {x}" for x in custom[1:]])
+        lines.extend([f"  {x}" if x else "" for x in custom[1:]])
 
 
 def _resolve_constraint_links(content: SphinxContent, constraint: Dict[str, Any],
