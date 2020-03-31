@@ -13,6 +13,8 @@ appl-config-option-notes: |
   areas is cleared to zero during system initialization.  In case
   :ref:`CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY` is also defined, then the
   memory is first dirtied and then zeroed.
+
+  See also :ref:`CONFIGURE_MALLOC_DIRTY`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

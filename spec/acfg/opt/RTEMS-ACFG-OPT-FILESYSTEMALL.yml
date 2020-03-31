@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-description: |
+  In case this configuration option is defined, then the following
+  configuration options will be defined as well
+
+  - :ref:`CONFIGURE_FILESYSTEM_DOSFS`,
+
+  - :ref:`CONFIGURE_FILESYSTEM_FTPFS`,
+
+  - :ref:`CONFIGURE_FILESYSTEM_IMFS`,
+
+  - :ref:`CONFIGURE_FILESYSTEM_JFFS2`,
+
+  - :ref:`CONFIGURE_FILESYSTEM_NFS`,
+
+  - :ref:`CONFIGURE_FILESYSTEM_RFS`, and
+
+  - :ref:`CONFIGURE_FILESYSTEM_TFTPFS`.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_FILESYSTEM_ALL
+appl-config-option-notes: |
+  None.
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.146
+links:
+- RTEMS-ACFG-FILESYSTEM: 9RfguldyRuN5UR-zcLUoiTYBDzow1fnI4B_ZnP_UyKk=
+normative: true
+ref: ''
+reviewed: null
+text: ''
+type: interface

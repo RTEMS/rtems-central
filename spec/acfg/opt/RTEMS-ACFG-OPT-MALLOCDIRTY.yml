@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-description: |
+  In case this configuration option is defined, then each memory area returned
+  by C Program Heap allocator functions such as :c:func:`malloc` is dirtied
+  with a ``0xCF`` byte pattern before it is handed over to the application.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MALLOC_DIRTY
+appl-config-option-notes: |
+  The dirtying performed by this option is carried out for each successful
+  memory allocation from the C Program Heap in contrast to
+  :ref:`CONFIGURE_DIRTY_MEMORY` which dirties the memory only once during the
+  system initialization.
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.156
+links:
+- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+normative: true
+ref: ''
+reviewed: null
+text: ''
+type: interface

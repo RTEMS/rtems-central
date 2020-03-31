@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-type: feature-enable
+appl-config-option-description: |
+  In case this configuration option is defined, then the system is informed
+  that the task stack allocator does not use the RTEMS Workspace.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE
+appl-config-option-notes: |
+  This configuration option may be used if a custom task stack allocator is
+  configured, see :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: '1.160'
+links:
+- RTEMS-ACFG-STACKALLOC: RinkAR6bq3NOG7L5KiFW19GxN_mHxMpEd6-axxdk-k4=
+normative: true
+ref: ''
+reviewed: null
+text: ''
+type: interface

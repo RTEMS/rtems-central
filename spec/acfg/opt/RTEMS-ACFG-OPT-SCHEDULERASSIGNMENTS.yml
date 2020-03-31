@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+appl-config-option-default-value: |
+  The default value of this configuration option is computed so that the
+  default scheduler is assigned to each configured processor (up to 32).
+appl-config-option-description: |
+  The value of this configuration option is used to initialize the initial
+  scheduler to processor assignments.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_SCHEDULER_ASSIGNMENTS
+appl-config-option-notes: |
+  This configuration option is only evaluated in SMP configurations.
+
+  This is an advanced configuration option, see
+  :ref:`ConfigurationSchedulersClustered`.
+appl-config-option-type: initializer
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option shall be a list of the following
+    macros:
+
+    * ``RTEMS_SCHEDULER_ASSIGN( processor_index, attributes )``
+
+    * :c:macro:`RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER`
+  - |
+    The value of this configuration option shall be a list of exactly
+    :ref:`CONFIGURE_MAXIMUM_PROCESSORS` elements.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+header: ''
+interface-type: appl-config-option
+level: 1.158
+links:
+- RTEMS-ACFG-SCHEDGENERAL: rc4sMdWxd5qw88Gl1zfZxhSAF4EJ3mvQOTYVBtVHtRc=
+normative: true
+ref: ''
+reviewed: null
+text: ''
+type: interface
