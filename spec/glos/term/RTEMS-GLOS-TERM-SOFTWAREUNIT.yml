@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+glossary-term: software unit
+glossary-type: term
+header: ''
+level: 1.211
+links:
+- RTEMS-GLOS-GENERAL: y-DGLwoqVNRBlzUau_mx_yR3iKlhE02h2mRxK7VkLQE=
+normative: true
+ref: ''
+reviewed: null
+text: |
+  This term is defined by ECSS-E-ST-40C 3.2.24 as a "separately compilable
+  piece of source code".  For this project a *software unit* shall be any of
+  the following items and nothing else:
+
+  * @term{RTEMS-GLOS-TERM-ASSEMBLERLANGUAGE} function in a
+    @term{RTEMS-GLOS-TERM-SOURCECODE} file
+
+  * @term{RTEMS-GLOS-TERM-CLANGUAGE} function (external and internal linkage)
+
+  A *software unit* is a @term{RTEMS-GLOS-TERM-SOFTWARECOMPONENT}.
+type: glossary
