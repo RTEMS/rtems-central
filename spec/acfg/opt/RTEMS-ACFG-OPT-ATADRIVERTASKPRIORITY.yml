@@ -10,10 +10,8 @@ appl-config-option-notes: |
   This configuration option is only evaluated if the configuration option
   :ref:`CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER` is defined.
 appl-config-option-constraint:
-  custom:
-  - |
-    The value of this configuration option shall be a valid Classic API task
-    priority.  The set of valid task priorities is scheduler-specific.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTPRIOCLASSIC
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 derived: false

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+active: true
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+derived: false
+enabled-by: []
+header: ''
+level: 1.162
+links: []
+normative: true
+ref: ''
+reviewed: null
+text: |
+  The value of this configuration option shall be a valid Classic API task
+  priority.  The set of valid task priorities is scheduler-specific.
+type: constraint

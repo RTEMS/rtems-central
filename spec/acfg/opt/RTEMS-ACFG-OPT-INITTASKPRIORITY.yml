@@ -10,10 +10,8 @@ appl-config-option-name: CONFIGURE_INIT_TASK_PRIORITY
 appl-config-option-notes: |
   None.
 appl-config-option-constraint:
-  custom:
-  - |
-    The value of this configuration option shall be a valid task priority.  The
-    set of valid task priorities is scheduler-specific.
+  links:
+  - RTEMS-ACFG-OPT-CONSTRAINTPRIOCLASSIC
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false
