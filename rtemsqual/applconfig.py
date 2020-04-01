@@ -24,7 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from rtemsqual.content import SphinxContent
 from rtemsqual.items import Item, ItemCache
@@ -114,7 +114,8 @@ def _generate_item_custom(lines: List[str], constraint: Dict[str,
         lines.extend([f"  {x}" if x else "" for x in custom[1:]])
 
 
-def _resolve_constraint_links(content: SphinxContent, constraint: Dict[str, Any],
+def _resolve_constraint_links(content: SphinxContent, constraint: Dict[str,
+                                                                       Any],
                               item_cache: ItemCache) -> None:
     if "links" in constraint:
         if "custom" not in constraint:
@@ -178,6 +179,12 @@ _OPTION_GENERATORS = {
 }
 
 
+def _generate_notes(content: SphinxContent, notes: Optional[str]) -> None:
+    if not notes:
+        notes = "None."
+    content.add_definition_item("NOTES:", notes)
+
+
 def _generate_content(group: Item, options: ItemMap,
                       item_cache: ItemCache) -> SphinxContent:
     content = SphinxContent()
@@ -199,7 +206,7 @@ def _generate_content(group: Item, options: ItemMap,
         _OPTION_GENERATORS[option_type](content, item, option_type, item_cache)
         content.add_definition_item("DESCRIPTION:",
                                     item["appl-config-option-description"])
-        content.add_definition_item("NOTES:", item["appl-config-option-notes"])
+        _generate_notes(content, item["appl-config-option-notes"])
     content.add_licence_and_copyrights()
     return content
 
