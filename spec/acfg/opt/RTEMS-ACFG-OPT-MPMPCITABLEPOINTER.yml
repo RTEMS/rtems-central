@@ -11,6 +11,9 @@ appl-config-option-notes: |
   RTEMS provides a Shared Memory MPCI Device Driver which can be used on any
   Multiprocessor System assuming the BSP provides the proper set of
   supporting methods.
+
+  This configuration option is only evaluated if
+  :ref:`CONFIGURE_MP_APPLICATION` is defined.
 appl-config-option-constraint:
   custom:
   - |

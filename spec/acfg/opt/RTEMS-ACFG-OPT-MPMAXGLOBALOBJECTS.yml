@@ -10,6 +10,9 @@ appl-config-option-name: CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
 appl-config-option-notes: |
   This value corresponds to the total number of objects which can be created
   with the ``RTEMS_GLOBAL`` attribute.
+
+  This configuration option is only evaluated if
+  :ref:`CONFIGURE_MP_APPLICATION` is defined.
 appl-config-option-constraint:
   min: 0
   max: '``UINT32_MAX``'

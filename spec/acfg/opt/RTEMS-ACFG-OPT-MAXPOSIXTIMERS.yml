@@ -17,6 +17,7 @@ appl-config-option-constraint:
   min: 0
   max: 65535
   links:
+  - RTEMS-ACFG-OPT-CONSTRAINTPOSIX
   - RTEMS-ACFG-OPT-CONSTRAINTUNLIMITED
   - RTEMS-ACFG-OPT-CONSTRAINTMEMSZ
 copyrights:

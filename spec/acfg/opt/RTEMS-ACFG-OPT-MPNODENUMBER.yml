@@ -12,6 +12,9 @@ appl-config-option-notes: |
   the Makefile variable ``NODE_NUMBER``. The same code is compiled with the
   ``NODE_NUMBER`` set to different values. The test programs behave
   differently based upon their node number.
+
+  This configuration option is only evaluated if
+  :ref:`CONFIGURE_MP_APPLICATION` is defined.
 appl-config-option-constraint:
   min: 0
   max: '``UINT32_MAX``'

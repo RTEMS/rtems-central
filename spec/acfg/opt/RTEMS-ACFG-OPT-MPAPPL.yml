@@ -11,8 +11,10 @@ appl-config-option-description: |
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MP_APPLICATION
 appl-config-option-notes: |
-  This has no impact unless RTEMS was built with the
-  ``--enable-multiprocessing`` build configuration option.
+  This configuration option shall be undefined if the multiprocessing support
+  is not enabled (e.g. RTEMS was built without the ``--enable-multiprocessing``
+  build configuration option).  Otherwise a compile time error in the
+  configuration file will occur.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false

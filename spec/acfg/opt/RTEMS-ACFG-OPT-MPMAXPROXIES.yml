@@ -13,6 +13,9 @@ appl-config-option-notes: |
   on this node. This configuration parameter reflects the maximum number of
   remote tasks/threads which can be blocked on objects on this node, see
   :ref:`MPCIProxies`.
+
+  This configuration option is only evaluated if
+  :ref:`CONFIGURE_MP_APPLICATION` is defined.
 appl-config-option-constraint:
   min: 0
   max: '``UINT32_MAX``'

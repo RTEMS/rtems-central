@@ -15,6 +15,7 @@ appl-config-option-notes: |
 appl-config-option-constraint:
   min: 0
   links:
+  - RTEMS-ACFG-OPT-CONSTRAINTPOSIX
   - RTEMS-ACFG-OPT-CONSTRAINTWKSPACE
   - RTEMS-ACFG-OPT-CONSTRAINTMEMSZ
 copyrights:

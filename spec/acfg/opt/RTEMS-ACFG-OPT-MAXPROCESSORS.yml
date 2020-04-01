@@ -12,8 +12,11 @@ appl-config-option-index: []
 appl-config-option-name: CONFIGURE_MAXIMUM_PROCESSORS
 appl-config-option-notes: |
   If there are more processors available than configured, the rest will be
-  ignored.  In uniprocessor configuration, this configuration define is
   ignored.
+
+  This configuration option is only evaluated in SMP configurations (e.g. RTEMS
+  was built with the ``--enable-smp`` build configuration option).  In all
+  other configurations it has no effect.
 appl-config-option-constraint:
   min: 0
   max: '``CPU_MAXIMUM_PROCESSORS``'
