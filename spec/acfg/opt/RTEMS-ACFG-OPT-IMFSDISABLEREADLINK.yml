@@ -9,8 +9,7 @@ appl-config-option-description: |
   support reading symbolic links (no support for :c:func:`readlink`).
 appl-config-option-index: []
 appl-config-option-name: CONFIGURE_IMFS_DISABLE_READLINK
-appl-config-option-notes: |
-  None.
+appl-config-option-notes: null
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 derived: false
