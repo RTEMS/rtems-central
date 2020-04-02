@@ -56,7 +56,7 @@ header: ''
 interface-type: appl-config-option
 level: 1.72
 links:
-- RTEMS-ACFG-GENERAL: B6rbi_eXOZOzB3o8-DYzrc0JmF7ON1adlcZj3dQd6WY=
+- RTEMS-ACFG-SCHEDGENERAL: rc4sMdWxd5qw88Gl1zfZxhSAF4EJ3mvQOTYVBtVHtRc=
 normative: true
 ref: ''
 reviewed: ksLz61UxfVP62IWAMhRmES1jMkdgahV0JiusncyKuOQ=
