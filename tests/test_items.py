@@ -66,14 +66,15 @@ class TestItemCache(object):
 
     def test_load(self, tmpdir):
         config = {}
-        cache_file = tmpdir + "/spec.pickle"
+        cache_file = "spec.pickle"
         config["cache-file"] = cache_file
-        spec_dir = tmpdir + "/spec"
-        shutil.copytree(
-            os.path.dirname(__file__) + "/spec-item-cache", spec_dir)
-        config["paths"] = [spec_dir]
+        spec_src = os.path.join(os.path.dirname(__file__), "spec-item-cache")
+        spec_dst = os.path.join(tmpdir, "spec")
+        shutil.copytree(spec_src, spec_dst)
+        config["paths"] = [str(spec_dst)]
         ic = ItemCache(config)
-        assert os.path.exists(cache_file)
+        assert os.path.exists(os.path.join(spec_dst, cache_file))
+        assert os.path.exists(os.path.join(spec_dst, "d", cache_file))
         assert ic["c"]["v"] == "c"
         assert ic["p"]["v"] == "p"
         t = ic.top_level
@@ -81,7 +82,7 @@ class TestItemCache(object):
         assert t["p"]["v"] == "p"
         ic2 = ItemCache(config)
         assert ic2["c"]["v"] == "c"
-        with open(tmpdir + "/spec/d/c.yml", "w+") as out:
+        with open(os.path.join(tmpdir, "spec", "d", "c.yml"), "w+") as out:
             out.write("links:\n- p: null\nv: x\n")
         ic3 = ItemCache(config)
         assert ic3["c"]["v"] == "x"
