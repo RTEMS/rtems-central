@@ -98,7 +98,7 @@ class ItemCache(object):
         """ Returns the list of top-level specification items. """
         return self._top_level
 
-    def _load_items_in_dir(self, path: str, path_cache_file: str,
+    def _load_items_in_dir(self, path: str, cache_file: str,
                            update_cache: bool) -> None:
         data_by_uid = {}  # type: Dict[str, Any]
         if update_cache:
@@ -108,10 +108,11 @@ class ItemCache(object):
                     uid = os.path.basename(name).replace(".yml", "")
                     with open(path2, "r") as yaml_src:
                         data_by_uid[uid] = yaml.safe_load(yaml_src.read())
-            with open(path_cache_file, "wb") as out:
+            os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+            with open(cache_file, "wb") as out:
                 pickle.dump(data_by_uid, out)
         else:
-            with open(path_cache_file, "rb") as pickle_src:
+            with open(cache_file, "rb") as pickle_src:
                 data_by_uid = pickle.load(pickle_src)
         for uid, data in data_by_uid.items():
             item = Item(uid, data)
@@ -119,10 +120,12 @@ class ItemCache(object):
             if not item["links"]:
                 self._top_level[uid] = item
 
-    def _load_items_recursive(self, path: str, cache_file: str) -> None:
-        path_cache_file = os.path.join(path, cache_file)
+    def _load_items_recursive(self, path: str, cache_dir: str) -> None:
+        mid = os.path.abspath(path)
+        mid = mid.replace(os.path.commonprefix([cache_dir, mid]), "")
+        cache_file = os.path.join(cache_dir, mid, "spec.pickle")
         try:
-            mtime = os.path.getmtime(path_cache_file)
+            mtime = os.path.getmtime(cache_file)
             update_cache = False
         except FileNotFoundError:
             update_cache = True
@@ -132,8 +135,8 @@ class ItemCache(object):
                 update_cache = update_cache or mtime <= os.path.getmtime(path2)
             else:
                 if stat.S_ISDIR(os.lstat(path2).st_mode):
-                    self._load_items_recursive(path2, cache_file)
-        self._load_items_in_dir(path, path_cache_file, update_cache)
+                    self._load_items_recursive(path2, cache_dir)
+        self._load_items_in_dir(path, cache_file, update_cache)
 
     def _init_parents(self) -> None:
         for item in self._items.values():
@@ -145,8 +148,8 @@ class ItemCache(object):
                 parent.add_child(item)
 
     def _load_items(self, config: Any) -> None:
-        cache_file = config["cache-file"]
+        cache_dir = os.path.abspath(config["cache-directory"])
         for path in config["paths"]:
-            self._load_items_recursive(path, cache_file)
+            self._load_items_recursive(path, cache_dir)
         self._init_parents()
         self._init_children()

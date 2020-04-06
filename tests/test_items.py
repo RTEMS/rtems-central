@@ -66,15 +66,16 @@ class TestItemCache(object):
 
     def test_load(self, tmpdir):
         config = {}
-        cache_file = "spec.pickle"
-        config["cache-file"] = cache_file
+        cache_dir = os.path.join(tmpdir, "cache")
+        config["cache-directory"] = os.path.normpath(cache_dir)
         spec_src = os.path.join(os.path.dirname(__file__), "spec-item-cache")
         spec_dst = os.path.join(tmpdir, "spec")
         shutil.copytree(spec_src, spec_dst)
-        config["paths"] = [str(spec_dst)]
+        config["paths"] = [os.path.normpath(spec_dst)]
         ic = ItemCache(config)
-        assert os.path.exists(os.path.join(spec_dst, cache_file))
-        assert os.path.exists(os.path.join(spec_dst, "d", cache_file))
+        assert os.path.exists(os.path.join(cache_dir, "spec", "spec.pickle"))
+        assert os.path.exists(
+            os.path.join(cache_dir, "spec", "d", "spec.pickle"))
         assert ic["c"]["v"] == "c"
         assert ic["p"]["v"] == "p"
         t = ic.top_level

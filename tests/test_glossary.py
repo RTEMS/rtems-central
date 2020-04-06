@@ -34,20 +34,20 @@ from rtemsqual.items import ItemCache
 class TestGlossary(object):
     def test_glossary(self, tmpdir):
         item_cache_config = {}
-        cache_file = tmpdir + "/spec.pickle"
-        item_cache_config["cache-file"] = cache_file
-        spec_dir = tmpdir + "/spec"
-        shutil.copytree(os.path.dirname(__file__) + "/spec-glossary", spec_dir)
-        item_cache_config["paths"] = [spec_dir]
+        item_cache_config["cache-directory"] = "cache"
+        spec_src = os.path.join(os.path.dirname(__file__), "spec-glossary")
+        spec_dst = os.path.join(tmpdir, "spec")
+        shutil.copytree(spec_src, spec_dst)
+        item_cache_config["paths"] = [os.path.normpath(spec_dst)]
         ic = ItemCache(item_cache_config)
 
         glossary_config = {}
         glossary_config["project-groups"] = ["g"]
-        project_glossary = tmpdir + "/project/glossary.rst"
+        project_glossary = os.path.join(tmpdir, "project", "glossary.rst")
         glossary_config["project-target"] = project_glossary
         doc = {}
         doc["rest-source-paths"] = [str(tmpdir)]
-        document_glossary = tmpdir + "/document/glossary.rst"
+        document_glossary = os.path.join(tmpdir, "document", "glossary.rst")
         doc["target"] = document_glossary
         glossary_config["documents"] = [doc]
         generate(glossary_config, ic)
