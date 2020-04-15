@@ -141,8 +141,13 @@ class ItemCache(object):
         return self._items[uid]
 
     @property
+    def all(self) -> ItemMap:
+        """ Returns the map of all specification items. """
+        return self._items
+
+    @property
     def top_level(self) -> ItemMap:
-        """ Returns the list of top-level specification items. """
+        """ Returns the map of top-level specification items. """
         return self._top_level
 
     def _load_items_in_dir(self, path: str, cache_file: str,

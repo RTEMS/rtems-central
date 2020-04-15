@@ -52,6 +52,10 @@ def test_load(tmpdir):
     t = ic.top_level
     assert len(t) == 1
     assert t["p"]["v"] == "p"
+    a = ic.all
+    assert len(a) == 2
+    assert a["p"]["v"] == "p"
+    assert a["c"]["v"] == "c"
     ic2 = ItemCache(config)
     assert ic2["c"]["v"] == "c"
     with open(os.path.join(tmpdir, "spec", "d", "c.yml"), "w+") as out:
