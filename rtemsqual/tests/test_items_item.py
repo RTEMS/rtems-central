@@ -56,3 +56,31 @@ def test_children():
     x = p.children
     assert len(x) == 1
     assert c == x[0]
+
+
+def _is_enabled(enabled, enabled_by):
+    i = Item("i", {"enabled-by": enabled_by})
+    return i.is_enabled(enabled)
+
+
+def test_is_enabled():
+    assert _is_enabled([], None)
+    assert _is_enabled([], [])
+    assert not _is_enabled([], ["A"])
+    assert _is_enabled(["A"], "A")
+    assert not _is_enabled(["B"], "A")
+    assert _is_enabled(["A"], ["A"])
+    assert not _is_enabled(["B"], ["A"])
+    assert _is_enabled(["A"], ["A", "B"])
+    assert _is_enabled(["B"], ["A", "B"])
+    assert not _is_enabled(["C"], ["A", "B"])
+    assert not _is_enabled(["A"], {"not": "A"})
+    assert _is_enabled(["B"], {"not": "A"})
+    assert not _is_enabled(["A"], {"and": ["A", "B"]})
+    assert _is_enabled(["A", "B"], {"and": ["A", "B"]})
+    assert _is_enabled(["A", "B", "C"], {"and": ["A", "B"]})
+    assert _is_enabled(["A", "B"], {"and": ["A", "B", {"not": "C"}]})
+    assert not _is_enabled(["A", "B", "C"], {"and": ["A", "B", {"not": "C"}]})
+    assert not _is_enabled(["A"], {"and": "A", "x": "y"})
+    assert not _is_enabled(["A"], {"x": "A"})
+    assert _is_enabled([], {"not": {"and": ["A", {"not": "A"}]}})

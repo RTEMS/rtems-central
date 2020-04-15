@@ -38,6 +38,49 @@ ItemList = List["Item"]
 ItemMap = Dict[str, "Item"]
 
 
+def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
+    for next_enabled_by in enabled_by:
+        if not _is_enabled(enabled, next_enabled_by):
+            return False
+    return True
+
+
+def _is_enabled_op_false(_enabled: List[str], _enabled_by: Any) -> bool:
+    return False
+
+
+def _is_enabled_op_not(enabled: List[str], enabled_by: Any) -> bool:
+    return not _is_enabled(enabled, enabled_by)
+
+
+def _is_enabled_op_or(enabled: List[str], enabled_by: Any) -> bool:
+    for next_enabled_by in enabled_by:
+        if _is_enabled(enabled, next_enabled_by):
+            return True
+    return False
+
+
+_IS_ENABLED_OP = {
+    "and": _is_enabled_op_and,
+    "not": _is_enabled_op_not,
+    "or": _is_enabled_op_or
+}
+
+
+def _is_enabled(enabled: List[str], enabled_by: Any) -> bool:
+    if enabled_by:
+        if isinstance(enabled_by, list):
+            return _is_enabled_op_or(enabled, enabled_by)
+        if isinstance(enabled_by, dict):
+            if len(enabled_by) == 1:
+                key = next(iter(enabled_by))
+                return _IS_ENABLED_OP.get(key, _is_enabled_op_false)(
+                    enabled, enabled_by[key])
+            return False
+        return enabled_by in enabled
+    return True
+
+
 class Item(object):
     """ Objects of this class represent a specification item. """
     def __init__(self, uid: str, data: Any):
@@ -81,6 +124,10 @@ class Item(object):
         content.register_license(self["SPDX-License-Identifier"])
         for statement in self["copyrights"]:
             content.register_copyright(statement)
+
+    def is_enabled(self, enabled: List[str]):
+        """ Returns true if the item is enabled by the specified enables. """
+        return _is_enabled(enabled, self["enabled-by"])
 
 
 class ItemCache(object):
