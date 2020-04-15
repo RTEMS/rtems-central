@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" The RTEMS pre-qualification package. """
+""" Unit tests for the rtemsqual.build module. """
 
-# Copyright (C) 2019, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -24,10 +24,27 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["applconfig", "build", "content", "glossary", "items"]
+import os
+import shutil
 
-import rtemsqual.applconfig
-import rtemsqual.build
-import rtemsqual.content
-import rtemsqual.glossary
-import rtemsqual.items  # noqa: F401
+from rtemsqual.build import gather_files
+from rtemsqual.items import ItemCache
+
+
+def test_build(tmpdir):
+    item_cache_config = {}
+    item_cache_config["cache-directory"] = "cache"
+    spec_src = os.path.join(os.path.dirname(__file__), "spec-build")
+    spec_dst = os.path.join(tmpdir, "spec")
+    shutil.copytree(spec_src, spec_dst)
+    item_cache_config["paths"] = [os.path.normpath(spec_dst)]
+    ic = ItemCache(item_cache_config)
+
+    build_config = {}
+    build_config["arch"] = "foo"
+    build_config["bsp"] = "bar"
+    build_config["enabled"] = ["A"]
+    build_config["sources"] = ["a", "b"]
+    build_config["uids"] = ["g"]
+    files = gather_files(build_config, ic)
+    assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def"]

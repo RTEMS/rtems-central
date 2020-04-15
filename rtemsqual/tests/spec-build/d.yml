@@ -1,0 +1,7 @@
+build-type: start-file
+enabled-by:
+- not: A
+source:
+- pqr
+links: []
+type: build

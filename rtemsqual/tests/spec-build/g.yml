@@ -1,0 +1,7 @@
+build-type: group
+enabled-by: []
+install:
+- source:
+  - ghi
+links: []
+type: build

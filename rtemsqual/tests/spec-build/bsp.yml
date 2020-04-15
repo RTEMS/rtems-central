@@ -1,0 +1,13 @@
+arch: foo
+bsp: bar
+build-type: bsp
+enabled-by: []
+install:
+- source:
+  - abc
+links:
+- o: null
+- d: null
+source:
+- def
+type: build

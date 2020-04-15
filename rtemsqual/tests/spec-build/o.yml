@@ -1,0 +1,10 @@
+build-type: objects
+enabled-by: []
+install:
+- source:
+  - jkl
+source:
+- mno
+links:
+- s: null
+type: build

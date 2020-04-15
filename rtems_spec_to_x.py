@@ -25,20 +25,62 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
+import shutil
+import subprocess
+from typing import List
 import yaml
 
 import rtemsqual.applconfig
-import rtemsqual.items
+import rtemsqual.build
+from rtemsqual.items import ItemCache
 import rtemsqual.glossary
 
 
-def main():
+def _run_command(args: List[str], cwd: str) -> int:
+    task = subprocess.Popen(args,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            cwd=cwd)
+    while True:
+        line = task.stdout.readline()
+        if line:
+            print(line.decode("utf-8").strip())
+        elif task.poll() is not None:
+            break
+    return task.wait()
+
+
+def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
+    files = rtemsqual.build.gather_files(config, item_cache)
+    source_dir = config["source-directory"]
+    workspace_dir = config["workspace-directory"]
+    for a_file in files:
+        src = os.path.join(source_dir, a_file)
+        dst = os.path.join(workspace_dir, a_file)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copy2(src, dst)
+    with open(os.path.join(workspace_dir, "config.ini"), "w") as config_ini:
+        config_ini.write(f"""[{config["arch"]}/{config["bsp"]}]
+RTEMS_SMP = True
+RTEMS_QUAL = True
+RTEMS_QUAL_ONLY = True
+BUILD_TESTS = False
+BUILD_VALIDATIONTESTS = True
+""")
+    specs = os.path.relpath(os.path.join(source_dir, "spec"), workspace_dir)
+    _run_command(["./waf", "configure", "--rtems-specs", specs], workspace_dir)
+    _run_command(["./waf"], workspace_dir)
+
+
+def main() -> None:
     """ Generates glossaries of terms according to the configuration. """
     with open("config.ini", "r") as out:
         config = yaml.safe_load(out.read())
-    item_cache = rtemsqual.items.ItemCache(config["spec"])
+    item_cache = ItemCache(config["spec"])
     rtemsqual.glossary.generate(config["glossary"], item_cache)
     rtemsqual.applconfig.generate(config["appl-config"], item_cache)
+    _run_pre_qualified_only_build(config["build"], item_cache)
 
 
 if __name__ == "__main__":
