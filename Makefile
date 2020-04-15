@@ -1,6 +1,9 @@
-all: *.py rtemsqual/*.py | check-env
-	coverage run -m pytest tests
-	yapf -i $^ tests/*.py
+PY_SRC_FILES = $(wildcard *.py) $(wildcard rtemsqual/*.py)
+PY_ALL_FILES = $(PY_SRC_FILES) $(wildcard rtemsqual/tests/*.py)
+
+all: $(PY_SRC_FILES) | check-env
+	coverage run -m pytest rtemsqual/tests
+	yapf -i $(PY_ALL_FILES)
 	flake8 $^
 	mypy $^
 	pylint $^
@@ -8,8 +11,12 @@ all: *.py rtemsqual/*.py | check-env
 check-env:
 	test -n "$$VIRTUAL_ENV"
 
+EMPTY :=
+SPACE := $(EMPTY) $(EMPTY)
+COMMA := ,
+
 coverage-report:
-	coverage report -m --omit 'env/*'
+	coverage report -m --include=$(subst $(SPACE),$(COMMA),$(PY_SRC_FILES))
 
 .PONY: env
 
