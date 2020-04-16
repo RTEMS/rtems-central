@@ -75,7 +75,7 @@ BUILD_VALIDATIONTESTS = True
 
 def main() -> None:
     """ Generates glossaries of terms according to the configuration. """
-    with open("config.ini", "r") as out:
+    with open("config.yml", "r") as out:
         config = yaml.safe_load(out.read())
     item_cache = ItemCache(config["spec"])
     rtemsqual.glossary.generate(config["glossary"], item_cache)
