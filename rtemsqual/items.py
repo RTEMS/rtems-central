@@ -24,8 +24,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# pylint: disable=useless-object-inheritance
-
 import os
 import pickle
 import stat
@@ -81,7 +79,7 @@ def _is_enabled(enabled: List[str], enabled_by: Any) -> bool:
     return True
 
 
-class Item(object):
+class Item:
     """ Objects of this class represent a specification item. """
     def __init__(self, uid: str, data: Any):
         self._uid = uid
@@ -130,7 +128,7 @@ class Item(object):
         return _is_enabled(enabled, self["enabled-by"])
 
 
-class ItemCache(object):
+class ItemCache:
     """ This class provides a cache of specification items. """
     def __init__(self, config: Any):
         self._items = {}  # type: ItemMap

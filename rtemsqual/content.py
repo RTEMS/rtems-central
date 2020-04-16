@@ -24,13 +24,11 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# pylint: disable=useless-object-inheritance
-
 import os
 import re
 
 
-class Copyright(object):
+class Copyright:
     """
     This class represents a copyright holder with its years of substantial
     contributions.
@@ -71,7 +69,7 @@ class Copyright(object):
         return self._holder > other._holder
 
 
-class Copyrights(object):
+class Copyrights:
     """ This class represents a set of copyright holders. """
     def __init__(self):
         self.copyrights = {}
@@ -130,7 +128,7 @@ def _make_list(value):
     return value
 
 
-class SphinxContent(object):
+class SphinxContent:
     """ This class builds Sphinx content. """
     def __init__(self):
         self._content = ""
@@ -215,7 +213,7 @@ class SphinxContent(object):
             out.write(self._content)
 
 
-class MacroToSphinx(object):
+class MacroToSphinx:
     """ This class expands specification item macros to Sphinx markup. """
     def __init__(self):
         self._terms = {}
