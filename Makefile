@@ -1,9 +1,15 @@
 PY_SRC_FILES = $(wildcard *.py) $(wildcard rtemsqual/*.py)
 PY_ALL_FILES = $(PY_SRC_FILES) $(wildcard rtemsqual/tests/*.py)
 
-all: $(PY_SRC_FILES) | check-env
-	coverage run -m pytest rtemsqual/tests
-	yapf -i $(PY_ALL_FILES)
+all: check format analyse coverage-report
+
+check: check-env
+	coverage run -m pytest -v rtemsqual/tests
+
+format: $(PY_ALL_FILES) | check-env
+	yapf -i $^
+
+analyse: $(PY_SRC_FILES) | check-env
 	flake8 $^
 	mypy $^
 	pylint $^
