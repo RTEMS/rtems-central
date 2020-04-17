@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" The RTEMS pre-qualification package. """
+""" This module provides utility functions. """
 
-# Copyright (C) 2019, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -24,11 +24,28 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["applconfig", "build", "content", "glossary", "items", "util"]
+import os
+from typing import Any
+import yaml
 
-import rtemsqual.applconfig
-import rtemsqual.build
-import rtemsqual.content
-import rtemsqual.glossary
-import rtemsqual.items  # noqa: F401
-import rtemsqual.util  # noqa: F401
+
+def load_config(config_filename: str) -> Any:
+    """ Loads the configuration file with recursive includes. """
+    class IncludeLoader(yaml.SafeLoader):  # pylint: disable=too-many-ancestors
+        """ YAML loader customization to process custom include tags. """
+        _filenames = [config_filename]
+
+        def include(self, node):
+            """ Processes the custom include tag. """
+            container = IncludeLoader._filenames[0]
+            dirname = os.path.dirname(container)
+            filename = os.path.join(dirname, self.construct_scalar(node))
+            IncludeLoader._filenames.insert(0, filename)
+            with open(filename, "r") as included_file:
+                data = yaml.load(included_file, IncludeLoader)
+            IncludeLoader._filenames.pop()
+            return data
+
+    IncludeLoader.add_constructor("!include", IncludeLoader.include)
+    with open(config_filename, "r") as config_file:
+        return yaml.load(config_file.read(), Loader=IncludeLoader)

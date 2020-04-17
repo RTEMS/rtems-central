@@ -30,12 +30,12 @@ import shutil
 import string
 import subprocess
 from typing import List
-import yaml
 
 import rtemsqual.applconfig
 import rtemsqual.build
 from rtemsqual.items import ItemCache
 import rtemsqual.glossary
+import rtemsqual.util
 
 
 def _run_command(args: List[str], cwd: str) -> int:
@@ -71,8 +71,7 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
 
 def main() -> None:
     """ Generates glossaries of terms according to the configuration. """
-    with open("config.yml", "r") as out:
-        config = yaml.safe_load(out.read())
+    config = rtemsqual.util.load_config("config.yml")
     item_cache = ItemCache(config["spec"])
     rtemsqual.glossary.generate(config["glossary"], item_cache)
     rtemsqual.applconfig.generate(config["appl-config"], item_cache)

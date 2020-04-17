@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" The RTEMS pre-qualification package. """
+""" Unit tests for the rtemsqual.util module. """
 
-# Copyright (C) 2019, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -24,11 +24,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["applconfig", "build", "content", "glossary", "items", "util"]
+import os
 
-import rtemsqual.applconfig
-import rtemsqual.build
-import rtemsqual.content
-import rtemsqual.glossary
-import rtemsqual.items  # noqa: F401
-import rtemsqual.util  # noqa: F401
+from rtemsqual.util import load_config
+
+
+def test_load_config():
+    filename = os.path.join(os.path.dirname(__file__), "config", "a.yml")
+    config = load_config(filename)
+    assert config["a"] == "b"
+    assert config["c"] == "d"
