@@ -4,3 +4,6 @@
 [submodule "external/rtems-docs"]
 	path = external/rtems-docs
 	url = git://git.rtems.org/rtems-docs.git
+[submodule "external/rtems-source-builder"]
+	path = external/rsb
+	url = git://git.rtems.org/rtems-source-builder.git
