@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-name: a
+appl-config-option-type: feature
+appl-config-option-default: default a
+appl-config-option-description: description a
+appl-config-option-index:
+- index a
+appl-config-option-notes: notes a
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- g: null
+type: interface

@@ -208,7 +208,9 @@ class SphinxContent:
 
     def write(self, path):
         """ Writes the content to the file specified by the path. """
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        directory = os.path.dirname(path)
+        if directory:
+            os.makedirs(directory, exist_ok=True)
         with open(path, "w+") as out:
             out.write(self._content)
 

@@ -104,6 +104,13 @@ def _generate_item_max(lines: List[str], constraint: Dict[str, Any]) -> None:
         lines.append(f"* It shall be less than or equal to {value}.")
 
 
+def _generate_item_set(lines: List[str], constraint: Dict[str, Any]) -> None:
+    if "set" in constraint:
+        value_set = constraint["set"]
+        lines.append("")
+        lines.append(f"* It shall be an element of {value_set}.")
+
+
 def _generate_item_custom(lines: List[str], constraint: Dict[str,
                                                              Any]) -> None:
     for custom in constraint.get("custom", []):
@@ -145,8 +152,6 @@ def _generate_constraint(content: SphinxContent, item: Item,
             else:
                 _start_constraint_list(lines)
                 _generate_item_custom(lines, constraint)
-        else:
-            raise ValueError
     elif count == 2 and "min" in constraint and "max" in constraint:
         minimum = constraint["min"]
         maximum = constraint["max"]
@@ -157,6 +162,7 @@ def _generate_constraint(content: SphinxContent, item: Item,
         _start_constraint_list(lines)
         _generate_item_min(lines, constraint)
         _generate_item_max(lines, constraint)
+        _generate_item_set(lines, constraint)
         _generate_item_custom(lines, constraint)
     content.add_definition_item("VALUE CONSTRAINTS:", lines)
 
