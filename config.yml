@@ -9,6 +9,7 @@ build:
     BUILD_TESTS = False
     BUILD_VALIDATIONTESTS = True
     INSTALL_LEGACY_MAKEFILES = False
+  doxyfile-template: templates/Doxyfile
   enabled:
   - RTEMS_QUAL
   - RTEMS_SMP
@@ -16,6 +17,7 @@ build:
   sources:
   - bsps/shared/cache/cacheimpl.h
   - bsps/shared/dev/clock/clockimpl.h
+  - cpukit/doxygen.h
   - cpukit/libcsupport/src/malloc_p.h
   - cpukit/libtest/t-test-rtems.h
   - cpukit/score/cpu/sparc/syscall.h
@@ -24,6 +26,7 @@ build:
   - cpukit/score/src/opt_ntp.h
   - gccdeps.py
   - long_gcc.py
+  - testsuites/doxygen.h
   - waf
   - wscript
   uids:

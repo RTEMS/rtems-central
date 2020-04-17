@@ -68,6 +68,23 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
     _run_command(["./waf"], workspace_dir)
 
 
+def _run_pre_qualified_doxygen(config: dict) -> None:
+    workspace_dir = config["workspace-directory"]
+    with open(config["doxyfile-template"], "r") as doxyfile_template:
+
+        class Template(string.Template):
+            """ Template class with custom delimiter. """
+            delimiter = "%"
+
+        doxyfile_vars = {}
+        doxyfile_vars["project_name"] = "RTEMS"
+        doxyfile_vars["output_directory"] = "doc"
+        content = Template(doxyfile_template.read()).substitute(doxyfile_vars)
+        with open(os.path.join(workspace_dir, "Doxyfile"), "w") as doxyfile:
+            doxyfile.write(content)
+    _run_command(["doxygen"], workspace_dir)
+
+
 def main() -> None:
     """ Generates glossaries of terms according to the configuration. """
     config = rtemsqual.util.load_config("config.yml")
@@ -76,6 +93,7 @@ def main() -> None:
     rtemsqual.applconfig.generate(config["appl-config"], item_cache)
     rtemsqual.validation.generate(config["validation"], item_cache)
     _run_pre_qualified_only_build(config["build"], item_cache)
+    _run_pre_qualified_doxygen(config["build"])
 
 
 if __name__ == "__main__":
