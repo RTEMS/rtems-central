@@ -1,6 +1,13 @@
 build:
   arch: sparc
   bsp: leon3
+  config-ini: |
+    [${arch}/${bsp}]
+    RTEMS_SMP = True
+    RTEMS_QUAL = True
+    RTEMS_QUAL_ONLY = True
+    BUILD_TESTS = False
+    BUILD_VALIDATIONTESTS = True
   enabled:
   - RTEMS_QUAL
   - RTEMS_SMP

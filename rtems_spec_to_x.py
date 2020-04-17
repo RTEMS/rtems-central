@@ -27,6 +27,7 @@
 
 import os
 import shutil
+import string
 import subprocess
 from typing import List
 import yaml
@@ -61,13 +62,8 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copy2(src, dst)
     with open(os.path.join(workspace_dir, "config.ini"), "w") as config_ini:
-        config_ini.write(f"""[{config["arch"]}/{config["bsp"]}]
-RTEMS_SMP = True
-RTEMS_QUAL = True
-RTEMS_QUAL_ONLY = True
-BUILD_TESTS = False
-BUILD_VALIDATIONTESTS = True
-""")
+        content = string.Template(config["config-ini"]).substitute(config)
+        config_ini.write(content)
     specs = os.path.relpath(os.path.join(source_dir, "spec"), workspace_dir)
     _run_command(["./waf", "configure", "--rtems-specs", specs], workspace_dir)
     _run_command(["./waf"], workspace_dir)
