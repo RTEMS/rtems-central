@@ -41,10 +41,11 @@ def test_applconfig(tmpdir):
     ic = ItemCache(item_cache_config)
 
     applconfig_config = {}
-    applconfig_config["groups"] = [{"uid": "g", "target": "g.rst"}]
+    g_rst = os.path.join(tmpdir, "g.rst")
+    applconfig_config["groups"] = [{"uid": "g", "target": g_rst}]
     generate(applconfig_config, ic)
 
-    with open("g.rst", "r") as src:
+    with open(g_rst, "r") as src:
         content = (
             ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
             "\n"
