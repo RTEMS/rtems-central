@@ -25,8 +25,22 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-from typing import Any
+import shutil
+from typing import Any, List
 import yaml
+
+
+def copy_files(src_dir: str, dst_dir: str, files: List[str]) -> None:
+    """
+    Copies a list of files in the source directory to the destination
+    directory preserving the directory of the files relative to the source
+    directory.
+    """
+    for a_file in files:
+        src = os.path.join(src_dir, a_file)
+        dst = os.path.join(dst_dir, a_file)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copy2(src, dst)
 
 
 def load_config(config_filename: str) -> Any:

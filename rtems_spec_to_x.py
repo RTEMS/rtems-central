@@ -26,7 +26,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import shutil
 import string
 import subprocess
 from typing import List
@@ -56,11 +55,7 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
     files = rtemsqual.build.gather_files(config, item_cache)
     source_dir = config["source-directory"]
     workspace_dir = config["workspace-directory"]
-    for a_file in files:
-        src = os.path.join(source_dir, a_file)
-        dst = os.path.join(workspace_dir, a_file)
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copy2(src, dst)
+    rtemsqual.util.copy_files(source_dir, workspace_dir, files)
     with open(os.path.join(workspace_dir, "config.ini"), "w") as config_ini:
         content = string.Template(config["config-ini"]).substitute(config)
         config_ini.write(content)

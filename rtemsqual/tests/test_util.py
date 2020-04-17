@@ -26,7 +26,16 @@
 
 import os
 
-from rtemsqual.util import load_config
+from rtemsqual.util import copy_files, load_config
+
+
+def test_copy_files(tmpdir):
+    src_dir = os.path.dirname(__file__)
+    copy_files(src_dir, tmpdir, [])
+    filename = "config/c/d.yml"
+    assert not os.path.exists(os.path.join(tmpdir, filename))
+    copy_files(src_dir, tmpdir, [filename])
+    assert os.path.exists(os.path.join(tmpdir, filename))
 
 
 def test_load_config():
