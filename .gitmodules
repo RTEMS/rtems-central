@@ -1,6 +1,6 @@
 [submodule "external/rtems"]
 	path = external/rtems
-	url = git://git.rtems.org/sebh/rtems-qual.git
+	url = git://git.rtems.org/sebh/rtems.git
 [submodule "external/rtems-docs"]
 	path = external/rtems-docs
 	url = git://git.rtems.org/rtems-docs.git
