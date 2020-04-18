@@ -24,6 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
 import pytest
 
 from rtemsqual.content import SphinxContent
@@ -109,7 +110,12 @@ def test_license_and_copyrights():
 def test_write(tmpdir):
     sc = SphinxContent()
     sc.add_line("x")
-    path = tmpdir + "/y/z"
+    path = os.path.join(tmpdir, "x", "y")
+    sc.write(path)
+    with open(path, "r") as src:
+        assert "x\n" == src.read()
+    tmpdir.chdir()
+    path = "z"
     sc.write(path)
     with open(path, "r") as src:
         assert "x\n" == src.read()

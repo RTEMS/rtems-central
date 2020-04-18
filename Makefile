@@ -4,7 +4,7 @@ PY_ALL_FILES = $(PY_SRC_FILES) $(wildcard rtemsqual/tests/*.py)
 all: check format analyse coverage-report
 
 check: check-env
-	coverage run -m pytest -vv rtemsqual/tests
+	coverage run --branch -m pytest -vv rtemsqual/tests
 
 format: $(PY_ALL_FILES) | check-env
 	yapf -i $^

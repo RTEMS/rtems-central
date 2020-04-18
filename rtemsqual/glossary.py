@@ -97,9 +97,8 @@ def _resolve_glossary_terms(document_terms: ItemMap,
 
 
 def _generate_project_glossary(target: str, project_terms: ItemMap) -> None:
-    if target:
-        content = _generate_glossary_content(project_terms)
-        content.write(target)
+    content = _generate_glossary_content(project_terms)
+    content.write(target)
 
 
 def _generate_document_glossary(config: dict, project_terms: ItemMap) -> None:

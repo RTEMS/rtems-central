@@ -1,0 +1,11 @@
+arch: foo
+bsp: bla
+build-type: bsp
+enabled-by: []
+install:
+- source:
+  - blub
+links: []
+source:
+- nada
+type: build
