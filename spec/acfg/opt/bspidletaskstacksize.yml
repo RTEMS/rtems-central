@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  links:
+  - /acfg/opt/constraintidlestackarea
+  - /acfg/opt/constraintbspappmin
+appl-config-option-default-value: |
+  The default value is BSP-specific.
+appl-config-option-description: |
+  If
+
+  * this configuration option is defined by the BSP
+
+  * and :ref:`CONFIGURE_DISABLE_BSP_SETTINGS` is undefined,
+
+  then the value of this configuration option defines the default value of
+  :ref:`CONFIGURE_IDLE_TASK_SIZE`.
+appl-config-option-index: []
+appl-config-option-name: BSP_IDLE_TASK_STACK_SIZE
+appl-config-option-notes: null
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../bsp
+text: ''
+type: interface

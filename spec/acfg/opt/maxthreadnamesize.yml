@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  links:
+  - /acfg/opt/constraintmemsz
+  max: '``SIZE_MAX``'
+  min: 0
+appl-config-option-default-value: 16
+appl-config-option-description: |
+  The value of this configuration option defines the maximum thread name size
+  including the terminating ``NUL`` character.
+appl-config-option-index:
+- maximum thread name size
+appl-config-option-name: CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
+appl-config-option-notes: |
+  The default value was chosen for Linux compatibility, see
+  `PTHREAD_SETNAME_NP(3) <http://man7.org/linux/man-pages/man3/pthread_setname_np.3.html>`_.
+
+  The size of the thread control block is increased by the maximum thread name
+  size.
+
+  This configuration option is available since RTEMS 5.1.
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../general
+text: ''
+type: interface

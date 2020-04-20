@@ -41,7 +41,7 @@ def test_glossary(tmpdir):
     ic = ItemCache(item_cache_config)
 
     glossary_config = {}
-    glossary_config["project-groups"] = ["g"]
+    glossary_config["project-groups"] = ["/glos/g"]
     project_glossary = os.path.join(tmpdir, "project", "glossary.rst")
     glossary_config["project-target"] = project_glossary
     doc = {}

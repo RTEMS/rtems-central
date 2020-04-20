@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+glossary-term: GNAT
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  *GNAT* is the @term{/glos/term/gnu} compiler for Ada, integrated into the
+  @term{/glos/term/gcc}.
+type: glossary

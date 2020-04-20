@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-default: |
+  If this configuration option is undefined, then the user is assumed to
+  provide one or more initialization tasks.
+appl-config-option-description: |
+  This configuration option is defined to indicate that the user has configured
+  **no** user initialization tasks or threads and that the user provided IDLE
+  task will perform application initialization and then transform itself into
+  an IDLE task.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+appl-config-option-notes: |
+  If you use this option be careful, the user IDLE task **cannot** block at all
+  during the initialization sequence.  Further, once application
+  initialization is complete, it shall make itself preemptible and enter an idle
+  body loop.
+
+  The IDLE task shall run at the lowest priority of all tasks in the system.
+
+  If this configuration option is defined, then it is mandatory to configure a
+  user IDLE task with the :ref:`CONFIGURE_IDLE_TASK_BODY` configuration option,
+  otherwise a compile time error in the configuration file will occur.
+
+  The application shall define exactly one of the following configuration
+  options
+
+  * :ref:`CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
+
+  * :ref:`CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
+
+  * `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
+
+  otherwise a compile time error in the configuration file will occur.
+appl-config-option-type: feature
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../idle
+text: ''
+type: interface

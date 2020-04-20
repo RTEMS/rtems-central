@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-group-description: |
+  This section describes configuration options related to the Block Device Cache
+  (bdbuf).
+appl-config-group-name: Block Device Cache Configuration
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-group
+links:
+- role: null
+  uid: ../applconfig
+text: ''
+type: interface

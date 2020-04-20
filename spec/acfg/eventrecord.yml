@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-group-description: |
+  This section describes configuration options related to the event recording.
+appl-config-group-name: Event Recording Configuration
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-type: appl-config-group
+links:
+- role: null
+  uid: ../applconfig
+text: ''
+type: interface

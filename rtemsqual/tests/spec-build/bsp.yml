@@ -6,8 +6,10 @@ install:
 - source:
   - abc
 links:
-- o: null
-- d: null
+- role: null
+  uid: o
+- role: null
+  uid: d
 source:
 - def
 type: build

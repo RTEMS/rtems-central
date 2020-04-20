@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+glossary-term: ISVV
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  An acronym for Independent Software Verification and Validation.
+type: glossary

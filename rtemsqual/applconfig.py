@@ -121,16 +121,16 @@ def _generate_item_custom(lines: List[str], constraint: Dict[str,
         lines.extend([f"  {x}" if x else "" for x in custom[1:]])
 
 
-def _resolve_constraint_links(content: SphinxContent, constraint: Dict[str,
-                                                                       Any],
-                              item_cache: ItemCache) -> None:
+def _resolve_constraint_links(content: SphinxContent, item: Item,
+                              item_cache: ItemCache,
+                              constraint: Dict[str, Any]) -> None:
     if "links" in constraint:
         if "custom" not in constraint:
             constraint["custom"] = []
         for link in reversed(constraint["links"]):
-            item = item_cache[link]
-            item.register_license_and_copyrights(content)
-            constraint["custom"].append(item["text"])
+            other = item_cache[item.to_abs_uid(link)]
+            other.register_license_and_copyrights(content)
+            constraint["custom"].append(other["text"])
 
 
 def _generate_constraint(content: SphinxContent, item: Item,
@@ -138,7 +138,7 @@ def _generate_constraint(content: SphinxContent, item: Item,
     constraint = item["appl-config-option-constraint"]
     count = len(constraint)
     lines = []  # type: List[str]
-    _resolve_constraint_links(content, constraint, item_cache)
+    _resolve_constraint_links(content, item, item_cache, constraint)
     if count == 1:
         if "min" in constraint:
             _generate_min_max(lines, constraint["min"], "greater")

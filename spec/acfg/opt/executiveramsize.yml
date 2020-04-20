@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  links:
+  - /acfg/opt/constraintmemsz
+  max: '``UINTPTR_MAX``'
+  min: 0
+appl-config-option-default-value: |
+  If this configuration option is undefined, then the RTEMS Workspace and task
+  stack space size is calculated by ``<rtems/confdefs.h>`` based on the values
+  configuration options.
+appl-config-option-description: |
+  The value of this configuration option defines the RTEMS Workspace size in
+  bytes.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_EXECUTIVE_RAM_SIZE
+appl-config-option-notes: |
+  This is an advanced configuration option.  Use it only if you know exactly
+  what you are doing.
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../general
+text: ''
+type: interface

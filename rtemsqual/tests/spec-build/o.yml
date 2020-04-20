@@ -6,5 +6,6 @@ install:
 source:
 - mno
 links:
-- s: null
+- role: null
+  uid: s
 type: build

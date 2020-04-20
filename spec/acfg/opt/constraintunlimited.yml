@@ -1,0 +1,11 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+links: []
+text: |
+  The value of this configuration option may be defined through
+  :c:func:`rtems_resource_unlimited` the enable unlimited objects for this
+  object class, if the value passed to :c:func:`rtems_resource_unlimited`
+  satisfies all other constraints of this configuration option.
+type: constraint

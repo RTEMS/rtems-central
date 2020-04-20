@@ -1,0 +1,11 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+glossary-term: V
+glossary-type: term
+links:
+- role: null
+  uid: ../g
+text: |
+  Term text V.
+type: glossary

@@ -60,7 +60,10 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
         content = string.Template(config["config-ini"]).substitute(config)
         config_ini.write(content)
     specs = os.path.relpath(os.path.join(source_dir, "spec"), workspace_dir)
-    _run_command(["./waf", "configure", "--rtems-specs", specs], workspace_dir)
+    _run_command([
+        "./waf", "configure", "--rtems-specs", specs, "--rtems-top-group",
+        "/build/grp"
+    ], workspace_dir)
     _run_command(["./waf"], workspace_dir)
 
 

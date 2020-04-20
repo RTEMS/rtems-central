@@ -12,5 +12,6 @@ copyrights:
 enabled-by: []
 interface-type: appl-config-option
 links:
-- g: null
+- role: null
+  uid: g
 type: interface

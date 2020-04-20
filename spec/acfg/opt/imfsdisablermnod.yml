@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-default: |
+  If this configuration option is undefined, then the root IMFS supports
+  removing files.
+appl-config-option-description: |
+  In case this configuration option is defined, then the root IMFS does not
+  support removing files (no support for :c:func:`rmnod`).
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_IMFS_DISABLE_RMNOD
+appl-config-option-notes: null
+appl-config-option-type: feature
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../filesystem
+text: ''
+type: interface

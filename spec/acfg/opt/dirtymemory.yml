@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-description: |
+  In case this configuration option is defined, then the memory areas used for
+  the RTEMS Workspace and the C Program Heap are dirtied with a ``0xCF`` byte
+  pattern during system initialization.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_DIRTY_MEMORY
+appl-config-option-notes: |
+  Dirtying memory can add significantly to system initialization time.  It may
+  assist in finding code that incorrectly assumes the contents of free memory
+  areas is cleared to zero during system initialization.  In case
+  :ref:`CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY` is also defined, then the
+  memory is first dirtied and then zeroed.
+
+  See also :ref:`CONFIGURE_MALLOC_DIRTY`.
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../general
+text: ''
+type: interface

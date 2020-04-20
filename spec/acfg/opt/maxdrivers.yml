@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  custom:
+  - |
+    It shall be greater than or equal than the number of statically configured
+    device drivers.
+  links:
+  - /acfg/opt/constraintmemsz
+  max: '``SIZE_MAX``'
+appl-config-option-default-value: |
+  This is computed by default, and is set to the number of device drivers
+  configured using the ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER``
+  configuration options.
+appl-config-option-description: |
+  The value of this configuration option defines the number of device drivers.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MAXIMUM_DRIVERS
+appl-config-option-notes: |
+  If the application will dynamically install device drivers, then this
+  configuration parameter shall be larger than the number of statically
+  configured device drivers. Drivers configured using the
+  ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER`` configuration options are
+  statically installed.
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../devdrv
+text: ''
+type: interface

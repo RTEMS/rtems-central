@@ -42,7 +42,7 @@ def test_applconfig(tmpdir):
 
     applconfig_config = {}
     g_rst = os.path.join(tmpdir, "g.rst")
-    applconfig_config["groups"] = [{"uid": "g", "target": g_rst}]
+    applconfig_config["groups"] = [{"uid": "/g", "target": g_rst}]
     generate(applconfig_config, ic)
 
     with open(g_rst, "r") as src:

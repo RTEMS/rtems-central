@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+glossary-term: homogeneous
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  A multiprocessor computer system composed of a single type of processor.
+type: glossary

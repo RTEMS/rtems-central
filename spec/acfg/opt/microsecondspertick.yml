@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  custom:
+  - It shall be greater than or equal to a Clock Driver specific value.
+  - It shall be less than or equal to a Clock Driver specific value.
+  - The resulting clock ticks per second should be an integer.
+appl-config-option-default-value: 10000
+appl-config-option-description: |
+  The value of this configuration option defines the length of time in
+  microseconds between clock ticks (clock tick quantum).
+
+  When the clock tick quantum value is too low, the system will spend so much
+  time processing clock ticks that it does not have processing time available
+  to perform application work. In this case, the system will become
+  unresponsive.
+
+  The lowest practical time quantum varies widely based upon the speed of the
+  target hardware and the architectural overhead associated with
+  interrupts. In general terms, you do not want to configure it lower than is
+  needed for the application.
+
+  The clock tick quantum should be selected such that it all blocking and
+  delay times in the application are evenly divisible by it. Otherwise,
+  rounding errors will be introduced which may negatively impact the
+  application.
+appl-config-option-index:
+- clock tick quantum
+- tick quantum
+appl-config-option-name: CONFIGURE_MICROSECONDS_PER_TICK
+appl-config-option-notes: |
+  This configuration option has no impact if the Clock Driver is not
+  configured, see :ref:`CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`.
+
+  There may be Clock Driver specific limits on the resolution or maximum value
+  of a clock tick quantum.
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../general
+text: ''
+type: interface

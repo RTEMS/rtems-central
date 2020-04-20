@@ -1,0 +1,6 @@
+links: []
+requirement-type: configuration
+text: |
+  The system shall provide configuration options to the application to set
+  configurable system parameters at link time.
+type: requirement

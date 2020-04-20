@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-group-description: |
+  This section describes configuration options related to the BSP.  Some
+  configuration options may have a BSP-specific setting which is defined by
+  ``<bsp.h>``.  The BSP-specific settings can be disabled by the
+  :ref:`CONFIGURE_DISABLE_BSP_SETTINGS` configuration option.
+appl-config-group-name: BSP Related Configuration Options
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-group
+links:
+- role: null
+  uid: ../applconfig
+text: ''
+type: interface

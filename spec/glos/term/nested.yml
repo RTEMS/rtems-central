@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+glossary-term: nested
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  A term used to describe an ASR that occurs during another ASR or an ISR
+  that occurs during another ISR.
+type: glossary

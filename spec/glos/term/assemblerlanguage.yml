@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+glossary-term: assembler language
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  The assembler language is a programming language which can be translated very
+  easily into machine code and data.  For this project assembler languages are
+  restricted to languages accepted by the @term{/glos/term/gnu} assembler
+  program for the target architectures.
+type: glossary

@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+glossary-term: schedulable
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  A set of tasks which can be guaranteed to meet their deadlines based upon
+  a specific scheduling algorithm.
+type: glossary

@@ -24,29 +24,38 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
 import pytest
 
 from rtemsqual.items import Item
 
 
+def test_to_abs_uid():
+    item = Item("/x/y", {})
+    assert item.to_abs_uid("z") == "/x/z"
+    assert item.to_abs_uid("/z") == "/z"
+    assert item.to_abs_uid("../z") == "/z"
+    assert item.to_abs_uid("../../z") == "/z"
+
+
 def test_uid():
-    i = Item("x", {})
-    assert i.uid == "x"
+    item = Item("x", {})
+    assert item.uid == "x"
 
 
 def test_contains():
     data = {}
     data["x"] = "y"
-    i = Item("z", data)
-    assert "x" in i
-    assert "a" not in i
+    item = Item("z", data)
+    assert "x" in item
+    assert "a" not in item
 
 
 def test_getitem():
     data = {}
     data["x"] = "y"
-    i = Item("z", data)
-    assert i["x"] == "y"
+    item = Item("z", data)
+    assert item["x"] == "y"
 
 
 def test_children():
@@ -59,8 +68,8 @@ def test_children():
 
 
 def _is_enabled(enabled, enabled_by):
-    i = Item("i", {"enabled-by": enabled_by})
-    return i.is_enabled(enabled)
+    item = Item("i", {"enabled-by": enabled_by})
+    return item.is_enabled(enabled)
 
 
 def test_is_enabled():
@@ -84,3 +93,11 @@ def test_is_enabled():
     assert not _is_enabled(["A"], {"and": "A", "x": "y"})
     assert not _is_enabled(["A"], {"x": "A"})
     assert _is_enabled([], {"not": {"and": ["A", {"not": "A"}]}})
+
+
+def test_save(tmpdir):
+    item_file = os.path.join(tmpdir, "i.yml")
+    item = Item("i", {"k": "v", "_file": item_file})
+    item.save()
+    with open(item_file, "r") as src:
+        assert src.read() == "k: v\n"

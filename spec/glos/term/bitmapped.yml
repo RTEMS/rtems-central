@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+glossary-term: bit-mapped
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  A data encoding scheme in which each bit in a variable is used to
+  represent something different.  This makes for compact data
+  representation.
+type: glossary

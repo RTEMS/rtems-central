@@ -1,0 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+links: []
+text: |
+  The value of this configuration option shall be small enough so that the task
+  stack space calculation carried out by ``<rtems/confdefs.h>`` does not
+  overflow an integer of type ``uintptr_t``.
+type: constraint

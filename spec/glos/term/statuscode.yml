@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+glossary-term: status code
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  A status code indicates the completion status of an operation.  For
+  example most RTEMS directives return a status code through the
+  @term{/glos/term/returnvalue} to indicate a successful operation or error
+  conditions.
+type: glossary

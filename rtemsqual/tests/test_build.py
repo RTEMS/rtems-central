@@ -45,6 +45,6 @@ def test_build(tmpdir):
     build_config["bsp"] = "bar"
     build_config["enabled"] = ["A"]
     build_config["sources"] = ["a", "b"]
-    build_config["uids"] = ["g"]
+    build_config["uids"] = ["/g"]
     files = gather_files(build_config, ic)
     assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def"]

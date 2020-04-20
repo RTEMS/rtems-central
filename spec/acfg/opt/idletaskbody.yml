@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option shall be defined to a valid function
+    pointer of the type ``void *( *idle_body )( uintptr_t )``.
+appl-config-option-default-value: |
+  If :ref:`BSP_IDLE_TASK_BODY` is defined, then this will be the default value,
+  otherwise the default value is ``_CPU_Thread_Idle_body``.
+appl-config-option-description: |
+  The value of this configuration option initializes the IDLE thread body.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_IDLE_TASK_BODY
+appl-config-option-notes: |
+  IDLE threads shall not block.  A blocking IDLE thread results in undefined
+  system behaviour because the scheduler assume that at least one ready thread
+  exists.
+
+  IDLE threads can be used to initialize the application, see configuration
+  option :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`.
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../idle
+text: ''
+type: interface

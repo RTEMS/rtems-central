@@ -66,8 +66,8 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
 
 
 def _make_glossary_term_uid(term: str) -> str:
-    return ("RTEMS-GLOS-TERM-" +
-            re.sub(r"[^a-zA-Z0-9]+", "", term.replace("+", "X")).upper())
+    return "/glos/term/" + re.sub(r"[^a-zA-Z0-9]+", "", term.replace(
+        "+", "X")).lower()
 
 
 def _find_glossary_terms(path: str, document_terms: ItemMap,

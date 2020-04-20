@@ -79,6 +79,15 @@ def _is_enabled(enabled: List[str], enabled_by: Any) -> bool:
     return True
 
 
+def _str_representer(dumper, data):
+    return dumper.represent_scalar("tag:yaml.org,2002:str",
+                                   data,
+                                   style="|" if "\n" in data else "")
+
+
+yaml.add_representer(str, _str_representer)
+
+
 class Item:
     """ Objects of this class represent a specification item. """
     def __init__(self, uid: str, data: Any):
@@ -98,6 +107,16 @@ class Item:
         """ Returns the UID of the item. """
         return self._uid
 
+    def to_abs_uid(self, abs_or_rel_uid: str) -> str:
+        """
+        Returns the absolute UID of an absolute UID or an UID relative to this
+        item.
+        """
+        if os.path.isabs(abs_or_rel_uid):
+            return abs_or_rel_uid
+        return os.path.normpath(
+            os.path.join(os.path.dirname(self.uid), abs_or_rel_uid))
+
     @property
     def parents(self) -> ItemList:
         """ Returns the list of parents of this items. """
@@ -111,7 +130,7 @@ class Item:
     def init_parents(self, item_cache: "ItemCache"):
         """ Initializes the list of parents of this items. """
         for link in self._data["links"]:
-            self._links.append(item_cache[list(link.keys())[0]])
+            self._links.append(item_cache[self.to_abs_uid(link["uid"])])
 
     def add_child(self, child: "Item"):
         """ Adds a child to this item. """
@@ -126,6 +145,15 @@ class Item:
     def is_enabled(self, enabled: List[str]):
         """ Returns true if the item is enabled by the specified enables. """
         return _is_enabled(enabled, self["enabled-by"])
+
+    def save(self):
+        """ Saves the item to the corresponding file. """
+        with open(self._data["_file"], "w") as dst:
+            del self._data["_file"]
+            dst.write(
+                yaml.dump(self._data,
+                          default_flow_style=False,
+                          allow_unicode=True))
 
 
 class ItemCache:
@@ -148,16 +176,19 @@ class ItemCache:
         """ Returns the map of top-level specification items. """
         return self._top_level
 
-    def _load_items_in_dir(self, path: str, cache_file: str,
+    def _load_items_in_dir(self, base: str, path: str, cache_file: str,
                            update_cache: bool) -> None:
         data_by_uid = {}  # type: Dict[str, Any]
         if update_cache:
             for name in os.listdir(path):
                 path2 = os.path.join(path, name)
                 if name.endswith(".yml") and not name.startswith("."):
-                    uid = os.path.basename(name).replace(".yml", "")
+                    uid = "/" + os.path.relpath(path2, base).replace(
+                        ".yml", "")
                     with open(path2, "r") as yaml_src:
-                        data_by_uid[uid] = yaml.safe_load(yaml_src.read())
+                        data = yaml.safe_load(yaml_src.read())
+                        data["_file"] = os.path.abspath(path2)
+                        data_by_uid[uid] = data
             os.makedirs(os.path.dirname(cache_file), exist_ok=True)
             with open(cache_file, "wb") as out:
                 pickle.dump(data_by_uid, out)
@@ -170,7 +201,8 @@ class ItemCache:
             if not item["links"]:
                 self._top_level[uid] = item
 
-    def _load_items_recursive(self, path: str, cache_dir: str) -> None:
+    def _load_items_recursive(self, base: str, path: str,
+                              cache_dir: str) -> None:
         mid = os.path.abspath(path)
         mid = mid.replace(os.path.commonprefix([cache_dir, mid]), "")
         cache_file = os.path.join(cache_dir, mid, "spec.pickle")
@@ -185,8 +217,8 @@ class ItemCache:
                 update_cache = update_cache or mtime <= os.path.getmtime(path2)
             else:
                 if stat.S_ISDIR(os.lstat(path2).st_mode):
-                    self._load_items_recursive(path2, cache_dir)
-        self._load_items_in_dir(path, cache_file, update_cache)
+                    self._load_items_recursive(base, path2, cache_dir)
+        self._load_items_in_dir(base, path, cache_file, update_cache)
 
     def _init_parents(self) -> None:
         for item in self._items.values():
@@ -200,6 +232,6 @@ class ItemCache:
     def _load_items(self, config: Any) -> None:
         cache_dir = os.path.abspath(config["cache-directory"])
         for path in config["paths"]:
-            self._load_items_recursive(path, cache_dir)
+            self._load_items_recursive(path, path, cache_dir)
         self._init_parents()
         self._init_children()

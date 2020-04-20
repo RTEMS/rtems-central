@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  custom:
+  - It shall be a power of two.
+  links:
+  - /acfg/opt/constraintmemsz
+  max: '``SIZE_MAX``'
+  min: 16
+appl-config-option-default-value: 0
+appl-config-option-description: |
+  The value of this configuration option defines the event record item count
+  per processor.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
+appl-config-option-notes: |
+  The event record buffers are statically allocated for each configured
+  processor (:ref:`CONFIGURE_MAXIMUM_PROCESSORS`).  If the value of this
+  configuration option is zero, then nothing is allocated.
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../eventrecord
+text: ''
+type: interface

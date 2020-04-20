@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  custom:
+  - |
+    The value of this configuration option shall be defined to a valid function
+    pointer of the type ``void ( *initialize )( size_t )`` or to ``NULL``.
+appl-config-option-default-value: '``NULL``'
+appl-config-option-description: |
+  The value of this configuration option initializes the stack allocator
+  initialization handler.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_TASK_STACK_ALLOCATOR_INIT
+appl-config-option-notes: |
+  A correctly configured system shall configure the following to be consistent:
+
+  - `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
+
+  - :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`
+
+  - :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
+appl-config-option-type: initializer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../stackalloc
+text: ''
+type: interface

@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-constraint:
+  links:
+  - /acfg/opt/constraintunlimited
+  - /acfg/opt/constraintmemsz
+  max: 65535
+  min: 0
+appl-config-option-default-value: |
+  The default value is
+  :ref:`CONFIGURE_MAXIMUM_POSIX_KEYS` *
+  :ref:`CONFIGURE_MAXIMUM_TASKS` +
+  :ref:`CONFIGURE_MAXIMUM_POSIX_THREADS`.
+appl-config-option-description: |
+  The value of this configuration option defines the maximum number of key
+  value pairs used by POSIX API Keys that can be concurrently active.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
+appl-config-option-notes: |
+  This object class can be configured in unlimited allocation mode, see
+  :ref:`ConfigUnlimitedObjects`.
+
+  A key value pair is created by :c:func:`pthread_setspecific` if the value
+  is not :c:macro:`NULL`, otherwise it is deleted.
+appl-config-option-type: integer
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../posix
+text: ''
+type: interface

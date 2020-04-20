@@ -1,0 +1,9 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+links: []
+text: |
+  The value of this configuration option shall be aligned according to
+  ``CPU_INTERRUPT_STACK_ALIGNMENT``.
+type: constraint

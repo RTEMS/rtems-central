@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-description: |
+  In case this configuration option is defined, then
+  :ref:`Constant Bandwidth Server (CBS) Scheduler <SchedulerCBS>`
+  algorithm is made available to the application.
+appl-config-option-index: []
+appl-config-option-name: CONFIGURE_SCHEDULER_CBS
+appl-config-option-notes: |
+  This scheduler configuration option is an advanced configuration option.
+  Think twice before you use it.
+
+  In case no explicit :ref:`clustered scheduler configuration
+  <ConfigurationSchedulersClustered>` is present, then it is used as the
+  scheduler for exactly one processor.
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+interface-type: appl-config-option
+links:
+- role: null
+  uid: ../schedgeneral
+text: ''
+type: interface

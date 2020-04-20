@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+glossary-term: software unit
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  This term is defined by ECSS-E-ST-40C 3.2.24 as a "separately compilable
+  piece of source code".  For this project a *software unit* shall be any of
+  the following items and nothing else:
+
+  * @term{/glos/term/assemblerlanguage} function in a
+    @term{/glos/term/sourcecode} file
+
+  * @term{/glos/term/clanguage} function (external and internal linkage)
+
+  A *software unit* is a @term{/glos/term/softwarecomponent}.
+type: glossary

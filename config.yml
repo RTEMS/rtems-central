@@ -27,9 +27,9 @@ build:
   - waf
   - wscript
   uids:
-  - RTEMS-BUILD-CPUKIT-LIBRTEMSCPU
-  - RTEMS-BUILD-CPUKIT-LIBRTEMSTEST
-  - RTEMS-BUILD-TEST-VAL-GRP
+  - /build/cpukit/librtemscpu
+  - /build/cpukit/librtemstest
+  - /build/testsuites/validation/grp
   workspace-directory: workspace/rtems
 spec:
   cache-directory: cache
@@ -38,7 +38,7 @@ spec:
   - external/rtems/spec
 glossary:
   project-groups:
-  - RTEMS-GLOS-GENERAL
+  - /glos/general
   project-target: external/rtems-docs/c-user/glossary.rst
   documents:
   - rest-source-paths:
@@ -46,31 +46,31 @@ glossary:
     target: external/rtems-docs/eng/glossary.rst
 appl-config:
   groups:
-  - uid: RTEMS-ACFG-BDBUF
+  - uid: /acfg/bdbuf
     target: external/rtems-docs/c-user/config/bdbuf.rst
-  - uid: RTEMS-ACFG-BSP
+  - uid: /acfg/bsp
     target: external/rtems-docs/c-user/config/bsp-related.rst
-  - uid: RTEMS-ACFG-CLASSIC
+  - uid: /acfg/classic
     target: external/rtems-docs/c-user/config/classic-api.rst
-  - uid: RTEMS-ACFG-CLASSICINIT
+  - uid: /acfg/classicinit
     target: external/rtems-docs/c-user/config/classic-init-task.rst
-  - uid: RTEMS-ACFG-DEVDRV
+  - uid: /acfg/devdrv
     target: external/rtems-docs/c-user/config/device-driver.rst
-  - uid: RTEMS-ACFG-EVENTRECORD
+  - uid: /acfg/eventrecord
     target: external/rtems-docs/c-user/config/event-record.rst
-  - uid: RTEMS-ACFG-FILESYSTEM
+  - uid: /acfg/filesystem
     target: external/rtems-docs/c-user/config/filesystem.rst
-  - uid: RTEMS-ACFG-GENERAL
+  - uid: /acfg/general
     target: external/rtems-docs/c-user/config/general.rst
-  - uid: RTEMS-ACFG-IDLE
+  - uid: /acfg/idle
     target: external/rtems-docs/c-user/config/idle-task.rst
-  - uid: RTEMS-ACFG-MPCI
+  - uid: /acfg/mpci
     target: external/rtems-docs/c-user/config/mpci.rst
-  - uid: RTEMS-ACFG-POSIX
+  - uid: /acfg/posix
     target: external/rtems-docs/c-user/config/posix-api.rst
-  - uid: RTEMS-ACFG-POSIXINIT
+  - uid: /acfg/posixinit
     target: external/rtems-docs/c-user/config/posix-init-thread.rst
-  - uid: RTEMS-ACFG-SCHEDGENERAL
+  - uid: /acfg/schedgeneral
     target: external/rtems-docs/c-user/config/scheduler-general.rst
-  - uid: RTEMS-ACFG-STACKALLOC
+  - uid: /acfg/stackalloc
     target: external/rtems-docs/c-user/config/task-stack-alloc.rst

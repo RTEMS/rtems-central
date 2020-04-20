@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
+enabled-by: []
+glossary-term: priority boosting
+glossary-type: term
+links:
+- role: null
+  uid: ../general
+text: |
+  A simple approach to extend the priority inheritance protocol for
+  clustered scheduling is priority boosting.  In case a mutex is owned by a
+  task of another cluster, then the priority of the owner task is raised to
+  an artificially high priority, the pseudo-interrupt priority.
+type: glossary
