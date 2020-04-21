@@ -28,6 +28,7 @@ development tools such as yapf, flake8, mypy, pylint, pytest, and coverage.
 Run
 ```
 git submodule init
+git submodule sync
 git submodule update
 ```
 to initialize the Git submodules.  Run
@@ -44,20 +45,8 @@ with
 
 The
 [specification items](https://docs.rtems.org/branches/master/eng/req-eng.html#specification-items)
-are located in the `spec` directory.  You can use doorstop to work with them,
-e.g.
-```
-$ doorstop
-building tree...
-loading documents...
-validating items...
-
-RTEMS
-│
-└── RTEMS-GLOS
-    │
-    └── RTEMS-GLOS-TERM
-```
+are located in the `spec` directory.  You can use a text editor to work with
+them.
 
 ## Specification-To-X Tool
 
@@ -76,7 +65,7 @@ On branch master
 Your branch is up to date with 'origin/master'.
 
 nothing to commit, working tree clean
-$ sed -i 's/Binary/Boom/' spec/glos/term/RTEMS-GLOS-TERM-ABI.yml
+$ sed -i 's/Binary/Boom/' spec/glos/term/abi.yml
 $ ./rtems_spec_to_x.py
 $ git status
 On branch master
@@ -127,21 +116,21 @@ Run the unit tests and static analysers with:
 ```
 make
 ```
-You can get a coverage report with:
+You can get a branch coverage report with:
 ```
 $ make coverage-report 
-coverage report -m --omit 'env/*'
-Name                     Stmts   Miss  Cover   Missing
-------------------------------------------------------
-rtemsqual/__init__.py        5      0   100%
-rtemsqual/content.py       120      0   100%
-rtemsqual/glossary.py       73      0   100%
-rtemsqual/items.py          93      0   100%
-tests/test_content.py      114      0   100%
-tests/test_glossary.py      33      0   100%
-tests/test_items.py         47      0   100%
-------------------------------------------------------
-TOTAL                      485      0   100%
+coverage report -m --include=...
+Name                      Stmts   Miss Branch BrPart  Cover   Missing
+---------------------------------------------------------------------
+rtemsqual/__init__.py         8      0      0      0   100%
+rtemsqual/applconfig.py     130      0     53      0   100%
+rtemsqual/build.py           36      0     14      0   100%
+rtemsqual/content.py        133      0     44      0   100%
+rtemsqual/glossary.py        70      0     31      0   100%
+rtemsqual/items.py          139      0     46      0   100%
+rtemsqual/util.py            26      0      2      0   100%
+---------------------------------------------------------------------
+TOTAL                       542      0    190      0   100%
 ```
 
 ## Contributing
