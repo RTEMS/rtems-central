@@ -33,7 +33,6 @@ cp git-hooks/sanity-check.sh .git/hooks/pre-push
 Run
 ```
 git submodule init
-git submodule sync
 git submodule update
 ```
 to initialize the Git submodules.  Run
@@ -45,6 +44,11 @@ with
 ```
 . env/bin/activate
 ```
+If submodule URLs changed after a pull use
+```
+git submodule sync
+```
+to activate the new URLs.
 
 ## Specification Items
 
