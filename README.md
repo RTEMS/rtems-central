@@ -25,6 +25,11 @@ development tools such as yapf, flake8, mypy, pylint, pytest, and coverage.
 
 ## Getting Started
 
+Copy the sanity check script at least to the pre-push hook (optional also to
+the pre-commit hook):
+```
+cp git-hooks/sanity-check.sh .git/hooks/pre-push
+```
 Run
 ```
 git submodule init
