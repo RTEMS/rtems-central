@@ -22,7 +22,7 @@ SPACE := $(EMPTY) $(EMPTY)
 COMMA := ,
 
 coverage-report:
-	coverage report -m --include=$(subst $(SPACE),$(COMMA),$(PY_SRC_FILES))
+	coverage report -m --fail-under=100 --include=$(subst $(SPACE),$(COMMA),$(PY_SRC_FILES))
 
 .PONY: env
 
