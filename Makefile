@@ -24,7 +24,7 @@ COMMA := ,
 coverage-report:
 	coverage report -m --fail-under=100 --include=$(subst $(SPACE),$(COMMA),$(PY_SRC_FILES))
 
-.PONY: env
+.PHONY: env
 
 env:
 	python3 -m venv env
