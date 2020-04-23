@@ -146,14 +146,23 @@ class Item:
         """ Returns true if the item is enabled by the specified enables. """
         return _is_enabled(enabled, self["enabled-by"])
 
+    @property
+    def file(self) -> str:
+        """ Returns the file of the item. """
+        return self._data["_file"]
+
+    @file.setter
+    def file(self, value: str):
+        """ Sets the file of the item. """
+        self._data["_file"] = value
+
     def save(self):
         """ Saves the item to the corresponding file. """
-        with open(self._data["_file"], "w") as dst:
-            del self._data["_file"]
+        with open(self.file, "w") as dst:
+            data = self._data.copy()
+            del data["_file"]
             dst.write(
-                yaml.dump(self._data,
-                          default_flow_style=False,
-                          allow_unicode=True))
+                yaml.dump(data, default_flow_style=False, allow_unicode=True))
 
 
 class ItemCache:

@@ -97,7 +97,10 @@ def test_is_enabled():
 
 def test_save(tmpdir):
     item_file = os.path.join(tmpdir, "i.yml")
-    item = Item("i", {"k": "v", "_file": item_file})
+    item = Item("i", {"k": "v"})
+    item.file = item_file
+    assert item.file == item_file
     item.save()
     with open(item_file, "r") as src:
         assert src.read() == "k: v\n"
+    assert item.file == item_file
