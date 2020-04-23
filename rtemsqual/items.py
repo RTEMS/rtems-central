@@ -164,6 +164,13 @@ class Item:
             dst.write(
                 yaml.dump(data, default_flow_style=False, allow_unicode=True))
 
+    def load(self):
+        """ Loads the item from the corresponding file. """
+        filename = self.file
+        with open(filename, "r") as src:
+            self._data = yaml.safe_load(src.read())
+            self._data["_file"] = filename
+
 
 class ItemCache:
     """ This class provides a cache of specification items. """

@@ -95,7 +95,7 @@ def test_is_enabled():
     assert _is_enabled([], {"not": {"and": ["A", {"not": "A"}]}})
 
 
-def test_save(tmpdir):
+def test_save_and_load(tmpdir):
     item_file = os.path.join(tmpdir, "i.yml")
     item = Item("i", {"k": "v"})
     item.file = item_file
@@ -103,4 +103,12 @@ def test_save(tmpdir):
     item.save()
     with open(item_file, "r") as src:
         assert src.read() == "k: v\n"
+    assert item.file == item_file
+
+    item2 = Item("i2", {})
+    item2.file = item_file
+    with pytest.raises(KeyError):
+        item2["k"]
+    item2.load()
+    assert item2["k"] == "v"
     assert item.file == item_file
