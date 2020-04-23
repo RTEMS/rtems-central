@@ -147,6 +147,12 @@ TOTAL                       542      0    190      0   100%
 Please read
 [Support and Contributing](https://docs.rtems.org/branches/master/user/support/index.html).
 
+For the ESA activity do not push to the `esa` branch directly.  Instead always
+work on topic branches and use merge requests, for example:
+```
+git push -o merge_request.create topic-branch
+```
+
 ## License
 
 This project is licensed under the
