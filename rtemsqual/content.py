@@ -128,17 +128,41 @@ def _make_list(value):
     return value
 
 
-class SphinxContent:
-    """ This class builds Sphinx content. """
-    def __init__(self):
+class Content:
+    """ This class builds content. """
+    def __init__(self, the_license):
         self._content = ""
-        self._license = "CC-BY-SA-4.0"
+        self._license = the_license
         self._copyrights = Copyrights()
 
     @property
     def content(self):
         """ Returns the content. """
         return self._content
+
+    def register_license(self, the_license):
+        """ Registers a licence for the content. """
+        licenses = re.split(r"\s+OR\s+", the_license)
+        if self._license not in licenses:
+            raise ValueError(the_license)
+
+    def register_copyright(self, statement):
+        """ Registers a copyright statement for the content. """
+        self._copyrights.register(statement)
+
+    def write(self, path):
+        """ Writes the content to the file specified by the path. """
+        directory = os.path.dirname(path)
+        if directory:
+            os.makedirs(directory, exist_ok=True)
+        with open(path, "w+") as out:
+            out.write(self._content)
+
+
+class SphinxContent(Content):
+    """ This class builds Sphinx content. """
+    def __init__(self):
+        super().__init__("CC-BY-SA-4.0")
 
     def add_label(self, label):
         """ Adds a label to the content. """
@@ -184,16 +208,6 @@ class SphinxContent:
                 self.add_line(name, indent)
             self.add_line(line, indent=indent + 1)
 
-    def register_license(self, the_license):
-        """ Registers a licence for the content. """
-        licenses = re.split(r"\s+OR\s+", the_license)
-        if self._license not in licenses:
-            raise ValueError(the_license)
-
-    def register_copyright(self, statement):
-        """ Registers a copyright statement for the content. """
-        self._copyrights.register(statement)
-
     def add_licence_and_copyrights(self):
         """
         Adds a licence and copyright block to the content according to the
@@ -205,14 +219,6 @@ class SphinxContent:
             self._content = f"{spdx}\n.. {statements}\n\n{self._content}"
         else:
             self._content = f"{spdx}\n{self._content}"
-
-    def write(self, path):
-        """ Writes the content to the file specified by the path. """
-        directory = os.path.dirname(path)
-        if directory:
-            os.makedirs(directory, exist_ok=True)
-        with open(path, "w+") as out:
-            out.write(self._content)
 
 
 class MacroToSphinx:

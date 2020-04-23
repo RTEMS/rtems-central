@@ -30,7 +30,7 @@ import stat
 from typing import Any, List, Dict
 import yaml
 
-from rtemsqual.content import SphinxContent
+from rtemsqual.content import Content
 
 ItemList = List["Item"]
 ItemMap = Dict[str, "Item"]
@@ -136,7 +136,7 @@ class Item:
         """ Adds a child to this item. """
         self._children.append(child)
 
-    def register_license_and_copyrights(self, content: SphinxContent):
+    def register_license_and_copyrights(self, content: Content):
         """ Registers the license and copyrights of this item. """
         content.register_license(self["SPDX-License-Identifier"])
         for statement in self["copyrights"]:
