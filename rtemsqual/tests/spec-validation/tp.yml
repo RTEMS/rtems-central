@@ -1,0 +1,9 @@
+build-type: test-program
+enabled-by: []
+links: []
+source:
+- tc12.c
+- tc34.c
+- ts.c
+- other.c
+type: build

@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+includes:
+- blue.h
+links: []
+local-includes:
+- green.h
+source: ts.c
+test-suite-code: |
+  /* Blue green code */
+test-suite-brief: The Blue Green brief description.
+test-suite-description: The Blue Green description.
+test-suite-name: Blue Green
+type: test-suite

@@ -24,7 +24,9 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-__all__ = ["applconfig", "build", "content", "glossary", "items", "util"]
+__all__ = [
+    "applconfig", "build", "content", "glossary", "items", "util", "validation"
+]
 
 import rtemsqual.applconfig
 import rtemsqual.build
@@ -32,3 +34,4 @@ import rtemsqual.content
 import rtemsqual.glossary
 import rtemsqual.items  # noqa: F401
 import rtemsqual.util  # noqa: F401
+import rtemsqual.validation  # noqa: F401

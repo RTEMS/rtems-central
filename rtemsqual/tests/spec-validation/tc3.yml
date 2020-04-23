@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+test-case-actions:
+- action: |
+    /* Test case 3 action 0 code */
+  checks:
+  - check: |
+      /* Test case 3 action 0 check 0 code; step ${step} */
+    description: |
+      Test case 3 action 0 check 0 description.
+    links: []
+  description: |
+    Test case 3 action 0 description.
+  links: []
+test-case-brief: Test case 3 brief description.
+test-case-description: Test case 3 description.
+test-case-epilogue: null
+test-case-fixture: null
+test-case-name: Test Case 3
+test-case-prologue: null
+test-case-support: null
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+includes:
+- c.h
+links: []
+local-includes:
+- z.h
+source: tc34.c
+type: test-case
