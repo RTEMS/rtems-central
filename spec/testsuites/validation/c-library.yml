@@ -1,0 +1,78 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+test-case-actions:
+- action: |
+    p = aligned_alloc(128, 4);
+  checks:
+  - check: |
+      T_step_not_null(${step}, p);
+    description: |
+      Check that the returned pointer is not NULL.
+    links: []
+  - check: |
+      T_step_eq_uptr(${step}, (uintptr_t) p % 128, 0);
+    description: |
+      Check that the returned pointer is aligned by 128 bytes.
+    links: []
+  description: |
+    Allocate four bytes with an alignment of 128 bytes with aligned_alloc().
+  links: []
+- action: |
+    p = rtems_malloc(4);
+  checks:
+  - check: |
+      T_step_not_null(${step}, p);
+    description: |
+      Check that the returned pointer is not NULL.
+    links: []
+  description: |
+    Allocate four bytes with rtems_malloc().
+  links: []
+- action: |
+    d = 1;
+    memset(&d, 0, sizeof(d));
+  checks:
+  - check: |
+      T_step_eq_int(${step}, d, 0);
+    description: |
+      Check that the integer variable is equal to zero.
+    links: []
+  description: |
+    Set an integer variable to one and then to zero with memset().
+  links: []
+- action: |
+    s = 1;
+    d = 2;
+    memcpy(&d, &s, sizeof(d));
+  checks:
+  - check: |
+      T_step_eq_int(${step}, d, 1);
+    description: |
+      Check that the destination integer variable is equal to one.
+    links: []
+  description: |
+    Set a source integer variable to one, set a destination integer variable to
+    two, and copy the source to the destination variable through memcpy().
+  links: []
+test-case-brief: |
+  This test case calls functions of the C Library which are included in the
+  space profile.
+test-case-description: null
+test-case-epilogue: null
+test-case-fixture: null
+test-case-name: Space Profile C Library
+test-case-prologue: |
+  void *p;
+  int s;
+  int d;
+test-case-support: null
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+includes:
+- rtems.h
+- stdlib.h
+- rtems/malloc.h
+links: []
+local-includes: []
+source: testsuites/validation/tc-space-profile.c
+type: test-case

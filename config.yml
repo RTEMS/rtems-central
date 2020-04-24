@@ -74,3 +74,5 @@ appl-config:
     target: external/rtems-docs/c-user/config/scheduler-general.rst
   - uid: /acfg/stackalloc
     target: external/rtems-docs/c-user/config/task-stack-alloc.rst
+validation:
+  base-directory: external/rtems

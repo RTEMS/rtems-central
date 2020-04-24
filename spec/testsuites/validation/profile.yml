@@ -1,0 +1,158 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+includes:
+- rtems.h
+- rtems/bspIo.h
+- rtems/sysinit.h
+- rtems/score/sysstate.h
+links: []
+local-includes: []
+source: testsuites/validation/ts-space-profile.c
+test-suite-code: |
+  #define NAME rtems_build_name('N', 'A', 'M', 'E')
+
+  static void fatal_extension(
+    rtems_fatal_source source,
+    bool always_set_to_false,
+    rtems_fatal_code error
+  )
+  {
+    T_make_runner();
+    T_step_eq_int(0, source, RTEMS_FATAL_SOURCE_APPLICATION);
+    T_step_false(1, always_set_to_false, "always_set_to_false");
+    T_step_eq_ulong(2, error, 123);
+    T_case_end();
+    T_run_finalize();
+  }
+
+  static void Init(rtems_task_argument arg)
+  {
+    (void) arg;
+
+    T_make_runner();
+    T_register();
+    T_run_all();
+    T_case_begin("SpaceProfileFatalError", NULL);
+    T_plan(3);
+    rtems_fatal(RTEMS_FATAL_SOURCE_APPLICATION, 123);
+  }
+
+  static char init_task_stack[RTEMS_MINIMUM_STACK_SIZE];
+
+  static char buffer[512];
+
+  static void check_task_context(T_event event, const char *name)
+  {
+    if (_System_state_Is_up(_System_state_Get())) {
+      T_check_task_context(event, name);
+    }
+  }
+
+  static const T_action actions[] = {
+    T_report_hash_sha256,
+    check_task_context,
+    T_check_rtems_barriers,
+    T_check_rtems_extensions,
+    T_check_rtems_message_queues,
+    T_check_rtems_partitions,
+    T_check_rtems_periods,
+    T_check_rtems_semaphores,
+    T_check_rtems_tasks,
+    T_check_rtems_timers
+  };
+
+  static const T_config test_config = {
+    .name = "SpaceProfile",
+    .buf = buffer,
+    .buf_size = sizeof(buffer),
+    .putchar = rtems_put_char,
+    .verbosity = T_VERBOSE,
+    .now = T_now_clock,
+    .action_count = T_ARRAY_SIZE(actions),
+    .actions = actions
+  };
+
+  static void init_task(void)
+  {
+    static const rtems_task_config task_config = {
+      .name = NAME,
+      .initial_priority = 1,
+      .stack_area = init_task_stack,
+      .stack_size = sizeof(init_task_stack),
+      .initial_modes = RTEMS_DEFAULT_MODES,
+      .attribute_set = RTEMS_DEFAULT_ATTRIBUTES
+    };
+    rtems_id id;
+    rtems_status_code sc;
+
+    T_run_initialize(&test_config);
+    T_case_begin("SpaceProfileTaskBuild", NULL);
+    T_plan(2);
+
+    sc = rtems_task_build(&task_config, &id);
+    T_step_rsc_success(0, sc);
+
+    sc = rtems_task_start(id, Init, 0);
+    T_step_rsc_success(1, sc);
+
+    T_check_rtems_tasks(T_EVENT_RUN_INITIALIZE_EARLY, T_case_name());
+    T_case_end();
+  }
+
+  RTEMS_SYSINIT_ITEM(
+    init_task,
+    RTEMS_SYSINIT_CLASSIC_USER_TASKS,
+    RTEMS_SYSINIT_ORDER_MIDDLE
+  );
+
+  #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+
+  #define CONFIGURE_MAXIMUM_BARRIERS 1
+
+  #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+  #define CONFIGURE_MAXIMUM_PARTITIONS 1
+
+  #define CONFIGURE_MAXIMUM_PERIODS 1
+
+  #define CONFIGURE_MAXIMUM_SEMAPHORES 1
+
+  #define CONFIGURE_MAXIMUM_TASKS 1
+
+  #define CONFIGURE_MAXIMUM_TIMERS 1
+
+  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+  #define CONFIGURE_MESSAGE_BUFFER_MEMORY 1
+
+  #define CONFIGURE_MICROSECONDS_PER_TICK 10000
+
+  #define CONFIGURE_SCHEDULER_NAME NAME
+
+  #define CONFIGURE_INITIAL_EXTENSIONS { .fatal = fatal_extension }
+
+  /* Mandatory for space profile */
+
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+  #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+  #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+test-suite-brief: |
+  This test suite contains test cases which call in combination all functions
+  included in the space profile.
+test-suite-description: null
+test-suite-name: Space Profile
+type: test-suite
