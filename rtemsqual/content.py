@@ -26,6 +26,9 @@
 
 import os
 import re
+import textwrap
+
+from typing import List, Union
 
 
 class Copyright:
@@ -116,7 +119,7 @@ class Copyrights:
         return statements
 
 
-def _make_lines(lines):
+def _make_lines(lines: Union[str, List[str]]) -> List[str]:
     if not isinstance(lines, list):
         return lines.strip("\n").split("\n")
     return lines
@@ -134,6 +137,14 @@ class Content:
         self._content = ""
         self._license = the_license
         self._copyrights = Copyrights()
+
+    def add(self, content: str) -> None:
+        """ Adds content to the content. """
+        self._content += content
+
+    def add_blank_line(self):
+        """ Adds a blank line to the content. """
+        self.add("\n")
 
     @property
     def content(self):
@@ -172,10 +183,6 @@ class SphinxContent(Content):
         """ Adds a header to the content. """
         name = name.strip()
         self._content += name + "\n" + level * len(name) + "\n"
-
-    def add_blank_line(self):
-        """ Adds a blank line to the content. """
-        self._content += "\n"
 
     def add_line(self, line, indent=0):
         """ Adds a line to the content. """
@@ -246,3 +253,116 @@ class MacroToSphinx:
             return roles[name](match.group(2))
         assert match.group(0) == "@@"
         return "@"
+
+
+_BSD_2_CLAUSE_LICENSE = """
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+"""
+
+
+class CContent(Content):
+    """ This class builds C content. """
+    def __init__(self):
+        super().__init__("BSD-2-Clause")
+
+    def add_spdx_license_identifier(self):
+        """
+        Adds an SPDX License Identifier to the content according to the
+        registered licenses.
+        """
+        spdx = f"/* SPDX-License-Identifier: {self._license} */"
+        self.add(f"{spdx}\n{self._content}")
+
+    def add_copyrights_and_licenses(self):
+        """
+        Adds the copyrights and licenses to the content according to the
+        registered copyrights and licenses.
+        """
+        self.add("\n/*\n * ")
+        self.add("\n * ".join(self._copyrights.get_statements()))
+        self.add(_BSD_2_CLAUSE_LICENSE)
+
+    def add_have_config(self):
+        """ Adds a guarded config.h include. """
+        self.add("""
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+""")
+
+    def add_lines(self, lines: Union[str, List[str]], indent: int = 0) -> None:
+        """ Adds the lines to the content. """
+        if lines:
+            sep = "\n" + indent * "  "
+            self.add(indent * "  " + sep.join(_make_lines(lines)) + "\n")
+
+    def add_line_block(self,
+                       lines: Union[str, List[str]],
+                       indent: int = 0) -> None:
+        """ Adds a block of lines to the content. """
+        if lines:
+            sep = "\n" + indent * "  "
+            self.add(sep + sep.join(_make_lines(lines)) + "\n")
+
+    def add_includes(self, includes: List[str], local: bool = False) -> None:
+        """ Adds a block of includes. """
+        class IncludeKey:  # pylint: disable=too-few-public-methods
+            """ Provides a key to sort includes. """
+            def __init__(self, inc: str):
+                self._inc = inc
+
+            def __lt__(self, other: "IncludeKey") -> bool:
+                left = self._inc.split("/")
+                right = other._inc.split("/")
+                left_len = len(left)
+                right_len = len(right)
+                if left_len == right_len:
+                    for left_part, right_part in zip(left[:-1], right[:-1]):
+                        if left_part != right_part:
+                            return left_part < right_part
+                    return left[-1] < right[-1]
+                return left_len < right_len
+
+        left = "\"" if local else "<"
+        right = "\"" if local else ">"
+        incs = [f"#include {left}{inc}{right}" for inc in includes]
+        self.add_line_block(sorted(set(incs), key=IncludeKey))
+
+    def add_comment_content(self,
+                            content: str,
+                            indent: int = 0,
+                            intro: str = "") -> None:
+        """ Adds comment content to the content. """
+        if content:
+            text = textwrap.TextWrapper()
+            text.drop_whitespace = True
+            sep = indent * "  " + " * "
+            text.initial_indent = sep + intro
+            text.subsequent_indent = sep + len(intro) * " "
+            self.add(indent * "  " + " *\n" + "\n".join(text.wrap(content)) +
+                     "\n")
+
+    def add_brief_description(self, description: str, indent: int = 0) -> None:
+        """ Adds a brief description to the content. """
+        self.add_comment_content(description, indent, intro="@brief ")
