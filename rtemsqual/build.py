@@ -76,11 +76,8 @@ def gather_files(config: dict, item_cache: ItemCache) -> List[str]:
     bsps = {}  # type: BSPMap
     for item in item_cache.all.values():
         if item["type"] == "build" and item["build-type"] == "bsp":
-            arch = item["arch"].strip()
-            if arch not in bsps:
-                bsps[arch] = {}
-            bsp = item["bsp"].strip()
-            bsps[arch][bsp] = item
+            arch_bsps = bsps.setdefault(item["arch"].strip(), {})
+            arch_bsps[item["bsp"].strip()] = item
     source_files = config["sources"]  # type: List[str]
     arch = config["arch"]
     bsp = config["bsp"]
