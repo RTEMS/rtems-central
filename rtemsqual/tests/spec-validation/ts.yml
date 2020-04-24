@@ -10,7 +10,6 @@ local-includes:
 source: ts.c
 test-suite-code: |
   /* Blue green code */
-test-suite-brief: The Blue Green brief description.
 test-suite-description: The Blue Green description.
 test-suite-name: Blue Green
 type: test-suite

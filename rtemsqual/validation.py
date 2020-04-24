@@ -72,7 +72,7 @@ def _add_ingroup(content: CContent, items: List[Item], prefix: str,
 
 def _add_test_case_description(content: CContent, item: Item,
                                test_case_to_suites: Dict[str, List[Item]],
-                               name: str, desi: str):
+                               name: str, desi: str) -> None:
     content.add(f"""
 /**
  * @defgroup RTEMSTestCase{desi} {name}
@@ -80,8 +80,15 @@ def _add_test_case_description(content: CContent, item: Item,
 """)
     _add_ingroup(content, test_case_to_suites[item.uid], "RTEMSTestSuite",
                  "test-suite-name")
-    content.add_brief_description(item["test-case-brief"])
-    content.add_comment_content(item["test-case-description"])
+    content.add(f""" *
+ * @brief Test Case
+ *
+ * @{{
+ */
+""")
+
+
+def _add_test_case_action_description(content: CContent, item: Item) -> None:
     actions = item["test-case-actions"]
     if actions:
         content.add_comment_content(
@@ -90,10 +97,6 @@ def _add_test_case_description(content: CContent, item: Item,
             content.add_comment_content(action["description"], intro="- ")
             for check in action["checks"]:
                 content.add_comment_content(check["description"], intro="  - ")
-    content.add(f""" *
- * @{{
- */
-""")
 
 
 def _generate_test_case_actions(item: Item, steps: StepWrapper) -> CContent:
@@ -118,13 +121,12 @@ def _generate_test_case(content: CContent, item: Item,
     content.add_line_block(item["test-case-support"])
     content.add(f"""
 /**
- * @fn void {desi}(void)
- *
- * @brief This is an artificial function.
- *
- * This function does exits only in the documentation.  It enables Doxygen to
- * link the test case source code to the test case module.
- */
+ * @fn void T_case_body_{desi}(void)
+""")
+    content.add_brief_description(item["test-case-brief"])
+    content.add_comment_content(item["test-case-description"])
+    _add_test_case_action_description(content, item)
+    content.add(f""" */
 """)
     fixture = item["test-case-fixture"]
     if fixture:
@@ -167,8 +169,9 @@ def _generate_test_suite(content: CContent, item: Item) -> None:
  * @defgroup RTEMSTestSuite{_designator(name)} {name}
  *
  * @ingroup RTEMSTestSuites
+ *
+ * @brief Test Suite
 """)
-    content.add_brief_description(item["test-suite-brief"])
     content.add_comment_content(item["test-suite-description"])
     content.add(f""" *
  * @{{
