@@ -51,16 +51,17 @@ def _gather_glossary_terms(item: Item, glossary_terms: ItemMap) -> None:
 def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     content = SphinxContent()
     content.add_header("Glossary", level="*")
-    content.add_blank_line()
-    content.add_line(".. glossary::")
-    content.add_line(":sorted:", indent=1)
+    content.add(".. glossary::")
+    with content.indent():
+        content.append(":sorted:")
     macro_to_sphinx = MacroToSphinx()
     macro_to_sphinx.set_terms(terms)
     for item in sorted(terms.values(),
                        key=lambda x: x["glossary-term"].lower()):
         text = macro_to_sphinx.substitute(item["text"].strip())
         item.register_license_and_copyrights(content)
-        content.add_definition_item(item["glossary-term"], text, indent=1)
+        with content.indent():
+            content.add_definition_item(item["glossary-term"], text)
     content.add_licence_and_copyrights()
     return content
 

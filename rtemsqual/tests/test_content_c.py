@@ -30,105 +30,101 @@ from rtemsqual.content import CContent
 def test_add_have_config():
     content = CContent()
     content.add_have_config()
-    assert content.content == """
+    assert str(content) == """#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+"""
+    content.add_have_config()
+    assert str(content) == """#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 """
 
 
-def test_add_lines():
-    content = CContent()
-    content.add_lines("")
-    assert content.content == ""
-    content.add_lines("a\nb\n")
-    assert content.content == """a
-b
-"""
-    content.add_lines(["c", "d"], indent=1)
-    assert content.content == """a
-b
-  c
-  d
-"""
-
-
-def test_add_line_block():
-    content = CContent()
-    content.add_line_block("")
-    assert content.content == ""
-    content.add_line_block("a")
-    assert content.content == """
-a
-"""
-    content.add_line_block(["b", "c"])
-    assert content.content == """
-a
-
-b
-c
-"""
-
-
 def test_add_includes():
     content = CContent()
     content.add_includes([])
-    assert content.content == ""
+    assert str(content) == ""
     content = CContent()
     content.add_includes(["a", "a"])
-    assert content.content == """
-#include <a>
+    assert str(content) == """#include <a>
+"""
+    content.add_includes(["b"])
+    assert str(content) == """#include <a>
+
+#include <b>
 """
     content = CContent()
     content.add_includes(["c", "b"], local=True)
-    assert content.content == """
-#include "b"
+    assert str(content) == """#include "b"
 #include "c"
 """
     content = CContent()
     content.add_includes(["d/f", "d/e"])
-    assert content.content == """
-#include <d/e>
+    assert str(content) == """#include <d/e>
 #include <d/f>
 """
     content = CContent()
     content.add_includes(["h", "g/h"])
-    assert content.content == """
-#include <h>
+    assert str(content) == """#include <h>
 #include <g/h>
 """
     content = CContent()
     content.add_includes(["i/l/k", "i/j/k"])
-    assert content.content == """
-#include <i/j/k>
+    assert str(content) == """#include <i/j/k>
 #include <i/l/k>
 """
 
 
-def test_add_comment_content():
+def test_comment_block():
     content = CContent()
-    content.add_comment_content("")
-    assert content.content == ""
-    content.add_comment_content("a")
-    assert content.content == """ *
+    with content.comment_block():
+        assert not content.gap
+        content.add(content.wrap(""))
+        assert not content.gap
+        assert str(content) == """/*
+"""
+        content.add(content.wrap("a"))
+        assert content.gap
+        assert str(content) == """/*
  * a
+"""
+        content.add(content.wrap("b"))
+        assert content.gap
+        assert str(content) == """/*
+ * a
+ *
+ * b
+"""
+        content.gap = False
+        content.add(content.wrap("c"))
+        assert content.gap
+        assert str(content) == """/*
+ * a
+ *
+ * b
+ * c
 """
 
 
 def test_add_brief_description():
     content = CContent()
     content.add_brief_description("")
-    assert content.content == ""
+    assert str(content) == ""
+    content.gap = True
     content.add_brief_description(
         "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT "
         "HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED "
         "WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES "
         "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE "
         "DISCLAIMED.")
-    assert content.content == """ *
- * @brief THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
- *        CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
- *        INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- *        MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- *        DISCLAIMED.
+    assert str(content) == """
+@brief THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+       IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+       TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+       PARTICULAR PURPOSE ARE DISCLAIMED.
 """

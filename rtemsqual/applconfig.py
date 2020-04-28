@@ -188,19 +188,16 @@ def _generate_notes(content: SphinxContent, notes: Optional[str]) -> None:
     content.add_definition_item("NOTES:", notes)
 
 
-def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
+def _generate_file(group: Item, options: ItemMap, target: str) -> None:
     content = SphinxContent()
     group.register_license_and_copyrights(content)
     content.add_header(group["appl-config-group-name"], level="=")
-    content.add_blank_line()
-    content.add_lines(group["appl-config-group-description"])
+    content.add(group["appl-config-group-description"])
     for item in sorted(options.values(), key=lambda x: x.uid):
         name = item["appl-config-option-name"]
         item.register_license_and_copyrights(content)
         content.add_index_entries([name] + item["appl-config-option-index"])
-        content.add_blank_line()
         content.add_label(name)
-        content.add_blank_line()
         content.add_header(name, level="-")
         content.add_definition_item("CONSTANT:", f"``{name}``")
         option_type = item["appl-config-option-type"]
@@ -210,7 +207,7 @@ def _generate_content(group: Item, options: ItemMap) -> SphinxContent:
                                     item["appl-config-option-description"])
         _generate_notes(content, item["appl-config-option-notes"])
     content.add_licence_and_copyrights()
-    return content
+    content.write(target)
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -230,5 +227,4 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         group = groups[group_config["uid"]]
         options = {}  # type: ItemMap
         _gather_options(group, options)
-        content = _generate_content(group, options)
-        content.write(group_config["target"])
+        _generate_file(group, options, group_config["target"])

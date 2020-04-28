@@ -65,51 +65,35 @@ def _designator(name: str) -> str:
 
 def _add_ingroup(content: CContent, items: List[Item], prefix: str,
                  key: str) -> None:
-    for desi in sorted(set(_designator(item[key]) for item in items)):
-        content.add(f""" * @ingroup {prefix}{desi}
-""")
+    content.add_ingroup(
+        [f"{prefix}{_designator(item[key])}" for item in items])
 
 
 def _add_test_case_description(content: CContent, item: Item,
                                test_case_to_suites: Dict[str, List[Item]],
-                               name: str, desi: str) -> None:
-    content.add(f"""
-/**
- * @defgroup RTEMSTestCase{desi} {name}
- *
-""")
-    _add_ingroup(content, test_case_to_suites[item.uid], "RTEMSTestSuite",
-                 "test-suite-name")
-    content.add(f""" *
- * @brief Test Case
- *
- * @{{
- */
-""")
+                               identifier: str, name: str) -> None:
+    with content.defgroup_block(f"RTEMSTestCase{identifier}", name):
+        _add_ingroup(content, test_case_to_suites[item.uid], "RTEMSTestSuite",
+                     "test-suite-name")
+        content.add(["@brief Test Case", "", "@{"])
 
 
 def _add_test_case_action_description(content: CContent, item: Item) -> None:
     actions = item["test-case-actions"]
     if actions:
-        content.add_comment_content(
-            "This test case performs the following actions:")
+        content.add("This test case performs the following actions:")
         for action in actions:
-            content.add_comment_content(action["description"], intro="- ")
+            content.add(content.wrap(action["description"], intro="- "))
             for check in action["checks"]:
-                content.add_comment_content(check["description"], intro="  - ")
+                content.add(content.wrap(check["description"], intro="  - "))
 
 
 def _generate_test_case_actions(item: Item, steps: StepWrapper) -> CContent:
     content = CContent()
-    first = True
     for action in item["test-case-actions"]:
-        if not first:
-            content.add_blank_line()
-        first = False
-        content.add_lines(action["action"], indent=1)
+        content.add(action["action"])
         for check in action["checks"]:
-            the_check = string.Template(check["check"]).substitute(steps)
-            content.add_lines(the_check, indent=1)
+            content.append(string.Template(check["check"]).substitute(steps))
     return content
 
 
@@ -117,69 +101,38 @@ def _generate_test_case(content: CContent, item: Item,
                         test_case_to_suites: Dict[str, List[Item]]) -> None:
     name = item["test-case-name"]
     desi = _designator(name)
-    _add_test_case_description(content, item, test_case_to_suites, name, desi)
-    content.add_line_block(item["test-case-support"])
-    content.add(f"""
-/**
- * @fn void T_case_body_{desi}(void)
-""")
-    content.add_brief_description(item["test-case-brief"])
-    content.add_comment_content(item["test-case-description"])
-    _add_test_case_action_description(content, item)
-    content.add(f""" */
-""")
+    _add_test_case_description(content, item, test_case_to_suites, desi, name)
+    content.add(item["test-case-support"])
+    with content.function_block(f"void T_case_body_{desi}(void)"):
+        content.add_brief_description(item["test-case-brief"])
+        content.add(content.wrap(item["test-case-description"]))
+        _add_test_case_action_description(content, item)
     fixture = item["test-case-fixture"]
     if fixture:
-        content.add_lines(f"T_TEST_CASE_FIXTURE({desi}, &{fixture})")
+        content.append(f"T_TEST_CASE_FIXTURE({desi}, &{fixture})")
     else:
-        content.add_lines(f"T_TEST_CASE({desi})")
-    content.add_lines("{")
-    prologue = item["test-case-prologue"]
-    first = True
-    if prologue:
-        first = False
-        content.add_lines(prologue, indent=1)
-    steps = StepWrapper()
-    action_content = _generate_test_case_actions(item, steps)
-    if steps.steps > 0:
-        if not first:
-            content.add_blank_line()
-        first = False
-        content.add_lines(f"T_plan({steps.steps});", indent=1)
-    if action_content.content:
-        if not first:
-            content.add_blank_line()
-        first = False
-        content.add(action_content.content)
-    epilogue = item["test-case-epilogue"]
-    if epilogue:
-        if not first:
-            content.add_blank_line()
-        content.add_lines(epilogue, indent=1)
-    content.add(f"""}}
-
-/** @}} */
-""")
+        content.append(f"T_TEST_CASE({desi})")
+    content.append("{")
+    content.gap = False
+    with content.indent():
+        content.add(item["test-case-prologue"])
+        steps = StepWrapper()
+        action_content = _generate_test_case_actions(item, steps)
+        if steps.steps > 0:
+            content.add(f"T_plan({steps.steps});")
+        content.add(action_content)
+        content.add(item["test-case-epilogue"])
+    content.append(["}", "", "/** @} */"])
 
 
 def _generate_test_suite(content: CContent, item: Item) -> None:
     name = item["test-suite-name"]
-    content.add(f"""
-/**
- * @defgroup RTEMSTestSuite{_designator(name)} {name}
- *
- * @ingroup RTEMSTestSuites
- *
- * @brief Test Suite
-""")
-    content.add_comment_content(item["test-suite-description"])
-    content.add(f""" *
- * @{{
- */
-
-{item["test-suite-code"]}
-/** @}} */
-""")
+    with content.defgroup_block(f"RTEMSTestSuite{_designator(name)}", name):
+        content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
+        content.add(content.wrap(item["test-suite-description"]))
+        content.add("@{")
+    content.add(item["test-suite-code"])
+    content.add("/** @} */")
 
 
 class SourceFile:
@@ -221,17 +174,11 @@ class SourceFile:
             local_includes.extend(item["local-includes"])
             item.register_license_and_copyrights(content)
         content.add_spdx_license_identifier()
-        content.add(f"""
-/**
- * @file
- *
-""")
-        _add_ingroup(content, self._test_suites, "RTEMSTestSuite",
-                     "test-suite-name")
-        _add_ingroup(content, self._test_cases, "RTEMSTestCase",
-                     "test-case-name")
-        content.add(f""" */
-""")
+        with content.file_block():
+            _add_ingroup(content, self._test_suites, "RTEMSTestSuite",
+                         "test-suite-name")
+            _add_ingroup(content, self._test_cases, "RTEMSTestCase",
+                         "test-case-name")
         content.add_copyrights_and_licenses()
         content.add_have_config()
         content.add_includes(includes)

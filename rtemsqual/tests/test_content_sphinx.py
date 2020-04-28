@@ -24,7 +24,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
 import pytest
 
 from rtemsqual.content import SphinxContent
@@ -40,56 +39,61 @@ class EmptyCache(ItemCache):
 def test_add_label():
     sc = SphinxContent()
     sc.add_label("x")
-    assert ".. _x:\n" == sc.content
+    assert str(sc) == """.. _x:
+"""
 
 
 def test_add_header():
     sc = SphinxContent()
     sc.add_header("x")
-    assert "x\n=\n" == sc.content
+    assert str(sc) == """x
+=
+"""
 
 
-def test_add_blank_line():
+def test_append():
     sc = SphinxContent()
-    sc.add_blank_line()
-    assert "\n" == sc.content
+    sc.append("x")
+    assert str(sc) == """x
+"""
+    with sc.indent():
+        sc.append("y")
+        assert str(sc) == """x
+    y
+"""
+        sc.append("")
+        assert str(sc) == """x
+    y
 
-
-def test_add_line():
-    sc = SphinxContent()
-    sc.add_line("x")
-    assert "x\n" == sc.content
-    sc.add_line("y", 1)
-    assert "x\n    y\n" == sc.content
-    sc.add_line("")
-    assert "x\n    y\n\n" == sc.content
-
-
-def test_add_lines():
-    sc = SphinxContent()
-    sc.add_lines("x")
-    assert sc.content == "x\n"
-    sc.add_lines("y", 1)
-    assert sc.content == "x\n    y\n"
-    sc.add_lines(["a", "b"])
-    assert sc.content == "x\n    y\na\nb\n"
+"""
 
 
 def test_add_index_entries():
     sc = SphinxContent()
     sc.add_index_entries(["x", "y"])
-    assert "\n.. index:: x\n.. index:: y\n" == sc.content
+    assert str(sc) == """.. index:: x
+.. index:: y
+"""
     sc.add_index_entries("z")
-    assert "\n.. index:: x\n.. index:: y\n\n.. index:: z\n" == sc.content
+    assert str(sc) == """.. index:: x
+.. index:: y
+
+.. index:: z
+"""
 
 
 def test_add_definition_item():
     sc = SphinxContent()
     sc.add_definition_item("x", ["y", "z"])
-    assert sc.content == "\nx\n    y\n    z\n"
+    assert str(sc) == """x
+    y
+    z
+"""
     sc = SphinxContent()
     sc.add_definition_item("a", "\n b\n")
-    assert sc.content == "\na\n     b\n"
+    assert str(sc) == """a
+     b
+"""
 
 
 def test_license():
@@ -97,9 +101,11 @@ def test_license():
     with pytest.raises(ValueError):
         sc.register_license("x")
     sc.register_license("CC-BY-SA-4.0")
-    assert sc.content == ""
+    assert str(sc) == ""
     sc.add_licence_and_copyrights()
-    assert ".. SPDX-License-Identifier: CC-BY-SA-4.0\n\n" == sc.content
+    assert str(sc) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+"""
 
 
 def test_license_and_copyrights():
@@ -107,27 +113,13 @@ def test_license_and_copyrights():
     with pytest.raises(ValueError):
         sc.register_license("x")
     sc.register_copyright("Copyright (C) A")
-    assert sc.content == ""
+    assert str(sc) == ""
     sc.add_licence_and_copyrights()
-    assert sc.content == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+    assert str(sc) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
 .. Copyright (C) A
 
 """
-
-
-def test_write(tmpdir):
-    sc = SphinxContent()
-    sc.add_line("x")
-    path = os.path.join(tmpdir, "x", "y")
-    sc.write(path)
-    with open(path, "r") as src:
-        assert "x\n" == src.read()
-    tmpdir.chdir()
-    path = "z"
-    sc.write(path)
-    with open(path, "r") as src:
-        assert "x\n" == src.read()
 
 
 def test_substitute():
