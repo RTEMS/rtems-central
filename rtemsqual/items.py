@@ -27,12 +27,11 @@
 import os
 import pickle
 import stat
-from typing import Any, List, Dict
+from typing import Any, Dict, Iterator, List
 import yaml
 
 from rtemsqual.content import Content
 
-ItemList = List["Item"]
 ItemMap = Dict[str, "Item"]
 
 
@@ -88,13 +87,33 @@ def _str_representer(dumper, data):
 yaml.add_representer(str, _str_representer)
 
 
+class Link:
+    """ A link to an item. """
+    def __init__(self, item: "Item", data: Any):
+        self._item = item
+        self._data = data
+
+    @classmethod
+    def create(cls, link: "Link", item: "Item") -> "Link":
+        """ Creates a link using an existing link with a new target item. """
+        return cls(item, link._data)  # pylint: disable=protected-access
+
+    def __getitem__(self, name: str) -> Any:
+        return self._data[name]
+
+    @property
+    def item(self) -> "Item":
+        """ The item referenced by this link. """
+        return self._item
+
+
 class Item:
     """ Objects of this class represent a specification item. """
     def __init__(self, uid: str, data: Any):
         self._uid = uid
         self._data = data
-        self._links = []  # type: ItemList
-        self._children = []  # type: ItemList
+        self._links_to_parents = []  # type: List[Link]
+        self._links_to_children = []  # type: List[Link]
 
     def __contains__(self, key: str) -> bool:
         return key in self._data
@@ -117,24 +136,33 @@ class Item:
         return os.path.normpath(
             os.path.join(os.path.dirname(self.uid), abs_or_rel_uid))
 
-    @property
-    def parents(self) -> ItemList:
-        """ Returns the list of parents of this items. """
-        return self._links
+    def links_to_parents(self) -> Iterator[Link]:
+        """ Yields the links to the parents of this items. """
+        yield from self._links_to_parents
 
-    @property
-    def children(self) -> ItemList:
-        """ Returns the list of children of this items. """
-        return self._children
+    def parents(self) -> Iterator["Item"]:
+        """ Yields the parents of this items. """
+        for link in self._links_to_parents:
+            yield link.item
+
+    def links_to_children(self) -> Iterator[Link]:
+        """ Yields the links to the children of this items. """
+        yield from self._links_to_children
+
+    def children(self) -> Iterator["Item"]:
+        """ Yields the children of this items. """
+        for link in self._links_to_children:
+            yield link.item
 
     def init_parents(self, item_cache: "ItemCache"):
-        """ Initializes the list of parents of this items. """
-        for link in self._data["links"]:
-            self._links.append(item_cache[self.to_abs_uid(link["uid"])])
+        """ Initializes the list of links to parents of this items. """
+        for data in self._data["links"]:
+            link = Link(item_cache[self.to_abs_uid(data["uid"])], data)
+            self._links_to_parents.append(link)
 
-    def add_child(self, child: "Item"):
-        """ Adds a child to this item. """
-        self._children.append(child)
+    def add_link_to_child(self, link: Link):
+        """ Adds a link to a child item of this items. """
+        self._links_to_children.append(link)
 
     def register_license_and_copyrights(self, content: Content):
         """ Registers the license and copyrights of this item. """
@@ -242,8 +270,8 @@ class ItemCache:
 
     def _init_children(self) -> None:
         for item in self._items.values():
-            for parent in item.parents:
-                parent.add_child(item)
+            for link in item.links_to_parents():
+                link.item.add_link_to_child(Link.create(link, item))
 
     def _load_items(self, config: Any) -> None:
         cache_dir = os.path.abspath(config["cache-directory"])

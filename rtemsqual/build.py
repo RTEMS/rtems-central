@@ -63,7 +63,7 @@ _EXTEND_SOURCE_FILES = {
 
 def _gather_source_files(item: Item, enabled: List[str],
                          source_files: List[str]) -> None:
-    for parent in item.parents:
+    for parent in item.parents():
         if parent["type"] == "build" and parent["build-type"] in [
                 "group", "objects", "start-file", "test-program"
         ] and parent.is_enabled(enabled):

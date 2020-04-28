@@ -27,7 +27,7 @@
 import os
 import pytest
 
-from rtemsqual.items import Item
+from rtemsqual.items import Item, Link
 
 
 def test_to_abs_uid():
@@ -59,12 +59,16 @@ def test_getitem():
 
 
 def test_children():
-    c = Item("c", {})
-    p = Item("p", {})
-    p.add_child(c)
-    x = p.children
-    assert len(x) == 1
-    assert c == x[0]
+    child = Item("c", {})
+    parent = Item("p", {})
+    parent.add_link_to_child(Link(child, {"a": "b"}))
+    children = [item for item in parent.children()]
+    assert len(children) == 1
+    assert children[0] == child
+    links = [link for link in parent.links_to_children()]
+    assert len(links) == 1
+    assert links[0].item == child
+    assert links[0]["a"] == "b"
 
 
 def _is_enabled(enabled, enabled_by):

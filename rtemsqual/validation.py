@@ -276,7 +276,7 @@ def _get_source_file(filename: str,
 
 def _gather_items(item: Item, source_files: Dict[str, SourceFile],
                   test_programs: List[TestProgram]) -> None:
-    for child in item.children:
+    for child in item.children():
         _gather_items(child, source_files, test_programs)
     if item["type"] == "test-suite":
         src = _get_source_file(item["source"], source_files)

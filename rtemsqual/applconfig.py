@@ -33,7 +33,7 @@ ItemMap = Dict[str, Item]
 
 
 def _gather_groups(item: Item, groups: ItemMap) -> None:
-    for child in item.children:
+    for child in item.children():
         _gather_groups(child, groups)
     if item["type"] == "interface" and item[
             "interface-type"] == "appl-config-group":
@@ -41,7 +41,7 @@ def _gather_groups(item: Item, groups: ItemMap) -> None:
 
 
 def _gather_options(item: Item, options: ItemMap) -> None:
-    for child in item.children:
+    for child in item.children():
         _gather_options(child, options)
     if item["type"] == "interface" and item[
             "interface-type"] == "appl-config-option":

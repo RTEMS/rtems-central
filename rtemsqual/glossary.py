@@ -35,14 +35,14 @@ ItemMap = Dict[str, Item]
 
 
 def _gather_glossary_groups(item: Item, glossary_groups: ItemMap) -> None:
-    for child in item.children:
+    for child in item.children():
         _gather_glossary_groups(child, glossary_groups)
     if item["type"] == "glossary" and item["glossary-type"] == "group":
         glossary_groups[item.uid] = item
 
 
 def _gather_glossary_terms(item: Item, glossary_terms: ItemMap) -> None:
-    for child in item.children:
+    for child in item.children():
         _gather_glossary_terms(child, glossary_terms)
     if item["type"] == "glossary" and item["glossary-type"] == "term":
         glossary_terms[item.uid] = item
