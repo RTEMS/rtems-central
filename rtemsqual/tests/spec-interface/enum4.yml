@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: Enum C brief description.
+interface-definition-kind: typedef-and-enum
+interface-description: null
+interface-name: EnumC
+interface-type: enum
+links:
+- role: include
+  uid: h2
+type: interface

@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: null
+interface-description: null
+interface-name: Struct
+interface-definition-kind: struct-only
+interface-definition:
+  default:
+    brief: Brief union description.
+    definition: ${uint32_t:/interface-name} ${.:name}
+    description: Union description.
+    kind: union
+    name: some_union
+    members:
+    - default:
+        brief: Brief member description.
+        definition: ${uint32_t:/interface-name} ${.:name}
+        description: Member description.
+        kind: member
+        name: some_member
+      variants: []
+    - default:
+        brief: Brief member 2 description.
+        definition: ${uint32_t:/interface-name} ${.:name}
+        description: Member 2 description.
+        kind: member
+        name: some_member_2
+      variants: []
+  variants: []
+interface-type: struct
+links:
+- role: include
+  uid: h
+- role: ingroup
+  uid: gc
+type: interface

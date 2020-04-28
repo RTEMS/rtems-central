@@ -1,0 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-name: float_t
+interface-type: typedef
+links:
+- role: include
+  uid: math
+type: interface

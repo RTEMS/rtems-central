@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: Function brief description.
+interface-description: Function description.
+interface-definition:
+  default:
+    params:
+    - int ${.:/interface-params[0]/name}
+    - const int *${.:/interface-params[1]/name}
+    - int *${.:/interface-params[2]/name}
+    - int *${.:/interface-params[3]/name}
+    return: void
+  variants: []
+interface-name: Function
+interface-params:
+- name: Param0
+  dir: null
+  description: is parameter 0.
+- name: Param1
+  dir: in
+  description: is parameter 1.
+- name: Param2
+  dir: out
+  description: is parameter 2.
+- name: Param3
+  dir: inout
+  description: is parameter 3.
+interface-type: function
+links:
+- role: include
+  uid: h
+- role: ingroup
+  uid: ga
+type: interface

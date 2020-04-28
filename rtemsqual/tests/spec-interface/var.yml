@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: Variable brief description.
+interface-definition:
+  default: |
+    ${forward-decl:/interface-name} *${.:/interface-name}
+  variants: []
+interface-description: Variable description.
+interface-name: Variable
+interface-type: variable
+links:
+- role: ingroup
+  uid: gc
+- role: include
+  uid: h
+type: interface

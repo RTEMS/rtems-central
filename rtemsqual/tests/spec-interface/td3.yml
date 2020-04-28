@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: null
+interface-definition:
+  default: null
+  variants:
+  - enabled-by: defined(RTEMS_SMP)
+    definition: |
+      ${uint32_t:/interface-name} ${.:/interface-name}
+interface-description: null
+interface-name: Integer3
+interface-type: typedef
+links:
+- role: include
+  uid: h
+- role: ingroup
+  uid: gb
+type: interface

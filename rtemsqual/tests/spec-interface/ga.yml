@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+group-brief: Group A brief description.
+group-description: Group A description.
+group-name: Group A
+interface-type: group
+links:
+- role: include
+  uid: h
+type: interface

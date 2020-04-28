@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: Short macro brief description.
+interface-description: null
+interface-definition:
+  default: |
+    ( ( ${.:/interface-params[0]/name} ) + 1 )
+  variants: []
+interface-name: MACRO
+interface-params:
+- name: Param0
+  dir: null
+  description: |
+    is parameter 0.
+interface-return:
+  return: Sometimes some value.
+  return-values: []
+interface-type: macro
+links:
+- role: include
+  uid: h
+- role: ingroup
+  uid: gb
+type: interface

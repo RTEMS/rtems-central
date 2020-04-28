@@ -1,0 +1,45 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: Very long macro brief description.
+interface-description: null
+interface-definition:
+  default: |
+    do {
+      (void) ${.:/interface-params[1]/name};
+      (void) ${.:/interface-params[2]/name};
+      (void) ${.:/interface-params[3]/name};
+    } while ( 0 );
+    ${.:/interface-params[0]/name} + 1;
+  variants: []
+interface-name: VERY_LONG_MACRO
+interface-params:
+- name: VeryLongParam0
+  dir: null
+  description: |
+    is very long parameter 0 with some super important and extra very long
+    description which makes a lot of sense.
+- name: VeryLongParam1
+  dir: in
+  description: is very long parameter 1.
+- name: VeryLongParam2
+  dir: out
+  description: is very long parameter 2.
+- name: VeryLongParam3
+  dir: inout
+  description: is very long parameter 3.
+interface-return:
+  return: Sometimes some value.
+  return-values:
+  - description: is returned, in case A.
+    value: 1
+  - description: is returned, in case B.
+    value: 2
+interface-type: macro
+links:
+- role: include
+  uid: h
+- role: ingroup
+  uid: gb
+type: interface
