@@ -29,7 +29,12 @@ import pytest
 
 from rtemsqual.content import SphinxContent
 from rtemsqual.content import MacroToSphinx
-from rtemsqual.items import Item
+from rtemsqual.items import Item, ItemCache
+
+
+class EmptyCache(ItemCache):
+    def __init__(self):
+        return
 
 
 def test_add_label():
@@ -126,7 +131,7 @@ def test_substitute():
     data = {}
     data["glossary-term"] = "y"
     terms = {}
-    terms["x"] = Item("x", data)
+    terms["x"] = Item(EmptyCache(), "x", data)
     macro_to_sphinx.set_terms(terms)
     assert "@" == macro_to_sphinx.substitute("@@")
     assert "@x" == macro_to_sphinx.substitute("@x")

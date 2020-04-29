@@ -109,7 +109,8 @@ class Link:
 
 class Item:
     """ Objects of this class represent a specification item. """
-    def __init__(self, uid: str, data: Any):
+    def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
+        self._item_cache = item_cache
         self._uid = uid
         self._data = data
         self._links_to_parents = []  # type: List[Link]
@@ -135,6 +136,13 @@ class Item:
             return abs_or_rel_uid
         return os.path.normpath(
             os.path.join(os.path.dirname(self.uid), abs_or_rel_uid))
+
+    def map(self, abs_or_rel_uid: str) -> "Item":
+        """
+        Maps the absolute UID or the UID relative to this item to the
+        corresponding item.
+        """
+        return self._item_cache[self.to_abs_uid(abs_or_rel_uid)]
 
     def links_to_parents(self) -> Iterator[Link]:
         """ Yields the links to the parents of this items. """
@@ -240,7 +248,7 @@ class ItemCache:
             with open(cache_file, "rb") as pickle_src:
                 data_by_uid = pickle.load(pickle_src)
         for uid, data in data_by_uid.items():
-            item = Item(uid, data)
+            item = Item(self, uid, data)
             self._items[uid] = item
             if not item["links"]:
                 self._top_level[uid] = item

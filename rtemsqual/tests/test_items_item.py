@@ -27,11 +27,16 @@
 import os
 import pytest
 
-from rtemsqual.items import Item, Link
+from rtemsqual.items import Item, ItemCache, Link
+
+
+class EmptyCache(ItemCache):
+    def __init__(self):
+        return
 
 
 def test_to_abs_uid():
-    item = Item("/x/y", {})
+    item = Item(EmptyCache(), "/x/y", {})
     assert item.to_abs_uid("z") == "/x/z"
     assert item.to_abs_uid("/z") == "/z"
     assert item.to_abs_uid("../z") == "/z"
@@ -39,14 +44,14 @@ def test_to_abs_uid():
 
 
 def test_uid():
-    item = Item("x", {})
+    item = Item(EmptyCache(), "x", {})
     assert item.uid == "x"
 
 
 def test_contains():
     data = {}
     data["x"] = "y"
-    item = Item("z", data)
+    item = Item(EmptyCache(), "z", data)
     assert "x" in item
     assert "a" not in item
 
@@ -54,13 +59,13 @@ def test_contains():
 def test_getitem():
     data = {}
     data["x"] = "y"
-    item = Item("z", data)
+    item = Item(EmptyCache(), "z", data)
     assert item["x"] == "y"
 
 
 def test_children():
-    child = Item("c", {})
-    parent = Item("p", {})
+    child = Item(EmptyCache(), "c", {})
+    parent = Item(EmptyCache(), "p", {})
     parent.add_link_to_child(Link(child, {"a": "b"}))
     children = [item for item in parent.children()]
     assert len(children) == 1
@@ -72,7 +77,7 @@ def test_children():
 
 
 def _is_enabled(enabled, enabled_by):
-    item = Item("i", {"enabled-by": enabled_by})
+    item = Item(EmptyCache(), "i", {"enabled-by": enabled_by})
     return item.is_enabled(enabled)
 
 
@@ -101,7 +106,7 @@ def test_is_enabled():
 
 def test_save_and_load(tmpdir):
     item_file = os.path.join(tmpdir, "i.yml")
-    item = Item("i", {"k": "v"})
+    item = Item(EmptyCache(), "i", {"k": "v"})
     item.file = item_file
     assert item.file == item_file
     item.save()
@@ -109,7 +114,7 @@ def test_save_and_load(tmpdir):
         assert src.read() == "k: v\n"
     assert item.file == item_file
 
-    item2 = Item("i2", {})
+    item2 = Item(EmptyCache(), "i2", {})
     item2.file = item_file
     with pytest.raises(KeyError):
         item2["k"]

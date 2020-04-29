@@ -51,7 +51,10 @@ def test_load(tmpdir):
     assert ic["/p"]["v"] == "p"
     t = ic.top_level
     assert len(t) == 1
-    assert t["/p"]["v"] == "p"
+    p = t["/p"]
+    assert p["v"] == "p"
+    assert p.map("/p") == p
+    assert p.map("p") == p
     a = ic.all
     assert len(a) == 2
     assert a["/p"]["v"] == "p"
