@@ -52,42 +52,42 @@ def test_glossary(tmpdir):
     generate(glossary_config, ic)
 
     with open(project_glossary, "r") as src:
-        content = (
-            ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
-            "\n"
-            ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
-            "\n"
-            "Glossary\n"
-            "********\n"
-            "\n"
-            ".. glossary::\n"
-            "    :sorted:\n"
-            "\n"
-            "    T\n"
-            "        Term text @:term:`U`.\n"
-            "\n"
-            "    U\n"
-            "        Term text U.\n"
-            "\n"
-            "    V\n"
-            "        Term text V.\n")
+        content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+
+Glossary
+********
+
+.. glossary::
+    :sorted:
+
+    T
+        Term text @:term:`U`.
+
+    U
+        Term text U.
+
+    V
+        Term text V.
+"""
         assert content == src.read()
 
     with open(document_glossary, "r") as src:
-        content = (
-            ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
-            "\n"
-            ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
-            "\n"
-            "Glossary\n"
-            "********\n"
-            "\n"
-            ".. glossary::\n"
-            "    :sorted:\n"
-            "\n"
-            "    T\n"
-            "        Term text @:term:`U`.\n"
-            "\n"
-            "    U\n"
-            "        Term text U.\n")
+        content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+
+Glossary
+********
+
+.. glossary::
+    :sorted:
+
+    T
+        Term text @:term:`U`.
+
+    U
+        Term text U.
+"""
         assert content == src.read()

@@ -46,304 +46,306 @@ def test_applconfig(tmpdir):
     generate(applconfig_config, ic)
 
     with open(g_rst, "r") as src:
-        content = (
-            ".. SPDX-License-Identifier: CC-BY-SA-4.0\n"
-            "\n"
-            ".. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)\n"
-            "\n"
-            "group name\n"
-            "==========\n"
-            "\n"
-            "description\n"
-            "\n"
-            ".. index:: a\n"
-            ".. index:: index a\n"
-            "\n"
-            ".. _a:\n"
-            "\n"
-            "a\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``a``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is a boolean feature define.\n"
-            "\n"
-            "DEFAULT CONFIGURATION:\n"
-            "    default a\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description a\n"
-            "\n"
-            "NOTES:\n"
-            "    notes a\n"
-            "\n"
-            ".. index:: b\n"
-            "\n"
-            ".. _b:\n"
-            "\n"
-            "b\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``b``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is a boolean feature define.\n"
-            "\n"
-            "DEFAULT CONFIGURATION:\n"
-            "    If this configuration option is undefined, then the described feature is not\n"
-            "    enabled.\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description b\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: c\n"
-            "\n"
-            ".. _c:\n"
-            "\n"
-            "c\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``c``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 13.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall satisfy all of the following\n"
-            "    constraints:\n"
-            "\n"
-            "    * It shall be greater than or equal to -1.\n"
-            "\n"
-            "    * It shall be less than or equal to 99.\n"
-            "\n"
-            "    * custom c 1\n"
-            "\n"
-            "    * custom c 2\n"
-            "\n"
-            "    * constraint d\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description c\n"
-            "\n"
-            "NOTES:\n"
-            "    notes c\n"
-            "\n"
-            ".. index:: e\n"
-            "\n"
-            ".. _e:\n"
-            "\n"
-            "e\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``e``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 7.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall be greater than or equal to -2.\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description e\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: f\n"
-            "\n"
-            ".. _f:\n"
-            "\n"
-            "f\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``f``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 1.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall be less than or equal to 2.\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description f\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: h\n"
-            "\n"
-            ".. _h:\n"
-            "\n"
-            "h\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``h``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 1.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    custom h\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description h\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: i\n"
-            "\n"
-            ".. _i:\n"
-            "\n"
-            "i\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``i``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 1.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall be\n"
-            "    an element of {1, 2, 3}.\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description i\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: j\n"
-            "\n"
-            ".. _j:\n"
-            "\n"
-            "j\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``j``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    Foo bar.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall satisfy all of the following\n"
-            "    constraints:\n"
-            "\n"
-            "    * It shall be an element of [1, 2].\n"
-            "\n"
-            "    * constraint d\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description j\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: k\n"
-            "\n"
-            ".. _k:\n"
-            "\n"
-            "k\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``k``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an integer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 1.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall satisfy all of the following\n"
-            "    constraints:\n"
-            "\n"
-            "    * custom k 1\n"
-            "\n"
-            "    * custom k 2\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description k\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: l\n"
-            "\n"
-            ".. _l:\n"
-            "\n"
-            "l\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``l``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an initializer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 1.\n"
-            "\n"
-            "VALUE CONSTRAINTS:\n"
-            "    The value of this configuration option shall be greater than or equal to 0\n"
-            "    and less than or equal to 2.\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description l\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n"
-            "\n"
-            ".. index:: m\n"
-            "\n"
-            ".. _m:\n"
-            "\n"
-            "m\n"
-            "-\n"
-            "\n"
-            "CONSTANT:\n"
-            "    ``m``\n"
-            "\n"
-            "OPTION TYPE:\n"
-            "    This configuration option is an initializer define.\n"
-            "\n"
-            "DEFAULT VALUE:\n"
-            "    The default value is 1.\n"
-            "\n"
-            "DESCRIPTION:\n"
-            "    description m\n"
-            "\n"
-            "NOTES:\n"
-            "    None.\n")
+        content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+
+group name
+==========
+
+description
+
+.. index:: a
+.. index:: index a
+
+.. _a:
+
+a
+-
+
+CONSTANT:
+    ``a``
+
+OPTION TYPE:
+    This configuration option is a boolean feature define.
+
+DEFAULT CONFIGURATION:
+    default a
+
+DESCRIPTION:
+    description a
+
+NOTES:
+    notes a
+
+.. index:: b
+
+.. _b:
+
+b
+-
+
+CONSTANT:
+    ``b``
+
+OPTION TYPE:
+    This configuration option is a boolean feature define.
+
+DEFAULT CONFIGURATION:
+    If this configuration option is undefined, then the described feature is \
+not
+    enabled.
+
+DESCRIPTION:
+    description b
+
+NOTES:
+    None.
+
+.. index:: c
+
+.. _c:
+
+c
+-
+
+CONSTANT:
+    ``c``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    The default value is 13.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall satisfy all of the following
+    constraints:
+
+    * It shall be greater than or equal to -1.
+
+    * It shall be less than or equal to 99.
+
+    * custom c 1
+
+    * custom c 2
+
+    * constraint d
+
+DESCRIPTION:
+    description c
+
+NOTES:
+    notes c
+
+.. index:: e
+
+.. _e:
+
+e
+-
+
+CONSTANT:
+    ``e``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    The default value is 7.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall be greater than or equal to \
+-2.
+
+DESCRIPTION:
+    description e
+
+NOTES:
+    None.
+
+.. index:: f
+
+.. _f:
+
+f
+-
+
+CONSTANT:
+    ``f``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    The default value is 1.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall be less than or equal to 2.
+
+DESCRIPTION:
+    description f
+
+NOTES:
+    None.
+
+.. index:: h
+
+.. _h:
+
+h
+-
+
+CONSTANT:
+    ``h``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    The default value is 1.
+
+VALUE CONSTRAINTS:
+    custom h
+
+DESCRIPTION:
+    description h
+
+NOTES:
+    None.
+
+.. index:: i
+
+.. _i:
+
+i
+-
+
+CONSTANT:
+    ``i``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    The default value is 1.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall be
+    an element of {1, 2, 3}.
+
+DESCRIPTION:
+    description i
+
+NOTES:
+    None.
+
+.. index:: j
+
+.. _j:
+
+j
+-
+
+CONSTANT:
+    ``j``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    Foo bar.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall satisfy all of the following
+    constraints:
+
+    * It shall be an element of [1, 2].
+
+    * constraint d
+
+DESCRIPTION:
+    description j
+
+NOTES:
+    None.
+
+.. index:: k
+
+.. _k:
+
+k
+-
+
+CONSTANT:
+    ``k``
+
+OPTION TYPE:
+    This configuration option is an integer define.
+
+DEFAULT VALUE:
+    The default value is 1.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall satisfy all of the following
+    constraints:
+
+    * custom k 1
+
+    * custom k 2
+
+DESCRIPTION:
+    description k
+
+NOTES:
+    None.
+
+.. index:: l
+
+.. _l:
+
+l
+-
+
+CONSTANT:
+    ``l``
+
+OPTION TYPE:
+    This configuration option is an initializer define.
+
+DEFAULT VALUE:
+    The default value is 1.
+
+VALUE CONSTRAINTS:
+    The value of this configuration option shall be greater than or equal to 0
+    and less than or equal to 2.
+
+DESCRIPTION:
+    description l
+
+NOTES:
+    None.
+
+.. index:: m
+
+.. _m:
+
+m
+-
+
+CONSTANT:
+    ``m``
+
+OPTION TYPE:
+    This configuration option is an initializer define.
+
+DEFAULT VALUE:
+    The default value is 1.
+
+DESCRIPTION:
+    description m
+
+NOTES:
+    None.
+"""
         assert content == src.read()

@@ -97,7 +97,7 @@ def test_license():
     with pytest.raises(ValueError):
         sc.register_license("x")
     sc.register_license("CC-BY-SA-4.0")
-    assert "" == sc.content
+    assert sc.content == ""
     sc.add_licence_and_copyrights()
     assert ".. SPDX-License-Identifier: CC-BY-SA-4.0\n\n" == sc.content
 
@@ -107,9 +107,13 @@ def test_license_and_copyrights():
     with pytest.raises(ValueError):
         sc.register_license("x")
     sc.register_copyright("Copyright (C) A")
-    assert "" == sc.content
+    assert sc.content == ""
     sc.add_licence_and_copyrights()
-    assert ".. SPDX-License-Identifier: CC-BY-SA-4.0\n\n.. Copyright (C) A\n\n" == sc.content
+    assert sc.content == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) A
+
+"""
 
 
 def test_write(tmpdir):
