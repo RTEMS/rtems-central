@@ -28,7 +28,7 @@ import os
 import pytest
 import shutil
 
-from rtemsqual.items import ItemCache
+from rtemsqual.items import ItemCache, ItemMapper, ItemTemplate
 
 
 def test_config_error():
@@ -36,7 +36,7 @@ def test_config_error():
         ItemCache({})
 
 
-def test_load(tmpdir):
+def _create_spec_and_config(tmpdir):
     config = {}
     cache_dir = os.path.join(tmpdir, "cache")
     config["cache-directory"] = os.path.normpath(cache_dir)
@@ -44,24 +44,78 @@ def test_load(tmpdir):
     spec_dst = os.path.join(tmpdir, "spec")
     shutil.copytree(spec_src, spec_dst)
     config["paths"] = [os.path.normpath(spec_dst)]
-    ic = ItemCache(config)
+    return config
+
+
+def test_load(tmpdir):
+    config = _create_spec_and_config(tmpdir)
+    item_cache = ItemCache(config)
+    cache_dir = config["cache-directory"]
     assert os.path.exists(os.path.join(cache_dir, "spec", "spec.pickle"))
     assert os.path.exists(os.path.join(cache_dir, "spec", "d", "spec.pickle"))
-    assert ic["/d/c"]["v"] == "c"
-    assert ic["/p"]["v"] == "p"
-    t = ic.top_level
+    assert item_cache["/d/c"]["v"] == "c"
+    assert item_cache["/p"]["v"] == "p"
+    t = item_cache.top_level
     assert len(t) == 1
     p = t["/p"]
     assert p["v"] == "p"
     assert p.map("/p") == p
     assert p.map("p") == p
-    a = ic.all
+    a = item_cache.all
     assert len(a) == 2
     assert a["/p"]["v"] == "p"
     assert a["/d/c"]["v"] == "c"
-    ic2 = ItemCache(config)
-    assert ic2["/d/c"]["v"] == "c"
+    item_cache_2 = ItemCache(config)
+    assert item_cache_2["/d/c"]["v"] == "c"
     with open(os.path.join(tmpdir, "spec", "d", "c.yml"), "w+") as out:
         out.write("links:\n- role: null\n  uid: ../p\nv: x\n")
-    ic3 = ItemCache(config)
-    assert ic3["/d/c"]["v"] == "x"
+    item_cache_3 = ItemCache(config)
+    assert item_cache_3["/d/c"]["v"] == "x"
+
+
+class Mapper(ItemMapper):
+    def __init__(self, item):
+        super().__init__(item)
+
+    def u(self, value):
+        return "u" + value
+
+    def v(self, value):
+        return "v" + value
+
+    def dup(self, value):
+        return value + value
+
+    def x_to_b(self, item, value):
+        return value["b"]
+
+
+def test_item_mapper(tmpdir):
+    config = _create_spec_and_config(tmpdir)
+    item_cache = ItemCache(config)
+    item = item_cache["/p"]
+    mapper = Mapper(item)
+    with mapper.prefix("v"):
+        assert mapper[".:."] == "p"
+        assert mapper[".:../x/y"] == "z"
+        item_2, value_2 = mapper.map(".:.")
+        assert item == item_2
+        assert value_2 == "p"
+        assert mapper.substitute("$$${.:.}") == "$p"
+    with mapper.prefix("x"):
+        with mapper.prefix("y"):
+            assert mapper[".:."] == "z"
+    assert mapper["d/c:v"] == "c"
+    assert mapper["d/c:a/b"] == "e"
+    assert mapper["d/c:a/b|u"] == "ue"
+    assert mapper["d/c:a/x-to-b|u|v"] == "vue"
+    assert mapper["d/c:a/f[1]"] == 2
+    assert mapper["d/c:a/../a/f[3]/g[0]|dup"] == 8
+    item_3, value_3 = mapper.map("/p:/v")
+    assert item == item_3
+    assert value_3 == "p"
+    with pytest.raises(StopIteration):
+        for something in mapper:
+            pass
+    with pytest.raises(AttributeError):
+        len(mapper)

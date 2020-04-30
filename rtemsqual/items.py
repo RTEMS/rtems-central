@@ -24,15 +24,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from contextlib import contextmanager
 import os
 import pickle
+import string
 import stat
-from typing import Any, Dict, Iterator, List
+from typing import Any, Callable, Dict, Iterator, List, Mapping, Tuple
 import yaml
 
 from rtemsqual.content import Content
 
 ItemMap = Dict[str, "Item"]
+KeyMapper = Callable[["Item", Any, str], Any]
 
 
 def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
@@ -107,6 +110,10 @@ class Link:
         return self._item
 
 
+def _key_error(_item: "Item", _value: Any, _key: str) -> str:
+    raise KeyError
+
+
 class Item:
     """ Objects of this class represent a specification item. """
     def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
@@ -122,6 +129,27 @@ class Item:
     def __getitem__(self, name: str) -> Any:
         return self._data[name]
 
+    def get(self,
+            key_path: str,
+            prefix: str = "",
+            mapper: KeyMapper = _key_error) -> Any:
+        """ Gets the attribute value corresponding to the key path. """
+        if not os.path.isabs(key_path):
+            key_path = os.path.join(prefix, key_path)
+        key_path = os.path.normpath(key_path)
+        value = self._data
+        for key in key_path.strip("/").split("/"):
+            parts = key.split("[")
+            try:
+                value = value[parts[0]]
+            except KeyError:
+                value = mapper(self, value, parts[0])
+            try:
+                value = value[int(parts[1].split("]")[0])]
+            except IndexError:
+                pass
+        return value
+
     @property
     def uid(self) -> str:
         """ Returns the UID of the item. """
@@ -132,6 +160,8 @@ class Item:
         Returns the absolute UID of an absolute UID or an UID relative to this
         item.
         """
+        if abs_or_rel_uid == ".":
+            return self._uid
         if os.path.isabs(abs_or_rel_uid):
             return abs_or_rel_uid
         return os.path.normpath(
@@ -206,6 +236,66 @@ class Item:
         with open(filename, "r") as src:
             self._data = yaml.safe_load(src.read())
             self._data["_file"] = filename
+
+
+class ItemTemplate(string.Template):
+    """ String template for item mapper identifiers. """
+    idpattern = "[a-zA-Z0-9._/-]+:[][a-zA-Z0-9._/-]+(|[a-zA-Z0-9_]+)*"
+
+
+class ItemMapper(Mapping[str, object]):
+    """ Maps identifiers to items and attribute values. """
+    def __init__(self, item: "Item"):
+        self._item = item
+        self._prefix = [""]
+
+    def push_prefix(self, prefix: str) -> None:
+        """ Pushes a key path prefix. """
+        self._prefix.append(prefix)
+
+    def pop_prefix(self) -> None:
+        """ Pops a key path prefix. """
+        self._prefix.pop()
+
+    @contextmanager
+    def prefix(self, prefix: str) -> Iterator[None]:
+        """ Opens a key path prefix context. """
+        self.push_prefix(prefix)
+        yield
+        self.pop_prefix()
+
+    def map(self, identifier: str) -> Tuple[Item, Any]:
+        """
+        Maps an identifier to the corresponding item and attribute value.
+        """
+        parts = identifier.split("|")
+        uid, key_path = parts[0].split(":")
+        if uid == ".":
+            item = self._item
+            prefix = "/".join(self._prefix)
+        else:
+            item = self._item.map(uid)
+            prefix = ""
+        value = item.get(key_path, prefix, self._key_mapper)
+        for func in parts[1:]:
+            value = getattr(self, func)(value)
+        return item, value
+
+    def __getitem__(self, identifier):
+        return self.map(identifier)[1]
+
+    def __iter__(self):
+        raise StopIteration
+
+    def __len__(self):
+        raise AttributeError
+
+    def substitute(self, text: str) -> str:
+        """ Performs a variable substitution using the item mapper. """
+        return ItemTemplate(text).substitute(self)
+
+    def _key_mapper(self, item: Item, value: Any, key: str) -> Any:
+        return getattr(self, key.replace("-", "_"))(item, value)
 
 
 class ItemCache:

@@ -37,6 +37,7 @@ class EmptyCache(ItemCache):
 
 def test_to_abs_uid():
     item = Item(EmptyCache(), "/x/y", {})
+    assert item.to_abs_uid(".") == "/x/y"
     assert item.to_abs_uid("z") == "/x/z"
     assert item.to_abs_uid("/z") == "/z"
     assert item.to_abs_uid("../z") == "/z"
@@ -54,6 +55,24 @@ def test_contains():
     item = Item(EmptyCache(), "z", data)
     assert "x" in item
     assert "a" not in item
+
+
+def test_get():
+    data = {}
+    data["a"] = {"b": "c", "d": [1, 2, 3]}
+    data["x"] = "y"
+    item = Item(EmptyCache(), "z", data)
+    assert item.get("x") == "y"
+    assert item.get("a/d[2]") == 3
+    assert item.get("a/b/../d[0]") == 1
+    assert item.get("/a/b/../d[0]") == 1
+    assert item.get("../d[0]", "a/b") == 1
+    with pytest.raises(KeyError):
+        assert item.get("y")
+    with pytest.raises(KeyError):
+        assert item.get("[")
+    with pytest.raises(ValueError):
+        assert item.get("x[y]")
 
 
 def test_getitem():
