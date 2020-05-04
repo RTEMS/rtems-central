@@ -266,9 +266,9 @@ class Node:
             content.gap = False
             with content.indent():
                 index = 0
-                for compound_member in definition["members"]:
+                for compound_member in definition["definition"]:
                     content.add(
-                        _add_definition(self, item, f"members[{index}]",
+                        _add_definition(self, item, f"definition[{index}]",
                                         compound_member,
                                         Node._get_compound_definition))
                     index += 1

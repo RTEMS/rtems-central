@@ -115,19 +115,6 @@ extern "C" {
 struct Struct;
 
 /**
- * @ingroup GroupA
- */
-#if defined(A) || defined(B)
-  #define DEFINE ((float_t) 456)
-#elif defined(C) && \\
-  defined(D)
-  #define DEFINE ((float_t) 789)
-#else
-  #define DEFINE \\
-    ((float_t) 123)
-#endif
-
-/**
  * @ingroup GroupB
  *
  * @brief Enum brief description.
@@ -150,6 +137,19 @@ typedef enum {
    */
   ENUMERATOR_2
 } Enum;
+
+/**
+ * @ingroup GroupA
+ */
+#if defined(A) || defined(B)
+  #define DEFINE ((float_t) 456)
+#elif defined(C) && \\
+  defined(D)
+  #define DEFINE ((float_t) 789)
+#else
+  #define DEFINE \\
+    ((float_t) 123)
+#endif
 
 /**
  * @ingroup GroupB
@@ -274,11 +274,25 @@ struct Struct {
     uint32_t some_member;
 
     /**
-     * @brief Brief member 2 description.
+     * @brief Brief struct description.
      *
-     * Member 2 description.
+     * struct description.
      */
-    uint32_t some_member_2;
+    struct {
+      /**
+       * @brief Brief member 2 description.
+       *
+       * Member 2 description.
+       */
+      uint32_t some_member_2;
+
+      /**
+       * @brief Brief member 3 description.
+       *
+       * Member 3 description.
+       */
+      Enum some_member_3;
+    } some_struct;
   } some_union;
 };
 
