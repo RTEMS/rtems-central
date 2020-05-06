@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: |
+  Instructs the compiler to place a specific variable or function in the
+  specified section.
+interface-definition:
+  default: ""
+  variants:
+  - definition: |
+      __attribute__((__section__(_section)))
+    enabled-by:
+    - defined(${/if/compiler/gnuc:/interface-name})
+interface-description: null
+interface-name: RTEMS_SECTION
+interface-params:
+- description: |
+    is the section name as a string.
+  dir: null
+  name: _section
+interface-return:
+  return: null
+  return-values: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/basedefs
+type: interface

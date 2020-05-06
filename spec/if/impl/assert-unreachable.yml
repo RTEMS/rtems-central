@@ -1,0 +1,26 @@
+
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: |
+  Asserts that this program point is unreachable.
+interface-definition:
+  default: |
+    do { } while ( 0 )
+  variants:
+  - definition: |
+      _Assert( 0 )
+    enabled-by:
+    - defined(${/if/build-options/debug:/interface-name})
+interface-description: null
+interface-name: _Assert_Unreachable
+interface-params: []
+interface-return:
+  return: null
+  return-values: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: /if/rtems/basedefs/header
+type: interface

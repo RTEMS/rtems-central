@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: |
+  Constructs a symbol name.
+interface-definition:
+  default: |
+    ${expand:/interface-name}(_name)
+  variants:
+  - definition: |
+      ${xconcat:/interface-name}(${/if/compiler/user-label-prefix:/interface-name}, _name)
+    enabled-by:
+    - defined(${/if/compiler/user-label-prefix:/interface-name})
+interface-description: null
+interface-name: RTEMS_SYMBOL_NAME
+interface-params:
+- description: |
+    is the user defined name of the symbol.  The name shall be a valid
+    designator.  On the name a macro expansion is performed.
+  dir: null
+  name: _name
+interface-return:
+  return: null
+  return-values: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/basedefs
+type: interface

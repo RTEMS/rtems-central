@@ -1,0 +1,14 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+group-brief: API
+group-description: |
+  This group contains the RTEMS Application Programming Interface (API).
+group-identifier: RTEMSAPI
+group-name: API
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/basedefs/header
+type: interface

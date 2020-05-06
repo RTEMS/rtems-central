@@ -34,6 +34,7 @@ import rtemsqual.applconfig
 import rtemsqual.build
 from rtemsqual.items import ItemCache
 import rtemsqual.glossary
+import rtemsqual.interface
 import rtemsqual.util
 import rtemsqual.validation
 
@@ -91,6 +92,7 @@ def main() -> None:
     item_cache = ItemCache(config["spec"])
     rtemsqual.glossary.generate(config["glossary"], item_cache)
     rtemsqual.applconfig.generate(config["appl-config"], item_cache)
+    rtemsqual.interface.generate(config["interface"], item_cache)
     rtemsqual.validation.generate(config["validation"], item_cache)
     _run_pre_qualified_only_build(config["build"], item_cache)
     _run_pre_qualified_doxygen(config["build"])

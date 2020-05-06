@@ -79,3 +79,10 @@ appl-config:
     target: external/rtems-docs/c-user/config/task-stack-alloc.rst
 validation:
   base-directory: external/rtems
+interface:
+  item-level-interfaces:
+  - /if/build-options/domain
+  - /if/compiler/domain
+  - /if/use/domain
+  interface-domains:
+    rtems: external/rtems
