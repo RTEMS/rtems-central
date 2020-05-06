@@ -451,14 +451,14 @@ class HeaderFile:
 
 
 def _generate_header_file(item: Item, domains: Dict[str, str]) -> None:
-    dom = item["path-domain"]
-    if dom not in domains:
+    domain_path = domains.get(item["interface-domain"], None)
+    if domain_path is None:
         return
     header_file = HeaderFile()
     header_file.generate_nodes(item)
     header_file.finalize(item)
     header_file.write(
-        os.path.join(domains[dom], item["path-prefix"], item["path-include"]))
+        os.path.join(domain_path, item["path-prefix"], item["path-include"]))
 
 
 def _visit_header_files(item: Item, domains: Dict[str, str]) -> None:
@@ -476,4 +476,4 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the interfaces.
     """
     for item in item_cache.top_level.values():
-        _visit_header_files(item, config["path-domains"])
+        _visit_header_files(item, config["interface-domains"])
