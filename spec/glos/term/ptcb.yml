@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/partitioncontrolblock}.
+  An acronym for ${partitioncontrolblock:/glossary-term}.
 type: glossary

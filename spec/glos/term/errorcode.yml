@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  This term has the same meaning as @term{/glos/term/statuscode}.
+  This term has the same meaning as ${statuscode:/glossary-term}.
 type: glossary

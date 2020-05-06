@@ -12,27 +12,27 @@ text: |
   system".  For this project a *software component* shall be any of the
   following items and nothing else:
 
-  * @term{/glos/term/softwareunit}
+  * ${softwareunit:/glossary-term}
 
-  * explicitly defined @term{/glos/term/elf} symbol in a
-    @term{/glos/term/sourcecode} file
+  * explicitly defined ${elf:/glossary-term} symbol in a
+    ${sourcecode:/glossary-term} file
 
-  * @term{/glos/term/assemblerlanguage} data in a source code file
+  * ${assemblerlanguage:/glossary-term} data in a source code file
 
-  * @term{/glos/term/clanguage} object with static storage duration
+  * ${clanguage:/glossary-term} object with static storage duration
 
   * C language object with thread-local storage duration
 
-  * @term{/glos/term/thread}
+  * ${thread:/glossary-term}
 
-  * @term{/glos/term/interruptservice}
+  * ${interruptservice:/glossary-term}
 
   * collection of *software components* (this is a software architecture
     element)
 
   Please note that explicitly defined ELF symbols and assembler language
   data are considered a software component only if they are defined in a
-  @term{/glos/term/sourcecode} file.  For example, this rules out symbols
+  ${sourcecode:/glossary-term} file.  For example, this rules out symbols
   and data generated as side-effects by the toolchain (compiler, assembler,
   linker) such as jump tables, linker trampolines, exception frame information,
   etc.

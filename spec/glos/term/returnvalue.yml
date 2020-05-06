@@ -9,5 +9,5 @@ links:
   uid: ../general
 text: |
   The value returned by a function.  A return value may be a
-  @term{/glos/term/statuscode}.
+  ${statuscode:/glossary-term}.
 type: glossary

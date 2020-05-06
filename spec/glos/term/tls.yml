@@ -9,6 +9,6 @@ links:
   uid: ../general
 text: |
   An acronym for Thread-Local Storage :cite:`Drepper:2013:TLS`.  TLS is
-  available in @term{/glos/term/c11} and @term{/glos/term/cxx11}.  The support for TLS depends
+  available in ${c11:/glossary-term} and ${cxx11:/glossary-term}.  The support for TLS depends
   on the CPU port :cite:`RTEMS:CPU`.
 type: glossary

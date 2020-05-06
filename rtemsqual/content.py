@@ -29,9 +29,10 @@ import itertools
 import os
 import re
 import textwrap
-from typing import Callable, ContextManager, Iterator, List, Optional, Union
+from typing import Any, Callable, ContextManager, Iterator, List, Optional, \
+    Union
 
-from rtemsqual.items import Item
+from rtemsqual.items import Item, ItemMapper
 
 AddContext = Callable[["Content"], ContextManager[None]]
 GenericContent = Union[str, List[str], "Content"]
@@ -326,31 +327,18 @@ class SphinxContent(Content):
         self.prepend([f".. SPDX-License-Identifier: {self._license}", ""])
 
 
-class MacroToSphinx:
-    """ This class expands specification item macros to Sphinx markup. """
-    def __init__(self):
-        self._terms = {}
+class SphinxMapper(ItemMapper):
+    """ Sphinx mapper. """
+    def __init__(self, item: Item):
+        super().__init__(item)
 
-    def set_terms(self, terms):
-        """ Sets the glossary of terms used for macro expansion. """
-        self._terms = terms
-
-    def substitute(self, text):
-        """
-        Substitutes all specification item macros contained in the text.
-        """
-        return re.sub(r"@@|@([a-z]+){([^}]+)}", self, text)
-
-    def __call__(self, match):
-        name = match.group(1)
-        if name:
-            roles = {
-                "term":
-                lambda x: ":term:`" + self._terms[x]["glossary-term"] + "`"
-            }
-            return roles[name](match.group(2))
-        assert match.group(0) == "@@"
-        return "@"
+    def get_value(self, _item: Item, _path: str, value: Any, key: str,
+                  _index: Optional[int]) -> Any:
+        """ Gets a value by key and optional index. """
+        # pylint: disable=no-self-use
+        if key == "glossary-term":
+            return f":term:`{value[key]}`"
+        raise KeyError
 
 
 _BSD_2_CLAUSE_LICENSE = """Redistribution and use in source and binary \

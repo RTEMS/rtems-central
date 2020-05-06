@@ -12,10 +12,10 @@ text: |
   piece of source code".  For this project a *software unit* shall be any of
   the following items and nothing else:
 
-  * @term{/glos/term/assemblerlanguage} function in a
-    @term{/glos/term/sourcecode} file
+  * ${assemblerlanguage:/glossary-term} function in a
+    ${sourcecode:/glossary-term} file
 
-  * @term{/glos/term/clanguage} function (external and internal linkage)
+  * ${clanguage:/glossary-term} function (external and internal linkage)
 
-  A *software unit* is a @term{/glos/term/softwarecomponent}.
+  A *software unit* is a ${softwarecomponent:/glossary-term}.
 type: glossary

@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/proxycontrolblock}.
+  An acronym for ${proxycontrolblock:/glossary-term}.
 type: glossary

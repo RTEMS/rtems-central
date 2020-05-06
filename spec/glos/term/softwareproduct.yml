@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  The *software product* is the @term{/glos/term/rtems} real-time operating system.
+  The *software product* is the ${rtems:/glossary-term} real-time operating system.
 type: glossary

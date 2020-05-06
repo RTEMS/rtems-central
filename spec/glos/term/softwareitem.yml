@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  This term has the same meaning as @term{/glos/term/softwareproduct}.
+  This term has the same meaning as ${softwareproduct:/glossary-term}.
 type: glossary

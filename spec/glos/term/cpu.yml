@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/centralprocessingunit}.
+  An acronym for ${centralprocessingunit:/glossary-term}.
 type: glossary

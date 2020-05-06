@@ -9,5 +9,5 @@ links:
   uid: ../general
 text: |
   The C language for this project is defined in terms of
-  @term{/glos/term/c11}.
+  ${c11:/glossary-term}.
 type: glossary

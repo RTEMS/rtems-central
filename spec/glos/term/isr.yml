@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/interruptserviceroutine}.
+  An acronym for ${interruptserviceroutine:/glossary-term}.
 type: glossary

@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/asynchronoussignalroutine}.
+  An acronym for ${asynchronoussignalroutine:/glossary-term}.
 type: glossary

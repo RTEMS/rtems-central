@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/multiprocessorcommunicationsinterfacelayer}.
+  An acronym for ${multiprocessorcommunicationsinterfacelayer:/glossary-term}.
 type: glossary

@@ -9,9 +9,9 @@ links:
   uid: ../general
 text: |
   An *interrupt service* consists of an
-  @term{/glos/term/interruptserviceroutine} which is called with a user
+  ${interruptserviceroutine:/glossary-term} which is called with a user
   provided argument upon reception of an interrupt service request.  The
   routine is invoked in interrupt context.  Interrupt service requests may have
   a priority and an affinity to a set of processors.  An *interrupt service* is
-  a @term{/glos/term/softwarecomponent}.
+  a ${softwarecomponent:/glossary-term}.
 type: glossary

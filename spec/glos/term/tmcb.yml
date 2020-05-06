@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  An acronym for @term{/glos/term/timercontrolblock}.
+  An acronym for ${timercontrolblock:/glossary-term}.
 type: glossary

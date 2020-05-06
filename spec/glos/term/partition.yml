@@ -14,5 +14,5 @@ text: |
      deallocate fixed size blocks of memory from an dynamically specified
      area of memory.
 
-  2. A @term{/glos/term/cluster} with a cardinality of one is a partition.
+  2. A ${cluster:/glossary-term} with a cardinality of one is a partition.
 type: glossary

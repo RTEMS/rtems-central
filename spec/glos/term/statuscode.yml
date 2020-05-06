@@ -10,6 +10,6 @@ links:
 text: |
   A status code indicates the completion status of an operation.  For
   example most RTEMS directives return a status code through the
-  @term{/glos/term/returnvalue} to indicate a successful operation or error
+  ${returnvalue:/glossary-term} to indicate a successful operation or error
   conditions.
 type: glossary

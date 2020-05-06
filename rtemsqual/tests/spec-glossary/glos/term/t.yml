@@ -7,5 +7,6 @@ links:
 - role: null
   uid: ../g
 text: |
-  Term text @@@term{/glos/term/u}.
+  Term text $$${/glos/term/u:/glossary-term} ${/glos/term/t:/glossary-term}
+  ${/glos/term/u:/glossary-type}.
 type: glossary

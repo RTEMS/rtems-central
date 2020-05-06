@@ -26,14 +26,9 @@
 
 import pytest
 
-from rtemsqual.content import SphinxContent
-from rtemsqual.content import MacroToSphinx
-from rtemsqual.items import Item, ItemCache
-
-
-class EmptyCache(ItemCache):
-    def __init__(self):
-        return
+from rtemsqual.content import SphinxContent, SphinxMapper
+from rtemsqual.items import Item, ItemCache, ItemMapper
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_add_label():
@@ -122,15 +117,10 @@ def test_license_and_copyrights():
 """
 
 
-def test_substitute():
-    macro_to_sphinx = MacroToSphinx()
-    data = {}
-    data["glossary-term"] = "y"
-    terms = {}
-    terms["x"] = Item(EmptyCache(), "x", data)
-    macro_to_sphinx.set_terms(terms)
-    assert "@" == macro_to_sphinx.substitute("@@")
-    assert "@x" == macro_to_sphinx.substitute("@x")
+def test_substitute(tmpdir):
+    config = create_item_cache_config_and_copy_spec(tmpdir, "spec-sphinx")
+    item_cache = ItemCache(config)
+    mapper = SphinxMapper(item_cache["/x"])
     with pytest.raises(KeyError):
-        macro_to_sphinx.substitute("@x{y}")
-    assert ":term:`y`" == macro_to_sphinx.substitute("@term{x}")
+        mapper.substitute("${x:/y}")
+    assert ":term:`y`" == mapper.substitute("${x:/glossary-term}")

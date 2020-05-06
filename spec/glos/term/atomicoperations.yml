@@ -8,5 +8,5 @@ links:
 - role: null
   uid: ../general
 text: |
-  Atomic operations are defined in terms of @term{/glos/term/c11}.
+  Atomic operations are defined in terms of ${c11:/glossary-term}.
 type: glossary

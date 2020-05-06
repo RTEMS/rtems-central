@@ -63,7 +63,8 @@ Glossary
     :sorted:
 
     T
-        Term text @:term:`U`.
+        Term text $:term:`U` :term:`T`
+        term.
 
     U
         Term text U.
@@ -85,7 +86,8 @@ Glossary
     :sorted:
 
     T
-        Term text @:term:`U`.
+        Term text $:term:`U` :term:`T`
+        term.
 
     U
         Term text U.

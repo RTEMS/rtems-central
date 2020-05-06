@@ -8,6 +8,6 @@ links:
 - role: null
   uid: ../general
 text: |
-  *GNAT* is the @term{/glos/term/gnu} compiler for Ada, integrated into the
-  @term{/glos/term/gcc}.
+  *GNAT* is the ${gnu:/glossary-term} compiler for Ada, integrated into the
+  ${gcc:/glossary-term}.
 type: glossary
