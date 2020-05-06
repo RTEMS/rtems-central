@@ -26,9 +26,9 @@
 
 import os
 import pytest
-import shutil
 
 from rtemsqual.items import ItemCache, ItemMapper, ItemTemplate
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_config_error():
@@ -36,19 +36,8 @@ def test_config_error():
         ItemCache({})
 
 
-def _create_spec_and_config(tmpdir):
-    config = {}
-    cache_dir = os.path.join(tmpdir, "cache")
-    config["cache-directory"] = os.path.normpath(cache_dir)
-    spec_src = os.path.join(os.path.dirname(__file__), "spec-item-cache")
-    spec_dst = os.path.join(tmpdir, "spec")
-    shutil.copytree(spec_src, spec_dst)
-    config["paths"] = [os.path.normpath(spec_dst)]
-    return config
-
-
 def test_load(tmpdir):
-    config = _create_spec_and_config(tmpdir)
+    config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
     item_cache = ItemCache(config)
     cache_dir = config["cache-directory"]
     assert os.path.exists(os.path.join(cache_dir, "spec", "spec.pickle"))
@@ -93,7 +82,7 @@ class Mapper(ItemMapper):
 
 
 def test_item_mapper(tmpdir):
-    config = _create_spec_and_config(tmpdir)
+    config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
     item_cache = ItemCache(config)
     item = item_cache["/p"]
     base_mapper = ItemMapper(item)
