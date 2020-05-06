@@ -31,6 +31,8 @@ import re
 import textwrap
 from typing import Callable, ContextManager, Iterator, List, Optional, Union
 
+from rtemsqual.items import Item
+
 AddContext = Callable[["Content"], ContextManager[None]]
 GenericContent = Union[str, List[str], "Content"]
 
@@ -266,6 +268,12 @@ class Content:
     def register_copyright(self, statement: str) -> None:
         """ Registers a copyright statement for the content. """
         self._copyrights.register(statement)
+
+    def register_license_and_copyrights_of_item(self, item: Item) -> None:
+        """ Registers the license and copyrights of the item. """
+        self.register_license(item["SPDX-License-Identifier"])
+        for statement in item["copyrights"]:
+            self.register_copyright(statement)
 
     def write(self, path: str) -> None:
         """ Writes the content to the file specified by the path. """

@@ -172,7 +172,7 @@ class SourceFile:
         for item in itertools.chain(self._test_suites, self._test_cases):
             includes.extend(item["includes"])
             local_includes.extend(item["local-includes"])
-            item.register_license_and_copyrights(content)
+            content.register_license_and_copyrights_of_item(item)
         content.add_spdx_license_identifier()
         with content.file_block():
             _add_ingroup(content, self._test_suites, "RTEMSTestSuite",

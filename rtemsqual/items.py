@@ -33,8 +33,6 @@ from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, \
     Tuple
 import yaml
 
-from rtemsqual.content import Content
-
 ItemMap = Dict[str, "Item"]
 ItemGetValue = Callable[["Item", str, Any, str, Optional[int]], Any]
 
@@ -208,12 +206,6 @@ class Item:
     def add_link_to_child(self, link: Link):
         """ Adds a link to a child item of this items. """
         self._links_to_children.append(link)
-
-    def register_license_and_copyrights(self, content: Content):
-        """ Registers the license and copyrights of this item. """
-        content.register_license(self["SPDX-License-Identifier"])
-        for statement in self["copyrights"]:
-            content.register_copyright(statement)
 
     def is_enabled(self, enabled: List[str]):
         """ Returns true if the item is enabled by the specified enables. """

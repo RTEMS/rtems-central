@@ -374,7 +374,7 @@ class HeaderFile:
         ingroups = _get_ingroups(item)
         self._ingroups.update(ingroups)
         self._nodes[item.uid] = Node(self, item, ingroups)
-        item.register_license_and_copyrights(self._content)
+        self._content.register_license_and_copyrights_of_item(item)
 
     def add_potential_edge(self, node: Node, item: Item) -> None:
         """

@@ -128,7 +128,7 @@ def _resolve_constraint_links(content: SphinxContent, item: Item,
             constraint["custom"] = []
         for link in reversed(constraint["links"]):
             other = item.map(link)
-            other.register_license_and_copyrights(content)
+            content.register_license_and_copyrights_of_item(other)
             constraint["custom"].append(other["text"])
 
 
@@ -190,12 +190,12 @@ def _generate_notes(content: SphinxContent, notes: Optional[str]) -> None:
 
 def _generate_file(group: Item, options: ItemMap, target: str) -> None:
     content = SphinxContent()
-    group.register_license_and_copyrights(content)
+    content.register_license_and_copyrights_of_item(group)
     content.add_header(group["appl-config-group-name"], level="=")
     content.add(group["appl-config-group-description"])
     for item in sorted(options.values(), key=lambda x: x.uid):
         name = item["appl-config-option-name"]
-        item.register_license_and_copyrights(content)
+        content.register_license_and_copyrights_of_item(item)
         content.add_index_entries([name] + item["appl-config-option-index"])
         content.add_label(name)
         content.add_header(name, level="-")
