@@ -129,8 +129,15 @@ class Item:
     def __contains__(self, key: str) -> bool:
         return key in self._data
 
-    def __getitem__(self, name: str) -> Any:
-        return self._data[name]
+    def __getitem__(self, key: str) -> Any:
+        return self._data[key]
+
+    def get(self, key: str, default: Any) -> Any:
+        """
+        Gets the attribute value if the attribute exists, otherwise the
+        specified default value is returned.
+        """
+        return self._data.get(key, default)
 
     def get_by_key_path(self,
                         key_path: str,

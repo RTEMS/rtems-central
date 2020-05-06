@@ -82,6 +82,14 @@ def test_getitem():
     assert item["x"] == "y"
 
 
+def test_get():
+    data = {}
+    data["x"] = "y"
+    item = Item(EmptyCache(), "z", data)
+    assert item.get("x", "z") == "y"
+    assert item.get("z", "a") == "a"
+
+
 def test_children():
     child = Item(EmptyCache(), "c", {})
     parent = Item(EmptyCache(), "p", {})
