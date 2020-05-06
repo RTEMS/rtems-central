@@ -86,14 +86,18 @@ class Mapper(ItemMapper):
     def dup(self, value):
         return value + value
 
-    def x_to_b(self, item, value):
-        return value["b"]
+    def get_value(self, item, path, value, key, index):
+        if key == "x-to-b":
+            return value["b"]
+        raise KeyError
 
 
 def test_item_mapper(tmpdir):
     config = _create_spec_and_config(tmpdir)
     item_cache = ItemCache(config)
     item = item_cache["/p"]
+    base_mapper = ItemMapper(item)
+    assert base_mapper["d/c:v"] == "c"
     mapper = Mapper(item)
     with mapper.prefix("v"):
         assert mapper[".:."] == "p"

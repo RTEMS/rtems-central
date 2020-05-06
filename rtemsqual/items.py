@@ -29,13 +29,14 @@ import os
 import pickle
 import string
 import stat
-from typing import Any, Callable, Dict, Iterator, List, Mapping, Tuple
+from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, \
+    Tuple
 import yaml
 
 from rtemsqual.content import Content
 
 ItemMap = Dict[str, "Item"]
-KeyMapper = Callable[["Item", Any, str], Any]
+ItemGetValue = Callable[["Item", str, Any, str, Optional[int]], Any]
 
 
 def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
@@ -110,8 +111,12 @@ class Link:
         return self._item
 
 
-def _key_error(_item: "Item", _value: Any, _key: str) -> str:
-    raise KeyError
+def _get_value(_item: "Item", _path: str, value: Any, key: str,
+               index: Optional[int]) -> str:
+    value = value[key]
+    if index is not None:
+        value = value[index]
+    return value
 
 
 class Item:
@@ -129,25 +134,27 @@ class Item:
     def __getitem__(self, name: str) -> Any:
         return self._data[name]
 
-    def get(self,
-            key_path: str,
-            prefix: str = "",
-            mapper: KeyMapper = _key_error) -> Any:
+    def get_by_key_path(self,
+                        key_path: str,
+                        prefix: str = "",
+                        get_value: ItemGetValue = _get_value) -> Any:
         """ Gets the attribute value corresponding to the key path. """
         if not os.path.isabs(key_path):
             key_path = os.path.join(prefix, key_path)
         key_path = os.path.normpath(key_path)
+        path = "/"
         value = self._data
         for key in key_path.strip("/").split("/"):
             parts = key.split("[")
             try:
-                value = value[parts[0]]
-            except KeyError:
-                value = mapper(self, value, parts[0])
-            try:
-                value = value[int(parts[1].split("]")[0])]
+                index = int(parts[1].split("]")[0])  # type: Optional[int]
             except IndexError:
-                pass
+                index = None
+            try:
+                value = get_value(self, path, value, parts[0], index)
+            except KeyError:
+                value = _get_value(self, path, value, parts[0], index)
+            path = os.path.join(path, key)
         return value
 
     @property
@@ -276,7 +283,7 @@ class ItemMapper(Mapping[str, object]):
         else:
             item = self._item.map(uid)
             prefix = ""
-        value = item.get(key_path, prefix, self._key_mapper)
+        value = item.get_by_key_path(key_path, prefix, self.get_value)
         for func in parts[1:]:
             value = getattr(self, func)(value)
         return item, value
@@ -294,8 +301,11 @@ class ItemMapper(Mapping[str, object]):
         """ Performs a variable substitution using the item mapper. """
         return ItemTemplate(text).substitute(self)
 
-    def _key_mapper(self, item: Item, value: Any, key: str) -> Any:
-        return getattr(self, key.replace("-", "_"))(item, value)
+    def get_value(self, _item: Item, _path: str, _value: Any, _key: str,
+                  _index: Optional[int]) -> Any:
+        """ Gets a value by key and optional index. """
+        # pylint: disable=no-self-use
+        raise KeyError
 
 
 class ItemCache:

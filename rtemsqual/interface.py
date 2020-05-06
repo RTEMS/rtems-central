@@ -26,7 +26,7 @@
 
 from contextlib import contextmanager
 import os
-from typing import Any, Callable, Dict, Iterator, List, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
 from rtemsqual.content import CContent
 from rtemsqual.items import Item, ItemCache, ItemMapper
@@ -125,10 +125,14 @@ class InterfaceMapper(ItemMapper):
             header_file.add_potential_edge(node, item)
         return value
 
-    def interface_name(self, item: Item, _value: Any):
-        """ Returns the interface name of a forward declaration. """
+    def get_value(self, item: Item, _path: str, _value: Any, key: str,
+                  _index: Optional[int]) -> Any:
+        """ Gets a value by key and optional index. """
         # pylint: disable=no-self-use
-        return _forward_declaration(item)
+        if key == "interface-name" and item["type"] == "interface" and item[
+                "interface-type"] == "forward-declaration":
+            return _forward_declaration(item)
+        raise KeyError
 
 
 _PARAM = {
