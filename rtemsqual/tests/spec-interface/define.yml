@@ -10,15 +10,15 @@ interface-definition:
     \
       ((${float_t:/interface-name}) 123)
   variants:
-  - enabled-by: |
-      defined(A) || defined(B)
-    definition: |
-      ((${float_t:/interface-name}) 456)
-  - enabled-by: |
-      defined(C) && \
-        defined(D)
-    definition: |
-      ((${float_t:/interface-name}) 789)
+  - enabled-by:
+    - defined(${define-a:/interface-name})
+    - (${define-b:/interface-name} > ${define-c:/interface-name})
+    definition: ((${float_t:/interface-name}) 456)
+  - enabled-by:
+      and:
+      - defined(C)
+      - defined(D)
+    definition: ((${float_t:/interface-name}) 789)
 interface-type: define
 links:
 - role: include

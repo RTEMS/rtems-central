@@ -28,7 +28,7 @@ from contextlib import contextmanager
 import os
 from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
-from rtemsqual.content import CContent
+from rtemsqual.content import CContent, enabled_by_to_exp, ExpressionMapper
 from rtemsqual.items import Item, ItemCache, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -57,6 +57,43 @@ def _forward_declaration(item: Item) -> str:
     return target["interface-type"] + " " + target["interface-name"]
 
 
+class _InterfaceMapper(ItemMapper):
+    def __init__(self, node: "Node"):
+        super().__init__(node.item)
+        self._node = node
+
+    def __getitem__(self, identifier):
+        item, value = self.map(identifier)
+        if item["type"] == "interface":
+            node = self._node
+            header_file = node.header_file
+            if item["interface-type"] == "enumerator":
+                for link in item.links_to_children():
+                    if link["role"] == "enumerator":
+                        header_file.add_includes(link.item)
+            else:
+                header_file.add_includes(item)
+            header_file.add_potential_edge(node, item)
+        return value
+
+    def get_value(self, item: Item, _path: str, _value: Any, key: str,
+                  _index: Optional[int]) -> Any:
+        # pylint: disable=no-self-use
+        if key == "interface-name" and item["type"] == "interface" and item[
+                "interface-type"] == "forward-declaration":
+            return _forward_declaration(item)
+        raise KeyError
+
+
+class _InterfaceExpressionMapper(ExpressionMapper):
+    def __init__(self, mapper: _InterfaceMapper):
+        super().__init__()
+        self._mapper = mapper
+
+    def map(self, symbol: str) -> str:
+        return self._mapper.substitute(symbol)
+
+
 def _add_definition(node: "Node", item: Item, prefix: str,
                     value: Dict[str, Any], get_lines: GetLines) -> CContent:
     content = CContent()
@@ -66,7 +103,9 @@ def _add_definition(node: "Node", item: Item, prefix: str,
         ifelse = "#if "
         with node.mapper.prefix(os.path.join(prefix, "variants")):
             for variant in variants:
-                enabled_by = variant["enabled-by"].strip()
+                enabled_by = enabled_by_to_exp(
+                    variant["enabled-by"],
+                    _InterfaceExpressionMapper(node.mapper))
                 content.append(f"{ifelse}{enabled_by}")
                 with content.indent():
                     content.append(get_lines(node, item,
@@ -105,36 +144,6 @@ def _get_description(item: Item, ingroups: ItemMap) -> CContent:
     return content
 
 
-class InterfaceMapper(ItemMapper):
-    """ Interface mapper. """
-    def __init__(self, node: "Node"):
-        super().__init__(node.item)
-        self._node = node
-
-    def __getitem__(self, identifier):
-        item, value = self.map(identifier)
-        if item["type"] == "interface":
-            node = self._node
-            header_file = node.header_file
-            if item["interface-type"] == "enumerator":
-                for link in item.links_to_children():
-                    if link["role"] == "enumerator":
-                        header_file.add_includes(link.item)
-            else:
-                header_file.add_includes(item)
-            header_file.add_potential_edge(node, item)
-        return value
-
-    def get_value(self, item: Item, _path: str, _value: Any, key: str,
-                  _index: Optional[int]) -> Any:
-        """ Gets a value by key and optional index. """
-        # pylint: disable=no-self-use
-        if key == "interface-name" and item["type"] == "interface" and item[
-                "interface-type"] == "forward-declaration":
-            return _forward_declaration(item)
-        raise KeyError
-
-
 _PARAM = {
     None: "@param ",
     "in": "@param[in] ",
@@ -153,7 +162,7 @@ class Node:
         self.in_edges = {}  # type: ItemMap
         self.out_edges = {}  # type: ItemMap
         self.content = CContent()
-        self.mapper = InterfaceMapper(self)
+        self.mapper = _InterfaceMapper(self)
 
     def __lt__(self, other: "Node") -> bool:
         return self.item.uid < other.item.uid

@@ -89,6 +89,7 @@ def test_interface(tmpdir):
 #ifndef _H_H
 #define _H_H
 
+#include <h2.h>
 #include <h3.h>
 #include <math.h>
 #include <stdint.h>
@@ -141,10 +142,9 @@ typedef enum {
 /**
  * @ingroup GroupA
  */
-#if defined(A) || defined(B)
+#if defined(A) || (B > C)
   #define DEFINE ((float_t) 456)
-#elif defined(C) && \\
-  defined(D)
+#elif defined(C) && defined(D)
   #define DEFINE ((float_t) 789)
 #else
   #define DEFINE \\
