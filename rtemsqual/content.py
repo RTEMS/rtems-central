@@ -528,3 +528,92 @@ class CContent(Content):
         self.add(["#ifdef __cplusplus", "extern \"C\" {", "#endif"])
         yield
         self.add(["#ifdef __cplusplus", "}", "#endif"])
+
+
+class ExpressionMapper:
+    """ Maps symbols and operations to form a C expression. """
+
+    # pylint: disable=no-self-use
+    def map(self, symbol: str) -> str:
+        """ Maps a symbol to build an expression. """
+        return f"defined({symbol})"
+
+    def op_and(self) -> str:
+        """ Returns the and operator. """
+        return " && "
+
+    def op_or(self) -> str:
+        """ Returns the or operator. """
+        return " || "
+
+    def op_not(self, symbol: str) -> str:
+        """ Returns the negation of the symbol. """
+        return f"!{symbol}"
+
+
+class PythonExpressionMapper(ExpressionMapper):
+    """ Maps symbols and operations to form a Python expression. """
+
+    # pylint: disable=no-self-use
+    def map(self, symbol: str) -> str:
+        return symbol
+
+    def op_and(self) -> str:
+        return " and "
+
+    def op_or(self) -> str:
+        return " or "
+
+    def op_not(self, symbol: str) -> str:
+        return f"not {symbol}"
+
+
+def _to_expression_op(enabled_by: Any, mapper: ExpressionMapper,
+                      operation: str) -> str:
+    symbols = [
+        _to_expression(next_enabled_by, mapper)
+        for next_enabled_by in enabled_by
+    ]
+    if len(symbols) == 1:
+        return symbols[0]
+    return f"({operation.join(symbols)})"
+
+
+def _to_expression_op_and(enabled_by: Any, mapper: ExpressionMapper) -> str:
+    return _to_expression_op(enabled_by, mapper, mapper.op_and())
+
+
+def _to_expression_op_not(enabled_by: Any, mapper: ExpressionMapper) -> str:
+    return mapper.op_not(_to_expression(enabled_by, mapper))
+
+
+def _to_expression_op_or(enabled_by: Any, mapper: ExpressionMapper) -> str:
+    return _to_expression_op(enabled_by, mapper, mapper.op_or())
+
+
+_TO_EXPRESSION_OP = {
+    "and": _to_expression_op_and,
+    "not": _to_expression_op_not,
+    "or": _to_expression_op_or
+}
+
+
+def _to_expression(enabled_by: Any, mapper: ExpressionMapper) -> str:
+    if isinstance(enabled_by, list):
+        return _to_expression_op_or(enabled_by, mapper)
+    if isinstance(enabled_by, dict):
+        if len(enabled_by) == 1:
+            key = next(iter(enabled_by))
+            return _TO_EXPRESSION_OP[key](enabled_by[key], mapper)
+        raise ValueError
+    return mapper.map(enabled_by)
+
+
+def enabled_by_to_exp(enabled_by: Any, mapper: ExpressionMapper) -> str:
+    """
+    Returns an expression for an enabled-by attribute value.
+    """
+    exp = _to_expression(enabled_by, mapper)
+    if exp.startswith("("):
+        return exp[1:-1]
+    return exp
