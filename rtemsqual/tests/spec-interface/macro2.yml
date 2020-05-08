@@ -19,7 +19,7 @@ interface-return:
   return-values: []
 interface-type: macro
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: gb

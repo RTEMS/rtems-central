@@ -13,7 +13,7 @@ interface-description: null
 interface-name: Integer3
 interface-type: typedef
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: gb

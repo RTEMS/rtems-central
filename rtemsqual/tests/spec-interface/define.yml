@@ -21,7 +21,7 @@ interface-definition:
     definition: ((${float_t:/interface-name}) 789)
 interface-type: define
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: ga

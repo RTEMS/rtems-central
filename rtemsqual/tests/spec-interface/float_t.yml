@@ -5,6 +5,6 @@ enabled-by: []
 interface-name: float_t
 interface-type: typedef
 links:
-- role: include
+- role: interface-placement
   uid: math
 type: interface

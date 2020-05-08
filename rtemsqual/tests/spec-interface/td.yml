@@ -15,6 +15,6 @@ links:
   uid: other
 - role: ingroup
   uid: gb
-- role: include
+- role: interface-placement
   uid: h
 type: interface

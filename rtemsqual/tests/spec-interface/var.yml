@@ -13,6 +13,6 @@ interface-type: variable
 links:
 - role: ingroup
   uid: gc
-- role: include
+- role: interface-placement
   uid: h
 type: interface

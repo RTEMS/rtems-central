@@ -44,7 +44,7 @@ interface-definition:
   variants: []
 interface-type: struct
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: gc

@@ -7,6 +7,6 @@ interface-type: typedef
 links:
 - role: other
   uid: other3
-- role: include
+- role: interface-placement
   uid: stdint
 type: interface

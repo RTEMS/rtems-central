@@ -7,6 +7,6 @@ group-description: Group C description.
 group-name: Group C
 interface-type: group
 links:
-- role: include
+- role: interface-placement
   uid: h2
 type: interface

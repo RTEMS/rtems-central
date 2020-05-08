@@ -29,7 +29,7 @@ interface-params:
   description: is parameter 3.
 interface-type: function
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: ga

@@ -38,7 +38,7 @@ interface-return:
     value: 2
 interface-type: macro
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: gb

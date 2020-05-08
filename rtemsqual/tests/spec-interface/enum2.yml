@@ -8,7 +8,7 @@ interface-description: null
 interface-name: EnumA
 interface-type: enum
 links:
-- role: include
+- role: interface-placement
   uid: h3
 - role: enumerator
   uid: enumerator-a

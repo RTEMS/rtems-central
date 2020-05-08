@@ -5,6 +5,6 @@ enabled-by: []
 interface-target: s
 interface-type: forward-declaration
 links:
-- role: include
+- role: interface-placement
   uid: h
 type: interface

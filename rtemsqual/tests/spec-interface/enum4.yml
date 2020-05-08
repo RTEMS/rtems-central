@@ -8,6 +8,6 @@ interface-description: null
 interface-name: EnumC
 interface-type: enum
 links:
-- role: include
+- role: interface-placement
   uid: h2
 type: interface

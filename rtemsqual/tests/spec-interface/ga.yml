@@ -7,6 +7,6 @@ group-description: Group A description.
 group-name: Group A
 interface-type: group
 links:
-- role: include
+- role: interface-placement
   uid: h
 type: interface

@@ -372,7 +372,7 @@ class HeaderFile:
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
         for link in item.links_to_parents():
-            if link["role"] == "include":
+            if link["role"] == "interface-placement":
                 self._includes.append(link.item)
 
     def add_ingroup(self, item: Item) -> None:
@@ -401,7 +401,7 @@ class HeaderFile:
     def generate_nodes(self, item: Item) -> None:
         """ Generates all nodes of this header file. """
         for link in item.links_to_children():
-            if link["role"] == "include":
+            if link["role"] == "interface-placement":
                 self._add_child(link.item)
         for node in self._nodes.values():
             self._resolve_ingroups(node)

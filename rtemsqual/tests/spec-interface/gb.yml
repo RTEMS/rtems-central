@@ -11,6 +11,6 @@ links:
   uid: ga
 - role: "other"
   uid: other
-- role: include
+- role: interface-placement
   uid: h
 type: interface

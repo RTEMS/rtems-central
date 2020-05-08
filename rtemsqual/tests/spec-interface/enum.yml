@@ -8,7 +8,7 @@ interface-description: Enum description.
 interface-name: Enum
 interface-type: enum
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: gb

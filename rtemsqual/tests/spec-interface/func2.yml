@@ -43,7 +43,7 @@ interface-return:
     value: 2
 interface-type: function
 links:
-- role: include
+- role: interface-placement
   uid: h
 - role: ingroup
   uid: gb
