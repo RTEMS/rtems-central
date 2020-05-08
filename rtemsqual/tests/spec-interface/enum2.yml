@@ -10,7 +10,7 @@ interface-type: enum
 links:
 - role: interface-placement
   uid: h3
-- role: enumerator
+- role: interface-enumerator
   uid: enumerator-a
 - role: other
   uid: enumerator-a

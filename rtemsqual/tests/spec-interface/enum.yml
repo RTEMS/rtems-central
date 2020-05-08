@@ -12,10 +12,10 @@ links:
   uid: h
 - role: interface-ingroup
   uid: gb
-- role: enumerator
+- role: interface-enumerator
   uid: enumerator-0
-- role: enumerator
+- role: interface-enumerator
   uid: enumerator-1
-- role: enumerator
+- role: interface-enumerator
   uid: enumerator-2
 type: interface

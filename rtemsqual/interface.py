@@ -69,7 +69,7 @@ class _InterfaceMapper(ItemMapper):
             header_file = node.header_file
             if item["interface-type"] == "enumerator":
                 for link in item.links_to_children():
-                    if link["role"] == "enumerator":
+                    if link["role"] == "interface-enumerator":
                         header_file.add_includes(link.item)
             else:
                 header_file.add_includes(item)
@@ -204,7 +204,7 @@ class Node:
         with self._enum_struct_or_union():
             enumerators = []  # type: List[CContent]
             for link in self.item.links_to_parents():
-                if link["role"] != "enumerator":
+                if link["role"] != "interface-enumerator":
                     continue
                 enumerator = _get_description(link.item, {})
                 enumerator.append(
