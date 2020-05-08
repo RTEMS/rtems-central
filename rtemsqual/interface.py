@@ -43,7 +43,7 @@ def _designator(name: str) -> str:
 def _get_ingroups(item: Item) -> ItemMap:
     ingroups = {}  # type: ItemMap
     for link in item.links_to_parents():
-        if link["role"] == "ingroup":
+        if link["role"] == "interface-ingroup":
             ingroups[link.item.uid] = link.item
     return ingroups
 

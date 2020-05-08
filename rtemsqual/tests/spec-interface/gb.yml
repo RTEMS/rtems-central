@@ -7,7 +7,7 @@ group-brief: null
 group-description: null
 group-name: Group B
 links:
-- role: "ingroup"
+- role: interface-ingroup
   uid: ga
 - role: "other"
   uid: other

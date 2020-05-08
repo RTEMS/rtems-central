@@ -13,7 +13,7 @@ interface-type: typedef
 links:
 - role: other
   uid: other
-- role: ingroup
+- role: interface-ingroup
   uid: gb
 - role: interface-placement
   uid: h

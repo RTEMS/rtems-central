@@ -40,6 +40,6 @@ interface-type: macro
 links:
 - role: interface-placement
   uid: h
-- role: ingroup
+- role: interface-ingroup
   uid: gb
 type: interface

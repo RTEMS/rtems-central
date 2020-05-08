@@ -46,6 +46,6 @@ interface-type: struct
 links:
 - role: interface-placement
   uid: h
-- role: ingroup
+- role: interface-ingroup
   uid: gc
 type: interface
