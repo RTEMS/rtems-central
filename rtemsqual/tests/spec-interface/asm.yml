@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: null
+interface-description: null
+interface-name: ASM
+interface-definition:
+  defaults: null
+  variants: []
+interface-type: define
+links:
+- role: interface-placement
+  uid: command-line
+- role: other
+  uid: command-line
+type: interface

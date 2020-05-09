@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by:
+  not: ASM
 interface-brief: Variable brief description.
 interface-definition:
   default: |

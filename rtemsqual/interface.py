@@ -84,6 +84,13 @@ class _InterfaceMapper(ItemMapper):
             return _forward_declaration(item)
         raise KeyError
 
+    def enabled_by_to_defined(self, enabled_by: str) -> str:
+        """
+        Maps an item-level enabled-by attribute value to the corresponding
+        defined expression.
+        """
+        return self._node.header_file.enabled_by_defined[enabled_by]
+
 
 class _InterfaceExpressionMapper(ExpressionMapper):
     def __init__(self, mapper: _InterfaceMapper):
@@ -92,6 +99,16 @@ class _InterfaceExpressionMapper(ExpressionMapper):
 
     def map(self, symbol: str) -> str:
         return self._mapper.substitute(symbol)
+
+
+class _ItemLevelExpressionMapper(ExpressionMapper):
+    def __init__(self, mapper: _InterfaceMapper):
+        super().__init__()
+        self._mapper = mapper
+
+    def map(self, symbol: str) -> str:
+        return self._mapper.substitute(
+            self._mapper.enabled_by_to_defined(symbol))
 
 
 def _add_definition(node: "Node", item: Item, prefix: str,
@@ -187,9 +204,20 @@ class Node:
         else:
             self.content.append(f"}} {name};")
 
+    def _generate(self) -> None:
+        _NODE_GENERATORS[self.item["interface-type"]](self)
+
     def generate(self) -> None:
         """ Generates a node to generate the node content. """
-        _NODE_GENERATORS[self.item["interface-type"]](self)
+        enabled_by = self.item["enabled-by"]
+        if enabled_by:
+            mapper = _ItemLevelExpressionMapper(self.mapper)
+            self.content.add(f"#if {enabled_by_to_exp(enabled_by, mapper)}")
+            with self.content.indent():
+                self._generate()
+            self.content.add("#endif")
+        else:
+            self._generate()
 
     def generate_compound(self) -> None:
         """ Generates a compound (struct or union). """
@@ -363,16 +391,18 @@ _NODE_GENERATORS = {
 
 class HeaderFile:
     """ A header file. """
-    def __init__(self):
+    def __init__(self, enabled_by_defined: Dict[str, str]):
         self._content = CContent()
         self._ingroups = {}  # type: ItemMap
         self._includes = []  # type: List[Item]
         self._nodes = {}  # type: Dict[str, Node]
+        self.enabled_by_defined = enabled_by_defined
 
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
         for link in item.links_to_parents():
-            if link["role"] == "interface-placement":
+            if link["role"] == "interface-placement" and link.item[
+                    "interface-type"] == "header-file":
                 self._includes.append(link.item)
 
     def add_ingroup(self, item: Item) -> None:
@@ -459,22 +489,35 @@ class HeaderFile:
         self._content.write(filename)
 
 
-def _generate_header_file(item: Item, domains: Dict[str, str]) -> None:
+def _generate_header_file(item: Item, domains: Dict[str, str],
+                          enabled_by_defined: Dict[str, str]) -> None:
     domain_path = domains.get(item["interface-domain"], None)
     if domain_path is None:
         return
-    header_file = HeaderFile()
+    header_file = HeaderFile(enabled_by_defined)
     header_file.generate_nodes(item)
     header_file.finalize(item)
     header_file.write(
         os.path.join(domain_path, item["path-prefix"], item["path-include"]))
 
 
-def _visit_header_files(item: Item, domains: Dict[str, str]) -> None:
+def _visit_header_files(item: Item, domains: Dict[str, str],
+                        enabled_by_defined: Dict[str, str]) -> None:
     for child in item.children():
-        _visit_header_files(child, domains)
+        _visit_header_files(child, domains, enabled_by_defined)
     if item["type"] == "interface" and item["interface-type"] == "header-file":
-        _generate_header_file(item, domains)
+        _generate_header_file(item, domains, enabled_by_defined)
+
+
+def _gather_enabled_by_defined(item_level_interfaces: List[str],
+                               item_cache: ItemCache) -> Dict[str, str]:
+    enabled_by_defined = {}  # type: Dict[str, str]
+    for uid in item_level_interfaces:
+        for link in item_cache[uid].links_to_children():
+            if link["role"] == "interface-placement":
+                define = f"defined(${{{link.item.uid}:/interface-name}})"
+                enabled_by_defined[link.item["interface-name"]] = define
+    return enabled_by_defined
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -484,5 +527,8 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param config: A dictionary with configuration entries.
     :param item_cache: The specification item cache containing the interfaces.
     """
+    enabled_by_defined = _gather_enabled_by_defined(
+        config["item-level-interfaces"], item_cache)
     for item in item_cache.top_level.values():
-        _visit_header_files(item, config["interface-domains"])
+        _visit_header_files(item, config["interface-domains"],
+                            enabled_by_defined)

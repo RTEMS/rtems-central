@@ -37,12 +37,15 @@ def test_interface(tmpdir):
     item_cache_config["cache-directory"] = "cache"
 
     interface_config = {}
+    interface_config["item-level-interfaces"] = []
     base_directory = os.path.join(tmpdir, "base")
     interface_domains = {"abc": base_directory}
     interface_config["interface-domains"] = interface_domains
 
     item_cache_config["paths"] = [os.path.normpath(tmpdir)]
     generate(interface_config, ItemCache(item_cache_config))
+
+    interface_config["item-level-interfaces"] = ["/command-line"]
 
     spec_src = os.path.join(os.path.dirname(__file__), "spec-interface")
     spec_dst = os.path.join(tmpdir, "spec")
@@ -312,14 +315,16 @@ typedef uint32_t Integer /* Some comment. */;
   typedef uint32_t Integer3;
 #endif
 
-/**
- * @ingroup GroupC
- *
- * @brief Variable brief description.
- *
- * Variable description.
- */
-extern struct Struct *Variable;
+#if !defined(ASM)
+  /**
+   * @ingroup GroupC
+   *
+   * @brief Variable brief description.
+   *
+   * Variable description.
+   */
+  extern struct Struct *Variable;
+#endif
 
 #ifdef __cplusplus
 }
