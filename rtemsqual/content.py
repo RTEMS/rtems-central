@@ -153,7 +153,7 @@ class Content:
     """ This class builds content. """
 
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, the_license):
+    def __init__(self, the_license: str, pop_indent_gap: bool):
         self._lines = []  # type: List[str]
         self._license = the_license
         self._copyrights = Copyrights()
@@ -163,6 +163,7 @@ class Content:
         self._indent = ""
         self._empty_line_indents = [""]
         self._empty_line_indent = ""
+        self._pop_indent_gap = pop_indent_gap
 
     def __str__(self):
         return "\n".join(itertools.chain(self._lines, [""]))
@@ -235,12 +236,14 @@ class Content:
         self._empty_line_indents.append(
             empty_line_indent if empty_line_indent else self._tab)
         self._update_indent()
+        self.gap = False
 
     def pop_indent(self) -> None:
         """ Pops an indent level. """
         self._indents.pop()
         self._empty_line_indents.pop()
         self._update_indent()
+        self.gap = self._pop_indent_gap
 
     @contextmanager
     def indent(self,
@@ -288,7 +291,7 @@ class Content:
 class SphinxContent(Content):
     """ This class builds Sphinx content. """
     def __init__(self):
-        super().__init__("CC-BY-SA-4.0")
+        super().__init__("CC-BY-SA-4.0", True)
         self._tab = "    "
 
     def add_label(self, label: str) -> None:
@@ -369,7 +372,7 @@ class CContent(Content):
 
     # pylint: disable=too-many-public-methods
     def __init__(self):
-        super().__init__("BSD-2-Clause")
+        super().__init__("BSD-2-Clause", False)
 
     def add_spdx_license_identifier(self):
         """
@@ -430,7 +433,6 @@ class CContent(Content):
     def _open_comment_block(self, begin) -> None:
         self.add(begin)
         self.push_indent(" * ", " *")
-        self.gap = False
 
     def open_comment_block(self) -> None:
         """ Opens a comment block. """

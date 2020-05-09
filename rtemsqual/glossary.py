@@ -53,11 +53,10 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     content.add_header("Glossary", level="*")
     content.add(".. glossary::")
     with content.indent():
-        content.append(":sorted:")
-    for item in sorted(terms.values(),
-                       key=lambda x: x["glossary-term"].lower()):
-        content.register_license_and_copyrights_of_item(item)
-        with content.indent():
+        content.add(":sorted:")
+        for item in sorted(terms.values(),
+                           key=lambda x: x["glossary-term"].lower()):
+            content.register_license_and_copyrights_of_item(item)
             text = SphinxMapper(item).substitute(item["text"])
             content.add_definition_item(item["glossary-term"], text)
     content.add_licence_and_copyrights()

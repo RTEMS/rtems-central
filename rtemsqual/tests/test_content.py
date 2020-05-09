@@ -32,7 +32,7 @@ from rtemsqual.content import Content, enabled_by_to_exp, \
 
 
 def test_append():
-    content = Content("BSD-2-Clause")
+    content = Content("BSD-2-Clause", True)
     content.append("")
     assert str(content) == """
 """
@@ -52,7 +52,7 @@ b
 
 
 def test_prepend():
-    content = Content("BSD-2-Clause")
+    content = Content("BSD-2-Clause", True)
     content.prepend("")
     assert str(content) == """
 """
@@ -72,7 +72,7 @@ b
 
 
 def test_add():
-    content = Content("BSD-2-Clause")
+    content = Content("BSD-2-Clause", True)
     content.add("")
     assert str(content) == ""
     content.add("a")
@@ -87,14 +87,14 @@ c
 
 
 def test_add_blank_line():
-    content = Content("BSD-2-Clause")
+    content = Content("BSD-2-Clause", True)
     content.add_blank_line()
     assert str(content) == """
 """
 
 
 def test_indent():
-    content = Content("BSD-2-Clause")
+    content = Content("BSD-2-Clause", True)
     content.add_blank_line()
     content.append("x")
     content.indent_lines(3)
@@ -104,7 +104,7 @@ def test_indent():
 
 
 def test_write(tmpdir):
-    content = Content("BSD-2-Clause")
+    content = Content("BSD-2-Clause", True)
     content.append("x")
     path = os.path.join(tmpdir, "x", "y")
     content.write(path)

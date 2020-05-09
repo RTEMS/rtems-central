@@ -122,7 +122,7 @@ def _generate_test_case(content: CContent, item: Item,
             content.add(f"T_plan({steps.steps});")
         content.add(action_content)
         content.add(item["test-case-epilogue"])
-    content.append(["}", "", "/** @} */"])
+    content.add(["}", "", "/** @} */"])
 
 
 def _generate_test_suite(content: CContent, item: Item) -> None:
