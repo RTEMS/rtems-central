@@ -4,6 +4,7 @@ copyrights:
 enabled-by: []
 group-brief: Group C brief description.
 group-description: Group C description.
+group-identifier: GroupC
 group-name: Group C
 interface-type: group
 links:

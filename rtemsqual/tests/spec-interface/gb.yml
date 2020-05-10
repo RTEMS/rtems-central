@@ -4,6 +4,7 @@ copyrights:
 enabled-by: []
 group-brief: null
 group-description: null
+group-identifier: GroupB
 group-name: Group B
 interface-type: group
 links:

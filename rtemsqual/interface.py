@@ -36,10 +36,6 @@ Lines = Union[str, List[str]]
 GetLines = Callable[["Node", Item, Any], Lines]
 
 
-def _designator(name: str) -> str:
-    return name.replace(" ", "")
-
-
 def _get_ingroups(item: Item) -> ItemMap:
     ingroups = {}  # type: ItemMap
     for link in item.links_to_parents():
@@ -48,8 +44,8 @@ def _get_ingroups(item: Item) -> ItemMap:
     return ingroups
 
 
-def _ingroups_to_designators(ingroups: ItemMap) -> List[str]:
-    return [_designator(item["group-name"]) for item in ingroups.values()]
+def _get_group_identifiers(groups: ItemMap) -> List[str]:
+    return [item["group-identifier"] for item in groups.values()]
 
 
 def _forward_declaration(item: Item) -> str:
@@ -143,7 +139,7 @@ def _add_definition(node: "Node", item: Item, prefix: str,
 def _get_description(item: Item, ingroups: ItemMap) -> CContent:
     content = CContent()
     with content.doxygen_block():
-        content.add_ingroup(_ingroups_to_designators(ingroups))
+        content.add_ingroup(_get_group_identifiers(ingroups))
         content.add_brief_description(item["interface-brief"])
         content.add(content.wrap(item["interface-description"]))
         if "interface-params" in item:
@@ -269,9 +265,9 @@ class Node:
         self.header_file.add_ingroup(self.item)
         for ingroup in self.ingroups.values():
             self.header_file.add_potential_edge(self, ingroup)
-        name = self.item["group-name"]
-        self.content.add_group(_designator(name), name,
-                               _ingroups_to_designators(self.ingroups),
+        self.content.add_group(self.item["group-identifier"],
+                               self.item["group-name"],
+                               _get_group_identifiers(self.ingroups),
                                self.item["group-brief"],
                                self.item["group-description"])
 
@@ -479,7 +475,7 @@ class _HeaderFile:
         """ Finalizes the header file. """
         self._content.add_spdx_license_identifier()
         with self._content.file_block():
-            self._content.add_ingroup(_ingroups_to_designators(self._ingroups))
+            self._content.add_ingroup(_get_group_identifiers(self._ingroups))
         self._content.add_copyrights_and_licenses()
         with self._content.header_guard(self._item["interface-path"]):
             self._content.add_includes([
