@@ -3,7 +3,6 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-brief: Function brief description.
-interface-description: Function description.
 interface-definition:
   default:
     params:
@@ -13,20 +12,21 @@ interface-definition:
     - int *${.:/interface-params[3]/name}
     return: void
   variants: []
+interface-description: Function description.
 interface-name: Function
 interface-params:
-- name: Param0
+- description: is parameter 0.
   dir: null
-  description: is parameter 0.
-- name: Param1
+  name: Param0
+- description: is parameter 1.
   dir: in
-  description: is parameter 1.
-- name: Param2
+  name: Param1
+- description: is parameter 2.
   dir: out
-  description: is parameter 2.
-- name: Param3
+  name: Param2
+- description: is parameter 3.
   dir: inout
-  description: is parameter 3.
+  name: Param3
 interface-type: function
 links:
 - role: interface-placement

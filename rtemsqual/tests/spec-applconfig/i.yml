@@ -1,15 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-type: integer
-appl-config-option-default-value: 1
-appl-config-option-description: description i
-appl-config-option-index: []
-appl-config-option-name: i
-appl-config-option-notes: null
 appl-config-option-constraint:
   set:
   - 1
   - 2
   - 3
+appl-config-option-default-value: 1
+appl-config-option-description: description i
+appl-config-option-index: []
+appl-config-option-name: i
+appl-config-option-notes: null
+appl-config-option-type: integer
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []

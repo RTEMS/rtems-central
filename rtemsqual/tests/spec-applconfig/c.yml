@@ -1,18 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-type: integer
+appl-config-option-constraint:
+  custom:
+  - custom c 1
+  - custom c 2
+  links:
+  - d
+  max: 99
+  min: -1
 appl-config-option-default-value: 13
 appl-config-option-description: description c
 appl-config-option-index: []
 appl-config-option-name: c
 appl-config-option-notes: notes c
-appl-config-option-constraint:
-  min: -1
-  max: 99
-  links:
-  - d
-  custom:
-  - custom c 1
-  - custom c 2
+appl-config-option-type: integer
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []

@@ -3,11 +3,11 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-brief: null
+interface-definition:
+  default: '1'
+  variants: []
 interface-description: null
 interface-name: B
-interface-definition:
-  default: "1"
-  variants: []
 interface-type: define
 links:
 - role: interface-placement

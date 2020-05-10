@@ -4,7 +4,7 @@ copyrights:
 enabled-by: []
 interface-brief: Enumerator A brief description.
 interface-definition:
-  default: "17"
+  default: '17'
   variants: []
 interface-description: null
 interface-name: ENUMERATOR_A

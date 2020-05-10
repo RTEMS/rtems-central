@@ -3,8 +3,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-domain: abc
-interface-type: header-file
-links: []
 interface-path: h3.h
 interface-prefix: include
+interface-type: header-file
+links: []
 type: interface

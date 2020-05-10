@@ -3,8 +3,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-domain: c
-interface-type: header-file
-links: []
 interface-path: math.h
 interface-prefix: null
+interface-type: header-file
+links: []
 type: interface

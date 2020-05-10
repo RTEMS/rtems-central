@@ -1,16 +1,16 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-type: integer
+appl-config-option-constraint:
+  links:
+  - d
+  set:
+  - 1
+  - 2
 appl-config-option-default-value: Foo bar.
 appl-config-option-description: description j
 appl-config-option-index: []
 appl-config-option-name: j
 appl-config-option-notes: null
-appl-config-option-constraint:
-  set:
-  - 1
-  - 2
-  links:
-  - d
+appl-config-option-type: integer
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []

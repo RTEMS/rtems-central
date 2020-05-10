@@ -3,45 +3,45 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-brief: null
-interface-description: null
-interface-name: Struct
-interface-definition-kind: struct-only
 interface-definition:
   default:
     brief: Brief union description.
     definition:
-      - default:
-          brief: Brief member description.
-          definition: ${uint32_t:/interface-name} ${.:name}
-          description: Member description.
-          kind: member
-          name: some_member
-        variants: []
-      - default:
-          brief: Brief struct description.
-          definition:
-          - default:
-              brief: Brief member 2 description.
-              definition: ${uint32_t:/interface-name} ${.:name}
-              description: Member 2 description.
-              kind: member
-              name: some_member_2
-            variants: []
-          - default:
-              brief: Brief member 3 description.
-              definition: ${enum:/interface-name} ${.:name}
-              description: Member 3 description.
-              kind: member
-              name: some_member_3
-            variants: []
-          description: struct description.
-          kind: struct
-          name: some_struct
-        variants: []
+    - default:
+        brief: Brief member description.
+        definition: ${uint32_t:/interface-name} ${.:name}
+        description: Member description.
+        kind: member
+        name: some_member
+      variants: []
+    - default:
+        brief: Brief struct description.
+        definition:
+        - default:
+            brief: Brief member 2 description.
+            definition: ${uint32_t:/interface-name} ${.:name}
+            description: Member 2 description.
+            kind: member
+            name: some_member_2
+          variants: []
+        - default:
+            brief: Brief member 3 description.
+            definition: ${enum:/interface-name} ${.:name}
+            description: Member 3 description.
+            kind: member
+            name: some_member_3
+          variants: []
+        description: struct description.
+        kind: struct
+        name: some_struct
+      variants: []
     description: Union description.
     kind: union
     name: some_union
   variants: []
+interface-definition-kind: struct-only
+interface-description: null
+interface-name: Struct
 interface-type: struct
 links:
 - role: interface-placement

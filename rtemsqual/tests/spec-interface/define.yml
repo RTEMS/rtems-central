@@ -3,22 +3,22 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-brief: null
-interface-description: null
-interface-name: DEFINE
 interface-definition:
   default: |
     \
       ((${float_t:/interface-name}) 123)
   variants:
-  - enabled-by:
+  - definition: ((${float_t:/interface-name}) 456)
+    enabled-by:
     - defined(${define-a:/interface-name})
     - (${define-b:/interface-name} > ${define-c:/interface-name})
-    definition: ((${float_t:/interface-name}) 456)
-  - enabled-by:
+  - definition: ((${float_t:/interface-name}) 789)
+    enabled-by:
       and:
       - defined(C)
       - defined(D)
-    definition: ((${float_t:/interface-name}) 789)
+interface-description: null
+interface-name: DEFINE
 interface-type: define
 links:
 - role: interface-placement

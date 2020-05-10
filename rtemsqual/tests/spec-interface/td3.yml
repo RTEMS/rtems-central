@@ -6,9 +6,9 @@ interface-brief: null
 interface-definition:
   default: null
   variants:
-  - enabled-by: defined(RTEMS_SMP)
-    definition: |
+  - definition: |
       ${uint32_t:/interface-name} ${.:/interface-name}
+    enabled-by: defined(RTEMS_SMP)
 interface-description: null
 interface-name: Integer3
 interface-type: typedef

@@ -1,6 +1,6 @@
 comment: Some comment.
 enabled-by: []
 links:
-- role: "other"
+- role: other
   uid: h
 type: other

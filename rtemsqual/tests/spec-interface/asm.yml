@@ -3,11 +3,11 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-brief: null
-interface-description: null
-interface-name: ASM
 interface-definition:
   defaults: null
   variants: []
+interface-description: null
+interface-name: ASM
 interface-type: define
 links:
 - role: interface-placement

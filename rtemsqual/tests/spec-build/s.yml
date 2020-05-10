@@ -1,7 +1,7 @@
 build-type: start-file
 enabled-by:
 - A
+links: []
 source:
 - stu
-links: []
 type: build

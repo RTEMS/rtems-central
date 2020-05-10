@@ -3,7 +3,6 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-brief: Very long function brief description.
-interface-description: null
 interface-definition:
   default:
     body: |
@@ -18,22 +17,23 @@ interface-definition:
     - ${forward-decl:/interface-name} *${.:/interface-params[3]/name}
     return: int
   variants: []
+interface-description: null
 interface-name: VeryLongFunction
 interface-params:
-- name: VeryLongParam0
-  dir: null
-  description: |
+- description: |
     is very long parameter 0 with some super important and extra very long
     description which makes a lot of sense.
-- name: VeryLongParam1
+  dir: null
+  name: VeryLongParam0
+- description: is very long parameter 1.
   dir: in
-  description: is very long parameter 1.
-- name: VeryLongParam2
+  name: VeryLongParam1
+- description: is very long parameter 2.
   dir: out
-  description: is very long parameter 2.
-- name: VeryLongParam3
+  name: VeryLongParam2
+- description: is very long parameter 3.
   dir: inout
-  description: is very long parameter 3.
+  name: VeryLongParam3
 interface-return:
   return: Sometimes some value.
   return-values:

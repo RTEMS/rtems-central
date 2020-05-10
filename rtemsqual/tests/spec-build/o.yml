@@ -3,9 +3,9 @@ enabled-by: []
 install:
 - source:
   - jkl
-source:
-- mno
 links:
 - role: null
   uid: s
+source:
+- mno
 type: build
