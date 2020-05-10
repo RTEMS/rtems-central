@@ -94,6 +94,7 @@ def test_interface(tmpdir):
 
 #include <h2.h>
 #include <h3.h>
+#include <h4.h>
 #include <math.h>
 #include <stdint.h>
 

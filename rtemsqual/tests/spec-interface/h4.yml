@@ -3,12 +3,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
 interface-domain: abc
-interface-path: h.h
+interface-path: h4.h
 interface-prefix: include
 interface-type: header-file
-links:
-- role: interface-include
-  uid: h4
-- role: other
-  uid: h4
+links: []
 type: interface

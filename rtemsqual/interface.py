@@ -395,7 +395,10 @@ class _HeaderFile:
         self._item = item
         self._content = CContent()
         self._ingroups = {}  # type: ItemMap
-        self._includes = []  # type: List[Item]
+        self._includes = [
+            link.item for link in item.links_to_parents()
+            if link["role"] == "interface-include"
+        ]
         self._nodes = {}  # type: Dict[str, Node]
         self.enabled_by_defined = enabled_by_defined
 
