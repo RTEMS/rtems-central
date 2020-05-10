@@ -171,7 +171,7 @@ _PARAM = {
 
 class Node:
     """ Nodes of a header file. """
-    def __init__(self, header_file: "HeaderFile", item: Item,
+    def __init__(self, header_file: "_HeaderFile", item: Item,
                  ingroups: ItemMap):
         self.header_file = header_file
         self.item = item
@@ -389,9 +389,10 @@ _NODE_GENERATORS = {
 }
 
 
-class HeaderFile:
+class _HeaderFile:
     """ A header file. """
-    def __init__(self, enabled_by_defined: Dict[str, str]):
+    def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
+        self._item = item
         self._content = CContent()
         self._ingroups = {}  # type: ItemMap
         self._includes = []  # type: List[Item]
@@ -428,9 +429,9 @@ class HeaderFile:
         for ingroup in node.ingroups.values():
             self.add_potential_edge(node, ingroup)
 
-    def generate_nodes(self, item: Item) -> None:
+    def generate_nodes(self) -> None:
         """ Generates all nodes of this header file. """
-        for link in item.links_to_children():
+        for link in self._item.links_to_children():
             if link["role"] == "interface-placement":
                 self._add_child(link.item)
         for node in self._nodes.values():
@@ -471,23 +472,26 @@ class HeaderFile:
 
         return nodes_in_dependency_order
 
-    def finalize(self, item: Item) -> None:
+    def finalize(self) -> None:
         """ Finalizes the header file. """
         self._content.add_spdx_license_identifier()
         with self._content.file_block():
             self._content.add_ingroup(_ingroups_to_designators(self._ingroups))
         self._content.add_copyrights_and_licenses()
-        with self._content.header_guard(item["interface-path"]):
+        with self._content.header_guard(self._item["interface-path"]):
             self._content.add_includes([
-                inc["interface-path"] for inc in self._includes if inc != item
+                inc["interface-path"] for inc in self._includes
+                if inc != self._item
             ])
             with self._content.extern_c():
                 for node in self._get_nodes_in_dependency_order():
                     self._content.add(node.content)
 
-    def write(self, filename: str) -> None:
+    def write(self, domain_path: str) -> None:
         """ Writes the header file. """
-        self._content.write(filename)
+        self._content.write(
+            os.path.join(domain_path, self._item["interface-prefix"],
+                         self._item["interface-path"]))
 
 
 def _generate_header_file(item: Item, domains: Dict[str, str],
@@ -495,12 +499,10 @@ def _generate_header_file(item: Item, domains: Dict[str, str],
     domain_path = domains.get(item["interface-domain"], None)
     if domain_path is None:
         return
-    header_file = HeaderFile(enabled_by_defined)
-    header_file.generate_nodes(item)
-    header_file.finalize(item)
-    header_file.write(
-        os.path.join(domain_path, item["interface-prefix"],
-                     item["interface-path"]))
+    header_file = _HeaderFile(item, enabled_by_defined)
+    header_file.generate_nodes()
+    header_file.finalize()
+    header_file.write(domain_path)
 
 
 def _visit_header_files(item: Item, domains: Dict[str, str],
