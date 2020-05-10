@@ -5,6 +5,6 @@ enabled-by: []
 interface-domain: abc
 interface-type: header-file
 links: []
-path-include: h3.h
-path-prefix: include
+interface-path: h3.h
+interface-prefix: include
 type: interface

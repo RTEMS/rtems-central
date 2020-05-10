@@ -477,9 +477,10 @@ class HeaderFile:
         with self._content.file_block():
             self._content.add_ingroup(_ingroups_to_designators(self._ingroups))
         self._content.add_copyrights_and_licenses()
-        with self._content.header_guard(item["path-include"]):
-            self._content.add_includes(
-                [inc["path-include"] for inc in self._includes if inc != item])
+        with self._content.header_guard(item["interface-path"]):
+            self._content.add_includes([
+                inc["interface-path"] for inc in self._includes if inc != item
+            ])
             with self._content.extern_c():
                 for node in self._get_nodes_in_dependency_order():
                     self._content.add(node.content)
@@ -498,7 +499,8 @@ def _generate_header_file(item: Item, domains: Dict[str, str],
     header_file.generate_nodes(item)
     header_file.finalize(item)
     header_file.write(
-        os.path.join(domain_path, item["path-prefix"], item["path-include"]))
+        os.path.join(domain_path, item["interface-prefix"],
+                     item["interface-path"]))
 
 
 def _visit_header_files(item: Item, domains: Dict[str, str],

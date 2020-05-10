@@ -5,6 +5,6 @@ enabled-by: []
 interface-domain: abc
 interface-type: header-file
 links: []
-path-include: h.h
-path-prefix: include
+interface-path: h.h
+interface-prefix: include
 type: interface

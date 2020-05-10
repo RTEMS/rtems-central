@@ -5,6 +5,6 @@ enabled-by: []
 interface-domain: c
 interface-type: header-file
 links: []
-path-include: stdint.h
-path-prefix: null
+interface-path: stdint.h
+interface-prefix: null
 type: interface

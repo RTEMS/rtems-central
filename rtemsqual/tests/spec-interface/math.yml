@@ -5,6 +5,6 @@ enabled-by: []
 interface-domain: c
 interface-type: header-file
 links: []
-path-include: math.h
-path-prefix: null
+interface-path: math.h
+interface-prefix: null
 type: interface
