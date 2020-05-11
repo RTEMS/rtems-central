@@ -29,7 +29,7 @@ import os
 import string
 from typing import Dict, List, Mapping
 
-from rtemsqual.content import CContent
+from rtemsqual.content import CContent, CInclude
 from rtemsqual.items import Item, ItemCache
 
 ItemMap = Dict[str, Item]
@@ -167,11 +167,13 @@ class SourceFile:
         Generates the source file and the corresponding build specification.
         """
         content = CContent()
-        includes = []  # type: List[str]
-        local_includes = []  # type: List[str]
+        includes = []  # type: List[CInclude]
+        local_includes = []  # type: List[CInclude]
         for item in itertools.chain(self._test_suites, self._test_cases):
-            includes.extend(item["includes"])
-            local_includes.extend(item["local-includes"])
+            for inc in item["includes"]:
+                includes.append(CInclude(inc))
+            for inc in item["local-includes"]:
+                local_includes.append(CInclude(inc))
             content.register_license_and_copyrights_of_item(item)
         content.add_spdx_license_identifier()
         with content.file_block():
@@ -183,7 +185,7 @@ class SourceFile:
         content.add_have_config()
         content.add_includes(includes)
         content.add_includes(local_includes, local=True)
-        content.add_includes(["t.h"])
+        content.add_includes([CInclude("t.h")])
         for item in sorted(self._test_cases,
                            key=lambda x: x["test-case-name"]):
             _generate_test_case(content, item, test_case_to_suites)

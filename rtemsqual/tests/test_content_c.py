@@ -26,7 +26,7 @@
 
 import pytest
 
-from rtemsqual.content import CContent
+from rtemsqual.content import CContent, CInclude
 
 
 def test_add_have_config():
@@ -48,35 +48,36 @@ def test_add_have_config():
 
 
 def test_add_includes():
+    assert not CInclude("a") == "a"
     content = CContent()
     content.add_includes([])
     assert str(content) == ""
     content = CContent()
-    content.add_includes(["a", "a"])
+    content.add_includes([CInclude("a"), CInclude("a")])
     assert str(content) == """#include <a>
 """
-    content.add_includes(["b"])
+    content.add_includes([CInclude("b")])
     assert str(content) == """#include <a>
 
 #include <b>
 """
     content = CContent()
-    content.add_includes(["c", "b"], local=True)
+    content.add_includes([CInclude("c"), CInclude("b")], local=True)
     assert str(content) == """#include "b"
 #include "c"
 """
     content = CContent()
-    content.add_includes(["d/f", "d/e"])
+    content.add_includes([CInclude("d/f"), CInclude("d/e")])
     assert str(content) == """#include <d/e>
 #include <d/f>
 """
     content = CContent()
-    content.add_includes(["h", "g/h"])
+    content.add_includes([CInclude("h"), CInclude("g/h")])
     assert str(content) == """#include <h>
 #include <g/h>
 """
     content = CContent()
-    content.add_includes(["i/l/k", "i/j/k"])
+    content.add_includes([CInclude("i/l/k"), CInclude("i/j/k")])
     assert str(content) == """#include <i/j/k>
 #include <i/l/k>
 """

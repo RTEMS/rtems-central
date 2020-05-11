@@ -1,11 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by:
-  not: ASM
-interface-domain: abc
-interface-path: h2.h
-interface-prefix: include
-interface-type: header-file
-links: []
+enabled-by: []
+interface-name: RTEMS_SMP
+interface-type: define
+links:
+- role: interface-placement
+  uid: command-line
 type: interface

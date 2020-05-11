@@ -92,11 +92,17 @@ def test_interface(tmpdir):
 #ifndef _H_H
 #define _H_H
 
-#include <h2.h>
 #include <h3.h>
-#include <h4.h>
 #include <math.h>
 #include <stdint.h>
+
+#if !defined(ASM) && defined(RTEMS_SMP)
+  #include <h2.h>
+#endif
+
+#if defined(ASM) && defined(RTEMS_SMP)
+  #include <h4.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -28,7 +28,8 @@ from contextlib import contextmanager
 import os
 from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
-from rtemsqual.content import CContent, enabled_by_to_exp, ExpressionMapper
+from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
+    ExpressionMapper
 from rtemsqual.items import Item, ItemCache, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -105,6 +106,16 @@ class _ItemLevelExpressionMapper(ExpressionMapper):
     def map(self, symbol: str) -> str:
         return self._mapper.substitute(
             self._mapper.enabled_by_to_defined(symbol))
+
+
+class _HeaderExpressionMapper(ExpressionMapper):
+    def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
+        super().__init__()
+        self._mapper = ItemMapper(item)
+        self._enabled_by_defined = enabled_by_defined
+
+    def map(self, symbol: str) -> str:
+        return self._mapper.substitute(self._enabled_by_defined[symbol])
 
 
 def _add_definition(node: "Node", item: Item, prefix: str,
@@ -391,10 +402,7 @@ class _HeaderFile:
         self._item = item
         self._content = CContent()
         self._ingroups = {}  # type: ItemMap
-        self._includes = [
-            link.item for link in item.links_to_parents()
-            if link.role == "interface-include"
-        ]
+        self._includes = []  # type: List[Item]
         self._nodes = {}  # type: Dict[str, Node]
         self.enabled_by_defined = enabled_by_defined
 
@@ -479,10 +487,20 @@ class _HeaderFile:
             self._content.add_ingroup(_get_group_identifiers(self._ingroups))
         self._content.add_copyrights_and_licenses()
         with self._content.header_guard(self._item["interface-path"]):
-            self._content.add_includes([
-                inc["interface-path"] for inc in self._includes
-                if inc != self._item
+            exp_mapper = _HeaderExpressionMapper(self._item,
+                                                 self.enabled_by_defined)
+            includes = [
+                CInclude(item["interface-path"],
+                         enabled_by_to_exp(item["enabled-by"], exp_mapper))
+                for item in self._includes if item != self._item
+            ]
+            includes.extend([
+                CInclude(link.item["interface-path"],
+                         enabled_by_to_exp(link["enabled-by"], exp_mapper))
+                for link in self._item.links_to_parents()
+                if link.role == "interface-include"
             ])
+            self._content.add_includes(includes)
             with self._content.extern_c():
                 for node in self._get_nodes_in_dependency_order():
                     self._content.add(node.content)

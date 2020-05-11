@@ -8,7 +8,20 @@ interface-prefix: include
 interface-type: header-file
 links:
 - role: interface-include
+  uid: h2
+  enabled-by: RTEMS_SMP
+- role: interface-include
   uid: h4
+  enabled-by: []
+- role: interface-include
+  uid: h4
+  enabled-by: RTEMS_SMP
+- role: interface-include
+  uid: h4
+  enabled-by: ASM
+- role: interface-include
+  uid: h4
+  enabled-by: []
 - role: other
   uid: h4
 type: interface

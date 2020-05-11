@@ -29,8 +29,8 @@ import itertools
 import os
 import re
 import textwrap
-from typing import Any, Callable, ContextManager, Iterator, List, Optional, \
-    Union
+from typing import Any, Callable, ContextManager, Dict, Iterator, List, \
+    NamedTuple, Optional, Set, Tuple, Union
 
 from rtemsqual.items import Item, ItemMapper
 
@@ -367,6 +367,29 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE."""
 
 
+class CInclude(NamedTuple):
+    """ A C include file. """
+    path: str
+    enabled_by: str = ""
+
+
+def _split_includes(
+        includes: List[CInclude]) -> Tuple[Set[str], Dict[str, Set[str]]]:
+    includes_unconditional = set()  # type: Set[str]
+    includes_enabled_by = {}  # type: Dict[str, Set[str]]
+    for inc in set(includes):
+        if inc.enabled_by:
+            try:
+                includes_unconditional.remove(inc.path)
+            except KeyError:
+                pass
+            includes_enabled_by.setdefault(inc.path, set()).add(inc.enabled_by)
+        else:
+            if inc.path not in includes_enabled_by:
+                includes_unconditional.add(inc.path)
+    return includes_unconditional, includes_enabled_by
+
+
 class CContent(Content):
     """ This class builds C content. """
 
@@ -393,8 +416,7 @@ class CContent(Content):
         """ Adds a guarded config.h include. """
         self.add(["#ifdef HAVE_CONFIG_H", "#include \"config.h\"", "#endif"])
 
-    def add_includes(self, includes: List[str], local: bool = False) -> None:
-        """ Adds a block of includes. """
+    def _add_includes(self, includes: Set[str], local: bool) -> None:
         class IncludeKey:  # pylint: disable=too-few-public-methods
             """ Provides a key to sort includes. """
             def __init__(self, inc: str):
@@ -416,8 +438,28 @@ class CContent(Content):
         right = "\"" if local else ">"
         self.add([
             f"#include {left}{inc}{right}"
-            for inc in sorted(set(includes), key=IncludeKey)
+            for inc in sorted(includes, key=IncludeKey)
         ])
+
+    def _add_includes_enabled_by(self, includes: Dict[str, Set[str]],
+                                 local: bool) -> None:
+        enabled_by_includes = {}  # type: Dict[str, Set[str]]
+        for inc, enabled_bys in includes.items():
+            enabled_by_includes.setdefault(" && ".join(sorted(enabled_bys)),
+                                           set()).add(inc)
+        for enabled_by, incs in sorted(enabled_by_includes.items()):
+            self.add(f"#if {enabled_by}")
+            with self.indent():
+                self._add_includes(incs, local)
+            self.add("#endif")
+
+    def add_includes(self,
+                     includes: List[CInclude],
+                     local: bool = False) -> None:
+        """ Adds a block of includes. """
+        includes_unconditional, includes_enabled_by = _split_includes(includes)
+        self._add_includes(includes_unconditional, local)
+        self._add_includes_enabled_by(includes_enabled_by, local)
 
     def wrap(self, content: Optional[str], intro: str = "") -> List[str]:
         """ Wraps a text. """
