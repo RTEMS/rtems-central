@@ -518,8 +518,7 @@ class CContent(Content):
     @contextmanager
     def header_guard(self, filename: str) -> Iterator[None]:
         """ Opens a header guard context. """
-        filename = os.path.basename(filename)
-        guard = "_" + filename.replace(".", "_").upper()
+        guard = "_" + filename.replace("/", "_").replace(".", "_").upper()
         self.add([f"#ifndef {guard}", f"#define {guard}"])
         yield
         self.add(f"#endif /* {guard} */")
