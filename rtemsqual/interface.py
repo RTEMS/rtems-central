@@ -39,7 +39,7 @@ GetLines = Callable[["Node", Item, Any], Lines]
 def _get_ingroups(item: Item) -> ItemMap:
     ingroups = {}  # type: ItemMap
     for link in item.links_to_parents():
-        if link["role"] == "interface-ingroup":
+        if link.role == "interface-ingroup":
             ingroups[link.item.uid] = link.item
     return ingroups
 
@@ -65,7 +65,7 @@ class _InterfaceMapper(ItemMapper):
             header_file = node.header_file
             if item["interface-type"] == "enumerator":
                 for link in item.links_to_children():
-                    if link["role"] == "interface-enumerator":
+                    if link.role == "interface-enumerator":
                         header_file.add_includes(link.item)
             else:
                 header_file.add_includes(item)
@@ -228,7 +228,7 @@ class Node:
         with self._enum_struct_or_union():
             enumerators = []  # type: List[CContent]
             for link in self.item.links_to_parents():
-                if link["role"] != "interface-enumerator":
+                if link.role != "interface-enumerator":
                     continue
                 enumerator = _get_description(link.item, {})
                 enumerator.append(
@@ -393,7 +393,7 @@ class _HeaderFile:
         self._ingroups = {}  # type: ItemMap
         self._includes = [
             link.item for link in item.links_to_parents()
-            if link["role"] == "interface-include"
+            if link.role == "interface-include"
         ]
         self._nodes = {}  # type: Dict[str, Node]
         self.enabled_by_defined = enabled_by_defined
@@ -401,7 +401,7 @@ class _HeaderFile:
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
         for link in item.links_to_parents():
-            if link["role"] == "interface-placement" and link.item[
+            if link.role == "interface-placement" and link.item[
                     "interface-type"] == "header-file":
                 self._includes.append(link.item)
 
@@ -431,7 +431,7 @@ class _HeaderFile:
     def generate_nodes(self) -> None:
         """ Generates all nodes of this header file. """
         for link in self._item.links_to_children():
-            if link["role"] == "interface-placement":
+            if link.role == "interface-placement":
                 self._add_child(link.item)
         for node in self._nodes.values():
             self._resolve_ingroups(node)
@@ -517,7 +517,7 @@ def _gather_enabled_by_defined(item_level_interfaces: List[str],
     enabled_by_defined = {}  # type: Dict[str, str]
     for uid in item_level_interfaces:
         for link in item_cache[uid].links_to_children():
-            if link["role"] == "interface-placement":
+            if link.role == "interface-placement":
                 define = f"defined(${{{link.item.uid}:/interface-name}})"
                 enabled_by_defined[link.item["interface-name"]] = define
     return enabled_by_defined

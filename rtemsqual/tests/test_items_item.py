@@ -93,7 +93,7 @@ def test_get():
 def test_children():
     child = Item(EmptyCache(), "c", {})
     parent = Item(EmptyCache(), "p", {})
-    parent.add_link_to_child(Link(child, {"a": "b"}))
+    parent.add_link_to_child(Link(child, {"a": "b", "role": "c"}))
     children = [item for item in parent.children()]
     assert len(children) == 1
     assert children[0] == child
@@ -101,6 +101,7 @@ def test_children():
     assert len(links) == 1
     assert links[0].item == child
     assert links[0]["a"] == "b"
+    assert links[0].role == "c"
 
 
 def _is_enabled(enabled, enabled_by):

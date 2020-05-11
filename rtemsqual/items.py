@@ -108,6 +108,11 @@ class Link:
         """ The item referenced by this link. """
         return self._item
 
+    @property
+    def role(self) -> str:
+        """ The link role. """
+        return self._data["role"]
+
 
 def _get_value(_item: "Item", _path: str, value: Any, key: str,
                index: Optional[int]) -> str:
