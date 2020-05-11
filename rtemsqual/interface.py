@@ -411,7 +411,8 @@ class _HeaderFile:
 
     def _add_child(self, item: Item) -> None:
         ingroups = _get_ingroups(item)
-        self._ingroups.update(ingroups)
+        if item["interface-type"] != "group":
+            self._ingroups.update(ingroups)
         self._nodes[item.uid] = Node(self, item, ingroups)
         self._content.register_license_and_copyrights_of_item(item)
 
