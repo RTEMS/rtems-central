@@ -248,7 +248,8 @@ static inline int VeryLongFunction(
   VeryLongParam1, \\
   VeryLongParam2, \\
   VeryLongParam3 \\
-) do { \\
+) \\
+  do { \\
     (void) VeryLongParam1; \\
     (void) VeryLongParam2; \\
     (void) VeryLongParam3; \\
@@ -264,7 +265,11 @@ static inline int VeryLongFunction(
  *
  * @return Sometimes some value.
  */
-#define MACRO(Param0) ( ( Param0 ) + 1 )
+#if 0
+  #define MACRO(Param0)
+#else
+  #define MACRO(Param0) ( ( Param0 ) + 1 )
+#endif
 
 /**
  * @ingroup GroupC

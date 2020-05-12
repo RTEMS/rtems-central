@@ -6,7 +6,9 @@ interface-brief: Short macro brief description.
 interface-definition:
   default: |
     ( ( ${.:/interface-params[0]/name} ) + 1 )
-  variants: []
+  variants:
+  - definition: ""
+    enabled-by: "0"
 interface-description: null
 interface-name: MACRO
 interface-params:

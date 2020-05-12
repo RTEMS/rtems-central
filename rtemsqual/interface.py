@@ -364,12 +364,18 @@ class Node:
         name = item["interface-name"]
         params = [param["name"] for param in item["interface-params"]]
         param_line = ", ".join(params)
-        line = f"#define {name}({param_line}) "
+        line = f"#define {name}({param_line})"
         if len(line) > 79:
             param_block = ", \\\n  ".join(params)
-            line = f"#define {name}( \\\n  {param_block} \\\n) "
-        body = self.substitute(" \\\n  ".join(
-            definition.strip("\n").split("\n")))
+            line = f"#define {name}( \\\n  {param_block} \\\n)"
+        if not definition:
+            return line
+        body_lines = definition.strip("\n").split("\n")
+        if len(body_lines) == 1 and len(line + body_lines[0]) <= 79:
+            body = " "
+        else:
+            body = " \\\n  "
+        body += self.substitute(" \\\n  ".join(body_lines))
         return line + body
 
     def _get_typedef_definition(self, _item: Item, definition: Any) -> Lines:
