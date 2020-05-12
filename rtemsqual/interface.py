@@ -135,7 +135,7 @@ def _add_definition(node: "Node", item: Item, prefix: str,
                     content.append(get_lines(node, item,
                                              variant["definition"]))
                 ifelse = "#elif "
-        if default:
+        if default is not None:
             content.append("#else")
             with node.mapper.prefix(os.path.join(prefix, "default")):
                 with content.indent():
