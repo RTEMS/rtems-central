@@ -332,7 +332,10 @@ class Node:
 
     def _get_define_definition(self, item: Item, definition: Any) -> Lines:
         name = item["interface-name"]
-        return f"#define {name} {self.substitute(definition)}".split("\n")
+        value = self.substitute(definition)
+        if value:
+            return f"#define {name} {value}".split("\n")
+        return f"#define {name}"
 
     def _get_function_definition(self, item: Item, definition: Any) -> Lines:
         ret = self.substitute(definition["return"])

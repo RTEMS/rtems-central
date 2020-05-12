@@ -4,7 +4,7 @@ copyrights:
 enabled-by: []
 interface-brief: null
 interface-definition:
-  default: '"A"'
+  default: ""
   variants: []
 interface-description: null
 interface-name: A
