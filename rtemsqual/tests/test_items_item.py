@@ -57,6 +57,13 @@ def test_contains():
     assert "a" not in item
 
 
+def test_data():
+    data = {}
+    data["x"] = "y"
+    item = Item(EmptyCache(), "z", data)
+    assert item.data == {"x": "y"}
+
+
 def test_get_key_path():
     data = {}
     data["a"] = {"b": "c", "d": [1, 2, 3]}

@@ -224,6 +224,11 @@ class Item:
         return _is_enabled(enabled, self["enabled-by"])
 
     @property
+    def data(self) -> Any:
+        """ The item data. """
+        return self._data
+
+    @property
     def file(self) -> str:
         """ Returns the file of the item. """
         return self._data["_file"]
