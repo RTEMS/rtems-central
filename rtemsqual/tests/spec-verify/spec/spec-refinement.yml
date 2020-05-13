@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: spec-refinement
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      spec-key:
+        description: |
+          This mandatory attribute defines the specification type refinement
+          attribute key of the specification refinement.
+        spec-type: name
+      spec-value:
+        description: |
+          This mandatory attribute defines the specification type refinement
+          attribute value of the specification refinement.
+        spec-type: name
+    description: |
+      This specification type defines the specification refinement role of
+      links.
+    required-attributes: all
+spec-name: Specification Refinement Link Role
+spec-type: spec-refinement
+type: spec

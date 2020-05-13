@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: /spec/root
+spec-example: null
+spec-info:
+  int:
+    assert:
+    - and:
+      - not:
+          eq: 8
+      - eq: 8
+    - and:
+      - eq: 8
+      - ne: 8
+    - and:
+      - ge: 8
+      - le: 8
+    - and:
+      - gt: 8
+      - lt: 8
+    - and:
+      - le: 8
+      - ge: 8
+    - and:
+      - lt: 8
+      - gt: 8
+    - and:
+      - or:
+        - eq: 8
+        - ne: 8
+    - eq: 1
+    - ne: 2
+    - le: 3
+    - lt: 4
+    - ge: 5
+    - gt: 6
+spec-type: some-int
+type: spec

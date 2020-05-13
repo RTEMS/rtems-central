@@ -1,0 +1,94 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: |
+  A value of this type shall be an expression which asserts that the string of
+  the specified attribute satisfies the required constraints.
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      and:
+        description: |
+          The *and* operator evaluates to the *logical and* of the evaluation
+          results of the expressions in the list.
+        spec-type: spec-assert-str-list
+      contains:
+        description: |
+          The *contains* operator evaluates to true, if the string to check
+          converted to lower case with all white space characters converted to
+          a single space character contains a string of the list of strings of
+          this attribute, otherwise to false.
+        spec-type: list-str
+      eq:
+        description: |
+          The *eq* operator evaluates to true, if the string to check is equal
+          to the value of this attribute, otherwise to false.
+        spec-type: str
+      ge:
+        description: |
+          The *ge* operator evaluates to true, if the string to check is
+          greater than or equal to the value of this attribute, otherwise to
+          false.
+        spec-type: str
+      gt:
+        description: |
+          The *gt* operator evaluates to true, if the string to check is
+          greater than the value of this attribute, otherwise to false.
+        spec-type: str
+      in:
+        description: |
+          The *in* operator evaluates to true, if the string to check is
+          contained in the list of strings of this attribute, otherwise to
+          false.
+        spec-type: list-str
+      le:
+        description: |
+          The *le* operator evaluates to true, if the string to check is less
+          than or equal to the value of this attribute, otherwise to false.
+        spec-type: str
+      lt:
+        description: |
+          The *lt* operator evaluates to true, if the string to check is less
+          than the value of this attribute, otherwise to false.
+        spec-type: str
+      ne:
+        description: |
+          The *ne* operator evaluates to true, if the string to check is not
+          equal to the value of this attribute, otherwise to false.
+        spec-type: str
+      not:
+        description: |
+          The *not* operator evaluates to the *logical not* of the evaluation
+          results of the expression.
+        spec-type: spec-assert-str
+      or:
+        description: |
+          The *or* operator evaluates to the *logical or* of the evaluation
+          results of the expressions in the list.
+        spec-type: spec-assert-str-list
+      re:
+        description: |
+          The *re* operator evaluates to true, if the string to check matches
+          with the regular expression of this attribute, otherwise to false.
+        spec-type: str
+      uid:
+        description: |
+          The *uid* operator evaluates to true, if the string is a valid UID,
+          otherwise to false.
+        spec-type: none
+    description: |
+      Each attribute defines an operator.
+    required-attributes: exactly-one
+  list:
+    description: |
+      This list of expressions evaluates to the *logical or* of the evaluation
+      results of the expressions in the list.
+    spec-type: spec-assert-str
+spec-name: String Assert Specification
+spec-type: spec-assert-str
+type: spec

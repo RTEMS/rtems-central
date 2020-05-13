@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: /spec/root
+- role: spec-refinement
+  spec-key: type
+  spec-value: c
+  uid: /spec/root
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      any-dict:
+        spec-type: any-dict
+      bool:
+        spec-type: some-bool
+      dict:
+        spec-type: some-dict
+      float:
+        spec-type: some-float
+      int:
+        spec-type: some-int
+      list:
+        spec-type: some-list
+      must-be-true:
+        spec-type: must-be-true
+      other-int:
+        spec-type: other-int
+      str:
+        spec-type: some-str
+      str-contains:
+        spec-type: str-contains
+      uid:
+        spec-type: uid
+    required-attributes: all
+spec-type: c
+type: spec

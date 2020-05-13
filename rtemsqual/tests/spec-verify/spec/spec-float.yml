@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      assert:
+        description: |
+          This optional attribute defines the value constraints of the
+          specified floating-point value.  In case the assert attribute is not
+          present, then the value of the specified floating-point value may be
+          every valid floating-point number.
+        spec-type: spec-assert-float
+      description:
+        description: |
+          This mandatory attribute shall be the description of the specified
+          floating-point value.
+        spec-type: optional-str
+    description: |
+      This attribute set specifies a floating-point value.
+    required-attributes:
+    - description
+spec-name: Floating-Point Value Specification
+spec-type: spec-float
+type: spec

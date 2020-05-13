@@ -1,0 +1,10 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de
+dict:
+  b: null
+enabled-by: true
+links: []
+list: []
+str-contains: uvw
+type: c
