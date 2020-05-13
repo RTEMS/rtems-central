@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: []
+interface-brief: Void function brief description with very long return type.
+interface-definition:
+  default:
+    params: []
+    return: VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
+  variants: []
+interface-description: null
+interface-name: VoidFunction
+interface-params: []
+interface-return:
+  return: null
+  return-values: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: h4
+- role: interface-ingroup
+  uid: gb
+type: interface

@@ -343,12 +343,18 @@ class Node:
             ret = "static inline " + ret
         name = item["interface-name"]
         space = "" if ret.endswith("*") else " "
-        params = [self.substitute(param) for param in definition["params"]]
-        param_line = ", ".join(params)
-        line = f"{ret}{space}{name}({param_line})"
-        if len(line) > 79:
-            param_block = ",\n  ".join(params)
-            line = f"{ret}{space}{name}(\n  {param_block}\n)"
+        if definition["params"]:
+            params = [self.substitute(param) for param in definition["params"]]
+            param_line = ", ".join(params)
+            line = f"{ret}{space}{name}({param_line})"
+            if len(line) > 79:
+                line = f"{ret}{space}{name}"
+                param_block = ",\n  ".join(params)
+                line = f"{ret}{space}{name}(\n  {param_block}\n)"
+        else:
+            line = f"{ret}{space}{name}(void)"
+            if len(line) > 79:
+                line = f"{ret}\n{name}(void)"
         if "body" in definition:
             body = self.substitute("\n  ".join(
                 definition["body"].strip("\n").split("\n")))
