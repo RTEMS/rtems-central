@@ -89,6 +89,15 @@ def test_getitem():
     assert item["x"] == "y"
 
 
+def test_setitem():
+    data = {}
+    item = Item(EmptyCache(), "z", data)
+    with pytest.raises(KeyError):
+        item["a"]
+    item["a"] = "b"
+    assert item["a"] == "b"
+
+
 def test_get():
     data = {}
     data["x"] = "y"

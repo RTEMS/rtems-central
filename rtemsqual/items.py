@@ -137,6 +137,9 @@ class Item:
     def __getitem__(self, key: str) -> Any:
         return self._data[key]
 
+    def __setitem__(self, key: str, value: Any) -> None:
+        self._data[key] = value
+
     def get(self, key: str, default: Any) -> Any:
         """
         Gets the attribute value if the attribute exists, otherwise the
