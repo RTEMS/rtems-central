@@ -6,6 +6,7 @@ interface-brief: Enum C brief description.
 interface-definition-kind: typedef-and-enum
 interface-description: null
 interface-name: EnumC
+interface-notes: null
 interface-type: enum
 links:
 - role: interface-placement

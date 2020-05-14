@@ -6,6 +6,7 @@ interface-brief: Enum brief description.
 interface-definition-kind: typedef-only
 interface-description: Enum description.
 interface-name: Enum
+interface-notes: null
 interface-type: enum
 links:
 - role: interface-placement

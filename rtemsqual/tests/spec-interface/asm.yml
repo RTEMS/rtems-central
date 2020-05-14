@@ -8,6 +8,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: ASM
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

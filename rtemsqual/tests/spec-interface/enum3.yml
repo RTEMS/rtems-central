@@ -6,6 +6,7 @@ interface-brief: Enum B brief description.
 interface-definition-kind: typedef-and-enum
 interface-description: null
 interface-name: EnumB
+interface-notes: null
 interface-type: enum
 links:
 - role: interface-enumerator

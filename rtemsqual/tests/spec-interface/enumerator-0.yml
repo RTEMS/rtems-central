@@ -8,6 +8,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: ENUMERATOR_0
+interface-notes: null
 interface-type: enumerator
 links: []
 type: interface

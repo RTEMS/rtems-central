@@ -19,6 +19,7 @@ interface-definition:
       - defined(D)
 interface-description: null
 interface-name: DEFINE
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

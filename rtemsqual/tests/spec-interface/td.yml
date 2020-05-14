@@ -9,6 +9,7 @@ interface-definition:
   variants: []
 interface-description: Typedef Integer description.
 interface-name: Integer
+interface-notes: null
 interface-type: typedef
 links:
 - role: other

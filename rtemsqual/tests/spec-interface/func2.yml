@@ -19,6 +19,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: VeryLongFunction
+interface-notes: null
 interface-params:
 - description: |
     is very long parameter 0 with some super important and extra very long

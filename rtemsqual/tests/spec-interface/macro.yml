@@ -14,6 +14,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: VERY_LONG_MACRO
+interface-notes: null
 interface-params:
 - description: |
     is very long parameter 0 with some super important and extra very long

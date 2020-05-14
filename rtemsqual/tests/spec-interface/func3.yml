@@ -10,6 +10,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: VoidFunction
+interface-notes: null
 interface-params: []
 interface-return:
   return: null

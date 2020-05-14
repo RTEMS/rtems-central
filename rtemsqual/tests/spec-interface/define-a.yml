@@ -4,10 +4,11 @@ copyrights:
 enabled-by: []
 interface-brief: null
 interface-definition:
-  default: ""
+  default: ''
   variants: []
 interface-description: null
 interface-name: A
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

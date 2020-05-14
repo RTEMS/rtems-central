@@ -49,6 +49,7 @@ interface-definition:
 interface-definition-kind: struct-only
 interface-description: null
 interface-name: Struct
+interface-notes: null
 interface-type: struct
 links:
 - role: interface-placement

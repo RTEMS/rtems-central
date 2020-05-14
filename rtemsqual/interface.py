@@ -383,6 +383,7 @@ class Node:
                 self.substitute(item["interface-brief"]))
             content.add(
                 content.wrap(self.substitute(item["interface-description"])))
+            content.add(content.wrap(self.substitute(item["interface-notes"])))
             if "interface-params" in item:
                 for param in item["interface-params"]:
                     content.add(

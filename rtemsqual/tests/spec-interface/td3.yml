@@ -11,6 +11,7 @@ interface-definition:
     enabled-by: defined(RTEMS_SMP)
 interface-description: null
 interface-name: Integer3
+interface-notes: null
 interface-type: typedef
 links:
 - role: interface-placement
