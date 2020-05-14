@@ -309,6 +309,13 @@ struct Struct {
       Enum some_member_3;
     } some_struct;
   } some_union;
+
+  /**
+   * @brief Brief member 4 description.
+   *
+   * Member 4 description.
+   */
+  Enum some_member_4;
 };
 
 /**

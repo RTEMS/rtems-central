@@ -4,7 +4,7 @@ copyrights:
 enabled-by: []
 interface-brief: null
 interface-definition:
-  default:
+- default:
     brief: Brief union description.
     definition:
     - default:
@@ -38,6 +38,13 @@ interface-definition:
     description: Union description.
     kind: union
     name: some_union
+  variants: []
+- default:
+    brief: Brief member 4 description.
+    definition: ${enum:/interface-name} ${.:name}
+    description: Member 4 description.
+    kind: member
+    name: some_member_4
   variants: []
 interface-definition-kind: struct-only
 interface-description: null

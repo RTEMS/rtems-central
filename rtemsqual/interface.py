@@ -229,10 +229,13 @@ class Node:
     def generate_compound(self) -> None:
         """ Generates a compound (struct or union). """
         with self._enum_struct_or_union():
-            self.content.append(
-                _add_definition(self, self.item, "interface-definition",
-                                self.item["interface-definition"],
-                                Node._get_compound_definition))
+            index = 0
+            for definition in self.item["interface-definition"]:
+                self.content.add(
+                    _add_definition(self, self.item,
+                                    f"interface-definition[{index}]",
+                                    definition, Node._get_compound_definition))
+                index += 1
 
     def generate_enum(self) -> None:
         """ Generates an enum. """
