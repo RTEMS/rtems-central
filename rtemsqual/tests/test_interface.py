@@ -196,7 +196,7 @@ void Function(int Param0, const int *Param1, int *Param2, int *Param3);
  * @brief Very long function brief description.
  *
  * @param VeryLongParam0 is very long parameter 0 with some super important and
- *        extra very long description which makes a lot of sense.
+ *   extra very long description which makes a lot of sense.
  *
  * @param[in] VeryLongParam1 is very long parameter 1.
  *
@@ -229,7 +229,7 @@ static inline int VeryLongFunction(
  * @brief Very long macro brief description.
  *
  * @param VeryLongParam0 is very long parameter 0 with some super important and
- *        extra very long description which makes a lot of sense.
+ *   extra very long description which makes a lot of sense.
  *
  * @param[in] VeryLongParam1 is very long parameter 1.
  *

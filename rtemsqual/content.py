@@ -509,7 +509,7 @@ class CContent(Content):
         wrapper = textwrap.TextWrapper()
         wrapper.drop_whitespace = True
         wrapper.initial_indent = intro
-        wrapper.subsequent_indent = len(intro) * " "
+        wrapper.subsequent_indent = self._tab
         wrapper.width = 79 - len(self._indent)
         return wrapper.wrap(content)
 
