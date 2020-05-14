@@ -505,13 +505,19 @@ class CContent(Content):
     def wrap(self, content: Optional[str], intro: str = "") -> List[str]:
         """ Wraps a text. """
         if not content:
-            return [""]
+            return []
         wrapper = textwrap.TextWrapper()
         wrapper.drop_whitespace = True
         wrapper.initial_indent = intro
-        wrapper.subsequent_indent = self._tab
+        wrapper.subsequent_indent = self._tab if intro else ""
         wrapper.width = 79 - len(self._indent)
-        return wrapper.wrap(content)
+        lines = []
+        gap = []  # type: List[str]
+        for block in content.split("\n\n"):
+            lines.extend(gap)
+            lines.extend(wrapper.wrap(block))
+            gap = [""]
+        return lines
 
     def _open_comment_block(self, begin) -> None:
         self.add(begin)
