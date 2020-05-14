@@ -10,6 +10,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_COMPILER_PACKED_ATTRIBUTE
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

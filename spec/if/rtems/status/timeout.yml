@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+interface-brief: |
+  This status code indicates that a blocking directive timed out.
+interface-definition:
+  default: '6'
+  variants: []
+interface-description: null
+interface-name: RTEMS_TIMEOUT
+interface-notes: null
+interface-type: enumerator
+links: []
+type: interface

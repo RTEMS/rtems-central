@@ -9,6 +9,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_CONCAT
+interface-notes: null
 interface-params:
 - description: |
     is the left hand side token of the concatenation.

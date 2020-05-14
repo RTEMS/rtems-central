@@ -14,11 +14,13 @@ interface-definition:
   variants:
   - definition:
       params: []
-      return: __attribute__((__error__("RTEMS_DEQUALIFY() types differ not only by volatile and const"))) void *
+      return: __attribute__((__error__("RTEMS_DEQUALIFY() types differ not only by
+        volatile and const"))) void *
     enabled-by:
     - defined(${/if/compiler/gnuc:/interface-name})
 interface-description: null
 interface-name: RTEMS_DEQUALIFY_types_not_compatible
+interface-notes: null
 interface-params: []
 interface-return:
   return: null

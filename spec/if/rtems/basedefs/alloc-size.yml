@@ -14,6 +14,7 @@ interface-definition:
     - defined(${/if/compiler/gnuc:/interface-name})
 interface-description: null
 interface-name: RTEMS_ALLOC_SIZE
+interface-notes: null
 interface-params:
 - description: |
     is the allocation size parameter index (starting with one).

@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+interface-brief: |
+  Returns the pointer to the Classic API Configuration Table of this application.
+interface-definition:
+  default:
+    params: []
+    return: const rtems_api_configuration_table *
+  variants: []
+interface-description: null
+interface-name: rtems_configuration_get_rtems_api_configuration
+interface-notes: null
+interface-params: []
+interface-return:
+  return: null
+  return-values: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: /groups/api/config
+type: interface

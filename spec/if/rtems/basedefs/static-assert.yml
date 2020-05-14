@@ -19,6 +19,7 @@ interface-definition:
     - ${/if/compiler/stdc-version:/interface-name} >= 201112L
 interface-description: null
 interface-name: RTEMS_STATIC_ASSERT
+interface-notes: null
 interface-params:
 - description: |
     is the condition this static assertion shall satisfy.

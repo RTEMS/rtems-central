@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+group-brief: API
+group-description: |
+  This group contains defines and macros to create an application configuration
+  as well as functions to get values of the application configuration.
+group-identifier: RTEMSAPIConfig
+group-name: Configuration
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/config/header
+- role: interface-ingroup
+  uid: /groups/api
+type: interface

@@ -10,6 +10,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_ARRAY_SIZE
+interface-notes: null
 interface-params:
 - description: |
     is the name of the array.

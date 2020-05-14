@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2015, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+interface-brief: |
+  Initializes the system and starts multitasking.
+interface-definition:
+  default:
+    params: []
+    return: ${/if/rtems/basedefs/no-return:/interface-name} void
+  variants: []
+interface-description: |
+  Iterates through the system initialization linker set and invokes the
+  registered handlers.  The final step is to start multitasking.
+interface-name: rtems_initialize_executive
+interface-notes: |
+  This directive should be called by boot_card() only.
+
+  This directive does not return to the caller.  Errors in the initialization
+  sequence are usually fatal and lead to a system termination.
+interface-params: []
+interface-return:
+  return: null
+  return-values: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/init
+type: interface

@@ -12,6 +12,7 @@ interface-description: |
   not allow flexible array members.  Use the GNU extension which is also
   supported by other compilers.
 interface-name: RTEMS_ZERO_LENGTH_ARRAY
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

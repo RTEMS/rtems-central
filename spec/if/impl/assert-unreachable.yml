@@ -14,6 +14,7 @@ interface-definition:
     - defined(${/if/build-options/debug:/interface-name})
 interface-description: null
 interface-name: _Assert_Unreachable
+interface-notes: null
 interface-params: []
 interface-return:
   return: null

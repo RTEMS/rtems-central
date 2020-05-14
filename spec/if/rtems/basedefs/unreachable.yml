@@ -17,6 +17,7 @@ interface-definition:
     - defined(${/if/compiler/gnuc:/interface-name})
 interface-description: null
 interface-name: RTEMS_UNREACHABLE
+interface-notes: null
 interface-params: []
 interface-return:
   return: null

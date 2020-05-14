@@ -13,6 +13,7 @@ interface-definition:
     - defined(${/if/compiler/gnuc:/interface-name})
 interface-description: null
 interface-name: RTEMS_NO_INLINE
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

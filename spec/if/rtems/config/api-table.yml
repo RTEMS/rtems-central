@@ -1,0 +1,117 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+interface-brief: |
+  This structure contains a summary of the Classic API configuration.
+interface-definition:
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Tasks which are
+      configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_tasks
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field indicates if Classic API Notepads are enabled or disabled for
+      this application.
+    definition: ${/if/c/bool:/interface-name} notepads_enabled
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Timers which are
+      configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_timers
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Semaphores which
+      are configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_semaphores
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Message Queues
+      which are configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_message_queues
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Partitions which
+      are configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_partitions
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Regions which are
+      configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_regions
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Dual Ported Memory
+      Areas which are configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_ports
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Rate Monotonic
+      Periods which are configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_periods
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Barriers which are
+      configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} maximum_barriers
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the number of Classic API Initialization
+      Tasks which are configured for this application.
+    definition: ${/if/c/uint32_t:/interface-name} number_of_initialization_tasks
+    description: null
+    kind: member
+  variants: []
+- default:
+    brief: |
+      This field contains the pointer to Classic API Initialization Tasks Table
+      of this application.
+    definition: const rtems_initialization_tasks_table *User_initialization_tasks_table
+    description: null
+    kind: member
+  variants: []
+interface-definition-kind: typedef-only
+interface-description: |
+  Use ${get-api-configuration:/interface-name}() to get the configuration
+  table.
+interface-name: rtems_api_configuration_table
+interface-notes: null
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: /groups/api/config
+type: interface

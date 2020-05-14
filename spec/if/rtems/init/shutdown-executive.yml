@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2015, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+enabled-by: true
+interface-brief: |
+  Shuts down the RTEMS environment.
+interface-definition:
+  default:
+    params:
+    - ${/if/c/uint32_t:/interface-name} ${.:/interface-params[0]/name}
+    return: ${/if/rtems/basedefs/no-return:/interface-name} void
+  variants: []
+interface-description: |
+  The invocation of this directive results in the RTEMS environment being
+  shutdown and multitasking halted.  The system is terminated with a fatal
+  source of RTEMS_FATAL_SOURCE_EXIT and the specified result code.
+interface-name: rtems_shutdown_executive
+interface-notes: |
+  This directive does not return to the caller.
+interface-params:
+- description: is the result code.
+  dir: null
+  name: result
+interface-return:
+  return: null
+  return-values: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/init
+type: interface

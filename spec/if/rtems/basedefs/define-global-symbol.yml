@@ -18,6 +18,7 @@ interface-definition:
 interface-description: |
   This macro shall be placed at file scope.
 interface-name: RTEMS_DEFINE_GLOBAL_SYMBOL
+interface-notes: null
 interface-params:
 - description: |
     is the user defined name of the symbol.  The name shall be a valid

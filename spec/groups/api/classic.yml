@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+group-brief: API
+group-description: |
+  This group contains the Classic API groups.
+group-identifier: RTEMSAPIClassic
+group-name: Classic
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/status/header
+- role: interface-ingroup
+  uid: /groups/api
+type: interface

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+interface-brief: |
+  Returns the maximum number of Classic API Semaphores which are configured for
+  this application.
+interface-definition:
+  default:
+    params: []
+    return: ${/if/c/uint32_t:/interface-name}
+  variants: []
+interface-description: null
+interface-name: rtems_configuration_get_maximum_semaphores
+interface-notes: null
+interface-params: []
+interface-return:
+  return: null
+  return-values: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: /groups/api/config
+type: interface

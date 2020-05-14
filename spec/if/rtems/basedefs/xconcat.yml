@@ -9,6 +9,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_XCONCAT
+interface-notes: null
 interface-params:
 - description: |
     is expanded first and then used as the left hand side token of the

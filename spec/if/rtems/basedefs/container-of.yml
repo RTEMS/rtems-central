@@ -10,6 +10,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_CONTAINER_OF
+interface-notes: null
 interface-params:
 - description: |
     is the pointer to a member of the container.

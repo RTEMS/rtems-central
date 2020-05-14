@@ -18,6 +18,7 @@ interface-definition:
     - defined(${/if/compiler/gnuc:/interface-name})
 interface-description: null
 interface-name: RTEMS_HAVE_MEMBER_SAME_TYPE
+interface-notes: null
 interface-params:
 - description: |
     is the left hand side type.

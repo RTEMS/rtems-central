@@ -9,6 +9,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_XSTRING
+interface-notes: null
 interface-params:
 - description: |
     is the token expand and stringify.

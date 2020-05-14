@@ -24,6 +24,7 @@ interface-definition:
     - defined(${/if/compiler/gnuc:/interface-name})
 interface-description: null
 interface-name: RTEMS_DEQUALIFY_DEPTHX
+interface-notes: null
 interface-params:
 - description: |
     is the pointer indirection level expressed in *.

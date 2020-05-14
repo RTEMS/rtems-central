@@ -16,6 +16,7 @@ interface-description: |
   Use this attribute for function definitions.  Do not use it for function
   declarations.
 interface-name: RTEMS_WEAK
+interface-notes: null
 interface-type: define
 links:
 - role: interface-placement

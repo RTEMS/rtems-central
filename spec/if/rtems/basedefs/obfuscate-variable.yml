@@ -16,6 +16,7 @@ interface-definition:
 interface-description: |
   The variable must be simple enough to fit into a register.
 interface-name: RTEMS_OBFUSCATE_VARIABLE
+interface-notes: null
 interface-params:
 - description: |
     is the variable to obfuscate.

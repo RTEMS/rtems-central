@@ -11,6 +11,7 @@ interface-definition:
   variants: []
 interface-description: null
 interface-name: RTEMS_DECONST
+interface-notes: null
 interface-params:
 - description: |
     is the target type of the cast.

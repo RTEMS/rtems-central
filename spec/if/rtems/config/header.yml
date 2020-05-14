@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+interface-domain: rtems
+interface-path: rtems/config.h
+interface-prefix: cpukit/include
+interface-type: header-file
+links:
+- enabled-by: RTEMS_MULTIPROCESSING
+  role: interface-include
+  uid: /if/impl/mpci/header
+- enabled-by: RTEMS_MULTIPROCESSING
+  role: interface-include
+  uid: /if/rtems/types/header
+type: interface

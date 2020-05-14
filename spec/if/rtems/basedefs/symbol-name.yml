@@ -14,6 +14,7 @@ interface-definition:
     - defined(${/if/compiler/user-label-prefix:/interface-name})
 interface-description: null
 interface-name: RTEMS_SYMBOL_NAME
+interface-notes: null
 interface-params:
 - description: |
     is the user defined name of the symbol.  The name shall be a valid
