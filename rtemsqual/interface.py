@@ -147,27 +147,6 @@ def _add_definition(node: "Node", item: Item, prefix: str,
     return content
 
 
-def _get_description(item: Item, ingroups: ItemMap) -> CContent:
-    content = CContent()
-    with content.doxygen_block():
-        content.add_ingroup(_get_group_identifiers(ingroups))
-        content.add_brief_description(item["interface-brief"])
-        content.add(content.wrap(item["interface-description"]))
-        if "interface-params" in item:
-            for param in item["interface-params"]:
-                content.add(
-                    content.wrap(param["name"] + " " + param["description"],
-                                 intro=_PARAM[param["dir"]]))
-        if "interface-return" in item:
-            ret = item["interface-return"]
-            for retval in ret["return-values"]:
-                val = retval["value"]
-                intro = f"@retval {val} "
-                content.add(content.wrap(retval["description"], intro=intro))
-            content.add(content.wrap(ret["return"], intro="@return "))
-    return content
-
-
 _PARAM = {
     None: "@param ",
     "in": "@param[in] ",
@@ -193,7 +172,7 @@ class Node:
 
     @contextmanager
     def _enum_struct_or_union(self) -> Iterator[None]:
-        self.content.add(_get_description(self.item, self.ingroups))
+        self.content.add(self._get_description(self.item, self.ingroups))
         name = self.item["interface-name"]
         typename = self.item["interface-type"]
         kind = self.item["interface-definition-kind"]
@@ -244,7 +223,7 @@ class Node:
             for link in self.item.links_to_parents():
                 if link.role != "interface-enumerator":
                     continue
-                enumerator = _get_description(link.item, {})
+                enumerator = self._get_description(link.item, {})
                 enumerator.append(
                     _add_definition(self, link.item, "interface-definition",
                                     link.item["interface-definition"],
@@ -301,13 +280,16 @@ class Node:
         """
         Performs a variable substitution using the item mapper of the node.
         """
-        return self.mapper.substitute(text.strip("\n"))
+        if text:
+            return self.mapper.substitute(text.strip("\n"))
+        return text
 
     def _get_compound_definition(self, item: Item, definition: Any) -> Lines:
         content = CContent()
         with content.doxygen_block():
-            content.add_brief_description(definition["brief"])
-            content.add(content.wrap(definition["description"]))
+            content.add_brief_description(self.substitute(definition["brief"]))
+            content.add(
+                content.wrap(self.substitute(definition["description"])))
         kind = definition["kind"]
         if kind == "member":
             member = self.substitute(definition["definition"]) + ";"
@@ -393,8 +375,33 @@ class Node:
     def _get_variable_definition(self, _item: Item, definition: Any) -> Lines:
         return f"extern {self.substitute(definition)};"
 
+    def _get_description(self, item: Item, ingroups: ItemMap) -> CContent:
+        content = CContent()
+        with content.doxygen_block():
+            content.add_ingroup(_get_group_identifiers(ingroups))
+            content.add_brief_description(
+                self.substitute(item["interface-brief"]))
+            content.add(
+                content.wrap(self.substitute(item["interface-description"])))
+            if "interface-params" in item:
+                for param in item["interface-params"]:
+                    content.add(
+                        content.wrap(param["name"] + " " +
+                                     self.substitute(param["description"]),
+                                     intro=_PARAM[param["dir"]]))
+            if "interface-return" in item:
+                ret = item["interface-return"]
+                for retval in ret["return-values"]:
+                    val = retval["value"]
+                    intro = f"@retval {val} "
+                    content.add(
+                        content.wrap(self.substitute(retval["description"]),
+                                     intro=intro))
+                content.add(content.wrap(ret["return"], intro="@return "))
+        return content
+
     def _add_generic_definition(self, get_lines: GetLines) -> None:
-        self.content.add(_get_description(self.item, self.ingroups))
+        self.content.add(self._get_description(self.item, self.ingroups))
         self.content.append(
             _add_definition(self, self.item, "interface-definition",
                             self.item["interface-definition"], get_lines))
