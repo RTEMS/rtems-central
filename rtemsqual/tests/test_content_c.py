@@ -81,6 +81,38 @@ def test_add_includes():
     assert str(content) == """#include <i/j/k>
 #include <i/l/k>
 """
+    content = CContent()
+    content.add_includes([CInclude("a", "X"), CInclude("a")])
+    assert str(content) == """#if X
+  #include <a>
+#endif
+"""
+    content = CContent()
+    content.add_includes([CInclude("a"), CInclude("a", "X")])
+    assert str(content) == """#if X
+  #include <a>
+#endif
+"""
+    content = CContent()
+    content.add_includes([CInclude("a", "X"), CInclude("b", "X")])
+    assert str(content) == """#if X
+  #include <a>
+  #include <b>
+#endif
+"""
+    content = CContent()
+    content.add_includes(
+        [CInclude("a", "Y"),
+         CInclude("a", "X"),
+         CInclude("b", "X")])
+    assert str(content) == """#if X
+  #include <b>
+#endif
+
+#if X && Y
+  #include <a>
+#endif
+"""
 
 
 def test_comment_block():

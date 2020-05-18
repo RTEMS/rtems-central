@@ -313,12 +313,12 @@ class SphinxContent(Content):
         name = name.strip()
         self.add([name, _HEADER_LEVELS[level] * len(name)])
 
-    def add_header_with_ref(self, title, level) -> str:
-        """ Adds a header with reference. """
-        section_ref = "Section" + _to_camel_case(title.strip())
-        self.add_label(section_ref)
-        self.add_header(title, level)
-        return section_ref
+    def add_header_with_label(self, name, level=2) -> str:
+        """ Adds a header with label. """
+        label = "Section" + _to_camel_case(name.strip())
+        self.add_label(label)
+        self.add_header(name, level)
+        return label
 
     def add_index_entries(self, entries) -> None:
         """ Adds a list of index entries the content. """
@@ -335,19 +335,18 @@ class SphinxContent(Content):
 
         self.add(lines, _definition_item_context)
 
-    def push_directive(self,
+    def open_directive(self,
                        name: str,
                        value: Optional[str] = None,
                        options: Optional[List[str]] = None) -> None:
-        """ Pushes a directive. """
-        self.add(".. " + name.strip() + "::")
-        if value:
-            self.lines[-1] += " " + value
+        """ Opens a directive. """
+        value = " " + value if value else ""
+        self.add(f".. {name.strip()}::{value}")
         self.push_indent()
         self.add(options)
 
-    def pop_directive(self) -> None:
-        """ Pops a directive. """
+    def close_directive(self) -> None:
+        """ Closes a directive. """
         self.pop_indent()
 
     @contextmanager
@@ -356,9 +355,9 @@ class SphinxContent(Content):
                   value: Optional[str] = None,
                   options: Optional[List[str]] = None):
         """ Opens a directive context. """
-        self.push_directive(name, value, options)
+        self.open_directive(name, value, options)
         yield
-        self.pop_directive()
+        self.close_directive()
 
     def add_licence_and_copyrights(self) -> None:
         """

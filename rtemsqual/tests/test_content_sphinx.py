@@ -73,15 +73,17 @@ yz
 """
 
 
-def test_add_header_with_ref():
+def test_add_header_with_label():
     sc = SphinxContent()
-    sc.add_header_with_ref("x", 1)
+    label = sc.add_header_with_label("x", 1)
+    assert label == "SectionX"
     assert str(sc) == """.. _SectionX:
 
 x
 *
 """
-    sc.add_header_with_ref("yz w", 2)
+    label = sc.add_header_with_label("yz w", 2)
+    assert label == "SectionYzW"
     assert str(sc) == """.. _SectionX:
 
 x
