@@ -50,7 +50,7 @@ def _gather_glossary_terms(item: Item, glossary_terms: ItemMap) -> None:
 
 def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     content = SphinxContent()
-    content.add_header("Glossary", level="*")
+    content.add_header("Glossary", level=1)
     content.add(".. glossary::")
     with content.indent():
         content.add(":sorted:")

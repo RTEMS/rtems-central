@@ -191,14 +191,14 @@ def _generate_notes(content: SphinxContent, notes: Optional[str]) -> None:
 def _generate_file(group: Item, options: ItemMap, target: str) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
-    content.add_header(group["appl-config-group-name"], level="=")
+    content.add_header(group["appl-config-group-name"], level=2)
     content.add(group["appl-config-group-description"])
     for item in sorted(options.values(), key=lambda x: x.uid):
         name = item["appl-config-option-name"]
         content.register_license_and_copyrights_of_item(item)
         content.add_index_entries([name] + item["appl-config-option-index"])
         content.add_label(name)
-        content.add_header(name, level="-")
+        content.add_header(name, level=3)
         content.add_definition_item("CONSTANT:", f"``{name}``")
         option_type = item["appl-config-option-type"]
         content.add_definition_item("OPTION TYPE:", _OPTION_TYPES[option_type])

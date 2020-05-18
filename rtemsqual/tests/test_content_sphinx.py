@@ -38,11 +38,59 @@ def test_add_label():
 """
 
 
+def test_directive():
+    sc = SphinxContent()
+    with sc.directive("x"):
+        sc.add("y")
+        assert str(sc) == """.. x::
+    y
+"""
+    with sc.directive("z", "xy", [":a:", ":b:"]):
+        sc.add("c")
+        assert str(sc) == """.. x::
+    y
+
+.. z:: xy
+    :a:
+    :b:
+
+    c
+"""
+
+
 def test_add_header():
     sc = SphinxContent()
     sc.add_header("x")
     assert str(sc) == """x
 =
+"""
+    sc.add_header("yz", 1)
+    assert str(sc) == """x
+=
+
+yz
+**
+"""
+
+
+def test_add_header_with_ref():
+    sc = SphinxContent()
+    sc.add_header_with_ref("x", 1)
+    assert str(sc) == """.. _SectionX:
+
+x
+*
+"""
+    sc.add_header_with_ref("yz w", 2)
+    assert str(sc) == """.. _SectionX:
+
+x
+*
+
+.. _SectionYzW:
+
+yz w
+====
 """
 
 
