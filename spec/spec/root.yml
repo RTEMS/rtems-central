@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      SPDX-License-Identifier:
+        description: |
+          This mandatory attribute defines the license of this item.
+        spec-type: spdx-license-identifier
+      copyrights:
+        description: |
+          This mandatory attribute defines the copyright holders and copyright
+          information of this item.
+        spec-type: copyrights
+      enabled-by:
+        description: |
+          This mandatory attribute defines the conditions under which this item
+          is enabled.
+        spec-type: enabled-by
+      links:
+        description: |
+          This mandatory attribute defines the links of this items to other
+          items.
+        spec-type: links
+      type:
+        description: |
+          This mandatory attribute defines the type of this item.
+        spec-type: name
+    description: |
+      This is the root specification item type.
+    required-attributes: all
+spec-name: Root Item Type
+spec-type: root
+type: spec

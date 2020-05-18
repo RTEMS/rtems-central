@@ -1,0 +1,71 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: |
+  A value of this type shall be an expression which asserts that the
+  floating-point value of the specified attribute satisfies the required
+  constraints.
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      and:
+        description: |
+          The *and* operator evaluates to the *logical and* of the evaluation
+          results of the expressions in the list.
+        spec-type: spec-assert-float-list
+      eq:
+        description: |
+          The *eq* operator evaluates to true, if the value to check is equal
+          to the value of this attribute, otherwise to false.
+        spec-type: float
+      ge:
+        description: |
+          The *ge* operator evaluates to true, if the value to check is greater
+          than or equal to the value of this attribute, otherwise to false.
+        spec-type: float
+      gt:
+        description: |
+          The *gt* operator evaluates to true, if the value to check is greater
+          than the value of this attribute, otherwise to false.
+        spec-type: float
+      le:
+        description: |
+          The *le* operator evaluates to true, if the value to check is less
+          than or equal to the value of this attribute, otherwise to false.
+        spec-type: float
+      lt:
+        description: |
+          The *lt* operator evaluates to true, if the value to check is less
+          than the value of this attribute, otherwise to false.
+        spec-type: float
+      ne:
+        description: |
+          The *ne* operator evaluates to true, if the value to check is not
+          equal to the value of this attribute, otherwise to false.
+        spec-type: float
+      not:
+        description: |
+          The *not* operator evaluates to the *logical not* of the evaluation
+          results of the expression.
+        spec-type: spec-assert-float
+      or:
+        description: |
+          The *or* operator evaluates to the *logical or* of the evaluation
+          results of the expressions in the list.
+        spec-type: spec-assert-float-list
+    description: |
+      Each attribute defines an operator.
+    required-attributes: exactly-one
+  list:
+    description: |
+      This list of expressions evaluates to the *logical or* of the evaluation
+      results of the expressions in the list.
+    spec-type: spec-assert-float
+spec-name: Floating-Point Assert Specification
+spec-type: spec-assert-float
+type: spec

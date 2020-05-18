@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      description:
+        description: |
+          This mandatory attribute shall be the description of the generic
+          attributes.
+        spec-type: optional-str
+      spec-type:
+        description: |
+          This mandatory attribute defines the specification type of the
+          generic attribute values.
+        spec-type: name
+    description: |
+      This set of attributes specifies generic attributes.  Generic attributes
+      are attributes which are not explicitly defined.  They are restricted to
+      a uniform attribute value type.
+    required-attributes: all
+spec-name: Generic Attributes Specification
+spec-type: spec-generic-attributes
+type: spec
