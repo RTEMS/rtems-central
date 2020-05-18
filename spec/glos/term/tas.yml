@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 glossary-term: TAS
 glossary-type: term
 links:

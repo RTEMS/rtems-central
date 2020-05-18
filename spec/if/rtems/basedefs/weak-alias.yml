@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Instructs the compiler to generate a weak alias to the specified target
   function.
 interface-definition:
-  default: ""
+  default: ''
   variants:
   - definition: |
       __attribute__((__weak__, __alias__(#_target)))

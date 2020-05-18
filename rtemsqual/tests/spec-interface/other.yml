@@ -1,5 +1,5 @@
 comment: Some comment.
-enabled-by: []
+enabled-by: true
 links:
 - role: other
   uid: h

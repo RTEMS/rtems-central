@@ -573,7 +573,7 @@ def _split_includes(
     includes_unconditional = set()  # type: Set[str]
     includes_enabled_by = {}  # type: Dict[str, Set[str]]
     for inc in set(includes):
-        if inc.enabled_by:
+        if inc.enabled_by and inc.enabled_by != "1":
             try:
                 includes_unconditional.remove(inc.path)
             except KeyError:
@@ -761,7 +761,12 @@ class ExpressionMapper:
     """ Maps symbols and operations to form a C expression. """
 
     # pylint: disable=no-self-use
-    def map(self, symbol: str) -> str:
+    def map_bool(self, value: bool) -> str:
+        """ Maps a boolean value to build an expression. """
+        return str(int(value))
+
+    # pylint: disable=no-self-use
+    def map_symbol(self, symbol: str) -> str:
         """ Maps a symbol to build an expression. """
         return f"defined({symbol})"
 
@@ -782,7 +787,11 @@ class PythonExpressionMapper(ExpressionMapper):
     """ Maps symbols and operations to form a Python expression. """
 
     # pylint: disable=no-self-use
-    def map(self, symbol: str) -> str:
+    def map_bool(self, value: bool) -> str:
+        return str(value)
+
+    # pylint: disable=no-self-use
+    def map_symbol(self, symbol: str) -> str:
         return symbol
 
     def op_and(self) -> str:
@@ -826,6 +835,8 @@ _TO_EXPRESSION_OP = {
 
 
 def _to_expression(enabled_by: Any, mapper: ExpressionMapper) -> str:
+    if isinstance(enabled_by, bool):
+        return mapper.map_bool(enabled_by)
     if isinstance(enabled_by, list):
         return _to_expression_op_or(enabled_by, mapper)
     if isinstance(enabled_by, dict):
@@ -833,7 +844,7 @@ def _to_expression(enabled_by: Any, mapper: ExpressionMapper) -> str:
             key = next(iter(enabled_by))
             return _TO_EXPRESSION_OP[key](enabled_by[key], mapper)
         raise ValueError
-    return mapper.map(enabled_by)
+    return mapper.map_symbol(enabled_by)
 
 
 def enabled_by_to_exp(enabled_by: Any, mapper: ExpressionMapper) -> str:

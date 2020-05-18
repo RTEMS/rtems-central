@@ -9,7 +9,7 @@ appl-config-option-notes: null
 appl-config-option-type: feature-enable
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-type: appl-config-option
 links:
 - role: null

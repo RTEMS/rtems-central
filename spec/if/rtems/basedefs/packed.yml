@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Instructs the compiler in a type definition to place members of a structure
   or union so that the memory required is minimized.
 interface-definition:
-  default: ""
+  default: ''
   variants:
   - definition: |
       __attribute__((__packed__))

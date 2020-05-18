@@ -1,5 +1,5 @@
 build-type: test-program
-enabled-by: []
+enabled-by: true
 links: []
 source:
 - tc12.c

@@ -94,7 +94,7 @@ class _InterfaceExpressionMapper(ExpressionMapper):
         super().__init__()
         self._mapper = mapper
 
-    def map(self, symbol: str) -> str:
+    def map_symbol(self, symbol: str) -> str:
         return self._mapper.substitute(symbol)
 
 
@@ -103,7 +103,7 @@ class _ItemLevelExpressionMapper(ExpressionMapper):
         super().__init__()
         self._mapper = mapper
 
-    def map(self, symbol: str) -> str:
+    def map_symbol(self, symbol: str) -> str:
         return self._mapper.substitute(
             self._mapper.enabled_by_to_defined(symbol))
 
@@ -114,7 +114,7 @@ class _HeaderExpressionMapper(ExpressionMapper):
         self._mapper = ItemMapper(item)
         self._enabled_by_defined = enabled_by_defined
 
-    def map(self, symbol: str) -> str:
+    def map_symbol(self, symbol: str) -> str:
         return self._mapper.substitute(self._enabled_by_defined[symbol])
 
 
@@ -196,7 +196,7 @@ class Node:
     def generate(self) -> None:
         """ Generates a node to generate the node content. """
         enabled_by = self.item["enabled-by"]
-        if enabled_by:
+        if not isinstance(enabled_by, bool) or not enabled_by:
             mapper = _ItemLevelExpressionMapper(self.mapper)
             self.content.add(f"#if {enabled_by_to_exp(enabled_by, mapper)}")
             with self.content.indent():

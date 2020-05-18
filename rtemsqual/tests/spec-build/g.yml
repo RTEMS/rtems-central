@@ -1,5 +1,5 @@
 build-type: group
-enabled-by: []
+enabled-by: true
 install:
 - source:
   - ghi

@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 includes:
 - rtems.h
 - rtems/bspIo.h
@@ -10,6 +10,9 @@ includes:
 links: []
 local-includes: []
 source: testsuites/validation/ts-space-profile.c
+test-suite-brief: |
+  This test suite contains test cases which call in combination all functions
+  included in the space profile.
 test-suite-code: |
   #define NAME rtems_build_name('N', 'A', 'M', 'E')
 
@@ -150,9 +153,6 @@ test-suite-code: |
   #define CONFIGURE_INIT
 
   #include <rtems/confdefs.h>
-test-suite-brief: |
-  This test suite contains test cases which call in combination all functions
-  included in the space profile.
 test-suite-description: null
 test-suite-name: Space Profile
 type: test-suite

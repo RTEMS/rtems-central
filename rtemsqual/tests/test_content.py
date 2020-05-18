@@ -184,6 +184,8 @@ def to_c_exp(enabled_by):
 
 
 def test_enabled_by_to_exp():
+    assert to_c_exp(True) == "1"
+    assert to_c_exp(False) == "0"
     assert to_c_exp([]) == ""
     assert to_c_exp(["A"]) == "defined(A)"
     assert to_c_exp(["B"]) == "defined(B)"
@@ -221,6 +223,8 @@ def to_python_exp(enabled_by):
 
 
 def test_enabled_by_to_python_exp():
+    assert to_python_exp(True) == "True"
+    assert to_python_exp(False) == "False"
     assert to_python_exp([]) == ""
     assert to_python_exp(["A"]) == "A"
     assert to_python_exp(["B"]) == "B"

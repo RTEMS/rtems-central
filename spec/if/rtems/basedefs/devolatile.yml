@@ -2,13 +2,12 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2014 Paval Pisa
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Performs a type cast which removes volatile qualifiers without warnings to
   the specified type for the specified pointer variable.
 interface-definition:
-  default:
-    ${dequalify-depthx:/interface-name}(*, _type, _var)
+  default: ${dequalify-depthx:/interface-name}(*, _type, _var)
   variants: []
 interface-description: null
 interface-name: RTEMS_DEVOLATILE

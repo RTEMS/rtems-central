@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2014 Paval Pisa
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Returns the type of a pointer reference of the specified level to the specified type.
 interface-definition:
-  default: ""
+  default: ''
   variants:
   - definition: |
       ${/if/compiler/typeof:/interface-name}(_level(union { int z; ${/if/compiler/typeof:/interface-name}(_target) x; }){0}.x)

@@ -4,7 +4,7 @@ appl-config-group-description: |
 appl-config-group-name: Event Recording Configuration
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-type: appl-config-group
 links:
 - role: null

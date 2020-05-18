@@ -44,10 +44,6 @@ def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
     return True
 
 
-def _is_enabled_op_false(_enabled: List[str], _enabled_by: Any) -> bool:
-    return False
-
-
 def _is_enabled_op_not(enabled: List[str], enabled_by: Any) -> bool:
     return not _is_enabled(enabled, enabled_by)
 
@@ -67,17 +63,14 @@ _IS_ENABLED_OP = {
 
 
 def _is_enabled(enabled: List[str], enabled_by: Any) -> bool:
-    if enabled_by:
-        if isinstance(enabled_by, list):
-            return _is_enabled_op_or(enabled, enabled_by)
-        if isinstance(enabled_by, dict):
-            if len(enabled_by) == 1:
-                key = next(iter(enabled_by))
-                return _IS_ENABLED_OP.get(key, _is_enabled_op_false)(
-                    enabled, enabled_by[key])
-            return False
-        return enabled_by in enabled
-    return True
+    if isinstance(enabled_by, bool):
+        return enabled_by
+    if isinstance(enabled_by, list):
+        return _is_enabled_op_or(enabled, enabled_by)
+    if isinstance(enabled_by, dict):
+        key, value = next(iter(enabled_by.items()))
+        return _IS_ENABLED_OP[key](enabled, value)
+    return enabled_by in enabled
 
 
 def _str_representer(dumper, data):

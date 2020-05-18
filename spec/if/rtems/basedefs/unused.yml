@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2013 On-Line Applications Research Corporation (OAR)
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Tells the compiler that a specific variable or function is deliberately
   unused.
 interface-definition:
-  default: ""
+  default: ''
   variants:
   - definition: |
       __attribute__((__unused__))

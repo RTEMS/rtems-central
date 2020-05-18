@@ -21,7 +21,7 @@ appl-config-option-notes: |
 appl-config-option-type: initializer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: []
+enabled-by: true
 interface-type: appl-config-option
 links:
 - role: null

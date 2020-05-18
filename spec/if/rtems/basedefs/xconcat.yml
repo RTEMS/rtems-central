@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Concatenates expansion of _x and expansion of _y.
 interface-definition:

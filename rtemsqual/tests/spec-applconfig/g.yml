@@ -3,7 +3,7 @@ appl-config-group-description: description
 appl-config-group-name: group name
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-type: appl-config-group
 links: []
 type: interface

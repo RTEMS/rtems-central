@@ -1,4 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+includes:
+- rtems.h
+links: []
+local-includes: []
+source: testsuites/validation/tc-space-profile.c
 test-case-actions:
 - action: |
     id = 0xffffffff;
@@ -75,12 +83,4 @@ test-case-prologue: |
   rtems_id id2;
   uint32_t released;
 test-case-support: null
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
-includes:
-- rtems.h
-links: []
-local-includes: []
-source: testsuites/validation/tc-space-profile.c
 type: test-case

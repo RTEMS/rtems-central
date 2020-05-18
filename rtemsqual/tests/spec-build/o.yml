@@ -1,5 +1,5 @@
 build-type: objects
-enabled-by: []
+enabled-by: true
 install:
 - source:
   - jkl

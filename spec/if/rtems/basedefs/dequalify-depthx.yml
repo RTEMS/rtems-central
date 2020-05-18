@@ -2,16 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2014 Paval Pisa
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Performs a type cast which removes qualifiers without warnings to the
   specified type for the specified variable.
 interface-definition:
-  default:
-    ((_type)(${/if/c/uintptr_t:/interface-name})(const volatile void *)(_var))
+  default: ((_type)(${/if/c/uintptr_t:/interface-name})(const volatile void *)(_var))
   variants:
   - definition: |
-     (const_cast<_type>(_var))
+      (const_cast<_type>(_var))
     enabled-by:
     - defined(${/if/compiler/cplusplus:/interface-name})
   - definition: |

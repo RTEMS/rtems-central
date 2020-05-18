@@ -126,8 +126,9 @@ def _is_enabled(enabled, enabled_by):
 
 
 def test_is_enabled():
-    assert _is_enabled([], None)
-    assert _is_enabled([], [])
+    assert _is_enabled([], True)
+    assert not _is_enabled([], False)
+    assert not _is_enabled([], [])
     assert not _is_enabled([], ["A"])
     assert _is_enabled(["A"], "A")
     assert not _is_enabled(["B"], "A")
@@ -143,8 +144,8 @@ def test_is_enabled():
     assert _is_enabled(["A", "B", "C"], {"and": ["A", "B"]})
     assert _is_enabled(["A", "B"], {"and": ["A", "B", {"not": "C"}]})
     assert not _is_enabled(["A", "B", "C"], {"and": ["A", "B", {"not": "C"}]})
-    assert not _is_enabled(["A"], {"and": "A", "x": "y"})
-    assert not _is_enabled(["A"], {"x": "A"})
+    with pytest.raises(KeyError):
+        _is_enabled(["A"], {"x": "A"})
     assert _is_enabled([], {"not": {"and": ["A", {"not": "A"}]}})
 
 

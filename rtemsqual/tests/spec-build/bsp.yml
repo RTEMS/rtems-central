@@ -1,7 +1,7 @@
 arch: foo
 bsp: bar
 build-type: bsp
-enabled-by: []
+enabled-by: true
 install:
 - source:
   - abc

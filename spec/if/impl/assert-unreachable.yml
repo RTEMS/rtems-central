@@ -1,8 +1,7 @@
-
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Asserts that this program point is unreachable.
 interface-definition:

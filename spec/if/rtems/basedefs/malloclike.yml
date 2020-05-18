@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: []
+enabled-by: true
 interface-brief: |
   Tells the compiler in a declaration that this function is a memory allocation
   function similar to malloc().
 interface-definition:
-  default: ""
+  default: ''
   variants:
   - definition: |
       __attribute__((__malloc__))
