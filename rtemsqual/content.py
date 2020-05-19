@@ -156,7 +156,7 @@ def _add_context(_content: "Content") -> Iterator[None]:
     yield
 
 
-_HEADER_LEVELS = ["#", "*", "=", "-", "^", '\"']
+_HEADER_LEVELS = ["#", "*", "=", "-", "^", "\""]
 
 
 class Content:
@@ -300,9 +300,10 @@ class Content:
 
 class SphinxContent(Content):
     """ This class builds Sphinx content. """
-    def __init__(self):
+    def __init__(self, section_level: int = 2):
         super().__init__("CC-BY-SA-4.0", True)
         self._tab = "    "
+        self._section_level = section_level
 
     def add_label(self, label: str) -> None:
         """ Adds a label. """
@@ -363,6 +364,22 @@ class SphinxContent(Content):
         self.open_directive(name, value, options)
         yield
         self.close_directive()
+
+    def open_section(self, name: str) -> str:
+        """ Opens a section. """
+        label = self.add_header_with_label(name, self._section_level)
+        self._section_level += 1
+        return label
+
+    def close_section(self) -> None:
+        """ Closes a section. """
+        self._section_level -= 1
+
+    @contextmanager
+    def section(self, name: str) -> Iterator[str]:
+        """ Opens a section context. """
+        yield self.open_section(name)
+        self.close_section()
 
     def add_licence_and_copyrights(self) -> None:
         """

@@ -96,6 +96,28 @@ yz w
 """
 
 
+def test_section():
+    content = SphinxContent()
+    with content.section("ab cd") as label:
+        content.add(label)
+        with content.section("ef gh") as label2:
+            content.add(label2)
+    assert str(content) == """.. _SectionAbCd:
+
+ab cd
+=====
+
+SectionAbCd
+
+.. _SectionEfGh:
+
+ef gh
+-----
+
+SectionEfGh
+"""
+
+
 def test_append():
     sc = SphinxContent()
     sc.append("x")
