@@ -308,6 +308,11 @@ class SphinxContent(Content):
         """ Adds a label. """
         self.add(".. _" + label.strip() + ":")
 
+    def get_section_label(self, name: str) -> str:
+        """ Returns the section label for the specified section name. """
+        # pylint: disable=no-self-use
+        return "Section" + _to_camel_case(name.strip())
+
     def add_header(self, name, level=2) -> None:
         """ Adds a header. """
         name = name.strip()
@@ -315,7 +320,7 @@ class SphinxContent(Content):
 
     def add_header_with_label(self, name, level=2) -> str:
         """ Adds a header with label. """
-        label = "Section" + _to_camel_case(name.strip())
+        label = self.get_section_label(name)
         self.add_label(label)
         self.add_header(name, level)
         return label
