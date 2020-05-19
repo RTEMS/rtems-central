@@ -217,6 +217,23 @@ class Content:
                 break
             index += 1
 
+    def wrap(self, content: Optional[str], intro: str = "") -> List[str]:
+        """ Wraps a text. """
+        if not content:
+            return []
+        wrapper = textwrap.TextWrapper()
+        wrapper.drop_whitespace = True
+        wrapper.initial_indent = intro
+        wrapper.subsequent_indent = self._tab if intro else ""
+        wrapper.width = 79 - len(self._indent)
+        lines = []
+        gap = []  # type: List[str]
+        for block in content.split("\n\n"):
+            lines.extend(gap)
+            lines.extend(wrapper.wrap(block))
+            gap = [""]
+        return lines
+
     @property
     def gap(self) -> bool:
         """
@@ -530,23 +547,6 @@ class CContent(Content):
         includes_unconditional, includes_enabled_by = _split_includes(includes)
         self._add_includes(includes_unconditional, local)
         self._add_includes_enabled_by(includes_enabled_by, local)
-
-    def wrap(self, content: Optional[str], intro: str = "") -> List[str]:
-        """ Wraps a text. """
-        if not content:
-            return []
-        wrapper = textwrap.TextWrapper()
-        wrapper.drop_whitespace = True
-        wrapper.initial_indent = intro
-        wrapper.subsequent_indent = self._tab if intro else ""
-        wrapper.width = 79 - len(self._indent)
-        lines = []
-        gap = []  # type: List[str]
-        for block in content.split("\n\n"):
-            lines.extend(gap)
-            lines.extend(wrapper.wrap(block))
-            gap = [""]
-        return lines
 
     def _open_comment_block(self, begin) -> None:
         self.add(begin)
