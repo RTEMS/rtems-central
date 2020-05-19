@@ -228,7 +228,7 @@ class Content:
         wrapper.width = 79 - len(self._indent)
         lines = []
         gap = []  # type: List[str]
-        for block in content.split("\n\n"):
+        for block in content.strip().split("\n\n"):
             lines.extend(gap)
             lines.extend(wrapper.wrap(block))
             gap = [""]
