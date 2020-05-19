@@ -305,6 +305,13 @@ class SphinxContent(Content):
         self._tab = "    "
         self._section_level = section_level
 
+    def get_reference(self, label: str, name: Optional[str] = None) -> str:
+        """ Returns the reference to the specified label. """
+        # pylint: disable=no-self-use
+        if name:
+            return f":ref:`{name} <{label}>`"
+        return f":ref:`{label}`"
+
     def add_label(self, label: str) -> None:
         """ Adds a label. """
         self.add(".. _" + label.strip() + ":")

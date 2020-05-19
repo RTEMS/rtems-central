@@ -96,6 +96,12 @@ yz w
 """
 
 
+def test_get_reference():
+    content = SphinxContent()
+    assert content.get_reference("a") == ":ref:`a`"
+    assert content.get_reference("a", "b") == ":ref:`b <a>`"
+
+
 def test_section():
     content = SphinxContent()
     with content.section("ab cd") as label:
