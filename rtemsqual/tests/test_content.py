@@ -31,6 +31,11 @@ from rtemsqual.content import Content, enabled_by_to_exp, \
     ExpressionMapper, PythonExpressionMapper
 
 
+def test_tab():
+    content = Content("BSD-2-Clause", True)
+    assert content.tab == "  "
+
+
 def test_append():
     content = Content("BSD-2-Clause", True)
     content.append("")
@@ -84,6 +89,32 @@ def test_add():
 b
 c
 """
+
+
+def test_wrap():
+    content = Content("BSD-2-Clause", True)
+    content.wrap("")
+    assert str(content) == ""
+    content.wrap("a")
+    assert str(content) == """a
+"""
+    content.wrap(["b", "c"])
+    assert str(content) == """a
+
+b c
+"""
+    content.wrap(content)
+    assert str(content) == """a
+
+b c
+
+a
+
+b c
+"""
+    content = Content("BSD-2-Clause", True)
+    content.wrap("\n")
+    assert str(content) == ""
 
 
 def test_add_blank_line():

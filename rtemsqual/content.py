@@ -183,6 +183,11 @@ class Content:
         """ The lines. """
         return self._lines
 
+    @property
+    def tab(self) -> str:
+        """ The tabulator. """
+        return self._tab
+
     def append(self, content: GenericContent) -> None:
         """ Appends the content. """
         self._lines.extend(
@@ -206,10 +211,7 @@ class Content:
         index = 0
         for line in lines:
             if line:
-                if self._gap:
-                    self._lines.extend(
-                        _indent([""], self._indent, self._empty_line_indent))
-                self._gap = True
+                self._add_gap()
                 with context(self):
                     self._lines.extend(
                         _indent(lines[index:], self._indent,
@@ -217,22 +219,50 @@ class Content:
                 break
             index += 1
 
-    def wrap(self, content: Optional[str], intro: str = "") -> List[str]:
-        """ Wraps a text. """
+    def wrap(self,
+             content: Optional[GenericContent],
+             initial_indent: str = "",
+             subsequent_indent: Optional[str] = None,
+             context: AddContext = _add_context) -> None:
+        """ Adds a gap if needed, then adds the wrapped content.  """
         if not content:
-            return []
-        wrapper = textwrap.TextWrapper()
-        wrapper.drop_whitespace = True
-        wrapper.initial_indent = intro
-        wrapper.subsequent_indent = self._tab if intro else ""
-        wrapper.width = 79 - len(self._indent)
-        lines = []
-        gap = []  # type: List[str]
-        for block in content.strip().split("\n\n"):
-            lines.extend(gap)
-            lines.extend(wrapper.wrap(block))
-            gap = [""]
-        return lines
+            return
+        if isinstance(content, str):
+            text = content
+        elif isinstance(content, list):
+            text = "\n".join(content)
+        else:
+            text = "\n".join(content.lines)
+        text = text.strip()
+        if not text:
+            return
+        self._add_gap()
+        with context(self):
+            if subsequent_indent is None:
+                if initial_indent:
+                    subsequent_indent = self._tab
+                else:
+                    subsequent_indent = ""
+            wrapper = textwrap.TextWrapper()
+            wrapper.break_long_words = False
+            wrapper.break_on_hyphens = False
+            wrapper.drop_whitespace = True
+            wrapper.initial_indent = initial_indent
+            wrapper.subsequent_indent = subsequent_indent
+            wrapper.width = 79 - len(self._indent)
+            gap = []  # type: List[str]
+            for block in text.split("\n\n"):
+                self._lines.extend(gap)
+                self._lines.extend(
+                    _indent(wrapper.wrap(block), self._indent,
+                            self._empty_line_indent))
+                gap = [self._empty_line_indent]
+
+    def _add_gap(self) -> None:
+        if self._gap:
+            self._lines.extend(
+                _indent([""], self._indent, self._empty_line_indent))
+        self._gap = True
 
     @property
     def gap(self) -> bool:
@@ -618,7 +648,7 @@ class CContent(Content):
 
     def add_brief_description(self, description: Optional[str]) -> None:
         """ Adds a brief description. """
-        return self.add(self.wrap(description, intro="@brief "))
+        return self.wrap(description, initial_indent="@brief ")
 
     def add_ingroup(self, ingroups: List[str]) -> None:
         """ Adds an ingroup comment block. """
@@ -631,7 +661,7 @@ class CContent(Content):
         with self.defgroup_block(identifier, name):
             self.add_ingroup(ingroups)
             self.add_brief_description(brief)
-            self.add(self.wrap(description))
+            self.wrap(description)
 
     @contextmanager
     def header_guard(self, filename: str) -> Iterator[None]:

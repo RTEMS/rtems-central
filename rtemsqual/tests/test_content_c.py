@@ -119,16 +119,16 @@ def test_comment_block():
     content = CContent()
     with content.comment_block():
         assert not content.gap
-        content.add(content.wrap(""))
+        content.add("")
         assert not content.gap
         assert str(content) == """/*
 """
-        content.add(content.wrap("a"))
+        content.add("a")
         assert content.gap
         assert str(content) == """/*
  * a
 """
-        content.add(content.wrap("b"))
+        content.add("b")
         assert content.gap
         assert str(content) == """/*
  * a
@@ -136,7 +136,7 @@ def test_comment_block():
  * b
 """
         content.gap = False
-        content.add(content.wrap("c"))
+        content.add("c")
         assert content.gap
         assert str(content) == """/*
  * a

@@ -288,8 +288,7 @@ class Node:
         content = CContent()
         with content.doxygen_block():
             content.add_brief_description(self.substitute(definition["brief"]))
-            content.add(
-                content.wrap(self.substitute(definition["description"])))
+            content.wrap(self.substitute(definition["description"]))
         kind = definition["kind"]
         if kind == "member":
             member = self.substitute(definition["definition"]) + ";"
@@ -381,24 +380,19 @@ class Node:
             content.add_ingroup(_get_group_identifiers(ingroups))
             content.add_brief_description(
                 self.substitute(item["interface-brief"]))
-            content.add(
-                content.wrap(self.substitute(item["interface-description"])))
-            content.add(content.wrap(self.substitute(item["interface-notes"])))
+            content.wrap(self.substitute(item["interface-description"]))
+            content.wrap(self.substitute(item["interface-notes"]))
             if "interface-params" in item:
                 for param in item["interface-params"]:
-                    content.add(
-                        content.wrap(param["name"] + " " +
-                                     self.substitute(param["description"]),
-                                     intro=_PARAM[param["dir"]]))
+                    content.wrap(param["name"] + " " +
+                                 self.substitute(param["description"]),
+                                 initial_indent=_PARAM[param["dir"]])
             if "interface-return" in item:
                 ret = item["interface-return"]
                 for retval in ret["return-values"]:
-                    val = retval["value"]
-                    intro = f"@retval {val} "
-                    content.add(
-                        content.wrap(self.substitute(retval["description"]),
-                                     intro=intro))
-                content.add(content.wrap(ret["return"], intro="@return "))
+                    content.wrap(self.substitute(retval["description"]),
+                                 initial_indent=f"@retval {retval['value']} ")
+                content.wrap(ret["return"], initial_indent="@return ")
         return content
 
     def _add_generic_definition(self, get_lines: GetLines) -> None:

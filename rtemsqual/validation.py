@@ -83,9 +83,11 @@ def _add_test_case_action_description(content: CContent, item: Item) -> None:
     if actions:
         content.add("This test case performs the following actions:")
         for action in actions:
-            content.add(content.wrap(action["description"], intro="- "))
+            content.wrap(action["description"], initial_indent="- ")
             for check in action["checks"]:
-                content.add(content.wrap(check["description"], intro="  - "))
+                content.wrap(check["description"],
+                             initial_indent="  - ",
+                             subsequent_indent="    ")
 
 
 def _generate_test_case_actions(item: Item, steps: StepWrapper) -> CContent:
@@ -105,7 +107,7 @@ def _generate_test_case(content: CContent, item: Item,
     content.add(item["test-case-support"])
     with content.function_block(f"void T_case_body_{desi}(void)"):
         content.add_brief_description(item["test-case-brief"])
-        content.add(content.wrap(item["test-case-description"]))
+        content.wrap(item["test-case-description"])
         _add_test_case_action_description(content, item)
     fixture = item["test-case-fixture"]
     if fixture:
@@ -129,7 +131,7 @@ def _generate_test_suite(content: CContent, item: Item) -> None:
     name = item["test-suite-name"]
     with content.defgroup_block(f"RTEMSTestSuite{_designator(name)}", name):
         content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
-        content.add(content.wrap(item["test-suite-description"]))
+        content.wrap(item["test-suite-description"])
         content.add("@{")
     content.add(item["test-suite-code"])
     content.add("/** @} */")
