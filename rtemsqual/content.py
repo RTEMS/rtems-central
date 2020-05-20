@@ -402,19 +402,22 @@ class SphinxContent(Content):
         """ Adds a label. """
         self.add(".. _" + label.strip() + ":")
 
-    def get_section_label(self, name: str) -> str:
+    def get_section_label(self, name: str, prefix: str = "Section") -> str:
         """ Returns the section label for the specified section name. """
         # pylint: disable=no-self-use
-        return "Section" + _to_camel_case(name.strip())
+        return prefix + _to_camel_case(name.strip())
 
     def add_header(self, name, level=2) -> None:
         """ Adds a header. """
         name = name.strip()
         self.add([name, _HEADER_LEVELS[level] * len(name)])
 
-    def add_header_with_label(self, name, level=2) -> str:
+    def add_header_with_label(self,
+                              name: str,
+                              level: int = 2,
+                              label_prefix: str = "Section") -> str:
         """ Adds a header with label. """
-        label = self.get_section_label(name)
+        label = self.get_section_label(name, label_prefix)
         self.add_label(label)
         self.add_header(name, level)
         return label
@@ -458,9 +461,10 @@ class SphinxContent(Content):
         yield
         self.close_directive()
 
-    def open_section(self, name: str) -> str:
+    def open_section(self, name: str, label_prefix: str = "Section") -> str:
         """ Opens a section. """
-        label = self.add_header_with_label(name, self._section_level)
+        label = self.add_header_with_label(name, self._section_level,
+                                           label_prefix)
         self._section_level += 1
         return label
 
@@ -469,9 +473,11 @@ class SphinxContent(Content):
         self._section_level -= 1
 
     @contextmanager
-    def section(self, name: str) -> Iterator[str]:
+    def section(self,
+                name: str,
+                label_prefix: str = "Section") -> Iterator[str]:
         """ Opens a section context. """
-        yield self.open_section(name)
+        yield self.open_section(name, label_prefix)
         self.close_section()
 
     def add_list_item(self, content: GenericContent) -> None:
