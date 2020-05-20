@@ -478,6 +478,14 @@ class SphinxContent(Content):
         """ Adds a list item. """
         self.wrap(content, initial_indent="* ", subsequent_indent="  ")
 
+    def add_list(self, introduction: GenericContent,
+                 items: List[GenericContent]) -> None:
+        """ Adds a list with introduction. """
+        if items:
+            self.wrap(introduction)
+            for item in items:
+                self.add_list_item(item)
+
     def open_list_item(self, content: GenericContent) -> None:
         """ Opens a list item. """
         self.add(["* "])

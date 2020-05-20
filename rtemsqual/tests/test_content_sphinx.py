@@ -146,6 +146,19 @@ def test_list_item():
 """
 
 
+def test_add_list():
+    content = SphinxContent()
+    content.add_list("a", [])
+    assert str(content) == ""
+    content.add_list("a", ["b", "c"])
+    assert str(content) == """a
+
+* b
+
+* c
+"""
+
+
 def test_append():
     sc = SphinxContent()
     sc.append("x")
