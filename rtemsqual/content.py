@@ -36,6 +36,7 @@ from rtemsqual.items import Item, ItemMapper
 
 AddContext = Callable[["Content"], ContextManager[None]]
 GenericContent = Union[str, List[str], "Content"]
+GenericContentList = Union[List[str], List[List[str]], List[GenericContent]]
 
 
 class Copyright:
@@ -485,7 +486,7 @@ class SphinxContent(Content):
         self.wrap(content, initial_indent="* ", subsequent_indent="  ")
 
     def add_list(self, introduction: GenericContent,
-                 items: List[GenericContent]) -> None:
+                 items: GenericContentList) -> None:
         """ Adds a list with introduction. """
         if items:
             self.wrap(introduction)
