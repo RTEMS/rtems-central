@@ -117,6 +117,35 @@ b c
     assert str(content) == ""
 
 
+def test_paste():
+    content = Content("BSD-2-Clause", True)
+    content.paste("")
+    assert str(content) == ""
+    content.paste("a")
+    assert str(content) == """a
+"""
+    content.paste(["b", "c"])
+    assert str(content) == """a b c
+"""
+    content.paste(content)
+    assert str(content) == """a b c a b c
+"""
+    content = Content("BSD-2-Clause", True)
+    content.paste("\n")
+    assert str(content) == ""
+    content.append("")
+    content.paste("a")
+    assert str(content) == """
+a
+"""
+    content = Content("BSD-2-Clause", True)
+    content.paste(["a", "b", "", "c"])
+    assert str(content) == """a b
+
+c
+"""
+
+
 def test_add_blank_line():
     content = Content("BSD-2-Clause", True)
     content.add_blank_line()

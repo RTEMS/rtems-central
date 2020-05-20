@@ -258,6 +258,45 @@ class Content:
                             self._empty_line_indent))
                 gap = [self._empty_line_indent]
 
+    def paste(self, content: Optional[GenericContent]) -> None:
+        """ Pastes the wrapped content directly to the last line.  """
+        if not content:
+            return
+        if isinstance(content, str):
+            text = content
+        elif isinstance(content, list):
+            text = "\n".join(content)
+        else:
+            text = "\n".join(content.lines)
+        indent_len = len(self._indent)
+        try:
+            last = self._lines[-1]
+            text = last[indent_len:] + " " + text
+        except IndexError:
+            last = ""
+        text = text.strip()
+        if not text:
+            return
+        wrapper = textwrap.TextWrapper()
+        wrapper.break_long_words = False
+        wrapper.break_on_hyphens = False
+        wrapper.drop_whitespace = True
+        wrapper.initial_indent = ""
+        wrapper.subsequent_indent = ""
+        wrapper.width = 79 - len(self._indent)
+        first = True
+        for block in text.split("\n\n"):
+            lines = wrapper.wrap(block)
+            if first:
+                if 0 < len(last) >= indent_len:
+                    self._lines[-1] = last[0:indent_len] + lines[0]
+                    lines = lines[1:]
+                first = False
+            else:
+                self._lines.append(self._empty_line_indent)
+            self._lines.extend(
+                _indent(lines, self._indent, self._empty_line_indent))
+
     def _add_gap(self) -> None:
         if self._gap:
             self._lines.extend(
