@@ -474,6 +474,29 @@ class SphinxContent(Content):
         yield self.open_section(name)
         self.close_section()
 
+    def add_list_item(self, content: GenericContent) -> None:
+        """ Adds a list item. """
+        self.wrap(content, initial_indent="* ", subsequent_indent="  ")
+
+    def open_list_item(self, content: GenericContent) -> None:
+        """ Opens a list item. """
+        self.add(["* "])
+        self.push_indent("  ")
+        self.gap = True
+        self.paste(content)
+
+    def close_list_item(self) -> None:
+        """ Closes a list item. """
+        self.pop_indent()
+        self.gap = True
+
+    @contextmanager
+    def list_item(self, content: GenericContent) -> Iterator[None]:
+        """ Opens a list item context. """
+        self.open_list_item(content)
+        yield
+        self.close_list_item()
+
     def add_licence_and_copyrights(self) -> None:
         """
         Adds a licence and copyright block according to the registered licenses

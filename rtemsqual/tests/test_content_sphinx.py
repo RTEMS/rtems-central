@@ -124,6 +124,28 @@ SectionEfGh
 """
 
 
+def test_list_item():
+    content = SphinxContent()
+    with content.list_item("ab cd"):
+        content.paste("ef gh")
+        with content.list_item("ij kl"):
+            content.add("mn op")
+        content.paste("qr st")
+    with content.list_item("uv"):
+        pass
+    content.add_list_item("wx")
+    assert str(content) == """* ab cd ef gh
+
+  * ij kl
+
+  mn op qr st
+
+* uv
+
+* wx
+"""
+
+
 def test_append():
     sc = SphinxContent()
     sc.append("x")
