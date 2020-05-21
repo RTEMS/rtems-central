@@ -86,3 +86,5 @@ interface:
   - /if/use/domain
   interface-domains:
     rtems: external/rtems
+spec-verification:
+  root-type: /spec/root
