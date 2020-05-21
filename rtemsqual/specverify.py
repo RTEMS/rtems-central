@@ -480,8 +480,7 @@ def verify(config: dict, item_cache: ItemCache) -> None:
     _gather_item_verifiers(root_item, verifier_map)
     for name in sorted(verifier_map.keys()):
         logging.info("type: %s", name)
-    for verifier in verifier_map.values():
-        verifier.resolve_type_refinements()
+        verifier_map[name].resolve_type_refinements()
     logging.info("start specification item verification")
     for key in sorted(item_cache.all.keys()):
         item = item_cache[key]

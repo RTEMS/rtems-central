@@ -70,6 +70,7 @@ INFO type: c
 INFO type: copyright
 INFO type: copyrights
 INFO type: d
+INFO add subtype 'd-a' to 'd'
 INFO type: d-a
 INFO type: enabled-by
 INFO type: enabled-by-list
@@ -79,6 +80,8 @@ INFO type: keys-at-least-one
 INFO type: keys-at-most-one
 INFO type: keys-exactly-one
 INFO type: link
+INFO add subtype 'spec-member' to 'link'
+INFO add subtype 'spec-refinement' to 'link'
 INFO type: links
 INFO type: list-str
 INFO type: must-be-true
@@ -87,6 +90,13 @@ INFO type: none
 INFO type: optional-str
 INFO type: other-int
 INFO type: root
+INFO add subtype 'd' to 'root'
+INFO add subtype 'keys-at-most-one' to 'root'
+INFO add subtype 'c' to 'root'
+INFO add subtype 'keys-at-least-one' to 'root'
+INFO add subtype 'spec-invalid' to 'root'
+INFO add subtype 'keys-exactly-one' to 'root'
+INFO add subtype 'spec' to 'root'
 INFO type: some-bool
 INFO type: some-dict
 INFO type: some-float
@@ -119,16 +129,6 @@ INFO type: str
 INFO type: str-contains
 INFO type: uid
 INFO type: x
-INFO add subtype 'd' to 'root'
-INFO add subtype 'keys-at-most-one' to 'root'
-INFO add subtype 'c' to 'root'
-INFO add subtype 'keys-at-least-one' to 'root'
-INFO add subtype 'spec-invalid' to 'root'
-INFO add subtype 'keys-exactly-one' to 'root'
-INFO add subtype 'spec' to 'root'
-INFO add subtype 'd-a' to 'd'
-INFO add subtype 'spec-member' to 'link'
-INFO add subtype 'spec-refinement' to 'link'
 INFO start specification item verification
 INFO /c1: verify using type 'root'
 INFO /c1:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
