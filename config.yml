@@ -88,3 +88,6 @@ interface:
     rtems: external/rtems
 spec-verification:
   root-type: /spec/root
+spec-documentation:
+  root-type: /spec/root
+  doc-target: external/rtems-docs/eng/req/items.rst
