@@ -382,7 +382,8 @@ class ItemCache:
             item.init_parents(self)
 
     def _init_children(self) -> None:
-        for item in self._items.values():
+        for uid in sorted(self._items):
+            item = self._items[uid]
             for link in item.links_to_parents():
                 link.item.add_link_to_child(Link.create(link, item))
 

@@ -90,13 +90,13 @@ INFO type: none
 INFO type: optional-str
 INFO type: other-int
 INFO type: root
-INFO add subtype 'd' to 'root'
-INFO add subtype 'keys-at-most-one' to 'root'
-INFO add subtype 'c' to 'root'
-INFO add subtype 'keys-at-least-one' to 'root'
-INFO add subtype 'spec-invalid' to 'root'
-INFO add subtype 'keys-exactly-one' to 'root'
 INFO add subtype 'spec' to 'root'
+INFO add subtype 'c' to 'root'
+INFO add subtype 'd' to 'root'
+INFO add subtype 'spec-invalid' to 'root'
+INFO add subtype 'keys-at-least-one' to 'root'
+INFO add subtype 'keys-at-most-one' to 'root'
+INFO add subtype 'keys-exactly-one' to 'root'
 INFO type: some-bool
 INFO type: some-dict
 INFO type: some-float
