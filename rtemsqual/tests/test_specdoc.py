@@ -112,6 +112,12 @@ The following attributes are explicitly defined for this type:
 a
     The attribute value shall be an :ref:`SpecTypeA`.
 
+Please have a look at the following example:
+
+.. code-block:: yaml
+
+    a: null
+
 .. _SpecTypeB:
 
 B
@@ -171,8 +177,7 @@ Name
 ^^^^
 
 The value shall be a string. A string is a valid name if it matches with the
-``[a-z][a-z0-9-]*`` regular expression or is equal to
-``SPDX-License-Identifier``.
+``^([a-z][a-z0-9-]*|SPDX-License-Identifier)$`` regular expression.
 
 .. _SpecTypeUID:
 

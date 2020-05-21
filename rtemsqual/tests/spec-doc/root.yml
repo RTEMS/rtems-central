@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+spec-description: null
+spec-example: null
+spec-info:
+  bool:
+    assert: true
+    description: null
+  dict:
+    attributes:
+      type:
+        description: null
+        spec-type: name
+    description: null
+    generic-attributes:
+      description: null
+      spec-type: root
+    required-attributes: all
+  float:
+    assert:
+      eq: 0.0
+    description: null
+    spec-type: float
+  int:
+    assert:
+      eq: 0
+    description: null
+    spec-type: int
+  list:
+    description: null
+    spec-type: root
+  none: null
+  str:
+    assert:
+      eq: ''
+    description: null
+    spec-type: str
+spec-name: Root
+spec-type: root
+type: spec
