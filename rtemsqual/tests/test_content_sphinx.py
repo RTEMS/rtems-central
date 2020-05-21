@@ -43,11 +43,13 @@ def test_directive():
     with sc.directive("x"):
         sc.add("y")
         assert str(sc) == """.. x::
+
     y
 """
     with sc.directive("z", "xy", [":a:", ":b:"]):
         sc.add("c")
         assert str(sc) == """.. x::
+
     y
 
 .. z:: xy

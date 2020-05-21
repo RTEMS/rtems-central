@@ -447,6 +447,7 @@ class SphinxContent(Content):
         self.add(f".. {name.strip()}::{value}")
         self.push_indent()
         self.add(options)
+        self.gap = True
 
     def close_directive(self) -> None:
         """ Closes a directive. """
