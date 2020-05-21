@@ -5,18 +5,13 @@ enabled-by: true
 links:
 - role: spec-member
   uid: root
-- role: spec-refinement
-  spec-key: role
-  spec-value: spec-member
-  uid: link
 spec-description: null
 spec-example: null
 spec-info:
-  dict:
-    attributes: {}
+  str:
     description: |
-      It defines the specification membership role of links.
-    required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+      It shall be a source file.  The path to a source file shall be relative
+      to the directory of the :file:`wscript`.
+spec-name: Build Source
+spec-type: build-source
 type: spec

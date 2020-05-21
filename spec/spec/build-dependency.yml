@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: role
-  spec-value: spec-member
+  spec-value: build-dependency
   uid: link
 spec-description: null
 spec-example: null
@@ -15,8 +15,8 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      It defines the specification membership role of links.
+      It defines the build dependency role of links.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Build Dependency Link Role
+spec-type: build-dependency
 type: spec

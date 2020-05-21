@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: type
+  spec-value: requirement
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      text:
+        description: |
+          This mandatory attribute defines the requirement text.
+        spec-type: requirement-text
+      requirement-type:
+        description: |
+          This mandatory attribute defines the requirement type.
+        spec-type: name
+    description: |
+      This set of attributes specifies a requirement.
+    required-attributes: all
+spec-name: Requirement Item Type
+spec-type: requirement
+type: spec

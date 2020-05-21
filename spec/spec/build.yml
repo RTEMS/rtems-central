@@ -6,17 +6,21 @@ links:
 - role: spec-member
   uid: root
 - role: spec-refinement
-  spec-key: role
-  spec-value: spec-member
-  uid: link
+  spec-key: type
+  spec-value: build
+  uid: root
 spec-description: null
 spec-example: null
 spec-info:
   dict:
-    attributes: {}
+    attributes:
+      build-type:
+        description: |
+          This mandatory attribute defines the build type.
+        spec-type: name
     description: |
-      It defines the specification membership role of links.
+      This set of attributes specifies a build item.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Build Item Type
+spec-type: build
 type: spec

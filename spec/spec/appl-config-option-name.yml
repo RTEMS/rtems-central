@@ -5,18 +5,14 @@ enabled-by: true
 links:
 - role: spec-member
   uid: root
-- role: spec-refinement
-  spec-key: role
-  spec-value: spec-member
-  uid: link
 spec-description: null
 spec-example: null
 spec-info:
-  dict:
-    attributes: {}
+  str:
+    assert:
+    - re: ^(CONFIGURE_|BSP_)[A-Z0-9_]+$
     description: |
-      It defines the specification membership role of links.
-    required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+      This attribute value defines an application configuration option name.
+spec-name: Application Configuration Option Name
+spec-type: appl-config-option-name
 type: spec

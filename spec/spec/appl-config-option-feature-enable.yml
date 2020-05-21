@@ -6,17 +6,18 @@ links:
 - role: spec-member
   uid: root
 - role: spec-refinement
-  spec-key: role
-  spec-value: spec-member
-  uid: link
+  spec-key: appl-config-option-type
+  spec-value: feature-enable
+  uid: appl-config-option
 spec-description: null
 spec-example: null
 spec-info:
   dict:
     attributes: {}
     description: |
-      It defines the specification membership role of links.
+      This set of attributes specifies application configuration feature enable
+      option specification items.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Application Configuration Feature Enable Option Item Type
+spec-type: appl-config-option-feature-enable
 type: spec

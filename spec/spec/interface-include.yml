@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: interface-include
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      enabled-by:
+        description: |
+          This mandatory attribute defines under which conditions the interface
+          container is included.
+        spec-type: enabled-by
+    description: |
+      It defines the interface include role of links and is used to indicate
+      that an interface container includes another interface container.  For
+      example, one header file includes another header file.
+    required-attributes: all
+spec-name: Interface Include Link Role
+spec-type: interface-include
+type: spec

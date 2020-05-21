@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    description: |
+      It shall be an option for the C compiler.  The options are used to
+      compile the sources of this item.  The options defined by this attribute
+      succeed the options presented to the item by the build item context.
+spec-name: Build C Compiler Option
+spec-type: build-cflag
+type: spec

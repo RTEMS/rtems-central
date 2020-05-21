@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: initializer
+  uid: appl-config-option
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: integer
+  uid: appl-config-option
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      appl-config-option-constraint:
+        description: |
+          This mandatory attribute shall list the constraints of the
+          configuration option value.
+        spec-type: appl-config-option-constraint
+      appl-config-option-default-value:
+        description: |
+          This mandatory attribute shall describe the default value of the
+          configuration option.
+        spec-type: int-or-str
+    description: |
+      This set of attributes specifies application configuration initializer or
+      integer option specification items.
+    required-attributes: all
+spec-name: Application Configuration Value Option Item Type
+spec-type: appl-config-option-value
+type: spec

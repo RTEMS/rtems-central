@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: appl-config-option
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      appl-config-option-description:
+        description: |
+          This mandatory attribute shall be the description of the application
+          configuration option.
+        spec-type: str
+      appl-config-option-index:
+        description: |
+          This mandatory attribute defines additional application configuration
+          option document index entries.  The application configuration option
+          name is automatically added to the document index.
+        spec-type: list-str
+      appl-config-option-name:
+        description: |
+          This mandatory attribute defines the application configuration option
+          name.
+        spec-type: appl-config-option-name
+      appl-config-option-notes:
+        description: |
+          This mandatory attribute shall be the notes to the application
+          configuration option.
+        spec-type: optional-str
+      appl-config-option-type:
+        description: |
+          This mandatory attribute shall be the application configuration
+          option type.
+        spec-type: name
+      text:
+        description: |
+          This mandatory attribute states the requirement for the application
+          configuration option.
+        spec-type: requirement-text
+    description: |
+      This set of attributes specifies application configuration option
+      specification items.
+    required-attributes: all
+spec-name: Application Configuration Option Item Type
+spec-type: appl-config-option
+type: spec

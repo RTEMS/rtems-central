@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: role
-  spec-value: spec-member
+  spec-value: interface-placement
   uid: link
 spec-description: null
 spec-example: null
@@ -15,8 +15,10 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      It defines the specification membership role of links.
+      It defines the interface placement role of links.  It is used to indicate
+      that an interface definition is placed into an interface container, for
+      example a header file.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Interface Placement Link Role
+spec-type: interface-placement
 type: spec

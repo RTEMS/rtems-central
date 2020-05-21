@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      custom:
+        description: |
+          This attribute defines a list of constraints.
+        spec-type: list-str
+      links:
+        description: |
+          This attribute shall list links to constraints.
+        spec-type: list-uid
+      max:
+        description: |
+          This attribute defines the maximum value.
+        spec-type: int-or-str
+      min:
+        description: |
+          This attribute defines the minimum value.
+        spec-type: int-or-str
+      set:
+        description: |
+          This attribute defines a set of valid values.
+        spec-type: list-int-or-str
+    description: |
+      This set of attributes defines application configuration option
+      constraints.
+    required-attributes: none
+spec-name: Application Configuration Option Constraint
+spec-type: appl-config-option-constraint
+type: spec

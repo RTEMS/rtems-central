@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: feature
+  uid: appl-config-option
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      appl-config-option-default:
+        description: |
+          This mandatory attribute shall describe what happens if the
+          configuration option is undefined.
+        spec-type: str
+    description: |
+      This set of attributes specifies application configuration feature option
+      specification items.
+    required-attributes: all
+spec-name: Application Configuration Feature Option Item Type
+spec-type: appl-config-option-feature
+type: spec

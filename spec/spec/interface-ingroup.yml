@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: role
-  spec-value: spec-member
+  spec-value: interface-ingroup
   uid: link
 spec-description: null
 spec-example: null
@@ -15,8 +15,8 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      It defines the specification membership role of links.
+      It defines the interface group membership role of links.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Interface Group Membership Link Role
+spec-type: interface-ingroup
 type: spec

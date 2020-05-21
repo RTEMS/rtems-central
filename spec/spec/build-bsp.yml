@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: bsp
+  uid: build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      arch:
+        description: |
+          This mandatory attribute defines the target architecture of the BSP.
+        spec-type: str
+      bsp:
+        description: |
+          This mandatory attribute defines the base BSP variant name.
+        spec-type: str
+      cflags:
+        description: null
+        spec-type: build-cflags
+      bsp:
+        description: |
+          This mandatory attribute defines the BSP family name.  The name shall
+          be the last directory of the path to the BSP sources.
+        spec-type: str
+      includes:
+        description: null
+        spec-type: build-includes
+      install:
+        description: null
+        spec-type: build-install-list
+      source:
+        description: null
+        spec-type: build-source-list
+    description: |
+      This set of attributes specifies a BSP build item.
+    required-attributes: all
+spec-name: BSP Build Item Type
+spec-type: build-bsp
+type: spec

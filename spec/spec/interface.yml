@@ -6,17 +6,21 @@ links:
 - role: spec-member
   uid: root
 - role: spec-refinement
-  spec-key: role
-  spec-value: spec-member
-  uid: link
+  spec-key: type
+  spec-value: interface
+  uid: root
 spec-description: null
 spec-example: null
 spec-info:
   dict:
-    attributes: {}
+    attributes:
+      interface-type:
+        description: |
+          This mandatory attribute defines the interface type.
+        spec-type: name
     description: |
-      It defines the specification membership role of links.
+      This set of attributes specifies interface specification items.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Interface Item Type
+spec-type: interface
 type: spec

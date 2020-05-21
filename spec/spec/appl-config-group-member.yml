@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: role
-  spec-value: spec-member
+  spec-value: appl-config-group-member
   uid: link
 spec-description: null
 spec-example: null
@@ -15,8 +15,8 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      It defines the specification membership role of links.
+      It defines the application configuration group membership role of links.
     required-attributes: all
-spec-name: Specification Member Link Role
-spec-type: spec-member
+spec-name: Application Configuration Group Member Link Role
+spec-type: appl-config-group-member
 type: spec

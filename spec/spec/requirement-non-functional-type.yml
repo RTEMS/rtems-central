@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+      in:
+      - build-configuration
+      - constraint
+      - design
+      - interface
+      - interface-requirement
+      - maintainability
+      - performance
+      - portability
+      - quality
+      - reliability
+      - resource
+      - safety
+    description: |
+      This type shall be used for non-functional requirement types.
+spec-name: Non-Functional Requirement Type
+spec-type: requirement-non-functional-type
+type: spec

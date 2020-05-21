@@ -10,7 +10,7 @@ spec-example: null
 spec-info:
   list:
     description: null
-    spec-type: str
-spec-name: String List
-spec-type: list-str
+    spec-type: uid
+spec-name: UID List
+spec-type: list-uid
 type: spec

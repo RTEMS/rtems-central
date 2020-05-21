@@ -8,9 +8,10 @@ links:
 spec-description: null
 spec-example: null
 spec-info:
-  list:
+  int:
     description: null
-    spec-type: str
-spec-name: String List
-spec-type: list-str
+  str:
+    description: null
+spec-name: Integer or String
+spec-type: int-or-str
 type: spec

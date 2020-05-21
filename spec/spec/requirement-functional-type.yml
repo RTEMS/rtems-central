@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+      in:
+      - capability
+      - dependability-function
+      - function
+      - operational
+      - safety-function
+    description: |
+      This type shall be used for functional requirement types.
+spec-name: Functional Requirement Type
+spec-type: requirement-functional-type
+type: spec
