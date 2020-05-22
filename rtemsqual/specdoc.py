@@ -70,6 +70,7 @@ class _Documenter:
         self._info_map = item["spec-info"]
         self._item = item
         self._documenter_map = documenter_map
+        self.used_by = set()  # type: Set[str]
         assert self._name not in documenter_map
         documenter_map[self._name] = self
 
@@ -138,13 +139,13 @@ class _Documenter:
 
     def _document_attributes(self, content: SphinxContent,
                              attributes: Any) -> None:
-        for key, value in attributes.items():
+        for key, info in attributes.items():
             content.add(key)
             with content.indent():
                 content.wrap(
                     self.get_value_type_phrase(content, "The attribute value",
-                                               "shall", value["spec-type"]))
-                content.paste(value["description"])
+                                               "shall", info["spec-type"]))
+                content.paste(info["description"])
 
     def document_dict(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
@@ -247,6 +248,8 @@ class _Documenter:
                 refinement.get_section_reference(content)
                 for refinement in self.refinements()
             ], "This type is refined by the following types:")
+            content.add_list(sorted(self.used_by),
+                             "This type is used by the following types:")
             example = self._item["spec-example"]
             if example:
                 content.add("Please have a look at the following example:")
@@ -256,6 +259,26 @@ class _Documenter:
             names.remove(self._name)
             for refinement in self.refinements():
                 refinement.document(content, names)
+
+    def _add_used_by(self, content: SphinxContent, type_name: str) -> None:
+        if type_name not in _PRIMITIVE_TYPES:
+            documenter = self._documenter_map[type_name]
+            element_type_name = documenter.get_list_element_type()
+            if element_type_name:
+                type_name = element_type_name
+        if type_name not in _PRIMITIVE_TYPES:
+            documenter = self._documenter_map[type_name]
+            documenter.used_by.add(self.get_section_reference(content))
+
+    def resolve_used_by(self, content: SphinxContent) -> None:
+        """ Resolves type uses in attribute sets. """
+        info = self._info_map.get("dict", None)
+        if info is not None:
+            for attribute in info["attributes"].values():
+                self._add_used_by(content, attribute["spec-type"])
+            if "generic-attributes" in info:
+                self._add_used_by(content,
+                                  info["generic-attributes"]["spec-type"])
 
 
 _DOCUMENT = {
@@ -323,8 +346,10 @@ def document(config: dict, item_cache: ItemCache) -> None:
         documenter_map)
     root_documenter = _Documenter(root_item, documenter_map)
     _gather_item_documenters(root_item, documenter_map)
-    documenter_names = set(documenter_map.keys())
     content = SphinxContent()
+    for documenter in documenter_map.values():
+        documenter.resolve_used_by(content)
+    documenter_names = set(documenter_map.keys())
     with content.section("Specification Items"):
         with content.section("Specification Item Hierarchy"):
             content.add(
