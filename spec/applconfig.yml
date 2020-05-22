@@ -3,7 +3,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de
 enabled-by: true
 links: []
-requirement-type: configuration
+non-functional-type: interface-requirement
+requirement-type: non-functional
 text: |
   The system shall provide configuration options to the application to set
   configurable system parameters at link time.
