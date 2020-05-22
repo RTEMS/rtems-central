@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: entry point
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The address at which a function or task begins to execute.  In C, the

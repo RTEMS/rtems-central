@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: Device Driver Table
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A table which contains the entry points for each of the configured device

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: remote operation
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The manipulation of an object which does not reside on the same node as

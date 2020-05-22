@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: CRT
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An acronym for Cathode Ray Tube.  Normally used in reference to the

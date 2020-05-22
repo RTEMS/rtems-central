@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: overhead
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The portion of the CPUs processing power consumed by the operating

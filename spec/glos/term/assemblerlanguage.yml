@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: assembler language
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The assembler language is a programming language which can be translated very

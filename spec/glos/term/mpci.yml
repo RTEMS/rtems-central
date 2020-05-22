@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: MPCI
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An acronym for ${multiprocessorcommunicationsinterfacelayer:/glossary-term}.

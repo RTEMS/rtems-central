@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: thread dispatch
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The thread dispatch transfers control of the processor from the currently

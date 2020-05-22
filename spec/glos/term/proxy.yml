@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: proxy
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An RTEMS control structure used to represent, on a remote node, a task

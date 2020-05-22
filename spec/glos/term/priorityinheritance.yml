@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: priority inheritance
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An algorithm that calls for the lower priority task holding a resource to

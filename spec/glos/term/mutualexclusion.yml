@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: mutual exclusion
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A term used to describe the act of preventing other tasks from accessing

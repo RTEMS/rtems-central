@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: C11
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The standard ISO/IEC 9899:2011.

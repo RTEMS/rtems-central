@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: heir task
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A task is an heir if it is registered as an heir in a processor of the

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: external address
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The address used to access dual-ported memory by all the nodes in a

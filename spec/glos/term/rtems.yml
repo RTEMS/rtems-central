@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: RTEMS
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An acronym for Real-Time Executive for Multiprocessor Systems.

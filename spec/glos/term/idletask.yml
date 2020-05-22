@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: IDLE task
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A special low priority task which assumes control of the CPU when no

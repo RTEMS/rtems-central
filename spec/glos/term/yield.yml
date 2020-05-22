@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: yield
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   When a task voluntarily releases control of the processor.

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: software component
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   This term is defined by ECSS-E-ST-40C 3.2.28 as a "part of a software

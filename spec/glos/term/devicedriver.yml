@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: device driver
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   Control software for special peripheral devices used by the application.

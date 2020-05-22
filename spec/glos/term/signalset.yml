@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: signal set
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A thirty-two bit entity which is used to represent a task's collection of

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: registers
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   Registers are locations physically located within a component, typically

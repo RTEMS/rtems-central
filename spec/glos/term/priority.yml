@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: priority
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A mechanism used to represent the relative importance of an element in a

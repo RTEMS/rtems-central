@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: return value
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The value returned by a function.  A return value may be a

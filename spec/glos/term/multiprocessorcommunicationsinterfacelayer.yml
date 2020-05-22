@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: Multiprocessor Communications Interface Layer
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A set of user-provided routines which enable the nodes in a

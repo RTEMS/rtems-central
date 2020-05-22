@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: mode
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An entry in a task's control block that is used to determine if the task

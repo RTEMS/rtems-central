@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: kernel
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   In this document, this term is used as a synonym for executive.

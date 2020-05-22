@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: packet
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A buffer which contains the messages passed between nodes in a

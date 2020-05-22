@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: physical address
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The actual hardware address of a resource.

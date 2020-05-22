@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: dispatch
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   The act of loading a task's context onto the CPU and transferring control

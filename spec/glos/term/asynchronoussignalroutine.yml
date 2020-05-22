@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: Asynchronous Signal Routine
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   Similar to a hardware interrupt except that it is associated with a task

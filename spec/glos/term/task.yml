@@ -6,7 +6,7 @@ enabled-by: true
 glossary-term: task
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   This project uses the

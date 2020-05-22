@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: TTAS
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An acronym for Test and Test-And-Set.

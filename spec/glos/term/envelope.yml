@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: envelope
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A buffer provided by the MPCI layer to RTEMS which is used to pass

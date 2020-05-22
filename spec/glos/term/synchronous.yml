@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: synchronous
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   Related in order or timing to other occurrences in the system.

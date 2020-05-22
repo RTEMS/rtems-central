@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: TLS
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An acronym for Thread-Local Storage :cite:`Drepper:2013:TLS`.  TLS is

@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: reentrant
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A term used to describe routines which do not modify themselves or global

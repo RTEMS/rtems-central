@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: Interrupt Service Routine
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   An ISR is invoked by the CPU to process a pending interrupt.

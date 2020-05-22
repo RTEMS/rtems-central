@@ -5,7 +5,7 @@ enabled-by: true
 glossary-term: heap
 glossary-type: term
 links:
-- role: null
+- role: glossary-member
   uid: ../general
 text: |
   A data structure used to dynamically allocate and deallocate variable
