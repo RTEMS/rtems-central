@@ -147,10 +147,10 @@ def _indent(lines: List[str], indent: str,
 
 
 def _to_camel_case(name: str) -> str:
-    return name[0].upper() + \
-        re.sub(r"[^a-zA-Z0-9]+([a-zA-Z0-9])",
-               lambda match: match.group(1).upper(),
-               name[1:])
+    return name[0].upper() + re.sub(
+        r"[^a-zA-Z0-9]", "X",
+        re.sub(r"[ \n\t]+([a-zA-Z0-9])", lambda match: match.group(1).upper(),
+               name[1:]))
 
 
 @contextmanager
