@@ -51,10 +51,10 @@ def test_document(tmpdir):
 Specification Items
 ===================
 
-.. _SectionSpecificationItemTypes:
+.. _SectionSpecificationItemHierarchy:
 
-Specification Item Types
-------------------------
+Specification Item Hierarchy
+----------------------------
 
 The specification item types have the following hierarchy:
 
@@ -63,6 +63,11 @@ The specification item types have the following hierarchy:
   * :ref:`SpecTypeA`
 
   * :ref:`SpecTypeB`
+
+.. _SectionSpecificationItemTypes:
+
+Specification Item Types
+------------------------
 
 .. _SpecTypeRoot:
 

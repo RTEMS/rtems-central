@@ -326,10 +326,11 @@ def document(config: dict, item_cache: ItemCache) -> None:
     documenter_names = set(documenter_map.keys())
     content = SphinxContent()
     with content.section("Specification Items"):
-        with content.section("Specification Item Types"):
+        with content.section("Specification Item Hierarchy"):
             content.add(
                 "The specification item types have the following hierarchy:")
             root_documenter.hierarchy(content)
+        with content.section("Specification Item Types"):
             root_documenter.document(content, documenter_names)
         with content.section("Specification Attribute Sets and Value Types"):
             documenters = [documenter_map[name] for name in documenter_names]
