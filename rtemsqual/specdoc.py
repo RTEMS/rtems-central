@@ -90,7 +90,7 @@ class _Documenter:
             return self._info_map["list"]["spec-type"]
         return ""
 
-    def get_list_phrase(self, content: SphinxContent, shall: str,
+    def get_list_phrase(self, content: SphinxContent, value: str, shall: str,
                         type_name: str) -> str:
         """ Returns a list phrase. """
         if type_name in _PRIMITIVE_TYPES:
@@ -100,7 +100,7 @@ class _Documenter:
             documenter = self._documenter_map[type_name]
             ref = documenter.get_a_section_reference(content)
             type_phrase = f"Each list element shall be {ref}."
-        return f"The value {shall} be a list. {type_phrase}"
+        return f"{value} {shall} be a list. {type_phrase}"
 
     def get_value_type_phrase(self, content: SphinxContent, value: str,
                               shall: str, type_name: str) -> str:
@@ -110,7 +110,8 @@ class _Documenter:
         documenter = self._documenter_map[type_name]
         element_type_name = documenter.get_list_element_type()
         if element_type_name:
-            return self.get_list_phrase(content, shall, element_type_name)
+            return self.get_list_phrase(content, value, shall,
+                                        element_type_name)
         return (f"{value} {shall} be "
                 f"{documenter.get_a_section_reference(content)}.")
 
@@ -182,7 +183,7 @@ class _Documenter:
                 content.paste("Generic attributes may be defined.")
             content.paste("Each attribute key shall be a :ref:`SpecTypeName`.")
             type_phrase = self.get_value_type_phrase(
-                content, "The generic attribute value", "shall",
+                content, "The attribute value", "shall",
                 info["generic-attributes"]["spec-type"])
             content.paste(type_phrase)
             content.paste(info["generic-attributes"]["description"])
@@ -197,7 +198,9 @@ class _Documenter:
     def document_list(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
         """ Documents a list value. """
-        content.paste(self.get_list_phrase(content, shall, info["spec-type"]))
+        content.paste(
+            self.get_list_phrase(content, "The value", shall,
+                                 info["spec-type"]))
         content.paste(info["description"])
 
     def document_none(self, content: SphinxContent, _variant: str, shall: str,

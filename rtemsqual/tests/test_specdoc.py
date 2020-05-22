@@ -86,7 +86,7 @@ A value of this type shall be of one of the following variants:
 
   In addition to the explicitly defined attributes above, generic attributes
   may be defined. Each attribute key shall be a :ref:`SpecTypeName`. The
-  generic attribute value shall be a :ref:`SpecTypeRoot`.
+  attribute value shall be a :ref:`SpecTypeRoot`.
 
 * The value may be a floating-point number.
 
@@ -143,8 +143,8 @@ This type refines the following types:
 * :ref:`SpecTypeRoot` though the ``type`` attribute if the value is ``b``
 
 Generic attributes may be defined. Each attribute key shall be a
-:ref:`SpecTypeName`. The value shall be a list. Each list element shall be a
-string.
+:ref:`SpecTypeName`. The attribute value shall be a list. Each list element
+shall be a string.
 
 .. _SectionSpecificationAttributeSetsAndValueTypes:
 
