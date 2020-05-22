@@ -1,0 +1,63 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: test-program
+  uid: build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      cflags:
+        description: null
+        spec-type: build-cflags
+      cppflags:
+        description: null
+        spec-type: build-cppflags
+      cxxflags:
+        description: null
+        spec-type: build-cxxflags
+      features:
+        description: |
+          It shall be the ``waf`` build features for this test program.
+        spec-type: str
+      includes:
+        description: null
+        spec-type: build-includes
+      ldflags:
+        description: null
+        spec-type: build-ldflags
+      source:
+        description: null
+        spec-type: build-source-list
+      stlib:
+        description: |
+          It shall be a list of external static library identifiers used to
+          link this test program, e.g. ``m`` for ``libm.a``.
+        spec-type: list-str
+      target:
+        description: null
+        spec-type: build-target
+      use-after:
+        description: null
+        spec-type: build-use-after-list
+      use-before:
+        description: null
+        spec-type: build-use-before-list
+    description: |
+      This set of attributes specifies a test program executable to build.
+      Test programs may use additional objects provided by
+      :ref:`SpecTypeBuildObjectsItemType` items.  Test programs have an
+      implicit ``enabled-by`` attribute value which is controlled by the option
+      action :ref:`set-test-state <SpecTypeBuildOptionItemType>`.  If the test
+      state is set to ``exclude``, then the test program is not built.
+    required-attributes: all
+spec-name: Build Test Program Item Type
+spec-type: build-test-program
+type: spec

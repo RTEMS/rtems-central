@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  bool:
+    description: null
+  int:
+    description: null
+  list:
+    description: null
+    spec-type: str
+  none: null
+  str:
+    description: null
+spec-name: Build Option Value
+spec-type: build-option-value
+type: spec

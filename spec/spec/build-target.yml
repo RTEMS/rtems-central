@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    description: |
+      It shall be the target file path.  The path to the target file shall be
+      relative to the directory of the :file:`wscript`.  The target file is
+      located in the build tree.
+spec-name: Build Target
+spec-type: build-target
+type: spec

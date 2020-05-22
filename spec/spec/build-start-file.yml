@@ -7,44 +7,35 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: build-type
-  spec-value: bsp
+  spec-value: start-file
   uid: build
 spec-description: null
 spec-example: null
 spec-info:
   dict:
     attributes:
-      arch:
-        description: |
-          It shall be the target architecture of the BSP.
-        spec-type: str
-      bsp:
-        description: |
-          It shall be the base BSP variant name.
-        spec-type: str
-      cflags:
+      asflags:
         description: null
-        spec-type: build-cflags
+        spec-type: build-asflags
       cppflags:
         description: null
         spec-type: build-cppflags
-      family:
-        description: |
-          It shall be the BSP family name.  The name shall be the last
-          directory of the path to the BSP sources.
-        spec-type: str
       includes:
         description: null
         spec-type: build-includes
-      install:
+      install-path:
         description: null
-        spec-type: build-install-list
+        spec-type: build-install-path
       source:
         description: null
         spec-type: build-source-list
+      target:
+        description: null
+        spec-type: build-target
     description: |
-      This set of attributes specifies a base BSP variant to build.
+      This set of attributes specifies a start file to build which is used to
+      link an executable.
     required-attributes: all
-spec-name: Build BSP Item Type
-spec-type: build-bsp
+spec-name: Build Start File Item Type
+spec-type: build-start-file
 type: spec

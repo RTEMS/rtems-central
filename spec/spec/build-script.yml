@@ -1,0 +1,87 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: script
+  uid: build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      do-configure:
+        description: |
+          If this script shall execute, then it shall be Python code which is
+          executed via ``exec()`` in the context of the ``do_configure()``
+          method of the :file:`wscript`.  A local variable ``conf`` is
+          available with the ``waf`` configuration context.  A local variable
+          ``cic`` is available with the configuration item context.
+        spec-type: optional-str
+      do-build:
+        description: |
+          If this script shall execute, then it shall be Python code which is
+          executed via ``exec()`` in the context of the ``do_build()`` method
+          of the :file:`wscript`.  A local variable ``bld`` is available with
+          the ``waf`` build context.  A local variable ``bic`` is available
+          with the build item context.
+        spec-type: optional-str
+      prepare-configure:
+        description: |
+          If this script shall execute, then it shall be Python code which is
+          executed via ``exec()`` in the context of the ``prepare_configure()``
+          method of the :file:`wscript`.  A local variable ``conf`` is
+          available with the ``waf`` configuration context.  A local variable
+          ``cic`` is available with the configuration item context.
+        spec-type: optional-str
+      prepare-build:
+        description: |
+          If this script shall execute, then it shall be Python code which is
+          executed via ``exec()`` in the context of the ``prepare_build()``
+          method of the :file:`wscript`.  A local variable ``bld`` is available
+          with the ``waf`` build context.  A local variable ``bic`` is
+          available with the build item context.
+        spec-type: optional-str
+      stlib:
+        description: |
+          It shall be a list of external static library identifiers used to
+          link this test program, e.g. ``m`` for ``libm.a``.
+        spec-type: list-str
+      use-after:
+        description: null
+        spec-type: build-use-after-list
+      use-before:
+        description: null
+        spec-type: build-use-before-list
+      asflags:
+        description: null
+        spec-type: build-asflags
+      cflags:
+        description: null
+        spec-type: build-cflags
+      cppflags:
+        description: null
+        spec-type: build-cppflags
+      cxxflags:
+        description: null
+        spec-type: build-cxxflags
+      includes:
+        description: null
+        spec-type: build-includes
+      ldflags:
+        description: null
+        spec-type: build-ldflags
+    description: |
+      This set of attributes specifies build scripts.
+    required-attributes:
+    - do-build
+    - do-configure
+    - prepare-build
+    - prepare-configure
+spec-name: Build Script Item Type
+spec-type: build-script
+type: spec

@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    generic-attributes:
+      description: |
+        The keys shall be test program names.  The names shall correspond to
+        the name of a :ref:`SpecTypeBuildTestItemType` item.  Due to the
+        processing order of items, there is no way to check if the name
+        specified by the attribute key is valid.
+      spec-type: build-test-state
+    description: |
+      This set of attributes specifies test states for a set of test programs.
+    required-attributes: all
+spec-name: Build Option Set Test State Action
+spec-type: build-action-set-test-state
+type: spec

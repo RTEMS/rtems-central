@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: config-file
+  uid: build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      content:
+        description: |
+          This mandatory attribute defines the content of the configuration
+          file. A ${VARIABLE} substitution is performed during the configure
+          command execution using the variables of the configuration set.  Use
+          $$ for a plain $ character. To have all variables from sibling items
+          available for substitution it is recommended to link them in the
+          proper order.
+        spec-type: str
+      install-path:
+        description: null
+        spec-type: build-install-path
+      target:
+        description: null
+        spec-type: build-target
+    description: |
+      This set of attributes specifies a configuration file placed in the build
+      tree.  The files are generated during the configure command execution and
+      are placed in the build tree.
+    required-attributes: all
+spec-name: Build Configuration File Item Type
+spec-type: build-config-file
+type: spec

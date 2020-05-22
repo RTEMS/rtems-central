@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    description: |
+      It shall be an internal static library identifier.  They are used to link
+      programs referenced by this item, e.g. ``z`` for ``libz.a``.  They are
+      placed before the use items of the build item context.
+spec-name: Build Use Before Directive
+spec-type: build-use-before
+type: spec

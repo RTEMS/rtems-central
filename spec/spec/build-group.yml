@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: group
+  uid: build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      includes:
+        description: null
+        spec-type: build-includes
+      install:
+        description: null
+        spec-type: build-install-list
+      ldflags:
+        description: |
+          This mandatory attribute defines a list of options for the linker.
+          They are used to link programs referenced by this item.
+        spec-type: list-str
+      use-after:
+        description: null
+        spec-type: build-use-after-list
+      use-before:
+        description: null
+        spec-type: build-use-before-list
+    description: |
+      This set of attributes provides a means to aggregate other build items
+      and modify the build item context which is used by referenced build
+      items.  The ``includes``, ``ldflags``, ``objects``, and ``use`` variables
+      of the build item context are updated by the corresponding attributes of
+      the build group.
+    required-attributes: all
+spec-name: Build Group Item Type
+spec-type: build-group
+type: spec

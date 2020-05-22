@@ -20,6 +20,6 @@ spec-info:
       :ref:`SpecTypeBuildTestProgramItemType` items the includes are only
       visible to the sources specified by the item itself and they do not
       propagate to referenced items.
-spec-name: Build Include
+spec-name: Build Include Path
 spec-type: build-include
 type: spec

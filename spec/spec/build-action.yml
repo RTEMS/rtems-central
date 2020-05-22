@@ -1,0 +1,225 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      append-test-cppflags:
+        description: |
+          It shall be the name of a test program.  The action appends the
+          action value to the ``CPPFLAGS`` of the test program.  The name shall
+          correspond to the name of a :ref:`SpecTypeBuildTestProgramItemType`
+          item.  Due to the processing order of items, there is no way to check
+          if the name specified by the attribute value is valid.
+        spec-type: str
+      assert-aligned:
+        description: |
+          The action asserts that the action value is aligned according to the
+          attribute value.
+        spec-type: int
+      assert-eq:
+        description: |
+          The action asserts that the action value is equal to the attribute
+          value.
+        spec-type: bool-or-int-or-str
+      assert-ne:
+        description: |
+          The action asserts that the action value is not equal to the
+          attribute value.
+        spec-type: bool-or-int-or-str
+      assert-le:
+        description: |
+          The action asserts that the action value is less than or equal to the
+          attribute value.
+        spec-type: int-or-str
+      assert-lt:
+        description: |
+          The action asserts that the action value is less than the attribute
+          value.
+        spec-type: int-or-str
+      assert-ge:
+        description: |
+          The action asserts that the action value is greater than or equal to
+          the attribute value.
+        spec-type: int-or-str
+      assert-gt:
+        description: |
+          The action asserts that the action value is greater than the
+          attribute value.
+        spec-type: int-or-str
+      assert-int8:
+        description: |
+          The action asserts that the action value is a valid signed 8-bit
+          integer.
+        spec-type: none
+      assert-uint8:
+        description: |
+          The action asserts that the action value is a valid unsigned 8-bit
+          integer.
+        spec-type: none
+      assert-int16:
+        description: |
+          The action asserts that the action value is a valid signed 16-bit
+          integer.
+        spec-type: none
+      assert-uint16:
+        description: |
+          The action asserts that the action value is a valid unsigned 16-bit
+          integer.
+        spec-type: none
+      assert-int32:
+        description: |
+          The action asserts that the action value is a valid signed 32-bit
+          integer.
+        spec-type: none
+      assert-uint32:
+        description: |
+          The action asserts that the action value is a valid unsigned 32-bit
+          integer.
+        spec-type: none
+      assert-int64:
+        description: |
+          The action asserts that the action value is a valid signed 64-bit
+          integer.
+        spec-type: none
+      assert-uint64:
+        description: |
+          The action asserts that the action value is a valid unsigned 64-bit
+          integer.
+        spec-type: none
+      assert-power-of-two:
+        description: |
+          The action asserts that the action value is a power of two.
+        spec-type: none
+      check-cc:
+        description: null
+        spec-type: build-action-check-cc
+      check-cxx:
+        description: null
+        spec-type: build-action-check-cxx
+      define-condition:
+        description: |
+          The action adds a conditional define to the configuration set.  If
+          the attribute value is present, then it is used as the name of the
+          define, otherwise the ``name`` of the item is used.  The value of the
+          define is the action value.
+        spec-type: optional-str
+      define:
+        description: |
+          The action adds a define to the configuration set.  If the attribute
+          value is present, then it is used as the name of the define,
+          otherwise the ``name`` of the item is used.  The value of the define
+          is the action value.  If the action value is a string, then it is
+          quoted.
+        spec-type: optional-str
+      define-unquoted:
+        description: |
+          The action adds a define to the configuration set.  If the attribute
+          value is present, then it is used as the name of the define,
+          otherwise the ``name`` of the item is used.  The value of the define
+          is the action value.  If the action value is a string, then it is not
+          quoted.
+        spec-type: optional-str
+      env-append:
+        description: |
+          The action appends the action value to an environment of the
+          configuration set.  If the attribute value is present, then it is
+          used as the name of the environment variable, otherwise the ``name``
+          of the item is used.
+        spec-type: optional-str
+      env-assign:
+        description: |
+          The action assigns the action value to an environment of the
+          configuration set.  If the attribute value is present, then it is
+          used as the name of the environment variable, otherwise the ``name``
+          of the item is used.
+        spec-type: optional-str
+      env-enable:
+        description: |
+          If the action value is true, then a name is appended to the
+          ``ENABLE`` environment variable of the configuration set.  If the
+          attribute value is present, then it is used as the name, otherwise
+          the ``name`` of the item is used.
+        spec-type: optional-str
+      find-program:
+        description: |
+          The action tries to find the program specified by the action value.
+          Uses the ``${PATH}`` to find the program.  Returns the result of the
+          find operation, e.g. a path to the program.
+        spec-type: none
+      find-tool:
+        description: |
+          The action tries to find the tool specified by the action value.
+          Uses the tool paths specified by the ``--rtems-tools`` command line
+          option.  Returns the result of the find operation, e.g. a path to the
+          program.
+        spec-type: none
+      format-and-define:
+        description: |
+          The action adds a define to the configuration set.  If the attribute
+          value is present, then it is used as the name of the define,
+          otherwise the ``name`` of the item is used.  The value of the define
+          is the action value.  The value is formatted according to the
+          ``format`` attribute value.
+        spec-type: optional-str
+      get-boolean:
+        description: |
+          The action gets the action value for subsequent actions from a
+          configuration file variable named by the items ``name`` attribute.
+          If no such variable exists in the configuration file, then the
+          default value is used.  The value is converted to a boolean.
+        spec-type: none
+      get-integer:
+        description: |
+          The action gets the action value for subsequent actions from a
+          configuration file variable named by the items ``name`` attribute.
+          If no such variable exists in the configuration file, then the
+          default value is used.  The value is converted to an integer.
+        spec-type: none
+      get-string:
+        description: |
+          The action gets the action value for subsequent actions from a
+          configuration file variable named by the items ``name`` attribute.
+          If no such variable exists in the configuration file, then the
+          default value is used.  The value is converted to a string.
+        spec-type: none
+      get-env:
+        description: |
+          The action gets the action value for subsequent actions from the
+          environment variable of the configuration set named by the attribute
+          value.
+        spec-type: str
+      script:
+        description: |
+          The action executes the attribute value with the Python ``eval()``
+          function in the context of the script action handler.
+        spec-type: str
+      set-test-state:
+        description: null
+        spec-type: build-action-set-test-state
+      set-value:
+        description: |
+          The action sets the action value for subsequent actions to the
+          attribute value.
+        spec-type: build-option-value
+      split:
+        description: |
+          The action splits the action value.
+        spec-type: none
+      substitute:
+        description: |
+          The action Performs a ``${VARIABLE}`` substitution on the action
+          value.  Use ``$$`` for a plain ``$`` character.
+        spec-type: none
+    description: |
+      This set of attributes specifies a build option action.
+    required-attributes: exactly-one
+spec-name: Build Option Action
+spec-type: build-action
+type: spec

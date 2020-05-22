@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: option
+  uid: build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      actions:
+        description: |
+          Each action operates on the *action value* handed over by a previous
+          action and action-specific attribute values.  The actions pass the
+          processed action value to the next action in the list.  The first
+          action starts with an action value of ``None``.  The actions are
+          carried out during the configure command execution.
+        spec-type: build-action-list
+      default:
+        description: |
+          It shall be the default value of the option if no variant-specific
+          default value is specified.  Use ``null`` to specify that no default
+          value exits.  The variant-specific default values may be specified by
+          the ``default-by-variant`` attribute.
+        spec-type: build-option-value
+      default-by-variant:
+        description: |
+          The list is processed from top to bottom.  If a matching variant is
+          found, then the processing stops.
+        spec-type: build-default-by-variant-list
+      format:
+        description: |
+          It shall be a `Python format string
+          <https://docs.python.org/3/library/string.html#formatstrings>`_, for
+          example ``'{}'`` or ``'{:#010x}'``.
+        spec-type: optional-str
+      name:
+        description: null
+        spec-type: build-option-name
+      description:
+        description: |
+          It shall be the description of the option.
+        spec-type: optional-str
+    description: |
+      This set of attributes specifies a build option.
+    required-attributes:
+    - actions
+    - default
+    - default-by-variant
+    - description
+spec-name: Build Option Item Type
+spec-type: build-option
+type: spec

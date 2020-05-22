@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      fragment:
+        description: |
+          It shall be a code fragment used to check the availability of a
+          certain feature through compilation with the C++ compiler.  The
+          resulting object is not linked to an executable.
+        spec-type: str
+      message:
+        description: |
+          It shall be a description of the feature to check.
+        spec-type: str
+      cxxflags:
+        description: null
+        spec-type: build-cxxflags
+    description: |
+      This set of attributes specifies a check done using the C++ compiler.
+    required-attributes: all
+spec-name: Build Option C++ Compiler Check Action
+spec-type: build-action-check-cxx
+type: spec
