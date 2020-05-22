@@ -3,8 +3,10 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
+non-functional-type: constraint
+requirement-type: non-functional
 text: |
   The value of this configuration option shall be less than or equal to a
   BSP-specific and application-specific value which depends on the size of the
   memory available to the application.
-type: constraint
+type: requirement
