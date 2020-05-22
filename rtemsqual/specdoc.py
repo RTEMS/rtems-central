@@ -116,11 +116,9 @@ class _Documenter:
 
     def refinements(self) -> Iterator["_Documenter"]:
         """ Yields the refinements of this type. """
-        refinements = [
-            self._documenter_map[link.item["spec-type"]]
-            for link in self._item.links_to_children()
-            if link.role == "spec-refinement"
-        ]
+        refinements = set(self._documenter_map[link.item["spec-type"]]
+                          for link in self._item.links_to_children()
+                          if link.role == "spec-refinement")
         yield from sorted(refinements, key=lambda x: x.section)
 
     def refines(self) -> Iterator[Tuple["_Documenter", str, str]]:
