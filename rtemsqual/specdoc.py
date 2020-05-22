@@ -207,6 +207,20 @@ class _Documenter:
         # pylint: disable=no-self-use
         content.paste(f"There {shall} by be no value (null).")
 
+    def _add_description(self, content: SphinxContent) -> None:
+        refines = [
+            f"{documenter.get_section_reference(content)} though the "
+            f"``{key}`` attribute if the value is ``{value}``"
+            for documenter, key, value in self.refines()
+        ]
+        if len(refines) == 1:
+            content.wrap(f"This type refines the {refines[0]}.")
+        else:
+            content.add_list(refines,
+                             "This type refines the following types:",
+                             add_blank_line=True)
+        content.paste(self._description)
+
     def document(self,
                  content: SphinxContent,
                  names: Optional[Set[str]] = None) -> None:
@@ -216,18 +230,7 @@ class _Documenter:
         content.register_license_and_copyrights_of_item(self._item)
         with content.section(self.section, _SECTION_PREFIX):
             last = content.lines[-1]
-            refines = [
-                f"{documenter.get_section_reference(content)} though the "
-                f"``{key}`` attribute if the value is ``{value}``"
-                for documenter, key, value in self.refines()
-            ]
-            if len(refines) == 1:
-                content.wrap(f"This type refines the {refines[0]}.")
-                content.paste(self._description)
-            else:
-                content.add_list("This type refines the following types:",
-                                 refines)
-                content.wrap(self._description)
+            self._add_description(content)
             if len(self._info_map) == 1:
                 if last == content.lines[-1]:
                     content.add_blank_line()
@@ -240,10 +243,10 @@ class _Documenter:
                     with content.list_item(""):
                         _DOCUMENT[key](self, content, key, "may",
                                        self._info_map[key])
-            content.add_list("This type is refined by the following types:", [
+            content.add_list([
                 refinement.get_section_reference(content)
                 for refinement in self.refinements()
-            ])
+            ], "This type is refined by the following types:")
             example = self._item["spec-example"]
             if example:
                 content.add("Please have a look at the following example:")

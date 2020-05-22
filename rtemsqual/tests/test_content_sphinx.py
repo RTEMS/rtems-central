@@ -150,14 +150,23 @@ def test_list_item():
 
 def test_add_list():
     content = SphinxContent()
-    content.add_list("a", [])
+    content.add_list([], "a")
     assert str(content) == ""
-    content.add_list("a", ["b", "c"])
+    content.add_list(["b", "c"], "a", "d")
     assert str(content) == """a
 
 * b
 
 * c
+
+d
+"""
+    content = SphinxContent()
+    content.add_list(["b", "c"], add_blank_line=True)
+    assert str(content) == """* b
+
+* c
+
 """
 
 

@@ -29,14 +29,15 @@ import itertools
 import os
 import re
 import textwrap
-from typing import Any, Callable, ContextManager, Dict, Iterator, List, \
-    NamedTuple, Optional, Set, Tuple, Union
+from typing import Any, Callable, ContextManager, Dict, Iterable, Iterator, \
+    List, NamedTuple, Optional, Set, Tuple, Union
 
 from rtemsqual.items import Item, ItemMapper
 
 AddContext = Callable[["Content"], ContextManager[None]]
 GenericContent = Union[str, List[str], "Content"]
-GenericContentList = Union[List[str], List[List[str]], List[GenericContent]]
+GenericContentIterable = Union[Iterable[str], Iterable[List[str]],
+                               Iterable[GenericContent]]
 
 
 class Copyright:
@@ -486,13 +487,19 @@ class SphinxContent(Content):
         """ Adds a list item. """
         self.wrap(content, initial_indent="* ", subsequent_indent="  ")
 
-    def add_list(self, introduction: GenericContent,
-                 items: GenericContentList) -> None:
+    def add_list(self,
+                 items: GenericContentIterable,
+                 prologue: Optional[GenericContent] = None,
+                 epilogue: Optional[GenericContent] = None,
+                 add_blank_line: bool = False) -> None:
         """ Adds a list with introduction. """
         if items:
-            self.wrap(introduction)
+            self.wrap(prologue)
             for item in items:
                 self.add_list_item(item)
+            if add_blank_line:
+                self.add_blank_line()
+            self.wrap(epilogue)
 
     def open_list_item(self, content: GenericContent) -> None:
         """ Opens a list item. """

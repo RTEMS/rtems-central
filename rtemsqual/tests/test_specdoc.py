@@ -128,6 +128,7 @@ This type refines the following types:
 * :ref:`SpecTypeD` though the ``d1`` attribute if the value is ``b``
 
 * :ref:`SpecTypeRoot` though the ``type`` attribute if the value is ``b``
+
 Generic attributes may be defined. Each attribute key shall be a
 :ref:`SpecTypeName`. The value shall be a list. Each list element shall be a
 string.
