@@ -18,7 +18,7 @@ copyrights:
 enabled-by: true
 interface-type: appl-config-option
 links:
-- role: null
+- role: appl-config-group-member
   uid: ../schedgeneral
 text: ''
 type: interface
