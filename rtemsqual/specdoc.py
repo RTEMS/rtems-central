@@ -217,11 +217,12 @@ class _Documenter:
         ]
         if len(refines) == 1:
             content.wrap(f"This type refines the {refines[0]}.")
+            content.paste(self._description)
         else:
             content.add_list(refines,
                              "This type refines the following types:",
                              add_blank_line=True)
-        content.paste(self._description)
+            content.wrap(self._description)
 
     def document(self,
                  content: SphinxContent,
