@@ -396,8 +396,8 @@ class _ItemVerifier(_Verifier):
                                       self._info_map[type_name])
         logging.error(
             "%s expected value of types %s for type '%s', "
-            "actual type '%s'", _prefix(path),
-            str(sorted(list(self._info_map.keys()))), self._name, type_name)
+            "actual type '%s'", _prefix(path), str(sorted(self._info_map)),
+            self._name, type_name)
         return set()
 
     def _add_subtype_verifier(self, subtype_key: str, subtype_value: str,
@@ -478,11 +478,11 @@ def verify(config: dict, item_cache: ItemCache) -> None:
         return
     root_verifier = _create_verifier(root_item, verifier_map)
     _gather_item_verifiers(root_item, verifier_map)
-    for name in sorted(verifier_map.keys()):
+    for name in sorted(verifier_map):
         logging.info("type: %s", name)
         verifier_map[name].resolve_type_refinements()
     logging.info("start specification item verification")
-    for key in sorted(item_cache.all.keys()):
+    for key in sorted(item_cache.all):
         item = item_cache[key]
         root_verifier.verify(_Path(item, f"{item.uid}:"), item.data)
     logging.info("finished specification item verification")

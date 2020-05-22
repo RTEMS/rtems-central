@@ -239,7 +239,7 @@ class _Documenter:
             else:
                 content.add("A value of this type shall be of one of "
                             "the following variants:")
-                for key in sorted(self._info_map.keys()):
+                for key in sorted(self._info_map):
                     with content.list_item(""):
                         _DOCUMENT[key](self, content, key, "may",
                                        self._info_map[key])

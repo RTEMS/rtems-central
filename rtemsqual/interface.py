@@ -493,7 +493,7 @@ class _HeaderFile:
             nodes_in_dependency_order.insert(0, node)
 
             # Sort by UID
-            for uid in sorted(node.out_edges.keys()):
+            for uid in sorted(node.out_edges):
                 in_degree[uid] -= 1
                 if in_degree[uid] == 0:
                     queue.append(self._nodes[uid])
