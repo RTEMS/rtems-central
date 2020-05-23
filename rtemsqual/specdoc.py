@@ -138,7 +138,8 @@ class _Documenter:
 
     def _document_attributes(self, content: SphinxContent,
                              attributes: Any) -> None:
-        for key, info in attributes.items():
+        for key in sorted(attributes):
+            info = attributes[key]
             content.add(key)
             with content.indent():
                 content.wrap(
