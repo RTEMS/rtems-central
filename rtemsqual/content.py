@@ -541,7 +541,7 @@ class SphinxMapper(ItemMapper):
                   _index: Optional[int]) -> Any:
         """ Gets a value by key and optional index. """
         # pylint: disable=no-self-use
-        if key == "glossary-term":
+        if key == "term":
             return f":term:`{value[key]}`"
         raise KeyError
 

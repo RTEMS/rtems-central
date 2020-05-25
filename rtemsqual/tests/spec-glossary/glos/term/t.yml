@@ -1,12 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-glossary-term: T
+term: T
 glossary-type: term
 links:
 - role: null
   uid: ../g
 text: |
-  Term text $$${/glos/term/u:/glossary-term} ${/glos/term/t:/glossary-term}
+  Term text $$${/glos/term/u:/term} ${/glos/term/t:/term}
   ${/glos/term/u:/glossary-type}.
 type: glossary

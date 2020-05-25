@@ -54,11 +54,10 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     content.add(".. glossary::")
     with content.indent():
         content.add(":sorted:")
-        for item in sorted(terms.values(),
-                           key=lambda x: x["glossary-term"].lower()):
+        for item in sorted(terms.values(), key=lambda x: x["term"].lower()):
             content.register_license_and_copyrights_of_item(item)
             text = SphinxMapper(item).substitute(item["text"])
-            content.add_definition_item(item["glossary-term"], text)
+            content.add_definition_item(item["term"], text)
     content.add_licence_and_copyrights()
     return content
 
@@ -87,7 +86,7 @@ class _GlossaryMapper(ItemMapper):
     def get_value(self, item: Item, _path: str, _value: Any, key: str,
                   _index: Optional[int]) -> Any:
         """ Recursively adds glossary terms to the document terms. """
-        if key == "glossary-term":
+        if key == "term":
             if item.uid not in self._document_terms:
                 self._document_terms[item.uid] = item
                 _GlossaryMapper(item,

@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-glossary-term: TLS
+term: TLS
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
 text: |
   An acronym for Thread-Local Storage :cite:`Drepper:2013:TLS`.  TLS is
-  available in ${c11:/glossary-term} and ${cxx11:/glossary-term}.  The support for TLS depends
+  available in ${c11:/term} and ${cxx11:/term}.  The support for TLS depends
   on the CPU port :cite:`RTEMS:CPU`.
 type: glossary

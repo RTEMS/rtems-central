@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-glossary-term: software unit
+term: software unit
 glossary-type: term
 links:
 - role: glossary-member
@@ -12,10 +12,10 @@ text: |
   piece of source code".  For this project a *software unit* shall be any of
   the following items and nothing else:
 
-  * ${assemblerlanguage:/glossary-term} function in a
-    ${sourcecode:/glossary-term} file
+  * ${assemblerlanguage:/term} function in a
+    ${sourcecode:/term} file
 
-  * ${clanguage:/glossary-term} function (external and internal linkage)
+  * ${clanguage:/term} function (external and internal linkage)
 
-  A *software unit* is a ${softwarecomponent:/glossary-term}.
+  A *software unit* is a ${softwarecomponent:/term}.
 type: glossary
