@@ -7,10 +7,12 @@ copyrights:
 - Copyright (C) 2014 Paval Pisa
 definition:
   default:
+    body: null
     params: []
     return: void *
   variants:
   - definition:
+      body: null
       params: []
       return: __attribute__((__error__("RTEMS_DEQUALIFY() types differ not only by
         volatile and const"))) void *

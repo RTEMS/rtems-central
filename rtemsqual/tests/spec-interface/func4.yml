@@ -5,6 +5,7 @@ enabled-by: true
 brief: Void function brief description with very long return type.
 definition:
   default:
+    body: null
     params: []
     return: VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
   variants: []

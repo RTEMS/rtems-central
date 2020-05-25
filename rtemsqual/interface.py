@@ -319,8 +319,9 @@ class Node:
         return f"#define {name}"
 
     def _get_function_definition(self, item: Item, definition: Any) -> Lines:
+        body = definition["body"]
         ret = self.substitute(definition["return"])
-        if "body" in definition:
+        if body:
             ret = "static inline " + ret
         name = item["name"]
         space = "" if ret.endswith("*") else " "
@@ -336,12 +337,12 @@ class Node:
             line = f"{ret}{space}{name}(void)"
             if len(line) > 79:
                 line = f"{ret}\n{name}(void)"
-        if "body" in definition:
-            body = self.substitute("\n  ".join(
-                definition["body"].strip("\n").split("\n")))
+        if body:
+            body_lines = self.substitute("\n  ".join(
+                body.strip("\n").split("\n")))
             line = f"""{line}
 {{
-  {body}
+  {body_lines}
 }}"""
         else:
             line += ";"

@@ -5,6 +5,7 @@ enabled-by: true
 brief: Function brief description.
 definition:
   default:
+    body: null
     params:
     - int ${.:/params[0]/name}
     - const int *${.:/params[1]/name}

@@ -4,6 +4,7 @@ copyrights:
 - Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    body: null
     params:
     - ${code:/name} ${.:/params[0]/name}
     return: const char *

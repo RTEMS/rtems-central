@@ -5,6 +5,7 @@ enabled-by: true
 brief: Void function brief description.
 definition:
   default:
+    body: null
     params: []
     return: void
   variants: []

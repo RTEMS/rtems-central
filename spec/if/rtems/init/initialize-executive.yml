@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 2015, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    body: null
     params: []
     return: ${/if/rtems/basedefs/no-return:/name} void
   variants: []

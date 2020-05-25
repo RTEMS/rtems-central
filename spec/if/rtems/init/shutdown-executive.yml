@@ -6,6 +6,7 @@ copyrights:
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    body: null
     params:
     - ${/if/c/uint32_t:/name} ${.:/params[0]/name}
     return: ${/if/rtems/basedefs/no-return:/name} void
