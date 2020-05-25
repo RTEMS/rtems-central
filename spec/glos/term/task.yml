@@ -3,11 +3,11 @@ copyrights:
 - Copyright (C) 2017, 2019 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: task
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: task
 text: |
   This project uses the
   `thread definition of Wikipedia <https://en.wikipedia.org/wiki/Thread_(computing)>`_:

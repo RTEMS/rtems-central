@@ -10,15 +10,15 @@ spec-example: null
 spec-info:
   dict:
     attributes:
+      value:
+        description: |
+          It value shall be the default value for the matching variants.
+        spec-type: build-option-value
       variants:
         description: |
           It shall be a list of Python regular expression matching with the
           desired variants.
         spec-type: list-str
-      value:
-        description: |
-          It value shall be the default value for the matching variants.
-        spec-type: build-option-value
     description: |
       This set of attributes specifies build option default values by variant.
     required-attributes: all

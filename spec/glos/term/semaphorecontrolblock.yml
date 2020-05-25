@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: Semaphore Control Block
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: Semaphore Control Block
 text: |
   A data structure associated with each semaphore used by RTEMS to manage
   that semaphore.

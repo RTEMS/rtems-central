@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: First In First Out
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: First In First Out
 text: |
   A discipline for manipulating entries in a data structure.
 type: glossary

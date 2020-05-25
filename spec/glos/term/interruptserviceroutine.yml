@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: Interrupt Service Routine
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: Interrupt Service Routine
 text: |
   An ISR is invoked by the CPU to process a pending interrupt.
 type: glossary

@@ -10,6 +10,9 @@ spec-example: null
 spec-info:
   dict:
     attributes:
+      cflags:
+        description: null
+        spec-type: build-cflags
       fragment:
         description: |
           It shall be a code fragment used to check the availability of a
@@ -20,9 +23,6 @@ spec-info:
         description: |
           It shall be a description of the feature to check.
         spec-type: str
-      cflags:
-        description: null
-        spec-type: build-cflags
     description: |
       This set of attributes specifies a check done using the C compiler.
     required-attributes: all

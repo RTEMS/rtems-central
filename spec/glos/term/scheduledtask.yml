@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: scheduled task
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: scheduled task
 text: |
   A task is scheduled if it is allowed to execute and has a processor
   assigned.  Such a task executes currently on a processor or is about to

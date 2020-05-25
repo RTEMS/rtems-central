@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2017 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-term: TTAS
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: TTAS
 text: |
   An acronym for Test and Test-And-Set.
 type: glossary

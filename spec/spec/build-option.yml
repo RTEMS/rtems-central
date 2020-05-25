@@ -34,6 +34,10 @@ spec-info:
           The list is processed from top to bottom.  If a matching variant is
           found, then the processing stops.
         spec-type: build-default-by-variant-list
+      description:
+        description: |
+          It shall be the description of the option.
+        spec-type: optional-str
       format:
         description: |
           It shall be a `Python format string
@@ -43,10 +47,6 @@ spec-info:
       name:
         description: null
         spec-type: build-option-name
-      description:
-        description: |
-          It shall be the description of the option.
-        spec-type: optional-str
     description: |
       This set of attributes specifies a build option.
     required-attributes:

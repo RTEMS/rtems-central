@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: envelope
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: envelope
 text: |
   A buffer provided by the MPCI layer to RTEMS which is used to pass
   messages between nodes in a multiprocessor system.  It typically contains

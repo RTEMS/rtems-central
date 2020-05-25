@@ -14,6 +14,10 @@ spec-example: null
 spec-info:
   dict:
     attributes:
+      guard:
+        description: |
+          It shall be the header guard define.
+        spec-type: str
       include-headers:
         description: |
           It shall be a list of header files to include via ``#include <...>``.
@@ -21,10 +25,6 @@ spec-info:
       install-path:
         description: null
         spec-type: build-install-path
-      guard:
-        description: |
-          It shall be the header guard define.
-        spec-type: str
       target:
         description: null
         spec-type: build-target

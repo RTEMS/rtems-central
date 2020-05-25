@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: periodic task
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: periodic task
 text: |
   A task which must execute at regular intervals and comply with a hard
   deadline.

@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-term: RTEMS
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: RTEMS
 text: |
   An acronym for Real-Time Executive for Multiprocessor Systems.
 type: glossary

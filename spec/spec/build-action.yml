@@ -28,21 +28,6 @@ spec-info:
           The action asserts that the action value is equal to the attribute
           value.
         spec-type: bool-or-int-or-str
-      assert-ne:
-        description: |
-          The action asserts that the action value is not equal to the
-          attribute value.
-        spec-type: bool-or-int-or-str
-      assert-le:
-        description: |
-          The action asserts that the action value is less than or equal to the
-          attribute value.
-        spec-type: int-or-str
-      assert-lt:
-        description: |
-          The action asserts that the action value is less than the attribute
-          value.
-        spec-type: int-or-str
       assert-ge:
         description: |
           The action asserts that the action value is greater than or equal to
@@ -53,24 +38,9 @@ spec-info:
           The action asserts that the action value is greater than the
           attribute value.
         spec-type: int-or-str
-      assert-int8:
-        description: |
-          The action asserts that the action value is a valid signed 8-bit
-          integer.
-        spec-type: none
-      assert-uint8:
-        description: |
-          The action asserts that the action value is a valid unsigned 8-bit
-          integer.
-        spec-type: none
       assert-int16:
         description: |
           The action asserts that the action value is a valid signed 16-bit
-          integer.
-        spec-type: none
-      assert-uint16:
-        description: |
-          The action asserts that the action value is a valid unsigned 16-bit
           integer.
         spec-type: none
       assert-int32:
@@ -78,14 +48,43 @@ spec-info:
           The action asserts that the action value is a valid signed 32-bit
           integer.
         spec-type: none
-      assert-uint32:
-        description: |
-          The action asserts that the action value is a valid unsigned 32-bit
-          integer.
-        spec-type: none
       assert-int64:
         description: |
           The action asserts that the action value is a valid signed 64-bit
+          integer.
+        spec-type: none
+      assert-int8:
+        description: |
+          The action asserts that the action value is a valid signed 8-bit
+          integer.
+        spec-type: none
+      assert-le:
+        description: |
+          The action asserts that the action value is less than or equal to the
+          attribute value.
+        spec-type: int-or-str
+      assert-lt:
+        description: |
+          The action asserts that the action value is less than the attribute
+          value.
+        spec-type: int-or-str
+      assert-ne:
+        description: |
+          The action asserts that the action value is not equal to the
+          attribute value.
+        spec-type: bool-or-int-or-str
+      assert-power-of-two:
+        description: |
+          The action asserts that the action value is a power of two.
+        spec-type: none
+      assert-uint16:
+        description: |
+          The action asserts that the action value is a valid unsigned 16-bit
+          integer.
+        spec-type: none
+      assert-uint32:
+        description: |
+          The action asserts that the action value is a valid unsigned 32-bit
           integer.
         spec-type: none
       assert-uint64:
@@ -93,9 +92,10 @@ spec-info:
           The action asserts that the action value is a valid unsigned 64-bit
           integer.
         spec-type: none
-      assert-power-of-two:
+      assert-uint8:
         description: |
-          The action asserts that the action value is a power of two.
+          The action asserts that the action value is a valid unsigned 8-bit
+          integer.
         spec-type: none
       check-cc:
         description: null
@@ -103,13 +103,6 @@ spec-info:
       check-cxx:
         description: null
         spec-type: build-action-check-cxx
-      define-condition:
-        description: |
-          The action adds a conditional define to the configuration set.  If
-          the attribute value is present, then it is used as the name of the
-          define, otherwise the ``name`` of the item is used.  The value of the
-          define is the action value.
-        spec-type: optional-str
       define:
         description: |
           The action adds a define to the configuration set.  If the attribute
@@ -117,6 +110,13 @@ spec-info:
           otherwise the ``name`` of the item is used.  The value of the define
           is the action value.  If the action value is a string, then it is
           quoted.
+        spec-type: optional-str
+      define-condition:
+        description: |
+          The action adds a conditional define to the configuration set.  If
+          the attribute value is present, then it is used as the name of the
+          define, otherwise the ``name`` of the item is used.  The value of the
+          define is the action value.
         spec-type: optional-str
       define-unquoted:
         description: |
@@ -175,6 +175,12 @@ spec-info:
           If no such variable exists in the configuration file, then the
           default value is used.  The value is converted to a boolean.
         spec-type: none
+      get-env:
+        description: |
+          The action gets the action value for subsequent actions from the
+          environment variable of the configuration set named by the attribute
+          value.
+        spec-type: str
       get-integer:
         description: |
           The action gets the action value for subsequent actions from a
@@ -189,12 +195,6 @@ spec-info:
           If no such variable exists in the configuration file, then the
           default value is used.  The value is converted to a string.
         spec-type: none
-      get-env:
-        description: |
-          The action gets the action value for subsequent actions from the
-          environment variable of the configuration set named by the attribute
-          value.
-        spec-type: str
       script:
         description: |
           The action executes the attribute value with the Python ``eval()``

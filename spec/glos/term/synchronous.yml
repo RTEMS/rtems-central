@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: synchronous
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: synchronous
 text: |
   Related in order or timing to other occurrences in the system.
 type: glossary

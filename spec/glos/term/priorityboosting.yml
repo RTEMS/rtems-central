@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: priority boosting
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: priority boosting
 text: |
   A simple approach to extend the priority inheritance protocol for
   clustered scheduling is priority boosting.  In case a mutex is owned by a

@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-term: YAML
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: YAML
 text: |
   An acronym for `YAML Ain't Markup Language <https://yaml.org/>`_.
 type: glossary

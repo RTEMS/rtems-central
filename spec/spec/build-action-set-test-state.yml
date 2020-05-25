@@ -10,6 +10,8 @@ spec-example: null
 spec-info:
   dict:
     attributes: {}
+    description: |
+      This set of attributes specifies test states for a set of test programs.
     generic-attributes:
       description: |
         The keys shall be test program names.  The names shall correspond to
@@ -17,8 +19,6 @@ spec-info:
         processing order of items, there is no way to check if the name
         specified by the attribute key is valid.
       spec-type: build-test-state
-    description: |
-      This set of attributes specifies test states for a set of test programs.
     required-attributes: all
 spec-name: Build Option Set Test State Action
 spec-type: build-action-set-test-state

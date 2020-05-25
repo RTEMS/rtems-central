@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: priority inversion
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: priority inversion
 text: |
   A form of indefinite postponement which occurs when a high priority tasks
   requests access to shared resource currently allocated to low priority

@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: physical address
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: physical address
 text: |
   The actual hardware address of a resource.
 type: glossary

@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: executing task
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: executing task
 text: |
   The task state entered by a task after it has been given control of the
   processor.  In SMP configurations, a task may be registered as executing

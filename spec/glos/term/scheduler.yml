@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: scheduler
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: scheduler
 text: |
   A scheduler or scheduling algorithm allocates processors to a subset of
   its set of ready tasks.  So it manages access to the processor resource.

@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: Proxy Control Block
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: Proxy Control Block
 text: |
   A data structure associated with each proxy used by RTEMS to manage that
   proxy.

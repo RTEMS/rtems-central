@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 1988, 1998 On-Line Applications Research Corporation (OAR)
 enabled-by: true
-term: handler
 glossary-type: term
 links:
 - role: glossary-member
   uid: ../general
+term: handler
 text: |
   The equivalent of a manager, except that it is internal to RTEMS and
   forms part of the core.  A handler is a collection of routines which
