@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 domain: c
 enabled-by: true
-interface-type: typedef
+interface-type: unspecified
 links:
 - role: interface-placement
   uid: stdint
