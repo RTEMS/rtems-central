@@ -1,17 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This status code indicates the object was deleted while the thread was
+  blocked waiting.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-brief: |
-  This status code indicates the object was deleted while the thread was
-  blocked waiting.
-interface-definition:
+definition:
   default: '7'
   variants: []
-interface-description: null
-interface-name: RTEMS_OBJECT_WAS_DELETED
-interface-notes: null
+description: null
+enabled-by: true
 interface-type: enumerator
 links: []
+name: RTEMS_OBJECT_WAS_DELETED
+notes: null
 type: interface

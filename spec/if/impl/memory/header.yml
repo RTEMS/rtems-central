@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+domain: implementation
 enabled-by: true
-interface-domain: implementation
-interface-path: rtems/score/memory.h
-interface-prefix: cpukit/include
 interface-type: header-file
 links: []
+path: rtems/score/memory.h
+prefix: cpukit/include
 type: interface

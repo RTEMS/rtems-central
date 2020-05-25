@@ -1,37 +1,37 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns true, if the left hand side status code is equal to the right hand
+  side status code, otherwise returns false.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-brief: |
-  Returns true, if the left hand side status code is equal to the right hand
-  side status code, otherwise returns false.
-interface-definition:
+definition:
   default:
     body: |
-      return ${.:/interface-params[0]/name} == ${.:/interface-params[1]/name};
+      return ${.:/params[0]/name} == ${.:/params[1]/name};
     params:
-    - ${code:/interface-name} ${.:/interface-params[0]/name}
-    - ${code:/interface-name} ${.:/interface-params[1]/name}
-    return: ${/if/c/bool:/interface-name}
+    - ${code:/name} ${.:/params[0]/name}
+    - ${code:/name} ${.:/params[1]/name}
+    return: ${/if/c/bool:/name}
   variants: []
-interface-description: null
-interface-name: rtems_are_statuses_equal
-interface-notes: null
-interface-params:
-- description: is the left hand side status code.
-  dir: null
-  name: left_status_code
-- description: is the right hand side status code.
-  dir: null
-  name: right_status_code
-interface-return:
-  return: null
-  return-values: []
+description: null
+enabled-by: true
 interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/classic/status
+name: rtems_are_statuses_equal
+notes: null
+params:
+- description: is the left hand side status code.
+  dir: null
+  name: left_status_code
+- description: is the right hand side status code.
+  dir: null
+  name: right_status_code
+return:
+  return: null
+  return-values: []
 type: interface

@@ -1,16 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Concatenates expansion of _x and expansion of _y.
 copyrights:
 - Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Concatenates expansion of _x and expansion of _y.
-interface-definition:
-  default: ${concat:/interface-name}( _x, _y )
+definition:
+  default: ${concat:/name}( _x, _y )
   variants: []
-interface-description: null
-interface-name: RTEMS_XCONCAT
-interface-notes: null
-interface-params:
+description: null
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/basedefs
+name: RTEMS_XCONCAT
+notes: null
+params:
 - description: |
     is expanded first and then used as the left hand side token of the
     concatenation.
@@ -21,14 +27,8 @@ interface-params:
     concatenation.
   dir: null
   name: _y
-interface-return:
+return:
   return: |
     The concatenation of the expansions of tokens _x and _y.
   return-values: []
-interface-type: macro
-links:
-- role: interface-placement
-  uid: header
-- role: interface-ingroup
-  uid: /groups/api/basedefs
 type: interface

@@ -1,25 +1,31 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Defines a global symbol with the specified name and value.
 copyrights:
 - Copyright (C) 2018, 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Defines a global symbol with the specified name and value.
-interface-definition:
+definition:
   default: ''
   variants:
   - definition: |
       __asm__(
-        "\t.globl " ${xstring:/interface-name}( ${symbol-name:/interface-name}( _name ) )
-        "\n\t.set " ${xstring:/interface-name}( ${symbol-name:/interface-name}( _name ) )
-        ", " ${string:/interface-name}( _value ) "\n"
+        "\t.globl " ${xstring:/name}( ${symbol-name:/name}( _name ) )
+        "\n\t.set " ${xstring:/name}( ${symbol-name:/name}( _name ) )
+        ", " ${string:/name}( _value ) "\n"
       )
     enabled-by:
-    - defined(${/if/compiler/user-label-prefix:/interface-name})
-interface-description: |
+    - defined(${/if/compiler/user-label-prefix:/name})
+description: |
   This macro shall be placed at file scope.
-interface-name: RTEMS_DEFINE_GLOBAL_SYMBOL
-interface-notes: null
-interface-params:
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/basedefs
+name: RTEMS_DEFINE_GLOBAL_SYMBOL
+notes: null
+params:
 - description: |
     is the user defined name of the symbol.  The name shall be a valid
     designator.  On the name a macro expansion is performed and afterwards it
@@ -32,13 +38,7 @@ interface-params:
     understood by the assembler.
   dir: null
   name: _value
-interface-return:
+return:
   return: null
   return-values: []
-interface-type: macro
-links:
-- role: interface-placement
-  uid: header
-- role: interface-ingroup
-  uid: /groups/api/basedefs
 type: interface

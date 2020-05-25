@@ -1,20 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Provided for backward compatibility.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Provided for backward compatibility.
-interface-definition:
+definition:
   default: |
-    ${no-return:/interface-name}
+    ${no-return:/name}
   variants: []
-interface-description: null
-interface-name: RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
-interface-notes: null
+description: null
+enabled-by: true
 interface-type: define
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/basedefs
+name: RTEMS_COMPILER_NO_RETURN_ATTRIBUTE
+notes: null
 type: interface

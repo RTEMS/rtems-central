@@ -1,29 +1,29 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Tells the compiler that this program point is unreachable.
 copyrights:
 - Copyright (C) 2016 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Tells the compiler that this program point is unreachable.
-interface-definition:
+definition:
   default: |
-    ${/if/impl/assert-unreachable:/interface-name}()
+    ${/if/impl/assert-unreachable:/name}()
   variants:
   - definition: |
       do {
-        ${/if/compiler/builtin-unreachable:/interface-name}();
-        ${/if/impl/assert-unreachable:/interface-name}();
+        ${/if/compiler/builtin-unreachable:/name}();
+        ${/if/impl/assert-unreachable:/name}();
       } while ( 0 )
     enabled-by:
-    - defined(${/if/compiler/gnuc:/interface-name})
-interface-description: null
-interface-name: RTEMS_UNREACHABLE
-interface-notes: null
-interface-params: []
-interface-return:
-  return: null
-  return-values: []
+    - defined(${/if/compiler/gnuc:/name})
+description: null
+enabled-by: true
 interface-type: macro
 links:
 - role: interface-placement
   uid: header
+name: RTEMS_UNREACHABLE
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
 type: interface

@@ -84,7 +84,7 @@ interface:
   - /if/build-options/domain
   - /if/compiler/domain
   - /if/use/domain
-  interface-domains:
+  domains:
     rtems: external/rtems
 spec-verification:
   root-type: /spec/root

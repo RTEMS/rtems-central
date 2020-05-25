@@ -1,18 +1,24 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Performs a type cast which removes volatile qualifiers without warnings to
+  the specified type for the specified pointer variable.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2014 Paval Pisa
-enabled-by: true
-interface-brief: |
-  Performs a type cast which removes volatile qualifiers without warnings to
-  the specified type for the specified pointer variable.
-interface-definition:
-  default: ${dequalify-depthx:/interface-name}(*, _type, _var)
+definition:
+  default: ${dequalify-depthx:/name}(*, _type, _var)
   variants: []
-interface-description: null
-interface-name: RTEMS_DEVOLATILE
-interface-notes: null
-interface-params:
+description: null
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/basedefs
+name: RTEMS_DEVOLATILE
+notes: null
+params:
 - description: |
     is the target type of the cast.
   dir: null
@@ -21,13 +27,7 @@ interface-params:
     is the pointer variable.
   dir: null
   name: _var
-interface-return:
+return:
   return: null
   return-values: []
-interface-type: macro
-links:
-- role: interface-placement
-  uid: header
-- role: interface-ingroup
-  uid: /groups/api/basedefs
 type: interface

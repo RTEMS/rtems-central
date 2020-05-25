@@ -1,17 +1,23 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the pointer to the container of a specified member pointer.
 copyrights:
 - Copyright (C) 2014 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Returns the pointer to the container of a specified member pointer.
-interface-definition:
+definition:
   default: |
-    ( (_type *) ( (${/if/c/uintptr_t:/interface-name}) ( _m ) - ${/if/c/offsetof:/interface-name}( _type, _member_name ) ) )
+    ( (_type *) ( (${/if/c/uintptr_t:/name}) ( _m ) - ${/if/c/offsetof:/name}( _type, _member_name ) ) )
   variants: []
-interface-description: null
-interface-name: RTEMS_CONTAINER_OF
-interface-notes: null
-interface-params:
+description: null
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/basedefs
+name: RTEMS_CONTAINER_OF
+notes: null
+params:
 - description: |
     is the pointer to a member of the container.
   dir: null
@@ -24,14 +30,8 @@ interface-params:
     is the designator name of the container member.
   dir: null
   name: _member_name
-interface-return:
+return:
   return: |
     Returns the pointer to the container of a specified member pointer.
   return-values: []
-interface-type: macro
-links:
-- role: interface-placement
-  uid: header
-- role: interface-ingroup
-  uid: /groups/api/basedefs
 type: interface

@@ -2,17 +2,17 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: Void function brief description.
-interface-definition:
+brief: Void function brief description.
+definition:
   default:
     params: []
     return: void
   variants: []
-interface-description: null
-interface-name: VoidFunction
-interface-notes: null
-interface-params: []
-interface-return:
+description: null
+name: VoidFunction
+notes: null
+params: []
+return:
   return: null
   return-values: []
 interface-type: function

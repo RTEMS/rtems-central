@@ -1,13 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This enumeration provides status codes for directives of the Classic API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition-kind: typedef-only
+description: null
 enabled-by: true
-interface-brief: |
-  This enumeration provides status codes for directives of the Classic API.
-interface-definition-kind: typedef-only
-interface-description: null
-interface-name: rtems_status_code
-interface-notes: null
 interface-type: enum
 links:
 - role: interface-placement
@@ -74,4 +72,6 @@ links:
   uid: interrupted
 - role: interface-enumerator
   uid: proxy-blocking
+name: rtems_status_code
+notes: null
 type: interface

@@ -1,21 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This is the status is used internally to RTEMS when performing
+  operations on behalf of remote tasks.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-brief: |
-  This is the status is used internally to RTEMS when performing
-  operations on behalf of remote tasks.
-interface-definition:
+definition:
   default: '29'
   variants: []
-interface-description: |
+description: |
   This is referred to as proxying operations and this status indicates that the
   operation could not be completed immediately and the proxy is blocking.
-interface-name: RTEMS_PROXY_BLOCKING
-interface-note: |
-  This status will not be returned to the user.
-interface-notes: null
+enabled-by: true
 interface-type: enumerator
 links: []
+name: RTEMS_PROXY_BLOCKING
+notes: |
+  This status will not be returned to the user.
 type: interface

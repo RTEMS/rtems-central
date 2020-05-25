@@ -1,26 +1,26 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
+brief: |
   Returns the thread stack space size in bytes of configured for this
   application.
-interface-definition:
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
   default:
     params: []
-    return: ${/if/c/uintptr_t:/interface-name}
+    return: ${/if/c/uintptr_t:/name}
   variants: []
-interface-description: null
-interface-name: rtems_configuration_get_stack_space_size
-interface-notes: null
-interface-params: []
-interface-return:
-  return: null
-  return-values: []
+description: null
+enabled-by: true
 interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/config
+name: rtems_configuration_get_stack_space_size
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
 type: interface

@@ -2,9 +2,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-name: RTEMS_MULTIPROCESSING
 interface-type: define
 links:
 - role: interface-placement
   uid: domain
+name: RTEMS_MULTIPROCESSING
 type: interface

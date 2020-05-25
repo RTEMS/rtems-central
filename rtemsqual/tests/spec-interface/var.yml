@@ -3,14 +3,14 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by:
   not: ASM
-interface-brief: Variable brief description.
-interface-definition:
+brief: Variable brief description.
+definition:
   default: |
-    ${forward-decl:/interface-name} *${.:/interface-name}
+    ${forward-decl:/name} *${.:/name}
   variants: []
-interface-description: Variable description.
-interface-name: Variable
-interface-notes: null
+description: Variable description.
+name: Variable
+notes: null
 interface-type: variable
 links:
 - role: interface-ingroup

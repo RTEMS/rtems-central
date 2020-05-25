@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: null
-interface-definition:
+brief: null
+definition:
   default: '1'
   variants: []
-interface-description: null
-interface-name: B
-interface-notes: null
+description: null
+name: B
+notes: null
 interface-type: define
 links:
 - role: interface-placement

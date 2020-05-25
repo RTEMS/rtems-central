@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+domain: c
 enabled-by: true
-interface-domain: c
-interface-path: stdint.h
-interface-prefix: ''
 interface-type: header-file
 links: []
+path: stdint.h
+prefix: ''
 type: interface

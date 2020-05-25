@@ -40,7 +40,7 @@ def test_interface(tmpdir):
     interface_config["item-level-interfaces"] = []
     base_directory = os.path.join(tmpdir, "base")
     interface_domains = {"abc": base_directory}
-    interface_config["interface-domains"] = interface_domains
+    interface_config["domains"] = interface_domains
 
     item_cache_config["paths"] = [os.path.normpath(tmpdir)]
     generate(interface_config, ItemCache(item_cache_config))

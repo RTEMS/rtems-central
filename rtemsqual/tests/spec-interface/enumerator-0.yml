@@ -2,13 +2,13 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: Enumerator 0 brief description.
-interface-definition:
+brief: Enumerator 0 brief description.
+definition:
   default: null
   variants: []
-interface-description: null
-interface-name: ENUMERATOR_0
-interface-notes: null
+description: null
+name: ENUMERATOR_0
+notes: null
 interface-type: enumerator
 links: []
 type: interface

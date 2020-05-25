@@ -2,22 +2,22 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: Short macro brief description.
-interface-definition:
+brief: Short macro brief description.
+definition:
   default: |
-    ( ( ${.:/interface-params[0]/name} ) + 1 )
+    ( ( ${.:/params[0]/name} ) + 1 )
   variants:
   - definition: ''
     enabled-by: '0'
-interface-description: null
-interface-name: MACRO
-interface-notes: null
-interface-params:
+description: null
+name: MACRO
+notes: null
+params:
 - description: |
     is parameter 0.
   dir: null
   name: Param0
-interface-return:
+return:
   return: Sometimes some value.
   return-values: []
 interface-type: macro

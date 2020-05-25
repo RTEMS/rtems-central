@@ -1,22 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This is a constant to declare zero-length arrays.
 copyrights:
 - Copyright (C) 2014 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  This is a constant to declare zero-length arrays.
-interface-definition:
+definition:
   default: '0'
   variants: []
-interface-description: |
+description: |
   Zero-length arrays are valid in C99 as flexible array members.  C++11 does
   not allow flexible array members.  Use the GNU extension which is also
   supported by other compilers.
-interface-name: RTEMS_ZERO_LENGTH_ARRAY
-interface-notes: null
+enabled-by: true
 interface-type: define
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/basedefs
+name: RTEMS_ZERO_LENGTH_ARRAY
+notes: null
 type: interface

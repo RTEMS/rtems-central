@@ -2,20 +2,20 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: Very long macro brief description.
-interface-definition:
+brief: Very long macro brief description.
+definition:
   default: |
     do {
-      (void) ${.:/interface-params[1]/name};
-      (void) ${.:/interface-params[2]/name};
-      (void) ${.:/interface-params[3]/name};
+      (void) ${.:/params[1]/name};
+      (void) ${.:/params[2]/name};
+      (void) ${.:/params[3]/name};
     } while ( 0 );
-    ${.:/interface-params[0]/name} + 1;
+    ${.:/params[0]/name} + 1;
   variants: []
-interface-description: null
-interface-name: VERY_LONG_MACRO
-interface-notes: null
-interface-params:
+description: null
+name: VERY_LONG_MACRO
+notes: null
+params:
 - description: |
     is very long parameter 0 with some super important and extra very long
     description which makes a lot of sense.
@@ -30,7 +30,7 @@ interface-params:
 - description: is very long parameter 3.
   dir: inout
   name: VeryLongParam3
-interface-return:
+return:
   return: Sometimes some value.
   return-values:
   - description: is returned, in case A.

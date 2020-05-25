@@ -2,9 +2,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
-interface-domain: abc
-interface-path: h.h
-interface-prefix: include
+domain: abc
+path: h.h
+prefix: include
 interface-type: header-file
 links:
 - role: interface-include

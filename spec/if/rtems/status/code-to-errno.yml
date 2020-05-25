@@ -1,73 +1,73 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Maps the specified RTEMS status code to a POSIX error number.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Maps the specified RTEMS status code to a POSIX error number.
-interface-definition:
+definition:
   default:
     params:
-    - ${code:/interface-name} ${.:/interface-params[0]/name}
+    - ${code:/name} ${.:/params[0]/name}
     return: int
   variants: []
-interface-description: null
-interface-name: rtems_status_code_to_errno
-interface-notes: null
-interface-params:
-- description: is the status code to map.
-  dir: null
-  name: status_code
-interface-return:
-  return: null
-  return-values:
-  - description: |
-      The status code is ${successful:/interface-name}.
-    value: '0'
-  - description: |
-      The status code is ${invalid-number:/interface-name}.
-    value: EBADF
-  - description: |
-      The status code is ${resource-in-use:/interface-name}.
-    value: EBUSY
-  - description: |
-      The status code is ${interrupted:/interface-name}.
-    value: EINTR
-  - description: |
-      The status code is ${invalid-clock:/interface-name},
-      ${invalid-name:/interface-name}, or ${invalid-node:/interface-name}.
-    value: EINVAL
-  - description: |
-      The status code is ${already-suspended:/interface-name},
-      ${called-from-isr:/interface-name},
-      ${illegal-on-remote-object:/interface-name},
-      ${illegal-on-self:/interface-name}, ${incorrect-state:/interface-name},
-      ${internal-error:/interface-name}, ${invalid-address:/interface-name},
-      ${invalid-id:/interface-name}, ${invalid-priority:/interface-name},
-      ${invalid-size:/interface-name}, ${io-error:/interface-name},
-      ${mp-not-configured:/interface-name}, ${not-defined:/interface-name},
-      ${object-was-deleted:/interface-name}, ${proxy-blocking:/interface-name},
-      ${task-exitted:/interface-name}, or ${too-many:/interface-name}.
-    value: EIO
-  - description: |
-      The status code is ${unsatisfied:/interface-name}.
-    value: ENODEV
-  - description: |
-      The status code is ${no-memory:/interface-name}.
-    value: ENOMEM
-  - description: |
-      The status code is ${not-configured:/interface-name} or
-      ${not-implemented:/interface-name}.
-    value: ENOSYS
-  - description: |
-      The status code is ${not-owner-of-resource:/interface-name}.
-    value: EPERM
-  - description: |
-      The status code is ${timeout:/interface-name}.
-    value: ETIMEDOUT
+description: null
+enabled-by: true
 interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/classic/status
+name: rtems_status_code_to_errno
+notes: null
+params:
+- description: is the status code to map.
+  dir: null
+  name: status_code
+return:
+  return: null
+  return-values:
+  - description: |
+      The status code is ${successful:/name}.
+    value: '0'
+  - description: |
+      The status code is ${invalid-number:/name}.
+    value: EBADF
+  - description: |
+      The status code is ${resource-in-use:/name}.
+    value: EBUSY
+  - description: |
+      The status code is ${interrupted:/name}.
+    value: EINTR
+  - description: |
+      The status code is ${invalid-clock:/name},
+      ${invalid-name:/name}, or ${invalid-node:/name}.
+    value: EINVAL
+  - description: |
+      The status code is ${already-suspended:/name},
+      ${called-from-isr:/name},
+      ${illegal-on-remote-object:/name},
+      ${illegal-on-self:/name}, ${incorrect-state:/name},
+      ${internal-error:/name}, ${invalid-address:/name},
+      ${invalid-id:/name}, ${invalid-priority:/name},
+      ${invalid-size:/name}, ${io-error:/name},
+      ${mp-not-configured:/name}, ${not-defined:/name},
+      ${object-was-deleted:/name}, ${proxy-blocking:/name},
+      ${task-exitted:/name}, or ${too-many:/name}.
+    value: EIO
+  - description: |
+      The status code is ${unsatisfied:/name}.
+    value: ENODEV
+  - description: |
+      The status code is ${no-memory:/name}.
+    value: ENOMEM
+  - description: |
+      The status code is ${not-configured:/name} or
+      ${not-implemented:/name}.
+    value: ENOSYS
+  - description: |
+      The status code is ${not-owner-of-resource:/name}.
+    value: EPERM
+  - description: |
+      The status code is ${timeout:/name}.
+    value: ETIMEDOUT
 type: interface

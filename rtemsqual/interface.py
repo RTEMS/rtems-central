@@ -51,7 +51,7 @@ def _get_group_identifiers(groups: ItemMap) -> List[str]:
 
 def _forward_declaration(item: Item) -> str:
     target = item.map(item["interface-target"])
-    return target["interface-type"] + " " + target["interface-name"]
+    return target["interface-type"] + " " + target["name"]
 
 
 class _InterfaceMapper(ItemMapper):
@@ -76,7 +76,7 @@ class _InterfaceMapper(ItemMapper):
     def get_value(self, item: Item, _path: str, _value: Any, key: str,
                   _index: Optional[int]) -> Any:
         # pylint: disable=no-self-use
-        if key == "interface-name" and item["type"] == "interface" and item[
+        if key == "name" and item["type"] == "interface" and item[
                 "interface-type"] == "forward-declaration":
             return _forward_declaration(item)
         raise KeyError
@@ -173,9 +173,9 @@ class Node:
     @contextmanager
     def _enum_struct_or_union(self) -> Iterator[None]:
         self.content.add(self._get_description(self.item, self.ingroups))
-        name = self.item["interface-name"]
+        name = self.item["name"]
         typename = self.item["interface-type"]
-        kind = self.item["interface-definition-kind"]
+        kind = self.item["definition-kind"]
         if kind == f"{typename}-only":
             self.content.append(f"{typename} {name} {{")
         elif kind == "typedef-only":
@@ -209,10 +209,9 @@ class Node:
         """ Generates a compound (struct or union). """
         with self._enum_struct_or_union():
             index = 0
-            for definition in self.item["interface-definition"]:
+            for definition in self.item["definition"]:
                 self.content.add(
-                    _add_definition(self, self.item,
-                                    f"interface-definition[{index}]",
+                    _add_definition(self, self.item, f"definition[{index}]",
                                     definition, Node._get_compound_definition))
                 index += 1
 
@@ -225,8 +224,8 @@ class Node:
                     continue
                 enumerator = self._get_description(link.item, {})
                 enumerator.append(
-                    _add_definition(self, link.item, "interface-definition",
-                                    link.item["interface-definition"],
+                    _add_definition(self, link.item, "definition",
+                                    link.item["definition"],
                                     Node._get_enumerator_definition))
                 enumerators.append(enumerator)
             for enumerator in enumerators[0:-1]:
@@ -307,13 +306,13 @@ class Node:
         return content.lines
 
     def _get_enumerator_definition(self, item: Item, definition: Any) -> Lines:
-        name = item["interface-name"]
+        name = item["name"]
         if definition:
             return f"{name} = {self.substitute(definition)}"
         return f"{name}"
 
     def _get_define_definition(self, item: Item, definition: Any) -> Lines:
-        name = item["interface-name"]
+        name = item["name"]
         value = self.substitute(definition)
         if value:
             return f"#define {name} {value}".split("\n")
@@ -323,7 +322,7 @@ class Node:
         ret = self.substitute(definition["return"])
         if "body" in definition:
             ret = "static inline " + ret
-        name = item["interface-name"]
+        name = item["name"]
         space = "" if ret.endswith("*") else " "
         if definition["params"]:
             params = [self.substitute(param) for param in definition["params"]]
@@ -349,8 +348,8 @@ class Node:
         return line
 
     def _get_macro_definition(self, item: Item, definition: Any) -> Lines:
-        name = item["interface-name"]
-        params = [param["name"] for param in item["interface-params"]]
+        name = item["name"]
+        params = [param["name"] for param in item["params"]]
         param_line = ", ".join(params)
         line = f"#define {name}({param_line})"
         if len(line) > 79:
@@ -376,17 +375,16 @@ class Node:
         content = CContent()
         with content.doxygen_block():
             content.add_ingroup(_get_group_identifiers(ingroups))
-            content.add_brief_description(
-                self.substitute(item["interface-brief"]))
-            content.wrap(self.substitute(item["interface-description"]))
-            content.wrap(self.substitute(item["interface-notes"]))
-            if "interface-params" in item:
-                for param in item["interface-params"]:
+            content.add_brief_description(self.substitute(item["brief"]))
+            content.wrap(self.substitute(item["description"]))
+            content.wrap(self.substitute(item["notes"]))
+            if "params" in item:
+                for param in item["params"]:
                     content.wrap(param["name"] + " " +
                                  self.substitute(param["description"]),
                                  initial_indent=_PARAM[param["dir"]])
-            if "interface-return" in item:
-                ret = item["interface-return"]
+            if "return" in item:
+                ret = item["return"]
                 for retval in ret["return-values"]:
                     content.wrap(self.substitute(retval["description"]),
                                  initial_indent=f"@retval {retval['value']} ")
@@ -396,8 +394,8 @@ class Node:
     def _add_generic_definition(self, get_lines: GetLines) -> None:
         self.content.add(self._get_description(self.item, self.ingroups))
         self.content.append(
-            _add_definition(self, self.item, "interface-definition",
-                            self.item["interface-definition"], get_lines))
+            _add_definition(self, self.item, "definition",
+                            self.item["definition"], get_lines))
 
 
 _NODE_GENERATORS = {
@@ -504,16 +502,16 @@ class _HeaderFile:
         with self._content.file_block():
             self._content.add_ingroup(_get_group_identifiers(self._ingroups))
         self._content.add_copyrights_and_licenses()
-        with self._content.header_guard(self._item["interface-path"]):
+        with self._content.header_guard(self._item["path"]):
             exp_mapper = _HeaderExpressionMapper(self._item,
                                                  self.enabled_by_defined)
             includes = [
-                CInclude(item["interface-path"],
+                CInclude(item["path"],
                          enabled_by_to_exp(item["enabled-by"], exp_mapper))
                 for item in self._includes if item != self._item
             ]
             includes.extend([
-                CInclude(link.item["interface-path"],
+                CInclude(link.item["path"],
                          enabled_by_to_exp(link["enabled-by"], exp_mapper))
                 for link in self._item.links_to_parents()
                 if link.role == "interface-include"
@@ -526,13 +524,13 @@ class _HeaderFile:
     def write(self, domain_path: str) -> None:
         """ Writes the header file. """
         self._content.write(
-            os.path.join(domain_path, self._item["interface-prefix"],
-                         self._item["interface-path"]))
+            os.path.join(domain_path, self._item["prefix"],
+                         self._item["path"]))
 
 
 def _generate_header_file(item: Item, domains: Dict[str, str],
                           enabled_by_defined: Dict[str, str]) -> None:
-    domain_path = domains.get(item["interface-domain"], None)
+    domain_path = domains.get(item["domain"], None)
     if domain_path is None:
         return
     header_file = _HeaderFile(item, enabled_by_defined)
@@ -555,8 +553,8 @@ def _gather_enabled_by_defined(item_level_interfaces: List[str],
     for uid in item_level_interfaces:
         for link in item_cache[uid].links_to_children():
             if link.role == "interface-placement":
-                define = f"defined(${{{link.item.uid}:/interface-name}})"
-                enabled_by_defined[link.item["interface-name"]] = define
+                define = f"defined(${{{link.item.uid}:/name}})"
+                enabled_by_defined[link.item["name"]] = define
     return enabled_by_defined
 
 
@@ -570,5 +568,4 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     enabled_by_defined = _gather_enabled_by_defined(
         config["item-level-interfaces"], item_cache)
     for item in item_cache.top_level.values():
-        _visit_header_files(item, config["interface-domains"],
-                            enabled_by_defined)
+        _visit_header_files(item, config["domains"], enabled_by_defined)

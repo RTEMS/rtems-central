@@ -2,25 +2,25 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: Very long function brief description.
-interface-definition:
+brief: Very long function brief description.
+definition:
   default:
     body: |
-      (void) ${.:/interface-params[1]/name};
-      (void) ${.:/interface-params[2]/name};
-      (void) ${.:/interface-params[3]/name};
-      return ${.:/interface-params[0]/name} + 1;
+      (void) ${.:/params[1]/name};
+      (void) ${.:/params[2]/name};
+      (void) ${.:/params[3]/name};
+      return ${.:/params[0]/name} + 1;
     params:
-    - int ${.:/interface-params[0]/name}
-    - const ${forward-decl:/interface-name} *${.:/interface-params[1]/name}
-    - ${forward-decl:/interface-name} *${.:/interface-params[2]/name}
-    - ${forward-decl:/interface-name} *${.:/interface-params[3]/name}
+    - int ${.:/params[0]/name}
+    - const ${forward-decl:/name} *${.:/params[1]/name}
+    - ${forward-decl:/name} *${.:/params[2]/name}
+    - ${forward-decl:/name} *${.:/params[3]/name}
     return: int
   variants: []
-interface-description: null
-interface-name: VeryLongFunction
-interface-notes: null
-interface-params:
+description: null
+name: VeryLongFunction
+notes: null
+params:
 - description: |
     is very long parameter 0 with some super important and extra very long
     description which makes a lot of sense.
@@ -35,7 +35,7 @@ interface-params:
 - description: is very long parameter 3.
   dir: inout
   name: VeryLongParam3
-interface-return:
+return:
   return: Sometimes some value.
   return-values:
   - description: is returned, in case A.

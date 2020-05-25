@@ -1,19 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: If TRUE is undefined, then TRUE is defined to 1.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by:
-- not: 'TRUE'
-interface-brief: If TRUE is undefined, then TRUE is defined to 1.
-interface-definition:
+definition:
   default: '1'
   variants: []
-interface-description: null
-interface-name: 'TRUE'
-interface-notes: null
+description: null
+enabled-by:
+- not: 'TRUE'
 interface-type: define
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/basedefs
+name: 'TRUE'
+notes: null
 type: interface

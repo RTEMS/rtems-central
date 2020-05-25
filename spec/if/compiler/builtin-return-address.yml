@@ -2,9 +2,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-name: __builtin_return_address
 interface-type: function
 links:
 - role: interface-placement
   uid: domain
+name: __builtin_return_address
 type: interface

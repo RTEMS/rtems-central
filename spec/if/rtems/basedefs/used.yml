@@ -1,23 +1,23 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Tells the compiler that a specific variable or function is used.
 copyrights:
 - Copyright (C) 2009 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-interface-brief: |
-  Tells the compiler that a specific variable or function is used.
-interface-definition:
+definition:
   default: ''
   variants:
   - definition: |
       __attribute__((__used__))
     enabled-by:
-    - defined(${/if/compiler/gnuc:/interface-name})
-interface-description: null
-interface-name: RTEMS_USED
-interface-notes: null
+    - defined(${/if/compiler/gnuc:/name})
+description: null
+enabled-by: true
 interface-type: define
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: /groups/api/basedefs
+name: RTEMS_USED
+notes: null
 type: interface

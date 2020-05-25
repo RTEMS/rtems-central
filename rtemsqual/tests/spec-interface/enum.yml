@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: Enum brief description.
-interface-definition-kind: typedef-only
-interface-description: Enum description.
-interface-name: Enum
-interface-notes: null
+brief: Enum brief description.
+definition-kind: typedef-only
+description: Enum description.
+name: Enum
+notes: null
 interface-type: enum
 links:
 - role: interface-placement

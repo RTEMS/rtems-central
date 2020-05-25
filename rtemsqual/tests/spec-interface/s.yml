@@ -2,14 +2,14 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-brief: null
-interface-definition:
+brief: null
+definition:
 - default:
     brief: Brief union description.
     definition:
     - default:
         brief: Brief member description.
-        definition: ${uint32_t:/interface-name} ${.:name}
+        definition: ${uint32_t:/name} ${.:name}
         description: Member description.
         kind: member
         name: some_member
@@ -19,14 +19,14 @@ interface-definition:
         definition:
         - default:
             brief: Brief member 2 description.
-            definition: ${uint32_t:/interface-name} ${.:name}
+            definition: ${uint32_t:/name} ${.:name}
             description: Member 2 description.
             kind: member
             name: some_member_2
           variants: []
         - default:
             brief: Brief member 3 description.
-            definition: ${enum:/interface-name} ${.:name}
+            definition: ${enum:/name} ${.:name}
             description: Member 3 description.
             kind: member
             name: some_member_3
@@ -41,15 +41,15 @@ interface-definition:
   variants: []
 - default:
     brief: Brief member 4 description.
-    definition: ${enum:/interface-name} ${.:name}
+    definition: ${enum:/name} ${.:name}
     description: Member 4 description.
     kind: member
     name: some_member_4
   variants: []
-interface-definition-kind: struct-only
-interface-description: null
-interface-name: Struct
-interface-notes: null
+definition-kind: struct-only
+description: null
+name: Struct
+notes: null
 interface-type: struct
 links:
 - role: interface-placement
