@@ -46,7 +46,7 @@ def _get_ingroups(item: Item) -> ItemMap:
 
 
 def _get_group_identifiers(groups: ItemMap) -> List[str]:
-    return [item["group-identifier"] for item in groups.values()]
+    return [item["identifier"] for item in groups.values()]
 
 
 def _forward_declaration(item: Item) -> str:
@@ -258,11 +258,9 @@ class Node:
         self.header_file.add_ingroup(self.item)
         for ingroup in self.ingroups.values():
             self.header_file.add_potential_edge(self, ingroup)
-        self.content.add_group(self.item["group-identifier"],
-                               self.item["group-name"],
+        self.content.add_group(self.item["identifier"], self.item["name"],
                                _get_group_identifiers(self.ingroups),
-                               self.item["group-brief"],
-                               self.item["group-description"])
+                               self.item["brief"], self.item["description"])
 
     def generate_macro(self) -> None:
         """ Generates a macro. """

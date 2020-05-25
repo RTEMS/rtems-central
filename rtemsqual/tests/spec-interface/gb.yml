@@ -2,10 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-group-brief: null
-group-description: null
-group-identifier: GroupB
-group-name: Group B
+brief: null
+description: null
+identifier: GroupB
+name: Group B
 interface-type: group
 links:
 - role: interface-ingroup

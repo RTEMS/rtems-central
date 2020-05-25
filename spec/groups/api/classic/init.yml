@@ -1,17 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-group-brief: API
-group-description: |
+description: |
   This group contains directives to initialize and shutdown the RTEMS
   executive.
-group-identifier: RTEMSAPIClassicInit
-group-name: Initialization and Shutdown
+enabled-by: true
+identifier: RTEMSAPIClassicInit
 interface-type: group
 links:
 - role: interface-placement
   uid: /if/rtems/init/header
 - role: interface-ingroup
   uid: /groups/api/classic
+name: Initialization and Shutdown
 type: interface
