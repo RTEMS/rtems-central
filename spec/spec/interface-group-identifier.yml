@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+    - re: ^[A-Z][a-zA-Z0-9]*$
+    description: |
+      It shall be the identifier of the interface group.
+spec-name: Interface Group Identifier
+spec-type: interface-group-identifier
+type: spec

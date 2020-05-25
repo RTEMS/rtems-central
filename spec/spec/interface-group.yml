@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: group
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      brief:
+        description: |
+          It shall be the brief description of the interface group.
+        spec-type: optional-str
+      description:
+        description: |
+          It shall be the description of the interface group.
+        spec-type: optional-str
+      identifier:
+        description: null
+        spec-type: interface-group-identifier
+      name:
+        description: |
+          It shall be the human readable name of the interface group.
+        spec-type: str
+    description: |
+      This set of attributes specifies an interface group.
+    required-attributes: all
+spec-name: Interface Group Item Type
+spec-type: interface-group
+type: spec
