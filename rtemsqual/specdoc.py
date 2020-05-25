@@ -95,7 +95,7 @@ class _Documenter:
         """ Returns a list phrase. """
         if type_name in _PRIMITIVE_TYPES:
             type_phrase = _PRIMITIVE_TYPES[type_name].format(
-                "Each list element", shall)
+                "Each list element", "shall")
         else:
             documenter = self._documenter_map[type_name]
             ref = documenter.get_a_section_reference(content)
