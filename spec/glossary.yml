@@ -3,7 +3,8 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de
 enabled-by: true
 links: []
-requirement-type: documentation
+non-functional-type: documentation
+requirement-type: non-functional
 text: |
-  The project shall have a glossary of terms.
+  The system shall have a glossary of terms.
 type: requirement

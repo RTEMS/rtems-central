@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: type
+  spec-value: glossary
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      glossary-type:
+        description: |
+          It defines the glossary item type.
+        spec-type: name
+    description: |
+      This set of attributes specifies glossary items.
+    required-attributes: all
+spec-name: Glossary Item Type
+spec-type: glossary
+type: spec
