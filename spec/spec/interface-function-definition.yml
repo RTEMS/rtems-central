@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      body:
+        description: |
+          If the value is present, then it shall be the definition of a static
+          inline function.  On the function definition a context-sensitive
+          substitution of item variables is performed.  If no value is present,
+          then the function is declared as an external function.
+        spec-type: optional-str
+      params:
+        description: |
+          It shall be the list of parameter declarations of the function.  On
+          the function parameter declarations a context-sensitive substitution
+          of item variables is performed.
+        spec-type: list-str
+      return:
+        description: |
+          It shall be the function return type.  On the return type a
+          context-sensitive substitution of item variables is performed.
+        spec-type: str
+    description: |
+      This set of attributes specifies a function definition.
+    required-attributes: all
+spec-name: Interface Function Definition
+spec-type: interface-function-definition
+type: spec

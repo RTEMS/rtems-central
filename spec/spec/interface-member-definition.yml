@@ -5,10 +5,6 @@ enabled-by: true
 links:
 - role: spec-member
   uid: root
-- role: spec-refinement
-  spec-key: interface-type
-  spec-value: group
-  uid: interface
 spec-description: null
 spec-example: null
 spec-info:
@@ -20,16 +16,17 @@ spec-info:
       description:
         description: null
         spec-type: interface-description
-      identifier:
-        description: null
-        spec-type: interface-group-identifier
+      kind:
+        description: |
+          It shall be the interface compound member kind.
+        spec-type: str
       name:
         description: |
-          It shall be the human readable name of the interface group.
+          It shall be the interface compound member name.
         spec-type: str
     description: |
-      This set of attributes specifies an interface group.
+      This set of attributes specifies an interface compound member definition.
     required-attributes: all
-spec-name: Interface Group Item Type
-spec-type: interface-group
+spec-name: Interface Compound Member Definition
+spec-type: interface-member-definition
 type: spec

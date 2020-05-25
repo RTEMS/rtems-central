@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: group
+  spec-value: define
   uid: interface
 spec-description: null
 spec-example: null
@@ -17,19 +17,22 @@ spec-info:
       brief:
         description: null
         spec-type: interface-brief
+      definition:
+        description: null
+        spec-type: interface-definition-directive
       description:
         description: null
         spec-type: interface-description
-      identifier:
-        description: null
-        spec-type: interface-group-identifier
       name:
         description: |
-          It shall be the human readable name of the interface group.
+          It shall be the name of the define.
         spec-type: str
+      notes:
+        description: null
+        spec-type: interface-notes
     description: |
-      This set of attributes specifies an interface group.
+      This set of attributes specifies a define.
     required-attributes: all
-spec-name: Interface Group Item Type
-spec-type: interface-group
+spec-name: Interface Define Item Type
+spec-type: interface-define
 type: spec

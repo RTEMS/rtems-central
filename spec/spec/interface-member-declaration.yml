@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: kind
+  spec-value: member
+  uid: interface-member-definition
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      definition:
+        description: |
+          It shall be the interface compound member declaration.  On the
+          declaration a context-sensitive substitution of item variables is
+          performed.
+        spec-type: str
+    description: |
+      This set of attributes specifies an interface compound member
+      declaration.
+    required-attributes: all
+spec-name: Interface Compound Member Declaration
+spec-type: interface-member-declaration
+type: spec

@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: header-file
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      domain:
+        description: |
+          It shall be the interface domain name.
+        spec-type: str
+      path:
+        description: |
+          It shall be the path used to include the header file.  For example
+          :file:`rtems/confdefs.h`.
+        spec-type: str
+      prefix:
+        description: |
+          It shall be the prefix directory path to the header file in the
+          interface domain.  For example :file:`cpukit/include`.
+        spec-type: str
+    description: |
+      This set of attributes specifies a header file.
+    required-attributes: all
+spec-name: Interface Header File Item Type
+spec-type: interface-header-file
+type: spec

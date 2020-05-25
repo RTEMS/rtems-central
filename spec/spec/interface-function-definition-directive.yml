@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      default:
+        description: |
+          The default definition will be used if no variant-specific definition
+          is enabled.
+        spec-type: interface-function-definition
+      variants:
+        description: null
+        spec-type: interface-function-definition-variant-list
+    description: |
+      This set of attributes specifies a function definition directive.
+    required-attributes: all
+spec-name: Interface Function Definition Directive
+spec-type: interface-function-definition-directive
+type: spec

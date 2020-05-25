@@ -7,7 +7,11 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: group
+  spec-value: struct
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: union
   uid: interface
 spec-description: null
 spec-example: null
@@ -17,19 +21,25 @@ spec-info:
       brief:
         description: null
         spec-type: interface-brief
+      definition:
+        description: null
+        spec-type: interface-member-definition-directive-list
+      definition-kind:
+        description: null
+        spec-type: interface-compound-definition-kind
       description:
         description: null
         spec-type: interface-description
-      identifier:
-        description: null
-        spec-type: interface-group-identifier
       name:
         description: |
-          It shall be the human readable name of the interface group.
+          It shall be the name of the compound (struct or union).
         spec-type: str
+      notes:
+        description: null
+        spec-type: interface-notes
     description: |
-      This set of attributes specifies an interface group.
+      This set of attributes specifies a compound (struct or union).
     required-attributes: all
-spec-name: Interface Group Item Type
-spec-type: interface-group
+spec-name: Interface Compound Item Type
+spec-type: interface-compound
 type: spec

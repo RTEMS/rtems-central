@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      return:
+        description: |
+          It shall describe the interface return for unspecified return values.
+        spec-type: optional-str
+      return-values:
+        description: null
+        spec-type: interface-return-value-list
+    description: |
+      This set of attributes specifies an interface return.
+    required-attributes: all
+spec-name: Interface Return Directive
+spec-type: interface-return-directive
+type: spec

@@ -5,31 +5,24 @@ enabled-by: true
 links:
 - role: spec-member
   uid: root
-- role: spec-refinement
-  spec-key: interface-type
-  spec-value: group
-  uid: interface
 spec-description: null
 spec-example: null
 spec-info:
   dict:
     attributes:
-      brief:
-        description: null
-        spec-type: interface-brief
       description:
         description: null
         spec-type: interface-description
-      identifier:
+      dir:
         description: null
-        spec-type: interface-group-identifier
+        spec-type: interface-param-dir
       name:
         description: |
-          It shall be the human readable name of the interface group.
+          It shall be the interface parameter name.
         spec-type: str
     description: |
-      This set of attributes specifies an interface group.
+      This set of attributes specifies an interface parameter.
     required-attributes: all
-spec-name: Interface Group Item Type
-spec-type: interface-group
+spec-name: Interface Parameter
+spec-type: interface-param
 type: spec

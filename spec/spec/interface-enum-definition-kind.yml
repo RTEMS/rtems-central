@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+      in:
+      - enum-only
+      - typedef-and-enum
+      - typedef-only
+    description: |
+      It specifies how the enum is defined.  It may be a typedef only, the enum
+      only, or a typedef with an enum definition.
+spec-name: Interface Enum Definition Kind
+spec-type: interface-enum-definition-kind
+type: spec

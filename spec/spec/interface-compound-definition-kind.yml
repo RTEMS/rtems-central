@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+      in:
+      - struct-only
+      - typedef-and-struct
+      - typedef-and-union
+      - typedef-only
+      - union-only
+    description: |
+      It specifies how the interface compound is defined.  It may be a typedef
+      only, the struct or union only, or a typedef with a struct or union
+      definition.
+spec-name: Interface Compound Definition Kind
+spec-type: interface-compound-definition-kind
+type: spec

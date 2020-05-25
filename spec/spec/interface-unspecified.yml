@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: |
+          It shall be the name of the unspecified interface.
+        spec-type: str
+    description: |
+      This set of attributes specifies an unspecified interface.
+    required-attributes: all
+spec-name: Interface Unspecified Item Type
+spec-type: interface-unspecified
+type: spec
