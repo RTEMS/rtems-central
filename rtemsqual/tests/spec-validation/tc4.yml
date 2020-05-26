@@ -5,14 +5,14 @@ enabled-by: true
 includes: []
 links: []
 local-includes: []
-source: tc34.c
-test-case-actions: []
-test-case-brief: Test case 4 brief description.
-test-case-description: Test case 4 description.
-test-case-epilogue: |
+target: tc34.c
+actions: []
+brief: Test case 4 brief description.
+description: Test case 4 description.
+epilogue: |
   /* Test case 4 epilogue code */
-test-case-fixture: null
-test-case-name: Test Case 4
-test-case-prologue: null
-test-case-support: null
+fixture: null
+name: Test Case 4
+prologue: null
+support: null
 type: test-case

@@ -9,7 +9,7 @@ includes:
 - rtems/score/sysstate.h
 links: []
 local-includes: []
-source: testsuites/validation/ts-space-profile.c
+target: testsuites/validation/ts-space-profile.c
 test-suite-brief: |
   This test suite contains test cases which call in combination all functions
   included in the space profile.

@@ -7,7 +7,7 @@ includes:
 links: []
 local-includes:
 - green.h
-source: ts.c
+target: ts.c
 test-suite-code: |
   /* Blue green code */
 test-suite-description: The Blue Green description.

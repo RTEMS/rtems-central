@@ -7,8 +7,8 @@ includes:
 links: []
 local-includes:
 - x.h
-source: tc12.c
-test-case-actions:
+target: tc12.c
+actions:
 - action: |
     /* Test case action 0 code */
   checks:
@@ -41,14 +41,14 @@ test-case-actions:
   description: |
     Test case action 1 description.
   links: []
-test-case-brief: Test case brief description.
-test-case-description: Test case description.
-test-case-epilogue: |
+brief: Test case brief description.
+description: Test case description.
+epilogue: |
   /* Test case epilogue code */
-test-case-fixture: null
-test-case-name: Test Case
-test-case-prologue: |
+fixture: null
+name: Test Case
+prologue: |
   /* Test case prologue code */
-test-case-support: |
+support: |
   /* Test case support code */
 type: test-case

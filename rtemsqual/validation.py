@@ -79,7 +79,7 @@ def _add_test_case_description(content: CContent, item: Item,
 
 
 def _add_test_case_action_description(content: CContent, item: Item) -> None:
-    actions = item["test-case-actions"]
+    actions = item["actions"]
     if actions:
         content.add("This test case performs the following actions:")
         for action in actions:
@@ -92,7 +92,7 @@ def _add_test_case_action_description(content: CContent, item: Item) -> None:
 
 def _generate_test_case_actions(item: Item, steps: StepWrapper) -> CContent:
     content = CContent()
-    for action in item["test-case-actions"]:
+    for action in item["actions"]:
         content.add(action["action"])
         for check in action["checks"]:
             content.append(string.Template(check["check"]).substitute(steps))
@@ -101,15 +101,15 @@ def _generate_test_case_actions(item: Item, steps: StepWrapper) -> CContent:
 
 def _generate_test_case(content: CContent, item: Item,
                         test_case_to_suites: Dict[str, List[Item]]) -> None:
-    name = item["test-case-name"]
+    name = item["name"]
     desi = _designator(name)
     _add_test_case_description(content, item, test_case_to_suites, desi, name)
-    content.add(item["test-case-support"])
+    content.add(item["support"])
     with content.function_block(f"void T_case_body_{desi}(void)"):
-        content.add_brief_description(item["test-case-brief"])
-        content.wrap(item["test-case-description"])
+        content.add_brief_description(item["brief"])
+        content.wrap(item["description"])
         _add_test_case_action_description(content, item)
-    fixture = item["test-case-fixture"]
+    fixture = item["fixture"]
     if fixture:
         content.append(f"T_TEST_CASE_FIXTURE({desi}, &{fixture})")
     else:
@@ -117,13 +117,13 @@ def _generate_test_case(content: CContent, item: Item,
     content.append("{")
     content.gap = False
     with content.indent():
-        content.add(item["test-case-prologue"])
+        content.add(item["prologue"])
         steps = StepWrapper()
         action_content = _generate_test_case_actions(item, steps)
         if steps.steps > 0:
             content.add(f"T_plan({steps.steps});")
         content.add(action_content)
-        content.add(item["test-case-epilogue"])
+        content.add(item["epilogue"])
     content.add(["}", "", "/** @} */"])
 
 
@@ -181,15 +181,13 @@ class SourceFile:
         with content.file_block():
             _add_ingroup(content, self._test_suites, "RTEMSTestSuite",
                          "test-suite-name")
-            _add_ingroup(content, self._test_cases, "RTEMSTestCase",
-                         "test-case-name")
+            _add_ingroup(content, self._test_cases, "RTEMSTestCase", "name")
         content.add_copyrights_and_licenses()
         content.add_have_config()
         content.add_includes(includes)
         content.add_includes(local_includes, local=True)
         content.add_includes([CInclude("t.h")])
-        for item in sorted(self._test_cases,
-                           key=lambda x: x["test-case-name"]):
+        for item in sorted(self._test_cases, key=lambda x: x["name"]):
             _generate_test_case(content, item, test_case_to_suites)
         for item in sorted(self._test_suites,
                            key=lambda x: x["test-suite-name"]):
@@ -230,10 +228,10 @@ def _gather_items(item: Item, source_files: Dict[str, SourceFile],
     for child in item.children():
         _gather_items(child, source_files, test_programs)
     if item["type"] == "test-suite":
-        src = _get_source_file(item["source"], source_files)
+        src = _get_source_file(item["target"], source_files)
         src.add_test_suite(item)
     elif item["type"] == "test-case":
-        src = _get_source_file(item["source"], source_files)
+        src = _get_source_file(item["target"], source_files)
         src.add_test_case(item)
     elif item["type"] == "build" and item["build-type"] == "test-program":
         test_programs.append(TestProgram(item))
