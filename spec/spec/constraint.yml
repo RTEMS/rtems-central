@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: constraint
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      It defines the constraint role of links.  The link target shall be a
+      constraint.
+    required-attributes: all
+spec-name: Constraint Link Role
+spec-type: constraint
+type: spec

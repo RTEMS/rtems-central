@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintmemsz
   max: '``UINTPTR_MAX``'
   min: 0
 copyrights:
@@ -20,6 +18,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../general
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_EXECUTIVE_RAM_SIZE
 notes: |
   This is an advanced configuration option.  Use it only if you know exactly

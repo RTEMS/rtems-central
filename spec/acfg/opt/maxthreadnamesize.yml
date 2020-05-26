@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintmemsz
   max: '``SIZE_MAX``'
   min: 0
 copyrights:
@@ -18,6 +16,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../general
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
 notes: |
   The default value was chosen for Linux compatibility, see

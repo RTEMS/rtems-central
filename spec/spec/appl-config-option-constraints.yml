@@ -14,10 +14,6 @@ spec-info:
         description: |
           This attribute defines a list of constraints.
         spec-type: list-str
-      links:
-        description: |
-          This attribute shall list links to constraints.
-        spec-type: list-uid
       max:
         description: |
           This attribute defines the maximum value.
@@ -32,7 +28,8 @@ spec-info:
         spec-type: list-int-or-str
     description: |
       This set of attributes defines application configuration option
-      constraints.
+      constraints.  Additional constraints can be added through the links of
+      the item using the :ref:`SpecTypeConstraintLinkRole`.
     required-attributes: none
 spec-name: Application Configuration Option Constraint Set
 spec-type: appl-config-option-constraints

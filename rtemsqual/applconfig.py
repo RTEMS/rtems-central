@@ -90,30 +90,30 @@ def _start_constraint_list(lines: List[str]) -> None:
     lines.append("constraints:")
 
 
-def _generate_item_min(lines: List[str], constraint: Dict[str, Any]) -> None:
-    if "min" in constraint:
-        value = constraint["min"]
+def _generate_item_min(lines: List[str], constraints: Dict[str, Any]) -> None:
+    if "min" in constraints:
+        value = constraints["min"]
         lines.append("")
         lines.append(f"* It shall be greater than or equal to {value}.")
 
 
-def _generate_item_max(lines: List[str], constraint: Dict[str, Any]) -> None:
-    if "max" in constraint:
-        value = constraint["max"]
+def _generate_item_max(lines: List[str], constraints: Dict[str, Any]) -> None:
+    if "max" in constraints:
+        value = constraints["max"]
         lines.append("")
         lines.append(f"* It shall be less than or equal to {value}.")
 
 
-def _generate_item_set(lines: List[str], constraint: Dict[str, Any]) -> None:
-    if "set" in constraint:
-        value_set = constraint["set"]
+def _generate_item_set(lines: List[str], constraints: Dict[str, Any]) -> None:
+    if "set" in constraints:
+        value_set = constraints["set"]
         lines.append("")
         lines.append(f"* It shall be an element of {value_set}.")
 
 
-def _generate_item_custom(lines: List[str], constraint: Dict[str,
-                                                             Any]) -> None:
-    for custom in constraint.get("custom", []):
+def _generate_item_custom(lines: List[str], constraints: Dict[str,
+                                                              Any]) -> None:
+    for custom in constraints.get("custom", []):
         lines.append("")
         custom = custom.replace("The value of this configuration option", "It")
         custom = custom.strip().split("\n")
@@ -122,46 +122,46 @@ def _generate_item_custom(lines: List[str], constraint: Dict[str,
 
 
 def _resolve_constraint_links(content: SphinxContent, item: Item,
-                              constraint: Dict[str, Any]) -> None:
-    if "links" in constraint:
-        if "custom" not in constraint:
-            constraint["custom"] = []
-        for link in reversed(constraint["links"]):
-            other = item.map(link)
-            content.register_license_and_copyrights_of_item(other)
-            constraint["custom"].append(other["text"])
+                              constraints: Dict[str, Any]) -> None:
+    texts = []  # type: List[str]
+    for link in item.links_to_parents():
+        if link.role == "constraint":
+            content.register_license_and_copyrights_of_item(link.item)
+            texts.append(link.item["text"])
+    if texts:
+        constraints.setdefault("custom", []).extend(reversed(texts))
 
 
 def _generate_constraint(content: SphinxContent, item: Item) -> None:
-    constraint = item["constraints"]
-    count = len(constraint)
+    constraints = item["constraints"]
+    _resolve_constraint_links(content, item, constraints)
     lines = []  # type: List[str]
-    _resolve_constraint_links(content, item, constraint)
+    count = len(constraints)
     if count == 1:
-        if "min" in constraint:
-            _generate_min_max(lines, constraint["min"], "greater")
-        elif "max" in constraint:
-            _generate_min_max(lines, constraint["max"], "less")
-        elif "set" in constraint:
-            _generate_set(lines, constraint["set"])
-        elif "custom" in constraint:
-            if len(constraint["custom"]) == 1:
-                lines.extend(constraint["custom"][0].strip().split("\n"))
+        if "min" in constraints:
+            _generate_min_max(lines, constraints["min"], "greater")
+        elif "max" in constraints:
+            _generate_min_max(lines, constraints["max"], "less")
+        elif "set" in constraints:
+            _generate_set(lines, constraints["set"])
+        elif "custom" in constraints:
+            if len(constraints["custom"]) == 1:
+                lines.extend(constraints["custom"][0].strip().split("\n"))
             else:
                 _start_constraint_list(lines)
-                _generate_item_custom(lines, constraint)
-    elif count == 2 and "min" in constraint and "max" in constraint:
-        minimum = constraint["min"]
-        maximum = constraint["max"]
+                _generate_item_custom(lines, constraints)
+    elif count == 2 and "min" in constraints and "max" in constraints:
+        minimum = constraints["min"]
+        maximum = constraints["max"]
         lines.append("The value of this configuration option shall be "
                      f"greater than or equal to {minimum}")
         lines.append(f"and less than or equal to {maximum}.")
     else:
         _start_constraint_list(lines)
-        _generate_item_min(lines, constraint)
-        _generate_item_max(lines, constraint)
-        _generate_item_set(lines, constraint)
-        _generate_item_custom(lines, constraint)
+        _generate_item_min(lines, constraints)
+        _generate_item_max(lines, constraints)
+        _generate_item_set(lines, constraints)
+        _generate_item_custom(lines, constraints)
     content.add_definition_item("VALUE CONSTRAINTS:", lines)
 
 

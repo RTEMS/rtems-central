@@ -1,9 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
-constraints:
-  links:
-  - /acfg/opt/constraintidlestackarea
-  - /acfg/opt/constraintbspappmin
+constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -23,6 +20,10 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bsp
+- role: constraint
+  uid: constraintidlestackarea
+- role: constraint
+  uid: constraintbspappmin
 name: BSP_IDLE_TASK_STACK_SIZE
 notes: null
 text: ''

@@ -5,8 +5,6 @@ constraints:
   - |
     It shall be greater than or equal than the number of statically configured
     device drivers.
-  links:
-  - /acfg/opt/constraintmemsz
   max: '``SIZE_MAX``'
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -22,6 +20,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../devdrv
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_MAXIMUM_DRIVERS
 notes: |
   If the application will dynamically install device drivers, then this

@@ -1,10 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintposix
-  - /acfg/opt/constraintunlimited
-  - /acfg/opt/constraintmemsz
   max: 65535
   min: 0
 copyrights:
@@ -19,6 +15,12 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../posix
+- role: constraint
+  uid: constraintposix
+- role: constraint
+  uid: constraintunlimited
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_MAXIMUM_POSIX_TIMERS
 notes: |
   This object class can be configured in unlimited allocation mode, see

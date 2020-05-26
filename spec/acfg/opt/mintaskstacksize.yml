@@ -1,9 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
-constraints:
-  links:
-  - /acfg/opt/constraintbspappmin
-  - /acfg/opt/constraintstackspace
+constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: '``CPU_STACK_MINIMUM_SIZE``'
@@ -17,6 +14,10 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../general
+- role: constraint
+  uid: constraintbspappmin
+- role: constraint
+  uid: constraintstackspace
 name: CONFIGURE_MINIMUM_TASK_STACK_SIZE
 notes: |
   Adjusting this parameter should be done with caution.  Examining the actual

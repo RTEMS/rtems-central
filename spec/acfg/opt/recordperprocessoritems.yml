@@ -3,8 +3,6 @@ appl-config-option-type: integer
 constraints:
   custom:
   - It shall be a power of two.
-  links:
-  - /acfg/opt/constraintmemsz
   max: '``SIZE_MAX``'
   min: 16
 copyrights:
@@ -19,6 +17,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../eventrecord
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
 notes: |
   The event record buffers are statically allocated for each configured

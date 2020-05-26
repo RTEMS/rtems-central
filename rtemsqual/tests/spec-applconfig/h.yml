@@ -1,18 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
+appl-config-option-type: integer
 constraints:
   custom:
   - custom h
-default-value: 1
-description: description h
-index-entries: []
-name: h
-notes: null
-appl-config-option-type: integer
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: 1
+description: description h
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: null
   uid: g
+name: h
+notes: null
 type: interface

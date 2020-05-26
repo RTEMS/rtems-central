@@ -1,9 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintstackspace
-  - /acfg/opt/constraintmemsz
   max: 65535
   min: 0
 copyrights:
@@ -18,6 +15,10 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../posix
+- role: constraint
+  uid: constraintstackspace
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_MAXIMUM_POSIX_THREADS
 notes: |
   This object class can be configured in unlimited allocation mode, see

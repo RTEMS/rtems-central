@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintmemsz
   max: '``SIZE_MAX``'
   min: 0
 copyrights:
@@ -17,6 +15,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../schedgeneral
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_CBS_MAXIMUM_SERVERS
 notes: |
   This configuration option is only evaluated if the configuration option

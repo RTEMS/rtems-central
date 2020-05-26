@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintmemsz
   max: 65535
   min: 0
 copyrights:
@@ -17,6 +15,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../classic
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_MAXIMUM_USER_EXTENSIONS
 notes: |
   This object class cannot be configured in unlimited allocation mode.

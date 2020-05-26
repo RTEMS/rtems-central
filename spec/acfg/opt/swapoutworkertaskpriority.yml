@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
-constraints:
-  links:
-  - /acfg/opt/constraintprioclassic
+constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 15
@@ -15,6 +13,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bdbuf
+- role: constraint
+  uid: constraintprioclassic
 name: CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
 notes: null
 text: ''

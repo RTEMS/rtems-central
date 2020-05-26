@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintstackspace
   min: :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -16,6 +14,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../classicinit
+- role: constraint
+  uid: constraintstackspace
 name: CONFIGURE_INIT_TASK_STACK_SIZE
 notes: null
 text: ''

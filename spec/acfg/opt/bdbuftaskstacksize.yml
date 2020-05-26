@@ -1,9 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintstackspace
-  - /acfg/opt/constraintmemsz
   min: :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -17,6 +14,10 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bdbuf
+- role: constraint
+  uid: constraintstackspace
+- role: constraint
+  uid: constraintmemsz
 name: CONFIGURE_BDBUF_TASK_STACK_SIZE
 notes: null
 text: ''

@@ -1,8 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  links:
-  - /acfg/opt/constraintstackspace
   min: 0
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -18,6 +16,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../general
+- role: constraint
+  uid: constraintstackspace
 name: CONFIGURE_EXTRA_TASK_STACKS
 notes: |
   This parameter is very important.  If the application creates tasks with
