@@ -16,8 +16,8 @@ spec-info:
     attributes:
       interface-target:
         description: |
-          It shall be the UID of the interface target which defines forward
-          declaration.
+          It shall be the UID of the interface target type declared by the
+          forward declaration.
         spec-type: uid
     description: |
       This set of attributes specifies a forward declaration.

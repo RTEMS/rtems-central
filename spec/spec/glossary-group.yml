@@ -16,11 +16,11 @@ spec-info:
     attributes:
       name:
         description: |
-          It defines the human readable name of the glossary group.
+          It shall be the human readable name of the glossary group.
         spec-type: str
       text:
         description: |
-          It states the requirement for the glossary group.
+          It shall state the requirement for the glossary group.
         spec-type: str
     description: |
       This set of attributes specifies a glossary group.

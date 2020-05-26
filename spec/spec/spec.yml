@@ -29,14 +29,14 @@ spec-example: |
       attributes:
         an-example-attribute:
           description: |
-            This mandatory attribute shall be an example.
+            It shall be an example.
           spec-type: optional-str
         example-number:
           description: |
-            This mandatory attribute shall be the example number.
+            It shall be the example number.
           spec-type: int
       description: |
-        This set of attributes gives an example.
+        This set of attributes specifies an example.
       required-attributes: all
   spec-name: Example Item Type
   spec-type: spec
@@ -46,25 +46,23 @@ spec-info:
     attributes:
       spec-description:
         description: |
-          This mandatory attribute shall be the description of the
-          specification type.
+          It shall be the description of the specification type.
         spec-type: optional-str
       spec-example:
         description: |
-          This mandatory attribute shall an example of the specification type.
+          If this value is present, then tt shall be an example of the
+          specification type.
         spec-type: optional-str
       spec-info:
-        description: |
-          This mandatory attribute defines the specification type information.
+        description: null
         spec-type: spec-info
       spec-name:
         description: |
-          This mandatory attribute shall be the human readable name of the
-          specification type.
+          It shall be the human readable name of the specification type.
         spec-type: optional-str
       spec-type:
         description: |
-          This mandatory attribute defines the specification type name.
+          It shall the specification type.
         spec-type: name
     description: |
       This set of attributes specifies specification types.

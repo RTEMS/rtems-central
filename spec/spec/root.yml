@@ -10,26 +10,22 @@ spec-info:
     attributes:
       SPDX-License-Identifier:
         description: |
-          This mandatory attribute defines the license of this item.
+          It shall be the license of the item.
         spec-type: spdx-license-identifier
       copyrights:
         description: |
-          This mandatory attribute defines the copyright holders and copyright
-          information of this item.
+          It shall be the list of copyright statements of the item.
         spec-type: copyrights
       enabled-by:
         description: |
-          This mandatory attribute defines the conditions under which this item
-          is enabled.
+          It shall define the conditions under which the item is enabled.
         spec-type: enabled-by
       links:
-        description: |
-          This mandatory attribute defines the links of this items to other
-          items.
+        description: null
         spec-type: links
       type:
         description: |
-          This mandatory attribute defines the type of this item.
+          It shall be the item type.
         spec-type: name
     description: |
       This is the root specification item type.

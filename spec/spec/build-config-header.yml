@@ -29,11 +29,11 @@ spec-info:
         description: null
         spec-type: build-target
     description: |
-      This set of attributes specifies configuration header files.  The
-      configuration header files are generated during configure command
-      execution and are placed in the build tree.  All collected configuration
-      defines are written to the configuration header file during the configure
-      command execution.  To have all configuration defines from sibling items
+      This set of attributes specifies configuration header file.  The
+      configuration header file is generated during configure command execution
+      and is placed in the build tree.  All collected configuration defines are
+      written to the configuration header file during the configure command
+      execution.  To have all configuration defines from sibling items
       available it is recommended to link them in the proper order.
     required-attributes: all
 spec-name: Build Configuration Header Item Type

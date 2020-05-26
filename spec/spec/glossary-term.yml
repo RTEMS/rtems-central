@@ -16,11 +16,11 @@ spec-info:
     attributes:
       term:
         description: |
-          It names the glossary term.
+          It shall be the glossary term.
         spec-type: str
       text:
         description: |
-          It gives the definition of the glossary term.
+          It shall be the definition of the glossary term.
         spec-type: str
     description: |
       This set of attributes specifies a glossary term.

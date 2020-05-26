@@ -76,7 +76,8 @@ spec-info:
         description: null
         spec-type: build-use-before-list
     description: |
-      This set of attributes specifies build scripts.
+      This set of attributes specifies a build script.  The optional attributes
+      may be required by commands executed through the scripts.
     required-attributes:
     - do-build
     - do-configure

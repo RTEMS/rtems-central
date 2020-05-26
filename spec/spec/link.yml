@@ -12,14 +12,15 @@ spec-info:
     attributes:
       role:
         description: |
-          This mandatory attribute defines the role of the link.
+          It shall be the role of the link.
         spec-type: name
       uid:
         description: |
-          This mandatory attribute defines the link target item UID.
+          It shall be the absolute or relative UID of the link target item.
         spec-type: uid
     description: |
-      This attribute value shall a link to a specification item.
+      This set of attributes specifies a link from one specification item to
+      another specification item.
     required-attributes: all
 spec-name: Link
 spec-type: link

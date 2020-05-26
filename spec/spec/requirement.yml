@@ -16,7 +16,7 @@ spec-info:
     attributes:
       requirement-type:
         description: |
-          This mandatory attribute defines the requirement type.
+          It shall be the requirement item type.
         spec-type: name
       rationale:
         description: |
@@ -25,7 +25,7 @@ spec-info:
         spec-type: optional-str
       text:
         description: |
-          This mandatory attribute defines the requirement text.
+          It shall state the requirement.
         spec-type: requirement-text
     description: |
       This set of attributes specifies a requirement.

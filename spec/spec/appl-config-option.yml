@@ -16,38 +16,38 @@ spec-info:
     attributes:
       appl-config-option-type:
         description: |
-          This mandatory attribute shall be the application configuration
-          option type.
+          It shall be the application configuration option type.
         spec-type: name
       description:
         description: |
-          This mandatory attribute shall be the description of the application
-          configuration option.
+          It shall be the description of the application configuration option.
+          The description should be short and concentrate on the average case.
+          All special cases, usage notes, constraints, error conditions,
+          configuration dependencies, references, etc. should be described in
+          the notes.  The
+          :ref:`SpecTypeApplicationConfigurationValueOptionItemType` items have
+          an attribute for constraints.
         spec-type: str
       index-entries:
         description: |
-          This mandatory attribute defines additional application configuration
-          option document index entries.  The application configuration option
-          name is automatically added to the document index.
+          It shall be a list of additional application configuration option
+          document index entries.  The application configuration option name is
+          automatically added to the document index.
         spec-type: list-str
       name:
-        description: |
-          This mandatory attribute defines the application configuration option
-          name.
+        description: null
         spec-type: appl-config-option-name
       notes:
         description: |
-          This mandatory attribute shall be the notes to the application
-          configuration option.
+          It shall be the notes to the application configuration option.
         spec-type: optional-str
       text:
         description: |
-          This mandatory attribute states the requirement for the application
-          configuration option.
+          It shall state the requirement for the application configuration
+          option.
         spec-type: requirement-text
     description: |
-      This set of attributes specifies application configuration option
-      specification items.
+      This set of attributes specifies an application configuration option.
     required-attributes: all
 spec-name: Application Configuration Option Item Type
 spec-type: appl-config-option

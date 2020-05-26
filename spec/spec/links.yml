@@ -5,13 +5,12 @@ enabled-by: true
 links:
 - role: spec-member
   uid: root
-spec-description: |
-  This attribute value shall be a list of links to specification items.
+spec-description: null
 spec-example: null
 spec-info:
   list:
     description: null
     spec-type: link
-spec-name: Item Links Type
+spec-name: Link List
 spec-type: links
 type: spec

@@ -16,10 +16,10 @@ spec-info:
     attributes:
       glossary-type:
         description: |
-          It defines the glossary item type.
+          It shall be the glossary item type.
         spec-type: name
     description: |
-      This set of attributes specifies glossary items.
+      This set of attributes specifies a glossary item.
     required-attributes: all
 spec-name: Glossary Item Type
 spec-type: glossary

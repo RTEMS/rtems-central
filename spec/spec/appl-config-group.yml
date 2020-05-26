@@ -16,22 +16,20 @@ spec-info:
     attributes:
       description:
         description: |
-          This mandatory attribute shall be the description of the application
-          configuration group.
+          It shall be the description of the application configuration group.
         spec-type: str
       name:
         description: |
-          This mandatory attribute defines the application configuration group
-          human readable name.
+          It shall be human readable name of the application configuration
+          group.
         spec-type: str
       text:
         description: |
-          This mandatory attribute states the requirement for the application
-          configuration group.
+          It shall state the requirement for the application configuration
+          group.
         spec-type: requirement-text
     description: |
-      This set of attributes specifies application configuration group
-      specification items.
+      This set of attributes specifies an application configuration group.
     required-attributes: all
 spec-name: Application Configuration Group Item Type
 spec-type: appl-config-group

@@ -12,7 +12,7 @@ spec-info:
     assert:
     - re: ^(CONFIGURE_|BSP_)[A-Z0-9_]+$
     description: |
-      This attribute value defines an application configuration option name.
+      It shall be the name of an application configuration option.
 spec-name: Application Configuration Option Name
 spec-type: appl-config-option-name
 type: spec

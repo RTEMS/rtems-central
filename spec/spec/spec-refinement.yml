@@ -16,13 +16,13 @@ spec-info:
     attributes:
       spec-key:
         description: |
-          This mandatory attribute defines the specification type refinement
-          attribute key of the specification refinement.
+          It shall be the specification type refinement attribute key of the
+          specification refinement.
         spec-type: name
       spec-value:
         description: |
-          This mandatory attribute defines the specification type refinement
-          attribute value of the specification refinement.
+          It shall be the specification type refinement attribute value of the
+          specification refinement.
         spec-type: name
     description: |
       It defines the specification refinement role of links.

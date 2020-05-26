@@ -12,13 +12,11 @@ spec-info:
     attributes:
       description:
         description: |
-          This mandatory attribute shall be the description of the generic
-          attributes.
+          It shall be the description of the generic attributes.
         spec-type: optional-str
       spec-type:
         description: |
-          This mandatory attribute defines the specification type of the
-          generic attribute values.
+          It shall be the specification type of the generic attribute values.
         spec-type: name
     description: |
       This set of attributes specifies generic attributes.  Generic attributes

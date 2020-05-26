@@ -16,8 +16,8 @@ spec-info:
     attributes:
       enabled-by:
         description: |
-          This mandatory attribute defines under which conditions the interface
-          container is included.
+          It shall define under which conditions the interface container is
+          included.
         spec-type: enabled-by
     description: |
       It defines the interface include role of links and is used to indicate

@@ -16,8 +16,7 @@ spec-info:
     attributes:
       non-functional-type:
         description: |
-          This mandatory attribute defines the non-functional type of the
-          requirement.
+          It shall be the non-functional type of the requirement.
         spec-type: requirement-non-functional-type
     description: |
       This set of attributes specifies a non-functional requirement.

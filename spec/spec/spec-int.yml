@@ -19,11 +19,10 @@ spec-info:
         spec-type: spec-assert-int
       description:
         description: |
-          This mandatory attribute shall be the description of the specified
-          integer value.
+          It shall be the description of the specified integer value.
         spec-type: optional-str
     description: |
-      This attribute set specifies an integer value.
+      This set of attributes specifies an integer value.
     required-attributes:
     - description
 spec-name: Integer Value Specification

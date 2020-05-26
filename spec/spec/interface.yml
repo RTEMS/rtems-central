@@ -16,10 +16,10 @@ spec-info:
     attributes:
       interface-type:
         description: |
-          This mandatory attribute defines the interface type.
+          It shall be the interface item type.
         spec-type: name
     description: |
-      This set of attributes specifies interface specification items.
+      This set of attributes specifies an interface specification item.
     required-attributes: all
 spec-name: Interface Item Type
 spec-type: interface

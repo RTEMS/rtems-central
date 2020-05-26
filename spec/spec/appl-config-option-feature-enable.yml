@@ -15,8 +15,8 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      This set of attributes specifies application configuration feature enable
-      option specification items.
+      This set of attributes specifies an application configuration feature
+      enable option.
     required-attributes: all
 spec-name: Application Configuration Feature Enable Option Item Type
 spec-type: appl-config-option-feature-enable

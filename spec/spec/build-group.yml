@@ -22,8 +22,8 @@ spec-info:
         spec-type: build-install-list
       ldflags:
         description: |
-          This mandatory attribute defines a list of options for the linker.
-          They are used to link programs referenced by this item.
+          It shall be a list of options for the linker.  They are used to link
+          executables referenced by this item.
         spec-type: list-str
       use-after:
         description: null

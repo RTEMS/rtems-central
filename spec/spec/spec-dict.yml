@@ -12,23 +12,21 @@ spec-info:
     attributes:
       attributes:
         description: |
-          This mandatory attribute defines the explicitly defined attributes of
-          the specified attribute set.
+          It shall be the specification of the set of explicitly defined
+          attributes.
         spec-type: spec-attributes
       description:
         description: |
-          This mandatory attribute shall be the description of the specified
-          attribute set.
+          It shall be the description of the attribute set.
         spec-type: optional-str
       generic-attributes:
         description: |
-          This optional attribute defines the generic attributes of the
-          specified attribute set.
+          It shall be the specification of the generic attributes of the
+          attribute set.
         spec-type: spec-generic-attributes
       required-attributes:
         description: |
-          This mandatory attribute defines the required attributes of the
-          specified attribute set.
+          It shall be the set of required attributes of the attribute set.
         spec-type: spec-required-attributes
     description: |
       This set of attributes specifies a set of attributes.

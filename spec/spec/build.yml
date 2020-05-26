@@ -16,7 +16,7 @@ spec-info:
     attributes:
       build-type:
         description: |
-          This mandatory attribute defines the build type.
+          It shall be the build item type.
         spec-type: name
     description: |
       This set of attributes specifies a build item.

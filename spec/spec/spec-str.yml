@@ -18,11 +18,10 @@ spec-info:
         spec-type: spec-assert-str
       description:
         description: |
-          This mandatory attribute shall be the description of the specified
-          string attribute.
+          It shall be the description of the specified string attribute.
         spec-type: optional-str
     description: |
-      This attribute set specifies a string.
+      This set of attributes specifies a string.
     required-attributes:
     - description
 spec-name: String Specification

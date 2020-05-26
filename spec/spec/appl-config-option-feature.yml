@@ -16,12 +16,12 @@ spec-info:
     attributes:
       default:
         description: |
-          This mandatory attribute shall describe what happens if the
-          configuration option is undefined.
+          It shall describe what happens if the configuration option is
+          undefined.
         spec-type: str
     description: |
-      This set of attributes specifies application configuration feature option
-      specification items.
+      This set of attributes specifies an application configuration feature
+      option.
     required-attributes: all
 spec-name: Application Configuration Feature Option Item Type
 spec-type: appl-config-option-feature
