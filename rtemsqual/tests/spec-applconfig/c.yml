@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
-  - custom c 1
-  - custom c 2
   max: 99
   min: -1
+  texts:
+  - custom c 1
+  - custom c 2
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: 13

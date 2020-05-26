@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
+  texts:
   - It shall be greater than or equal to a Clock Driver specific value.
   - It shall be less than or equal to a Clock Driver specific value.
   - The resulting clock ticks per second should be an integer.

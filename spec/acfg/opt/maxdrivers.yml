@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
+  max: '``SIZE_MAX``'
+  texts:
   - |
     It shall be greater than or equal than the number of statically configured
     device drivers.
-  max: '``SIZE_MAX``'
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |

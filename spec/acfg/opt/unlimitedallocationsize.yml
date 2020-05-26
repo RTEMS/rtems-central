@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
+  texts:
   - |
     The value of this configuration option shall meet the constraints of all
     object classes to which it is applied.

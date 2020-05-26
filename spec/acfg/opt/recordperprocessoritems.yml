@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
-  - It shall be a power of two.
   max: '``SIZE_MAX``'
   min: 16
+  texts:
+  - It shall be a power of two.
 copyrights:
 - Copyright (C) 2019 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: 0

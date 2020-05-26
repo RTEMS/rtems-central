@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
+  texts:
   - custom k 1
   - custom k 2
 copyrights:

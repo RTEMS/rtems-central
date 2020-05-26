@@ -10,10 +10,6 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      custom:
-        description: |
-          This attribute defines a list of constraints.
-        spec-type: list-str
       max:
         description: |
           This attribute defines the maximum value.
@@ -26,6 +22,9 @@ spec-info:
         description: |
           This attribute defines a set of valid values.
         spec-type: list-int-or-str
+      texts:
+        description: null
+        spec-type: requirement-text-list
     description: |
       This set of attributes defines application configuration option
       constraints.  Additional constraints can be added through the links of

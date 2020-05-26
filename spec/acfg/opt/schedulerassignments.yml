@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: initializer
 constraints:
-  custom:
+  texts:
   - |
     The value of this configuration option shall be a list of the following
     macros:

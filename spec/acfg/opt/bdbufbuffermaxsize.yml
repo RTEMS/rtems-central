@@ -1,9 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 appl-config-option-type: integer
 constraints:
-  custom:
-  - It shall be an integral multiple of :ref:`CONFIGURE_BDBUF_BUFFER_MIN_SIZE`.
   min: 0
+  texts:
+  - It shall be an integral multiple of :ref:`CONFIGURE_BDBUF_BUFFER_MIN_SIZE`.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 4096
