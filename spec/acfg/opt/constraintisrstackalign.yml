@@ -4,6 +4,7 @@ copyrights:
 enabled-by: true
 links: []
 non-functional-type: constraint
+rationale: null
 requirement-type: non-functional
 text: |
   The value of this configuration option shall be aligned according to
