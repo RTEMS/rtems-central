@@ -8,8 +8,8 @@ links: []
 local-includes:
 - green.h
 target: ts.c
-test-suite-code: |
+code: |
   /* Blue green code */
-test-suite-description: The Blue Green description.
-test-suite-name: Blue Green
+description: The Blue Green description.
+name: Blue Green
 type: test-suite

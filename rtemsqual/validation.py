@@ -74,7 +74,7 @@ def _add_test_case_description(content: CContent, item: Item,
                                identifier: str, name: str) -> None:
     with content.defgroup_block(f"RTEMSTestCase{identifier}", name):
         _add_ingroup(content, test_case_to_suites[item.uid], "RTEMSTestSuite",
-                     "test-suite-name")
+                     "name")
         content.add(["@brief Test Case", "", "@{"])
 
 
@@ -128,12 +128,12 @@ def _generate_test_case(content: CContent, item: Item,
 
 
 def _generate_test_suite(content: CContent, item: Item) -> None:
-    name = item["test-suite-name"]
+    name = item["name"]
     with content.defgroup_block(f"RTEMSTestSuite{_designator(name)}", name):
         content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
-        content.wrap(item["test-suite-description"])
+        content.wrap(item["description"])
         content.add("@{")
-    content.add(item["test-suite-code"])
+    content.add(item["code"])
     content.add("/** @} */")
 
 
@@ -179,8 +179,7 @@ class SourceFile:
             content.register_license_and_copyrights_of_item(item)
         content.add_spdx_license_identifier()
         with content.file_block():
-            _add_ingroup(content, self._test_suites, "RTEMSTestSuite",
-                         "test-suite-name")
+            _add_ingroup(content, self._test_suites, "RTEMSTestSuite", "name")
             _add_ingroup(content, self._test_cases, "RTEMSTestCase", "name")
         content.add_copyrights_and_licenses()
         content.add_have_config()
@@ -189,8 +188,7 @@ class SourceFile:
         content.add_includes([CInclude("t.h")])
         for item in sorted(self._test_cases, key=lambda x: x["name"]):
             _generate_test_case(content, item, test_case_to_suites)
-        for item in sorted(self._test_suites,
-                           key=lambda x: x["test-suite-name"]):
+        for item in sorted(self._test_suites, key=lambda x: x["name"]):
             _generate_test_suite(content, item)
         content.write(os.path.join(base_directory, self._file))
 
