@@ -1,5 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-description: |
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
   If
 
   * this configuration option is defined by the BSP
@@ -10,18 +13,15 @@ appl-config-option-description: |
   system initialization time.  When :c:func:`malloc()` or other standard memory
   allocation functions are unable to allocate memory, they will call the BSP
   supplied :c:func:`sbrk()` function to obtain more memory.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
-appl-config-option-notes: |
-  This option should not be defined by the application. Only the BSP knows how
-  it allocates memory to the C Program Heap.
-appl-config-option-type: feature-enable
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bsp
+name: CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+notes: |
+  This option should not be defined by the application. Only the BSP knows how
+  it allocates memory to the C Program Heap.
 text: ''
 type: interface

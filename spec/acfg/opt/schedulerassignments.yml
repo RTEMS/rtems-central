@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: initializer
+constraints:
   custom:
   - |
     The value of this configuration option shall be a list of the following
@@ -11,26 +12,25 @@ appl-config-option-constraint:
   - |
     The value of this configuration option shall be a list of exactly
     :ref:`CONFIGURE_MAXIMUM_PROCESSORS` elements.
-appl-config-option-default-value: |
-  The default value of this configuration option is computed so that the
-  default scheduler is assigned to each configured processor (up to 32).
-appl-config-option-description: |
-  The value of this configuration option is used to initialize the initial
-  scheduler to processor assignments.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_SCHEDULER_ASSIGNMENTS
-appl-config-option-notes: |
-  This configuration option is only evaluated in SMP configurations.
-
-  This is an advanced configuration option, see
-  :ref:`ConfigurationSchedulersClustered`.
-appl-config-option-type: initializer
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: |
+  The default value of this configuration option is computed so that the
+  default scheduler is assigned to each configured processor (up to 32).
+description: |
+  The value of this configuration option is used to initialize the initial
+  scheduler to processor assignments.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../schedgeneral
+name: CONFIGURE_SCHEDULER_ASSIGNMENTS
+notes: |
+  This configuration option is only evaluated in SMP configurations.
+
+  This is an advanced configuration option, see
+  :ref:`ConfigurationSchedulersClustered`.
 text: ''
 type: interface

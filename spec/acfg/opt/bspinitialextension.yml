@@ -1,12 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: initializer
+constraints:
   custom:
   - |
     The value of this configuration option shall be a list of initializers for
     structures of type :c:type:`rtems_extensions_table`.
-appl-config-option-default-value: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
   The default value is BSP-specific.
-appl-config-option-description: |
+description: |
   If
 
   * this configuration option is defined by the BSP
@@ -15,18 +18,15 @@ appl-config-option-description: |
 
   then the value of this configuration option is used to initialize the table
   of initial user extensions.
-appl-config-option-index: []
-appl-config-option-name: BSP_INITIAL_EXTENSION
-appl-config-option-notes: |
-  The value of this configuration option is placed after the entries of all
-  other initial user extensions.
-appl-config-option-type: initializer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bsp
+name: BSP_INITIAL_EXTENSION
+notes: |
+  The value of this configuration option is placed after the entries of all
+  other initial user extensions.
 text: ''
 type: interface

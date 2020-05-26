@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-group-description: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
   This section describes configuration options related to selecting a
   scheduling algorithm for an application.  A scheduler configuration is optional
   and only necessary in very specific circumstances.  A normal application
@@ -21,13 +23,11 @@ appl-config-group-description: |
   The pluggable scheduler interface also enables the user to provide their own
   scheduling algorithm.  If you choose to do this, you must define multiple
   configuration option.
-appl-config-group-name: General Scheduler Configuration
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
   uid: ../applconfig
+name: General Scheduler Configuration
 text: ''
 type: interface

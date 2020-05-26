@@ -1,14 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   max: '``UINT32_MAX``'
   min: 0
-appl-config-option-default-value: '``NODE_NUMBER``'
-appl-config-option-description: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: '``NODE_NUMBER``'
+description: |
   The value of this configuration option defines the node number of this node
   in a multiprocessor system.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_MP_NODE_NUMBER
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../mpci
+name: CONFIGURE_MP_NODE_NUMBER
+notes: |
   In the RTEMS Multiprocessing Test Suite, the node number is derived from
   the Makefile variable ``NODE_NUMBER``. The same code is compiled with the
   ``NODE_NUMBER`` set to different values. The test programs behave
@@ -16,13 +24,5 @@ appl-config-option-notes: |
 
   This configuration option is only evaluated if
   :ref:`CONFIGURE_MP_APPLICATION` is defined.
-appl-config-option-type: integer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../mpci
 text: ''
 type: interface

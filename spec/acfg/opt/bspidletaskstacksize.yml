@@ -1,11 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   links:
   - /acfg/opt/constraintidlestackarea
   - /acfg/opt/constraintbspappmin
-appl-config-option-default-value: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
   The default value is BSP-specific.
-appl-config-option-description: |
+description: |
   If
 
   * this configuration option is defined by the BSP
@@ -14,16 +17,13 @@ appl-config-option-description: |
 
   then the value of this configuration option defines the default value of
   :ref:`CONFIGURE_IDLE_TASK_SIZE`.
-appl-config-option-index: []
-appl-config-option-name: BSP_IDLE_TASK_STACK_SIZE
-appl-config-option-notes: null
-appl-config-option-type: integer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bsp
+name: BSP_IDLE_TASK_STACK_SIZE
+notes: null
 text: ''
 type: interface

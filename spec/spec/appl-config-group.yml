@@ -14,12 +14,12 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      appl-config-group-description:
+      description:
         description: |
           This mandatory attribute shall be the description of the application
           configuration group.
         spec-type: str
-      appl-config-group-name:
+      name:
         description: |
           This mandatory attribute defines the application configuration group
           human readable name.

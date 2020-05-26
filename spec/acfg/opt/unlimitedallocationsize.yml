@@ -1,30 +1,30 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   custom:
   - |
     The value of this configuration option shall meet the constraints of all
     object classes to which it is applied.
-appl-config-option-default-value: 8
-appl-config-option-description: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 8
+description: |
   If :ref:`CONFIGURE_UNLIMITED_OBJECTS` is defined, then the value of this
   configuration option defines the default objects maximum of all object
   classes supporting :ref:`ConfigUnlimitedObjects` to
   ``rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)``.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_UNLIMITED_ALLOCATION_SIZE
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../general
+name: CONFIGURE_UNLIMITED_ALLOCATION_SIZE
+notes: |
   By allowing users to declare all resources as being unlimited the user can
   avoid identifying and limiting the resources used.
 
   The object maximum of each class can be configured also individually using
   the :c:func:`rtems_resource_unlimited` macro.
-appl-config-option-type: integer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../general
 text: ''
 type: interface

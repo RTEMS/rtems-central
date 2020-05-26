@@ -1,19 +1,27 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   links:
   - /acfg/opt/constraintisrstackalign
   - /acfg/opt/constraintisrstackarea
   - /acfg/opt/constraintbspappmin
-appl-config-option-default-value: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
   The default value is :ref:`BSP_INTERRUPT_STACK_SIZE` in case it is defined,
   otherwise the default value is ``CPU_STACK_MINIMUM_SIZE``.
-appl-config-option-description: |
+description: |
   The value of this configuration option defines the size of an interrupt stack
   in bytes.
-appl-config-option-index:
+enabled-by: true
+index-entries:
 - interrupt stack size
-appl-config-option-name: CONFIGURE_INTERRUPT_STACK_SIZE
-appl-config-option-notes: |
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../general
+name: CONFIGURE_INTERRUPT_STACK_SIZE
+notes: |
   There is one interrupt stack available for each configured processor
   (:ref:`CONFIGURE_MAXIMUM_PROCESSORS`).  The interrupt stack areas are
   statically allocated in a special linker section (``.rtemsstack.interrupt``).
@@ -29,13 +37,5 @@ appl-config-option-notes: |
 
   In releases before RTEMS 5.1 the default value was
   :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE` instead of ``CPU_STACK_MINIMUM_SIZE``.
-appl-config-option-type: integer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../general
 text: ''
 type: interface

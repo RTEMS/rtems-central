@@ -14,7 +14,7 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      appl-config-option-default:
+      default:
         description: |
           This mandatory attribute shall describe what happens if the
           configuration option is undefined.

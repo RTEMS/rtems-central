@@ -1,23 +1,23 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   links:
   - /acfg/opt/constraintstackspace
   - /acfg/opt/constraintmemsz
   min: :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`
-appl-config-option-default-value: '``RTEMS_MINIMUM_STACK_SIZE``'
-appl-config-option-description: |
-  The value of this configuration option defines the task stack size of the
-  Block Device Cache tasks in bytes.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_BDBUF_TASK_STACK_SIZE
-appl-config-option-notes: null
-appl-config-option-type: integer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: '``RTEMS_MINIMUM_STACK_SIZE``'
+description: |
+  The value of this configuration option defines the task stack size of the
+  Block Device Cache tasks in bytes.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bdbuf
+name: CONFIGURE_BDBUF_TASK_STACK_SIZE
+notes: null
 text: ''
 type: interface

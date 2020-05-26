@@ -1,15 +1,23 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-default: |
+appl-config-option-type: feature
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default: |
   If this configuration option is undefined, then the user is assumed to
   provide one or more initialization tasks.
-appl-config-option-description: |
+description: |
   This configuration option is defined to indicate that the user has configured
   **no** user initialization tasks or threads and that the user provided IDLE
   task will perform application initialization and then transform itself into
   an IDLE task.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../idle
+name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+notes: |
   If you use this option be careful, the user IDLE task **cannot** block at all
   during the initialization sequence.  Further, once application
   initialization is complete, it shall make itself preemptible and enter an idle
@@ -31,13 +39,5 @@ appl-config-option-notes: |
   * `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
 
   otherwise a compile time error in the configuration file will occur.
-appl-config-option-type: feature
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../idle
 text: ''
 type: interface

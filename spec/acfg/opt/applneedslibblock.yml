@@ -1,20 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-description: |
-  In case this configuration option is defined, then the Block Device Cache is
-  initialized during system initialization.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
-appl-config-option-notes: |
-  Each option of the Block Device Cache (bdbuf) configuration can be explicitly
-  set by the user with the configuration options below.  The Block Device Cache
-  is used for example by the RFS and DOSFS filesystems.
 appl-config-option-type: feature-enable
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  In case this configuration option is defined, then the Block Device Cache is
+  initialized during system initialization.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../bdbuf
+name: CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+notes: |
+  Each option of the Block Device Cache (bdbuf) configuration can be explicitly
+  set by the user with the configuration options below.  The Block Device Cache
+  is used for example by the RFS and DOSFS filesystems.
 text: ''
 type: interface

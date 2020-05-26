@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   set:
   - 16
   - 32
@@ -7,13 +8,20 @@ appl-config-option-constraint:
   - 128
   - 256
   - 512
-appl-config-option-default-value: 128
-appl-config-option-description: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 128
+description: |
   The value of this configuration option defines the block size for in-memory
   files managed by the IMFS.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../filesystem
+name: CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+notes: |
   The configured block size has two impacts. The first is the average amount of
   unused memory in the last block of each file.  For example, when the block
   size is 512, on average one-half of the last block of each file will remain
@@ -39,13 +47,5 @@ appl-config-option-notes: |
 
   - when the block size is 512 bytes, the maximum file size is 1,082,195,456
     bytes.
-appl-config-option-type: integer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../filesystem
 text: ''
 type: interface

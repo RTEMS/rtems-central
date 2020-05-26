@@ -1,22 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   links:
   - /acfg/opt/constraintstackspace
   min: :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`
-appl-config-option-default-value: :ref:`CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE`
-appl-config-option-description: |
-  The value of this configuration option defines the thread stack size of the
-  POSIX API initialization thread.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-appl-config-option-notes: null
-appl-config-option-type: integer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: :ref:`CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE`
+description: |
+  The value of this configuration option defines the thread stack size of the
+  POSIX API initialization thread.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../posixinit
+name: CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+notes: null
 text: ''
 type: interface

@@ -1,13 +1,21 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-default: |
+appl-config-option-type: feature
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default: |
   If this configuration option is undefined, then a Clock Driver may be
   initialized during system initialization.
-appl-config-option-description: |
+description: |
   In case this configuration option is defined, then **no** Clock Driver is
   initialized during system initialization.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../devdrv
+name: CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+notes: |
   This configuration parameter is intended to prevent the common user error
   of using the Hello World example as the baseline for an application and
   leaving out a clock tick source.
@@ -21,13 +29,5 @@ appl-config-option-notes: |
   * :ref:`CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER`,
 
   otherwise a compile time error in the configuration file will occur.
-appl-config-option-type: feature
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../devdrv
 text: ''
 type: interface

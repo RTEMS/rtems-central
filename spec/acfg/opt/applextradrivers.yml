@@ -1,29 +1,29 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: initializer
+constraints:
   custom:
   - |
     The value of this configuration option shall be a list of initializers for
     structures of type :c:type:`rtems_driver_address_table`.
-appl-config-option-default-value: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
   The default value is the empty list.
-appl-config-option-description: |
+description: |
   The value of this configuration option is used to initialize the Device
   Driver Table.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_APPLICATION_EXTRA_DRIVERS
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../devdrv
+name: CONFIGURE_APPLICATION_EXTRA_DRIVERS
+notes: |
   The value of this configuration option is placed after the entries of other
   device driver configuration options.
 
   See :ref:`CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS` for an alternative
   placement of application device driver initializers.
-appl-config-option-type: initializer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../devdrv
 text: ''
 type: interface

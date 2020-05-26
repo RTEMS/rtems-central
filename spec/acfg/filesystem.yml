@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-group-description: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
   This section describes configuration options related to filesytems.
   By default, the In-Memory Filesystem (IMFS) is used as the base filesystem (also
   known as root filesystem).  In order to save some memory for your application,
@@ -41,13 +43,11 @@ appl-config-group-description: |
   * :ref:`CONFIGURE_IMFS_DISABLE_UTIME`
 
   * :ref:`CONFIGURE_IMFS_ENABLE_MKFIFO`
-appl-config-group-name: Filesystem Configuration
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
   uid: ../applconfig
+name: Filesystem Configuration
 text: ''
 type: interface

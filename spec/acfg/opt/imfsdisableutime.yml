@@ -1,20 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-default: |
-  If this configuration option is undefined, then the root IMFS supports
-  changing file times.
-appl-config-option-description: |
-  In case this configuration option is defined, then the root IMFS does not
-  support changing file times (no support for :c:func:`utime`).
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_IMFS_DISABLE_UTIME
-appl-config-option-notes: null
 appl-config-option-type: feature
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default: |
+  If this configuration option is undefined, then the root IMFS supports
+  changing file times.
+description: |
+  In case this configuration option is defined, then the root IMFS does not
+  support changing file times (no support for :c:func:`utime`).
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../filesystem
+name: CONFIGURE_IMFS_DISABLE_UTIME
+notes: null
 text: ''
 type: interface

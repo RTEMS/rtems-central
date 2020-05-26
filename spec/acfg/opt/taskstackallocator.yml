@@ -1,19 +1,27 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: initializer
+constraints:
   custom:
   - |
     The value of this configuration option shall be defined to a valid function
     pointer of the type ``void *( *allocate )( size_t )``.
-appl-config-option-default-value: |
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
   The default value is ``_Workspace_Allocate``, which indicates that task
   stacks will be allocated from the RTEMS Workspace.
-appl-config-option-description: |
+description: |
   The value of this configuration option initializes the stack allocator
   allocate handler.
-appl-config-option-index:
+enabled-by: true
+index-entries:
 - task stack allocator
-appl-config-option-name: CONFIGURE_TASK_STACK_ALLOCATOR
-appl-config-option-notes: |
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../stackalloc
+name: CONFIGURE_TASK_STACK_ALLOCATOR
+notes: |
   A correctly configured system shall configure the following to be consistent:
 
   - :ref:`CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
@@ -21,13 +29,5 @@ appl-config-option-notes: |
   - `CONFIGURE_TASK_STACK_ALLOCATOR`
 
   - :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
-appl-config-option-type: initializer
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../stackalloc
 text: ''
 type: interface

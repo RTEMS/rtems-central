@@ -1,22 +1,22 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   custom:
   - |
     The value of this configuration option shall be a valid task attribute set.
-appl-config-option-default-value: '``RTEMS_DEFAULT_ATTRIBUTES``'
-appl-config-option-description: |
-  The value of this configuration option defines the task attributes of the
-  Classic API initialization task.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_INIT_TASK_ATTRIBUTES
-appl-config-option-notes: null
-appl-config-option-type: integer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: '``RTEMS_DEFAULT_ATTRIBUTES``'
+description: |
+  The value of this configuration option defines the task attributes of the
+  Classic API initialization task.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../classicinit
+name: CONFIGURE_INIT_TASK_ATTRIBUTES
+notes: null
 text: ''
 type: interface

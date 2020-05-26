@@ -1,11 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-description: |
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
   In case this configuration option is defined, then
   :ref:`Earliest Deadline First (EDF) SMP Scheduler <SchedulerSMPEDF>`
   algorithm is made available to the application.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_SCHEDULER_EDF_SMP
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../schedgeneral
+name: CONFIGURE_SCHEDULER_EDF_SMP
+notes: |
   This scheduler configuration option is an advanced configuration option.
   Think twice before you use it.
 
@@ -19,13 +27,5 @@ appl-config-option-notes: |
   This scheduler algorithm is the default in SMP configurations if
   :ref:`CONFIGURE_MAXIMUM_PROCESSORS` is
   greater than one.
-appl-config-option-type: feature-enable
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../schedgeneral
 text: ''
 type: interface

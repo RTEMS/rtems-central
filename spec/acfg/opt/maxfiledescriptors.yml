@@ -1,26 +1,26 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: integer
+constraints:
   links:
   - /acfg/opt/constraintmemsz
   max: '``SIZE_MAX``'
   min: 0
-appl-config-option-default-value: 3
-appl-config-option-description: |
-  The value of this configuration option defines the maximum number of file
-  like objects that can be concurrently open.
-appl-config-option-index:
-- maximum file descriptors
-appl-config-option-name: CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
-appl-config-option-notes: |
-  The default value of three file descriptors allows RTEMS to support standard
-  input, output, and error I/O streams on ``/dev/console``.
-appl-config-option-type: integer
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: 3
+description: |
+  The value of this configuration option defines the maximum number of file
+  like objects that can be concurrently open.
 enabled-by: true
+index-entries:
+- maximum file descriptors
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../general
+name: CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
+notes: |
+  The default value of three file descriptors allows RTEMS to support standard
+  input, output, and error I/O streams on ``/dev/console``.
 text: ''
 type: interface

@@ -18,12 +18,12 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      appl-config-option-constraint:
+      constraints:
         description: |
           This mandatory attribute shall list the constraints of the
           configuration option value.
-        spec-type: appl-config-option-constraint
-      appl-config-option-default-value:
+        spec-type: appl-config-option-constraints
+      default-value:
         description: |
           This mandatory attribute shall describe the default value of the
           configuration option.

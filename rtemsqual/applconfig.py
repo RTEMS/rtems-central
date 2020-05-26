@@ -59,7 +59,7 @@ _OPTION_TYPES = {
 
 _OPTION_DEFAULT_CONFIG = {
     "feature":
-    lambda item: item["appl-config-option-default"],
+    lambda item: item["default"],
     "feature-enable":
     lambda item:
     """If this configuration option is undefined, then the described feature is not
@@ -133,7 +133,7 @@ def _resolve_constraint_links(content: SphinxContent, item: Item,
 
 
 def _generate_constraint(content: SphinxContent, item: Item) -> None:
-    constraint = item["appl-config-option-constraint"]
+    constraint = item["constraints"]
     count = len(constraint)
     lines = []  # type: List[str]
     _resolve_constraint_links(content, item, constraint)
@@ -167,7 +167,7 @@ def _generate_constraint(content: SphinxContent, item: Item) -> None:
 
 def _generate_initializer_or_integer(content: SphinxContent, item: Item,
                                      _option_type: str) -> None:
-    default_value = item["appl-config-option-default-value"]
+    default_value = item["default-value"]
     if not isinstance(default_value, str) or " " not in default_value:
         default_value = f"The default value is {default_value}."
     content.add_definition_item("DEFAULT VALUE:", default_value)
@@ -191,21 +191,20 @@ def _generate_notes(content: SphinxContent, notes: Optional[str]) -> None:
 def _generate_file(group: Item, options: ItemMap, target: str) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
-    content.add_header(group["appl-config-group-name"], level=2)
-    content.add(group["appl-config-group-description"])
+    content.add_header(group["name"], level=2)
+    content.add(group["description"])
     for item in sorted(options.values(), key=lambda x: x.uid):
-        name = item["appl-config-option-name"]
+        name = item["name"]
         content.register_license_and_copyrights_of_item(item)
-        content.add_index_entries([name] + item["appl-config-option-index"])
+        content.add_index_entries([name] + item["index-entries"])
         content.add_label(name)
         content.add_header(name, level=3)
         content.add_definition_item("CONSTANT:", f"``{name}``")
         option_type = item["appl-config-option-type"]
         content.add_definition_item("OPTION TYPE:", _OPTION_TYPES[option_type])
         _OPTION_GENERATORS[option_type](content, item, option_type)
-        content.add_definition_item("DESCRIPTION:",
-                                    item["appl-config-option-description"])
-        _generate_notes(content, item["appl-config-option-notes"])
+        content.add_definition_item("DESCRIPTION:", item["description"])
+        _generate_notes(content, item["notes"])
     content.add_licence_and_copyrights()
     content.write(target)
 

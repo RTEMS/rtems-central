@@ -14,32 +14,32 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      appl-config-option-description:
-        description: |
-          This mandatory attribute shall be the description of the application
-          configuration option.
-        spec-type: str
-      appl-config-option-index:
-        description: |
-          This mandatory attribute defines additional application configuration
-          option document index entries.  The application configuration option
-          name is automatically added to the document index.
-        spec-type: list-str
-      appl-config-option-name:
-        description: |
-          This mandatory attribute defines the application configuration option
-          name.
-        spec-type: appl-config-option-name
-      appl-config-option-notes:
-        description: |
-          This mandatory attribute shall be the notes to the application
-          configuration option.
-        spec-type: optional-str
       appl-config-option-type:
         description: |
           This mandatory attribute shall be the application configuration
           option type.
         spec-type: name
+      description:
+        description: |
+          This mandatory attribute shall be the description of the application
+          configuration option.
+        spec-type: str
+      index-entries:
+        description: |
+          This mandatory attribute defines additional application configuration
+          option document index entries.  The application configuration option
+          name is automatically added to the document index.
+        spec-type: list-str
+      name:
+        description: |
+          This mandatory attribute defines the application configuration option
+          name.
+        spec-type: appl-config-option-name
+      notes:
+        description: |
+          This mandatory attribute shall be the notes to the application
+          configuration option.
+        spec-type: optional-str
       text:
         description: |
           This mandatory attribute states the requirement for the application

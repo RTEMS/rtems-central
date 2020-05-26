@@ -1,20 +1,20 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-default: |
-  If this configuration option is undefined, then the root IMFS supports
-  creating symbolic links.
-appl-config-option-description: |
-  In case this configuration option is defined, then the root IMFS does not
-  support creating symbolic links (no support for :c:func:`symlink`).
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_IMFS_DISABLE_SYMLINK
-appl-config-option-notes: null
 appl-config-option-type: feature
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default: |
+  If this configuration option is undefined, then the root IMFS supports
+  creating symbolic links.
+description: |
+  In case this configuration option is defined, then the root IMFS does not
+  support creating symbolic links (no support for :c:func:`symlink`).
 enabled-by: true
+index-entries: []
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../filesystem
+name: CONFIGURE_IMFS_DISABLE_SYMLINK
+notes: null
 text: ''
 type: interface

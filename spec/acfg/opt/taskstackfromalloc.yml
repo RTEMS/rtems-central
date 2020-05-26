@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-constraint:
+appl-config-option-type: initializer
+constraints:
   custom:
   - |
     The value of this configuration option shall be defined to a macro which
@@ -7,24 +8,23 @@ appl-config-option-constraint:
     parameter will be an allocation size and the macro shall return this size
     plus the overhead of the allocator to manage an allocation request for this
     size.
-appl-config-option-default-value: |
-  The default value is a macro which supports the system heap allocator.
-appl-config-option-description: |
-  The value of this configuration option is used to calculate the task stack
-  space size.
-appl-config-option-index:
-- task stack allocator
-appl-config-option-name: CONFIGURE_TASK_STACK_FROM_ALLOCATOR
-appl-config-option-notes: |
-  This configuration option may be used if a custom task stack allocator is
-  configured, see :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`.
-appl-config-option-type: initializer
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+default-value: |
+  The default value is a macro which supports the system heap allocator.
+description: |
+  The value of this configuration option is used to calculate the task stack
+  space size.
 enabled-by: true
+index-entries:
+- task stack allocator
 interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: ../stackalloc
+name: CONFIGURE_TASK_STACK_FROM_ALLOCATOR
+notes: |
+  This configuration option may be used if a custom task stack allocator is
+  configured, see :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`.
 text: ''
 type: interface

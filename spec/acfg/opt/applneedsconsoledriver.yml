@@ -1,10 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
-appl-config-option-description: |
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
   In case this configuration option is defined, then the Console Driver is
   initialized during system initialization.
-appl-config-option-index: []
-appl-config-option-name: CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-appl-config-option-notes: |
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: ../devdrv
+name: CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+notes: |
   The Console Driver is responsible for providing the :file:`/dev/console`
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
@@ -21,13 +29,5 @@ appl-config-option-notes: |
   * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
 
   configuration options are mutually exclusive.
-appl-config-option-type: feature-enable
-copyrights:
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-enabled-by: true
-interface-type: appl-config-option
-links:
-- role: appl-config-group-member
-  uid: ../devdrv
 text: ''
 type: interface
