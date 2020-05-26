@@ -293,11 +293,30 @@ class Content:
                 if 0 < len(last) >= indent_len:
                     self._lines[-1] = last[0:indent_len] + lines[0]
                     lines = lines[1:]
+                self.gap = True
                 first = False
             else:
                 self._lines.append(self._empty_line_indent)
             self._lines.extend(
                 _indent(lines, self._indent, self._empty_line_indent))
+
+    def paste_and_add(self, content: Optional[GenericContent]) -> None:
+        """
+        Pastes the wrapped first block of the content directly to the last line
+        and adds additional blocks.
+        """
+        if not content:
+            return
+        if isinstance(content, str):
+            text = content
+        elif isinstance(content, list):
+            text = "\n".join(content)
+        else:
+            text = "\n".join(content.lines)
+        blocks = text.split("\n\n")
+        self.paste(blocks[0])
+        for block in blocks[1:]:
+            self.add(block)
 
     def _add_gap(self) -> None:
         if self._gap:

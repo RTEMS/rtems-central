@@ -145,14 +145,14 @@ class _Documenter:
                 content.wrap(
                     self.get_value_type_phrase(content, "The attribute value",
                                                "shall", info["spec-type"]))
-                content.paste(info["description"])
+                content.paste_and_add(info["description"])
 
     def document_dict(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
         """ Documents an attribute set. """
         if shall == "may":
             content.paste("The value may be a set of attributes.")
-        content.paste(info["description"])
+        content.paste_and_add(info["description"])
         has_explicit_attributes = len(info["attributes"]) > 0
         if has_explicit_attributes:
             required_attributes = info["required-attributes"]
@@ -187,14 +187,14 @@ class _Documenter:
                 content, "The attribute value", "shall",
                 info["generic-attributes"]["spec-type"])
             content.paste(type_phrase)
-            content.paste(info["generic-attributes"]["description"])
+            content.paste_and_add(info["generic-attributes"]["description"])
 
     def document_value(self, content: SphinxContent, variant: str, shall: str,
                        info: Any) -> None:
         """ Documents a value. """
         content.paste(
             self.get_value_type_phrase(content, "The value", shall, variant))
-        content.paste(info["description"])
+        content.paste_and_add(info["description"])
 
     def document_list(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
@@ -202,7 +202,7 @@ class _Documenter:
         content.paste(
             self.get_list_phrase(content, "The value", shall,
                                  info["spec-type"]))
-        content.paste(info["description"])
+        content.paste_and_add(info["description"])
 
     def document_none(self, content: SphinxContent, _variant: str, shall: str,
                       _info: Any) -> None:
