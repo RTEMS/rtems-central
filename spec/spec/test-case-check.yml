@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      check:
+        description: |
+          It shall be the test case check code.
+        spec-type: str
+      description:
+        description: |
+          It shall be the test case check description.
+        spec-type: optional-str
+      links:
+        description: null
+        spec-type: links
+    description: |
+      This set of attributes specifies a test case check.
+    required-attributes: all
+spec-name: Test Case Check
+spec-type: test-case-check
+type: spec

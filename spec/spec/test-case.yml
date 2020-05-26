@@ -1,0 +1,74 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: type
+  spec-value: test-case
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      actions:
+        description: null
+        spec-type: test-case-action-list
+      brief:
+        description: |
+          It shall be the test case brief description.
+        spec-type: str
+      description:
+        description: |
+          It shall be the test case description.
+        spec-type: optional-str
+      epilogue:
+        description: |
+          If the attribute value is present, then it shall be the test case
+          epilogue code.  The epilogue code is placed in the test case body
+          after the test case actions.
+        spec-type: optional-str
+      fixture:
+        description: |
+          If the attribute value is present, then it shall be a pointer to the
+          test case fixture.  The test case fixture pointer declaration may be
+          provided by the test case support code or via an included header
+          file.
+        spec-type: optional-str
+      includes:
+        description: |
+          It shall be a list of header files included via ``#include <...>``.
+        spec-type: list-str
+      local-includes:
+        description: |
+          It shall be a list of header files included via ``#include "..."``.
+        spec-type: list-str
+      name:
+        description: null
+        spec-type: test-name
+      prologue:
+        description: |
+          If the attribute value is present, then it shall be the test case
+          prologue code.  The prologue code is placed in the test case body
+          before the test case actions.  A use case is the declaration of local
+          variables used by the test case actions.
+        spec-type: optional-str
+      support:
+        description: |
+          If the attribute value is present, then it shall be the test case
+          support code.  The support code is placed at file scope before the
+          test case code.
+        spec-type: optional-str
+      target:
+        description: |
+          It shall be the path to the generated target test case source file.
+        spec-type: str
+    description: |
+      This set of attributes specifies a test case.
+    required-attributes: all
+spec-name: Test Case Item Type
+spec-type: test-case
+type: spec
