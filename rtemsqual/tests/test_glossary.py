@@ -25,20 +25,16 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import shutil
 
 from rtemsqual.glossary import generate
 from rtemsqual.items import ItemCache
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_glossary(tmpdir):
-    item_cache_config = {}
-    item_cache_config["cache-directory"] = "cache"
-    spec_src = os.path.join(os.path.dirname(__file__), "spec-glossary")
-    spec_dst = os.path.join(tmpdir, "spec")
-    shutil.copytree(spec_src, spec_dst)
-    item_cache_config["paths"] = [os.path.normpath(spec_dst)]
-    ic = ItemCache(item_cache_config)
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-glossary")
+    item_cache = ItemCache(item_cache_config)
 
     glossary_config = {}
     glossary_config["project-groups"] = ["/glos/g"]
@@ -49,7 +45,7 @@ def test_glossary(tmpdir):
     document_glossary = os.path.join(tmpdir, "document", "glossary.rst")
     doc["target"] = document_glossary
     glossary_config["documents"] = [doc]
-    generate(glossary_config, ic)
+    generate(glossary_config, item_cache)
 
     with open(project_glossary, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0

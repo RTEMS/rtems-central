@@ -24,21 +24,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import shutil
-
 from rtemsqual.build import gather_files
 from rtemsqual.items import ItemCache
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_build(tmpdir):
-    item_cache_config = {}
-    item_cache_config["cache-directory"] = "cache"
-    spec_src = os.path.join(os.path.dirname(__file__), "spec-build")
-    spec_dst = os.path.join(tmpdir, "spec")
-    shutil.copytree(spec_src, spec_dst)
-    item_cache_config["paths"] = [os.path.normpath(spec_dst)]
-    ic = ItemCache(item_cache_config)
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-build")
+    item_cache = ItemCache(item_cache_config)
 
     build_config = {}
     build_config["arch"] = "foo"
@@ -46,5 +40,5 @@ def test_build(tmpdir):
     build_config["enabled"] = ["A"]
     build_config["sources"] = ["a", "b"]
     build_config["uids"] = ["/g"]
-    files = gather_files(build_config, ic)
+    files = gather_files(build_config, item_cache)
     assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def"]

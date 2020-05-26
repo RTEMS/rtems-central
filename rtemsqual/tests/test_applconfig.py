@@ -25,25 +25,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import shutil
 
 from rtemsqual.applconfig import generate
 from rtemsqual.items import ItemCache
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_applconfig(tmpdir):
-    item_cache_config = {}
-    item_cache_config["cache-directory"] = "cache"
-    spec_src = os.path.join(os.path.dirname(__file__), "spec-applconfig")
-    spec_dst = os.path.join(tmpdir, "spec")
-    shutil.copytree(spec_src, spec_dst)
-    item_cache_config["paths"] = [os.path.normpath(spec_dst)]
-    ic = ItemCache(item_cache_config)
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-applconfig")
+    item_cache = ItemCache(item_cache_config)
 
     applconfig_config = {}
     g_rst = os.path.join(tmpdir, "g.rst")
     applconfig_config["groups"] = [{"uid": "/g", "target": g_rst}]
-    generate(applconfig_config, ic)
+    generate(applconfig_config, item_cache)
 
     with open(g_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0

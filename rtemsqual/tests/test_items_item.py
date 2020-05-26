@@ -27,16 +27,11 @@
 import os
 import pytest
 
-from rtemsqual.items import Item, ItemCache, Link
-
-
-class EmptyCache(ItemCache):
-    def __init__(self):
-        return
+from rtemsqual.items import EmptyItemCache, Item, ItemCache, Link
 
 
 def test_to_abs_uid():
-    item = Item(EmptyCache(), "/x/y", {})
+    item = Item(EmptyItemCache(), "/x/y", {})
     assert item.to_abs_uid(".") == "/x/y"
     assert item.to_abs_uid("z") == "/x/z"
     assert item.to_abs_uid("/z") == "/z"
@@ -45,14 +40,14 @@ def test_to_abs_uid():
 
 
 def test_uid():
-    item = Item(EmptyCache(), "x", {})
+    item = Item(EmptyItemCache(), "x", {})
     assert item.uid == "x"
 
 
 def test_contains():
     data = {}
     data["x"] = "y"
-    item = Item(EmptyCache(), "z", data)
+    item = Item(EmptyItemCache(), "z", data)
     assert "x" in item
     assert "a" not in item
 
@@ -60,7 +55,7 @@ def test_contains():
 def test_data():
     data = {}
     data["x"] = "y"
-    item = Item(EmptyCache(), "z", data)
+    item = Item(EmptyItemCache(), "z", data)
     assert item.data == {"x": "y"}
 
 
@@ -68,7 +63,7 @@ def test_get_key_path():
     data = {}
     data["a"] = {"b": "c", "d": [1, 2, 3]}
     data["x"] = "y"
-    item = Item(EmptyCache(), "z", data)
+    item = Item(EmptyItemCache(), "z", data)
     assert item.get_by_key_path("x") == "y"
     assert item.get_by_key_path("a/d[2]") == 3
     assert item.get_by_key_path("a/b/../d[0]") == 1
@@ -85,13 +80,13 @@ def test_get_key_path():
 def test_getitem():
     data = {}
     data["x"] = "y"
-    item = Item(EmptyCache(), "z", data)
+    item = Item(EmptyItemCache(), "z", data)
     assert item["x"] == "y"
 
 
 def test_setitem():
     data = {}
-    item = Item(EmptyCache(), "z", data)
+    item = Item(EmptyItemCache(), "z", data)
     with pytest.raises(KeyError):
         item["a"]
     item["a"] = "b"
@@ -101,14 +96,14 @@ def test_setitem():
 def test_get():
     data = {}
     data["x"] = "y"
-    item = Item(EmptyCache(), "z", data)
+    item = Item(EmptyItemCache(), "z", data)
     assert item.get("x", "z") == "y"
     assert item.get("z", "a") == "a"
 
 
 def test_children():
-    child = Item(EmptyCache(), "c", {})
-    parent = Item(EmptyCache(), "p", {})
+    child = Item(EmptyItemCache(), "c", {})
+    parent = Item(EmptyItemCache(), "p", {})
     parent.add_link_to_child(Link(child, {"a": "b", "role": "c"}))
     children = [item for item in parent.children()]
     assert len(children) == 1
@@ -121,7 +116,7 @@ def test_children():
 
 
 def _is_enabled(enabled, enabled_by):
-    item = Item(EmptyCache(), "i", {"enabled-by": enabled_by})
+    item = Item(EmptyItemCache(), "i", {"enabled-by": enabled_by})
     return item.is_enabled(enabled)
 
 
@@ -151,7 +146,7 @@ def test_is_enabled():
 
 def test_save_and_load(tmpdir):
     item_file = os.path.join(tmpdir, "i.yml")
-    item = Item(EmptyCache(), "i", {"k": "v"})
+    item = Item(EmptyItemCache(), "i", {"k": "v"})
     item.file = item_file
     assert item.file == item_file
     item.save()
@@ -159,7 +154,7 @@ def test_save_and_load(tmpdir):
         assert src.read() == "k: v\n"
     assert item.file == item_file
 
-    item2 = Item(EmptyCache(), "i2", {})
+    item2 = Item(EmptyItemCache(), "i2", {})
     item2.file = item_file
     with pytest.raises(KeyError):
         item2["k"]

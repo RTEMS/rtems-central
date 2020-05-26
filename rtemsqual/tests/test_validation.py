@@ -26,10 +26,10 @@
 
 import os
 import pytest
-import shutil
 
 from rtemsqual.validation import generate, StepWrapper
-from rtemsqual.items import ItemCache
+from rtemsqual.items import EmptyItemCache, ItemCache
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_step_wrapper(tmpdir):
@@ -46,20 +46,14 @@ def test_step_wrapper(tmpdir):
 
 
 def test_validation(tmpdir):
-    item_cache_config = {}
-    item_cache_config["cache-directory"] = "cache"
-
     validation_config = {}
     base_directory = os.path.join(tmpdir, "base")
     validation_config["base-directory"] = base_directory
 
-    item_cache_config["paths"] = [os.path.normpath(tmpdir)]
-    generate(validation_config, ItemCache(item_cache_config))
+    generate(validation_config, EmptyItemCache())
 
-    spec_src = os.path.join(os.path.dirname(__file__), "spec-validation")
-    spec_dst = os.path.join(tmpdir, "spec")
-    shutil.copytree(spec_src, spec_dst)
-    item_cache_config["paths"] = [os.path.normpath(spec_dst)]
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-validation")
     generate(validation_config, ItemCache(item_cache_config))
 
     with open(os.path.join(base_directory, "ts.c"), "r") as src:

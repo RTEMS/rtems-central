@@ -26,31 +26,25 @@
 
 import os
 import pytest
-import shutil
 
 from rtemsqual.interface import generate
-from rtemsqual.items import ItemCache
+from rtemsqual.items import EmptyItemCache, ItemCache
+from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_interface(tmpdir):
-    item_cache_config = {}
-    item_cache_config["cache-directory"] = "cache"
-
     interface_config = {}
     interface_config["item-level-interfaces"] = []
     base_directory = os.path.join(tmpdir, "base")
     interface_domains = {"abc": base_directory}
     interface_config["domains"] = interface_domains
 
-    item_cache_config["paths"] = [os.path.normpath(tmpdir)]
-    generate(interface_config, ItemCache(item_cache_config))
+    generate(interface_config, EmptyItemCache())
 
     interface_config["item-level-interfaces"] = ["/command-line"]
 
-    spec_src = os.path.join(os.path.dirname(__file__), "spec-interface")
-    spec_dst = os.path.join(tmpdir, "spec")
-    shutil.copytree(spec_src, spec_dst)
-    item_cache_config["paths"] = [os.path.normpath(spec_dst)]
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-interface")
     generate(interface_config, ItemCache(item_cache_config))
 
     with open(os.path.join(base_directory, "include", "h.h"), "r") as src:

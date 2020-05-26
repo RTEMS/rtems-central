@@ -393,3 +393,9 @@ class ItemCache:
             self._load_items_recursive(path, path, cache_dir)
         self._init_parents()
         self._init_children()
+
+
+class EmptyItemCache(ItemCache):
+    """ This class provides a empty cache of specification items. """
+    def __init__(self):
+        super().__init__({"cache-directory": ".", "paths": []})
