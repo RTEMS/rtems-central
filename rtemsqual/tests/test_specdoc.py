@@ -76,7 +76,7 @@ Root
 
 A value of this type shall be of one of the following variants:
 
-* The value may be a boolean.
+* The value may be a boolean. A reference to :ref:`SpecTypeRoot`.
 
 * The value may be a set of attributes. All explicitly defined attributes shall
   be specified. The following attributes are explicitly defined for this type:

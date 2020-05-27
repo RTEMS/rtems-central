@@ -16,10 +16,10 @@ spec-info:
     attributes:
       content:
         description: |
-          It shall be the content of the configuration file. A ${VARIABLE}
+          It shall be the content of the configuration file. A $${VARIABLE}
           substitution is performed during the configure command execution
-          using the variables of the configuration set.  Use $$ for a plain $
-          character. To have all variables from sibling items available for
+          using the variables of the configuration set.  Use $$$$ for a plain
+          $$ character. To have all variables from sibling items available for
           substitution it is recommended to link them in the proper order.
         spec-type: str
       install-path:

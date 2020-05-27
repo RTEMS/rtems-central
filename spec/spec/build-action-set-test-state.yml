@@ -15,9 +15,10 @@ spec-info:
     generic-attributes:
       description: |
         The keys shall be test program names.  The names shall correspond to
-        the name of a :ref:`SpecTypeBuildTestItemType` item.  Due to the
-        processing order of items, there is no way to check if the name
-        specified by the attribute key is valid.
+        the name of a ${build-test-program:/spec-name} or
+        ${build-ada-test-program:/spec-name} item.  Due to the processing order
+        of items, there is no way to check if the name specified by the
+        attribute key is valid.
       spec-type: build-test-state
     required-attributes: all
 spec-name: Build Option Set Test State Action

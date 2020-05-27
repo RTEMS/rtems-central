@@ -16,9 +16,9 @@ spec-info:
     attributes: {}
     description: |
       Items of this type specify a forward declaration.  The item shall have
-      exactly one link with the :ref:`SpecTypeInterfaceTargetLinkRole` to an
-      :ref:`SpecTypeInterfaceCompoundItemType` item.  This link defines the
-      type declared by the forward declaration.
+      exactly one link with the ${interface-target:/spec-name} to an
+      ${interface-compound:/spec-name} item.  This link defines the type
+      declared by the forward declaration.
     required-attributes: all
 spec-name: Interface Forward Declaration Item Type
 spec-type: interface-forward-declaration

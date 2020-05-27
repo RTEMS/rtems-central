@@ -8,7 +8,8 @@ spec-example: null
 spec-info:
   bool:
     assert: true
-    description: null
+    description: |
+      A reference to ${.:/spec-name}.
   dict:
     attributes:
       type:

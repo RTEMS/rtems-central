@@ -29,12 +29,12 @@ spec-info:
         description: |
           It shall be a list of constraints specific to this application
           configuration option.  For general constraints, use a link with the
-          :ref:`SpecTypeConstraintLinkRole` to a constraint item.
+          ${constraint-role:/spec-name} to a constraint item.
         spec-type: requirement-text-list
     description: |
       This set of attributes defines application configuration option
       constraints.  Additional constraints can be added through the links of
-      the item using the :ref:`SpecTypeConstraintLinkRole`.
+      the item using the ${constraint-role:/spec-name}.
     required-attributes: none
 spec-name: Application Configuration Option Constraint Set
 spec-type: appl-config-option-constraints

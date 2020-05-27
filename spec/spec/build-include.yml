@@ -13,13 +13,12 @@ spec-info:
       It shall be a path to header files.  The path is used by the C
       preprocessor to search for header files.  It succeeds the includes
       presented to the item by the build item context.  For an
-      :ref:`SpecTypeBuildGroupItemType` item the includes are visible to all
-      items referenced by the group item.  For :ref:`SpecTypeBuildBSPItemType`,
-      :ref:`SpecTypeBuildObjectsItemType`, :ref:`SpecTypeBuildLibraryItemType`,
-      :ref:`SpecTypeBuildStartFileItemType`, and
-      :ref:`SpecTypeBuildTestProgramItemType` items the includes are only
-      visible to the sources specified by the item itself and they do not
-      propagate to referenced items.
+      ${build-group:/spec-name} item the includes are visible to all items
+      referenced by the group item.  For ${build-bsp:/spec-name},
+      ${build-objects:/spec-name}, ${build-library:/spec-name},
+      ${build-start-file:/spec-name}, and ${build-test-program:/spec-name}
+      items the includes are only visible to the sources specified by the item
+      itself and they do not propagate to referenced items.
 spec-name: Build Include Path
 spec-type: build-include
 type: spec

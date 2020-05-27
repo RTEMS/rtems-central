@@ -26,9 +26,9 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies a header file.  The item shall have
-      exactly one link with the :ref:`SpecTypeInterfacePlacementLinkRole` to an
-      :ref:`SpecTypeInterfaceDomainItemType` item.  This link defines the
-      interface domain of the header file.
+      exactly one link with the ${interface-placement:/spec-name} to an
+      ${interface-domain:/spec-name} item.  This link defines the interface
+      domain of the header file.
     required-attributes: all
 spec-name: Interface Header File Item Type
 spec-type: interface-header-file

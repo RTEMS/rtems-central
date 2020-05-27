@@ -11,7 +11,7 @@ spec-info:
   none: null
   str:
     description: |
-      It shall be the installation path of a :ref:`SpecTypeBuildTarget`.
+      It shall be the installation path of a ${build-target:/spec-name}.
 spec-name: Build Install Path
 spec-type: build-install-path
 type: spec

@@ -24,9 +24,8 @@ spec-info:
           The description should be short and concentrate on the average case.
           All special cases, usage notes, constraints, error conditions,
           configuration dependencies, references, etc. should be described in
-          the notes.  The
-          :ref:`SpecTypeApplicationConfigurationValueOptionItemType` items have
-          an attribute for constraints.
+          the notes.  The ${appl-config-option-value:/spec-name} items have an
+          attribute for constraints.
         spec-type: str
       index-entries:
         description: |

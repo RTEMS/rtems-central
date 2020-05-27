@@ -16,8 +16,7 @@ spec-info:
     attributes:
       method:
         description: |
-          Validation by test is done through :ref:`SpecTypeTestCaseItemType`
-          items.
+          Validation by test is done through ${test-case:/spec-name} items.
         spec-type: requirement-validation-method
       text:
         description: |
@@ -28,7 +27,7 @@ spec-info:
             met, by analysing static properties of the software product.
 
           * *By inspection*: A statement shall be provided how the requirement
-            is met, by inspection of the :term:`source code`.
+            is met, by inspection of the ${/glos/term/sourcecode:/term}.
 
           * *By review of design*: A rationale shall be provided to demonstrate
             how the requirement is satisfied implicitly by the software design.
@@ -36,7 +35,7 @@ spec-info:
     description: |
       This set of attributes provides a requirement validation evidence.  The
       item shall have exactly one link to the validated requirement with the
-      :ref:`SpecTypeRequirementValidationLinkRole`.
+      ${requirement-validation-role:/spec-name}.
     required-attributes: all
 spec-name: Requirement Validation Item Type
 spec-type: requirement-validation

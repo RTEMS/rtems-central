@@ -14,9 +14,9 @@ spec-info:
         description: |
           It shall be the name of a test program.  The action appends the
           action value to the ``CPPFLAGS`` of the test program.  The name shall
-          correspond to the name of a :ref:`SpecTypeBuildTestProgramItemType`
-          item.  Due to the processing order of items, there is no way to check
-          if the name specified by the attribute value is valid.
+          correspond to the name of a ${build-test-program:/spec-name} item.
+          Due to the processing order of items, there is no way to check if the
+          name specified by the attribute value is valid.
         spec-type: str
       assert-aligned:
         description: |
@@ -150,7 +150,7 @@ spec-info:
       find-program:
         description: |
           The action tries to find the program specified by the action value.
-          Uses the ``${PATH}`` to find the program.  Returns the result of the
+          Uses the ``$${PATH}`` to find the program.  Returns the result of the
           find operation, e.g. a path to the program.
         spec-type: none
       find-tool:
@@ -214,8 +214,8 @@ spec-info:
         spec-type: none
       substitute:
         description: |
-          The action Performs a ``${VARIABLE}`` substitution on the action
-          value.  Use ``$$`` for a plain ``$`` character.
+          The action Performs a ``$${VARIABLE}`` substitution on the action
+          value.  Use ``$$$$`` for a plain ``$$`` character.
         spec-type: none
     description: |
       This set of attributes specifies a build option action.

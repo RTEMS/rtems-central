@@ -53,10 +53,10 @@ spec-info:
     description: |
       This set of attributes specifies a test program executable to build.
       Test programs may use additional objects provided by
-      :ref:`SpecTypeBuildObjectsItemType` items.  Test programs have an
-      implicit ``enabled-by`` attribute value which is controlled by the option
-      action :ref:`set-test-state <SpecTypeBuildOptionItemType>`.  If the test
-      state is set to ``exclude``, then the test program is not built.
+      ${build-objects:/spec-name} items.  Test programs have an implicit
+      ``enabled-by`` attribute value which is controlled by the option action
+      :ref:`set-test-state <SpecTypeBuildOptionItemType>`.  If the test state
+      is set to ``exclude``, then the test program is not built.
     required-attributes: all
 spec-name: Build Test Program Item Type
 spec-type: build-test-program

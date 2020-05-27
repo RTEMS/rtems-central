@@ -27,7 +27,7 @@
 from typing import Any, Dict, Iterator, Optional, Set, Tuple
 
 from rtemsqual.sphinxcontent import get_reference, get_section_label, \
-    SphinxContent
+    SphinxContent, SphinxMapper
 from rtemsqual.items import Item, ItemCache
 from rtemsqual.specverify import NAME
 
@@ -63,7 +63,12 @@ def _a_or_an(value: str) -> str:
     return "a"
 
 
+def _get_ref_specification_type(value: Any, key: str) -> str:
+    return get_reference(get_section_label(value[key], _SECTION_PREFIX))
+
+
 class _Documenter:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, item: Item, documenter_map: _DocumenterMap):
         self._name = item["spec-type"]
         self.section = item["spec-name"]
@@ -72,8 +77,16 @@ class _Documenter:
         self._item = item
         self._documenter_map = documenter_map
         self.used_by = set()  # type: Set[str]
+        self._mapper = SphinxMapper(item)
+        self._mapper.add_get_reference("spec", "/spec-name",
+                                       _get_ref_specification_type)
         assert self._name not in documenter_map
         documenter_map[self._name] = self
+
+    def _substitute(self, text: str) -> str:
+        if text:
+            return self._mapper.substitute(text)
+        return text
 
     def get_section_reference(self) -> str:
         """ Returns the section reference. """
@@ -142,14 +155,14 @@ class _Documenter:
                 content.wrap(
                     self.get_value_type_phrase("The attribute value", "shall",
                                                info["spec-type"]))
-                content.paste_and_add(info["description"])
+                content.paste_and_add(self._substitute(info["description"]))
 
     def document_dict(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
         """ Documents an attribute set. """
         if shall == "may":
             content.paste("The value may be a set of attributes.")
-        content.paste_and_add(info["description"])
+        content.paste_and_add(self._substitute(info["description"]))
         has_explicit_attributes = len(info["attributes"]) > 0
         if has_explicit_attributes:
             required_attributes = info["required-attributes"]
@@ -184,20 +197,21 @@ class _Documenter:
                 "The attribute value", "shall",
                 info["generic-attributes"]["spec-type"])
             content.paste(type_phrase)
-            content.paste_and_add(info["generic-attributes"]["description"])
+            content.paste_and_add(
+                self._substitute(info["generic-attributes"]["description"]))
 
     def document_value(self, content: SphinxContent, variant: str, shall: str,
                        info: Any) -> None:
         """ Documents a value. """
         content.paste(self.get_value_type_phrase("The value", shall, variant))
-        content.paste_and_add(info["description"])
+        content.paste_and_add(self._substitute(info["description"]))
 
     def document_list(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
         """ Documents a list value. """
         content.paste(
             self.get_list_phrase("The value", shall, info["spec-type"]))
-        content.paste_and_add(info["description"])
+        content.paste_and_add(self._substitute(info["description"]))
 
     def document_none(self, content: SphinxContent, _variant: str, shall: str,
                       _info: Any) -> None:
@@ -334,9 +348,9 @@ def document(config: dict, item_cache: ItemCache) -> None:
     documenter_map = {}  # type: _DocumenterMap
     root_item = item_cache[config["root-type"]]
     _create_str_documenter(
-        item_cache, "Name",
-        f"A string is a valid name if it matches with the ``{NAME.pattern}`` "
-        "regular expression.", documenter_map)
+        item_cache, "Name", "A string is a valid name if it matches with the "
+        f"``{NAME.pattern.replace('$', '$$')}`` regular expression.",
+        documenter_map)
     _create_str_documenter(
         item_cache, "UID",
         "The string shall be a valid absolute or relative item UID.",
