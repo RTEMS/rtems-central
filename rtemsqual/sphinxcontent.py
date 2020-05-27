@@ -45,6 +45,18 @@ def _to_camel_case(name: str) -> str:
                name[1:]))
 
 
+def get_reference(label: str, name: Optional[str] = None) -> str:
+    """ Returns the reference to the specified label. """
+    if name:
+        return f":ref:`{name} <{label}>`"
+    return f":ref:`{label}`"
+
+
+def get_section_label(name: str, prefix: str = "Section") -> str:
+    """ Returns the section label for the specified section name. """
+    return prefix + _to_camel_case(name.strip())
+
+
 class SphinxContent(Content):
     """ This class builds Sphinx content. """
     def __init__(self, section_level: int = 2):
@@ -52,21 +64,9 @@ class SphinxContent(Content):
         self._tab = "    "
         self._section_level = section_level
 
-    def get_reference(self, label: str, name: Optional[str] = None) -> str:
-        """ Returns the reference to the specified label. """
-        # pylint: disable=no-self-use
-        if name:
-            return f":ref:`{name} <{label}>`"
-        return f":ref:`{label}`"
-
     def add_label(self, label: str) -> None:
         """ Adds a label. """
         self.add(".. _" + label.strip() + ":")
-
-    def get_section_label(self, name: str, prefix: str = "Section") -> str:
-        """ Returns the section label for the specified section name. """
-        # pylint: disable=no-self-use
-        return prefix + _to_camel_case(name.strip())
 
     def add_header(self, name, level=2) -> None:
         """ Adds a header. """
@@ -78,7 +78,7 @@ class SphinxContent(Content):
                               level: int = 2,
                               label_prefix: str = "Section") -> str:
         """ Adds a header with label. """
-        label = self.get_section_label(name, label_prefix)
+        label = get_section_label(name, label_prefix)
         self.add_label(label)
         self.add_header(name, level)
         return label

@@ -26,7 +26,8 @@
 
 from typing import Any, Dict, Iterator, Optional, Set, Tuple
 
-from rtemsqual.sphinxcontent import SphinxContent
+from rtemsqual.sphinxcontent import get_reference, get_section_label, \
+    SphinxContent
 from rtemsqual.items import Item, ItemCache
 from rtemsqual.specverify import NAME
 
@@ -74,15 +75,13 @@ class _Documenter:
         assert self._name not in documenter_map
         documenter_map[self._name] = self
 
-    def get_section_reference(self, content: SphinxContent) -> str:
+    def get_section_reference(self) -> str:
         """ Returns the section reference. """
-        return content.get_reference(
-            content.get_section_label(self.section, _SECTION_PREFIX))
+        return get_reference(get_section_label(self.section, _SECTION_PREFIX))
 
-    def get_a_section_reference(self, content: SphinxContent) -> str:
+    def get_a_section_reference(self) -> str:
         """ Returns a section reference. """
-        return _a_or_an(
-            self.section) + " " + self.get_section_reference(content)
+        return f"{_a_or_an(self.section)} {self.get_section_reference()}"
 
     def get_list_element_type(self) -> str:
         """ Returns the list element type if this is a list only type. """
@@ -90,30 +89,28 @@ class _Documenter:
             return self._info_map["list"]["spec-type"]
         return ""
 
-    def get_list_phrase(self, content: SphinxContent, value: str, shall: str,
-                        type_name: str) -> str:
+    def get_list_phrase(self, value: str, shall: str, type_name: str) -> str:
         """ Returns a list phrase. """
         if type_name in _PRIMITIVE_TYPES:
             type_phrase = _PRIMITIVE_TYPES[type_name].format(
                 "Each list element", "shall")
         else:
             documenter = self._documenter_map[type_name]
-            ref = documenter.get_a_section_reference(content)
+            ref = documenter.get_a_section_reference()
             type_phrase = f"Each list element shall be {ref}."
         return f"{value} {shall} be a list. {type_phrase}"
 
-    def get_value_type_phrase(self, content: SphinxContent, value: str,
-                              shall: str, type_name: str) -> str:
+    def get_value_type_phrase(self, value: str, shall: str,
+                              type_name: str) -> str:
         """ Returns a value type phrase. """
         if type_name in _PRIMITIVE_TYPES:
             return _PRIMITIVE_TYPES[type_name].format(value, shall)
         documenter = self._documenter_map[type_name]
         element_type_name = documenter.get_list_element_type()
         if element_type_name:
-            return self.get_list_phrase(content, value, shall,
-                                        element_type_name)
+            return self.get_list_phrase(value, shall, element_type_name)
         return (f"{value} {shall} be "
-                f"{documenter.get_a_section_reference(content)}.")
+                f"{documenter.get_a_section_reference()}.")
 
     def refinements(self) -> Iterator["_Documenter"]:
         """ Yields the refinements of this type. """
@@ -132,7 +129,7 @@ class _Documenter:
 
     def hierarchy(self, content: SphinxContent) -> None:
         """ Documents the item type hierarchy. """
-        with content.list_item(self.get_section_reference(content)):
+        with content.list_item(self.get_section_reference()):
             for refinement in self.refinements():
                 refinement.hierarchy(content)
 
@@ -143,8 +140,8 @@ class _Documenter:
             content.add(key)
             with content.indent():
                 content.wrap(
-                    self.get_value_type_phrase(content, "The attribute value",
-                                               "shall", info["spec-type"]))
+                    self.get_value_type_phrase("The attribute value", "shall",
+                                               info["spec-type"]))
                 content.paste_and_add(info["description"])
 
     def document_dict(self, content: SphinxContent, _variant: str, shall: str,
@@ -184,7 +181,7 @@ class _Documenter:
                 content.paste("Generic attributes may be defined.")
             content.paste("Each attribute key shall be a :ref:`SpecTypeName`.")
             type_phrase = self.get_value_type_phrase(
-                content, "The attribute value", "shall",
+                "The attribute value", "shall",
                 info["generic-attributes"]["spec-type"])
             content.paste(type_phrase)
             content.paste_and_add(info["generic-attributes"]["description"])
@@ -192,16 +189,14 @@ class _Documenter:
     def document_value(self, content: SphinxContent, variant: str, shall: str,
                        info: Any) -> None:
         """ Documents a value. """
-        content.paste(
-            self.get_value_type_phrase(content, "The value", shall, variant))
+        content.paste(self.get_value_type_phrase("The value", shall, variant))
         content.paste_and_add(info["description"])
 
     def document_list(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
         """ Documents a list value. """
         content.paste(
-            self.get_list_phrase(content, "The value", shall,
-                                 info["spec-type"]))
+            self.get_list_phrase("The value", shall, info["spec-type"]))
         content.paste_and_add(info["description"])
 
     def document_none(self, content: SphinxContent, _variant: str, shall: str,
@@ -212,7 +207,7 @@ class _Documenter:
 
     def _add_description(self, content: SphinxContent) -> None:
         refines = [
-            f"{documenter.get_section_reference(content)} though the "
+            f"{documenter.get_section_reference()} though the "
             f"``{key}`` attribute if the value is ``{value}``"
             for documenter, key, value in self.refines()
         ]
@@ -248,7 +243,7 @@ class _Documenter:
                         _DOCUMENT[key](self, content, key, "may",
                                        self._info_map[key])
             content.add_list([
-                refinement.get_section_reference(content)
+                refinement.get_section_reference()
                 for refinement in self.refinements()
             ], "This type is refined by the following types:")
             content.add_list(sorted(self.used_by),
@@ -263,7 +258,7 @@ class _Documenter:
             for refinement in self.refinements():
                 refinement.document(content, names)
 
-    def _add_used_by(self, content: SphinxContent, type_name: str) -> None:
+    def _add_used_by(self, type_name: str) -> None:
         if type_name not in _PRIMITIVE_TYPES:
             documenter = self._documenter_map[type_name]
             element_type_name = documenter.get_list_element_type()
@@ -271,17 +266,16 @@ class _Documenter:
                 type_name = element_type_name
         if type_name not in _PRIMITIVE_TYPES:
             documenter = self._documenter_map[type_name]
-            documenter.used_by.add(self.get_section_reference(content))
+            documenter.used_by.add(self.get_section_reference())
 
-    def resolve_used_by(self, content: SphinxContent) -> None:
+    def resolve_used_by(self) -> None:
         """ Resolves type uses in attribute sets. """
         info = self._info_map.get("dict", None)
         if info is not None:
             for attribute in info["attributes"].values():
-                self._add_used_by(content, attribute["spec-type"])
+                self._add_used_by(attribute["spec-type"])
             if "generic-attributes" in info:
-                self._add_used_by(content,
-                                  info["generic-attributes"]["spec-type"])
+                self._add_used_by(info["generic-attributes"]["spec-type"])
 
 
 _DOCUMENT = {
@@ -351,7 +345,7 @@ def document(config: dict, item_cache: ItemCache) -> None:
     _gather_item_documenters(root_item, documenter_map)
     content = SphinxContent()
     for documenter in documenter_map.values():
-        documenter.resolve_used_by(content)
+        documenter.resolve_used_by()
     documenter_names = set(documenter_map.keys())
     with content.section("Specification Items"):
         with content.section("Specification Item Hierarchy"):
