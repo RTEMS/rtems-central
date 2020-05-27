@@ -3,10 +3,9 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
-non-functional-type: constraint
 rationale: null
-requirement-type: non-functional
+scope: user
 text: |
   The value of this configuration option shall be a valid Classic API task
   priority.  The set of valid task priorities is scheduler-specific.
-type: requirement
+type: constraint

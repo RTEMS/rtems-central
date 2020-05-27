@@ -3,12 +3,11 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
-non-functional-type: constraint
 rationale: null
-requirement-type: non-functional
+scope: user
 text: |
   The value of this configuration option shall be zero if the POSIX API is not
   enabled (e.g. RTEMS was built without the ``--enable-posix`` build
   configuration option).  Otherwise a compile time error in the configuration
   file will occur.
-type: requirement
+type: constraint

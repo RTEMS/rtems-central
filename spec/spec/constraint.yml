@@ -6,18 +6,30 @@ links:
 - role: spec-member
   uid: root
 - role: spec-refinement
-  spec-key: role
+  spec-key: type
   spec-value: constraint
-  uid: link
+  uid: root
 spec-description: null
 spec-example: null
 spec-info:
   dict:
-    attributes: {}
+    attributes:
+      rationale:
+        description: |
+          If the value is present, then it shall state the rationale or
+          justification of the constraint.
+        spec-type: optional-str
+      scope:
+        description: |
+          It shall be the scope of the constraint.
+        spec-type: str
+      text:
+        description: |
+          It shall state the constraint.
+        spec-type: requirement-text
     description: |
-      It defines the constraint role of links.  The link target shall be a
-      constraint.
+      This set of attributes specifies a constraint.
     required-attributes: all
-spec-name: Constraint Link Role
+spec-name: Constraint Item Type
 spec-type: constraint
 type: spec

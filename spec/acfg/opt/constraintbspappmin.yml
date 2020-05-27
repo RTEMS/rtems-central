@@ -3,10 +3,9 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
-non-functional-type: constraint
 rationale: null
-requirement-type: non-functional
+scope: user
 text: |
   The value of this configuration option shall be greater than or equal to a
   BSP-specific and application-specific minimum value.
-type: requirement
+type: constraint

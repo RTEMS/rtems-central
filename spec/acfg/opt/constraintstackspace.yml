@@ -3,11 +3,10 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
-non-functional-type: constraint
 rationale: null
-requirement-type: non-functional
+scope: user
 text: |
   The value of this configuration option shall be small enough so that the task
   stack space calculation carried out by ``<rtems/confdefs.h>`` does not
   overflow an integer of type ``uintptr_t``.
-type: requirement
+type: constraint
