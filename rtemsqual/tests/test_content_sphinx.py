@@ -251,4 +251,6 @@ def test_substitute(tmpdir):
     mapper = SphinxMapper(item_cache["/x"])
     with pytest.raises(KeyError):
         mapper.substitute("${x:/y}")
-    assert ":term:`y`" == mapper.substitute("${x:/term}")
+    assert mapper.substitute("${x:/term}") == ":term:`y`"
+    mapper.add_get_reference("foo", "/name", lambda x, y: x[y])
+    assert mapper.substitute("${y:/name}") == "bar"

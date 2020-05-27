@@ -25,8 +25,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
+import os
 import re
-from typing import Any, Iterable, Iterator, List, Optional, Union
+from typing import Any, Dict, Callable, Iterable, Iterator, List, Optional, \
+    Union
 
 from rtemsqual.content import Content, make_lines
 from rtemsqual.items import Item, ItemMapper
@@ -191,15 +193,28 @@ class SphinxContent(Content):
         self.prepend([f".. SPDX-License-Identifier: {self._license}", ""])
 
 
+def _get_ref_term(value: Any, key: str) -> str:
+    return f":term:`{value[key]}`"
+
+
 class SphinxMapper(ItemMapper):
     """ Sphinx mapper. """
     def __init__(self, item: Item):
         super().__init__(item)
+        self._get_ref = {
+            "glossary:/term": _get_ref_term
+        }  # type: Dict[str, Callable[[Any, str], str]]
 
-    def get_value(self, _item: Item, _path: str, value: Any, key: str,
+    def add_get_reference(self, type_name: str, path: str,
+                          get_ref: Callable[[Any, str], str]) -> None:
+        """
+        Adds a function to get a reference to the specified path for items of
+        the specified type.
+        """
+        self._get_ref[f"{type_name}:{path}"] = get_ref
+
+    def get_value(self, item: Item, path: str, value: Any, key: str,
                   _index: Optional[int]) -> Any:
         """ Gets a value by key and optional index. """
-        # pylint: disable=no-self-use
-        if key == "term":
-            return f":term:`{value[key]}`"
-        raise KeyError
+        return self._get_ref[f"{item['type']}:{os.path.join(path, key)}"](
+            value, key)
