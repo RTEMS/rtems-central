@@ -108,9 +108,42 @@ def test_children():
     children = [item for item in parent.children()]
     assert len(children) == 1
     assert children[0] == child
+    children = [item for item in parent.children("c")]
+    assert len(children) == 1
+    assert children[0] == child
+    children = [item for item in parent.children("d")]
+    assert len(children) == 0
     links = [link for link in parent.links_to_children()]
     assert len(links) == 1
     assert links[0].item == child
+    assert links[0]["a"] == "b"
+    assert links[0].role == "c"
+
+
+def test_parents():
+    item_cache = EmptyItemCache()
+    child = Item(item_cache, "c",
+                 {"links": [{
+                     "a": "b",
+                     "role": "c",
+                     "uid": "p"
+                 }]})
+    parent = Item(item_cache, "p", {"links": []})
+    item_cache._items["p"] = parent
+    child.init_parents(item_cache)
+    for link in child.links_to_parents():
+        link.item.add_link_to_child(Link.create(link, child))
+    parents = [item for item in child.parents()]
+    assert len(parents) == 1
+    assert parents[0] == parent
+    parents = [item for item in child.parents("c")]
+    assert len(parents) == 1
+    assert parents[0] == parent
+    parents = [item for item in child.parents("d")]
+    assert len(parents) == 0
+    links = [link for link in child.links_to_parents()]
+    assert len(links) == 1
+    assert links[0].item == parent
     assert links[0]["a"] == "b"
     assert links[0].role == "c"
 

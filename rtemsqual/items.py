@@ -191,19 +191,29 @@ class Item:
         """ Yields the links to the parents of this items. """
         yield from self._links_to_parents
 
-    def parents(self) -> Iterator["Item"]:
+    def parents(self, role: Optional[str] = None) -> Iterator["Item"]:
         """ Yields the parents of this items. """
-        for link in self._links_to_parents:
-            yield link.item
+        if role is None:
+            for link in self._links_to_parents:
+                yield link.item
+        else:
+            for link in self._links_to_parents:
+                if link.role == role:
+                    yield link.item
 
     def links_to_children(self) -> Iterator[Link]:
         """ Yields the links to the children of this items. """
         yield from self._links_to_children
 
-    def children(self) -> Iterator["Item"]:
+    def children(self, role: Optional[str] = None) -> Iterator["Item"]:
         """ Yields the children of this items. """
-        for link in self._links_to_children:
-            yield link.item
+        if role is None:
+            for link in self._links_to_children:
+                yield link.item
+        else:
+            for link in self._links_to_children:
+                if link.role == role:
+                    yield link.item
 
     def init_parents(self, item_cache: "ItemCache"):
         """ Initializes the list of links to parents of this items. """
