@@ -26,7 +26,7 @@
 
 from typing import Any, Dict, Iterator, Optional, Set, Tuple
 
-from rtemsqual.content import SphinxContent
+from rtemsqual.sphinxcontent import SphinxContent
 from rtemsqual.items import Item, ItemCache
 from rtemsqual.specverify import NAME
 

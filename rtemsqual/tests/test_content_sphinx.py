@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.content module. """
+""" Unit tests for the rtemsqual.sphinxcontent module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -26,29 +26,29 @@
 
 import pytest
 
-from rtemsqual.content import SphinxContent, SphinxMapper
+from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
 from rtemsqual.items import Item, ItemCache, ItemMapper
 from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_add_label():
-    sc = SphinxContent()
-    sc.add_label("x")
-    assert str(sc) == """.. _x:
+    content = SphinxContent()
+    content.add_label("x")
+    assert str(content) == """.. _x:
 """
 
 
 def test_directive():
-    sc = SphinxContent()
-    with sc.directive("x"):
-        sc.add("y")
-        assert str(sc) == """.. x::
+    content = SphinxContent()
+    with content.directive("x"):
+        content.add("y")
+        assert str(content) == """.. x::
 
     y
 """
-    with sc.directive("z", "xy", [":a:", ":b:"]):
-        sc.add("c")
-        assert str(sc) == """.. x::
+    with content.directive("z", "xy", [":a:", ":b:"]):
+        content.add("c")
+        assert str(content) == """.. x::
 
     y
 
@@ -61,13 +61,13 @@ def test_directive():
 
 
 def test_add_header():
-    sc = SphinxContent()
-    sc.add_header("x")
-    assert str(sc) == """x
+    content = SphinxContent()
+    content.add_header("x")
+    assert str(content) == """x
 =
 """
-    sc.add_header("yz", 1)
-    assert str(sc) == """x
+    content.add_header("yz", 1)
+    assert str(content) == """x
 =
 
 yz
@@ -76,17 +76,17 @@ yz
 
 
 def test_add_header_with_label():
-    sc = SphinxContent()
-    label = sc.add_header_with_label("x", 1)
+    content = SphinxContent()
+    label = content.add_header_with_label("x", 1)
     assert label == "SectionX"
-    assert str(sc) == """.. _SectionX:
+    assert str(content) == """.. _SectionX:
 
 x
 *
 """
-    label = sc.add_header_with_label("yz w", 2)
+    label = content.add_header_with_label("yz w", 2)
     assert label == "SectionYzW"
-    assert str(sc) == """.. _SectionX:
+    assert str(content) == """.. _SectionX:
 
 x
 *
@@ -171,30 +171,30 @@ d
 
 
 def test_append():
-    sc = SphinxContent()
-    sc.append("x")
-    assert str(sc) == """x
+    content = SphinxContent()
+    content.append("x")
+    assert str(content) == """x
 """
-    with sc.indent():
-        sc.append("y")
-        assert str(sc) == """x
+    with content.indent():
+        content.append("y")
+        assert str(content) == """x
     y
 """
-        sc.append("")
-        assert str(sc) == """x
+        content.append("")
+        assert str(content) == """x
     y
 
 """
 
 
 def test_add_index_entries():
-    sc = SphinxContent()
-    sc.add_index_entries(["x", "y"])
-    assert str(sc) == """.. index:: x
+    content = SphinxContent()
+    content.add_index_entries(["x", "y"])
+    assert str(content) == """.. index:: x
 .. index:: y
 """
-    sc.add_index_entries("z")
-    assert str(sc) == """.. index:: x
+    content.add_index_entries("z")
+    assert str(content) == """.. index:: x
 .. index:: y
 
 .. index:: z
@@ -202,39 +202,39 @@ def test_add_index_entries():
 
 
 def test_add_definition_item():
-    sc = SphinxContent()
-    sc.add_definition_item("x", ["y", "z"])
-    assert str(sc) == """x
+    content = SphinxContent()
+    content.add_definition_item("x", ["y", "z"])
+    assert str(content) == """x
     y
     z
 """
-    sc = SphinxContent()
-    sc.add_definition_item("a", "\n b\n")
-    assert str(sc) == """a
+    content = SphinxContent()
+    content.add_definition_item("a", "\n b\n")
+    assert str(content) == """a
      b
 """
 
 
 def test_license():
-    sc = SphinxContent()
+    content = SphinxContent()
     with pytest.raises(ValueError):
-        sc.register_license("x")
-    sc.register_license("CC-BY-SA-4.0")
-    assert str(sc) == ""
-    sc.add_licence_and_copyrights()
-    assert str(sc) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+        content.register_license("x")
+    content.register_license("CC-BY-SA-4.0")
+    assert str(content) == ""
+    content.add_licence_and_copyrights()
+    assert str(content) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
 """
 
 
 def test_license_and_copyrights():
-    sc = SphinxContent()
+    content = SphinxContent()
     with pytest.raises(ValueError):
-        sc.register_license("x")
-    sc.register_copyright("Copyright (C) A")
-    assert str(sc) == ""
-    sc.add_licence_and_copyrights()
-    assert str(sc) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+        content.register_license("x")
+    content.register_copyright("Copyright (C) A")
+    assert str(content) == ""
+    content.add_licence_and_copyrights()
+    assert str(content) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
 .. Copyright (C) A
 

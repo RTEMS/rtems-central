@@ -28,7 +28,7 @@ import glob
 import re
 from typing import Any, Dict, Optional
 
-from rtemsqual.content import SphinxContent, SphinxMapper
+from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
 from rtemsqual.items import Item, ItemCache, ItemMapper
 
 ItemMap = Dict[str, Item]

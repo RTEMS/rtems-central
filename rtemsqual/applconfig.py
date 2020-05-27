@@ -26,7 +26,7 @@
 
 from typing import Any, Dict, List, Optional
 
-from rtemsqual.content import SphinxContent
+from rtemsqual.sphinxcontent import SphinxContent
 from rtemsqual.items import Item, ItemCache
 
 ItemMap = Dict[str, Item]
