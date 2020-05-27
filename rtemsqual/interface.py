@@ -50,8 +50,8 @@ def _get_group_identifiers(groups: ItemMap) -> List[str]:
 
 
 def _forward_declaration(item: Item) -> str:
-    target = item.map(item["interface-target"])
-    return target["interface-type"] + " " + target["name"]
+    target = next(item.parents("interface-target"))
+    return f"{target['interface-type']} {target['name']}"
 
 
 class _InterfaceMapper(ItemMapper):
