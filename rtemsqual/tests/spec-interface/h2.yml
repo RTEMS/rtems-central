@@ -3,9 +3,10 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by:
   not: ASM
-domain: abc
+interface-type: header-file
+links:
+- role: interface-placement
+  uid: domain-abc
 path: h2.h
 prefix: include
-interface-type: header-file
-links: []
 type: interface

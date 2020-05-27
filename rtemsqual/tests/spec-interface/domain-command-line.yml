@@ -1,11 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: Command Line
 enabled-by: true
-interface-type: header-file
-links:
-- role: interface-placement
-  uid: /if/domains/c
-path: sys/types.h
-prefix: ''
+interface-type: domain
+links: []
+name: Command Line
 type: interface

@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: domain
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      description:
+        description: |
+          It shall be the description of the domain
+        spec-type: str
+      name:
+        description: |
+          It shall be the human readable name of the domain.
+        spec-type: str
+    description: |
+      This set of attributes specifies an interface domain.  Items of the types
+      :ref:`SpecTypeInterfaceContainerItemType` and
+      :ref:`SpecTypeInterfaceHeaderFileItemType` are placed into domains
+      through links with the :ref:`SpecTypeInterfacePlacementLinkRole`.
+    required-attributes: all
+spec-name: Interface Domain Item Type
+spec-type: interface-domain
+type: spec

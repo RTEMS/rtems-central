@@ -531,7 +531,9 @@ class _HeaderFile:
 
 def _generate_header_file(item: Item, domains: Dict[str, str],
                           enabled_by_defined: Dict[str, str]) -> None:
-    domain_path = domains.get(item["domain"], None)
+    domain = next(item.parents("interface-placement"))
+    assert domain["interface-type"] == "domain"
+    domain_path = domains.get(domain.uid, None)
     if domain_path is None:
         return
     header_file = _HeaderFile(item, enabled_by_defined)

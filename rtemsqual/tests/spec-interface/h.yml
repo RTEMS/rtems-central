@@ -2,26 +2,27 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: []
-domain: abc
-path: h.h
-prefix: include
 interface-type: header-file
 links:
-- role: interface-include
+- enabled-by: RTEMS_SMP
+  role: interface-include
   uid: h2
-  enabled-by: RTEMS_SMP
-- role: interface-include
+- enabled-by: []
+  role: interface-include
   uid: h4
-  enabled-by: []
-- role: interface-include
+- enabled-by: RTEMS_SMP
+  role: interface-include
   uid: h4
-  enabled-by: RTEMS_SMP
-- role: interface-include
+- enabled-by: ASM
+  role: interface-include
   uid: h4
-  enabled-by: ASM
-- role: interface-include
+- enabled-by: []
+  role: interface-include
   uid: h4
-  enabled-by: []
 - role: other
   uid: h4
+- role: interface-placement
+  uid: domain-abc
+path: h.h
+prefix: include
 type: interface

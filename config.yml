@@ -81,11 +81,11 @@ validation:
   base-directory: external/rtems
 interface:
   item-level-interfaces:
-  - /if/build-options/domain
-  - /if/compiler/domain
-  - /if/use/domain
+  - /if/build-options/container
+  - /if/compiler/container
+  - /if/use/container
   domains:
-    rtems: external/rtems
+    /if/domains/api: external/rtems
 spec-verification:
   root-type: /spec/root
 spec-documentation:

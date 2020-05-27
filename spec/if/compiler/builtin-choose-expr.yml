@@ -5,6 +5,6 @@ enabled-by: true
 interface-type: unspecified
 links:
 - role: interface-placement
-  uid: domain
+  uid: container
 name: __builtin_choose_expr
 type: interface
