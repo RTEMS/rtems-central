@@ -58,10 +58,19 @@ class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
         self._node = node
+        self._eval_interface = False
+
+    @contextmanager
+    def interface_evaluation(self) -> Iterator[None]:
+        """ Enables the interface evaluation. """
+        eval_iterface = self._eval_interface
+        self._eval_interface = True
+        yield
+        self._eval_interface = eval_iterface
 
     def __getitem__(self, identifier):
         item, value = self.map(identifier)
-        if item["type"] == "interface":
+        if self._eval_interface and item["type"] == "interface":
             node = self._node
             header_file = node.header_file
             if item["interface-type"] == "enumerator":
@@ -273,9 +282,20 @@ class Node:
         """ Generates a variable. """
         self._add_generic_definition(Node._get_variable_definition)
 
-    def substitute(self, text: str) -> str:
+    def substitute_code(self, text: str) -> str:
         """
-        Performs a variable substitution using the item mapper of the node.
+        Performs a variable substitution on code using the item mapper of the
+        node.
+        """
+        if text:
+            with self.mapper.interface_evaluation():
+                return self.mapper.substitute(text.strip("\n"))
+        return text
+
+    def substitute_description(self, text: str) -> str:
+        """
+        Performs a variable substitution on a description using the item mapper
+        of the node.
         """
         if text:
             return self.mapper.substitute(text.strip("\n"))
@@ -284,11 +304,13 @@ class Node:
     def _get_compound_definition(self, item: Item, definition: Any) -> Lines:
         content = CContent()
         with content.doxygen_block():
-            content.add_brief_description(self.substitute(definition["brief"]))
-            content.wrap(self.substitute(definition["description"]))
+            content.add_brief_description(
+                self.substitute_description(definition["brief"]))
+            content.wrap(self.substitute_description(
+                definition["description"]))
         kind = definition["kind"]
         if kind == "member":
-            member = self.substitute(definition["definition"]) + ";"
+            member = self.substitute_code(definition["definition"]) + ";"
             content.append(member.split("\n"))
         else:
             content.append(f"{kind} {{")
@@ -308,25 +330,27 @@ class Node:
     def _get_enumerator_definition(self, item: Item, definition: Any) -> Lines:
         name = item["name"]
         if definition:
-            return f"{name} = {self.substitute(definition)}"
+            return f"{name} = {self.substitute_code(definition)}"
         return f"{name}"
 
     def _get_define_definition(self, item: Item, definition: Any) -> Lines:
         name = item["name"]
-        value = self.substitute(definition)
+        value = self.substitute_code(definition)
         if value:
             return f"#define {name} {value}".split("\n")
         return f"#define {name}"
 
     def _get_function_definition(self, item: Item, definition: Any) -> Lines:
         body = definition["body"]
-        ret = self.substitute(definition["return"])
+        ret = self.substitute_code(definition["return"])
         if body:
             ret = "static inline " + ret
         name = item["name"]
         space = "" if ret.endswith("*") else " "
         if definition["params"]:
-            params = [self.substitute(param) for param in definition["params"]]
+            params = [
+                self.substitute_code(param) for param in definition["params"]
+            ]
             param_line = ", ".join(params)
             line = f"{ret}{space}{name}({param_line})"
             if len(line) > 79:
@@ -338,7 +362,7 @@ class Node:
             if len(line) > 79:
                 line = f"{ret}\n{name}(void)"
         if body:
-            body_lines = self.substitute("\n  ".join(
+            body_lines = self.substitute_code("\n  ".join(
                 body.strip("\n").split("\n")))
             line = f"""{line}
 {{
@@ -363,31 +387,34 @@ class Node:
             body = " "
         else:
             body = " \\\n  "
-        body += self.substitute(" \\\n  ".join(body_lines))
+        body += self.substitute_code(" \\\n  ".join(body_lines))
         return line + body
 
     def _get_typedef_definition(self, _item: Item, definition: Any) -> Lines:
-        return f"typedef {self.substitute(definition)};"
+        return f"typedef {self.substitute_code(definition)};"
 
     def _get_variable_definition(self, _item: Item, definition: Any) -> Lines:
-        return f"extern {self.substitute(definition)};"
+        return f"extern {self.substitute_code(definition)};"
 
     def _get_description(self, item: Item, ingroups: ItemMap) -> CContent:
         content = CContent()
         with content.doxygen_block():
             content.add_ingroup(_get_group_identifiers(ingroups))
-            content.add_brief_description(self.substitute(item["brief"]))
-            content.wrap(self.substitute(item["description"]))
-            content.wrap(self.substitute(item["notes"]))
+            content.add_brief_description(
+                self.substitute_description(item["brief"]))
+            content.wrap(self.substitute_description(item["description"]))
+            content.wrap(self.substitute_description(item["notes"]))
             if "params" in item:
                 for param in item["params"]:
-                    content.wrap(param["name"] + " " +
-                                 self.substitute(param["description"]),
-                                 initial_indent=_PARAM[param["dir"]])
+                    content.wrap(
+                        param["name"] + " " +
+                        self.substitute_description(param["description"]),
+                        initial_indent=_PARAM[param["dir"]])
             if "return" in item:
                 ret = item["return"]
                 for retval in ret["return-values"]:
-                    content.wrap(self.substitute(retval["description"]),
+                    content.wrap(self.substitute_description(
+                        retval["description"]),
                                  initial_indent=f"@retval {retval['value']} ")
                 content.wrap(ret["return"], initial_indent="@return ")
         return content
