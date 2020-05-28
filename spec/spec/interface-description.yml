@@ -11,7 +11,11 @@ spec-info:
   none: null
   str:
     description: |
-      It shall be the description of the interface.
+      It shall be the description of the interface.  The description should be
+      short and concentrate on the average case.  All special cases, usage
+      notes, constraints, error conditions, configuration dependencies,
+      references, etc. should be described in the
+      ${interface-notes:/spec-name}.
 spec-name: Interface Description
 spec-type: interface-description
 type: spec

@@ -20,13 +20,9 @@ spec-info:
         spec-type: name
       description:
         description: |
-          It shall be the description of the application configuration option.
-          The description should be short and concentrate on the average case.
-          All special cases, usage notes, constraints, error conditions,
-          configuration dependencies, references, etc. should be described in
-          the notes.  The ${appl-config-option-value:/spec-name} items have an
+          The ${appl-config-option-value:/spec-name} items have an
           attribute for constraints.
-        spec-type: str
+        spec-type: interface-description
       index-entries:
         description: |
           It shall be a list of additional application configuration option
@@ -37,9 +33,8 @@ spec-info:
         description: null
         spec-type: appl-config-option-name
       notes:
-        description: |
-          It shall be the notes to the application configuration option.
-        spec-type: optional-str
+        description: null
+        spec-type: interface-notes
       text:
         description: |
           It shall state the requirement for the application configuration
