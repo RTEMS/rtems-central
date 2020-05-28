@@ -20,6 +20,11 @@ spec-info:
         spec-type: name
     description: |
       This set of attributes specifies an interface specification item.
+      Interface items shall specify the interface of the software product to
+      other software products and the hardware.  Use
+      ${interface-domain:/spec-name} items to specify interface domains, for
+      example the ${/glos/term/api:/term}, C language, compiler, interfaces to
+      the implementation, and the hardware.
     required-attributes: all
 spec-name: Interface Item Type
 spec-type: interface

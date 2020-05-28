@@ -24,7 +24,8 @@ spec-info:
           method:
 
           * *By analysis*: A statement shall be provided how the requirement is
-            met, by analysing static properties of the software product.
+            met, by analysing static properties of the
+            ${/glos/term/softwareproduct:/term}.
 
           * *By inspection*: A statement shall be provided how the requirement
             is met, by inspection of the ${/glos/term/sourcecode:/term}.
