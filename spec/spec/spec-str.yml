@@ -24,6 +24,6 @@ spec-info:
       This set of attributes specifies a string.
     required-attributes:
     - description
-spec-name: String Specification
+spec-name: Specification String Value
 spec-type: spec-str
 type: spec

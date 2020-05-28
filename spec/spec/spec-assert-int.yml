@@ -65,6 +65,6 @@ spec-info:
       This list of expressions evaluates to the *logical or* of the evaluation
       results of the expressions in the list.
     spec-type: spec-assert-int
-spec-name: Integer Assert Specification
+spec-name: Specification Integer Assert
 spec-type: spec-assert-int
 type: spec

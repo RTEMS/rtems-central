@@ -14,8 +14,8 @@ spec-info:
     - re: ^\s*Copyright\s+\(C\)\s+[0-9]+\s+.+\s*$
     - re: ^\s*Copyright\s+\(C\)\s+.+\s*$
     description: |
-      A value of this type shall be a copyright statement of a copyright holder
-      of the specification item.
+      It shall be a copyright statement of a copyright holder of the
+      specification item.
 spec-name: Copyright
 spec-type: copyright
 type: spec

@@ -23,6 +23,6 @@ spec-info:
       are attributes which are not explicitly defined.  They are restricted to
       a uniform attribute value type.
     required-attributes: all
-spec-name: Generic Attributes Specification
+spec-name: Specification Generic Attributes
 spec-type: spec-generic-attributes
 type: spec

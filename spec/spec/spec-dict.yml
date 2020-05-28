@@ -34,6 +34,6 @@ spec-info:
     - attributes
     - description
     - required-attributes
-spec-name: Attribute Set Specification
+spec-name: Specification Attribute Set
 spec-type: spec-dict
 type: spec

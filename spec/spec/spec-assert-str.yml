@@ -89,6 +89,6 @@ spec-info:
       This list of expressions evaluates to the *logical or* of the evaluation
       results of the expressions in the list.
     spec-type: spec-assert-str
-spec-name: String Assert Specification
+spec-name: Specification String Assert
 spec-type: spec-assert-str
 type: spec

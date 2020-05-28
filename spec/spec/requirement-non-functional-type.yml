@@ -26,6 +26,6 @@ spec-info:
       - safety
     description: |
       This type shall be used for non-functional requirement types.
-spec-name: Non-Functional Requirement Type
+spec-name: Requirement Non-Functional Type
 spec-type: requirement-non-functional-type
 type: spec

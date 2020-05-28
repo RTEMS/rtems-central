@@ -25,6 +25,6 @@ spec-info:
       This set of attributes specifies an integer value.
     required-attributes:
     - description
-spec-name: Integer Value Specification
+spec-name: Specification Integer Value
 spec-type: spec-int
 type: spec

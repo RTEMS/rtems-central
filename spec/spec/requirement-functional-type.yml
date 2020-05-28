@@ -18,6 +18,6 @@ spec-info:
       - safety-function
     description: |
       This type shall be used for functional requirement types.
-spec-name: Functional Requirement Type
+spec-name: Requirement Functional Type
 spec-type: requirement-functional-type
 type: spec

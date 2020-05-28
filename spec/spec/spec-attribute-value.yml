@@ -21,6 +21,6 @@ spec-info:
     description: |
       This set of attributes specifies an attribute value.
     required-attributes: all
-spec-name: Attribute Value Specification
+spec-name: Specification Attribute Value
 spec-type: spec-attribute-value
 type: spec

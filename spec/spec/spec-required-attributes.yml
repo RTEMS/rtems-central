@@ -25,6 +25,6 @@ spec-info:
     description: |
       This string defines the how many explicitly defined attributes are
       required.
-spec-name: Required Attributes Specification
+spec-name: Specification Required Attributes
 spec-type: spec-required-attributes
 type: spec

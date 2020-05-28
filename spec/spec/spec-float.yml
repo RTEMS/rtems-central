@@ -25,6 +25,6 @@ spec-info:
       This set of attributes specifies a floating-point value.
     required-attributes:
     - description
-spec-name: Floating-Point Value Specification
+spec-name: Specification Floating-Point Value
 spec-type: spec-float
 type: spec

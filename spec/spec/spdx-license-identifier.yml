@@ -14,8 +14,8 @@ spec-info:
     - eq: BSD-2-Clause
     - eq: CC-BY-SA-4.0
     description: |
-      This attribute value defines the license of the item expressed though an
-      SPDX License Identifier.
+      It defines the license of the item expressed though an SPDX License
+      Identifier.
 spec-name: SPDX License Identifier
 spec-type: spdx-license-identifier
 type: spec

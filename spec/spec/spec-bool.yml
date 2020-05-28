@@ -28,6 +28,6 @@ spec-info:
       This attribute set specifies a boolean value.
     required-attributes:
     - description
-spec-name: Boolean Value Specification
+spec-name: Specification Boolean Value
 spec-type: spec-bool
 type: spec
