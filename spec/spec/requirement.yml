@@ -10,7 +10,19 @@ links:
   spec-value: requirement
   uid: root
 spec-description: null
-spec-example: null
+spec-example: |
+  SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+  copyrights:
+  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de
+  enabled-by: true
+  functional-type: capability
+  links: []
+  rationale: |
+    It keeps you busy.
+  requirement-type: functional
+  text: |
+    The system shall do crazy things.
+  type: requirement
 spec-info:
   dict:
     attributes:

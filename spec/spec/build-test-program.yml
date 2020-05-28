@@ -10,7 +10,27 @@ links:
   spec-value: test-program
   uid: build
 spec-description: null
-spec-example: null
+spec-example: |
+  SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+  build-type: test-program
+  cflags: []
+  copyrights:
+  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  cppflags: []
+  cxxflags: []
+  enabled-by: true
+  features: c cprogram
+  includes: []
+  ldflags: []
+  links: []
+  source:
+  - testsuites/samples/ticker/init.c
+  - testsuites/samples/ticker/tasks.c
+  stlib: []
+  target: testsuites/samples/ticker.exe
+  type: build
+  use-after: []
+  use-before: []
 spec-info:
   dict:
     attributes:

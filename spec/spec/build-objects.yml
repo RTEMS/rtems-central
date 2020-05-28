@@ -10,7 +10,27 @@ links:
   spec-value: objects
   uid: build
 spec-description: null
-spec-example: null
+spec-example: |
+  SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+  build-type: objects
+  cflags: []
+  copyrights:
+  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  cppflags: []
+  cxxflags: []
+  enabled-by: true
+  includes: []
+  install:
+  - destination: ${BSP_INCLUDEDIR}/bsp
+    source:
+    - bsps/include/bsp/bootcard.h
+    - bsps/include/bsp/default-initial-extension.h
+    - bsps/include/bsp/fatal.h
+  links: []
+  source:
+  - bsps/shared/start/bootcard.c
+  - bsps/shared/rtems-version.c
+  type: build
 spec-info:
   dict:
     attributes:

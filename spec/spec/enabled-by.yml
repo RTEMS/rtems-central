@@ -10,7 +10,11 @@ spec-description: |
   conditions the specification item or parts of it are enabled.  The expression
   is evaluated with the use of an *enabled set*.  This is a set of strings
   which indicate enabled features.
-spec-example: null
+spec-example: |
+  enabled-by:
+    and:
+    - RTEMS_NETWORKING
+    - not: RTEMS_SMP
 spec-info:
   bool:
     description: |

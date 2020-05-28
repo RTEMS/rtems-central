@@ -10,7 +10,45 @@ links:
   spec-value: bsp
   uid: build
 spec-description: null
-spec-example: null
+spec-example: |
+  SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+  arch: myarch
+  bsp: mybsp
+  build-type: bsp
+  cflags: []
+  copyrights:
+  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  cppflags: []
+  enabled-by: true
+  family: mybsp
+  includes: []
+  install:
+  - destination: ${BSP_INCLUDEDIR}
+    source:
+    - bsps/myarch/mybsp/include/bsp.h
+    - bsps/myarch/mybsp/include/tm27.h
+  - destination: ${BSP_INCLUDEDIR}/bsp
+    source:
+    - bsps/myarch/mybsp/include/bsp/irq.h
+  - destination: ${BSP_LIBDIR}
+    source:
+    - bsps/myarch/mybsp/start/linkcmds
+  links:
+  - role: build-dependency
+    uid: ../../obj
+  - role: build-dependency
+    uid: ../../opto2
+  - role: build-dependency
+    uid: abi
+  - role: build-dependency
+    uid: obj
+  - role: build-dependency
+    uid: ../start
+  - role: build-dependency
+    uid: ../../bspopts
+  source:
+  - bsps/myarch/mybsp/start/bspstart.c
+  type: build
 spec-info:
   dict:
     attributes:

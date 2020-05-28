@@ -10,7 +10,20 @@ links:
   spec-value: config-file
   uid: build
 spec-description: null
-spec-example: null
+spec-example: |
+  SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+  build-type: config-file
+  content: |
+    # ...
+    Name: ${ARCH}-rtems${__RTEMS_MAJOR__}-${BSP_NAME}
+    # ...
+  copyrights:
+  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  enabled-by: true
+  install-path: ${PREFIX}/lib/pkgconfig
+  links: []
+  target: ${ARCH}-rtems${__RTEMS_MAJOR__}-${BSP_NAME}.pc
+  type: build
 spec-info:
   dict:
     attributes:
