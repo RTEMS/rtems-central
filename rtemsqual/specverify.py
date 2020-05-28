@@ -112,9 +112,12 @@ def _assert_op_in(ctx: _AssertContext, assert_info: Any) -> bool:
     return ctx.value in assert_info
 
 
+_WORD_SEPARATOR = re.compile(r"[ \t\n\r\f\v-]+")
+
+
 def _assert_op_contains(ctx: _AssertContext, assert_info: Any) -> bool:
-    value = " ".join(ctx.value.lower().split())
-    return any(substring in value for substring in assert_info)
+    value = " " + " ".join(_WORD_SEPARATOR.split(ctx.value.lower())) + " "
+    return any(f" {substring} " in value for substring in assert_info)
 
 
 def _assert(ctx: _AssertContext, assert_info: Any) -> bool:

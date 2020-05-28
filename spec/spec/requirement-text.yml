@@ -63,7 +63,6 @@ spec-info:
         - small
         - some
         - state of the art
-        - state-of-the-art
         - sufficient
         - suitable
         - support
@@ -71,12 +70,11 @@ spec-info:
         - transparent
         - typical
         - user friendly
-        - user-friendly
         - usually
         - versatile
         - when necessary
     description: |
-      This type shall be used for requirement statements.
+      It shall state a requirement or constraint.
 spec-name: Requirement Text
 spec-type: requirement-text
 type: spec
