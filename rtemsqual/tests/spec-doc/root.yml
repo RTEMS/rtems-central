@@ -36,7 +36,55 @@ spec-info:
   none: null
   str:
     assert:
-      eq: ''
+    - and:
+      - contains:
+        - a
+        - b
+        - c
+      - eq: d
+      - ge: e
+      - gt: f
+      - in:
+        - g
+        - h
+      - le: i
+      - lt: j
+      - ne: k
+      - re: l
+      - true
+      - uid: null
+    - or:
+      - and:
+        - in: []
+      - in:
+        - x
+    - not:
+      - not:
+          contains:
+          - a
+          - b
+          - c
+      - not:
+          eq: d
+      - not:
+          ge: e
+      - not:
+          gt: f
+      - not:
+          in:
+          - g
+          - h
+      - not:
+          le: i
+      - not:
+          lt: j
+      - not:
+          ne: k
+      - not:
+          re: l
+      - not: true
+      - not:
+          uid: null
     description: null
     spec-type: str
 spec-name: Root

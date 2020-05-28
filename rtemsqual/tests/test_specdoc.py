@@ -76,7 +76,8 @@ Root
 
 A value of this type shall be of one of the following variants:
 
-* The value may be a boolean. A reference to :ref:`SpecTypeRoot`.
+* The value may be a boolean. A reference to :ref:`SpecTypeRoot`. The value
+  shall be true.
 
 * The value may be a set of attributes. All explicitly defined attributes shall
   be specified. The following attributes are explicitly defined for this type:
@@ -88,15 +89,91 @@ A value of this type shall be of one of the following variants:
   may be defined. Each attribute key shall be a :ref:`SpecTypeName`. The
   attribute value shall be a :ref:`SpecTypeRoot`.
 
-* The value may be a floating-point number.
+* The value may be a floating-point number. The value shall be equal to 0.0.
 
-* The value may be an integer number.
+* The value may be an integer number. The value shall be equal to 0.
 
 * The value may be a list. Each list element shall be a :ref:`SpecTypeRoot`.
 
 * There may by be no value (null).
 
-* The value may be a string.
+* The value may be a string. The value
+
+  * shall meet,
+
+    * shall contain an element of
+
+      * "``a``",
+
+      * "``b``", and
+
+      * "``c``",
+
+    * and, shall be equal to "``d``",
+
+    * and, shall be greater than or equal to "``e``",
+
+    * and, shall be greater than "``f``",
+
+    * and, shall be an element of
+
+      * "``g``", and
+
+      * "``h``",
+
+    * and, shall be less than or equal to "``i``",
+
+    * and, shall be less than "``j``",
+
+    * and, shall be not equal to "``k``",
+
+    * and, shall match with the regular expression "``l"``,
+
+    * and, shall be true,
+
+    * and, shall be a valid item UID,
+
+  * or,
+
+    * shall be an element of,
+
+    * or, shall be an element of
+
+      * "``x``",
+
+  * or, shall not meet,
+
+    * shall not contain an element of
+
+      * "``a``",
+
+      * "``b``", and
+
+      * "``c``",
+
+    * or, shall be not equal to "``d``",
+
+    * or, shall be less than "``e``",
+
+    * or, shall be less than or equal to "``f``",
+
+    * or, shall not be an element of
+
+      * "``g``", and
+
+      * "``h``",
+
+    * or, shall be greater than "``i``",
+
+    * or, shall be greater than or equal to "``j``",
+
+    * or, shall be equal to "``k``",
+
+    * or, shall not match with the regular expression "``l"``,
+
+    * or, shall be false,
+
+    * or, shall be an invalid item UID.
 
 This type is refined by the following types:
 

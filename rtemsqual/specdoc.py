@@ -24,7 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from typing import Any, Dict, Iterator, Optional, Set, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
 from rtemsqual.sphinxcontent import get_reference, get_section_label, \
     SphinxContent, SphinxMapper
@@ -65,6 +65,194 @@ def _a_or_an(value: str) -> str:
 
 def _get_ref_specification_type(value: Any, key: str) -> str:
     return get_reference(get_section_label(value[key], _SECTION_PREFIX))
+
+
+class _AssertContext:
+    """ This class provides a context to document assert expressions. """
+    def __init__(self, content: SphinxContent, ops: Dict[str, Any]):
+        self.content = content
+        self.ops = ops
+        self._comma = ""
+
+    def comma(self):
+        """ Adds a comma to the content if necessary. """
+        if not self.content.lines[-1].endswith(","):
+            self.content.lines[-1] += self._comma
+            self._comma = ","
+
+    def paste(self, text: str):
+        """ Pastes a text to the content. """
+        self.content.paste(text)
+
+
+def _negate(negate: bool) -> str:
+    if negate:
+        return "not "
+    return ""
+
+
+def _value(value: Any) -> str:
+    if isinstance(value, str):
+        return f"\"``{value}``\""
+    if isinstance(value, bool):
+        if value:
+            return "true"
+        return "false"
+    return str(value)
+
+
+def _list(ctx: _AssertContext, assert_info: List[str]) -> None:
+    ctx.content.add_list([f"{_value(value)}," for value in assert_info[:-2]])
+    try:
+        ctx.content.add_list_item(f"{_value(assert_info[-2])}, and")
+    except IndexError:
+        pass
+    try:
+        ctx.content.add_list_item(f"{_value(assert_info[-1])}")
+    except IndexError:
+        pass
+
+
+def _document_op_and_or(ctx: _AssertContext, negate: bool, assert_info: Any,
+                        and_or: str) -> None:
+    if len(assert_info) == 1:
+        _document_assert(ctx, negate, assert_info[0])
+    else:
+        if negate or ctx.content.lines[-1].endswith("* "):
+            ctx.paste(f"shall {_negate(negate)}meet")
+        intro = ""
+        for element in assert_info:
+            ctx.comma()
+            with ctx.content.list_item(intro):
+                _document_assert(ctx, False, element)
+            intro = and_or
+
+
+def _document_op_and(ctx: _AssertContext, negate: bool,
+                     assert_info: Any) -> None:
+    _document_op_and_or(ctx, negate, assert_info, "and, ")
+
+
+def _document_op_not(ctx: _AssertContext, negate: bool,
+                     assert_info: Any) -> None:
+    _document_assert(ctx, not negate, assert_info)
+
+
+def _document_op_or(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    _document_op_and_or(ctx, negate, assert_info, "or, ")
+
+
+def _document_op_eq(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    if negate:
+        _document_op_ne(ctx, False, assert_info)
+    else:
+        ctx.paste(f"shall be equal to {_value(assert_info)}")
+
+
+def _document_op_ne(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    if negate:
+        _document_op_eq(ctx, False, assert_info)
+    else:
+        ctx.paste(f"shall be not equal to {_value(assert_info)}")
+
+
+def _document_op_le(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    if negate:
+        _document_op_gt(ctx, False, assert_info)
+    else:
+        ctx.paste(f"shall be less than or equal to {_value(assert_info)}")
+
+
+def _document_op_lt(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    if negate:
+        _document_op_ge(ctx, False, assert_info)
+    else:
+        ctx.paste(f"shall be less than {_value(assert_info)}")
+
+
+def _document_op_ge(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    if negate:
+        _document_op_lt(ctx, False, assert_info)
+    else:
+        ctx.paste(f"shall be greater than or equal to {_value(assert_info)}")
+
+
+def _document_op_gt(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    if negate:
+        _document_op_le(ctx, False, assert_info)
+    else:
+        ctx.paste(f"shall be greater than {_value(assert_info)}")
+
+
+def _document_op_uid(ctx: _AssertContext, negate: bool,
+                     _assert_info: Any) -> None:
+    if negate:
+        ctx.paste("shall be an invalid item UID")
+    else:
+        ctx.paste("shall be a valid item UID")
+
+
+def _document_op_re(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    ctx.paste(f"shall {_negate(negate)}match with "
+              f"the regular expression \"``{assert_info}\"``")
+
+
+def _document_op_in(ctx: _AssertContext, negate: bool,
+                    assert_info: Any) -> None:
+    ctx.paste(f"shall {_negate(negate)}be an element of")
+    _list(ctx, assert_info)
+
+
+def _document_op_contains(ctx: _AssertContext, negate: bool,
+                          assert_info: Any) -> None:
+    ctx.paste(f"shall {_negate(negate)}contain an element of")
+    _list(ctx, assert_info)
+
+
+def _document_assert(ctx: _AssertContext, negate: bool,
+                     assert_info: Any) -> None:
+    if isinstance(assert_info, bool):
+        if negate:
+            assert_info = not assert_info
+        ctx.paste(f"shall be {_value(assert_info)}")
+    elif isinstance(assert_info, list):
+        _document_op_or(ctx, negate, assert_info)
+    else:
+        key = next(iter(assert_info))
+        ctx.ops[key](ctx, negate, assert_info[key])
+
+
+_DOCUMENT_OPS = {
+    "and": _document_op_and,
+    "contains": _document_op_contains,
+    "eq": _document_op_eq,
+    "ge": _document_op_ge,
+    "gt": _document_op_gt,
+    "in": _document_op_in,
+    "le": _document_op_le,
+    "lt": _document_op_lt,
+    "ne": _document_op_ne,
+    "not": _document_op_not,
+    "or": _document_op_or,
+    "re": _document_op_re,
+    "uid": _document_op_uid,
+}
+
+
+def _maybe_document_assert(content: SphinxContent, type_info: Any) -> None:
+    if "assert" in type_info:
+        content.paste("The value ")
+        _document_assert(_AssertContext(content, _DOCUMENT_OPS), False,
+                         type_info["assert"])
+        content.lines[-1] += "."
 
 
 class _Documenter:
@@ -205,6 +393,7 @@ class _Documenter:
         """ Documents a value. """
         content.paste(self.get_value_type_phrase("The value", shall, variant))
         content.paste_and_add(self._substitute(info["description"]))
+        _maybe_document_assert(content, info)
 
     def document_list(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
