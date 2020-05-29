@@ -1,0 +1,40 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: type
+  spec-value: test-procedure
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: |
+          It shall be the human readable name of the test procedure.
+        spec-type: str
+      purpose:
+        description: |
+          It shall state the purpose of the test procedure.
+        spec-type: str
+      steps:
+        description: |
+          It shall describe the steps of the test procedure execution.
+        spec-type: str
+    description: |
+      Please note:
+
+      .. warning::
+
+           This item type is work in progress.
+
+      This set of attributes specifies a test procedure.
+    required-attributes: all
+spec-name: Test Procedure Item Type
+spec-type: test-procedure
+type: spec
