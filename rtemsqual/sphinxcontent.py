@@ -54,9 +54,9 @@ def get_reference(label: str, name: Optional[str] = None) -> str:
     return f":ref:`{label}`"
 
 
-def get_section_label(name: str, prefix: str = "Section") -> str:
-    """ Returns the section label for the specified section name. """
-    return prefix + _to_camel_case(name.strip())
+def get_label(name: str) -> str:
+    """ Returns the label for the specified name. """
+    return _to_camel_case(name.strip())
 
 
 class SphinxContent(Content):
@@ -65,6 +65,7 @@ class SphinxContent(Content):
         super().__init__("CC-BY-SA-4.0", True)
         self._tab = "    "
         self._section_level = section_level
+        self.section_label_prefix = "Section"
 
     def add_label(self, label: str) -> None:
         """ Adds a label. """
@@ -78,9 +79,11 @@ class SphinxContent(Content):
     def add_header_with_label(self,
                               name: str,
                               level: int = 2,
-                              label_prefix: str = "Section") -> str:
+                              label_prefix: Optional[str] = None) -> str:
         """ Adds a header with label. """
-        label = get_section_label(name, label_prefix)
+        if label_prefix is None:
+            label_prefix = self.section_label_prefix
+        label = label_prefix + get_label(name)
         self.add_label(label)
         self.add_header(name, level)
         return label
@@ -125,7 +128,9 @@ class SphinxContent(Content):
         yield
         self.close_directive()
 
-    def open_section(self, name: str, label_prefix: str = "Section") -> str:
+    def open_section(self,
+                     name: str,
+                     label_prefix: Optional[str] = None) -> str:
         """ Opens a section. """
         label = self.add_header_with_label(name, self._section_level,
                                            label_prefix)
@@ -139,7 +144,7 @@ class SphinxContent(Content):
     @contextmanager
     def section(self,
                 name: str,
-                label_prefix: str = "Section") -> Iterator[str]:
+                label_prefix: Optional[str] = None) -> Iterator[str]:
         """ Opens a section context. """
         yield self.open_section(name, label_prefix)
         self.close_section()

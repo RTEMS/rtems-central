@@ -26,7 +26,7 @@
 
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
-from rtemsqual.sphinxcontent import get_reference, get_section_label, \
+from rtemsqual.sphinxcontent import get_reference, get_label, \
     SphinxContent, SphinxMapper
 from rtemsqual.items import Item, ItemCache
 from rtemsqual.specverify import NAME
@@ -54,7 +54,7 @@ _REQUIRED_ATTRIBUTES = {
     "none": "None of the explicitly defined attributes are required.",
 }
 
-_SECTION_PREFIX = "SpecType"
+_SPEC_TYPE_PREFIX = "SpecType"
 
 
 def _a_or_an(value: str) -> str:
@@ -64,7 +64,7 @@ def _a_or_an(value: str) -> str:
 
 
 def _get_ref_specification_type(value: Any, key: str) -> str:
-    return get_reference(get_section_label(value[key], _SECTION_PREFIX))
+    return get_reference(_SPEC_TYPE_PREFIX + get_label(value[key]))
 
 
 class _AssertContext:
@@ -278,7 +278,7 @@ class _Documenter:
 
     def get_section_reference(self) -> str:
         """ Returns the section reference. """
-        return get_reference(get_section_label(self.section, _SECTION_PREFIX))
+        return get_reference(_SPEC_TYPE_PREFIX + get_label(self.section))
 
     def get_a_section_reference(self) -> str:
         """ Returns a section reference. """
@@ -430,7 +430,7 @@ class _Documenter:
         if self.get_list_element_type():
             return
         content.register_license_and_copyrights_of_item(self._item)
-        with content.section(self.section, _SECTION_PREFIX):
+        with content.section(self.section, _SPEC_TYPE_PREFIX):
             last = content.lines[-1]
             self._add_description(content)
             if len(self._info_map) == 1:
@@ -550,6 +550,7 @@ def document(config: dict, item_cache: ItemCache) -> None:
     for documenter in documenter_map.values():
         documenter.resolve_used_by()
     documenter_names = set(documenter_map.keys())
+    content.section_label_prefix = "ReqEng"
     with content.section("Specification Items"):
         with content.section("Specification Item Hierarchy"):
             content.add(

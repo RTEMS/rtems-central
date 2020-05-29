@@ -46,12 +46,12 @@ def test_document(tmpdir):
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
-.. _SectionSpecificationItems:
+.. _ReqEngSpecificationItems:
 
 Specification Items
 ===================
 
-.. _SectionSpecificationItemHierarchy:
+.. _ReqEngSpecificationItemHierarchy:
 
 Specification Item Hierarchy
 ----------------------------
@@ -64,7 +64,7 @@ The specification item types have the following hierarchy:
 
   * :ref:`SpecTypeB`
 
-.. _SectionSpecificationItemTypes:
+.. _ReqEngSpecificationItemTypes:
 
 Specification Item Types
 ------------------------
@@ -223,7 +223,7 @@ Generic attributes may be defined. Each attribute key shall be a
 :ref:`SpecTypeName`. The attribute value shall be a list. Each list element
 shall be a string.
 
-.. _SectionSpecificationAttributeSetsAndValueTypes:
+.. _ReqEngSpecificationAttributeSetsAndValueTypes:
 
 Specification Attribute Sets and Value Types
 --------------------------------------------

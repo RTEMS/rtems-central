@@ -26,7 +26,7 @@
 
 import pytest
 
-from rtemsqual.sphinxcontent import get_reference, get_section_label, \
+from rtemsqual.sphinxcontent import get_reference, get_label, \
     SphinxContent, SphinxMapper
 from rtemsqual.items import Item, ItemCache, ItemMapper
 from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
@@ -104,8 +104,8 @@ def test_get_reference():
     assert get_reference("a", "b") == ":ref:`b <a>`"
 
 
-def test_get_section_label():
-    assert get_section_label("ab cd") == "SectionAbCd"
+def test_get_label():
+    assert get_label("ab cd") == "AbCd"
 
 
 def test_section():
