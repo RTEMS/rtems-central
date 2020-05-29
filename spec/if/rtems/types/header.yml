@@ -4,6 +4,21 @@ copyrights:
 enabled-by: true
 interface-type: header-file
 links:
+- enabled-by: true
+  role: interface-include
+  uid: /if/c/sys-cpuset
+- enabled-by: true
+  role: interface-include
+  uid: /if/c/sys-impl-timespec
+- enabled-by: true
+  role: interface-include
+  uid: /if/c/sys-impl-timeval
+- enabled-by: true
+  role: interface-include
+  uid: /if/rtems/modes/header
+- enabled-by: RTEMS_MULTIPROCESSING
+  role: interface-include
+  uid: /if/impl/mpci/header
 - role: interface-placement
   uid: /if/domains/api
 path: rtems/rtems/types.h

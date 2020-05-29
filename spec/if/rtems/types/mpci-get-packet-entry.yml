@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This type defines the prototype for the get packet entry point in an MPCI.
+copyrights:
+- Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2006 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${/if/impl/mpci/get-packet-entry:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: RTEMS_MULTIPROCESSING
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/types
+name: rtems_mpci_get_packet_entry
+notes: null
+type: interface
