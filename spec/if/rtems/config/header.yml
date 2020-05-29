@@ -10,6 +10,9 @@ links:
 - enabled-by: RTEMS_MULTIPROCESSING
   role: interface-include
   uid: /if/rtems/types/header
+- enabled-by: true
+  role: interface-include
+  uid: header-2
 - role: interface-placement
   uid: /if/domains/api
 path: rtems/config.h
