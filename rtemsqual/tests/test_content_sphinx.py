@@ -252,5 +252,6 @@ def test_substitute(tmpdir):
     with pytest.raises(KeyError):
         mapper.substitute("${x:/y}")
     assert mapper.substitute("${x:/term}") == ":term:`y`"
+    assert mapper.substitute("${x:/plural}") == ":term:`ys <y>`"
     mapper.add_get_reference("foo", "/name", lambda x, y: x[y])
     assert mapper.substitute("${y:/name}") == "bar"

@@ -202,12 +202,20 @@ def _get_ref_term(value: Any, key: str) -> str:
     return f":term:`{value[key]}`"
 
 
+def _get_ref_term_plural(value: Any, key: str) -> str:
+    try:
+        return f":term:`{value[key]} <{value['term']}>`"
+    except KeyError:
+        return f":term:`{value['term']}s <{value['term']}>`"
+
+
 class SphinxMapper(ItemMapper):
     """ Sphinx mapper. """
     def __init__(self, item: Item):
         super().__init__(item)
         self._get_ref = {
-            "glossary:/term": _get_ref_term
+            "glossary:/term": _get_ref_term,
+            "glossary:/plural": _get_ref_term_plural
         }  # type: Dict[str, Callable[[Any, str], str]]
 
     def add_get_reference(self, type_name: str, path: str,
