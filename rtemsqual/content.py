@@ -492,10 +492,10 @@ class CContent(Content):
     def _add_includes_enabled_by(self, includes: Dict[str, Set[str]],
                                  local: bool) -> None:
         enabled_by_includes = {}  # type: Dict[str, Set[str]]
-        for inc, enabled_bys in includes.items():
+        for inc, enabled_bys in iter(includes.items()):
             enabled_by_includes.setdefault(" && ".join(sorted(enabled_bys)),
                                            set()).add(inc)
-        for enabled_by, incs in sorted(enabled_by_includes.items()):
+        for enabled_by, incs in sorted(iter(enabled_by_includes.items())):
             self.add(f"#if {enabled_by}")
             with self.indent():
                 self._add_includes(incs, local)

@@ -362,7 +362,7 @@ class ItemCache:
         else:
             with open(cache_file, "rb") as pickle_src:
                 data_by_uid = pickle.load(pickle_src)
-        for uid, data in data_by_uid.items():
+        for uid, data in iter(data_by_uid.items()):
             item = Item(self, uid, data)
             self._items[uid] = item
             if not item["links"]:
