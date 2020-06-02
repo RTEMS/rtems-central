@@ -146,6 +146,29 @@ def test_comment_block():
 """
 
 
+def test_for_loop():
+    content = CContent()
+    with content.for_loop("i = 0", "i < 3", "++i"):
+        content.add("j[i] = i;")
+    assert str(content) == """for ( i = 0; i < 3; ++i ) {
+  j[i] = i;
+}
+"""
+    content = CContent()
+    with content.for_loop("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii = 0",
+                          "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii < 3",
+                          "++iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"):
+        content.add("j[i] = i;")
+    assert str(content) == """for (
+  iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii = 0;
+  iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii < 3;
+  ++iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+) {
+  j[i] = i;
+}
+"""
+
+
 def test_add_brief_description():
     content = CContent()
     content.add_brief_description("")

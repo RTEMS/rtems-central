@@ -577,6 +577,29 @@ class CContent(Content):
         yield
         self.close_comment_block()
 
+    def open_for_loop(self, begin: str, end: str, step: str) -> None:
+        """ Opens a for loop. """
+        for_loop = [f"for ( {begin}; {end}; {step} ) {{"]
+        if len(self._indent) + len(for_loop[0]) > 79:
+            for_loop = [
+                "for (", f"{self.tab}{begin};", f"{self.tab}{end};",
+                f"{self.tab}{step}", ") {"
+            ]
+        self.add(for_loop)
+        self.push_indent()
+
+    def close_for_loop(self) -> None:
+        """ Closes a for loop. """
+        self.pop_indent()
+        self.append(["}"])
+
+    @contextmanager
+    def for_loop(self, begin: str, end: str, step: str) -> Iterator[None]:
+        """ Opens a for loop context. """
+        self.open_for_loop(begin, end, step)
+        yield
+        self.close_for_loop()
+
     def add_brief_description(self, description: Optional[str]) -> None:
         """ Adds a brief description. """
         return self.wrap(description, initial_indent="@brief ")
