@@ -27,9 +27,10 @@
 import itertools
 import os
 import string
-from typing import Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, NamedTuple, Optional, Tuple
 
-from rtemsqual.content import CContent, CInclude
+from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
+    ExpressionMapper
 from rtemsqual.items import Item, ItemCache
 
 ItemMap = Dict[str, Item]
@@ -178,6 +179,281 @@ class _TestSuiteItem(_TestItem):
         content.add("/** @} */")
 
 
+class _PostCondition(NamedTuple):
+    """ A set of post conditions with an enabled by expression. """
+    enabled_by: str
+    conditions: Tuple[int, ...]
+
+
+_DirectiveIndexToEnum = Tuple[Tuple[str, ...], ...]
+_TransitionMap = List[List[_PostCondition]]
+
+
+def _directive_state_to_index(
+        conditions: List[Any]) -> Tuple[Dict[str, int], ...]:
+    return tuple(
+        dict((state["name"], index)
+             for index, state in enumerate(condition["states"]))
+        for condition in conditions)
+
+
+def _directive_index_to_enum(prefix: str,
+                             conditions: List[Any]) -> _DirectiveIndexToEnum:
+    return tuple(
+        tuple([f"{prefix}_{condition['name']}"] + [
+            f"{prefix}_{condition['name']}_{state['name']}"
+            for state in condition["states"]
+        ]) for index, condition in enumerate(conditions))
+
+
+def _directive_add_enum(content: CContent,
+                        index_to_enum: _DirectiveIndexToEnum) -> None:
+    for enum in index_to_enum:
+        content.add("typedef enum {")
+        with content.indent():
+            content.add(",\n".join(enum[1:]))
+        content.add(f"}} {enum[0]};")
+
+
+class _TestDirectiveItem(_TestItem):
+    """ A test directive item. """
+
+    # pylint: disable=too-many-instance-attributes
+    def __init__(self, item: Item):
+        super().__init__(item)
+        self._pre_condition_count = len(item["pre-conditions"])
+        self._post_condition_count = len(item["post-conditions"])
+        self._pre_index_to_enum = _directive_index_to_enum(
+            f"{self.ident}_Pre", item["pre-conditions"])
+        self._post_index_to_enum = _directive_index_to_enum(
+            f"{self.ident}_Post", item["post-conditions"])
+        self._pre_state_to_index = _directive_state_to_index(
+            item["pre-conditions"])
+        self._post_state_to_index = _directive_state_to_index(
+            item["post-conditions"])
+        self._pre_index_to_condition = dict(
+            (index, condition)
+            for index, condition in enumerate(item["pre-conditions"]))
+        self._post_index_to_name = dict(
+            (index, condition["name"])
+            for index, condition in enumerate(item["post-conditions"]))
+
+    @property
+    def name(self) -> str:
+        return self._item["test-name"]
+
+    @property
+    def context(self) -> str:
+        """ Returns the test case context type. """
+        return f"{self._ident}_Context"
+
+    @property
+    def includes(self) -> List[str]:
+        return self._item["test-includes"]
+
+    @property
+    def local_includes(self) -> List[str]:
+        return self._item["test-local-includes"]
+
+    def _add_context(self, content: CContent) -> None:
+        with content.doxygen_block():
+            content.add_brief_description(
+                f"Test context for {self.name} test case.")
+        content.append("typedef struct {")
+        with content.indent():
+            for info in self["test-context"]:
+                content.add_description_block(info["brief"],
+                                              info["description"])
+                content.add(f"{info['member'].strip()};")
+        content.add([
+            f"}} {self.context};", "", f"static {self.context}",
+            f"  {self.ident}_Instance;"
+        ])
+
+    def _add_fixture_method(self, content: CContent,
+                            info: Optional[Dict[str, Optional[str]]],
+                            name: str) -> str:
+        if not info:
+            return "NULL"
+        method = f"{self.ident}_{name}"
+        content.add_description_block(info["brief"], info["description"])
+        content.add(
+            [f"static void {method}(", f"  {self.context} *ctx", ")", "{"])
+        with content.indent():
+            content.add(info["code"])
+        wrap = f"{method}_Wrap"
+        content.add([
+            "}", "", f"static void {wrap}( void *arg )", "{",
+            f"  {method}( arg );", "}"
+        ])
+        return wrap
+
+    def _add_transitions(self, condition_index: int, map_index: int,
+                         transition: Dict[str,
+                                          Any], transition_map: _TransitionMap,
+                         post: Tuple[int, ...]) -> None:
+        # pylint: disable=too-many-arguments
+        if condition_index < self._pre_condition_count:
+            condition = self._pre_index_to_condition[condition_index]
+            state_count = len(condition["states"])
+            map_index *= state_count
+            states = transition["pre-conditions"][condition["name"]]
+            if isinstance(states, str):
+                assert states == "all"
+                for index in range(state_count):
+                    self._add_transitions(condition_index + 1,
+                                          map_index + index, transition,
+                                          transition_map, post)
+            else:
+                for state in states:
+                    self._add_transitions(
+                        condition_index + 1, map_index +
+                        self._pre_state_to_index[condition_index][state],
+                        transition, transition_map, post)
+        else:
+            enabled_by = enabled_by_to_exp(transition["enabled-by"],
+                                           ExpressionMapper())
+            assert enabled_by != "1" or not transition_map[map_index]
+            transition_map[map_index].append(_PostCondition(enabled_by, post))
+
+    def _get_transition_map(self) -> _TransitionMap:
+        transition_count = 1
+        for condition in self["pre-conditions"]:
+            state_count = len(condition["states"])
+            assert state_count > 0
+            transition_count *= state_count
+        transition_map = [list() for _ in range(transition_count)
+                          ]  # type: _TransitionMap
+        for transition in self["transition-map"]:
+            post = tuple(self._post_state_to_index[index][
+                transition["post-conditions"][self._post_index_to_name[index]]]
+                         for index in range(self._post_condition_count))
+            self._add_transitions(0, 0, transition, transition_map, post)
+        return transition_map
+
+    def _post_condition_enumerators(self, conditions: Any) -> str:
+        return ",\n".join(
+            f"    {self._post_index_to_enum[index][condition + 1]}"
+            for index, condition in enumerate(conditions))
+
+    def _add_transition_map(self, content: CContent) -> None:
+        transition_map = self._get_transition_map()
+        content.add([
+            "static const uint8_t "
+            f"{self.ident}_TransitionMap[][ {self._post_condition_count} ]"
+            " = {", "  {"
+        ])
+        elements = []
+        for transistions in transition_map:
+            assert transistions[0].enabled_by == "1"
+            if len(transistions) == 1:
+                elements.append(
+                    self._post_condition_enumerators(
+                        transistions[0].conditions))
+            else:
+                ifelse = "#if "
+                enumerators = []  # type: List[str]
+                for variant in transistions[1:]:
+                    enumerators.append(ifelse + variant.enabled_by)
+                    enumerators.append(
+                        self._post_condition_enumerators(variant.conditions))
+                    ifelse = "#elif "
+                enumerators.append("#else")
+                enumerators.append(
+                    self._post_condition_enumerators(
+                        transistions[0].conditions))
+                enumerators.append("#endif")
+                elements.append("\n".join(enumerators))
+        content.append(["\n  }, {\n".join(elements), "  }", "};"])
+
+    def _add_action(self, content: CContent) -> None:
+        for index, enum in enumerate(self._pre_index_to_enum):
+            content.append(f"{enum[0]}_Prepare( ctx, in_{index} );")
+        content.append(self["test-action"])
+        transition_map = f"{self.ident}_TransitionMap"
+        for index, enum in enumerate(self._post_index_to_enum):
+            content.append([
+                f"{enum[0]}_Check(", f"  ctx,",
+                f"  {transition_map}[ index ][ {index} ]", ");"
+            ])
+        content.append(f"++index;")
+
+    def _add_for_loops(self, content: CContent, index: int) -> None:
+        if index < self._pre_condition_count:
+            enum = self._pre_index_to_enum[index][0]
+            var = f"in_{index}"
+            if index == 0:
+                content.add([
+                    f"{self.context} *ctx;", "size_t index;", f"{enum} {var};",
+                    "", "ctx = T_fixture_context();", "index = 0;"
+                ])
+            else:
+                content.add([f"{enum} {var};"])
+            begin = self._pre_index_to_enum[index][1]
+            end = self._pre_index_to_enum[index][-1]
+            with content.for_loop(f"{var} = {begin}", f"{var} != {end} + 1",
+                                  f"++{var}"):
+                self._add_for_loops(content, index + 1)
+        else:
+            self._add_action(content)
+
+    def _add_handler(self, content: CContent, conditions: List[Any],
+                     index_to_enum: _DirectiveIndexToEnum,
+                     action: str) -> None:
+        for condition_index, condition in enumerate(conditions):
+            enum = index_to_enum[condition_index]
+            content.add([
+                f"static void {enum[0]}_{action}(", f"  {self.context} *ctx,",
+                f"  {enum[0]} state", ")", "{"
+            ])
+            with content.indent():
+                content.add(condition["test-prologue"])
+                content.add("switch ( state ) {")
+                with content.indent():
+                    for state_index, state in enumerate(condition["states"]):
+                        content.add(f"case {enum[state_index + 1]}: {{")
+                        with content.indent():
+                            content.add(state["test-code"])
+                            content.append("break;")
+                        content.add("}")
+                content.add("}")
+                content.add(condition["test-epilogue"])
+            content.add("}")
+
+    def generate(self, content: CContent,
+                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+        self.add_test_case_description(content, test_case_to_suites)
+        _directive_add_enum(content, self._pre_index_to_enum)
+        _directive_add_enum(content, self._post_index_to_enum)
+        self._add_context(content)
+        content.add(self["test-support"])
+        self._add_handler(content, self["pre-conditions"],
+                          self._pre_index_to_enum, "Prepare")
+        self._add_handler(content, self["post-conditions"],
+                          self._post_index_to_enum, "Check")
+        setup = self._add_fixture_method(content, self["test-setup"], "Setup")
+        stop = self._add_fixture_method(content, self["test-stop"], "Stop")
+        teardown = self._add_fixture_method(content, self["test-teardown"],
+                                            "Teardown")
+        fixture = f"{self.ident}_Fixture"
+        content.add([
+            f"static T_fixture {fixture} = {{", f"  .setup = {setup},",
+            f"  .stop = {stop},", f"  .teardown = {teardown},",
+            f"  .initial_context = &{self.ident}_Instance", "};"
+        ])
+        self._add_transition_map(content)
+        with content.function_block(f"void T_case_body_{self.ident}( void )"):
+            content.add_brief_description(self["test-brief"])
+            content.wrap(self["test-description"])
+        content.append([
+            "T_TEST_CASE_FIXTURE(", f"  {self.ident},", f"  &{fixture}", ")",
+            "{"
+        ])
+        with content.indent():
+            self._add_for_loops(content, 0)
+        content.add(["}", "", "/** @} */"])
+
+
 class _SourceFile:
     """ A test source file. """
     def __init__(self, filename: str):
@@ -203,6 +479,10 @@ class _SourceFile:
     def add_test_case(self, test_case: Item) -> None:
         """ Adds a test case to the source file. """
         self._test_cases.append(_TestItem(test_case))
+
+    def add_test_directive(self, test_directive: Item) -> None:
+        """ Adds a test directive to the source file. """
+        self._test_cases.append(_TestDirectiveItem(test_directive))
 
     def generate(self, base_directory: str,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
@@ -272,6 +552,11 @@ def _gather_items(item: Item, source_files: Dict[str, _SourceFile],
     elif item["type"] == "test-case":
         src = _get_source_file(item["target"], source_files)
         src.add_test_case(item)
+    elif item["type"] == "requirement" and item[
+            "requirement-type"] == "functional" and item[
+                "functional-type"] == "directive":
+        src = _get_source_file(item["test-target"], source_files)
+        src.add_test_directive(item)
     elif item["type"] == "build" and item["build-type"] == "test-program":
         test_programs.append(_TestProgram(item))
 

@@ -1,0 +1,299 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: directive
+links: []
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc(ctx->status, RTEMS_SUCCESSFUL);
+    text: |
+      The status shall be RTEMS_SUCCESSFUL.
+  - name: InvAddr
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
+    text: |
+      The status shall be RTEMS_INVALID_ADDRESS.
+  - name: InvName
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_NAME);
+    text: |
+      The status shall be RTEMS_INVALID_NAME.
+  - name: InvNode
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_NODE);
+    text: |
+      The status shall be RTEMS_INVALID_NODE.
+  - name: InvId
+    test-code: |
+      T_rsc(ctx->status, RTEMS_INVALID_ID);
+    text: |
+      The status shall be RTEMS_INVALID_ID.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, 0xffffffff);
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the value before the call to rtems_task_ident().
+  - name: NullPtr
+    test-code: |
+      T_null(ctx->id)
+    text: |
+      The id parameter shall be NULL.
+  - name: Self
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, rtems_task_self());
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the identifier of the executing thread.
+  - name: LocalTask
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, ctx->id_local_task);
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the identifier of a local task with a name equal to the name
+      parameter.  If more than one local task with such a name exists, then it
+      shall be the identifier of the task with the lowest object index.
+  - name: RemoteTask
+    test-code: |
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, ctx->id_remote_task);
+    text: |
+      The value of the object identifier referenced by the id parameter shall
+      be the identifier of a remote task on a eligible node defined by the node
+      parameter with a name equal to the name parameter.  If more than one task
+      with such a name exists on the same node, then it shall be the identifier
+      of the task with the lowest object index.  If more than one task with
+      such a name exists on different eligible nodes, then it shall be the
+      identifier of the task with the lowest node index.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Name
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->name = 1;
+    text: |
+      The name parameter shall not equal to a name of an active Classic API
+      task object and not equal to RTEMS_SELF.
+  - name: Self
+    test-code: |
+      ctx->name = RTEMS_SELF;
+    text: |
+      The name parameter shall be RTEMS_SELF.
+  - name: Valid
+    test-code: |
+      ctx->name = rtems_build_name( 'T', 'A', 'S', 'K' );
+    text: |
+      The name parameter shall equal to a name of an active Classic API task
+      object.
+  test-epilogue: |
+    /* Epilogue */
+  test-prologue: |
+    /* Prologue */
+- name: Node
+  states:
+  - name: Local
+    test-code: |
+      ctx->node = 1;
+    text: |
+      The node parameter shall be the local node number.
+  - name: Remote
+    test-code: |
+      ctx->node = 2;
+    text: |
+      The node parameter shall be a remote node number.
+  - name: Invalid
+    test-code: |
+      ctx->node = 256;
+    text: |
+      The node parameter shall be an invalid node number.
+  - name: SearchAll
+    test-code: |
+      ctx->node = RTEMS_SEARCH_ALL_NODES;
+    text: |
+      The node parameter shall be RTEMS_SEARCH_ALL_NODES.
+  - name: SearchOther
+    test-code: |
+      ctx->node = RTEMS_SEARCH_OTHER_NODES;
+    text: |
+      The node parameter shall be RTEMS_SEARCH_OTHER_NODES.
+  - name: SearchLocal
+    test-code: |
+      ctx->node = RTEMS_SEARCH_LOCAL_NODE;
+    text: |
+      The node parameter shall be RTEMS_SEARCH_LOCAL_NODE.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: NullPtr
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      The id parameter shall be NULL.
+  - name: Valid
+    test-code: |
+      ctx->id_value = 0xffffffff;
+      ctx->id = &ctx->id_value;
+    text: |
+      The id parameter shall point to an object identifier.
+  test-epilogue: null
+  test-prologue: null
+requirement-type: functional
+test-action: |
+  ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
+test-brief: Test rtems_task_ident() brief description.
+test-context:
+- brief: |
+    Brief context member description.
+  description: |
+    Context member description.
+  member: |
+    rtems_status_code status
+- brief: null
+  description: null
+  member: |
+    rtems_name name
+- brief: null
+  description: null
+  member: |
+    uint32_t node
+- brief: null
+  description: null
+  member: |
+    rtems_id *id
+- brief: null
+  description: null
+  member: |
+    rtems_id id_value
+- brief: null
+  description: null
+  member: |
+    rtems_id id_local_task
+- brief: null
+  description: null
+  member: |
+    rtems_id id_remote_task
+test-description: Test rtems_task_ident() description.
+test-includes:
+- rtems.h
+test-local-includes:
+- x.h
+test-name: Classic Task Identification
+test-setup:
+  brief: |
+    Setup brief description.
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_task_create(
+      rtems_build_name( 'T', 'A', 'S', 'K' ),
+      1,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->id_local_task
+    );
+    T_assert_rsc_success( sc );
+  description: |
+    Setup description.
+test-stop: null
+test-support: |
+  /* Test rtems_task_ident() support */
+test-target: tc12.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    if ( ctx->id_local_task != 0 ) {
+      sc = rtems_task_delete( ctx->id_local_task );
+      T_rsc_success( sc );
+    }
+  description: null
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Id: Self
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Self
+    Node: all
+- enabled-by: true
+  post-conditions:
+    Id: LocalTask
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Valid
+    Node:
+    - SearchAll
+    - SearchLocal
+    - Local
+- enabled-by: true
+  post-conditions:
+    Id: Nop
+    Status: InvName
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Valid
+    Node:
+    - Invalid
+    - SearchOther
+    - Remote
+- enabled-by: true
+  post-conditions:
+    Id: Nop
+    Status: InvName
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Invalid
+    Node: all
+- enabled-by: true
+  post-conditions:
+    Id: NullPtr
+    Status: InvAddr
+  pre-conditions:
+    Id:
+    - NullPtr
+    Name: all
+    Node: all
+- enabled-by: RTEMS_MULTIPROCESSING
+  post-conditions:
+    Id: RemoteTask
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Valid
+    Name:
+    - Valid
+    Node:
+    - SearchOther
+    - Remote
+rationale: null
+references: []
+text: |
+  Calling the rtems_task_ident() directive shall yield the specified
+  post-conditions under the specified pre-conditions.
+type: requirement

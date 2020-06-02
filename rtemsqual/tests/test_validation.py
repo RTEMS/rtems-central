@@ -124,6 +124,7 @@ def test_validation(tmpdir):
 /**
  * @file
  *
+ * @ingroup RTEMSTestCaseClassicTaskIdentification
  * @ingroup RTEMSTestCaseTestCase
  * @ingroup RTEMSTestCaseTestCase2
  */
@@ -159,11 +160,472 @@ def test_validation(tmpdir):
 
 #include <a.h>
 #include <b.h>
+#include <rtems.h>
 
 #include "x.h"
 #include "y.h"
 
 #include <t.h>
+
+/**
+ * @defgroup RTEMSTestCaseClassicTaskIdentification Classic Task Identification
+ *
+ * @ingroup RTEMSTestSuiteBlueGreen
+ *
+ * @brief Test Case
+ *
+ * @{
+ */
+
+typedef enum {
+  ClassicTaskIdentification_Pre_Name_Invalid,
+  ClassicTaskIdentification_Pre_Name_Self,
+  ClassicTaskIdentification_Pre_Name_Valid
+} ClassicTaskIdentification_Pre_Name;
+
+typedef enum {
+  ClassicTaskIdentification_Pre_Node_Local,
+  ClassicTaskIdentification_Pre_Node_Remote,
+  ClassicTaskIdentification_Pre_Node_Invalid,
+  ClassicTaskIdentification_Pre_Node_SearchAll,
+  ClassicTaskIdentification_Pre_Node_SearchOther,
+  ClassicTaskIdentification_Pre_Node_SearchLocal
+} ClassicTaskIdentification_Pre_Node;
+
+typedef enum {
+  ClassicTaskIdentification_Pre_Id_NullPtr,
+  ClassicTaskIdentification_Pre_Id_Valid
+} ClassicTaskIdentification_Pre_Id;
+
+typedef enum {
+  ClassicTaskIdentification_Post_Status_Ok,
+  ClassicTaskIdentification_Post_Status_InvAddr,
+  ClassicTaskIdentification_Post_Status_InvName,
+  ClassicTaskIdentification_Post_Status_InvNode,
+  ClassicTaskIdentification_Post_Status_InvId
+} ClassicTaskIdentification_Post_Status;
+
+typedef enum {
+  ClassicTaskIdentification_Post_Id_Nop,
+  ClassicTaskIdentification_Post_Id_NullPtr,
+  ClassicTaskIdentification_Post_Id_Self,
+  ClassicTaskIdentification_Post_Id_LocalTask,
+  ClassicTaskIdentification_Post_Id_RemoteTask
+} ClassicTaskIdentification_Post_Id;
+
+/**
+ * @brief Test context for Classic Task Identification test case.
+ */
+typedef struct {
+  /**
+   * @brief Brief context member description.
+   *
+   * Context member description.
+   */
+  rtems_status_code status;
+
+  rtems_name name;
+
+  uint32_t node;
+
+  rtems_id *id;
+
+  rtems_id id_value;
+
+  rtems_id id_local_task;
+
+  rtems_id id_remote_task;
+} ClassicTaskIdentification_Context;
+
+static ClassicTaskIdentification_Context
+  ClassicTaskIdentification_Instance;
+
+/* Test rtems_task_ident() support */
+
+static void ClassicTaskIdentification_Pre_Name_Prepare(
+  ClassicTaskIdentification_Context *ctx,
+  ClassicTaskIdentification_Pre_Name state
+)
+{
+  /* Prologue */
+
+  switch ( state ) {
+    case ClassicTaskIdentification_Pre_Name_Invalid: {
+      ctx->name = 1;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Name_Self: {
+      ctx->name = RTEMS_SELF;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Name_Valid: {
+      ctx->name = rtems_build_name( 'T', 'A', 'S', 'K' );
+      break;
+    }
+  }
+
+  /* Epilogue */
+}
+
+static void ClassicTaskIdentification_Pre_Node_Prepare(
+  ClassicTaskIdentification_Context *ctx,
+  ClassicTaskIdentification_Pre_Node state
+)
+{
+  switch ( state ) {
+    case ClassicTaskIdentification_Pre_Node_Local: {
+      ctx->node = 1;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Node_Remote: {
+      ctx->node = 2;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Node_Invalid: {
+      ctx->node = 256;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Node_SearchAll: {
+      ctx->node = RTEMS_SEARCH_ALL_NODES;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Node_SearchOther: {
+      ctx->node = RTEMS_SEARCH_OTHER_NODES;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Node_SearchLocal: {
+      ctx->node = RTEMS_SEARCH_LOCAL_NODE;
+      break;
+    }
+  }
+}
+
+static void ClassicTaskIdentification_Pre_Id_Prepare(
+  ClassicTaskIdentification_Context *ctx,
+  ClassicTaskIdentification_Pre_Id state
+)
+{
+  switch ( state ) {
+    case ClassicTaskIdentification_Pre_Id_NullPtr: {
+      ctx->id = NULL;
+      break;
+    }
+
+    case ClassicTaskIdentification_Pre_Id_Valid: {
+      ctx->id_value = 0xffffffff;
+      ctx->id = &ctx->id_value;
+      break;
+    }
+  }
+}
+
+static void ClassicTaskIdentification_Post_Status_Check(
+  ClassicTaskIdentification_Context *ctx,
+  ClassicTaskIdentification_Post_Status state
+)
+{
+  switch ( state ) {
+    case ClassicTaskIdentification_Post_Status_Ok: {
+      T_rsc(ctx->status, RTEMS_SUCCESSFUL);
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Status_InvAddr: {
+      T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Status_InvName: {
+      T_rsc(ctx->status, RTEMS_INVALID_NAME);
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Status_InvNode: {
+      T_rsc(ctx->status, RTEMS_INVALID_NODE);
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Status_InvId: {
+      T_rsc(ctx->status, RTEMS_INVALID_ID);
+      break;
+    }
+  }
+}
+
+static void ClassicTaskIdentification_Post_Id_Check(
+  ClassicTaskIdentification_Context *ctx,
+  ClassicTaskIdentification_Post_Id state
+)
+{
+  switch ( state ) {
+    case ClassicTaskIdentification_Post_Id_Nop: {
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, 0xffffffff);
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Id_NullPtr: {
+      T_null(ctx->id)
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Id_Self: {
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, rtems_task_self());
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Id_LocalTask: {
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, ctx->id_local_task);
+      break;
+    }
+
+    case ClassicTaskIdentification_Post_Id_RemoteTask: {
+      T_eq_ptr(ctx->id, &ctx->id_value);
+      T_eq_u32(ctx->id_value, ctx->id_remote_task);
+      break;
+    }
+  }
+}
+
+/**
+ * @brief Setup brief description.
+ *
+ * Setup description.
+ */
+static void ClassicTaskIdentification_Setup(
+  ClassicTaskIdentification_Context *ctx
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_create(
+    rtems_build_name( 'T', 'A', 'S', 'K' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->id_local_task
+  );
+  T_assert_rsc_success( sc );
+}
+
+static void ClassicTaskIdentification_Setup_Wrap( void *arg )
+{
+  ClassicTaskIdentification_Setup( arg );
+}
+
+static void ClassicTaskIdentification_Teardown(
+  ClassicTaskIdentification_Context *ctx
+)
+{
+  rtems_status_code sc;
+
+  if ( ctx->id_local_task != 0 ) {
+    sc = rtems_task_delete( ctx->id_local_task );
+    T_rsc_success( sc );
+  }
+}
+
+static void ClassicTaskIdentification_Teardown_Wrap( void *arg )
+{
+  ClassicTaskIdentification_Teardown( arg );
+}
+
+static T_fixture ClassicTaskIdentification_Fixture = {
+  .setup = ClassicTaskIdentification_Setup_Wrap,
+  .stop = NULL,
+  .teardown = ClassicTaskIdentification_Teardown_Wrap,
+  .initial_context = &ClassicTaskIdentification_Instance
+};
+
+static const uint8_t ClassicTaskIdentification_TransitionMap[][ 2 ] = {
+  {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_Self
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_Self
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_Self
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_Self
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_Self
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_Self
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_LocalTask
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+#if defined(RTEMS_MULTIPROCESSING)
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_RemoteTask
+#else
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+#endif
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_LocalTask
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+#if defined(RTEMS_MULTIPROCESSING)
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_RemoteTask
+#else
+    ClassicTaskIdentification_Post_Status_InvName,
+    ClassicTaskIdentification_Post_Id_Nop
+#endif
+  }, {
+    ClassicTaskIdentification_Post_Status_InvAddr,
+    ClassicTaskIdentification_Post_Id_NullPtr
+  }, {
+    ClassicTaskIdentification_Post_Status_Ok,
+    ClassicTaskIdentification_Post_Id_LocalTask
+  }
+};
+
+/**
+ * @fn void T_case_body_ClassicTaskIdentification( void )
+ *
+ * @brief Test rtems_task_ident() brief description.
+ *
+ * Test rtems_task_ident() description.
+ */
+T_TEST_CASE_FIXTURE(
+  ClassicTaskIdentification,
+  &ClassicTaskIdentification_Fixture
+)
+{
+  ClassicTaskIdentification_Context *ctx;
+  size_t index;
+  ClassicTaskIdentification_Pre_Name in_0;
+
+  ctx = T_fixture_context();
+  index = 0;
+
+  for (
+    in_0 = ClassicTaskIdentification_Pre_Name_Invalid;
+    in_0 != ClassicTaskIdentification_Pre_Name_Valid + 1;
+    ++in_0
+  ) {
+    ClassicTaskIdentification_Pre_Node in_1;
+
+    for (
+      in_1 = ClassicTaskIdentification_Pre_Node_Local;
+      in_1 != ClassicTaskIdentification_Pre_Node_SearchLocal + 1;
+      ++in_1
+    ) {
+      ClassicTaskIdentification_Pre_Id in_2;
+
+      for (
+        in_2 = ClassicTaskIdentification_Pre_Id_NullPtr;
+        in_2 != ClassicTaskIdentification_Pre_Id_Valid + 1;
+        ++in_2
+      ) {
+        ClassicTaskIdentification_Pre_Name_Prepare( ctx, in_0 );
+        ClassicTaskIdentification_Pre_Node_Prepare( ctx, in_1 );
+        ClassicTaskIdentification_Pre_Id_Prepare( ctx, in_2 );
+        ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
+        ClassicTaskIdentification_Post_Status_Check(
+          ctx,
+          ClassicTaskIdentification_TransitionMap[ index ][ 0 ]
+        );
+        ClassicTaskIdentification_Post_Id_Check(
+          ctx,
+          ClassicTaskIdentification_TransitionMap[ index ][ 1 ]
+        );
+        ++index;
+      }
+    }
+  }
+}
+
+/** @} */
 
 /**
  * @defgroup RTEMSTestCaseTestCase Test Case
