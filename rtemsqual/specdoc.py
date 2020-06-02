@@ -549,7 +549,7 @@ def document(config: dict, item_cache: ItemCache) -> None:
     content = SphinxContent()
     for documenter in documenter_map.values():
         documenter.resolve_used_by()
-    documenter_names = set(documenter_map.keys())
+    documenter_names = set(documenter_map)
     content.section_label_prefix = "ReqEng"
     with content.section("Specification Items"):
         with content.section("Specification Item Hierarchy"):

@@ -315,16 +315,14 @@ class _ItemVerifier(_Verifier):
                               attr_info: Any, keys: List[str]) -> None:
         required_attr_info = type_info["required-attributes"]
         if isinstance(required_attr_info, str):
-            _ASSERT_KEYS[required_attr_info](self, path, set(attr_info.keys()),
-                                             keys)
+            _ASSERT_KEYS[required_attr_info](self, path, set(attr_info), keys)
         else:
             assert isinstance(required_attr_info, list)
             self.assert_keys_subset(path, set(required_attr_info), keys)
 
     def verify_dict(self, path: _Path, value: Any, type_info: Any) -> Set[str]:
         """ Verifies a dictionary value. """
-        keys = sorted(filter(lambda key: not key.startswith("_"),
-                             value.keys()))
+        keys = sorted(filter(lambda key: not key.startswith("_"), value))
         attr_info = type_info["attributes"]
         self._assert_required_keys(path, type_info, attr_info, keys)
         verified_keys = set()  # type: Set[str]
