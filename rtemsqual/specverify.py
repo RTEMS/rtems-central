@@ -371,11 +371,9 @@ class _ItemVerifier(_Verifier):
     def verify_list(self, path: _Path, value: Any, type_info: Any) -> Set[str]:
         """ Verifies a list value. """
         verifier = self._verifier_map[type_info["spec-type"]]
-        index = 0
-        for element in value:
+        for index, element in enumerate(value):
             verifier.verify(_Path(path.item, path.path + f"[{index}]"),
                             element)
-            index += 1
         return set()
 
     def verify_none(self, _path: _Path, _value: Any,

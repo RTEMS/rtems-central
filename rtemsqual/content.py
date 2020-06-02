@@ -201,8 +201,7 @@ class Content:
         if not content:
             return
         lines = make_lines(content)
-        index = 0
-        for line in lines:
+        for index, line in enumerate(lines):
             if line:
                 self._add_gap()
                 with context(self):
@@ -210,7 +209,6 @@ class Content:
                         _indent(lines[index:], self._indent,
                                 self._empty_line_indent))
                 break
-            index += 1
 
     def wrap(self,
              content: Optional[GenericContent],
@@ -277,15 +275,13 @@ class Content:
         wrapper.initial_indent = ""
         wrapper.subsequent_indent = ""
         wrapper.width = 79 - len(self._indent)
-        first = True
-        for block in text.split("\n\n"):
+        for index, block in enumerate(text.split("\n\n")):
             lines = wrapper.wrap(block)
-            if first:
+            if index == 0:
                 if 0 < len(last) >= indent_len:
                     self._lines[-1] = last[0:indent_len] + lines[0]
                     lines = lines[1:]
                 self.gap = True
-                first = False
             else:
                 self._lines.append(self._empty_line_indent)
             self._lines.extend(

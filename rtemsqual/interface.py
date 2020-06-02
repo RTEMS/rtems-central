@@ -217,12 +217,10 @@ class Node:
     def generate_compound(self) -> None:
         """ Generates a compound (struct or union). """
         with self._enum_struct_or_union():
-            index = 0
-            for definition in self.item["definition"]:
+            for index, definition in enumerate(self.item["definition"]):
                 self.content.add(
                     _add_definition(self, self.item, f"definition[{index}]",
                                     definition, Node._get_compound_definition))
-                index += 1
 
     def generate_enum(self) -> None:
         """ Generates an enum. """
@@ -316,13 +314,12 @@ class Node:
             content.append(f"{kind} {{")
             content.gap = False
             with content.indent():
-                index = 0
-                for compound_member in definition["definition"]:
+                for index, compound_member in enumerate(
+                        definition["definition"]):
                     content.add(
                         _add_definition(self, item, f"definition[{index}]",
                                         compound_member,
                                         Node._get_compound_definition))
-                    index += 1
             name = definition["name"]
             content.append(f"}} {name};")
         return content.lines
