@@ -290,7 +290,7 @@ class Node:
                 return self.mapper.substitute(text.strip("\n"))
         return text
 
-    def substitute_description(self, text: str) -> str:
+    def substitute_text(self, text: str) -> str:
         """
         Performs a variable substitution on a description using the item mapper
         of the node.
@@ -301,11 +301,9 @@ class Node:
 
     def _get_compound_definition(self, item: Item, definition: Any) -> Lines:
         content = CContent()
-        with content.doxygen_block():
-            content.add_brief_description(
-                self.substitute_description(definition["brief"]))
-            content.wrap(self.substitute_description(
-                definition["description"]))
+        content.add_description_block(
+            self.substitute_text(definition["brief"]),
+            self.substitute_text(definition["description"]))
         kind = definition["kind"]
         if kind == "member":
             member = self.substitute_code(definition["definition"]) + ";"
@@ -397,21 +395,18 @@ class Node:
         content = CContent()
         with content.doxygen_block():
             content.add_ingroup(_get_group_identifiers(ingroups))
-            content.add_brief_description(
-                self.substitute_description(item["brief"]))
-            content.wrap(self.substitute_description(item["description"]))
-            content.wrap(self.substitute_description(item["notes"]))
+            content.add_brief_description(self.substitute_text(item["brief"]))
+            content.wrap(self.substitute_text(item["description"]))
+            content.wrap(self.substitute_text(item["notes"]))
             if "params" in item:
                 for param in item["params"]:
-                    content.wrap(
-                        param["name"] + " " +
-                        self.substitute_description(param["description"]),
-                        initial_indent=_PARAM[param["dir"]])
+                    content.wrap(param["name"] + " " +
+                                 self.substitute_text(param["description"]),
+                                 initial_indent=_PARAM[param["dir"]])
             if "return" in item:
                 ret = item["return"]
                 for retval in ret["return-values"]:
-                    content.wrap(self.substitute_description(
-                        retval["description"]),
+                    content.wrap(self.substitute_text(retval["description"]),
                                  initial_indent=f"@retval {retval['value']} ")
                 content.wrap(ret["return"], initial_indent="@return ")
         return content
