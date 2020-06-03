@@ -602,7 +602,16 @@ class CContent(Content):
 
     def add_brief_description(self, description: Optional[str]) -> None:
         """ Adds a brief description. """
-        return self.wrap(description, initial_indent="@brief ")
+        self.wrap(description, initial_indent="@brief ")
+
+    def add_description_block(self, brief: Optional[str],
+                              description: Optional[str]) -> None:
+        """ Adds a description block. """
+        if brief or description:
+            with self.doxygen_block():
+                self.add_brief_description(brief)
+                self.wrap(description)
+            self.gap = False
 
     def add_ingroup(self, ingroups: List[str]) -> None:
         """ Adds an ingroup comment block. """

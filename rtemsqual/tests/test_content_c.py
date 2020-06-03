@@ -186,3 +186,28 @@ def test_add_brief_description():
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
   ARE DISCLAIMED.
 """
+
+
+def test_add_description_block():
+    content = CContent()
+    content.add_description_block("", None)
+    assert str(content) == ""
+    content.add_description_block("a", "b")
+    assert str(content) == """/**
+ * @brief a
+ *
+ * b
+ */
+"""
+    content = CContent()
+    content.add_description_block("a", None)
+    assert str(content) == """/**
+ * @brief a
+ */
+"""
+    content = CContent()
+    content.add_description_block(None, "b")
+    assert str(content) == """/**
+ * b
+ */
+"""
