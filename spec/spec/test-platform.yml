@@ -14,13 +14,13 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      name:
-        description: |
-          It shall be the human readable name of the test platform.
-        spec-type: str
       description:
         description: |
           It shall be the description of the test platform.
+        spec-type: str
+      name:
+        description: |
+          It shall be the human readable name of the test platform.
         spec-type: str
     description: |
       Please note:
