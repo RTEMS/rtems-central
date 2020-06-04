@@ -5,6 +5,7 @@ enabled-by: true
 links: []
 non-functional-type: documentation
 rationale: null
+references: []
 requirement-type: non-functional
 text: |
   The system shall have a glossary of terms.

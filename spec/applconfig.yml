@@ -5,6 +5,7 @@ enabled-by: true
 links: []
 non-functional-type: interface-requirement
 rationale: null
+references: []
 requirement-type: non-functional
 text: |
   The system shall provide configuration options to the application to set
