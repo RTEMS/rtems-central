@@ -13,6 +13,7 @@ spec-info:
       in:
       - capability
       - dependability-function
+      - directive
       - function
       - operational
       - safety-function

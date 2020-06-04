@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes defines for each pre-condition the set of states
+      before the directive call for a transition in a directive requirement.
+    generic-attributes:
+      description: |
+        There shall be exactly one generic attribute key for each
+        pre-condition.  The key name shall be the pre-condition name.  The
+        value of each generic attribute shall be a set of states of the
+        pre-condition.
+      key-spec-type: requirement-directive-name
+      value-spec-type: requirement-directive-transition-pre-states
+    mandatory-attributes: all
+spec-name: Directive Requirement Transition Pre-Conditions
+spec-type: requirement-directive-transition-pre
+type: spec

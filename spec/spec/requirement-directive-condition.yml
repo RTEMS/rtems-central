@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: null
+        spec-type: requirement-directive-name
+      states:
+        description: null
+        spec-type: requirement-directive-state-list
+      test-epilogue:
+        description: |
+          If the value is present, then it shall be the test epilogue code.
+          The epilogue code is placed in the test condition preparation or
+          check before the state-specific code.
+        spec-type: optional-str
+      test-prologue:
+        description: |
+          If the value is present, then it shall be the test prologue code.
+          The prologue code is placed in the test condition preparation or
+          check after the state-specific code.
+        spec-type: optional-str
+    description: |
+      This set of attributes defines a directive pre-condition or
+      post-condition.
+    mandatory-attributes: all
+spec-name: Directive Requirement Condition
+spec-type: requirement-directive-condition
+type: spec

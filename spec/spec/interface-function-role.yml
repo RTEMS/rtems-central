@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: interface-function
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      It defines the interface function role of links.  It is used to indicate
+      that a ${requirement-directive:/spec-name} item specifies functional
+      requirements of an ${interface-function:/spec-name} or
+      a ${interface-macro:/spec-name} item.
+    mandatory-attributes: all
+spec-name: Interface Function Link Role
+spec-type: interface-function-role
+type: spec

@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+    - re: ^[A-Z][a-zA-Z0-9]+$
+    description: |
+      It shall be the name of a condition or a state of a condition used to
+      define pre-conditions and post-conditions of a directive requirement.  It
+      shall be formatted in CamelCase.  It should be brief and abbreviated.
+      The rationale for this is that the names are used in tables and the
+      horizontal space is limited by the page width.  The more conditions you
+      have in a directive requirement, the shorter the names should be.
+spec-name: Directive Requirement Name
+spec-type: requirement-directive-name
+type: spec

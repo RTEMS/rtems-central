@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      brief:
+        description: |
+          It shall be the test context member brief description.
+        spec-type: optional-str
+      description:
+        description: |
+          It shall be the test context member description.
+        spec-type: optional-str
+      member:
+        description: |
+          It shall be the test context member definition.  It shall be a valid
+          C structure member definition without a trailing ``;``.
+        spec-type: str
+    description: |
+      This set of attributes defines a directive requirement test context
+      member.
+    mandatory-attributes: all
+  none: null
+spec-name: Directive Requirement Test Context Member
+spec-type: requirement-directive-test-context
+type: spec

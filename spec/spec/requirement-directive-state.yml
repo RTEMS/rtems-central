@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: null
+        spec-type: requirement-directive-name
+      test-code:
+        description: |
+          It shall be the test code to prepare or check the state of the
+          condition.
+        spec-type: str
+      text:
+        description: |
+          It shall define the state of the condition.
+        spec-type: requirement-text
+    description: |
+      This set of attributes defines a directive pre-condition or
+      post-condition state.
+    mandatory-attributes: all
+spec-name: Directive Requirement State
+spec-type: requirement-directive-state
+type: spec

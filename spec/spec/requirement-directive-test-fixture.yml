@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      brief:
+        description: |
+          It shall be the test fixture method brief description.
+        spec-type: optional-str
+      code:
+        description: |
+          It shall be the test fixture method code.  The code may use a local
+          variable ``ctx`` which points to the test context, see
+          ${requirement-directive-test-context:/spec-name}.
+        spec-type: str
+      description:
+        description: |
+          It shall define the state of the condition.
+        spec-type: requirement-text
+        description: |
+          It shall be the test fixture method description.
+        spec-type: optional-str
+    description: |
+      This set of attributes defines a directive requirement test fixture
+      method.
+    mandatory-attributes: all
+  none: null
+spec-name: Directive Requirement Test Fixture Method
+spec-type: requirement-directive-test-fixture
+type: spec

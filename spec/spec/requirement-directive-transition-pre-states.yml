@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  list:
+    description: |
+      The list defines the set of states of the pre-condition in the
+      transition.
+    spec-type: requirement-directive-name
+  str:
+    assert:
+      eq: all
+    description: |
+      The value represents all states of the pre-condition in the transition.
+spec-name: Directive Requirement Transition Pre-Condition State Set
+spec-type: requirement-directive-transition-pre-states
+type: spec

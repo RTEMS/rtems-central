@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      enabled-by:
+        description: |
+          The transition map may be customized to support configuration
+          variants through this attribute.  The default transitions
+          (``enabled-by: true``) shall be specified before the customized
+          variants in the list.
+        spec-type: enabled-by
+      post-conditions:
+        description: null
+        spec-type: requirement-directive-transition-post
+      pre-conditions:
+        description: null
+        spec-type: requirement-directive-transition-pre
+    description: |
+      This set of attributes defines the transition from a set of
+      pre-conditions to post-conditions through a directive call in a directive
+      requirement.
+    mandatory-attributes: all
+spec-name: Directive Requirement Transition
+spec-type: requirement-directive-transition
+type: spec
