@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This type defines the control block used to manage each a mode set.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${/if/c/uint32_t:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/modes
+name: rtems_mode
+notes: null
+type: interface
