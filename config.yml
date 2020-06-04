@@ -41,7 +41,7 @@ spec:
   - external/rtems/spec
 glossary:
   project-groups:
-  - /glos/general
+  - /glossary-general
   project-target: external/rtems-docs/c-user/glossary.rst
   documents:
   - rest-source-paths:

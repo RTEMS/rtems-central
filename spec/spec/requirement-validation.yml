@@ -25,10 +25,10 @@ spec-info:
 
           * *By analysis*: A statement shall be provided how the requirement is
             met, by analysing static properties of the
-            ${/glos/term/softwareproduct:/term}.
+            ${/glossary/softwareproduct:/term}.
 
           * *By inspection*: A statement shall be provided how the requirement
-            is met, by inspection of the ${/glos/term/sourcecode:/term}.
+            is met, by inspection of the ${/glossary/sourcecode:/term}.
 
           * *By review of design*: A rationale shall be provided to demonstrate
             how the requirement is satisfied implicitly by the software design.

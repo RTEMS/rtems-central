@@ -38,7 +38,7 @@ spec-info:
       be called *specification items* or just *items* if it is clear from the
       context.
 
-      The specification items are stored in files in ${/glos/term/yaml:/term}
+      The specification items are stored in files in ${/glossary/yaml:/term}
       format with a defined set of key-value pairs called attributes.  Each
       attribute key name shall be a :ref:`SpecTypeName`.  In particular, key
       names which begin with an underscore (``_``) are reserved for internal
