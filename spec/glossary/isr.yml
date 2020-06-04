@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: ISR
 text: |
-  An acronym for ${interruptserviceroutine:/term}.
+  This term is an acronym for ${interruptserviceroutine:/term}.
 type: glossary

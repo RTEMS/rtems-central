@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: TMCB
 text: |
-  An acronym for ${timercontrolblock:/term}.
+  This term is an acronym for ${timercontrolblock:/term}.
 type: glossary

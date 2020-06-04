@@ -8,5 +8,6 @@ links:
   uid: ../glossary-general
 term: MPCI
 text: |
-  An acronym for ${multiprocessorcommunicationsinterfacelayer:/term}.
+  This term is an acronym for
+  ${multiprocessorcommunicationsinterfacelayer:/term}.
 type: glossary

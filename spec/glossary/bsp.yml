@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: BSP
 text: |
-  An acronym for ${boardsupportpackage:/term}.
+  This term is an acronym for ${boardsupportpackage:/term}.
 type: glossary

@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: ASR
 text: |
-  An acronym for ${asynchronoussignalroutine:/term}.
+  This term is an acronym for ${asynchronoussignalroutine:/term}.
 type: glossary

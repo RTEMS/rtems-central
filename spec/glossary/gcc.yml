@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: GCC
 text: |
-  An acronym for `GNU Compiler Collection <https://gcc.gnu.org/>`_.
+  This term is an acronym for `GNU Compiler Collection <https://gcc.gnu.org/>`_.
 type: glossary

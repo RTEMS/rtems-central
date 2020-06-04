@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: PXCB
 text: |
-  An acronym for ${proxycontrolblock:/term}.
+  This term is an acronym for ${proxycontrolblock:/term}.
 type: glossary

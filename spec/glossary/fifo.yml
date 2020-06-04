@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: FIFO
 text: |
-  An acronym for ${firstinfirstout:/term}.
+  This term is an acronym for ${firstinfirstout:/term}.
 type: glossary

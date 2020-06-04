@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: PTCB
 text: |
-  An acronym for ${partitioncontrolblock:/term}.
+  This term is an acronym for ${partitioncontrolblock:/term}.
 type: glossary

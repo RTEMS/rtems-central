@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: CPU
 text: |
-  An acronym for ${centralprocessingunit:/term}.
+  This term is an acronym for ${centralprocessingunit:/term}.
 type: glossary

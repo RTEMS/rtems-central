@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: SMCB
 text: |
-  An acronym for ${semaphorecontrolblock:/term}.
+  This term is an acronym for ${semaphorecontrolblock:/term}.
 type: glossary

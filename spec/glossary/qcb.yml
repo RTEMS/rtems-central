@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: QCB
 text: |
-  An acronym for ${messagequeuecontrolblock:/term}.
+  This term is an acronym for ${messagequeuecontrolblock:/term}.
 type: glossary

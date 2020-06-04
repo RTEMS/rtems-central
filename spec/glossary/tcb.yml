@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: TCB
 text: |
-  An acronym for ${taskcontrolblock:/term}.
+  This term is an acronym for ${taskcontrolblock:/term}.
 type: glossary

@@ -8,5 +8,5 @@ links:
   uid: ../glossary-general
 term: RNCB
 text: |
-  An acronym for ${regioncontrolblock:/term}.
+  This term is an acronym for ${regioncontrolblock:/term}.
 type: glossary
