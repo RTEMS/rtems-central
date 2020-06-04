@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: function
+links:
+- role: interface-function
+  uid: /if/rtems/message/ident
+requirement-type: functional
+text: |
+  The ${/if/rtems/message/ident:/name} directive shall identify an Classic API
+  message queue class object by its name as specified by ${../ident}.
+type: requirement
