@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: BSD-2-Clause
-""" Generates the interface header files from the specification. """
+""" Generates files of the RTEMS sources from the specification. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -25,13 +25,11 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rtemsqual.interface
-import rtemsqual.items
-import rtemsqual.util
+import rtemsqual
 
 
 def main() -> None:
-    """ Generates the interface header files from the specification. """
+    """ Generates files of the RTEMS sources from the specification. """
     config = rtemsqual.util.load_config("config.yml")
     item_cache = rtemsqual.items.ItemCache(config["spec"])
     rtemsqual.interface.generate(config["interface"], item_cache)
