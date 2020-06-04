@@ -25,7 +25,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 __all__ = [
-    "applconfig", "build", "content", "glossary", "items", "util", "validation"
+    "applconfig", "build", "content", "glossary", "items", "specdoc",
+    "specverify", "util", "validation"
 ]
 
 import rtemsqual.applconfig
@@ -33,5 +34,7 @@ import rtemsqual.build
 import rtemsqual.content
 import rtemsqual.glossary
 import rtemsqual.items  # noqa: F401
+import rtemsqual.specdoc
+import rtemsqual.specverify
 import rtemsqual.util  # noqa: F401
 import rtemsqual.validation  # noqa: F401
