@@ -50,7 +50,7 @@ spec-info:
         spec-type: optional-str
       spec-example:
         description: |
-          If this value is present, then tt shall be an example of the
+          If the value is present, then it shall be an example of the
           specification type.
         spec-type: optional-str
       spec-info:
