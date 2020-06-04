@@ -19,7 +19,8 @@ spec-info:
         ${build-ada-test-program:/spec-name} item.  Due to the processing order
         of items, there is no way to check if the name specified by the
         attribute key is valid.
-      spec-type: build-test-state
+      key-spec-type: name
+      value-spec-type: build-test-state
     mandatory-attributes: all
 spec-name: Build Option Set Test State Action
 spec-type: build-action-set-test-state

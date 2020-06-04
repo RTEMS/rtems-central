@@ -13,9 +13,12 @@ spec-info:
     description: null
     generic-attributes:
       description: |
-        The generic attributes specify an attribute set.
-      spec-type: spec-attribute-value
+        Each generic attribute specifies an explicit attribute of the attribute
+        set.  The key of the each generic attribute defines the attribute key
+        of the explicit attribute.
+      key-spec-type: name
+      value-spec-type: spec-attribute-value
     mandatory-attributes: none
-spec-name: Specification Attribute
+spec-name: Specification Explicit Attributes
 spec-type: spec-attributes
 type: spec

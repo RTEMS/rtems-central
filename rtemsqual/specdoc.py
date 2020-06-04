@@ -381,11 +381,14 @@ class _Documenter:
                              "generic attributes may be specified.")
             else:
                 content.paste("Generic attributes may be specified.")
-            content.paste("Each attribute key shall be a :ref:`SpecTypeName`.")
-            type_phrase = self.get_value_type_phrase(
-                "The attribute value", "shall",
-                info["generic-attributes"]["spec-type"])
-            content.paste(type_phrase)
+            content.paste(
+                self.get_value_type_phrase(
+                    "Each generic attribute key", "shall",
+                    info["generic-attributes"]["key-spec-type"]))
+            content.paste(
+                self.get_value_type_phrase(
+                    "Each generic attribute value", "shall",
+                    info["generic-attributes"]["value-spec-type"]))
             content.paste_and_add(
                 self._substitute(info["generic-attributes"]["description"]))
 
@@ -479,7 +482,9 @@ class _Documenter:
             for attribute in info["attributes"].values():
                 self._add_used_by(attribute["spec-type"])
             if "generic-attributes" in info:
-                self._add_used_by(info["generic-attributes"]["spec-type"])
+                self._add_used_by(info["generic-attributes"]["key-spec-type"])
+                self._add_used_by(
+                    info["generic-attributes"]["value-spec-type"])
 
 
 _DOCUMENT = {

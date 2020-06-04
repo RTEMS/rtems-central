@@ -185,11 +185,6 @@ def _assert_type(path: _Path, value: Any, type_expected: str) -> bool:
 NAME = re.compile(r"^([a-z][a-z0-9-]*|SPDX-License-Identifier)$")
 
 
-def _verify_name(path: _Path, value: Any) -> None:
-    if _assert_type(path, value, "str") and NAME.search(value) is None:
-        logging.error("%s invalid name: %s", _prefix(path), value)
-
-
 def _prefix(prefix: _Path) -> str:
     if prefix.path.endswith(":"):
         return prefix.path
@@ -221,7 +216,8 @@ class _NameVerifier(_Verifier):
     def verify(self, path: _Path, value: Any) -> Set[str]:
         """ Verifies a name. """
         self.verify_info(path)
-        _verify_name(path, value)
+        if _assert_type(path, value, "str") and NAME.search(value) is None:
+            logging.error("%s invalid name: %s", _prefix(path), value)
         return set()
 
 
@@ -257,9 +253,8 @@ class _ItemVerifier(_Verifier):
                               expected, value)
         return set()
 
-    def _verify_key(self, path: _Path, value: Any, type_info: Any,
-                    key: Any) -> None:
-        type_name = type_info["spec-type"]
+    def _verify_key(self, path: _Path, value: Any, type_name: str,
+                    key: str) -> None:
         if type_name in self._verifier_map:
             self._verifier_map[type_name].verify(
                 _Path(path.item, path.path + f"/{key}"), value[key])
@@ -328,12 +323,16 @@ class _ItemVerifier(_Verifier):
         verified_keys = set()  # type: Set[str]
         for key in keys:
             if key in attr_info:
-                self._verify_key(path, value, attr_info[key], key)
+                self._verify_key(path, value, attr_info[key]["spec-type"], key)
                 verified_keys.add(key)
             elif "generic-attributes" in type_info:
-                _verify_name(path, key)
-                self._verify_key(path, value, type_info["generic-attributes"],
-                                 key)
+                key_as_value = {key: key}
+                self._verify_key(
+                    path, key_as_value,
+                    type_info["generic-attributes"]["key-spec-type"], key)
+                self._verify_key(
+                    path, value,
+                    type_info["generic-attributes"]["value-spec-type"], key)
                 verified_keys.add(key)
         if self._subtype_key:
             if self._subtype_key in keys:

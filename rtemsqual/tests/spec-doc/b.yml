@@ -21,7 +21,8 @@ spec-info:
     description: null
     generic-attributes:
       description: null
-      spec-type: list-only
+      key-spec-type: name
+      value-spec-type: list-only
     mandatory-attributes: all
 spec-name: B
 spec-type: b

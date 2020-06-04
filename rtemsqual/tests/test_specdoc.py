@@ -86,8 +86,8 @@ A value of this type shall be of one of the following variants:
       The attribute value shall be a :ref:`SpecTypeName`.
 
   In addition to the explicit attributes, generic attributes may be specified.
-  Each attribute key shall be a :ref:`SpecTypeName`. The attribute value shall
-  be a :ref:`SpecTypeRoot`.
+  Each generic attribute key shall be a :ref:`SpecTypeName`. Each generic
+  attribute value shall be a :ref:`SpecTypeRoot`.
 
 * The value may be a floating-point number. The value shall be equal to 0.0.
 
@@ -219,9 +219,9 @@ This type refines the following types:
 
 * :ref:`SpecTypeRoot` though the ``type`` attribute if the value is ``b``
 
-Generic attributes may be specified. Each attribute key shall be a
-:ref:`SpecTypeName`. The attribute value shall be a list. Each list element
-shall be a string.
+Generic attributes may be specified. Each generic attribute key shall be a
+:ref:`SpecTypeName`. Each generic attribute value shall be a list. Each list
+element shall be a string.
 
 .. _ReqEngSpecificationAttributeSetsAndValueTypes:
 
@@ -271,6 +271,8 @@ The value shall be a string. A string is a valid name if it matches with the
 ``^([a-z][a-z0-9-]*|SPDX-License-Identifier)$`` regular expression.
 
 This type is used by the following types:
+
+* :ref:`SpecTypeB`
 
 * :ref:`SpecTypeD`
 

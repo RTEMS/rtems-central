@@ -18,7 +18,8 @@ spec-info:
     description: null
     generic-attributes:
       description: null
-      spec-type: root
+      key-spec-type: name
+      value-spec-type: root
     mandatory-attributes: all
   float:
     assert:

@@ -10,7 +10,8 @@ spec-info:
   dict:
     attributes: {}
     generic-attributes:
-      spec-type: str
+      key-spec-type: name
+      value-spec-type: str
     mandatory-attributes: none
 spec-type: any-dict
 type: spec
