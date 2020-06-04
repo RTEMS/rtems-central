@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: BSD-2-Clause
-""" Helps to document the specification. """
+""" Generates files of the RTEMS documentation from the specification. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -25,16 +25,16 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rtemsqual.items
-import rtemsqual.specdoc
-import rtemsqual.util
+import rtemsqual
 
 
 def main() -> None:
-    """ Documents the specification. """
+    """ Generates files of the RTEMS documentation from the specification. """
     config = rtemsqual.util.load_config("config.yml")
     item_cache = rtemsqual.items.ItemCache(config["spec"])
+    rtemsqual.applconfig.generate(config["appl-config"], item_cache)
     rtemsqual.specdoc.document(config["spec-documentation"], item_cache)
+    rtemsqual.glossary.generate(config["glossary"], item_cache)
 
 
 if __name__ == "__main__":
