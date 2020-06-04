@@ -25,7 +25,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies a check done using the C++ compiler.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Option C++ Compiler Check Action
 spec-type: build-action-check-cxx
 type: spec

@@ -30,7 +30,7 @@ spec-info:
         spec-type: requirement-text
     description: |
       This set of attributes specifies an application configuration group.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Application Configuration Group Item Type
 spec-type: appl-config-group
 type: spec

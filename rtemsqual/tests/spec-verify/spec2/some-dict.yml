@@ -11,7 +11,7 @@ spec-info:
     attributes:
       a:
         spec-type: none
-    required-attributes: none
+    mandatory-attributes: none
   none: null
 spec-type: some-dict
 type: spec

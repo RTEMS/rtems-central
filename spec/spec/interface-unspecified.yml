@@ -20,7 +20,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies an unspecified interface.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Unspecified Item Type
 spec-type: interface-unspecified
 type: spec

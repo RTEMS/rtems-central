@@ -44,7 +44,7 @@ spec-info:
         spec-type: requirement-text
     description: |
       This set of attributes specifies a requirement.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Requirement Item Type
 spec-type: requirement
 type: spec

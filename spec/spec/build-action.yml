@@ -219,7 +219,7 @@ spec-info:
         spec-type: none
     description: |
       This set of attributes specifies a build option action.
-    required-attributes: exactly-one
+    mandatory-attributes: exactly-one
 spec-name: Build Option Action
 spec-type: build-action
 type: spec

@@ -20,7 +20,7 @@ spec-info:
         spec-type: name
     description: |
       This set of attributes specifies a build item.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Item Type
 spec-type: build
 type: spec

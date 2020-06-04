@@ -100,7 +100,7 @@ spec-info:
     description: |
       This set of attributes specifies a build script.  The optional attributes
       may be required by commands executed through the scripts.
-    required-attributes:
+    mandatory-attributes:
     - do-build
     - do-configure
     - prepare-build

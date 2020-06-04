@@ -32,7 +32,7 @@ spec-info:
         spec-type: interface-description
     description: |
       This set of attributes specifies an enum.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Enum Item Type
 spec-type: interface-enum
 type: spec

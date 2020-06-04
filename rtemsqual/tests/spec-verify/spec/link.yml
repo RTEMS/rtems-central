@@ -20,7 +20,7 @@ spec-info:
         spec-type: uid
     description: |
       This attribute value shall a link to a specification item.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Link
 spec-type: link
 type: spec

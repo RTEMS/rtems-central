@@ -59,12 +59,12 @@ spec-info:
         spec-type: spec-assert-int-list
     description: |
       Each attribute defines an operator.
-    required-attributes: exactly-one
+    mandatory-attributes: exactly-one
   list:
     description: |
       This list of expressions evaluates to the *logical or* of the evaluation
       results of the expressions in the list.
     spec-type: spec-assert-int
-spec-name: Integer Assert Specification
+spec-name: Specification Integer Assert
 spec-type: spec-assert-int
 type: spec

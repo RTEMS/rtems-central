@@ -14,7 +14,7 @@ spec-info:
         description: null
         spec-type: float
     description: null
-    required-attributes:
+    mandatory-attributes:
     - c
 spec-name: C
 spec-type: c

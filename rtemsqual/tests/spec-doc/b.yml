@@ -22,7 +22,7 @@ spec-info:
     generic-attributes:
       description: null
       spec-type: list-only
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: B
 spec-type: b
 type: spec

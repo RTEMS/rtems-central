@@ -22,7 +22,7 @@ spec-info:
     description: |
       This set of attributes specifies an application configuration feature
       option.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Application Configuration Feature Option Item Type
 spec-type: appl-config-option-feature
 type: spec

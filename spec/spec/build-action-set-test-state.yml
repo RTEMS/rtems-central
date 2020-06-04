@@ -20,7 +20,7 @@ spec-info:
         of items, there is no way to check if the name specified by the
         attribute key is valid.
       spec-type: build-test-state
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Option Set Test State Action
 spec-type: build-action-set-test-state
 type: spec

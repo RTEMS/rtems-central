@@ -35,7 +35,7 @@ spec-info:
       written to the configuration header file during the configure command
       execution.  To have all configuration defines from sibling items
       available it is recommended to link them in the proper order.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Configuration Header Item Type
 spec-type: build-config-header
 type: spec

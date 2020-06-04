@@ -44,7 +44,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies a test suite.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Test Suite Item Type
 spec-type: test-suite
 type: spec

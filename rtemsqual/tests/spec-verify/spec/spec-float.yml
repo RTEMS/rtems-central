@@ -19,13 +19,12 @@ spec-info:
         spec-type: spec-assert-float
       description:
         description: |
-          This mandatory attribute shall be the description of the specified
-          floating-point value.
+          It shall be the description of the specified floating-point value.
         spec-type: optional-str
     description: |
-      This attribute set specifies a floating-point value.
-    required-attributes:
+      This set of attributes specifies a floating-point value.
+    mandatory-attributes:
     - description
-spec-name: Floating-Point Value Specification
+spec-name: Specification Floating-Point Value
 spec-type: spec-float
 type: spec

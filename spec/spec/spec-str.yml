@@ -22,7 +22,7 @@ spec-info:
         spec-type: optional-str
     description: |
       This set of attributes specifies a string.
-    required-attributes:
+    mandatory-attributes:
     - description
 spec-name: Specification String Value
 spec-type: spec-str

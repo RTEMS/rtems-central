@@ -40,7 +40,7 @@ spec-info:
         spec-type: spec-str
     description: |
       This set of attributes specifies attribute values.
-    required-attributes: at-least-one
+    mandatory-attributes: at-least-one
 spec-name: Specification Information
 spec-type: spec-info
 type: spec

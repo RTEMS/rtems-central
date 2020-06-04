@@ -72,7 +72,7 @@ spec-info:
         spec-type: build-option-name
     description: |
       This set of attributes specifies a build option.
-    required-attributes:
+    mandatory-attributes:
     - actions
     - default
     - default-by-variant

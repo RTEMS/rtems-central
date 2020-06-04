@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the requirement validation role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Requirement Validation Link Role
 spec-type: requirement-validation-role
 type: spec

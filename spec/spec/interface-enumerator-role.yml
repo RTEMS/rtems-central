@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the interface enumerator role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Enumerator Link Role
 spec-type: interface-enumerator-role
 type: spec

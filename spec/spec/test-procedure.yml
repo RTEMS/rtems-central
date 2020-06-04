@@ -34,7 +34,7 @@ spec-info:
            This item type is work in progress.
 
       This set of attributes specifies a test procedure.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Test Procedure Item Type
 spec-type: test-procedure
 type: spec

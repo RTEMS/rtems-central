@@ -45,7 +45,7 @@ spec-info:
       use in tools.
 
       This is the root specification item type.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Root Item Type
 spec-type: root
 type: spec

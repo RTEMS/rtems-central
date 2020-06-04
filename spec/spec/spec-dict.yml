@@ -12,8 +12,7 @@ spec-info:
     attributes:
       attributes:
         description: |
-          It shall be the specification of the set of explicitly defined
-          attributes.
+          It shall be the specification of the set of explicit attributes.
         spec-type: spec-attributes
       description:
         description: |
@@ -24,16 +23,16 @@ spec-info:
           It shall be the specification of the generic attributes of the
           attribute set.
         spec-type: spec-generic-attributes
-      required-attributes:
+      mandatory-attributes:
         description: |
-          It shall be the set of required attributes of the attribute set.
-        spec-type: spec-required-attributes
+          It shall be the set of mandatory attributes of the attribute set.
+        spec-type: spec-mandatory-attributes
     description: |
       This set of attributes specifies a set of attributes.
-    required-attributes:
+    mandatory-attributes:
     - attributes
     - description
-    - required-attributes
+    - mandatory-attributes
 spec-name: Specification Attribute Set
 spec-type: spec-dict
 type: spec

@@ -19,7 +19,7 @@ spec-info:
       exactly one link with the ${interface-placement:/spec-name} to an
       ${interface-domain:/spec-name} item.  This link defines the interface
       domain of the container.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Container Item Type
 spec-type: interface-container
 type: spec

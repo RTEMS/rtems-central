@@ -6,13 +6,12 @@ links:
 - role: spec-member
   uid: root
 spec-description: |
-  This attribute value defines which of the explicitly defined attributes are
-  required.
+  It defines which explicit attributes are mandatory.
 spec-example: null
 spec-info:
   list:
     description: |
-      This list defines the required attributes through their keys.
+      The list defines the mandatory attributes through their key names.
     spec-type: name
   str:
     assert:
@@ -23,8 +22,9 @@ spec-info:
       - exactly-one
       - none
     description: |
-      This string defines the how many explicitly defined attributes are
-      required.
-spec-name: Required Attributes Specification
-spec-type: spec-required-attributes
+      It defines how many explicit attributes are mandatory.  If `none` is
+      used, then none of the explicit attributes is mandatory, they are all
+      optional.
+spec-name: Specification Mandatory Attributes
+spec-type: spec-mandatory-attributes
 type: spec

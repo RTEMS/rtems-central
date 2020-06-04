@@ -121,9 +121,9 @@ INFO type: spec-info
 INFO type: spec-int
 INFO type: spec-invalid
 INFO type: spec-list
+INFO type: spec-mandatory-attributes
 INFO type: spec-member
 INFO type: spec-refinement
-INFO type: spec-required-attributes
 INFO type: spec-str
 INFO type: str
 INFO type: str-contains
@@ -142,7 +142,7 @@ INFO /c1:/links[0]/uid: verify using type 'uid'
 ERROR /c1:/links[0]: unknown subtype for key 'role' for type 'link': x
 INFO /c1:/type: verify using type 'name'
 INFO /c1: verify using type 'c'
-ERROR /c1: missing required keys for type 'c': ['any-dict', 'bool', 'float', 'int', 'must-be-true', 'other-int', 'str', 'str-contains']
+ERROR /c1: missing mandatory keys for type 'c': ['any-dict', 'bool', 'float', 'int', 'must-be-true', 'other-int', 'str', 'str-contains']
 INFO /c1:/dict: verify using type 'some-dict'
 INFO /c1:/dict/a: verify using type 'none'
 INFO /c1:/list: verify using type 'some-list'
@@ -156,7 +156,7 @@ INFO /c2:/enabled-by: verify using type 'enabled-by'
 INFO /c2:/links: verify using type 'links'
 INFO /c2:/type: verify using type 'name'
 INFO /c2: verify using type 'c'
-ERROR /c2: missing required keys for type 'c': ['any-dict', 'bool', 'float', 'int', 'must-be-true', 'other-int', 'str', 'uid']
+ERROR /c2: missing mandatory keys for type 'c': ['any-dict', 'bool', 'float', 'int', 'must-be-true', 'other-int', 'str', 'uid']
 INFO /c2:/dict: verify using type 'some-dict'
 ERROR /c2:/dict: has unverfied keys for type 'some-dict' and its subtypes: ['b']
 INFO /c2:/list: verify using type 'some-list'
@@ -170,7 +170,7 @@ INFO /c3:/enabled-by: verify using type 'enabled-by'
 INFO /c3:/links: verify using type 'links'
 INFO /c3:/type: verify using type 'name'
 INFO /c3: verify using type 'c'
-ERROR /c3: missing required keys for type 'c': ['any-dict', 'bool', 'float', 'int', 'other-int']
+ERROR /c3: missing mandatory keys for type 'c': ['any-dict', 'bool', 'float', 'int', 'other-int']
 INFO /c3:/dict: verify using type 'some-dict'
 ERROR /c3:/dict: expected value of types ['dict', 'none'] for type 'some-dict', actual type 'list'
 INFO /c3:/list: verify using type 'some-list'
@@ -234,7 +234,7 @@ INFO /d3:/enabled-by: verify using type 'enabled-by'
 INFO /d3:/links: verify using type 'links'
 INFO /d3:/type: verify using type 'name'
 INFO /d3: verify using type 'd'
-ERROR /d3: missing required keys for type 'd': ['d-type']
+ERROR /d3: missing mandatory keys for type 'd': ['d-type']
 ERROR /d3: subtype key 'd-type' not present for type 'd'
 INFO /e: verify using type 'root'
 INFO /e:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -339,7 +339,7 @@ ERROR /keys-exactly-one-2: not exactly one key out of ['key-a', 'key-b'] is pres
 INFO /keys-exactly-one-2:/key-a: verify using type 'none'
 INFO /keys-exactly-one-2:/key-b: verify using type 'none'
 INFO /notype: verify using type 'root'
-ERROR /notype: missing required keys for type 'root': ['type']
+ERROR /notype: missing mandatory keys for type 'root': ['type']
 INFO /notype:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
 INFO /notype:/copyrights: verify using type 'copyrights'
 INFO /notype:/copyrights[0]: verify using type 'copyright'
@@ -421,7 +421,7 @@ INFO /spec/enabled-by:/spec-info/dict/attributes/or: verify using type 'spec-att
 INFO /spec/enabled-by:/spec-info/dict/attributes/or/description: verify using type 'optional-str'
 INFO /spec/enabled-by:/spec-info/dict/attributes/or/spec-type: verify using type 'name'
 INFO /spec/enabled-by:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/enabled-by:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/enabled-by:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/enabled-by:/spec-info/list: verify using type 'spec-list'
 INFO /spec/enabled-by:/spec-info/list/description: verify using type 'optional-str'
 INFO /spec/enabled-by:/spec-info/list/spec-type: verify using type 'name'
@@ -473,7 +473,7 @@ INFO /spec/link:/spec-info/dict/attributes/uid: verify using type 'spec-attribut
 INFO /spec/link:/spec-info/dict/attributes/uid/description: verify using type 'optional-str'
 INFO /spec/link:/spec-info/dict/attributes/uid/spec-type: verify using type 'name'
 INFO /spec/link:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/link:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/link:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/link:/spec-name: verify using type 'optional-str'
 INFO /spec/link:/spec-type: verify using type 'name'
 INFO /spec/links: verify using type 'root'
@@ -565,7 +565,7 @@ INFO /spec/root:/spec-info/dict/attributes/type: verify using type 'spec-attribu
 INFO /spec/root:/spec-info/dict/attributes/type/description: verify using type 'optional-str'
 INFO /spec/root:/spec-info/dict/attributes/type/spec-type: verify using type 'name'
 INFO /spec/root:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/root:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/root:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/root:/spec-name: verify using type 'optional-str'
 INFO /spec/root:/spec-type: verify using type 'name'
 INFO /spec/spdx-license-identifier: verify using type 'root'
@@ -633,7 +633,7 @@ INFO /spec/spec:/spec-info/dict/attributes/spec-type: verify using type 'spec-at
 INFO /spec/spec:/spec-info/dict/attributes/spec-type/description: verify using type 'optional-str'
 INFO /spec/spec:/spec-info/dict/attributes/spec-type/spec-type: verify using type 'name'
 INFO /spec/spec:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec:/spec-name: verify using type 'optional-str'
 INFO /spec/spec:/spec-type: verify using type 'name'
 INFO /spec/spec-assert-float: verify using type 'root'
@@ -681,7 +681,7 @@ INFO /spec/spec-assert-float:/spec-info/dict/attributes/or: verify using type 's
 INFO /spec/spec-assert-float:/spec-info/dict/attributes/or/description: verify using type 'optional-str'
 INFO /spec/spec-assert-float:/spec-info/dict/attributes/or/spec-type: verify using type 'name'
 INFO /spec/spec-assert-float:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-assert-float:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-assert-float:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-assert-float:/spec-info/list: verify using type 'spec-list'
 INFO /spec/spec-assert-float:/spec-info/list/description: verify using type 'optional-str'
 INFO /spec/spec-assert-float:/spec-info/list/spec-type: verify using type 'name'
@@ -752,7 +752,7 @@ INFO /spec/spec-assert-int:/spec-info/dict/attributes/or: verify using type 'spe
 INFO /spec/spec-assert-int:/spec-info/dict/attributes/or/description: verify using type 'optional-str'
 INFO /spec/spec-assert-int:/spec-info/dict/attributes/or/spec-type: verify using type 'name'
 INFO /spec/spec-assert-int:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-assert-int:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-assert-int:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-assert-int:/spec-info/list: verify using type 'spec-list'
 INFO /spec/spec-assert-int:/spec-info/list/description: verify using type 'optional-str'
 INFO /spec/spec-assert-int:/spec-info/list/spec-type: verify using type 'name'
@@ -835,7 +835,7 @@ INFO /spec/spec-assert-str:/spec-info/dict/attributes/uid: verify using type 'sp
 INFO /spec/spec-assert-str:/spec-info/dict/attributes/uid/description: verify using type 'optional-str'
 INFO /spec/spec-assert-str:/spec-info/dict/attributes/uid/spec-type: verify using type 'name'
 INFO /spec/spec-assert-str:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-assert-str:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-assert-str:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-assert-str:/spec-info/list: verify using type 'spec-list'
 INFO /spec/spec-assert-str:/spec-info/list/description: verify using type 'optional-str'
 INFO /spec/spec-assert-str:/spec-info/list/spec-type: verify using type 'name'
@@ -885,7 +885,7 @@ INFO /spec/spec-attribute-value:/spec-info/dict/attributes/spec-type: verify usi
 INFO /spec/spec-attribute-value:/spec-info/dict/attributes/spec-type/description: verify using type 'optional-str'
 INFO /spec/spec-attribute-value:/spec-info/dict/attributes/spec-type/spec-type: verify using type 'name'
 INFO /spec/spec-attribute-value:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-attribute-value:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-attribute-value:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-attribute-value:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-attribute-value:/spec-type: verify using type 'name'
 INFO /spec/spec-attributes: verify using type 'root'
@@ -909,7 +909,7 @@ INFO /spec/spec-attributes:/spec-info/dict/description: verify using type 'optio
 INFO /spec/spec-attributes:/spec-info/dict/generic-attributes: verify using type 'spec-generic-attributes'
 INFO /spec/spec-attributes:/spec-info/dict/generic-attributes/description: verify using type 'optional-str'
 INFO /spec/spec-attributes:/spec-info/dict/generic-attributes/spec-type: verify using type 'name'
-INFO /spec/spec-attributes:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-attributes:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-attributes:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-attributes:/spec-type: verify using type 'name'
 INFO /spec/spec-bool: verify using type 'root'
@@ -936,8 +936,8 @@ INFO /spec/spec-bool:/spec-info/dict/attributes/description: verify using type '
 INFO /spec/spec-bool:/spec-info/dict/attributes/description/description: verify using type 'optional-str'
 INFO /spec/spec-bool:/spec-info/dict/attributes/description/spec-type: verify using type 'name'
 INFO /spec/spec-bool:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-bool:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
-INFO /spec/spec-bool:/spec-info/dict/required-attributes[0]: verify using type 'name'
+INFO /spec/spec-bool:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
+INFO /spec/spec-bool:/spec-info/dict/mandatory-attributes[0]: verify using type 'name'
 INFO /spec/spec-bool:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-bool:/spec-type: verify using type 'name'
 INFO /spec/spec-dict: verify using type 'root'
@@ -966,14 +966,14 @@ INFO /spec/spec-dict:/spec-info/dict/attributes/description/spec-type: verify us
 INFO /spec/spec-dict:/spec-info/dict/attributes/generic-attributes: verify using type 'spec-attribute-value'
 INFO /spec/spec-dict:/spec-info/dict/attributes/generic-attributes/description: verify using type 'optional-str'
 INFO /spec/spec-dict:/spec-info/dict/attributes/generic-attributes/spec-type: verify using type 'name'
-INFO /spec/spec-dict:/spec-info/dict/attributes/required-attributes: verify using type 'spec-attribute-value'
-INFO /spec/spec-dict:/spec-info/dict/attributes/required-attributes/description: verify using type 'optional-str'
-INFO /spec/spec-dict:/spec-info/dict/attributes/required-attributes/spec-type: verify using type 'name'
+INFO /spec/spec-dict:/spec-info/dict/attributes/mandatory-attributes: verify using type 'spec-attribute-value'
+INFO /spec/spec-dict:/spec-info/dict/attributes/mandatory-attributes/description: verify using type 'optional-str'
+INFO /spec/spec-dict:/spec-info/dict/attributes/mandatory-attributes/spec-type: verify using type 'name'
 INFO /spec/spec-dict:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-dict:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
-INFO /spec/spec-dict:/spec-info/dict/required-attributes[0]: verify using type 'name'
-INFO /spec/spec-dict:/spec-info/dict/required-attributes[1]: verify using type 'name'
-INFO /spec/spec-dict:/spec-info/dict/required-attributes[2]: verify using type 'name'
+INFO /spec/spec-dict:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
+INFO /spec/spec-dict:/spec-info/dict/mandatory-attributes[0]: verify using type 'name'
+INFO /spec/spec-dict:/spec-info/dict/mandatory-attributes[1]: verify using type 'name'
+INFO /spec/spec-dict:/spec-info/dict/mandatory-attributes[2]: verify using type 'name'
 INFO /spec/spec-dict:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-dict:/spec-type: verify using type 'name'
 INFO /spec/spec-float: verify using type 'root'
@@ -1000,8 +1000,8 @@ INFO /spec/spec-float:/spec-info/dict/attributes/description: verify using type 
 INFO /spec/spec-float:/spec-info/dict/attributes/description/description: verify using type 'optional-str'
 INFO /spec/spec-float:/spec-info/dict/attributes/description/spec-type: verify using type 'name'
 INFO /spec/spec-float:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-float:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
-INFO /spec/spec-float:/spec-info/dict/required-attributes[0]: verify using type 'name'
+INFO /spec/spec-float:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
+INFO /spec/spec-float:/spec-info/dict/mandatory-attributes[0]: verify using type 'name'
 INFO /spec/spec-float:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-float:/spec-type: verify using type 'name'
 INFO /spec/spec-generic-attributes: verify using type 'root'
@@ -1028,7 +1028,7 @@ INFO /spec/spec-generic-attributes:/spec-info/dict/attributes/spec-type: verify 
 INFO /spec/spec-generic-attributes:/spec-info/dict/attributes/spec-type/description: verify using type 'optional-str'
 INFO /spec/spec-generic-attributes:/spec-info/dict/attributes/spec-type/spec-type: verify using type 'name'
 INFO /spec/spec-generic-attributes:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-generic-attributes:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-generic-attributes:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-generic-attributes:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-generic-attributes:/spec-type: verify using type 'name'
 INFO /spec/spec-info: verify using type 'root'
@@ -1070,7 +1070,7 @@ INFO /spec/spec-info:/spec-info/dict/attributes/str: verify using type 'spec-att
 INFO /spec/spec-info:/spec-info/dict/attributes/str/description: verify using type 'optional-str'
 INFO /spec/spec-info:/spec-info/dict/attributes/str/spec-type: verify using type 'name'
 INFO /spec/spec-info:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-info:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-info:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-info:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-info:/spec-type: verify using type 'name'
 INFO /spec/spec-int: verify using type 'root'
@@ -1097,8 +1097,8 @@ INFO /spec/spec-int:/spec-info/dict/attributes/description: verify using type 's
 INFO /spec/spec-int:/spec-info/dict/attributes/description/description: verify using type 'optional-str'
 INFO /spec/spec-int:/spec-info/dict/attributes/description/spec-type: verify using type 'name'
 INFO /spec/spec-int:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-int:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
-INFO /spec/spec-int:/spec-info/dict/required-attributes[0]: verify using type 'name'
+INFO /spec/spec-int:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
+INFO /spec/spec-int:/spec-info/dict/mandatory-attributes[0]: verify using type 'name'
 INFO /spec/spec-int:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-int:/spec-type: verify using type 'name'
 INFO /spec/spec-list: verify using type 'root'
@@ -1125,9 +1125,38 @@ INFO /spec/spec-list:/spec-info/dict/attributes/spec-type: verify using type 'sp
 INFO /spec/spec-list:/spec-info/dict/attributes/spec-type/description: verify using type 'optional-str'
 INFO /spec/spec-list:/spec-info/dict/attributes/spec-type/spec-type: verify using type 'name'
 INFO /spec/spec-list:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-list:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-list:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-list:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-list:/spec-type: verify using type 'name'
+INFO /spec/spec-mandatory-attributes: verify using type 'root'
+INFO /spec/spec-mandatory-attributes:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
+INFO /spec/spec-mandatory-attributes:/copyrights: verify using type 'copyrights'
+INFO /spec/spec-mandatory-attributes:/copyrights[0]: verify using type 'copyright'
+INFO /spec/spec-mandatory-attributes:/enabled-by: verify using type 'enabled-by'
+INFO /spec/spec-mandatory-attributes:/links: verify using type 'links'
+INFO /spec/spec-mandatory-attributes:/links[0]: verify using type 'link'
+INFO /spec/spec-mandatory-attributes:/links[0]/role: verify using type 'name'
+INFO /spec/spec-mandatory-attributes:/links[0]/uid: verify using type 'uid'
+INFO /spec/spec-mandatory-attributes:/links[0]: verify using type 'spec-member'
+INFO /spec/spec-mandatory-attributes:/type: verify using type 'name'
+INFO /spec/spec-mandatory-attributes: verify using type 'spec'
+INFO /spec/spec-mandatory-attributes:/spec-description: verify using type 'optional-str'
+INFO /spec/spec-mandatory-attributes:/spec-example: verify using type 'optional-str'
+INFO /spec/spec-mandatory-attributes:/spec-info: verify using type 'spec-info'
+INFO /spec/spec-mandatory-attributes:/spec-info/list: verify using type 'spec-list'
+INFO /spec/spec-mandatory-attributes:/spec-info/list/description: verify using type 'optional-str'
+INFO /spec/spec-mandatory-attributes:/spec-info/list/spec-type: verify using type 'name'
+INFO /spec/spec-mandatory-attributes:/spec-info/str: verify using type 'spec-str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert: verify using type 'spec-assert-str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert/in: verify using type 'list-str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert/in[0]: verify using type 'str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert/in[1]: verify using type 'str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert/in[2]: verify using type 'str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert/in[3]: verify using type 'str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/assert/in[4]: verify using type 'str'
+INFO /spec/spec-mandatory-attributes:/spec-info/str/description: verify using type 'optional-str'
+INFO /spec/spec-mandatory-attributes:/spec-name: verify using type 'optional-str'
+INFO /spec/spec-mandatory-attributes:/spec-type: verify using type 'name'
 INFO /spec/spec-member: verify using type 'root'
 INFO /spec/spec-member:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
 INFO /spec/spec-member:/copyrights: verify using type 'copyrights'
@@ -1152,7 +1181,7 @@ INFO /spec/spec-member:/spec-info: verify using type 'spec-info'
 INFO /spec/spec-member:/spec-info/dict: verify using type 'spec-dict'
 INFO /spec/spec-member:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec/spec-member:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-member:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-member:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-member:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-member:/spec-type: verify using type 'name'
 INFO /spec/spec-refinement: verify using type 'root'
@@ -1185,38 +1214,9 @@ INFO /spec/spec-refinement:/spec-info/dict/attributes/spec-value: verify using t
 INFO /spec/spec-refinement:/spec-info/dict/attributes/spec-value/description: verify using type 'optional-str'
 INFO /spec/spec-refinement:/spec-info/dict/attributes/spec-value/spec-type: verify using type 'name'
 INFO /spec/spec-refinement:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-refinement:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec/spec-refinement:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec/spec-refinement:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-refinement:/spec-type: verify using type 'name'
-INFO /spec/spec-required-attributes: verify using type 'root'
-INFO /spec/spec-required-attributes:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
-INFO /spec/spec-required-attributes:/copyrights: verify using type 'copyrights'
-INFO /spec/spec-required-attributes:/copyrights[0]: verify using type 'copyright'
-INFO /spec/spec-required-attributes:/enabled-by: verify using type 'enabled-by'
-INFO /spec/spec-required-attributes:/links: verify using type 'links'
-INFO /spec/spec-required-attributes:/links[0]: verify using type 'link'
-INFO /spec/spec-required-attributes:/links[0]/role: verify using type 'name'
-INFO /spec/spec-required-attributes:/links[0]/uid: verify using type 'uid'
-INFO /spec/spec-required-attributes:/links[0]: verify using type 'spec-member'
-INFO /spec/spec-required-attributes:/type: verify using type 'name'
-INFO /spec/spec-required-attributes: verify using type 'spec'
-INFO /spec/spec-required-attributes:/spec-description: verify using type 'optional-str'
-INFO /spec/spec-required-attributes:/spec-example: verify using type 'optional-str'
-INFO /spec/spec-required-attributes:/spec-info: verify using type 'spec-info'
-INFO /spec/spec-required-attributes:/spec-info/list: verify using type 'spec-list'
-INFO /spec/spec-required-attributes:/spec-info/list/description: verify using type 'optional-str'
-INFO /spec/spec-required-attributes:/spec-info/list/spec-type: verify using type 'name'
-INFO /spec/spec-required-attributes:/spec-info/str: verify using type 'spec-str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert: verify using type 'spec-assert-str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert/in: verify using type 'list-str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert/in[0]: verify using type 'str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert/in[1]: verify using type 'str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert/in[2]: verify using type 'str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert/in[3]: verify using type 'str'
-INFO /spec/spec-required-attributes:/spec-info/str/assert/in[4]: verify using type 'str'
-INFO /spec/spec-required-attributes:/spec-info/str/description: verify using type 'optional-str'
-INFO /spec/spec-required-attributes:/spec-name: verify using type 'optional-str'
-INFO /spec/spec-required-attributes:/spec-type: verify using type 'name'
 INFO /spec/spec-str: verify using type 'root'
 INFO /spec/spec-str:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
 INFO /spec/spec-str:/copyrights: verify using type 'copyrights'
@@ -1241,8 +1241,8 @@ INFO /spec/spec-str:/spec-info/dict/attributes/description: verify using type 's
 INFO /spec/spec-str:/spec-info/dict/attributes/description/description: verify using type 'optional-str'
 INFO /spec/spec-str:/spec-info/dict/attributes/description/spec-type: verify using type 'name'
 INFO /spec/spec-str:/spec-info/dict/description: verify using type 'optional-str'
-INFO /spec/spec-str:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
-INFO /spec/spec-str:/spec-info/dict/required-attributes[0]: verify using type 'name'
+INFO /spec/spec-str:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
+INFO /spec/spec-str:/spec-info/dict/mandatory-attributes[0]: verify using type 'name'
 INFO /spec/spec-str:/spec-name: verify using type 'optional-str'
 INFO /spec/spec-str:/spec-type: verify using type 'name'
 INFO /spec2/any-dict: verify using type 'root'
@@ -1257,16 +1257,16 @@ INFO /spec2/any-dict:/links[0]/uid: verify using type 'uid'
 INFO /spec2/any-dict:/links[0]: verify using type 'spec-member'
 INFO /spec2/any-dict:/type: verify using type 'name'
 INFO /spec2/any-dict: verify using type 'spec'
-ERROR /spec2/any-dict: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/any-dict: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/any-dict:/spec-example: verify using type 'optional-str'
 INFO /spec2/any-dict:/spec-info: verify using type 'spec-info'
 INFO /spec2/any-dict:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/any-dict:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/any-dict:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/any-dict:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/any-dict:/spec-info/dict/generic-attributes: verify using type 'spec-generic-attributes'
-ERROR /spec2/any-dict:/spec-info/dict/generic-attributes: missing required keys for type 'spec-generic-attributes': ['description']
+ERROR /spec2/any-dict:/spec-info/dict/generic-attributes: missing mandatory keys for type 'spec-generic-attributes': ['description']
 INFO /spec2/any-dict:/spec-info/dict/generic-attributes/spec-type: verify using type 'name'
-INFO /spec2/any-dict:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/any-dict:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/any-dict:/spec-type: verify using type 'name'
 INFO /spec2/c: verify using type 'root'
 INFO /spec2/c:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1286,46 +1286,46 @@ INFO /spec2/c:/links[1]/spec-key: verify using type 'name'
 INFO /spec2/c:/links[1]/spec-value: verify using type 'name'
 INFO /spec2/c:/type: verify using type 'name'
 INFO /spec2/c: verify using type 'spec'
-ERROR /spec2/c: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/c: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/c:/spec-example: verify using type 'optional-str'
 INFO /spec2/c:/spec-info: verify using type 'spec-info'
 INFO /spec2/c:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/c:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/c:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/c:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/c:/spec-info/dict/attributes/any-dict: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/any-dict: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/any-dict: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/any-dict/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/bool: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/bool: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/bool: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/bool/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/dict: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/dict: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/dict: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/dict/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/float: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/float: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/float: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/float/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/int: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/int: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/int: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/int/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/list: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/list: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/list: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/list/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/must-be-true: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/must-be-true: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/must-be-true: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/must-be-true/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/other-int: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/other-int: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/other-int: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/other-int/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/str: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/str: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/str: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/str/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/str-contains: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/str-contains: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/str-contains: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/str-contains/spec-type: verify using type 'name'
 INFO /spec2/c:/spec-info/dict/attributes/uid: verify using type 'spec-attribute-value'
-ERROR /spec2/c:/spec-info/dict/attributes/uid: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/c:/spec-info/dict/attributes/uid: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/c:/spec-info/dict/attributes/uid/spec-type: verify using type 'name'
-INFO /spec2/c:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/c:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/c:/spec-type: verify using type 'name'
 INFO /spec2/d: verify using type 'root'
 INFO /spec2/d:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1345,17 +1345,17 @@ INFO /spec2/d:/links[1]/spec-key: verify using type 'name'
 INFO /spec2/d:/links[1]/spec-value: verify using type 'name'
 INFO /spec2/d:/type: verify using type 'name'
 INFO /spec2/d: verify using type 'spec'
-ERROR /spec2/d: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/d: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/d:/spec-example: verify using type 'optional-str'
 INFO /spec2/d:/spec-info: verify using type 'spec-info'
 INFO /spec2/d:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/d:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/d:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/d:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/d:/spec-info/dict/attributes/d-type: verify using type 'spec-attribute-value'
-ERROR /spec2/d:/spec-info/dict/attributes/d-type: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/d:/spec-info/dict/attributes/d-type: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/d:/spec-info/dict/attributes/d-type/spec-type: verify using type 'name'
-INFO /spec2/d:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
-INFO /spec2/d:/spec-info/dict/required-attributes[0]: verify using type 'name'
+INFO /spec2/d:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
+INFO /spec2/d:/spec-info/dict/mandatory-attributes[0]: verify using type 'name'
 INFO /spec2/d:/spec-type: verify using type 'name'
 INFO /spec2/d-a: verify using type 'root'
 INFO /spec2/d-a:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1379,16 +1379,16 @@ INFO /spec2/d-a:/links[2]/uid: verify using type 'uid'
 ERROR /spec2/d-a:/links[2]: unknown subtype for key 'role' for type 'link': other
 INFO /spec2/d-a:/type: verify using type 'name'
 INFO /spec2/d-a: verify using type 'spec'
-ERROR /spec2/d-a: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/d-a: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/d-a:/spec-example: verify using type 'optional-str'
 INFO /spec2/d-a:/spec-info: verify using type 'spec-info'
 INFO /spec2/d-a:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/d-a:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/d-a:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/d-a:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/d-a:/spec-info/dict/attributes/d-type: verify using type 'spec-attribute-value'
-ERROR /spec2/d-a:/spec-info/dict/attributes/d-type: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/d-a:/spec-info/dict/attributes/d-type: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/d-a:/spec-info/dict/attributes/d-type/spec-type: verify using type 'name'
-INFO /spec2/d-a:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/d-a:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/d-a:/spec-type: verify using type 'name'
 INFO /spec2/invalid: verify using type 'root'
 INFO /spec2/invalid:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1408,21 +1408,21 @@ INFO /spec2/invalid:/links[1]/spec-key: verify using type 'name'
 INFO /spec2/invalid:/links[1]/spec-value: verify using type 'name'
 INFO /spec2/invalid:/type: verify using type 'name'
 INFO /spec2/invalid: verify using type 'spec'
-ERROR /spec2/invalid: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/invalid: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/invalid:/spec-example: verify using type 'optional-str'
 INFO /spec2/invalid:/spec-info: verify using type 'spec-info'
 INFO /spec2/invalid:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/invalid:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/invalid:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/invalid:/spec-info/dict/attributes: verify using type 'spec-attributes'
 ERROR /spec2/invalid:/spec-info/dict/attributes: invalid name: INVALID
 INFO /spec2/invalid:/spec-info/dict/attributes/INVALID: verify using type 'spec-attribute-value'
-ERROR /spec2/invalid:/spec-info/dict/attributes/INVALID: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/invalid:/spec-info/dict/attributes/INVALID: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/invalid:/spec-info/dict/attributes/INVALID/spec-type: verify using type 'name'
-INFO /spec2/invalid:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/invalid:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/invalid:/spec-info/none: verify using type 'none'
 ERROR /spec2/invalid:/spec-info/none: expected type 'none', actual type 'bool'
 INFO /spec2/invalid:/spec-info/str: verify using type 'spec-str'
-ERROR /spec2/invalid:/spec-info/str: missing required keys for type 'spec-str': ['description']
+ERROR /spec2/invalid:/spec-info/str: missing mandatory keys for type 'spec-str': ['description']
 ERROR /spec2/invalid:/spec-info/str: has unverfied keys for type 'spec-str' and its subtypes: ['foo']
 ERROR /spec2/invalid:/spec-info: has unverfied keys for type 'spec-info' and its subtypes: ['unexpected']
 INFO /spec2/invalid:/spec-type: verify using type 'name'
@@ -1444,19 +1444,19 @@ INFO /spec2/keys-at-least-one:/links[1]/spec-key: verify using type 'name'
 INFO /spec2/keys-at-least-one:/links[1]/spec-value: verify using type 'name'
 INFO /spec2/keys-at-least-one:/type: verify using type 'name'
 INFO /spec2/keys-at-least-one: verify using type 'spec'
-ERROR /spec2/keys-at-least-one: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/keys-at-least-one: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/keys-at-least-one:/spec-example: verify using type 'optional-str'
 INFO /spec2/keys-at-least-one:/spec-info: verify using type 'spec-info'
 INFO /spec2/keys-at-least-one:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/keys-at-least-one:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/keys-at-least-one:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/keys-at-least-one:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/keys-at-least-one:/spec-info/dict/attributes/key-a: verify using type 'spec-attribute-value'
-ERROR /spec2/keys-at-least-one:/spec-info/dict/attributes/key-a: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/keys-at-least-one:/spec-info/dict/attributes/key-a: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/keys-at-least-one:/spec-info/dict/attributes/key-a/spec-type: verify using type 'name'
 INFO /spec2/keys-at-least-one:/spec-info/dict/attributes/key-b: verify using type 'spec-attribute-value'
-ERROR /spec2/keys-at-least-one:/spec-info/dict/attributes/key-b: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/keys-at-least-one:/spec-info/dict/attributes/key-b: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/keys-at-least-one:/spec-info/dict/attributes/key-b/spec-type: verify using type 'name'
-INFO /spec2/keys-at-least-one:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/keys-at-least-one:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/keys-at-least-one:/spec-type: verify using type 'name'
 INFO /spec2/keys-at-most-one: verify using type 'root'
 INFO /spec2/keys-at-most-one:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1476,19 +1476,19 @@ INFO /spec2/keys-at-most-one:/links[1]/spec-key: verify using type 'name'
 INFO /spec2/keys-at-most-one:/links[1]/spec-value: verify using type 'name'
 INFO /spec2/keys-at-most-one:/type: verify using type 'name'
 INFO /spec2/keys-at-most-one: verify using type 'spec'
-ERROR /spec2/keys-at-most-one: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/keys-at-most-one: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/keys-at-most-one:/spec-example: verify using type 'optional-str'
 INFO /spec2/keys-at-most-one:/spec-info: verify using type 'spec-info'
 INFO /spec2/keys-at-most-one:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/keys-at-most-one:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/keys-at-most-one:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/keys-at-most-one:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/keys-at-most-one:/spec-info/dict/attributes/key-a: verify using type 'spec-attribute-value'
-ERROR /spec2/keys-at-most-one:/spec-info/dict/attributes/key-a: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/keys-at-most-one:/spec-info/dict/attributes/key-a: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/keys-at-most-one:/spec-info/dict/attributes/key-a/spec-type: verify using type 'name'
 INFO /spec2/keys-at-most-one:/spec-info/dict/attributes/key-b: verify using type 'spec-attribute-value'
-ERROR /spec2/keys-at-most-one:/spec-info/dict/attributes/key-b: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/keys-at-most-one:/spec-info/dict/attributes/key-b: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/keys-at-most-one:/spec-info/dict/attributes/key-b/spec-type: verify using type 'name'
-INFO /spec2/keys-at-most-one:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/keys-at-most-one:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/keys-at-most-one:/spec-type: verify using type 'name'
 INFO /spec2/keys-exactly-one: verify using type 'root'
 INFO /spec2/keys-exactly-one:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1508,19 +1508,19 @@ INFO /spec2/keys-exactly-one:/links[1]/spec-key: verify using type 'name'
 INFO /spec2/keys-exactly-one:/links[1]/spec-value: verify using type 'name'
 INFO /spec2/keys-exactly-one:/type: verify using type 'name'
 INFO /spec2/keys-exactly-one: verify using type 'spec'
-ERROR /spec2/keys-exactly-one: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/keys-exactly-one: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/keys-exactly-one:/spec-example: verify using type 'optional-str'
 INFO /spec2/keys-exactly-one:/spec-info: verify using type 'spec-info'
 INFO /spec2/keys-exactly-one:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/keys-exactly-one:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/keys-exactly-one:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/keys-exactly-one:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/keys-exactly-one:/spec-info/dict/attributes/key-a: verify using type 'spec-attribute-value'
-ERROR /spec2/keys-exactly-one:/spec-info/dict/attributes/key-a: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/keys-exactly-one:/spec-info/dict/attributes/key-a: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/keys-exactly-one:/spec-info/dict/attributes/key-a/spec-type: verify using type 'name'
 INFO /spec2/keys-exactly-one:/spec-info/dict/attributes/key-b: verify using type 'spec-attribute-value'
-ERROR /spec2/keys-exactly-one:/spec-info/dict/attributes/key-b: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/keys-exactly-one:/spec-info/dict/attributes/key-b: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/keys-exactly-one:/spec-info/dict/attributes/key-b/spec-type: verify using type 'name'
-INFO /spec2/keys-exactly-one:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/keys-exactly-one:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/keys-exactly-one:/spec-type: verify using type 'name'
 INFO /spec2/must-be-true: verify using type 'root'
 INFO /spec2/must-be-true:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1534,11 +1534,11 @@ INFO /spec2/must-be-true:/links[0]/uid: verify using type 'uid'
 INFO /spec2/must-be-true:/links[0]: verify using type 'spec-member'
 INFO /spec2/must-be-true:/type: verify using type 'name'
 INFO /spec2/must-be-true: verify using type 'spec'
-ERROR /spec2/must-be-true: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/must-be-true: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/must-be-true:/spec-example: verify using type 'optional-str'
 INFO /spec2/must-be-true:/spec-info: verify using type 'spec-info'
 INFO /spec2/must-be-true:/spec-info/bool: verify using type 'spec-bool'
-ERROR /spec2/must-be-true:/spec-info/bool: missing required keys for type 'spec-bool': ['description']
+ERROR /spec2/must-be-true:/spec-info/bool: missing mandatory keys for type 'spec-bool': ['description']
 INFO /spec2/must-be-true:/spec-info/bool/assert: verify using type 'bool'
 INFO /spec2/must-be-true:/spec-type: verify using type 'name'
 INFO /spec2/other-int: verify using type 'root'
@@ -1553,11 +1553,11 @@ INFO /spec2/other-int:/links[0]/uid: verify using type 'uid'
 INFO /spec2/other-int:/links[0]: verify using type 'spec-member'
 INFO /spec2/other-int:/type: verify using type 'name'
 INFO /spec2/other-int: verify using type 'spec'
-ERROR /spec2/other-int: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/other-int: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/other-int:/spec-example: verify using type 'optional-str'
 INFO /spec2/other-int:/spec-info: verify using type 'spec-info'
 INFO /spec2/other-int:/spec-info/int: verify using type 'spec-int'
-ERROR /spec2/other-int:/spec-info/int: missing required keys for type 'spec-int': ['description']
+ERROR /spec2/other-int:/spec-info/int: missing mandatory keys for type 'spec-int': ['description']
 INFO /spec2/other-int:/spec-type: verify using type 'name'
 INFO /spec2/some-bool: verify using type 'root'
 INFO /spec2/some-bool:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1571,11 +1571,11 @@ INFO /spec2/some-bool:/links[0]/uid: verify using type 'uid'
 INFO /spec2/some-bool:/links[0]: verify using type 'spec-member'
 INFO /spec2/some-bool:/type: verify using type 'name'
 INFO /spec2/some-bool: verify using type 'spec'
-ERROR /spec2/some-bool: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/some-bool: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/some-bool:/spec-example: verify using type 'optional-str'
 INFO /spec2/some-bool:/spec-info: verify using type 'spec-info'
 INFO /spec2/some-bool:/spec-info/bool: verify using type 'spec-bool'
-ERROR /spec2/some-bool:/spec-info/bool: missing required keys for type 'spec-bool': ['description']
+ERROR /spec2/some-bool:/spec-info/bool: missing mandatory keys for type 'spec-bool': ['description']
 INFO /spec2/some-bool:/spec-type: verify using type 'name'
 INFO /spec2/some-dict: verify using type 'root'
 INFO /spec2/some-dict:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
@@ -1589,16 +1589,16 @@ INFO /spec2/some-dict:/links[0]/uid: verify using type 'uid'
 INFO /spec2/some-dict:/links[0]: verify using type 'spec-member'
 INFO /spec2/some-dict:/type: verify using type 'name'
 INFO /spec2/some-dict: verify using type 'spec'
-ERROR /spec2/some-dict: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/some-dict: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/some-dict:/spec-example: verify using type 'optional-str'
 INFO /spec2/some-dict:/spec-info: verify using type 'spec-info'
 INFO /spec2/some-dict:/spec-info/dict: verify using type 'spec-dict'
-ERROR /spec2/some-dict:/spec-info/dict: missing required keys for type 'spec-dict': ['description']
+ERROR /spec2/some-dict:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/some-dict:/spec-info/dict/attributes: verify using type 'spec-attributes'
 INFO /spec2/some-dict:/spec-info/dict/attributes/a: verify using type 'spec-attribute-value'
-ERROR /spec2/some-dict:/spec-info/dict/attributes/a: missing required keys for type 'spec-attribute-value': ['description']
+ERROR /spec2/some-dict:/spec-info/dict/attributes/a: missing mandatory keys for type 'spec-attribute-value': ['description']
 INFO /spec2/some-dict:/spec-info/dict/attributes/a/spec-type: verify using type 'name'
-INFO /spec2/some-dict:/spec-info/dict/required-attributes: verify using type 'spec-required-attributes'
+INFO /spec2/some-dict:/spec-info/dict/mandatory-attributes: verify using type 'spec-mandatory-attributes'
 INFO /spec2/some-dict:/spec-info/none: verify using type 'none'
 INFO /spec2/some-dict:/spec-type: verify using type 'name'
 INFO /spec2/some-float: verify using type 'root'
@@ -1613,11 +1613,11 @@ INFO /spec2/some-float:/links[0]/uid: verify using type 'uid'
 INFO /spec2/some-float:/links[0]: verify using type 'spec-member'
 INFO /spec2/some-float:/type: verify using type 'name'
 INFO /spec2/some-float: verify using type 'spec'
-ERROR /spec2/some-float: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/some-float: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/some-float:/spec-example: verify using type 'optional-str'
 INFO /spec2/some-float:/spec-info: verify using type 'spec-info'
 INFO /spec2/some-float:/spec-info/float: verify using type 'spec-float'
-ERROR /spec2/some-float:/spec-info/float: missing required keys for type 'spec-float': ['description']
+ERROR /spec2/some-float:/spec-info/float: missing mandatory keys for type 'spec-float': ['description']
 INFO /spec2/some-float:/spec-info/float/assert: verify using type 'spec-assert-float'
 INFO /spec2/some-float:/spec-info/float/assert[0]: verify using type 'spec-assert-float'
 INFO /spec2/some-float:/spec-info/float/assert[0]/le: verify using type 'float'
@@ -1634,11 +1634,11 @@ INFO /spec2/some-int:/links[0]/uid: verify using type 'uid'
 INFO /spec2/some-int:/links[0]: verify using type 'spec-member'
 INFO /spec2/some-int:/type: verify using type 'name'
 INFO /spec2/some-int: verify using type 'spec'
-ERROR /spec2/some-int: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/some-int: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/some-int:/spec-example: verify using type 'optional-str'
 INFO /spec2/some-int:/spec-info: verify using type 'spec-info'
 INFO /spec2/some-int:/spec-info/int: verify using type 'spec-int'
-ERROR /spec2/some-int:/spec-info/int: missing required keys for type 'spec-int': ['description']
+ERROR /spec2/some-int:/spec-info/int: missing mandatory keys for type 'spec-int': ['description']
 INFO /spec2/some-int:/spec-info/int/assert: verify using type 'spec-assert-int'
 INFO /spec2/some-int:/spec-info/int/assert[0]: verify using type 'spec-assert-int'
 INFO /spec2/some-int:/spec-info/int/assert[0]/and: verify using type 'spec-assert-int-list'
@@ -1710,11 +1710,11 @@ INFO /spec2/some-list:/links[0]/uid: verify using type 'uid'
 INFO /spec2/some-list:/links[0]: verify using type 'spec-member'
 INFO /spec2/some-list:/type: verify using type 'name'
 INFO /spec2/some-list: verify using type 'spec'
-ERROR /spec2/some-list: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/some-list: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/some-list:/spec-example: verify using type 'optional-str'
 INFO /spec2/some-list:/spec-info: verify using type 'spec-info'
 INFO /spec2/some-list:/spec-info/list: verify using type 'spec-list'
-ERROR /spec2/some-list:/spec-info/list: missing required keys for type 'spec-list': ['description']
+ERROR /spec2/some-list:/spec-info/list: missing mandatory keys for type 'spec-list': ['description']
 INFO /spec2/some-list:/spec-info/list/spec-type: verify using type 'name'
 INFO /spec2/some-list:/spec-type: verify using type 'name'
 INFO /spec2/some-str: verify using type 'root'
@@ -1729,11 +1729,11 @@ INFO /spec2/some-str:/links[0]/uid: verify using type 'uid'
 INFO /spec2/some-str:/links[0]: verify using type 'spec-member'
 INFO /spec2/some-str:/type: verify using type 'name'
 INFO /spec2/some-str: verify using type 'spec'
-ERROR /spec2/some-str: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/some-str: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/some-str:/spec-example: verify using type 'optional-str'
 INFO /spec2/some-str:/spec-info: verify using type 'spec-info'
 INFO /spec2/some-str:/spec-info/str: verify using type 'spec-str'
-ERROR /spec2/some-str:/spec-info/str: missing required keys for type 'spec-str': ['description']
+ERROR /spec2/some-str:/spec-info/str: missing mandatory keys for type 'spec-str': ['description']
 INFO /spec2/some-str:/spec-info/str/assert: verify using type 'spec-assert-str'
 INFO /spec2/some-str:/spec-info/str/assert[0]: verify using type 'spec-assert-str'
 INFO /spec2/some-str:/spec-info/str/assert[0]/uid: verify using type 'none'
@@ -1752,7 +1752,7 @@ INFO /spec2/sta:/enabled-by: verify using type 'enabled-by'
 INFO /spec2/sta:/links: verify using type 'links'
 INFO /spec2/sta:/type: verify using type 'name'
 INFO /spec2/sta: verify using type 'spec'
-ERROR /spec2/sta: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/sta: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/sta:/spec-example: verify using type 'optional-str'
 INFO /spec2/sta:/spec-info: verify using type 'spec-info'
 ERROR /spec2/sta:/spec-info: not at least one key out of ['bool', 'dict', 'float', 'int', 'list', 'none', 'str'] is present for type 'spec-info'
@@ -1769,11 +1769,11 @@ INFO /spec2/str-contains:/links[0]/uid: verify using type 'uid'
 INFO /spec2/str-contains:/links[0]: verify using type 'spec-member'
 INFO /spec2/str-contains:/type: verify using type 'name'
 INFO /spec2/str-contains: verify using type 'spec'
-ERROR /spec2/str-contains: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/str-contains: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/str-contains:/spec-example: verify using type 'optional-str'
 INFO /spec2/str-contains:/spec-info: verify using type 'spec-info'
 INFO /spec2/str-contains:/spec-info/str: verify using type 'spec-str'
-ERROR /spec2/str-contains:/spec-info/str: missing required keys for type 'spec-str': ['description']
+ERROR /spec2/str-contains:/spec-info/str: missing mandatory keys for type 'spec-str': ['description']
 INFO /spec2/str-contains:/spec-info/str/assert: verify using type 'spec-assert-str'
 INFO /spec2/str-contains:/spec-info/str/assert/and: verify using type 'spec-assert-str-list'
 INFO /spec2/str-contains:/spec-info/str/assert/and[0]: verify using type 'spec-assert-str'
@@ -1797,11 +1797,11 @@ INFO /spec2/x:/links[0]/uid: verify using type 'uid'
 INFO /spec2/x:/links[0]: verify using type 'spec-member'
 INFO /spec2/x:/type: verify using type 'name'
 INFO /spec2/x: verify using type 'spec'
-ERROR /spec2/x: missing required keys for type 'spec': ['spec-description', 'spec-name']
+ERROR /spec2/x: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
 INFO /spec2/x:/spec-example: verify using type 'optional-str'
 INFO /spec2/x:/spec-info: verify using type 'spec-info'
 INFO /spec2/x:/spec-info/str: verify using type 'spec-str'
-ERROR /spec2/x:/spec-info/str: missing required keys for type 'spec-str': ['description']
+ERROR /spec2/x:/spec-info/str: missing mandatory keys for type 'spec-str': ['description']
 INFO /spec2/x:/spec-info/str/assert: verify using type 'spec-assert-str'
 INFO /spec2/x:/spec-info/str/assert/eq: verify using type 'str'
 INFO /spec2/x:/spec-type: verify using type 'name'

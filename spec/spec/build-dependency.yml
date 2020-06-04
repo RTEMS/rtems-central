@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the build dependency role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Dependency Link Role
 spec-type: build-dependency
 type: spec

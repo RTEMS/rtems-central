@@ -39,7 +39,7 @@ spec-info:
         spec-type: interface-notes
     description: |
       This set of attributes specifies a compound (struct or union).
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Compound Item Type
 spec-type: interface-compound
 type: spec

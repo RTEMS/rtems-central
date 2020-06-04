@@ -23,7 +23,7 @@ spec-info:
     description: |
       This set of attributes specifies an interface compound member
       declaration.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Compound Member Declaration
 spec-type: interface-member-declaration
 type: spec

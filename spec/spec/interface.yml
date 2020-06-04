@@ -25,7 +25,7 @@ spec-info:
       ${interface-domain:/spec-name} items to specify interface domains, for
       example the ${/glossary/api:/term}, C language, compiler, interfaces to
       the implementation, and the hardware.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Item Type
 spec-type: interface
 type: spec

@@ -15,8 +15,8 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      This specification type defines the specification membership role of links.
-    required-attributes: none
+      It defines the specification membership role of links.
+    mandatory-attributes: all
 spec-name: Specification Member Link Role
 spec-type: spec-member
 type: spec

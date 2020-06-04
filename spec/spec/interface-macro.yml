@@ -38,7 +38,7 @@ spec-info:
         spec-type: interface-return-directive
     description: |
       This set of attributes specifies a macro.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Macro Item Type
 spec-type: interface-macro
 type: spec

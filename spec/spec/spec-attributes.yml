@@ -15,7 +15,7 @@ spec-info:
       description: |
         The generic attributes specify an attribute set.
       spec-type: spec-attribute-value
-    required-attributes: none
+    mandatory-attributes: none
 spec-name: Specification Attribute
 spec-type: spec-attributes
 type: spec

@@ -23,7 +23,7 @@ spec-info:
         spec-type: optional-str
     description: |
       This set of attributes specifies a floating-point value.
-    required-attributes:
+    mandatory-attributes:
     - description
 spec-name: Specification Floating-Point Value
 spec-type: spec-float

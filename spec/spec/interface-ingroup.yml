@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the interface group membership role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Group Membership Link Role
 spec-type: interface-ingroup
 type: spec

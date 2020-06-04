@@ -37,7 +37,7 @@ spec-example: |
           spec-type: int
       description: |
         This set of attributes specifies an example.
-      required-attributes: all
+      mandatory-attributes: all
   spec-name: Example Item Type
   spec-type: spec
   type: spec
@@ -66,7 +66,7 @@ spec-info:
         spec-type: name
     description: |
       This set of attributes specifies specification types.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Specification Item Type
 spec-type: spec
 type: spec

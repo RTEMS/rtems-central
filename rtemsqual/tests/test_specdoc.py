@@ -79,15 +79,15 @@ A value of this type shall be of one of the following variants:
 * The value may be a boolean. A reference to :ref:`SpecTypeRoot`. The value
   shall be true.
 
-* The value may be a set of attributes. All explicitly defined attributes shall
-  be specified. The following attributes are explicitly defined for this type:
+* The value may be a set of attributes. All explicit attributes shall be
+  specified. The explicit attributes for this type are:
 
   type
       The attribute value shall be a :ref:`SpecTypeName`.
 
-  In addition to the explicitly defined attributes above, generic attributes
-  may be defined. Each attribute key shall be a :ref:`SpecTypeName`. The
-  attribute value shall be a :ref:`SpecTypeRoot`.
+  In addition to the explicit attributes, generic attributes may be specified.
+  Each attribute key shall be a :ref:`SpecTypeName`. The attribute value shall
+  be a :ref:`SpecTypeRoot`.
 
 * The value may be a floating-point number. The value shall be equal to 0.0.
 
@@ -193,7 +193,7 @@ A
 This type refines the :ref:`SpecTypeRoot` though the ``type`` attribute if the
 value is ``a``.
 
-The following attributes are explicitly defined for this type:
+The explicit attributes for this type are:
 
 a
     The attribute value shall be an :ref:`SpecTypeA`.
@@ -219,7 +219,7 @@ This type refines the following types:
 
 * :ref:`SpecTypeRoot` though the ``type`` attribute if the value is ``b``
 
-Generic attributes may be defined. Each attribute key shall be a
+Generic attributes may be specified. Each attribute key shall be a
 :ref:`SpecTypeName`. The attribute value shall be a list. Each list element
 shall be a string.
 
@@ -233,8 +233,8 @@ Specification Attribute Sets and Value Types
 C
 ^
 
-Only the ``c`` attribute is required. The following attributes are explicitly
-defined for this type:
+Only the ``c`` attribute is mandatory. The explicit attributes for this type
+are:
 
 c
     The attribute value shall be a floating-point number.
@@ -244,13 +244,13 @@ c
 D
 ^
 
-The following explicitly defined attributes are required:
+The following explicit attributes are mandatory:
 
 * ``d1``
 
 * ``d2``
 
-The following attributes are explicitly defined for this type:
+The explicit attributes for this type are:
 
 d1
     The attribute value shall be a :ref:`SpecTypeName`.

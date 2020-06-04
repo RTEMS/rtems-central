@@ -65,7 +65,7 @@ spec-info:
       This set of attributes specifies a static library.  Library items may use
       additional objects provided by ${build-objects:/spec-name} items through
       the build dependency links of the item.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Library Item Type
 spec-type: build-library
 type: spec

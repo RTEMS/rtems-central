@@ -57,7 +57,7 @@ spec-info:
       items.  The ``includes``, ``ldflags``, ``objects``, and ``use`` variables
       of the build item context are updated by the corresponding attributes of
       the build group.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Group Item Type
 spec-type: build-group
 type: spec

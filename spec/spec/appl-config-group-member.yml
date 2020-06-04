@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the application configuration group membership role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Application Configuration Group Member Link Role
 spec-type: appl-config-group-member
 type: spec

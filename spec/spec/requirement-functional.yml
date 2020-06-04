@@ -20,7 +20,7 @@ spec-info:
         spec-type: requirement-functional-type
     description: |
       This set of attributes specifies a functional requirement.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Functional Requirement Item Type
 spec-type: requirement-functional
 type: spec

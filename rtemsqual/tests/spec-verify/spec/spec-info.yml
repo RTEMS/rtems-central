@@ -12,35 +12,35 @@ spec-info:
     attributes:
       bool:
         description: |
-          This attribute specifies a boolean value.
+          It shall specify a boolean value.
         spec-type: spec-bool
       dict:
         description: |
-          This attribute specifies a set of attributes.
+          It shall specify a set of attributes.
         spec-type: spec-dict
       float:
         description: |
-          This attribute specifies a floating-point value.
+          It shall specify a floating-point value.
         spec-type: spec-float
       int:
         description: |
-          This attribute specifies an integer value.
+          It shall specify an integer value.
         spec-type: spec-int
       list:
         description: |
-          This attribute specifies a list of attributes or values.
+          It shall specify a list of attributes or values.
         spec-type: spec-list
       none:
         description: |
-          This attribute indicates that no value is required.
+          It specifies that no value is required.
         spec-type: none
       str:
         description: |
-          This attribute specifies a string.
+          It shall specify a string.
         spec-type: spec-str
     description: |
-      This attribute set specifies attribute values.
-    required-attributes: at-least-one
+      This set of attributes specifies attribute values.
+    mandatory-attributes: at-least-one
 spec-name: Specification Information
 spec-type: spec-info
 type: spec

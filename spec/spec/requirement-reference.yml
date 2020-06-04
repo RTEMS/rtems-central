@@ -20,7 +20,7 @@ spec-info:
         spec-type: requirement-reference-type
     description: |
       This set of attributes specifies a requirement reference.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Requirement Reference
 spec-type: requirement-reference
 type: spec

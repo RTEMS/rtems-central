@@ -26,7 +26,7 @@ spec-info:
         spec-type: optional-str
     description: |
       This attribute set specifies a boolean value.
-    required-attributes:
+    mandatory-attributes:
     - description
 spec-name: Specification Boolean Value
 spec-type: spec-bool

@@ -12,17 +12,15 @@ spec-info:
     attributes:
       description:
         description: |
-          This mandatory attribute shall be the description of the specified
-          list.
+          It shall be the description of the list.
         spec-type: optional-str
       spec-type:
         description: |
-          This mandatory attribute defines the specification type of elements
-          of the specified list.
+          It shall be the specification type of elements of the list.
         spec-type: name
     description: |
-      This attribute set specifies a list of attributes or values.
-    required-attributes: all
-spec-name: List Specification
+      This set of attributes specifies a list of attributes or values.
+    mandatory-attributes: all
+spec-name: Specification List
 spec-type: spec-list
 type: spec

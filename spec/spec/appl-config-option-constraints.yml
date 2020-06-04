@@ -35,7 +35,7 @@ spec-info:
       This set of attributes defines application configuration option
       constraints.  Additional constraints can be added through the links of
       the item using the ${constraint-role:/spec-name}.
-    required-attributes: none
+    mandatory-attributes: none
 spec-name: Application Configuration Option Constraint Set
 spec-type: appl-config-option-constraints
 type: spec

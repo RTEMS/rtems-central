@@ -32,7 +32,7 @@ spec-info:
         spec-type: interface-notes
     description: |
       This set of attributes specifies a define.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Define Item Type
 spec-type: interface-define
 type: spec

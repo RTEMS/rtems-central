@@ -23,7 +23,7 @@ spec-info:
         spec-type: links
     description: |
       This set of attributes specifies a test case check.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Test Case Check
 spec-type: test-case-check
 type: spec

@@ -11,6 +11,6 @@ spec-info:
   list:
     description: null
     spec-type: spec-assert-str
-spec-name: String Assert Specification List
+spec-name: Specification String Assert List
 spec-type: spec-assert-str-list
 type: spec

@@ -26,7 +26,7 @@ spec-info:
         spec-type: name
     description: |
       It defines the specification refinement role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Specification Refinement Link Role
 spec-type: spec-refinement
 type: spec

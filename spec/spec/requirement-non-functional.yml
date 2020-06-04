@@ -20,7 +20,7 @@ spec-info:
         spec-type: requirement-non-functional-type
     description: |
       This set of attributes specifies a non-functional requirement.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Non-Functional Requirement Item Type
 spec-type: requirement-non-functional
 type: spec

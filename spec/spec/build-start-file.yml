@@ -49,7 +49,7 @@ spec-info:
     description: |
       This set of attributes specifies a start file to build.  A start file is
       used to link an executable.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Start File Item Type
 spec-type: build-start-file
 type: spec

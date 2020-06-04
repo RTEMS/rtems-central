@@ -29,7 +29,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies an interface group.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Group Item Type
 spec-type: interface-group
 type: spec

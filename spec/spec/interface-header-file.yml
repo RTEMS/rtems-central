@@ -29,7 +29,7 @@ spec-info:
       exactly one link with the ${interface-placement:/spec-name} to an
       ${interface-domain:/spec-name} item.  This link defines the interface
       domain of the header file.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Header File Item Type
 spec-type: interface-header-file
 type: spec

@@ -55,7 +55,7 @@ spec-info:
     description: |
       This set of attributes specifies a set of object files used to build
       static libraries or test programs.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Objects Item Type
 spec-type: build-objects
 type: spec

@@ -19,7 +19,7 @@ spec-info:
     generic-attributes:
       description: null
       spec-type: root
-    required-attributes: all
+    mandatory-attributes: all
   float:
     assert:
       eq: 0.0

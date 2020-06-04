@@ -11,6 +11,6 @@ spec-info:
   list:
     description: null
     spec-type: spec-assert-int
-spec-name: Integer Assert Specification List
+spec-name: Specification Integer Assert List
 spec-type: spec-assert-int-list
 type: spec

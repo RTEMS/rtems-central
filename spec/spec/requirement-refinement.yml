@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the requirement refinement role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Requirement Refinement Link Role
 spec-type: requirement-refinement
 type: spec

@@ -22,7 +22,7 @@ spec-info:
       This set of attributes specifies a link from one specification item to
       another specification item.  The links in a list are ordered.  The first
       link in the list is processed first.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Link
 spec-type: link
 type: spec

@@ -17,7 +17,7 @@ spec-info:
     description: |
       This set of attributes specifies an application configuration feature
       enable option.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Application Configuration Feature Enable Option Item Type
 spec-type: appl-config-option-feature-enable
 type: spec

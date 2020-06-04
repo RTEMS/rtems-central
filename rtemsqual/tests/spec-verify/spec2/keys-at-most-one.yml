@@ -17,6 +17,6 @@ spec-info:
         spec-type: none
       key-b:
         spec-type: none
-    required-attributes: at-most-one
+    mandatory-attributes: at-most-one
 spec-type: keys-at-most-one
 type: spec

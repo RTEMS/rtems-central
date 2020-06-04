@@ -26,7 +26,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies an interface compound member definition.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Compound Member Definition
 spec-type: interface-member-definition
 type: spec

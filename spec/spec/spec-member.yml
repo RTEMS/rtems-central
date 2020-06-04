@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the specification membership role of links.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Specification Member Link Role
 spec-type: spec-member
 type: spec

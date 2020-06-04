@@ -23,7 +23,7 @@ spec-info:
         spec-type: optional-str
     description: |
       This set of attributes specifies an integer value.
-    required-attributes:
+    mandatory-attributes:
     - description
 spec-name: Specification Integer Value
 spec-type: spec-int

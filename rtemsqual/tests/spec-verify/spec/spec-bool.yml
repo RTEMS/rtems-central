@@ -22,13 +22,12 @@ spec-info:
         spec-type: bool
       description:
         description: |
-          This mandatory attribute shall be the description of the specified
-          boolean value.
+          It shall be the description of the specified boolean value.
         spec-type: optional-str
     description: |
       This attribute set specifies a boolean value.
-    required-attributes:
+    mandatory-attributes:
     - description
-spec-name: Boolean Value Specification
+spec-name: Specification Boolean Value
 spec-type: spec-bool
 type: spec

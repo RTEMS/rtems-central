@@ -35,6 +35,6 @@ spec-info:
         spec-type: str-contains
       uid:
         spec-type: uid
-    required-attributes: all
+    mandatory-attributes: all
 spec-type: c
 type: spec

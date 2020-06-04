@@ -38,7 +38,7 @@ spec-info:
         spec-type: interface-return-directive
     description: |
       This set of attributes specifies a function.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Function Item Type
 spec-type: interface-function
 type: spec

@@ -19,7 +19,7 @@ spec-info:
         spec-type: bool-or-int-or-str
     description: |
       This set of attributes specifies an interface return value.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Return Value
 spec-type: interface-return-value
 type: spec

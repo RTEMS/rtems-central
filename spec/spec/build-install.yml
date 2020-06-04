@@ -22,7 +22,7 @@ spec-info:
         spec-type: list-str
     description: |
       This set of attributes specifies files installed by a build item.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Install Directive
 spec-type: build-install
 type: spec

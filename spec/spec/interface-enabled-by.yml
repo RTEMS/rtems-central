@@ -32,7 +32,7 @@ spec-info:
         spec-type: interface-enabled-by-list
     description: |
       Each attribute defines an operator.
-    required-attributes: exactly-one
+    mandatory-attributes: exactly-one
   list:
     description: |
       It defines a *logical or* of the expressions in the list.

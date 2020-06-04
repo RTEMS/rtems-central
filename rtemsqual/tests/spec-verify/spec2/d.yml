@@ -15,7 +15,7 @@ spec-info:
     attributes:
       d-type:
         spec-type: name
-    required-attributes:
+    mandatory-attributes:
     - d-type
 spec-type: d
 type: spec

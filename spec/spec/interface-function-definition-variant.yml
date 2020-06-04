@@ -21,7 +21,7 @@ spec-info:
         spec-type: interface-enabled-by
     description: |
       This set of attributes specifies a function definition variant.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Function Definition Variant
 spec-type: interface-function-definition-variant
 type: spec

@@ -20,7 +20,7 @@ spec-info:
         spec-type: name
     description: |
       This set of attributes specifies a list of attributes or values.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Specification List
 spec-type: spec-list
 type: spec

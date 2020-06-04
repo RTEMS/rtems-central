@@ -30,7 +30,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies a function definition.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Function Definition
 spec-type: interface-function-definition
 type: spec

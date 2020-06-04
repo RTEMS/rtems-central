@@ -19,7 +19,7 @@ spec-info:
       exactly one link with the ${interface-target:/spec-name} to an
       ${interface-compound:/spec-name} item.  This link defines the type
       declared by the forward declaration.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Forward Declaration Item Type
 spec-type: interface-forward-declaration
 type: spec

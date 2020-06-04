@@ -17,7 +17,7 @@ spec-info:
     description: |
       It defines the interface target role of links.  It is used for interface
       forward declarations.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Target Link Role
 spec-type: interface-target
 type: spec

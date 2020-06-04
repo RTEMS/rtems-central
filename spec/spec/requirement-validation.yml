@@ -37,7 +37,7 @@ spec-info:
       This set of attributes provides a requirement validation evidence.  The
       item shall have exactly one link to the validated requirement with the
       ${requirement-validation-role:/spec-name}.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Requirement Validation Item Type
 spec-type: requirement-validation
 type: spec

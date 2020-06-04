@@ -23,7 +23,7 @@ spec-info:
       It defines the interface include role of links and is used to indicate
       that an interface container includes another interface container.  For
       example, one header file includes another header file.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Include Link Role
 spec-type: interface-include
 type: spec

@@ -82,7 +82,7 @@ spec-info:
         spec-type: build-source-list
     description: |
       This set of attributes specifies a base BSP variant to build.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build BSP Item Type
 spec-type: build-bsp
 type: spec

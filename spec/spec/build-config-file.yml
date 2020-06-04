@@ -45,7 +45,7 @@ spec-info:
       This set of attributes specifies a configuration file placed in the build
       tree.  The configuration file is generated during the configure command
       execution and are placed in the build tree.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Configuration File Item Type
 spec-type: build-config-file
 type: spec

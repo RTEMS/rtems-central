@@ -43,15 +43,18 @@ _PRIMITIVE_TYPES = {
     "str": "{} {} be a string.",
 }
 
-_REQUIRED_ATTRIBUTES = {
-    "all": "All explicitly defined attributes shall be specified.",
+_MANDATORY_ATTRIBUTES = {
+    "all":
+    "All explicit attributes shall be specified.",
     "at-least-one":
-    "At least one of the explicitly defined attributes shall be specified.",
+    "At least one of the explicit attributes shall be specified.",
     "at-most-one":
-    "At most one of the explicitly defined attributes shall be specified.",
+    "At most one of the explicit attributes shall be specified.",
     "exactly-one":
-    "Exactly one of the explicitly defined attributes shall be specified.",
-    "none": "None of the explicitly defined attributes are required.",
+    "Exactly one of the explicit attributes shall be specified.",
+    "none":
+    "None of the explicit attributes is mandatory, "
+    "they are all are optional.",
 }
 
 _SPEC_TYPE_PREFIX = "SpecType"
@@ -353,33 +356,31 @@ class _Documenter:
         content.paste_and_add(self._substitute(info["description"]))
         has_explicit_attributes = len(info["attributes"]) > 0
         if has_explicit_attributes:
-            required_attributes = info["required-attributes"]
-            if isinstance(required_attributes, str):
-                content.paste(_REQUIRED_ATTRIBUTES[required_attributes])
+            mandatory_attributes = info["mandatory-attributes"]
+            if isinstance(mandatory_attributes, str):
+                content.paste(_MANDATORY_ATTRIBUTES[mandatory_attributes])
             else:
-                assert isinstance(required_attributes, list)
-                required_attribute_count = len(required_attributes)
-                if required_attribute_count == 1:
-                    content.paste(f"Only the ``{required_attributes[0]}`` "
-                                  "attribute is required.")
-                elif required_attribute_count > 1:
-                    content.paste("The following explicitly defined "
-                                  "attributes are required:")
-                    for attribute in sorted(required_attributes):
+                assert isinstance(mandatory_attributes, list)
+                mandatory_attribute_count = len(mandatory_attributes)
+                if mandatory_attribute_count == 1:
+                    content.paste(f"Only the ``{mandatory_attributes[0]}`` "
+                                  "attribute is mandatory.")
+                elif mandatory_attribute_count > 1:
+                    content.paste("The following explicit "
+                                  "attributes are mandatory:")
+                    for attribute in sorted(mandatory_attributes):
                         content.add_list_item(f"``{attribute}``")
                     content.add_blank_line()
                 else:
                     content.add_blank_line()
-            content.paste("The following attributes are explicitly "
-                          "defined for this type:")
+            content.paste("The explicit attributes for this type are:")
             self._document_attributes(content, info["attributes"])
         if "generic-attributes" in info:
             if has_explicit_attributes:
-                content.wrap(
-                    "In addition to the explicitly defined "
-                    "attributes above, generic attributes may be defined.")
+                content.wrap("In addition to the explicit attributes, "
+                             "generic attributes may be specified.")
             else:
-                content.paste("Generic attributes may be defined.")
+                content.paste("Generic attributes may be specified.")
             content.paste("Each attribute key shall be a :ref:`SpecTypeName`.")
             type_phrase = self.get_value_type_phrase(
                 "The attribute value", "shall",

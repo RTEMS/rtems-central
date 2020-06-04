@@ -60,12 +60,12 @@ spec-info:
         spec-type: spec-assert-float-list
     description: |
       Each attribute defines an operator.
-    required-attributes: exactly-one
+    mandatory-attributes: exactly-one
   list:
     description: |
       This list of expressions evaluates to the *logical or* of the evaluation
       results of the expressions in the list.
     spec-type: spec-assert-float
-spec-name: Floating-Point Assert Specification
+spec-name: Specification Floating-Point Assert
 spec-type: spec-assert-float
 type: spec

@@ -17,7 +17,7 @@ spec-info:
     description: |
       It defines the constraint role of links.  The link target shall be a
       constraint.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Constraint Link Role
 spec-type: constraint-role
 type: spec

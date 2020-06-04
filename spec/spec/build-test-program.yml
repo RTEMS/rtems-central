@@ -77,7 +77,7 @@ spec-info:
       ``enabled-by`` attribute value which is controlled by the option action
       :ref:`set-test-state <SpecTypeBuildOptionItemType>`.  If the test state
       is set to ``exclude``, then the test program is not built.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Test Program Item Type
 spec-type: build-test-program
 type: spec

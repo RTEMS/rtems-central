@@ -20,7 +20,7 @@ spec-info:
         spec-type: interface-definition-variant-list
     description: |
       This set of attributes specifies an interface definition directive.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Definition Directive
 spec-type: interface-definition-directive
 type: spec

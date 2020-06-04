@@ -308,23 +308,23 @@ class _ItemVerifier(_Verifier):
         if not specified_keys.issubset(keys):
             missing_keys = specified_keys.difference(
                 specified_keys.intersection(keys))
-            logging.error("%s missing required keys for type '%s': %s",
+            logging.error("%s missing mandatory keys for type '%s': %s",
                           _prefix(path), self._name, str(sorted(missing_keys)))
 
-    def _assert_required_keys(self, path: _Path, type_info: Any,
-                              attr_info: Any, keys: List[str]) -> None:
-        required_attr_info = type_info["required-attributes"]
-        if isinstance(required_attr_info, str):
-            _ASSERT_KEYS[required_attr_info](self, path, set(attr_info), keys)
+    def _assert_mandatory_keys(self, path: _Path, type_info: Any,
+                               attr_info: Any, keys: List[str]) -> None:
+        mandatory_attr_info = type_info["mandatory-attributes"]
+        if isinstance(mandatory_attr_info, str):
+            _ASSERT_KEYS[mandatory_attr_info](self, path, set(attr_info), keys)
         else:
-            assert isinstance(required_attr_info, list)
-            self.assert_keys_subset(path, set(required_attr_info), keys)
+            assert isinstance(mandatory_attr_info, list)
+            self.assert_keys_subset(path, set(mandatory_attr_info), keys)
 
     def verify_dict(self, path: _Path, value: Any, type_info: Any) -> Set[str]:
         """ Verifies a dictionary value. """
         keys = sorted(filter(lambda key: not key.startswith("_"), value))
         attr_info = type_info["attributes"]
-        self._assert_required_keys(path, type_info, attr_info, keys)
+        self._assert_mandatory_keys(path, type_info, attr_info, keys)
         verified_keys = set()  # type: Set[str]
         for key in keys:
             if key in attr_info:

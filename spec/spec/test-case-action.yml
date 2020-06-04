@@ -26,7 +26,7 @@ spec-info:
         spec-type: links
     description: |
       This set of attributes specifies a test case action.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Test Case Action
 spec-type: test-case-action
 type: spec

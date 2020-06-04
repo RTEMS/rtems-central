@@ -21,7 +21,7 @@ spec-info:
         spec-type: list-str
     description: |
       This set of attributes specifies build option default values by variant.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Build Option Default by Variant
 spec-type: build-default-by-variant
 type: spec

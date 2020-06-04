@@ -29,7 +29,7 @@ spec-info:
         spec-type: requirement-text
     description: |
       This set of attributes specifies a constraint.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Constraint Item Type
 spec-type: constraint
 type: spec

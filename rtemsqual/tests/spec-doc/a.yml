@@ -19,7 +19,7 @@ spec-info:
         description: null
         spec-type: a
     description: null
-    required-attributes: []
+    mandatory-attributes: []
 spec-name: A
 spec-type: a
 type: spec

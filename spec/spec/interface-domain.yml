@@ -27,7 +27,7 @@ spec-info:
       ${interface-container:/spec-name} and ${interface-header-file:/spec-name}
       are placed into domains through links with the
       ${interface-placement:/spec-name}.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Interface Domain Item Type
 spec-type: interface-domain
 type: spec

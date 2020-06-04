@@ -17,7 +17,7 @@ spec-info:
         description: null
         spec-type: none
     description: null
-    required-attributes:
+    mandatory-attributes:
     - d1
     - d2
 spec-name: D

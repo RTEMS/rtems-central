@@ -30,7 +30,7 @@ spec-info:
            This item type is work in progress.
 
       This set of attributes specifies a test platform.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Test Platform Item Type
 spec-type: test-platform
 type: spec

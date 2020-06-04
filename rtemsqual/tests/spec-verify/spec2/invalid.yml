@@ -15,7 +15,7 @@ spec-info:
     attributes:
       INVALID:
         spec-type: invalid
-    required-attributes: none
+    mandatory-attributes: none
   none: true
   str:
     foo: bar

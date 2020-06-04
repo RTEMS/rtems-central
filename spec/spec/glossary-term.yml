@@ -24,7 +24,7 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies a glossary term.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Glossary Term Item Type
 spec-type: glossary-term
 type: spec

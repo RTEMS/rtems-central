@@ -29,7 +29,7 @@ spec-info:
     description: |
       This set of attributes specifies application configuration initializer or
       integer option.
-    required-attributes: all
+    mandatory-attributes: all
 spec-name: Application Configuration Value Option Item Type
 spec-type: appl-config-option-value
 type: spec
