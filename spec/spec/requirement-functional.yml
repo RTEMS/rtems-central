@@ -17,7 +17,7 @@ spec-info:
       functional-type:
         description: |
           It shall be the functional type of the requirement.
-        spec-type: requirement-functional-type
+        spec-type: name
     description: |
       This set of attributes specifies a functional requirement.
     mandatory-attributes: all

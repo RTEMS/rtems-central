@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: functional-type
+  spec-value: capability
+  uid: requirement-functional
+- role: spec-refinement
+  spec-key: functional-type
+  spec-value: dependability-function
+  uid: requirement-functional
+- role: spec-refinement
+  spec-key: functional-type
+  spec-value: function
+  uid: requirement-functional
+- role: spec-refinement
+  spec-key: functional-type
+  spec-value: operational
+  uid: requirement-functional
+- role: spec-refinement
+  spec-key: functional-type
+  spec-value: safety-function
+  uid: requirement-functional
+spec-description: |
+  Items of this type state a functional requirement with the functional type
+  defined by the specification type refinement.
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: null
+    mandatory-attributes: all
+spec-name: Generic Functional Requirement Item Type
+spec-type: requirement-functional-generic
+type: spec
