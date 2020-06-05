@@ -407,8 +407,10 @@ class Node:
                 ret = item["return"]
                 for retval in ret["return-values"]:
                     content.wrap(self.substitute_text(retval["description"]),
-                                 initial_indent=f"@retval {retval['value']} ")
-                content.wrap(ret["return"], initial_indent="@return ")
+                                 initial_indent=self.substitute_text(
+                                     f"@retval {retval['value']} "))
+                content.wrap(self.substitute_text(ret["return"]),
+                             initial_indent="@return ")
         return content
 
     def _add_generic_definition(self, get_lines: GetLines) -> None:
