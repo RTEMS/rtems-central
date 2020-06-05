@@ -22,9 +22,6 @@ spec-info:
         spec-type: str
       description:
         description: |
-          It shall define the state of the condition.
-        spec-type: requirement-text
-        description: |
           It shall be the test fixture method description.
         spec-type: optional-str
     description: |
