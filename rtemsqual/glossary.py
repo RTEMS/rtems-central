@@ -37,6 +37,7 @@ ItemMap = Dict[str, Item]
 class _Glossary(NamedTuple):
     """ A glossary of terms. """
     uid_to_item: ItemMap = {}
+    term_to_item: ItemMap = {}
 
 
 def _gather_glossary_groups(item: Item, glossary_groups: ItemMap) -> None:
@@ -51,6 +52,9 @@ def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
         _gather_glossary_terms(child, glossary)
     if item["type"] == "glossary" and item["glossary-type"] == "term":
         glossary.uid_to_item[item.uid] = item
+        term = item["term"]
+        assert term not in glossary.term_to_item
+        glossary.term_to_item[term] = item
 
 
 def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
@@ -67,11 +71,6 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     return content
 
 
-def _make_glossary_term_uid(term: str) -> str:
-    return "/glossary/" + re.sub(r"[^a-zA-Z0-9]+", "", term.replace(
-        "+", "X")).lower()
-
-
 def _find_glossary_terms(path: str, document_terms: ItemMap,
                          glossary: _Glossary) -> None:
     for src in glob.glob(path + "/**/*.rst", recursive=True):
@@ -79,8 +78,8 @@ def _find_glossary_terms(path: str, document_terms: ItemMap,
             continue
         with open(src, "r") as out:
             for term in re.findall(":term:`([^`]+)`", out.read()):
-                uid = _make_glossary_term_uid(term)
-                document_terms[uid] = glossary.uid_to_item[uid]
+                item = glossary.term_to_item[term]
+                document_terms[item.uid] = item
 
 
 class _GlossaryMapper(ItemMapper):
