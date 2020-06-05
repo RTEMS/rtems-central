@@ -1,0 +1,75 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines a task configuration used to build a task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: |
+      This member is the name of the task.
+    definition: ${../types/name:/name} ${.:name}
+    description: null
+    kind: member
+    name: name
+  variants: []
+- default:
+    brief: |
+      This member is the initial priority of the task.
+    definition: ${priority:/name} ${.:name}
+    description: null
+    kind: member
+    name: initial_priority
+  variants: []
+- default:
+    brief: |
+      This member is task stack area begin address for the task.
+    definition: void *${.:name}
+    description: null
+    kind: member
+    name: stack_area
+  variants: []
+- default:
+    brief: |
+      This member is task stack area size in bytes for the task.
+    definition: ${/if/c/size_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: stack_size
+  variants: []
+- default:
+    brief: |
+      This member is the function to free the task stack area if the task gets
+      deleted.
+    definition: void ( *${.:name} )( void * )
+    description: null
+    kind: member
+    name: stack_free
+  variants: []
+- default:
+    brief: |
+      This member is set of initial modes of the task.
+    definition: ${../modes/mode:/name} ${.:name}
+    description: null
+    kind: member
+    name: initial_modes
+  variants: []
+- default:
+    brief: |
+      This member is set of attributes of the task.
+    definition: ${../attr/attribute:/name} ${.:name}
+    description: null
+    kind: member
+    name: attribute_set
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/tasks
+name: rtems_task_config
+notes: null
+type: interface

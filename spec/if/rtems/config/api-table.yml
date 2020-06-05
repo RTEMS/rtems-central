@@ -108,7 +108,7 @@ definition:
     brief: |
       This field contains the pointer to Classic API Initialization Tasks Table
       of this application.
-    definition: const rtems_initialization_tasks_table *${.:name}
+    definition: const ${../tasks/initialization-table:/name} *${.:name}
     description: null
     kind: member
     name: User_initialization_tasks_table

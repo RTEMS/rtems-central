@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the set of processors owned by the scheduler instance.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${../types/id:/name} ${.:/params[0]/name}
+    - ${/if/c/size_t:/name} ${.:/params[1]/name}
+    - ${/if/c/cpu_set_t:/name} *${.:/params[2]/name}
+    return: ${../status/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: ../tasks/header
+- role: interface-ingroup
+  uid: /groups/api/classic/tasks
+name: rtems_scheduler_get_processor_set
+notes: null
+params:
+- description: is the scheduler instance identifier.
+  dir: null
+  name: scheduler_id
+- description: |
+    is the size of the referenced processor set variable in bytes.  This value
+    shall be positive.
+  dir: null
+  name: cpusetsize
+- description: |
+    is the pointer to a processor set variable.  The processor set of the
+    scheduler instance will be stored in this variable, in case of a successful
+    operation.  A set bit in the processor set means that the corresponding
+    processor is owned by the scheduler instance, otherwise the bit is cleared.
+  dir: out
+  name: cpuset
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../status/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/if/c/null:/name}.
+    value: ${../status/invalid-address:/name}
+  - description: |
+      The scheduler instance identifier was invalid.
+    value: ${../status/invalid-id:/name}
+  - description: |
+      The provided processor set was too small for the set of processors owned
+      by the scheduler instance.
+    value: ${../status/invalid-number:/name}
+type: interface

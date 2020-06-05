@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the maximum priority of the scheduler with index zero.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    body: null
+    params: []
+    return: ${/if/rtems/tasks/priority:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: /if/rtems/tasks/header
+- role: interface-ingroup
+  uid: /groups/api/classic/tasks
+name: _RTEMS_Maximum_priority
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
+type: interface

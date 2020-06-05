@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: '%'
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${../modes/mode:/name} ${.:/params[0]/name}
+    - ${../modes/mode:/name} ${.:/params[1]/name}
+    - ${../modes/mode:/name} *${.:/params[2]/name}
+    return: ${../status/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/tasks
+name: rtems_task_mode
+notes: null
+params:
+- description: '%'
+  dir: null
+  name: mode_set
+- description: '%'
+  dir: null
+  name: mask
+- description: '%'
+  dir: null
+  name: previous_mode_set
+return:
+  return: null
+  return-values: []
+type: interface

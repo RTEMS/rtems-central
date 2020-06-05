@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  This group contains the Task Manager API.
+enabled-by: true
+identifier: RTEMSAPIClassicTasks
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/tasks/header
+- role: interface-ingroup
+  uid: /groups/api/classic
+name: Task Manager
+type: interface
