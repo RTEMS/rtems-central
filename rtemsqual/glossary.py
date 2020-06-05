@@ -26,12 +26,17 @@
 
 import glob
 import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, NamedTuple, Optional
 
 from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
 from rtemsqual.items import Item, ItemCache, ItemMapper
 
 ItemMap = Dict[str, Item]
+
+
+class _Glossary(NamedTuple):
+    """ A glossary of terms. """
+    uid_to_item: ItemMap = {}
 
 
 def _gather_glossary_groups(item: Item, glossary_groups: ItemMap) -> None:
@@ -41,11 +46,11 @@ def _gather_glossary_groups(item: Item, glossary_groups: ItemMap) -> None:
         glossary_groups[item.uid] = item
 
 
-def _gather_glossary_terms(item: Item, glossary_terms: ItemMap) -> None:
+def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
     for child in item.children():
-        _gather_glossary_terms(child, glossary_terms)
+        _gather_glossary_terms(child, glossary)
     if item["type"] == "glossary" and item["glossary-type"] == "term":
-        glossary_terms[item.uid] = item
+        glossary.uid_to_item[item.uid] = item
 
 
 def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
@@ -68,14 +73,14 @@ def _make_glossary_term_uid(term: str) -> str:
 
 
 def _find_glossary_terms(path: str, document_terms: ItemMap,
-                         project_terms: ItemMap) -> None:
+                         glossary: _Glossary) -> None:
     for src in glob.glob(path + "/**/*.rst", recursive=True):
         if src.endswith("glossary.rst"):
             continue
         with open(src, "r") as out:
             for term in re.findall(":term:`([^`]+)`", out.read()):
                 uid = _make_glossary_term_uid(term)
-                document_terms[uid] = project_terms[uid]
+                document_terms[uid] = glossary.uid_to_item[uid]
 
 
 class _GlossaryMapper(ItemMapper):
@@ -100,15 +105,15 @@ def _resolve_glossary_terms(document_terms: ItemMap) -> None:
         _GlossaryMapper(term, document_terms).substitute(term["text"])
 
 
-def _generate_project_glossary(target: str, project_terms: ItemMap) -> None:
-    content = _generate_glossary_content(project_terms)
+def _generate_project_glossary(target: str, glossary: _Glossary) -> None:
+    content = _generate_glossary_content(glossary.uid_to_item)
     content.write(target)
 
 
-def _generate_document_glossary(config: dict, project_terms: ItemMap) -> None:
+def _generate_document_glossary(config: dict, glossary: _Glossary) -> None:
     document_terms = {}  # type: ItemMap
     for path in config["rest-source-paths"]:
-        _find_glossary_terms(path, document_terms, project_terms)
+        _find_glossary_terms(path, document_terms, glossary)
     _resolve_glossary_terms(document_terms)
     content = _generate_glossary_content(document_terms)
     content.write(config["target"])
@@ -126,11 +131,11 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     for item in item_cache.top_level.values():
         _gather_glossary_groups(item, groups)
 
-    project_terms = {}  # type: ItemMap
+    project_glossary = _Glossary()
     for group in config["project-groups"]:
-        _gather_glossary_terms(groups[group], project_terms)
+        _gather_glossary_terms(groups[group], project_glossary)
 
-    _generate_project_glossary(config["project-target"], project_terms)
+    _generate_project_glossary(config["project-target"], project_glossary)
 
     for document_config in config["documents"]:
-        _generate_document_glossary(document_config, project_terms)
+        _generate_document_glossary(document_config, project_glossary)
