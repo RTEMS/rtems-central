@@ -546,7 +546,7 @@ def _gather_items(item: Item, source_files: Dict[str, _SourceFile],
         src.add_test_case(item)
     elif item["type"] == "requirement" and item[
             "requirement-type"] == "functional" and item[
-                "functional-type"] == "directive":
+                "functional-type"] == "action":
         src = _get_source_file(item["test-target"], source_files)
         src.add_test_directive(item)
     elif item["type"] == "build" and item["build-type"] == "test-program":
