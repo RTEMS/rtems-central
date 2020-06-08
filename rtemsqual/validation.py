@@ -256,6 +256,21 @@ class _TestDirectiveItem(_TestItem):
     def local_includes(self) -> List[str]:
         return self._item["test-local-includes"]
 
+    def _add_pre_condition_descriptions(self, content: CContent) -> None:
+        for condition in self["pre-conditions"]:
+            content.add("static const char * const "
+                        f"{self.ident}_PreDesc_{condition['name']}[] = {{")
+            with content.indent():
+                content.add(",\n".join(f"\"{state['name']}\""
+                                       for state in condition["states"]))
+            content.add("};")
+        content.add("static const char * const * const "
+                    f"{self.ident}_PreDesc[] = {{")
+        with content.indent():
+            content.add(",\n".join(f"{self.ident}_PreDesc_{condition['name']}"
+                                   for condition in self["pre-conditions"]))
+        content.add("};")
+
     def _add_context(self, content: CContent) -> None:
         with content.doxygen_block():
             content.add_brief_description(
@@ -270,10 +285,38 @@ class _TestDirectiveItem(_TestItem):
                 "This member defines the pre-condition states "
                 "for the next action.", None)
             content.add(f"size_t pcs[ {self._pre_condition_count} ];")
+            content.add_description_block(
+                "This member indicates if the test action loop "
+                "is currently executed.", None)
+            content.add("bool in_action_loop;")
         content.add([
             f"}} {self.context};", "", f"static {self.context}",
             f"  {self.ident}_Instance;"
         ])
+
+    def _add_scope_body(self, content: CContent) -> None:
+        with content.condition("!ctx->in_action_loop"):
+            content.add("return;")
+        with content.for_loop("i = 0",
+                              f"i < RTEMS_ARRAY_SIZE( {self.ident}_PreDesc )",
+                              "++i"):
+            content.add("size_t m;")
+            with content.condition("n > 0"):
+                content.add(["buf[ 0 ] = '/';", "--n;", "++buf;"])
+            content.call_function(
+                "m =", "strlcpy",
+                ["buf", f"{self.ident}_PreDesc[ i ][ ctx->pcs[ i ] ]", "n"])
+            with content.first_condition("m < n"):
+                content.add(["n -= m;", "buf += m;"])
+            with content.final_condition(None):
+                content.add("n = 0;")
+
+    def _add_fixture_scope(self, content: CContent) -> None:
+        params = ["void *arg", "char *buf", "size_t n"]
+        with content.function("static void", f"{self.ident}_Scope", params):
+            content.add(
+                [f"{self.context} *ctx;", "size_t i;", "", "ctx = arg;"])
+            self._add_scope_body(content)
 
     def _add_fixture_method(self, content: CContent,
                             info: Optional[Dict[str, Optional[str]]],
@@ -286,7 +329,10 @@ class _TestDirectiveItem(_TestItem):
         with content.function("static void", method, [f"{self.context} *ctx"]):
             content.add(info["code"])
         with content.function("static void", wrap, ["void *arg"]):
-            content.add(f"{method}( arg );")
+            content.add([
+                f"{self.context} *ctx;", "", "ctx = arg;",
+                "ctx->in_action_loop = false;", f"{method}( ctx );"
+            ])
         return wrap
 
     def _add_transitions(self, condition_index: int, map_index: int,
@@ -416,6 +462,7 @@ class _TestDirectiveItem(_TestItem):
         _directive_add_enum(content, self._pre_index_to_enum)
         _directive_add_enum(content, self._post_index_to_enum)
         self._add_context(content)
+        self._add_pre_condition_descriptions(content)
         content.add(self["test-support"])
         self._add_handler(content, self["pre-conditions"],
                           self._pre_index_to_enum, "Prepare")
@@ -425,10 +472,12 @@ class _TestDirectiveItem(_TestItem):
         stop = self._add_fixture_method(content, self["test-stop"], "Stop")
         teardown = self._add_fixture_method(content, self["test-teardown"],
                                             "Teardown")
+        self._add_fixture_scope(content)
         fixture = f"{self.ident}_Fixture"
         content.add([
             f"static T_fixture {fixture} = {{", f"  .setup = {setup},",
             f"  .stop = {stop},", f"  .teardown = {teardown},",
+            f"  .scope = {self.ident}_Scope,",
             f"  .initial_context = &{self.ident}_Instance", "};"
         ])
         self._add_transition_map(content)
@@ -442,7 +491,8 @@ class _TestDirectiveItem(_TestItem):
         with content.indent():
             content.add([
                 f"{self.context} *ctx;", "size_t index;", "",
-                "ctx = T_fixture_context();", "index = 0;"
+                "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
+                "index = 0;"
             ])
             self._add_for_loops(content, 0)
         content.add(["}", "", "/** @} */"])

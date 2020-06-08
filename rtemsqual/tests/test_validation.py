@@ -240,10 +240,42 @@ typedef struct {
    * @brief This member defines the pre-condition states for the next action.
    */
   size_t pcs[ 3 ];
+
+  /**
+   * @brief This member indicates if the test action loop is currently
+   *   executed.
+   */
+  bool in_action_loop;
 } ClassicTaskIdentification_Context;
 
 static ClassicTaskIdentification_Context
   ClassicTaskIdentification_Instance;
+
+static const char * const ClassicTaskIdentification_PreDesc_Name[] = {
+  "Invalid",
+  "Self",
+  "Valid"
+};
+
+static const char * const ClassicTaskIdentification_PreDesc_Node[] = {
+  "Local",
+  "Remote",
+  "Invalid",
+  "SearchAll",
+  "SearchOther",
+  "SearchLocal"
+};
+
+static const char * const ClassicTaskIdentification_PreDesc_Id[] = {
+  "NullPtr",
+  "Valid"
+};
+
+static const char * const * const ClassicTaskIdentification_PreDesc[] = {
+  ClassicTaskIdentification_PreDesc_Name,
+  ClassicTaskIdentification_PreDesc_Node,
+  ClassicTaskIdentification_PreDesc_Id
+};
 
 /* Test rtems_task_ident() support */
 
@@ -425,7 +457,11 @@ static void ClassicTaskIdentification_Setup(
 
 static void ClassicTaskIdentification_Setup_Wrap( void *arg )
 {
-  ClassicTaskIdentification_Setup( arg );
+  ClassicTaskIdentification_Context *ctx;
+
+  ctx = arg;
+  ctx->in_action_loop = false;
+  ClassicTaskIdentification_Setup( ctx );
 }
 
 static void ClassicTaskIdentification_Teardown(
@@ -442,13 +478,57 @@ static void ClassicTaskIdentification_Teardown(
 
 static void ClassicTaskIdentification_Teardown_Wrap( void *arg )
 {
-  ClassicTaskIdentification_Teardown( arg );
+  ClassicTaskIdentification_Context *ctx;
+
+  ctx = arg;
+  ctx->in_action_loop = false;
+  ClassicTaskIdentification_Teardown( ctx );
+}
+
+static void ClassicTaskIdentification_Scope( void *arg, char *buf, size_t n )
+{
+  ClassicTaskIdentification_Context *ctx;
+  size_t i;
+
+  ctx = arg;
+
+  if ( !ctx->in_action_loop ) {
+    return;
+  }
+
+  for (
+    i = 0;
+    i < RTEMS_ARRAY_SIZE( ClassicTaskIdentification_PreDesc );
+    ++i
+  ) {
+    size_t m;
+
+    if ( n > 0 ) {
+      buf[ 0 ] = '/';
+      --n;
+      ++buf;
+    }
+
+    m = strlcpy(
+      buf,
+      ClassicTaskIdentification_PreDesc[ i ][ ctx->pcs[ i ] ],
+      n
+    );
+
+    if ( m < n ) {
+      n -= m;
+      buf += m;
+    } else {
+      n = 0;
+    }
+  }
 }
 
 static T_fixture ClassicTaskIdentification_Fixture = {
   .setup = ClassicTaskIdentification_Setup_Wrap,
   .stop = NULL,
   .teardown = ClassicTaskIdentification_Teardown_Wrap,
+  .scope = ClassicTaskIdentification_Scope,
   .initial_context = &ClassicTaskIdentification_Instance
 };
 
@@ -590,6 +670,7 @@ T_TEST_CASE_FIXTURE(
   size_t index;
 
   ctx = T_fixture_context();
+  ctx->in_action_loop = true;
   index = 0;
 
   for (
