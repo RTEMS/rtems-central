@@ -33,6 +33,7 @@ def main() -> None:
     config = rtemsqual.util.load_config("config.yml")
     item_cache = rtemsqual.items.ItemCache(config["spec"])
     rtemsqual.interface.generate(config["interface"], item_cache)
+    rtemsqual.validation.generate(config["validation"], item_cache)
 
 
 if __name__ == "__main__":
