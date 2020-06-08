@@ -235,6 +235,11 @@ typedef struct {
   rtems_id id_local_task;
 
   rtems_id id_remote_task;
+
+  /**
+   * @brief This member defines the pre-condition states for the next action.
+   */
+  size_t pcs[ 3 ];
 } ClassicTaskIdentification_Context;
 
 static ClassicTaskIdentification_Context
@@ -583,33 +588,28 @@ T_TEST_CASE_FIXTURE(
 {
   ClassicTaskIdentification_Context *ctx;
   size_t index;
-  ClassicTaskIdentification_Pre_Name in_0;
 
   ctx = T_fixture_context();
   index = 0;
 
   for (
-    in_0 = ClassicTaskIdentification_Pre_Name_Invalid;
-    in_0 != ClassicTaskIdentification_Pre_Name_Valid + 1;
-    ++in_0
+    ctx->pcs[ 0 ] = ClassicTaskIdentification_Pre_Name_Invalid;
+    ctx->pcs[ 0 ] != ClassicTaskIdentification_Pre_Name_Valid + 1;
+    ++ctx->pcs[ 0 ]
   ) {
-    ClassicTaskIdentification_Pre_Node in_1;
-
     for (
-      in_1 = ClassicTaskIdentification_Pre_Node_Local;
-      in_1 != ClassicTaskIdentification_Pre_Node_SearchLocal + 1;
-      ++in_1
+      ctx->pcs[ 1 ] = ClassicTaskIdentification_Pre_Node_Local;
+      ctx->pcs[ 1 ] != ClassicTaskIdentification_Pre_Node_SearchLocal + 1;
+      ++ctx->pcs[ 1 ]
     ) {
-      ClassicTaskIdentification_Pre_Id in_2;
-
       for (
-        in_2 = ClassicTaskIdentification_Pre_Id_NullPtr;
-        in_2 != ClassicTaskIdentification_Pre_Id_Valid + 1;
-        ++in_2
+        ctx->pcs[ 2 ] = ClassicTaskIdentification_Pre_Id_NullPtr;
+        ctx->pcs[ 2 ] != ClassicTaskIdentification_Pre_Id_Valid + 1;
+        ++ctx->pcs[ 2 ]
       ) {
-        ClassicTaskIdentification_Pre_Name_Prepare( ctx, in_0 );
-        ClassicTaskIdentification_Pre_Node_Prepare( ctx, in_1 );
-        ClassicTaskIdentification_Pre_Id_Prepare( ctx, in_2 );
+        ClassicTaskIdentification_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
+        ClassicTaskIdentification_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
+        ClassicTaskIdentification_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
         ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
         ClassicTaskIdentification_Post_Status_Check(
           ctx,

@@ -266,6 +266,10 @@ class _TestDirectiveItem(_TestItem):
                 content.add_description_block(info["brief"],
                                               info["description"])
                 content.add(f"{info['member'].strip()};")
+            content.add_description_block(
+                "This member defines the pre-condition states "
+                "for the next action.", None)
+            content.add(f"size_t pcs[ {self._pre_condition_count} ];")
         content.add([
             f"}} {self.context};", "", f"static {self.context}",
             f"  {self.ident}_Instance;"
@@ -365,7 +369,7 @@ class _TestDirectiveItem(_TestItem):
 
     def _add_action(self, content: CContent) -> None:
         for index, enum in enumerate(self._pre_index_to_enum):
-            content.append(f"{enum[0]}_Prepare( ctx, in_{index} );")
+            content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")
         content.append(self["test-action"])
         transition_map = f"{self.ident}_TransitionMap"
         for index, enum in enumerate(self._post_index_to_enum):
@@ -377,15 +381,7 @@ class _TestDirectiveItem(_TestItem):
 
     def _add_for_loops(self, content: CContent, index: int) -> None:
         if index < self._pre_condition_count:
-            enum = self._pre_index_to_enum[index][0]
-            var = f"in_{index}"
-            if index == 0:
-                content.add([
-                    f"{self.context} *ctx;", "size_t index;", f"{enum} {var};",
-                    "", "ctx = T_fixture_context();", "index = 0;"
-                ])
-            else:
-                content.add([f"{enum} {var};"])
+            var = f"ctx->pcs[ {index} ]"
             begin = self._pre_index_to_enum[index][1]
             end = self._pre_index_to_enum[index][-1]
             with content.for_loop(f"{var} = {begin}", f"{var} != {end} + 1",
@@ -444,6 +440,10 @@ class _TestDirectiveItem(_TestItem):
             "{"
         ])
         with content.indent():
+            content.add([
+                f"{self.context} *ctx;", "size_t index;", "",
+                "ctx = T_fixture_context();", "index = 0;"
+            ])
             self._add_for_loops(content, 0)
         content.add(["}", "", "/** @} */"])
 
