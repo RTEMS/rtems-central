@@ -373,10 +373,10 @@ class _TestDirectiveItem(_TestItem):
         transition_map = f"{self.ident}_TransitionMap"
         for index, enum in enumerate(self._post_index_to_enum):
             content.append([
-                f"{enum[0]}_Check(", f"  ctx,",
+                f"{enum[0]}_Check(", "  ctx,",
                 f"  {transition_map}[ index ][ {index} ]", ");"
             ])
-        content.append(f"++index;")
+        content.append("++index;")
 
     def _add_for_loops(self, content: CContent, index: int) -> None:
         if index < self._pre_condition_count:
