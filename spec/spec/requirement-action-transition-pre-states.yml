@@ -12,12 +12,12 @@ spec-info:
     description: |
       The list defines the set of states of the pre-condition in the
       transition.
-    spec-type: requirement-directive-name
+    spec-type: requirement-action-name
   str:
     assert:
       eq: all
     description: |
       The value represents all states of the pre-condition in the transition.
-spec-name: Directive Requirement Transition Pre-Condition State Set
-spec-type: requirement-directive-transition-pre-states
+spec-name: Action Requirement Transition Pre-Condition State Set
+spec-type: requirement-action-transition-pre-states
 type: spec

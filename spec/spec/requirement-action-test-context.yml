@@ -24,10 +24,9 @@ spec-info:
           C structure member definition without a trailing ``;``.
         spec-type: str
     description: |
-      This set of attributes defines a directive requirement test context
-      member.
+      This set of attributes defines an action requirement test context member.
     mandatory-attributes: all
   none: null
-spec-name: Directive Requirement Test Context Member
-spec-type: requirement-directive-test-context
+spec-name: Action Requirement Test Context Member
+spec-type: requirement-action-test-context
 type: spec

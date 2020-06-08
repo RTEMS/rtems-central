@@ -12,16 +12,16 @@ spec-info:
     attributes: {}
     description: |
       This set of attributes defines for each post-condition the state after
-      the directive call for a transition in a directive requirement.
+      the action for a transition in an action requirement.
     generic-attributes:
       description: |
         There shall be exactly one generic attribute key for each
         post-condition.  The key name shall be the post-condition name.  The
         value of each generic attribute shall be the state of the
         post-condition.
-      key-spec-type: requirement-directive-name
-      value-spec-type: requirement-directive-name
+      key-spec-type: requirement-action-name
+      value-spec-type: requirement-action-name
     mandatory-attributes: all
-spec-name: Directive Requirement Transition Post-Conditions
-spec-type: requirement-directive-transition-post
+spec-name: Action Requirement Transition Post-Conditions
+spec-type: requirement-action-transition-post
 type: spec

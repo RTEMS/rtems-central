@@ -10,7 +10,7 @@ spec-example: null
 spec-info:
   list:
     description: null
-    spec-type: requirement-directive-condition
-spec-name: Directive Requirement Condition List
-spec-type: requirement-directive-condition-list
+    spec-type: requirement-action-transition
+spec-name: Action Requirement Transition List
+spec-type: requirement-action-transition-list
 type: spec

@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: functional-type
-  spec-value: directive
+  spec-value: action
   uid: requirement-functional
 spec-description: null
 spec-example: null
@@ -16,10 +16,10 @@ spec-info:
     attributes:
       post-conditions:
         description: null
-        spec-type: requirement-directive-condition-list
+        spec-type: requirement-action-condition-list
       pre-conditions:
         description: null
-        spec-type: requirement-directive-condition-list
+        spec-type: requirement-action-condition-list
       test-action:
         description: |
           It shall be the test action code.
@@ -31,7 +31,7 @@ spec-info:
         spec-type: optional-str
       test-context:
         description: null
-        spec-type: requirement-directive-test-context-list
+        spec-type: requirement-action-test-context-list
       test-description:
         description: |
           If the value is present, then it shall be the test case description.
@@ -49,10 +49,10 @@ spec-info:
         spec-type: test-name
       test-setup:
         description: null
-        spec-type: requirement-directive-test-fixture
+        spec-type: requirement-action-test-fixture
       test-stop:
         description: null
-        spec-type: requirement-directive-test-fixture
+        spec-type: requirement-action-test-fixture
       test-support:
         description: |
           If the value is present, then it shall be the test case support code.
@@ -64,30 +64,37 @@ spec-info:
         spec-type: str
       test-teardown:
         description: null
-        spec-type: requirement-directive-test-fixture
+        spec-type: requirement-action-test-fixture
       transition-map:
         description: null
-        spec-type: requirement-directive-transition-list
+        spec-type: requirement-action-transition-list
     description: |
       This set of attributes specifies functional requirements and
-      corresponding validation tests for a directive.  A directive is a
-      function or a macro.  There shall be exactly one link with the
-      ${interface-function-role:/spec-name} to the interface of the directive.
-      The directive requirement specifies
+      corresponding validation test code.  The functional requirements of an
+      action are specified.  An action performs a step in a finite state
+      machine.  An action is implemented through a function or a macro.  The
+      action is performed through a call of the function or an execution of the
+      code of an macro expansion by an actor.  The actor is for example a task
+      or an interrupt service routine.
+
+      There shall be exactly one link with the
+      ${interface-function-role:/spec-name} to the interface of the action.
+
+      The action requirements are specified by
 
       * a list of pre-conditions, each with a set of states,
 
       * a list of post-conditions, each with a set of states,
 
       * the transition of pre-condition states to post-condition states through
-        a call of the directive, and
+        the action.
 
-      * the test code to generate a validation test.
-
-      For a directive requirement it is verified that all variations of
-      pre-condition states have a set of post-condition states specified in the
-      transition map.
+      Along with the requirements, the test code to generate a validation test
+      is specified.  For an action requirement it is verified that all
+      variations of pre-condition states have a set of post-condition states
+      specified in the transition map.  All transitions are covered by the
+      generated test code.
     mandatory-attributes: all
-spec-name: Directive Requirement Item Type
-spec-type: requirement-directive
+spec-name: Action Requirement Item Type
+spec-type: requirement-action
 type: spec

@@ -19,15 +19,15 @@ spec-info:
         spec-type: enabled-by
       post-conditions:
         description: null
-        spec-type: requirement-directive-transition-post
+        spec-type: requirement-action-transition-post
       pre-conditions:
         description: null
-        spec-type: requirement-directive-transition-pre
+        spec-type: requirement-action-transition-pre
     description: |
-      This set of attributes defines the transition from a set of
-      pre-conditions to post-conditions through a directive call in a directive
-      requirement.
+      This set of attributes defines the transition from all state variations
+      of the set of pre-conditions to states of post-conditions through an
+      action in an action requirement.
     mandatory-attributes: all
-spec-name: Directive Requirement Transition
-spec-type: requirement-directive-transition
+spec-name: Action Requirement Transition
+spec-type: requirement-action-transition
 type: spec

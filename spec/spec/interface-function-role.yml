@@ -16,7 +16,7 @@ spec-info:
     attributes: {}
     description: |
       It defines the interface function role of links.  It is used to indicate
-      that a ${requirement-directive:/spec-name} item specifies functional
+      that a ${requirement-action:/spec-name} item specifies functional
       requirements of an ${interface-function:/spec-name} or
       a ${interface-macro:/spec-name} item.
     mandatory-attributes: all

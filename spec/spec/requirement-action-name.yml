@@ -13,11 +13,11 @@ spec-info:
     - re: ^[A-Z][a-zA-Z0-9]+$
     description: |
       It shall be the name of a condition or a state of a condition used to
-      define pre-conditions and post-conditions of a directive requirement.  It
+      define pre-conditions and post-conditions of an action requirement.  It
       shall be formatted in CamelCase.  It should be brief and abbreviated.
       The rationale for this is that the names are used in tables and the
       horizontal space is limited by the page width.  The more conditions you
-      have in a directive requirement, the shorter the names should be.
-spec-name: Directive Requirement Name
-spec-type: requirement-directive-name
+      have in an action requirement, the shorter the names should be.
+spec-name: Action Requirement Name
+spec-type: requirement-action-name
 type: spec

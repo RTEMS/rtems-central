@@ -12,20 +12,21 @@ spec-info:
     attributes:
       name:
         description: null
-        spec-type: requirement-directive-name
+        spec-type: requirement-action-name
       test-code:
         description: |
           It shall be the test code to prepare or check the state of the
-          condition.
+          condition.  The code may use a local variable ``ctx`` which points to
+          the test context, see ${requirement-action-test-context:/spec-name}.
         spec-type: str
       text:
         description: |
           It shall define the state of the condition.
         spec-type: requirement-text
     description: |
-      This set of attributes defines a directive pre-condition or
-      post-condition state.
+      This set of attributes defines an action pre-condition or post-condition
+      state.
     mandatory-attributes: all
-spec-name: Directive Requirement State
-spec-type: requirement-directive-state
+spec-name: Action Requirement State
+spec-type: requirement-action-state
 type: spec
