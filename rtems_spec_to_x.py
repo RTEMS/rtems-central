@@ -44,6 +44,7 @@ def _run_command(args: List[str], cwd: str) -> int:
                             stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT,
                             cwd=cwd)
+    assert task.stdout is not None
     while True:
         line = task.stdout.readline()
         if line:
