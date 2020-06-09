@@ -633,6 +633,33 @@ class CContent(Content):
             self.add(",\n".join(params))
         self.add(f"){semicolon}")
 
+    def call_function(self,
+                      ret: Optional[str],
+                      name: str,
+                      params: Optional[List[str]] = None) -> None:
+        """ Adds a function call. """
+        if ret:
+            space = " "
+        else:
+            ret = ""
+            space = ""
+        if params:
+            param_line = "( " + ", ".join(params) + " )"
+        else:
+            param_line = "()"
+        line = f"{ret}{space}{name}{param_line};"
+        if len(self._indent) + len(line) > 79:
+            if params:
+                self._function(ret, name, params, param_line, space, ";")
+            elif ret:
+                self.add(ret)
+                with self.indent():
+                    self.add(f"{name}();")
+            else:
+                self.add(f"{name}();")
+        else:
+            self.add(line)
+
     def declare_function(self,
                          ret: str,
                          name: str,

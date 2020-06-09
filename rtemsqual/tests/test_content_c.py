@@ -231,6 +231,33 @@ b
 
 def test_function():
     content = CContent()
+    content.call_function("a =", "b", [])
+    assert str(content) == """a = b();
+"""
+    content = CContent()
+    content.call_function(None, "a", [
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ])
+    assert str(content) == """a(
+  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+);
+"""
+    content = CContent()
+    content.call_function(
+        None,
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        [])
+    assert str(
+        content
+    ) == """aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa();
+"""
+    content = CContent()
+    content.call_function("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa =",
+                          "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", [])
+    assert str(content) == """aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa =
+  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb();
+"""
+    content = CContent()
     content.declare_function("a", "b", [])
     assert str(content) == """a b( void );
 """
