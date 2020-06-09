@@ -227,3 +227,55 @@ b
 
 /** @} */
 """
+
+
+def test_function():
+    content = CContent()
+    content.declare_function("a", "b", [])
+    assert str(content) == """a b( void );
+"""
+    content = CContent()
+    content.declare_function("a *", "b", [])
+    assert str(content) == """a *b( void );
+"""
+    content = CContent()
+    content.declare_function("a *", "b", [
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x",
+        "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y",
+        "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z"
+    ])
+    assert str(content) == """a *b(
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x,
+  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y,
+  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z
+);
+"""
+    content = CContent()
+    content.declare_function(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *",
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", [
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x",
+            "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y",
+            "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z"
+        ])
+    assert str(content) == """aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb(
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x,
+  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y,
+  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z
+);
+"""
+    content = CContent()
+    content.declare_function("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *",
+                             "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", [])
+    assert str(content) == """aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb( void );
+"""
+    content = CContent()
+    with content.function("a", "b", []):
+        content.add("c")
+    assert str(content) == """a b( void )
+{
+  c
+}
+"""

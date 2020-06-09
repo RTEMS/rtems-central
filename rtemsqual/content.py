@@ -616,6 +616,64 @@ class CContent(Content):
         yield
         self.close_for_loop()
 
+    def _function(self, ret: str, name: str, params: List[str],
+                  param_line: str, space: str, semicolon: str) -> None:
+        # pylint: disable=too-many-arguments
+        line = f"{ret}{space}{name}("
+        if len(self._indent) + len(line) > 79:
+            line = f"{name}{param_line}{semicolon}"
+            if len(self._indent) + len(line) > 79:
+                self.add([ret, f"{name}("])
+            else:
+                self.add([ret, line])
+                return
+        else:
+            self.add(line)
+        with self.indent():
+            self.add(",\n".join(params))
+        self.add(f"){semicolon}")
+
+    def declare_function(self,
+                         ret: str,
+                         name: str,
+                         params: Optional[List[str]] = None,
+                         define: bool = False) -> None:
+        """ Adds a function declaration. """
+        if not params:
+            params = ["void"]
+        param_line = f"( {', '.join(params)} )"
+        space = "" if not ret or ret.endswith("*") else " "
+        semicolon = "" if define else ";"
+        line = f"{ret}{space}{name}{param_line}{semicolon}"
+        if len(self._indent) + len(line) > 79:
+            self._function(ret, name, params, param_line, space, semicolon)
+        else:
+            self.add(line)
+
+    def open_function(self,
+                      ret: str,
+                      name: str,
+                      params: Optional[List[str]] = None) -> None:
+        """ Opens a function definition. """
+        self.declare_function(ret, name, params, define=True)
+        self.append("{")
+        self.push_indent()
+
+    def close_function(self) -> None:
+        """ Closes a function definition. """
+        self.pop_indent()
+        self.add("}")
+
+    @contextmanager
+    def function(self,
+                 ret: str,
+                 name: str,
+                 params: Optional[List[str]] = None) -> Iterator[None]:
+        """ Opens a function context. """
+        self.open_function(ret, name, params)
+        yield
+        self.close_function()
+
     def add_brief_description(self, description: Optional[str]) -> None:
         """ Adds a brief description. """
         self.wrap(description, initial_indent="@brief ")
