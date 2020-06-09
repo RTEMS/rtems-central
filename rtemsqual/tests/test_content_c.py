@@ -211,3 +211,19 @@ def test_add_description_block():
  * b
  */
 """
+
+
+def test_add_to_group():
+    content = CContent()
+    with content.add_to_group("a"):
+        content.add("b")
+    assert str(content) == """/**
+ * @addtogroup a
+ *
+ * @{
+ */
+
+b
+
+/** @} */
+"""

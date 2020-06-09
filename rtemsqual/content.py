@@ -577,6 +577,22 @@ class CContent(Content):
         yield
         self.close_comment_block()
 
+    def open_add_to_group(self, group: str) -> None:
+        """ Opens an add to group. """
+        with self.doxygen_block():
+            self.append([f"@addtogroup {group}", "", "@{"])
+
+    def close_add_to_group(self) -> None:
+        """ Closes an add to group. """
+        self.add("/** @} */")
+
+    @contextmanager
+    def add_to_group(self, group: str) -> Iterator[None]:
+        """ Opens an add to group context. """
+        self.open_add_to_group(group)
+        yield
+        self.close_add_to_group()
+
     def open_for_loop(self, begin: str, end: str, step: str) -> None:
         """ Opens a for loop. """
         for_loop = [f"for ( {begin}; {end}; {step} ) {{"]
