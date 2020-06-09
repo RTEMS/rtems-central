@@ -640,7 +640,7 @@ T_TEST_CASE_FIXTURE(
 /* Test case support code */
 
 /**
- * @fn void T_case_body_TestCase(void)
+ * @fn void T_case_body_TestCase( void )
  *
  * @brief Test case brief description.
  *
@@ -660,7 +660,7 @@ T_TEST_CASE_FIXTURE(
  *
  *   - Test case action 1 check 1 description.
  */
-T_TEST_CASE(TestCase)
+T_TEST_CASE( TestCase )
 {
   /* Test case prologue code */
 
@@ -690,7 +690,7 @@ T_TEST_CASE(TestCase)
  */
 
 /**
- * @fn void T_case_body_TestCase2(void)
+ * @fn void T_case_body_TestCase2( void )
  *
  * @brief Test case 2 brief description.
  *
@@ -706,7 +706,7 @@ T_TEST_CASE(TestCase)
  *
  * - Test case 2 action 1 description.
  */
-T_TEST_CASE_FIXTURE(TestCase2, &test_case_2_fixture)
+T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
 {
   /* Test case 2 action 0 code */
   /* Test case 2 action 0 check 0 code */
@@ -775,7 +775,7 @@ T_TEST_CASE_FIXTURE(TestCase2, &test_case_2_fixture)
  */
 
 /**
- * @fn void T_case_body_TestCase3(void)
+ * @fn void T_case_body_TestCase3( void )
  *
  * @brief Test case 3 brief description.
  *
@@ -787,7 +787,7 @@ T_TEST_CASE_FIXTURE(TestCase2, &test_case_2_fixture)
  *
  *   - Test case 3 action 0 check 0 description.
  */
-T_TEST_CASE(TestCase3)
+T_TEST_CASE( TestCase3 )
 {
   T_plan(1);
 
@@ -808,13 +808,13 @@ T_TEST_CASE(TestCase3)
  */
 
 /**
- * @fn void T_case_body_TestCase4(void)
+ * @fn void T_case_body_TestCase4( void )
  *
  * @brief Test case 4 brief description.
  *
  * Test case 4 description.
  */
-T_TEST_CASE(TestCase4)
+T_TEST_CASE( TestCase4 )
 {
   /* Test case 4 epilogue code */
 }

@@ -141,18 +141,19 @@ class _TestItem:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
         content.add(self["support"])
-        with content.function_block(f"void T_case_body_{self.ident}(void)"):
+        with content.function_block(f"void T_case_body_{self.ident}( void )"):
             content.add_brief_description(self["brief"])
             content.wrap(self["description"])
             self._add_test_case_action_description(content)
+        content.gap = False
+        params = [f"{self.ident}"]
         fixture = self["fixture"]
         if fixture:
-            content.append(f"T_TEST_CASE_FIXTURE({self.ident}, &{fixture})")
+            params.append(f"&{fixture}")
+            name = "T_TEST_CASE_FIXTURE"
         else:
-            content.append(f"T_TEST_CASE({self.ident})")
-        content.append("{")
-        content.gap = False
-        with content.indent():
+            name = "T_TEST_CASE"
+        with content.function("", name, params):
             content.add(self["prologue"])
             steps = StepWrapper()
             action_content = self._generate_test_case_actions(steps)
@@ -160,7 +161,7 @@ class _TestItem:
                 content.add(f"T_plan({steps.steps});")
             content.add(action_content)
             content.add(self["epilogue"])
-        content.add(["}", "", "/** @} */"])
+        content.add("/** @} */")
 
 
 class _TestSuiteItem(_TestItem):
@@ -276,16 +277,12 @@ class _TestDirectiveItem(_TestItem):
         if not info:
             return "NULL"
         method = f"{self.ident}_{name}"
-        content.add_description_block(info["brief"], info["description"])
-        content.add(
-            [f"static void {method}(", f"  {self.context} *ctx", ")", "{"])
-        with content.indent():
-            content.add(info["code"])
         wrap = f"{method}_Wrap"
-        content.add([
-            "}", "", f"static void {wrap}( void *arg )", "{",
-            f"  {method}( arg );", "}"
-        ])
+        content.add_description_block(info["brief"], info["description"])
+        with content.function("static void", method, [f"{self.context} *ctx"]):
+            content.add(info["code"])
+        with content.function("static void", wrap, ["void *arg"]):
+            content.add(f"{method}( arg );")
         return wrap
 
     def _add_transitions(self, condition_index: int, map_index: int,
@@ -402,11 +399,9 @@ class _TestDirectiveItem(_TestItem):
                      action: str) -> None:
         for condition_index, condition in enumerate(conditions):
             enum = index_to_enum[condition_index]
-            content.add([
-                f"static void {enum[0]}_{action}(", f"  {self.context} *ctx,",
-                f"  {enum[0]} state", ")", "{"
-            ])
-            with content.indent():
+            handler = f"{enum[0]}_{action}"
+            params = [f"{self.context} *ctx", f"{enum[0]} state"]
+            with content.function("static void", handler, params):
                 content.add(condition["test-prologue"])
                 content.add("switch ( state ) {")
                 with content.indent():
@@ -418,7 +413,6 @@ class _TestDirectiveItem(_TestItem):
                         content.add("}")
                 content.add("}")
                 content.add(condition["test-epilogue"])
-            content.add("}")
 
     def generate(self, content: CContent,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
