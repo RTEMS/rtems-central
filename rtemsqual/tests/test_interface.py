@@ -182,7 +182,7 @@ typedef enum EnumB {
  *
  * @param[in,out] Param3 is parameter 3.
  */
-void Function(int Param0, const int *Param1, int *Param2, int *Param3);
+void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
 
 /**
  * @ingroup GroupB

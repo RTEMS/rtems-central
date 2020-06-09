@@ -328,36 +328,19 @@ class Node:
         return f"#define {name}"
 
     def _get_function_definition(self, item: Item, definition: Any) -> Lines:
-        body = definition["body"]
-        ret = self.substitute_code(definition["return"])
-        if body:
-            ret = "static inline " + ret
+        content = CContent()
         name = item["name"]
-        space = "" if ret.endswith("*") else " "
-        if definition["params"]:
-            params = [
-                self.substitute_code(param) for param in definition["params"]
-            ]
-            param_line = ", ".join(params)
-            line = f"{ret}{space}{name}({param_line})"
-            if len(line) > 79:
-                line = f"{ret}{space}{name}"
-                param_block = ",\n  ".join(params)
-                line = f"{ret}{space}{name}(\n  {param_block}\n)"
-        else:
-            line = f"{ret}{space}{name}(void)"
-            if len(line) > 79:
-                line = f"{ret}\n{name}(void)"
+        ret = self.substitute_code(definition["return"])
+        params = [
+            self.substitute_code(param) for param in definition["params"]
+        ]
+        body = definition["body"]
         if body:
-            body_lines = self.substitute_code("\n  ".join(
-                body.strip("\n").split("\n")))
-            line = f"""{line}
-{{
-  {body_lines}
-}}"""
+            with content.function("static inline " + ret, name, params):
+                content.add(self.substitute_code(body))
         else:
-            line += ";"
-        return line
+            content.declare_function(ret, name, params)
+        return content.lines
 
     def _get_macro_definition(self, item: Item, definition: Any) -> Lines:
         name = item["name"]
