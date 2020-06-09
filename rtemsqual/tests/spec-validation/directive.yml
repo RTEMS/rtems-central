@@ -212,7 +212,8 @@ test-setup:
 test-stop: null
 test-support: |
   /* Test rtems_task_ident() support */
-test-target: tc12.c
+test-header: null
+test-target-source: tc12.c
 test-teardown:
   brief: null
   code: |

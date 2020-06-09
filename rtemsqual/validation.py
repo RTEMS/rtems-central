@@ -31,7 +31,7 @@ from typing import Any, Dict, List, Mapping, NamedTuple, Optional, Tuple
 
 from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper
-from rtemsqual.items import Item, ItemCache
+from rtemsqual.items import Item, ItemCache, ItemMapper
 
 ItemMap = Dict[str, Item]
 
@@ -136,7 +136,7 @@ class _TestItem:
                     string.Template(check["check"]).substitute(steps))
         return content
 
-    def generate(self, content: CContent,
+    def generate(self, content: CContent, _base_directory: str,
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
@@ -170,7 +170,7 @@ class _TestSuiteItem(_TestItem):
     def group_identifier(self) -> str:
         return f"RTEMSTestSuite{self.ident}"
 
-    def generate(self, content: CContent,
+    def generate(self, content: CContent, _base_directory: str,
                  _test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
         with content.defgroup_block(self.group_identifier, self.name):
             content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
@@ -271,7 +271,7 @@ class _TestDirectiveItem(_TestItem):
                                    for condition in self["pre-conditions"]))
         content.add("};")
 
-    def _add_context(self, content: CContent) -> None:
+    def _add_context(self, content: CContent, header: Dict[str, Any]) -> None:
         with content.doxygen_block():
             content.add_brief_description(
                 f"Test context for {self.name} test case.")
@@ -281,6 +281,11 @@ class _TestDirectiveItem(_TestItem):
                 content.add_description_block(info["brief"],
                                               info["description"])
                 content.add(f"{info['member'].strip()};")
+            for param in self._get_run_params(header):
+                content.add_description_block(
+                    "This member contains a copy of the corresponding "
+                    f"{self.ident}_Run() parameter.", None)
+                content.add(f"{param};")
             content.add_description_block(
                 "This member defines the pre-condition states "
                 "for the next action.", None)
@@ -436,6 +441,41 @@ class _TestDirectiveItem(_TestItem):
         else:
             self._add_action(content)
 
+    def _add_test_case(self, content: CContent, header: Dict[str,
+                                                             Any]) -> None:
+        fixture = f"{self.ident}_Fixture"
+        if header:
+            ret = "void"
+            name = f"{self.ident}_Run"
+            params = self._get_run_params(header)
+            prologue = [
+                f"{self.context} *ctx;", "size_t index;", "",
+                f"ctx = T_push_fixture( &{self.ident}_Node, &{fixture} );"
+            ]
+            prologue.extend(f"ctx->{param['name']} = {param['name']}"
+                            for param in header["run-params"])
+            prologue.extend(["ctx->in_action_loop = true;", "index = 0;"])
+            epilogue = ["T_pop_fixture();"]
+        else:
+            with content.function_block(
+                    f"void T_case_body_{self.ident}( void )"):
+                content.add_brief_description(self["test-brief"])
+                content.wrap(self["test-description"])
+            content.gap = False
+            ret = ""
+            name = "T_TEST_CASE_FIXTURE"
+            params = [f"{self.ident}", f"&{fixture}"]
+            prologue = [
+                f"{self.context} *ctx;", "size_t index;", "",
+                "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
+                "index = 0;"
+            ]
+            epilogue = []
+        with content.function(ret, name, params):
+            content.add(prologue)
+            self._add_for_loops(content, 0)
+            content.add(epilogue)
+
     def _add_handler(self, content: CContent, conditions: List[Any],
                      index_to_enum: _DirectiveIndexToEnum,
                      action: str) -> None:
@@ -456,12 +496,56 @@ class _TestDirectiveItem(_TestItem):
                 content.add("}")
                 content.add(condition["test-epilogue"])
 
-    def generate(self, content: CContent,
-                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
-        self.add_test_case_description(content, test_case_to_suites)
+    def _get_run_params(self, header: Optional[Dict[str, Any]]) -> List[str]:
+        if not header:
+            return []
+        mapper = ItemMapper(self._item)
+        return [
+            mapper.substitute_with_prefix(param["specifier"],
+                                          f"test-header/run-params[{index}]")
+            for index, param in enumerate(header["run-params"])
+        ]
+
+    def _generate_header_body(self, content: CContent,
+                              header: Dict[str, Any]) -> None:
         _directive_add_enum(content, self._pre_index_to_enum)
         _directive_add_enum(content, self._post_index_to_enum)
-        self._add_context(content)
+        content.add(header["code"])
+        with content.doxygen_block():
+            content.add_brief_description(self["test-brief"])
+            content.wrap(self["test-description"])
+            content.add_param_description(header["run-params"])
+        content.gap = False
+        content.declare_function("void", f"{self.ident}_Run",
+                                 self._get_run_params(header))
+
+    def _generate_header(self, base_directory: str, header: Dict[str,
+                                                                 Any]) -> None:
+        content = CContent()
+        content.register_license_and_copyrights_of_item(self._item)
+        content.add_spdx_license_identifier()
+        with content.file_block():
+            content.add_ingroup([self.group_identifier])
+        content.add_copyrights_and_licenses()
+        with content.header_guard(os.path.basename(header["target"])):
+            content.add_includes(list(map(CInclude, header["includes"])))
+            content.add_includes(list(map(CInclude, header["local-includes"])),
+                                 local=True)
+            with content.extern_c():
+                with content.add_to_group(self.group_identifier):
+                    self._generate_header_body(content, header)
+        content.write(os.path.join(base_directory, header["target"]))
+
+    def generate(self, content: CContent, base_directory: str,
+                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+        self.add_test_case_description(content, test_case_to_suites)
+        header = self["test-header"]
+        if header:
+            self._generate_header(base_directory, header)
+        else:
+            _directive_add_enum(content, self._pre_index_to_enum)
+            _directive_add_enum(content, self._post_index_to_enum)
+        self._add_context(content, header)
         self._add_pre_condition_descriptions(content)
         content.add(self["test-support"])
         self._add_handler(content, self["pre-conditions"],
@@ -473,29 +557,15 @@ class _TestDirectiveItem(_TestItem):
         teardown = self._add_fixture_method(content, self["test-teardown"],
                                             "Teardown")
         self._add_fixture_scope(content)
-        fixture = f"{self.ident}_Fixture"
         content.add([
-            f"static T_fixture {fixture} = {{", f"  .setup = {setup},",
-            f"  .stop = {stop},", f"  .teardown = {teardown},",
-            f"  .scope = {self.ident}_Scope,",
+            f"static T_fixture {self.ident}_Fixture = {{",
+            f"  .setup = {setup},", f"  .stop = {stop},",
+            f"  .teardown = {teardown},", f"  .scope = {self.ident}_Scope,",
             f"  .initial_context = &{self.ident}_Instance", "};"
         ])
         self._add_transition_map(content)
-        with content.function_block(f"void T_case_body_{self.ident}( void )"):
-            content.add_brief_description(self["test-brief"])
-            content.wrap(self["test-description"])
-        content.append([
-            "T_TEST_CASE_FIXTURE(", f"  {self.ident},", f"  &{fixture}", ")",
-            "{"
-        ])
-        with content.indent():
-            content.add([
-                f"{self.context} *ctx;", "size_t index;", "",
-                "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
-                "index = 0;"
-            ])
-            self._add_for_loops(content, 0)
-        content.add(["}", "", "/** @} */"])
+        self._add_test_case(content, header)
+        content.add("/** @} */")
 
 
 class _SourceFile:
@@ -550,9 +620,9 @@ class _SourceFile:
         content.add_includes(local_includes, local=True)
         content.add_includes([CInclude("t.h")])
         for item in sorted(self._test_cases, key=lambda x: x.name):
-            item.generate(content, test_case_to_suites)
+            item.generate(content, base_directory, test_case_to_suites)
         for item in sorted(self._test_suites, key=lambda x: x.name):
-            item.generate(content, test_case_to_suites)
+            item.generate(content, base_directory, test_case_to_suites)
         content.write(os.path.join(base_directory, self._file))
 
 
@@ -597,7 +667,7 @@ def _gather_items(item: Item, source_files: Dict[str, _SourceFile],
     elif item["type"] == "requirement" and item[
             "requirement-type"] == "functional" and item[
                 "functional-type"] == "action":
-        src = _get_source_file(item["test-target"], source_files)
+        src = _get_source_file(item["test-target-source"], source_files)
         src.add_test_directive(item)
     elif item["type"] == "build" and item["build-type"] == "test-program":
         test_programs.append(_TestProgram(item))

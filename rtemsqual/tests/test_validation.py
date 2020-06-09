@@ -903,3 +903,425 @@ T_TEST_CASE( TestCase4 )
 /** @} */
 """
         assert content == src.read()
+    with open(os.path.join(base_directory, "action2.h"), "r") as src:
+        content = """/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestCaseAction2
+ */
+
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef _ACTION2_H
+#define _ACTION2_H
+
+#include <d.h>
+
+#include "e.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @addtogroup RTEMSTestCaseAction2
+ *
+ * @{
+ */
+
+typedef enum {
+  Action2_Pre_A_X,
+  Action2_Pre_A_Y
+} Action2_Pre_A;
+
+typedef enum {
+  Action2_Pre_B_X,
+  Action2_Pre_B_Y
+} Action2_Pre_B;
+
+typedef enum {
+  Action2_Post_A_X,
+  Action2_Post_A_Y
+} Action2_Post_A;
+
+typedef enum {
+  Action2_Post_B_X,
+  Action2_Post_B_Y
+} Action2_Post_B;
+
+/* Header code */
+
+/**
+ * @brief Test brief.
+ *
+ * Test description.
+ *
+ * @param[in] a Parameter A description.
+ *
+ * @param b Parameter B description.
+ *
+ * @param[out] c Parameter C description.
+ */
+void Action2_Run( int *a, int b, int *c );
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _ACTION2_H */
+"""
+        assert content == src.read()
+    with open(os.path.join(base_directory, "action2.c"), "r") as src:
+        content = """/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestCaseAction2
+ */
+
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <a.h>
+
+#include "b.h"
+
+#include <t.h>
+
+/**
+ * @defgroup RTEMSTestCaseAction2 Action 2
+ *
+ * @ingroup RTEMSTestSuiteBlueGreen
+ *
+ * @brief Test Case
+ *
+ * @{
+ */
+
+/**
+ * @brief Test context for Action 2 test case.
+ */
+typedef struct {
+  /**
+   * @brief Context member brief.
+   *
+   * Context member description.
+   */
+  int member;
+
+  /**
+   * @brief This member contains a copy of the corresponding Action2_Run()
+   *   parameter.
+   */
+  int *a;
+
+  /**
+   * @brief This member contains a copy of the corresponding Action2_Run()
+   *   parameter.
+   */
+  int b;
+
+  /**
+   * @brief This member contains a copy of the corresponding Action2_Run()
+   *   parameter.
+   */
+  int *c;
+
+  /**
+   * @brief This member defines the pre-condition states for the next action.
+   */
+  size_t pcs[ 2 ];
+
+  /**
+   * @brief This member indicates if the test action loop is currently
+   *   executed.
+   */
+  bool in_action_loop;
+} Action2_Context;
+
+static Action2_Context
+  Action2_Instance;
+
+static const char * const Action2_PreDesc_A[] = {
+  "X",
+  "Y"
+};
+
+static const char * const Action2_PreDesc_B[] = {
+  "X",
+  "Y"
+};
+
+static const char * const * const Action2_PreDesc[] = {
+  Action2_PreDesc_A,
+  Action2_PreDesc_B
+};
+
+/* Support code */
+
+static void Action2_Pre_A_Prepare( Action2_Context *ctx, Action2_Pre_A state )
+{
+  /* Pre A prologue. */
+
+  switch ( state ) {
+    case Action2_Pre_A_X: {
+      /* Pre A X */
+      break;
+    }
+
+    case Action2_Pre_A_Y: {
+      /* Pre A Y */
+      break;
+    }
+  }
+
+  /* Pre A epilogue. */
+}
+
+static void Action2_Pre_B_Prepare( Action2_Context *ctx, Action2_Pre_B state )
+{
+  /* Pre B prologue. */
+
+  switch ( state ) {
+    case Action2_Pre_B_X: {
+      /* Pre B X */
+      break;
+    }
+
+    case Action2_Pre_B_Y: {
+      /* Pre B Y */
+      break;
+    }
+  }
+
+  /* Pre B epilogue. */
+}
+
+static void Action2_Post_A_Check( Action2_Context *ctx, Action2_Post_A state )
+{
+  /* Post A prologue. */
+
+  switch ( state ) {
+    case Action2_Post_A_X: {
+      /* Post A X */
+      break;
+    }
+
+    case Action2_Post_A_Y: {
+      /* Post A Y */
+      break;
+    }
+  }
+
+  /* Post A epilogue. */
+}
+
+static void Action2_Post_B_Check( Action2_Context *ctx, Action2_Post_B state )
+{
+  /* Post B prologue. */
+
+  switch ( state ) {
+    case Action2_Post_B_X: {
+      /* Post B X */
+      break;
+    }
+
+    case Action2_Post_B_Y: {
+      /* Post B Y */
+      break;
+    }
+  }
+
+  /* Post B epilogue. */
+}
+
+/**
+ * @brief Setup brief.
+ *
+ * Setup description.
+ */
+static void Action2_Setup( Action2_Context *ctx )
+{
+  /* Setup code */
+}
+
+static void Action2_Setup_Wrap( void *arg )
+{
+  Action2_Context *ctx;
+
+  ctx = arg;
+  ctx->in_action_loop = false;
+  Action2_Setup( ctx );
+}
+
+/**
+ * @brief Teardown brief.
+ *
+ * Teardown description.
+ */
+static void Action2_Teardown( Action2_Context *ctx )
+{
+  /* Teardown code */
+}
+
+static void Action2_Teardown_Wrap( void *arg )
+{
+  Action2_Context *ctx;
+
+  ctx = arg;
+  ctx->in_action_loop = false;
+  Action2_Teardown( ctx );
+}
+
+static void Action2_Scope( void *arg, char *buf, size_t n )
+{
+  Action2_Context *ctx;
+  size_t i;
+
+  ctx = arg;
+
+  if ( !ctx->in_action_loop ) {
+    return;
+  }
+
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( Action2_PreDesc ); ++i ) {
+    size_t m;
+
+    if ( n > 0 ) {
+      buf[ 0 ] = '/';
+      --n;
+      ++buf;
+    }
+
+    m = strlcpy( buf, Action2_PreDesc[ i ][ ctx->pcs[ i ] ], n );
+
+    if ( m < n ) {
+      n -= m;
+      buf += m;
+    } else {
+      n = 0;
+    }
+  }
+}
+
+static T_fixture Action2_Fixture = {
+  .setup = Action2_Setup_Wrap,
+  .stop = NULL,
+  .teardown = Action2_Teardown_Wrap,
+  .scope = Action2_Scope,
+  .initial_context = &Action2_Instance
+};
+
+static const uint8_t Action2_TransitionMap[][ 2 ] = {
+  {
+    Action2_Post_A_X,
+    Action2_Post_B_Y
+  }, {
+    Action2_Post_A_X,
+    Action2_Post_B_Y
+  }, {
+    Action2_Post_A_X,
+    Action2_Post_B_Y
+  }, {
+    Action2_Post_A_X,
+    Action2_Post_B_Y
+  }
+};
+
+void Action2_Run( int *a, int b, int *c )
+{
+  Action2_Context *ctx;
+  size_t index;
+
+  ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
+  ctx->a = a
+  ctx->b = b
+  ctx->c = c
+  ctx->in_action_loop = true;
+  index = 0;
+
+  for (
+    ctx->pcs[ 0 ] = Action2_Pre_A_X;
+    ctx->pcs[ 0 ] != Action2_Pre_A_Y + 1;
+    ++ctx->pcs[ 0 ]
+  ) {
+    for (
+      ctx->pcs[ 1 ] = Action2_Pre_B_X;
+      ctx->pcs[ 1 ] != Action2_Pre_B_Y + 1;
+      ++ctx->pcs[ 1 ]
+    ) {
+      Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
+      Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
+      /* Action */
+      Action2_Post_A_Check(
+        ctx,
+        Action2_TransitionMap[ index ][ 0 ]
+      );
+      Action2_Post_B_Check(
+        ctx,
+        Action2_TransitionMap[ index ][ 1 ]
+      );
+      ++index;
+    }
+  }
+
+  T_pop_fixture();
+}
+
+/** @} */
+"""
+        assert content == src.read()

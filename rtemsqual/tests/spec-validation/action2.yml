@@ -1,0 +1,146 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links: []
+post-conditions:
+- name: A
+  states:
+  - name: X
+    test-code: |
+      /* Post A X */
+    text: |
+      Post A X.
+  - name: Y
+    test-code: |
+      /* Post A Y */
+    text: |
+      Post A Y.
+  test-epilogue: |
+    /* Post A epilogue. */
+  test-prologue: |
+    /* Post A prologue. */
+- name: B
+  states:
+  - name: X
+    test-code: |
+      /* Post B X */
+    text: |
+      Post B X.
+  - name: Y
+    test-code: |
+      /* Post B Y */
+    text: |
+      Post B Y.
+  test-epilogue: |
+    /* Post B epilogue. */
+  test-prologue: |
+    /* Post B prologue. */
+pre-conditions:
+- name: A
+  states:
+  - name: X
+    test-code: |
+      /* Pre A X */
+    text: |
+      Pre A X.
+  - name: Y
+    test-code: |
+      /* Pre A Y */
+    text: |
+      Pre A Y.
+  test-epilogue: |
+    /* Pre A epilogue. */
+  test-prologue: |
+    /* Pre A prologue. */
+- name: B
+  states:
+  - name: X
+    test-code: |
+      /* Pre B X */
+    text: |
+      Pre B X.
+  - name: Y
+    test-code: |
+      /* Pre B Y */
+    text: |
+      Pre B Y.
+  test-epilogue: |
+    /* Pre B epilogue. */
+  test-prologue: |
+    /* Pre B prologue. */
+requirement-type: functional
+test-action: |
+  /* Action */
+test-brief: |
+  Test brief.
+test-context:
+- brief: |
+    Context member brief.
+  description: |
+    Context member description.
+  member: |
+    int member
+test-description: |
+  Test description.
+test-header:
+  code: |
+    /* Header code */
+  includes:
+  - d.h
+  local-includes:
+  - e.h
+  run-params:
+  - description: |
+      Parameter A description.
+    dir: in
+    name: a
+    specifier: int *${.:name}
+  - description: |
+      Parameter B description.
+    dir: null
+    name: b
+    specifier: int ${.:name}
+  - description: |
+      Parameter C description.
+    dir: out
+    name: c
+    specifier: int *${.:name}
+  target: action2.h
+test-includes:
+- a.h
+test-local-includes:
+- b.h
+test-name: Action 2
+test-setup:
+  brief: |
+    Setup brief.
+  code: |
+    /* Setup code */
+  description: |
+    Setup description.
+test-stop: null
+test-support: |
+  /* Support code */
+test-target-source: action2.c
+test-teardown:
+  brief: |
+    Teardown brief.
+  code: |
+    /* Teardown code */
+  description: |
+    Teardown description.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    A: X
+    B: Y
+  pre-conditions:
+    A: all
+    B: all
+rationale: null
+references: []
+text: |
+  Text.
+type: requirement
