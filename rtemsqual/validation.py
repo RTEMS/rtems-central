@@ -493,10 +493,8 @@ class _SourceFile:
         includes = []  # type: List[CInclude]
         local_includes = []  # type: List[CInclude]
         for item in itertools.chain(self._test_suites, self._test_cases):
-            for inc in item.includes:
-                includes.append(CInclude(inc))
-            for inc in item.local_includes:
-                local_includes.append(CInclude(inc))
+            includes.extend(map(CInclude, item.includes))
+            local_includes.extend(map(CInclude, item.local_includes))
             content.register_license_and_copyrights_of_item(item.item)
         content.add_spdx_license_identifier()
         with content.file_block():
