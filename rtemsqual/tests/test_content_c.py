@@ -306,3 +306,28 @@ bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb( void );
   c
 }
 """
+
+
+def test_condition():
+    content = CContent()
+    with content.condition("a"):
+        content.add("b")
+    assert str(content) == """if ( a ) {
+  b
+}
+"""
+    content = CContent()
+    with content.first_condition("a"):
+        content.add("b")
+    with content.next_condition("c"):
+        content.add("d")
+    with content.final_condition(None):
+        content.add("e")
+    assert str(content) == """if ( a ) {
+  b
+} else if ( c ) {
+  d
+} else {
+  e
+}
+"""

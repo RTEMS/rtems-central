@@ -701,6 +701,48 @@ class CContent(Content):
         yield
         self.close_function()
 
+    def open_condition(self,
+                       expression: Optional[str],
+                       chain: bool = False) -> None:
+        """ Opens a condition. """
+        begin = "} else " if chain else ""
+        ifelse = f"if ( {expression} ) " if expression else ""
+        self.add(f"{begin}{ifelse}{{")
+        self.push_indent()
+
+    def close_condition(self) -> None:
+        """ Closes a condition. """
+        self.pop_indent()
+        self.add("}")
+
+    @contextmanager
+    def condition(self, expression: Optional[str]) -> Iterator[None]:
+        """ Opens a condition context. """
+        self.open_condition(expression)
+        yield
+        self.close_condition()
+
+    @contextmanager
+    def first_condition(self, expression: Optional[str]) -> Iterator[None]:
+        """ Opens the first condition context. """
+        self.open_condition(expression, False)
+        yield
+        self.pop_indent()
+
+    @contextmanager
+    def next_condition(self, expression: Optional[str]) -> Iterator[None]:
+        """ Opens the next condition context. """
+        self.open_condition(expression, True)
+        yield
+        self.pop_indent()
+
+    @contextmanager
+    def final_condition(self, expression: Optional[str]) -> Iterator[None]:
+        """ Opens the final condition context. """
+        self.open_condition(expression, True)
+        yield
+        self.close_condition()
+
     def add_brief_description(self, description: Optional[str]) -> None:
         """ Adds a brief description. """
         self.wrap(description, initial_indent="@brief ")
