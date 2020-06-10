@@ -615,6 +615,7 @@ class CContent(Content):
         """ Closes a for loop. """
         self.pop_indent()
         self.append(["}"])
+        self.gap = True
 
     @contextmanager
     def for_loop(self, begin: str, end: str, step: str) -> Iterator[None]:
