@@ -7,7 +7,7 @@ check: check-env
 	coverage run --branch -m pytest -vv rtemsqual/tests
 
 format: $(PY_ALL_FILES) | check-env
-	yapf -i $^
+	yapf -i --parallel $^
 
 analyse: $(PY_SRC_FILES) | check-env
 	flake8 $^
