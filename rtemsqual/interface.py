@@ -156,14 +156,6 @@ def _add_definition(node: "Node", item: Item, prefix: str,
     return content
 
 
-_PARAM = {
-    None: "@param ",
-    "in": "@param[in] ",
-    "out": "@param[out] ",
-    "inout": "@param[in,out] ",
-}
-
-
 class Node:
     """ Nodes of a header file. """
     def __init__(self, header_file: "_HeaderFile", item: Item,
@@ -399,10 +391,8 @@ class Node:
             content.wrap(self.substitute_text(item["description"]))
             content.wrap(self.substitute_text(item["notes"]))
             if "params" in item:
-                for param in item["params"]:
-                    content.wrap(param["name"] + " " +
-                                 self.substitute_text(param["description"]),
-                                 initial_indent=_PARAM[param["dir"]])
+                content.add_param_description(item["params"],
+                                              self.substitute_text)
             if "return" in item:
                 ret = item["return"]
                 for retval in ret["return-values"]:

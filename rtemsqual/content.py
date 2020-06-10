@@ -414,6 +414,13 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE."""
 
+_PARAM = {
+    None: "@param ",
+    "in": "@param[in] ",
+    "out": "@param[out] ",
+    "inout": "@param[in,out] ",
+}
+
 
 class CInclude(NamedTuple):
     """ A C include file. """
@@ -746,6 +753,15 @@ class CContent(Content):
     def add_brief_description(self, description: Optional[str]) -> None:
         """ Adds a brief description. """
         self.wrap(description, initial_indent="@brief ")
+
+    def add_param_description(
+            self,
+            params: Iterable[Dict[str, str]],
+            substitute: Callable[[str], str] = lambda x: x) -> None:
+        """ Adds a list of parameter descriptions. """
+        for param in params:
+            self.wrap(param["name"] + " " + substitute(param["description"]),
+                      initial_indent=_PARAM[param["dir"]])
 
     def add_description_block(self, brief: Optional[str],
                               description: Optional[str]) -> None:

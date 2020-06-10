@@ -188,6 +188,48 @@ def test_add_brief_description():
 """
 
 
+def test_add_param_description():
+    content = CContent()
+    content.add_param_description([])
+    assert str(content) == ""
+    params = [{"description": "A", "dir": None, "name": "a"}]
+    content.add_param_description(params)
+    assert str(content) == """@param a A
+"""
+    content = CContent()
+    params = [
+        {
+            "description": "A",
+            "dir": None,
+            "name": "a"
+        },
+        {
+            "description": "B",
+            "dir": "in",
+            "name": "b"
+        },
+        {
+            "description": "C",
+            "dir": "out",
+            "name": "c"
+        },
+        {
+            "description": "D",
+            "dir": "inout",
+            "name": "d"
+        },
+    ]
+    content.add_param_description(params, lambda x: x + x)
+    assert str(content) == """@param a AA
+
+@param[in] b BB
+
+@param[out] c CC
+
+@param[in,out] d DD
+"""
+
+
 def test_add_description_block():
     content = CContent()
     content.add_description_block("", None)
