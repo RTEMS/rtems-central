@@ -95,6 +95,7 @@ def test_item_mapper(tmpdir):
         assert item == item_2
         assert value_2 == "p"
         assert mapper.substitute("$$${.:.}") == "$p"
+    assert mapper.substitute_with_prefix("$$${.:.}", "v") == "$p"
     with mapper.prefix("x"):
         with mapper.prefix("y"):
             assert mapper[".:."] == "z"

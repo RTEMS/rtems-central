@@ -316,6 +316,13 @@ class ItemMapper(Mapping[str, object]):
         """ Performs a variable substitution using the item mapper. """
         return ItemTemplate(text).substitute(self)
 
+    def substitute_with_prefix(self, text: str, prefix: str) -> str:
+        """
+        Performs a variable substitution using the item mapper with a prefix.
+        """
+        with self.prefix(prefix):
+            return ItemTemplate(text).substitute(self)
+
     def get_value(self, _item: Item, _path: str, _value: Any, _key: str,
                   _index: Optional[int]) -> Any:
         """ Gets a value by key and optional index. """
