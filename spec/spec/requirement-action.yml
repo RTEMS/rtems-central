@@ -77,7 +77,7 @@ spec-info:
       action are specified.  An action performs a step in a finite state
       machine.  An action is implemented through a function or a macro.  The
       action is performed through a call of the function or an execution of the
-      code of an macro expansion by an actor.  The actor is for example a task
+      code of a macro expansion by an actor.  The actor is for example a task
       or an interrupt service routine.
 
       There shall be exactly one link with the
