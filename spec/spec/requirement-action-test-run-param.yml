@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      description:
+        description: |
+          It shall be the description of the parameter.
+        spec-type: str
+      dir:
+        description: null
+        spec-type: interface-param-dir
+      name:
+        description: |
+          It shall be the parameter name.
+        spec-type: str
+      specifier:
+        description: |
+          It shall be the complete function parameter specifier.  Use
+          ``$${.:name}`` for the parameter name, for example
+          ``"int $${.:name}"``.
+        spec-type: str
+    description: |
+      This set of attributes specifies a parameter for the test run function.
+      The parameter is also added as a member to the test context, see
+      ${requirement-action-test-context:/spec-name}.
+    mandatory-attributes: all
+spec-name: Action Requirement Test Run Parameter
+spec-type: requirement-action-test-run-param
+type: spec

@@ -36,6 +36,9 @@ spec-info:
         description: |
           If the value is present, then it shall be the test case description.
         spec-type: optional-str
+      test-header:
+        description: null
+        spec-type: requirement-action-test-header
       test-includes:
         description: |
           It shall be a list of header files included via ``#include <...>``.
@@ -60,7 +63,7 @@ spec-info:
         spec-type: optional-str
       test-target:
         description: |
-          It shall be the path to the generated target test case source file.
+          It shall be the path to the generated test case source file.
         spec-type: str
       test-teardown:
         description: null
