@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  The semaphore manager utilizes standard Dijkstra counting semaphores to
+  provide synchronization and mutual exclusion capabilities.
+enabled-by: true
+identifier: RTEMSAPIClassicSem
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/sem/header
+- role: interface-ingroup
+  uid: /groups/api/classic
+name: Semaphore Manager
+type: interface
