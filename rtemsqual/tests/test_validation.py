@@ -346,7 +346,7 @@ static void ClassicTaskIdentification_Pre_Node_Prepare(
 
 static void ClassicTaskIdentification_Pre_Id_Prepare(
   ClassicTaskIdentification_Context *ctx,
-  ClassicTaskIdentification_Pre_Id state
+  ClassicTaskIdentification_Pre_Id   state
 )
 {
   switch ( state ) {
@@ -364,7 +364,7 @@ static void ClassicTaskIdentification_Pre_Id_Prepare(
 }
 
 static void ClassicTaskIdentification_Post_Status_Check(
-  ClassicTaskIdentification_Context *ctx,
+  ClassicTaskIdentification_Context    *ctx,
   ClassicTaskIdentification_Post_Status state
 )
 {
@@ -398,7 +398,7 @@ static void ClassicTaskIdentification_Post_Status_Check(
 
 static void ClassicTaskIdentification_Post_Id_Check(
   ClassicTaskIdentification_Context *ctx,
-  ClassicTaskIdentification_Post_Id state
+  ClassicTaskIdentification_Post_Id  state
 )
 {
   switch ( state ) {

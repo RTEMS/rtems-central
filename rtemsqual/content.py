@@ -28,6 +28,7 @@ from contextlib import contextmanager
 import itertools
 import os
 import re
+import sys
 import textwrap
 from typing import Any, Callable, ContextManager, Dict, Iterable, Iterator, \
     List, NamedTuple, Optional, Set, Tuple, Union
@@ -442,6 +443,32 @@ def _split_includes(
     return includes_unconditional, includes_enabled_by
 
 
+_FUNCTION_POINTER = re.compile(r"^[^(]+\(\s\*([^)]+)\)\s*\(")
+_DESIGNATOR = re.compile(r"([a-zA-Z0-9_]+)$")
+
+
+def _get_align_pos(param: str) -> Tuple[int, int]:
+    if param == "...":
+        return 0, sys.maxsize
+    match = _DESIGNATOR.search(param)
+    if not match:
+        match = _FUNCTION_POINTER.search(param)
+        assert match
+    star = param.find("*")
+    if star >= 0:
+        return star, match.start(1)
+    return match.start(1), match.start(1)
+
+
+def _align_params(params: List[str]) -> List[str]:
+    positions = list(map(_get_align_pos, params))
+    max_pos = max(positions)[1]
+    return [
+        param[:pos[0]] + (max_pos - pos[1]) * " " + param[pos[0]:]
+        for param, pos in zip(params, positions)
+    ]
+
+
 class CContent(Content):
     """ This class builds C content. """
 
@@ -669,7 +696,9 @@ class CContent(Content):
                          ret: str,
                          name: str,
                          params: Optional[List[str]] = None,
-                         define: bool = False) -> None:
+                         define: bool = False,
+                         align: bool = True) -> None:
+        # pylint: disable=too-many-arguments
         """ Adds a function declaration. """
         if not params:
             params = ["void"]
@@ -678,6 +707,8 @@ class CContent(Content):
         semicolon = "" if define else ";"
         line = f"{ret}{space}{name}{param_line}{semicolon}"
         if len(self._indent) + len(line) > 79:
+            if align:
+                params = _align_params(params)
             self._function(ret, name, params, param_line, space, semicolon)
         else:
             self.add(line)
@@ -685,9 +716,10 @@ class CContent(Content):
     def open_function(self,
                       ret: str,
                       name: str,
-                      params: Optional[List[str]] = None) -> None:
+                      params: Optional[List[str]] = None,
+                      align: bool = True) -> None:
         """ Opens a function definition. """
-        self.declare_function(ret, name, params, define=True)
+        self.declare_function(ret, name, params, define=True, align=align)
         self.append("{")
         self.push_indent()
 
@@ -700,9 +732,10 @@ class CContent(Content):
     def function(self,
                  ret: str,
                  name: str,
-                 params: Optional[List[str]] = None) -> Iterator[None]:
+                 params: Optional[List[str]] = None,
+                 align: bool = True) -> Iterator[None]:
         """ Opens a function context. """
-        self.open_function(ret, name, params)
+        self.open_function(ret, name, params, align=align)
         yield
         self.close_function()
 

@@ -471,7 +471,7 @@ class _TestDirectiveItem(_TestItem):
                 "index = 0;"
             ]
             epilogue = []
-        with content.function(ret, name, params):
+        with content.function(ret, name, params, align=False):
             content.add(prologue)
             self._add_for_loops(content, 0)
             content.add(epilogue)

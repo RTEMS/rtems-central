@@ -205,10 +205,10 @@ void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
  * @return Sometimes some value.
  */
 static inline int VeryLongFunction(
-  int VeryLongParam0,
+  int                  VeryLongParam0,
   const struct Struct *VeryLongParam1,
-  struct Struct *VeryLongParam2,
-  struct Struct *VeryLongParam3
+  struct Struct    *( *VeryLongParam2 )( void ),
+  struct Struct       *VeryLongParam3
 )
 {
   (void) VeryLongParam1;

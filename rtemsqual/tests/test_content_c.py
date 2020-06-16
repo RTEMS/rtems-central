@@ -308,15 +308,20 @@ def test_function():
     assert str(content) == """a *b( void );
 """
     content = CContent()
+    content.declare_function("a", "b", ["..."])
+    assert str(content) == """a b( ... );
+"""
+    content = CContent()
     content.declare_function("a *", "b", [
         "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x",
         "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y",
-        "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z"
+        "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z", "..."
     ])
     assert str(content) == """a *b(
   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x,
-  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y,
-  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z
+  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy             y,
+  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz          z,
+  ...
 );
 """
     content = CContent()
@@ -324,14 +329,14 @@ def test_function():
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *",
         "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", [
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x",
-            "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y",
-            "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z"
+            "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy *y",
+            "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz *( *z )( void )"
         ])
     assert str(content) == """aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *
 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb(
   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x,
-  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y,
-  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z
+  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy            *y,
+  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz      *( *z )( void )
 );
 """
     content = CContent()
