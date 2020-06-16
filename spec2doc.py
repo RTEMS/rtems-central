@@ -35,6 +35,8 @@ def main() -> None:
     rtemsqual.applconfig.generate(config["appl-config"], item_cache)
     rtemsqual.specdoc.document(config["spec-documentation"], item_cache)
     rtemsqual.glossary.generate(config["glossary"], item_cache)
+    rtemsqual.interfacedoc.generate(config["interface-documentation"],
+                                    item_cache)
 
 
 if __name__ == "__main__":

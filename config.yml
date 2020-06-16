@@ -86,6 +86,10 @@ interface:
   - /if/use/container
   domains:
     /if/domains/api: external/rtems
+interface-documentation:
+- directives-target: external/rtems-docs/c-user/sem/directives.rst
+  group: /groups/api/classic/sem
+  introduction-target: external/rtems-docs/c-user/sem/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:
