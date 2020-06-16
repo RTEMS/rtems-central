@@ -13,7 +13,10 @@ definition:
     - int *${.:/params[3]/name}
     return: void
   variants: []
-description: Function description.
+description: |
+  Function description.  References to ${func2:/name}, ${td:/name},
+  ${enum:/name}, ${define:/name}, ${macro:/name}, ${var:/name},
+  ${enumerator-0:/name}, and ${s:/name}.
 name: Function
 notes: null
 params:

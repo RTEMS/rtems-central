@@ -82,12 +82,21 @@ class _InterfaceMapper(ItemMapper):
             header_file.add_potential_edge(node, item)
         return value
 
-    def get_value(self, item: Item, _path: str, _value: Any, key: str,
+    def get_value(self, item: Item, path: str, value: Any, key: str,
                   _index: Optional[int]) -> Any:
-        # pylint: disable=no-self-use
-        if key == "name" and item["type"] == "interface" and item[
-                "interface-type"] == "forward-declaration":
-            return _forward_declaration(item)
+        if path == "/" and key == "name" and item["type"] == "interface":
+            interface_type = item["interface-type"]
+            if interface_type == "forward-declaration":
+                return _forward_declaration(item)
+            if not self._eval_interface:
+                value = value[key]
+                if interface_type == "function":
+                    return f"{value}()"
+                if interface_type in ["enumerator", "typedef"]:
+                    return f"::{value}"
+                if interface_type in ["define", "enum", "macro", "variable"]:
+                    return f"#{value}"
+                return value
         raise KeyError
 
     def enabled_by_to_defined(self, enabled_by: str) -> str:

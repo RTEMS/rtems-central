@@ -115,8 +115,7 @@ definition:
   variants: []
 definition-kind: typedef-only
 description: |
-  Use ${get-api-configuration:/name}() to get the configuration
-  table.
+  Use ${get-api-configuration:/name} to get the configuration table.
 enabled-by: true
 interface-type: struct
 links:
