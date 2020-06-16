@@ -217,6 +217,11 @@ def test_add_definition_item():
     assert str(content) == """a
      b
 """
+    content = SphinxContent()
+    content.add_definition_item("a", "\n b\nc", wrap=True)
+    assert str(content) == """a
+    b c
+"""
 
 
 def test_definition_item():

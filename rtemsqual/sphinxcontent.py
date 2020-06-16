@@ -92,7 +92,10 @@ class SphinxContent(Content):
         """ Adds a list of index entries the content. """
         self.add([".. index:: " + entry for entry in make_lines(entries)])
 
-    def add_definition_item(self, name, lines) -> None:
+    def add_definition_item(self,
+                            name: GenericContent,
+                            definition: GenericContent,
+                            wrap: bool = False) -> None:
         """ Adds a definition item the content. """
         @contextmanager
         def _definition_item_context(content: Content) -> Iterator[None]:
@@ -101,7 +104,10 @@ class SphinxContent(Content):
             yield
             content.pop_indent()
 
-        self.add(lines, _definition_item_context)
+        if wrap:
+            self.wrap(definition, context=_definition_item_context)
+        else:
+            self.add(definition, context=_definition_item_context)
 
     @contextmanager
     def definition_item(self, name: GenericContent) -> Iterator[None]:
