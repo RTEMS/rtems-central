@@ -16,7 +16,7 @@ definition:
 description: |
   Function description.  References to ${func2:/name}, ${td:/name},
   ${enum:/name}, ${define:/name}, ${macro:/name}, ${var:/name},
-  ${enumerator-0:/name}, and ${s:/name}.
+  ${enumerator-0:/name}, ${s:/name}, ${option:/name}, and ${option:/type}.
 name: Function
 notes: null
 params:
@@ -38,4 +38,7 @@ links:
   uid: h
 - role: interface-ingroup
   uid: ga
+return:
+  return: null
+  return-values: []
 type: interface

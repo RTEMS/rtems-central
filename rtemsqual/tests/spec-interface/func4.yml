@@ -2,19 +2,24 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-brief: Void function brief description with very long return type.
+brief: Function brief description with very long return type.
 definition:
   default:
     body: null
     params: []
     return: VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
-  variants: []
+  variants:
+  - enabled-by: true
+    definition:
+      body: null
+      params: []
+      return: NotSoVeryLongType
 description: null
-name: VoidFunction
+name: VeryLongTypeFunction
 notes: null
 params: []
 return:
-  return: null
+  return: This function returns an object with a very long type.
   return-values: []
 interface-type: function
 links:

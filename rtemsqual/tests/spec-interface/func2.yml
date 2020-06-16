@@ -17,9 +17,11 @@ definition:
     - ${forward-decl:/name} *${.:/params[3]/name}
     return: int
   variants: []
-description: null
+description: |
+  VeryLongFunction description.
 name: VeryLongFunction
-notes: null
+notes: |
+  VeryLongFunction notes.
 params:
 - description: |
     is very long parameter 0 with some super important and extra very long
@@ -36,7 +38,7 @@ params:
   dir: inout
   name: VeryLongParam3
 return:
-  return: Sometimes some value.
+  return: Sometimes some value.  See ${func:/name}.
   return-values:
   - description: is returned, in case A.
     value: 1

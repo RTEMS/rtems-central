@@ -173,7 +173,8 @@ typedef enum EnumB {
  * @brief Function brief description.
  *
  * Function description.  References to VeryLongFunction(), ::Integer, #Enum,
- * #DEFINE, #VERY_LONG_MACRO, #Variable, ::ENUMERATOR_0, and Struct.
+ * #DEFINE, #VERY_LONG_MACRO, #Variable, ::ENUMERATOR_0, Struct, a, and
+ * interface.
  *
  * @param Param0 is parameter 0.
  *
@@ -190,6 +191,10 @@ void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
  *
  * @brief Very long function brief description.
  *
+ * VeryLongFunction description.
+ *
+ * VeryLongFunction notes.
+ *
  * @param VeryLongParam0 is very long parameter 0 with some super important and
  *   extra very long description which makes a lot of sense.
  *
@@ -203,7 +208,7 @@ void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
  *
  * @retval 2 is returned, in case B.
  *
- * @return Sometimes some value.
+ * @return Sometimes some value.  See Function().
  */
 static inline int VeryLongFunction(
   int                  VeryLongParam0,
