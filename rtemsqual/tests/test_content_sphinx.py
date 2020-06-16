@@ -219,6 +219,16 @@ def test_add_definition_item():
 """
 
 
+def test_definition_item():
+    content = SphinxContent()
+    with content.definition_item("x"):
+        content.add(["y", "z"])
+    assert str(content) == """x
+    y
+    z
+"""
+
+
 def test_license():
     content = SphinxContent()
     with pytest.raises(ValueError):

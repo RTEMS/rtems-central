@@ -103,6 +103,14 @@ class SphinxContent(Content):
 
         self.add(lines, _definition_item_context)
 
+    @contextmanager
+    def definition_item(self, name: GenericContent) -> Iterator[None]:
+        """ Opens a definition item context. """
+        self.wrap(name)
+        self.push_indent()
+        yield
+        self.pop_indent()
+
     def open_directive(self,
                        name: str,
                        value: Optional[str] = None,
