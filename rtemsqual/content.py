@@ -152,6 +152,9 @@ def _add_context(_content: "Content") -> Iterator[None]:
     yield
 
 
+_SPECIAL_BLOCK = re.compile(r"^( *\* | *[0-9]+\. | +)")
+
+
 class Content:
     """ This class builds content. """
 
@@ -237,12 +240,17 @@ class Content:
             wrapper = textwrap.TextWrapper()
             wrapper.break_long_words = False
             wrapper.break_on_hyphens = False
-            wrapper.drop_whitespace = True
             wrapper.initial_indent = initial_indent
-            wrapper.subsequent_indent = subsequent_indent
             wrapper.width = 79 - len(self._indent)
             gap = []  # type: List[str]
             for block in text.split("\n\n"):
+                match = _SPECIAL_BLOCK.search(block)
+                if match:
+                    space = len(match.group(0)) * " "
+                    wrapper.subsequent_indent = f"{subsequent_indent}{space}"
+                    block = block.replace(f"\n{space}", "\n")
+                else:
+                    wrapper.subsequent_indent = subsequent_indent
                 self._lines.extend(gap)
                 self._lines.extend(
                     _indent(wrapper.wrap(block), self._indent,
@@ -271,39 +279,28 @@ class Content:
         wrapper = textwrap.TextWrapper()
         wrapper.break_long_words = False
         wrapper.break_on_hyphens = False
-        wrapper.drop_whitespace = True
         wrapper.initial_indent = ""
-        wrapper.subsequent_indent = ""
         wrapper.width = 79 - len(self._indent)
         for index, block in enumerate(text.split("\n\n")):
-            lines = wrapper.wrap(block)
             if index == 0:
+                wrapper.subsequent_indent = ""
+                lines = wrapper.wrap(block)
                 if 0 < len(last) >= indent_len:
                     self._lines[-1] = last[0:indent_len] + lines[0]
                     lines = lines[1:]
                 self.gap = True
             else:
+                match = _SPECIAL_BLOCK.search(block)
+                if match:
+                    space = len(match.group(0)) * " "
+                    wrapper.subsequent_indent = space
+                    block = block.replace(f"\n{space}", "\n")
+                else:
+                    wrapper.subsequent_indent = ""
+                lines = wrapper.wrap(block)
                 self._lines.append(self._empty_line_indent)
             self._lines.extend(
                 _indent(lines, self._indent, self._empty_line_indent))
-
-    def paste_and_add(self, content: Optional[GenericContent]) -> None:
-        """
-        Pastes the wrapped first block of the content directly to the last line
-        and adds additional blocks.
-        """
-        if not content:
-            return
-        if isinstance(content, str):
-            text = content
-        elif isinstance(content, list):
-            text = "\n".join(content)
-        else:
-            text = "\n".join(content.lines)
-        blocks = text.split("\n\n")
-        self.paste(blocks[0])
-        for block in blocks[1:]:
-            self.add(block)
 
     def _add_gap(self) -> None:
         if self._gap:

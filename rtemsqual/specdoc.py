@@ -346,14 +346,14 @@ class _Documenter:
                 content.wrap(
                     self.get_value_type_phrase("The attribute value", "shall",
                                                info["spec-type"]))
-                content.paste_and_add(self._substitute(info["description"]))
+                content.paste(self._substitute(info["description"]))
 
     def document_dict(self, content: SphinxContent, _variant: str, shall: str,
                       info: Any) -> None:
         """ Documents an attribute set. """
         if shall == "may":
             content.paste("The value may be a set of attributes.")
-        content.paste_and_add(self._substitute(info["description"]))
+        content.paste(self._substitute(info["description"]))
         has_explicit_attributes = len(info["attributes"]) > 0
         if has_explicit_attributes:
             mandatory_attributes = info["mandatory-attributes"]
@@ -389,14 +389,14 @@ class _Documenter:
                 self.get_value_type_phrase(
                     "Each generic attribute value", "shall",
                     info["generic-attributes"]["value-spec-type"]))
-            content.paste_and_add(
+            content.paste(
                 self._substitute(info["generic-attributes"]["description"]))
 
     def document_value(self, content: SphinxContent, variant: str, shall: str,
                        info: Any) -> None:
         """ Documents a value. """
         content.paste(self.get_value_type_phrase("The value", shall, variant))
-        content.paste_and_add(self._substitute(info["description"]))
+        content.paste(self._substitute(info["description"]))
         _maybe_document_assert(content, info)
 
     def document_list(self, content: SphinxContent, _variant: str, shall: str,
@@ -404,7 +404,7 @@ class _Documenter:
         """ Documents a list value. """
         content.paste(
             self.get_list_phrase("The value", shall, info["spec-type"]))
-        content.paste_and_add(self._substitute(info["description"]))
+        content.paste(self._substitute(info["description"]))
 
     def document_none(self, content: SphinxContent, _variant: str, shall: str,
                       _info: Any) -> None:
