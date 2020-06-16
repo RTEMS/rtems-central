@@ -90,12 +90,12 @@ def test_interface(tmpdir):
 #include <math.h>
 #include <stdint.h>
 
-#if defined(ASM) && defined(RTEMS_SMP)
-  #include <h4.h>
+#if !defined(ASM) && defined(RTEMS_SMP)
+  #include <h2.h>
 #endif
 
-#if defined(RTEMS_SMP)
-  #include <h2.h>
+#if defined(ASM) && defined(RTEMS_SMP)
+  #include <h4.h>
 #endif
 
 #ifdef __cplusplus

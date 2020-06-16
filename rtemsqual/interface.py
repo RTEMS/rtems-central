@@ -104,7 +104,8 @@ class _InterfaceExpressionMapper(ExpressionMapper):
         self._mapper = mapper
 
     def map_symbol(self, symbol: str) -> str:
-        return self._mapper.substitute(symbol)
+        with self._mapper.interface_evaluation():
+            return self._mapper.substitute(symbol)
 
 
 class _ItemLevelExpressionMapper(ExpressionMapper):
@@ -113,8 +114,9 @@ class _ItemLevelExpressionMapper(ExpressionMapper):
         self._mapper = mapper
 
     def map_symbol(self, symbol: str) -> str:
-        return self._mapper.substitute(
-            self._mapper.enabled_by_to_defined(symbol))
+        with self._mapper.interface_evaluation():
+            return self._mapper.substitute(
+                self._mapper.enabled_by_to_defined(symbol))
 
 
 class _HeaderExpressionMapper(ExpressionMapper):
