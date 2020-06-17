@@ -21,10 +21,10 @@ name: CONFIGURE_TASK_STACK_ALLOCATOR_INIT
 notes: |
   A correctly configured system shall configure the following to be consistent:
 
-  - `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
+  * `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
 
-  - :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`
+  * :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`
 
-  - :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
+  * :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
 text: ''
 type: interface
