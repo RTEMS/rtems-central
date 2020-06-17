@@ -88,6 +88,8 @@ def test_item_mapper(tmpdir):
     base_mapper = ItemMapper(item)
     assert base_mapper["d/c:v"] == "c"
     mapper = Mapper(item)
+    assert mapper.substitute(None) == ""
+    assert mapper.substitute_with_prefix(None, "v") == ""
     with mapper.prefix("v"):
         assert mapper[".:."] == "p"
         assert mapper[".:../x/y"] == "z"

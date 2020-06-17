@@ -313,14 +313,18 @@ class ItemMapper(Mapping[str, object]):
     def __len__(self):
         raise AttributeError
 
-    def substitute(self, text: str) -> str:
+    def substitute(self, text: Optional[str]) -> str:
         """ Performs a variable substitution using the item mapper. """
+        if not text:
+            return ""
         return ItemTemplate(text).substitute(self)
 
-    def substitute_with_prefix(self, text: str, prefix: str) -> str:
+    def substitute_with_prefix(self, text: Optional[str], prefix: str) -> str:
         """
         Performs a variable substitution using the item mapper with a prefix.
         """
+        if not text:
+            return ""
         with self.prefix(prefix):
             return ItemTemplate(text).substitute(self)
 
