@@ -42,9 +42,8 @@ _HEADER_LEVELS = ["#", "*", "=", "-", "^", "\""]
 
 def _to_camel_case(name: str) -> str:
     return name[0].upper() + re.sub(
-        r"[^a-zA-Z0-9]", "X",
-        re.sub(r"[ \n\t]+([a-zA-Z0-9])", lambda match: match.group(1).upper(),
-               name[1:]))
+        r"\s+(.)", lambda match: match.group(1).upper(),
+        re.sub(r"[^ \t\n\r\f\va-zA-Z0-9]", " ", name[1:].replace("+", "X")))
 
 
 def get_reference(label: str, name: Optional[str] = None) -> str:
