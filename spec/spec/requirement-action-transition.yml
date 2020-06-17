@@ -24,9 +24,16 @@ spec-info:
         description: null
         spec-type: requirement-action-transition-pre
     description: |
-      This set of attributes defines the transition from all state variations
-      of the set of pre-conditions to states of post-conditions through an
-      action in an action requirement.
+      This set of attributes defines the transition from multiple sets of
+      states of pre-conditions to a set of states of post-conditions through an
+      action in an action requirement.  The ability to specify multiple sets of
+      states of pre-conditions which result in a common set of post-conditions
+      may allow a more compact specification of the transition map.  For
+      example, let us suppose you want to specify the action of a function with
+      a pointer parameter.  The function performs an early check that the
+      pointer is NULL and in this case returns an error code.  The pointer
+      condition dominates the action outcome if the pointer is NULL.  Other
+      pre-condition states can be simply set to ``all`` for this transition.
     mandatory-attributes: all
 spec-name: Action Requirement Transition
 spec-type: requirement-action-transition
