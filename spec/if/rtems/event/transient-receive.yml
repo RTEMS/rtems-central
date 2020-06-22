@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Receives the transient event.
+copyrights:
+- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    body: |
+      ${set:/name} event_out;
+
+      return ${system-receive:/name}(
+        ${system-transient:/name},
+        ${../options/event-all:/name} | ${.:/params[0]/name},
+        ${.:/params[1]/name},
+        &event_out
+      );
+    params:
+    - ${../options/option:/name} ${.:/params[0]/name}
+    - ${../types/interval:/name} ${.:/params[1]/name}
+    return: ${../status/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/clock
+name: rtems_event_transient_receive
+notes: null
+params:
+- description: is the option set.
+  dir: null
+  name: option_set
+- description: is the optional timeout in clock ticks.
+  dir: null
+  name: ticks
+return:
+  return: null
+  return-values: []
+type: interface
