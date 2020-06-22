@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: '%'
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${/if/impl/object/search-all-nodes:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/object
+name: RTEMS_SEARCH_ALL_NODES
+notes: null
+type: interface

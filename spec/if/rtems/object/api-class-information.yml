@@ -1,0 +1,58 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: '%'
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This member is
+    definition: ${../types/id:/name} ${.:name}
+    description: '%'
+    kind: member
+    name: minimum_id
+  variants: []
+- default:
+    brief: |
+      This member is
+    definition: ${../types/id:/name} ${.:name}
+    description: '%'
+    kind: member
+    name: maximum_id
+  variants: []
+- default:
+    brief: |
+      This member is
+    definition: ${/if/c/uint32_t:/name} ${.:name}
+    description: '%'
+    kind: member
+    name: maximum
+  variants: []
+- default:
+    brief: |
+      This member is
+    definition: ${/if/c/bool:/name} ${.:name}
+    description: '%'
+    kind: member
+    name: auto_extend
+  variants: []
+- default:
+    brief: |
+      This member is
+    definition: ${/if/c/uint32_t:/name} ${.:name}
+    description: '%'
+    kind: member
+    name: unallocated
+  variants: []
+definition-kind: typedef-only
+description: null
+enabled-by: true
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/object
+name: rtems_object_api_class_information
+notes: null
+type: interface
