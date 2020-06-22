@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the number of microseconds for the specified milliseconds value.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: |
+    ( ( ${.:/params[0]/name} ) * 1000UL )
+  variants: []
+description: null
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/support
+name: RTEMS_MILLISECONDS_TO_MICROSECONDS
+notes: null
+params:
+- description: is the milliseconds value to convert to microseconds.
+  dir: null
+  name: _ms
+return:
+  return: |
+    The number of microseconds for the specified milliseconds value is returned.
+  return-values: []
+type: interface
