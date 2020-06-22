@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: '%'
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - const ${/if/rtems/types/time-of-day:/name} *${.:/params[0]/name}
+    return: ${/if/c/bool:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: /if/rtems/clock/header
+name: _TOD_Validate
+notes: null
+params:
+- description: '%'
+  dir: null
+  name: the_tod
+return:
+  return: null
+  return-values: []
+type: interface

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  The Clock Manager provides support for time of day and other time related
+  capabilities.
+enabled-by: true
+identifier: RTEMSAPIClassicClock
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/clock/header
+- role: interface-ingroup
+  uid: /groups/api/classic
+name: Clock Manager
+type: interface
