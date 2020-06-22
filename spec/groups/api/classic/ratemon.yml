@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  The Rate-Monotonic Manager provides facilities to implement tasks which
+  execute in a periodic fashion.  Critically, it also gathers information about
+  the execution of those periods and can provide important statistics to the
+  user which can be used to analyze and tune the application.
+enabled-by: true
+identifier: RTEMSAPIClassicRatemon
+interface-type: group
+links:
+- role: interface-placement
+  uid: /if/rtems/ratemon/header
+- role: interface-ingroup
+  uid: /groups/api/classic
+name: Rate-Monotonic Manager
+type: interface

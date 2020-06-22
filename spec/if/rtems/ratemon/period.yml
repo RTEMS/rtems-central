@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: '%'
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${../types/id:/name} ${.:/params[0]/name}
+    - ${../types/interval:/name} ${.:/params[1]/name}
+    return: ${../status/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: /groups/api/classic/ratemon
+name: rtems_rate_monotonic_period
+notes: null
+params:
+- description: '%'
+  dir: null
+  name: id
+- description: '%'
+  dir: null
+  name: length
+return:
+  return: null
+  return-values: []
+type: interface
