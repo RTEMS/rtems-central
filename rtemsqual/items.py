@@ -39,18 +39,18 @@ ItemGetValue = Callable[["Item", str, Any, str, Optional[int]], Any]
 
 def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
     for next_enabled_by in enabled_by:
-        if not _is_enabled(enabled, next_enabled_by):
+        if not is_enabled(enabled, next_enabled_by):
             return False
     return True
 
 
 def _is_enabled_op_not(enabled: List[str], enabled_by: Any) -> bool:
-    return not _is_enabled(enabled, enabled_by)
+    return not is_enabled(enabled, enabled_by)
 
 
 def _is_enabled_op_or(enabled: List[str], enabled_by: Any) -> bool:
     for next_enabled_by in enabled_by:
-        if _is_enabled(enabled, next_enabled_by):
+        if is_enabled(enabled, next_enabled_by):
             return True
     return False
 
@@ -62,7 +62,8 @@ _IS_ENABLED_OP = {
 }
 
 
-def _is_enabled(enabled: List[str], enabled_by: Any) -> bool:
+def is_enabled(enabled: List[str], enabled_by: Any) -> bool:
+    """ Verifies if the given parameter is enabled by specific enables. """
     if isinstance(enabled_by, bool):
         return enabled_by
     if isinstance(enabled_by, list):
@@ -227,7 +228,7 @@ class Item:
 
     def is_enabled(self, enabled: List[str]):
         """ Returns true if the item is enabled by the specified enables. """
-        return _is_enabled(enabled, self["enabled-by"])
+        return is_enabled(enabled, self["enabled-by"])
 
     @property
     def data(self) -> Any:
