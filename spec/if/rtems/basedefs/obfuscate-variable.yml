@@ -9,7 +9,7 @@ definition:
     (void) (_var)
   variants:
   - definition: |
-      __asm__("" : "+r" (_var))
+      ${/if/compiler/asm:/name}( "" : "+r" ( _var ) )
     enabled-by:
     - defined(${/if/compiler/gnuc:/name})
 description: |

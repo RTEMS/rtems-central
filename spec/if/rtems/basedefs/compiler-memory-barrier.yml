@@ -8,7 +8,7 @@ definition:
     do { } while ( 0 )
   variants:
   - definition: |
-      __asm__ volatile( "" ::: "memory" )
+      ${/if/compiler/asm:/name} volatile( "" ::: "memory" )
     enabled-by:
     - defined(${/if/compiler/gnuc:/name})
 description: null

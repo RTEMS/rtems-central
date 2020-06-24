@@ -7,7 +7,7 @@ definition:
   default: ''
   variants:
   - definition: |
-      __asm__(
+      ${/if/compiler/asm:/name}(
         "\t.globl " ${xstring:/name}( ${symbol-name:/name}( _name ) )
         "\n\t.set " ${xstring:/name}( ${symbol-name:/name}( _name ) )
         ", " ${string:/name}( _value ) "\n"
