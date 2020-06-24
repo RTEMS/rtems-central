@@ -9,7 +9,7 @@ identifier: RTEMSAPIClassic
 interface-type: group
 links:
 - role: interface-placement
-  uid: /if/rtems/status/header
+  uid: /if/rtems/header
 - role: interface-ingroup
   uid: /groups/api
 name: Classic
