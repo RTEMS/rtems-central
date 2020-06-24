@@ -356,7 +356,10 @@ class Node:
     def _get_macro_definition(self, item: Item, definition: Any) -> Lines:
         name = item["name"]
         params = [param["name"] for param in item["params"]]
-        param_line = ", ".join(params)
+        if params:
+            param_line = " " + ", ".join(params) + " "
+        else:
+            param_line = ""
         line = f"#define {name}({param_line})"
         if len(line) > 79:
             param_block = ", \\\n  ".join(params)

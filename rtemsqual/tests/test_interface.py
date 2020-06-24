@@ -261,9 +261,9 @@ static inline int VeryLongFunction(
  * @return Sometimes some value.
  */
 #if 0
-  #define MACRO(Param0)
+  #define MACRO( Param0 )
 #else
-  #define MACRO(Param0) ( ( Param0 ) + 1 )
+  #define MACRO( Param0 ) ( ( Param0 ) + 1 )
 #endif
 
 /**
