@@ -366,12 +366,12 @@ class Node:
             line = f"#define {name}( \\\n  {param_block} \\\n)"
         if not definition:
             return line
-        body_lines = definition.strip("\n").split("\n")
+        body_lines = self.substitute_code(definition).split("\n")
         if len(body_lines) == 1 and len(line + body_lines[0]) <= 79:
             body = " "
         else:
             body = " \\\n  "
-        body += self.substitute_code(" \\\n  ".join(body_lines))
+        body += " \\\n  ".join(body_lines)
         return line + body
 
     def _get_typedef_definition(self, _item: Item, definition: Any) -> Lines:
