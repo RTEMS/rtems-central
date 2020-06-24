@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Identifies a port object by the specified object name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -11,7 +12,9 @@ definition:
     - ${../types/id:/name} *${.:/params[1]/name}
     return: ${../status/code:/name}
   variants: []
-description: null
+description: |
+  This directive obtains the port identifier associated with the port name
+  specified in ``${.:/params[0]/name}``.
 enabled-by: true
 interface-type: function
 links:
@@ -20,15 +23,37 @@ links:
 - role: interface-ingroup
   uid: /groups/api/classic/dpmem
 name: rtems_port_ident
-notes: null
+notes: |
+  If the port name is not unique, then the port identifier will match the first
+  port with that name in the search order.  However, this port identifier is
+  not guaranteed to correspond to the desired port.  The port identifier is
+  used with other dual-ported memory related directives to access the port.
+
+  The objects are searched from lowest to the highest index.  Only the local
+  node is searched.
 params:
-- description: '%'
+- description: is the object name to look up.
   dir: null
   name: name
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to an object identifier variable.  The object identifier of
+    an object with the specified name will be stored in this variable, in case
+    of a successful operation.
+  dir: out
   name: id
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../status/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/if/c/null:/name}.
+    value: ${../status/invalid-address:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was 0.
+    value: ${../status/invalid-name:/name}
+  - description: |
+      There was no object with the specified name on the local node.
+    value: ${../status/invalid-name:/name}
 type: interface
