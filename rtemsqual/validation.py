@@ -26,8 +26,7 @@
 
 import itertools
 import os
-import string
-from typing import Any, Dict, List, Mapping, NamedTuple, Optional, Tuple
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper
@@ -36,9 +35,20 @@ from rtemsqual.items import Item, ItemCache, ItemMapper
 ItemMap = Dict[str, Item]
 
 
-class StepWrapper(Mapping[str, object]):
-    """ Test step wrapper. """
-    def __init__(self):
+class _CodeMapper(ItemMapper):
+    def get_value(self, item: Item, path: str, _value: Any, key: str,
+                  _index: Optional[int]) -> Any:
+        if path == "/" and key == "test-run" and item[
+                "type"] == "requirement" and item[
+                    "requirement-type"] == "functional" and item[
+                        "functional-type"] == "action":
+            return f"{item['test-name'].replace(' ', '')}_Run"
+        raise KeyError
+
+
+class _TextMapper(ItemMapper):
+    def __init__(self, item: Item):
+        super().__init__(item)
         self._step = 0
 
     @property
@@ -46,18 +56,16 @@ class StepWrapper(Mapping[str, object]):
         """ The count of test steps. """
         return self._step
 
-    def __getitem__(self, name):
-        if name == "step":
+    def reset_step(self):
+        """ Resets the test step counter. """
+        self._step = 0
+
+    def map(self, identifier: str) -> Tuple[Item, Any]:
+        if identifier == "step":
             step = self._step
             self._step = step + 1
-            return step
-        raise KeyError
-
-    def __iter__(self):
-        raise StopIteration
-
-    def __len__(self):
-        return 1
+            return self._item, str(step)
+        return super().map(identifier)
 
 
 def _add_ingroup(content: CContent, items: List["_TestItem"]) -> None:
@@ -69,6 +77,8 @@ class _TestItem:
     def __init__(self, item: Item):
         self._item = item
         self._ident = self.name.replace(" ", "")
+        self._code_mapper = _CodeMapper(self._item)
+        self._text_mapper = _TextMapper(self._item)
 
     def __getitem__(self, key: str):
         return self._item[key]
@@ -108,6 +118,20 @@ class _TestItem:
         """ Returns the group identifier. """
         return f"RTEMSTestCase{self.ident}"
 
+    def substitute_code(self, text: Optional[str]) -> str:
+        """ Performs a variable substitution for code. """
+        return self._code_mapper.substitute(text)
+
+    def substitute_text(self,
+                        text: Optional[str],
+                        prefix: Optional[str] = None) -> str:
+        """
+        Performs a variable substitution for text with an optinal prefix.
+        """
+        if prefix:
+            return self._text_mapper.substitute_with_prefix(text, prefix)
+        return self._text_mapper.substitute(text)
+
     def add_test_case_description(
             self, content: CContent,
             test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
@@ -121,29 +145,29 @@ class _TestItem:
         if actions:
             content.add("This test case performs the following actions:")
             for action in actions:
-                content.wrap(action["description"], initial_indent="- ")
+                content.wrap(self.substitute_text(action["description"]),
+                             initial_indent="- ")
                 for check in action["checks"]:
-                    content.wrap(check["description"],
+                    content.wrap(self.substitute_text(check["description"]),
                                  initial_indent="  - ",
                                  subsequent_indent="    ")
 
-    def _generate_test_case_actions(self, steps: StepWrapper) -> CContent:
+    def _generate_test_case_actions(self) -> CContent:
         content = CContent()
         for action in self["actions"]:
-            content.add(action["action"])
+            content.add(self.substitute_code(action["action"]))
             for check in action["checks"]:
-                content.append(
-                    string.Template(check["check"]).substitute(steps))
+                content.append(self.substitute_text(check["check"]))
         return content
 
     def generate(self, content: CContent, _base_directory: str,
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
-        content.add(self["support"])
+        content.add(self.substitute_code(self["support"]))
         with content.function_block(f"void T_case_body_{self.ident}( void )"):
-            content.add_brief_description(self["brief"])
-            content.wrap(self["description"])
+            content.add_brief_description(self.substitute_text(self["brief"]))
+            content.wrap(self.substitute_text(self["description"]))
             self._add_test_case_action_description(content)
         content.gap = False
         params = [f"{self.ident}"]
@@ -154,13 +178,13 @@ class _TestItem:
         else:
             name = "T_TEST_CASE"
         with content.function("", name, params):
-            content.add(self["prologue"])
-            steps = StepWrapper()
-            action_content = self._generate_test_case_actions(steps)
-            if steps.steps > 0:
-                content.add(f"T_plan({steps.steps});")
+            content.add(self.substitute_code(self["prologue"]))
+            self._text_mapper.reset_step()
+            action_content = self._generate_test_case_actions()
+            if self._text_mapper.steps > 0:
+                content.add(f"T_plan({self._text_mapper.steps});")
             content.add(action_content)
-            content.add(self["epilogue"])
+            content.add(self.substitute_code(self["epilogue"]))
         content.add("/** @} */")
 
 
@@ -174,9 +198,9 @@ class _TestSuiteItem(_TestItem):
                  _test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
         with content.defgroup_block(self.group_identifier, self.name):
             content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
-            content.wrap(self["description"])
+            content.wrap(self.substitute_text(self["description"]))
             content.add("@{")
-        content.add(self["code"])
+        content.add(self.substitute_code(self["code"]))
         content.add("/** @} */")
 
 
@@ -332,7 +356,7 @@ class _TestDirectiveItem(_TestItem):
         wrap = f"{method}_Wrap"
         content.add_description_block(info["brief"], info["description"])
         with content.function("static void", method, [f"{self.context} *ctx"]):
-            content.add(info["code"])
+            content.add(self.substitute_code(info["code"]))
         with content.function("static void", wrap, ["void *arg"]):
             content.add([
                 f"{self.context} *ctx;", "", "ctx = arg;",
@@ -421,7 +445,7 @@ class _TestDirectiveItem(_TestItem):
     def _add_action(self, content: CContent) -> None:
         for index, enum in enumerate(self._pre_index_to_enum):
             content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")
-        content.append(self["test-action"])
+        content.append(self.substitute_code(self["test-action"]))
         transition_map = f"{self.ident}_TransitionMap"
         for index, enum in enumerate(self._post_index_to_enum):
             content.append([
@@ -488,25 +512,25 @@ class _TestDirectiveItem(_TestItem):
             handler = f"{enum[0]}_{action}"
             params = [f"{self.context} *ctx", f"{enum[0]} state"]
             with content.function("static void", handler, params):
-                content.add(condition["test-prologue"])
+                content.add(self.substitute_code(condition["test-prologue"]))
                 content.add("switch ( state ) {")
                 with content.indent():
                     for state_index, state in enumerate(condition["states"]):
                         content.add(f"case {enum[state_index + 1]}: {{")
                         with content.indent():
-                            content.add(state["test-code"])
+                            content.add(
+                                self.substitute_code(state["test-code"]))
                             content.append("break;")
                         content.add("}")
                 content.add("}")
-                content.add(condition["test-epilogue"])
+                content.add(self.substitute_code(condition["test-epilogue"]))
 
     def _get_run_params(self, header: Optional[Dict[str, Any]]) -> List[str]:
         if not header:
             return []
-        mapper = ItemMapper(self._item)
         return [
-            mapper.substitute_with_prefix(param["specifier"],
-                                          f"test-header/run-params[{index}]")
+            self.substitute_text(param["specifier"],
+                                 f"test-header/run-params[{index}]")
             for index, param in enumerate(header["run-params"])
         ]
 
@@ -514,7 +538,7 @@ class _TestDirectiveItem(_TestItem):
                               header: Dict[str, Any]) -> None:
         _directive_add_enum(content, self._pre_index_to_enum)
         _directive_add_enum(content, self._post_index_to_enum)
-        content.add(header["code"])
+        content.add(self.substitute_code(header["code"]))
         with content.doxygen_block():
             content.add_brief_description(self["test-brief"])
             content.wrap(self["test-description"])
@@ -551,7 +575,7 @@ class _TestDirectiveItem(_TestItem):
             _directive_add_enum(content, self._post_index_to_enum)
         self._add_context(content, header)
         self._add_pre_condition_descriptions(content)
-        content.add(self["test-support"])
+        content.add(self.substitute_code(self["test-support"]))
         self._add_handler(content, self["pre-conditions"],
                           self._pre_index_to_enum, "Prepare")
         self._add_handler(content, self["post-conditions"],

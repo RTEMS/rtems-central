@@ -86,7 +86,7 @@ test-description: |
   Test description.
 test-header:
   code: |
-    /* Header code */
+    /* Header code for ${.:/test-name} with ${.:/test-run}() */
   includes:
   - d.h
   local-includes:

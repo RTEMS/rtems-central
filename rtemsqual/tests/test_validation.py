@@ -27,22 +27,9 @@
 import os
 import pytest
 
-from rtemsqual.validation import generate, StepWrapper
+from rtemsqual.validation import generate
 from rtemsqual.items import EmptyItemCache, ItemCache
 from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
-
-
-def test_step_wrapper(tmpdir):
-    steps = StepWrapper()
-    assert steps.steps == 0
-    assert len(steps) == 1
-    with pytest.raises(KeyError):
-        steps["nix"]
-    assert steps["step"] == 0
-    assert steps.steps == 1
-    with pytest.raises(StopIteration):
-        for step in steps:
-            pass
 
 
 def test_validation(tmpdir):
@@ -974,7 +961,7 @@ typedef enum {
   Action2_Post_B_Y
 } Action2_Post_B;
 
-/* Header code */
+/* Header code for Action 2 with Action2_Run() */
 
 /**
  * @brief Test brief.
