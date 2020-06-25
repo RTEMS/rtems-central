@@ -1,0 +1,121 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This test suite contains a collection of unrelated test cases.
+code: |
+  static char runner_task_stack[ RTEMS_MINIMUM_STACK_SIZE ];
+
+  static char buffer[ 512 ];
+
+  static const T_action actions[] = {
+    T_report_hash_sha256,
+    T_check_task_context,
+    T_check_rtems_barriers,
+    T_check_rtems_extensions,
+    T_check_rtems_message_queues,
+    T_check_rtems_partitions,
+    T_check_rtems_periods,
+    T_check_rtems_semaphores,
+    T_check_rtems_tasks,
+    T_check_rtems_timers
+  };
+
+  static const T_config test_config = {
+    .name = "Validation0",
+    .buf = buffer,
+    .buf_size = sizeof( buffer ),
+    .putchar = rtems_put_char,
+    .verbosity = T_VERBOSE,
+    .now = T_now_clock,
+    .action_count = T_ARRAY_SIZE( actions ),
+    .actions = actions
+  };
+
+  static void Init( rtems_task_argument arg )
+  {
+    int exit_code;
+
+    (void) arg;
+
+    T_register();
+    exit_code = T_main( &test_config );
+    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, (uint32_t) exit_code );
+  }
+
+  static void init_runner_task(void)
+  {
+    static const rtems_task_config task_config = {
+      .name = rtems_build_name('R', 'U', 'N', ' '),
+      .initial_priority = 1,
+      .stack_area = runner_task_stack,
+      .stack_size = sizeof( runner_task_stack ),
+      .initial_modes = RTEMS_DEFAULT_MODES,
+      .attribute_set = RTEMS_DEFAULT_ATTRIBUTES
+    };
+    rtems_id id;
+    rtems_status_code sc;
+
+    sc = rtems_task_build( &task_config, &id );
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 1 );
+    }
+
+    sc = rtems_task_start( id, Init, 0 );
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, 1 );
+    }
+  }
+
+  RTEMS_SYSINIT_ITEM(
+    init_runner_task,
+    RTEMS_SYSINIT_CLASSIC_USER_TASKS,
+    RTEMS_SYSINIT_ORDER_MIDDLE
+  );
+
+  #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+  #define CONFIGURE_MAXIMUM_PROCESSORS 32
+
+  #define CONFIGURE_MAXIMUM_BARRIERS 3
+
+  #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 3
+
+  #define CONFIGURE_MAXIMUM_PARTITIONS 3
+
+  #define CONFIGURE_MAXIMUM_PERIODS 3
+
+  #define CONFIGURE_MAXIMUM_SEMAPHORES 3
+
+  #define CONFIGURE_MAXIMUM_TASKS 3
+
+  #define CONFIGURE_MAXIMUM_TIMERS 3
+
+  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 3
+
+  #define CONFIGURE_MICROSECONDS_PER_TICK 1000
+
+  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
+
+  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
+
+  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
+
+  #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
+
+  #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
+
+  #define CONFIGURE_INIT
+
+  #include <rtems/confdefs.h>
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+includes:
+- rtems.h
+- rtems/bspIo.h
+- rtems/sysinit.h
+links: []
+local-includes: []
+name: Validation 0
+target: testsuites/validation/ts-validation-0.c
+type: test-suite
