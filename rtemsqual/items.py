@@ -263,7 +263,7 @@ class Item:
 
 class ItemTemplate(string.Template):
     """ String template for item mapper identifiers. """
-    idpattern = "[a-zA-Z0-9._/-]+:[][a-zA-Z0-9._/-]+(|[a-zA-Z0-9_]+)*"
+    idpattern = "[a-zA-Z0-9._/-]+(:[][a-zA-Z0-9._/-]+)?(|[a-zA-Z0-9_]+)*"
 
 
 class ItemMapper(Mapping[str, object]):
@@ -291,8 +291,12 @@ class ItemMapper(Mapping[str, object]):
         """
         Maps an identifier to the corresponding item and attribute value.
         """
-        parts = identifier.split("|")
-        uid, key_path = parts[0].split(":")
+        uid_key_path, *pipes = identifier.split("|")
+        colon = uid_key_path.find(":")
+        if colon >= 0:
+            uid, key_path = uid_key_path[:colon], uid_key_path[colon + 1:]
+        else:
+            uid, key_path = uid_key_path, "/_uid"
         if uid == ".":
             item = self._item
             prefix = "/".join(self._prefix)
@@ -300,7 +304,7 @@ class ItemMapper(Mapping[str, object]):
             item = self._item.map(uid)
             prefix = ""
         value = item.get_by_key_path(key_path, prefix, self.get_value)
-        for func in parts[1:]:
+        for func in pipes:
             value = getattr(self, func)(value)
         return item, value
 
@@ -367,6 +371,7 @@ class ItemCache:
                     with open(path2, "r") as yaml_src:
                         data = yaml.safe_load(yaml_src.read())
                         data["_file"] = os.path.abspath(path2)
+                        data["_uid"] = uid
                         data_by_uid[uid] = data
             os.makedirs(os.path.dirname(cache_file), exist_ok=True)
             with open(cache_file, "wb") as out:

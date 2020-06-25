@@ -101,6 +101,8 @@ def test_item_mapper(tmpdir):
     with mapper.prefix("x"):
         with mapper.prefix("y"):
             assert mapper[".:."] == "z"
+    assert mapper["."] == "/p"
+    assert mapper["d/c"] == "/d/c"
     assert mapper["d/c:v"] == "c"
     assert mapper["d/c:a/b"] == "e"
     assert mapper["d/c:a/b|u"] == "ue"
