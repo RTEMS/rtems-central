@@ -1282,15 +1282,18 @@ static const uint8_t Action2_TransitionMap[][ 2 ] = {
   }
 };
 
+static T_fixture_node Action2_Node;
+
 void Action2_Run( int *a, int b, int *c )
 {
   Action2_Context *ctx;
   size_t index;
 
   ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
-  ctx->a = a
-  ctx->b = b
-  ctx->c = c
+
+  ctx->a = a;
+  ctx->b = b;
+  ctx->c = c;
   ctx->in_action_loop = true;
   index = 0;
 

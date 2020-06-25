@@ -444,18 +444,22 @@ class _TestDirectiveItem(_TestItem):
     def _add_test_case(self, content: CContent, header: Dict[str,
                                                              Any]) -> None:
         fixture = f"{self.ident}_Fixture"
+        prologue = CContent()
+        epilogue = CContent()
         if header:
+            content.add(f"static T_fixture_node {self.ident}_Node;")
             ret = "void"
             name = f"{self.ident}_Run"
             params = self._get_run_params(header)
-            prologue = [
-                f"{self.context} *ctx;", "size_t index;", "",
-                f"ctx = T_push_fixture( &{self.ident}_Node, &{fixture} );"
-            ]
-            prologue.extend(f"ctx->{param['name']} = {param['name']}"
-                            for param in header["run-params"])
-            prologue.extend(["ctx->in_action_loop = true;", "index = 0;"])
-            epilogue = ["T_pop_fixture();"]
+            prologue.add([f"{self.context} *ctx;", "size_t index;"])
+            prologue.call_function("ctx =", "T_push_fixture",
+                                   [f"&{self.ident}_Node", f"&{fixture}"])
+            prologue.add([
+                f"ctx->{param['name']} = {param['name']};"
+                for param in header["run-params"]
+            ] + ["ctx->in_action_loop = true;", "index = 0;"])
+            epilogue.add("T_pop_fixture();")
+            align = True
         else:
             with content.function_block(
                     f"void T_case_body_{self.ident}( void )"):
@@ -465,13 +469,13 @@ class _TestDirectiveItem(_TestItem):
             ret = ""
             name = "T_TEST_CASE_FIXTURE"
             params = [f"{self.ident}", f"&{fixture}"]
-            prologue = [
+            prologue.add([
                 f"{self.context} *ctx;", "size_t index;", "",
                 "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
                 "index = 0;"
-            ]
-            epilogue = []
-        with content.function(ret, name, params, align=False):
+            ])
+            align = False
+        with content.function(ret, name, params, align=align):
             content.add(prologue)
             self._add_for_loops(content, 0)
             content.add(epilogue)
