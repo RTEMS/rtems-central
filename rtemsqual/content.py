@@ -469,6 +469,9 @@ def _align_params(params: List[str]) -> List[str]:
     ]
 
 
+_NOT_ALPHANUM = re.compile(r"[^a-zA-Z0-9_]")
+
+
 class CContent(Content):
     """ This class builds C content. """
 
@@ -819,7 +822,7 @@ class CContent(Content):
     @contextmanager
     def header_guard(self, filename: str) -> Iterator[None]:
         """ Opens a header guard context. """
-        guard = "_" + filename.replace("/", "_").replace(".", "_").upper()
+        guard = "_" + _NOT_ALPHANUM.sub("_", filename).upper()
         self.add([f"#ifndef {guard}", f"#define {guard}"])
         yield
         self.add(f"#endif /* {guard} */")
