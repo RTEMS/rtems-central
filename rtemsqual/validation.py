@@ -684,8 +684,6 @@ def _get_source_file(filename: str,
 
 def _gather_items(item: Item, source_files: Dict[str, _SourceFile],
                   test_programs: List[_TestProgram]) -> None:
-    for child in item.children():
-        _gather_items(child, source_files, test_programs)
     if item["type"] == "test-suite":
         src = _get_source_file(item["target"], source_files)
         src.add_test_suite(item)
@@ -712,7 +710,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     """
     source_files = {}  # type: Dict[str, _SourceFile]
     test_programs = []  # type: List[_TestProgram]
-    for item in item_cache.top_level.values():
+    for item in item_cache.all.values():
         _gather_items(item, source_files, test_programs)
 
     test_case_to_suites = {}  # type: Dict[str, List[_TestItem]]
