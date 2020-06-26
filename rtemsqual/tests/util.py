@@ -42,4 +42,5 @@ def create_item_cache_config_and_copy_spec(tmp_dir: str,
     spec_dst = os.path.join(tmp_dir, "spec")
     shutil.copytree(spec_src, spec_dst)
     config["paths"] = [os.path.normpath(spec_dst)]
+    config["spec-type-root-uid"] = None
     return config

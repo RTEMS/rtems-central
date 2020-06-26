@@ -36,6 +36,7 @@ build:
   workspace-directory: workspace/rtems
 spec:
   cache-directory: cache
+  spec-type-root-uid: /spec/root
   paths:
   - spec
   - external/rtems/spec

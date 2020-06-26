@@ -34,7 +34,9 @@ from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 def test_document(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-doc")
+    item_cache_config["spec-type-root-uid"] = "/root"
     item_cache = ItemCache(item_cache_config)
+    assert item_cache["/root"].type == "spec"
     doc_target = os.path.join(tmpdir, "items.rst")
     config = {
         "root-type": "/root",
@@ -191,7 +193,7 @@ A
 ^
 
 This type refines the :ref:`SpecTypeRoot` though the ``type`` attribute if the
-value is ``a``.
+value is ``spec``.
 
 The explicit attributes for this type are:
 

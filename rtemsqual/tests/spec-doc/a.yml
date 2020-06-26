@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: type
-  spec-value: a
+  spec-value: spec
   uid: root
 spec-description: null
 spec-example: |

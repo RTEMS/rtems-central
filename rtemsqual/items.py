@@ -29,8 +29,8 @@ import os
 import pickle
 import string
 import stat
-from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, \
-    Tuple
+from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Mapping, \
+    Optional, Tuple
 import yaml
 
 ItemMap = Dict[str, "Item"]
@@ -245,6 +245,11 @@ class Item:
         """ Sets the file of the item. """
         self._data["_file"] = value
 
+    @property
+    def type(self) -> str:
+        """ Returns the type of the item. """
+        return self._data["_type"]
+
     def save(self):
         """ Saves the item to the corresponding file. """
         with open(self.file, "w") as dst:
@@ -341,12 +346,31 @@ class ItemMapper(Mapping[str, object]):
         raise KeyError
 
 
+class _SpecType(NamedTuple):
+    key: str
+    refinements: Dict[str, Any]
+
+
+def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
+    new_type = None  # type: Optional[_SpecType]
+    for link in item.links_to_children():
+        if link.role == "spec-refinement":
+            key = link["spec-key"]
+            if new_type is None:
+                new_type = _SpecType(key, {})
+            assert new_type.key == key
+            new_type.refinements[
+                link["spec-value"]] = _gather_spec_refinements(link.item)
+    return new_type
+
+
 class ItemCache:
     """ This class provides a cache of specification items. """
     def __init__(self, config: Any):
         self._items = {}  # type: ItemMap
         self._top_level = {}  # type: ItemMap
         self._load_items(config)
+        self._set_types(config)
 
     def __getitem__(self, uid: str) -> Item:
         return self._items[uid]
@@ -423,8 +447,28 @@ class ItemCache:
         self._init_parents()
         self._init_children()
 
+    def _set_types(self, config: Any) -> None:
+        spec_root = config["spec-type-root-uid"]
+        if spec_root:
+            root_type = _gather_spec_refinements(self[spec_root])
+        else:
+            root_type = None
+        for item in self._items.values():
+            spec_type = root_type
+            value = item.data
+            path = []  # type: List[str]
+            while spec_type is not None:
+                type_name = value[spec_type.key]
+                path.append(type_name)
+                spec_type = spec_type.refinements[type_name]
+            item["_type"] = "/".join(path)
+
 
 class EmptyItemCache(ItemCache):
     """ This class provides a empty cache of specification items. """
     def __init__(self):
-        super().__init__({"cache-directory": ".", "paths": []})
+        super().__init__({
+            "cache-directory": ".",
+            "paths": [],
+            "spec-type-root-uid": None
+        })
