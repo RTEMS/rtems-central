@@ -33,8 +33,23 @@ from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Mapping, \
     Optional, Tuple
 import yaml
 
+
+class ItemGetValueContext(NamedTuple):
+    """ Context used to get an item value. """
+    item: "Item"
+    path: str
+    value: Any
+    key: str
+    index: Any  # should be int, but this triggers a mypy error
+
+    @property
+    def type_path_key(self) -> str:
+        """ Returns the item type followed the path to the key. """
+        return f"{self.item.type}:{self.path}{self.key}"
+
+
 ItemMap = Dict[str, "Item"]
-ItemGetValue = Callable[["Item", str, Any, str, Optional[int]], Any]
+ItemGetValue = Callable[[ItemGetValueContext], Any]
 
 
 def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
@@ -108,11 +123,10 @@ class Link:
         return self._data["role"]
 
 
-def _get_value(_item: "Item", _path: str, value: Any, key: str,
-               index: Optional[int]) -> str:
-    value = value[key]
-    if index is not None:
-        value = value[index]
+def _get_value(ctx: ItemGetValueContext) -> Any:
+    value = ctx.value[ctx.key]
+    if ctx.index >= 0:
+        return value[ctx.index]
     return value
 
 
@@ -154,13 +168,14 @@ class Item:
         for key in key_path.strip("/").split("/"):
             parts = key.split("[")
             try:
-                index = int(parts[1].split("]")[0])  # type: Optional[int]
+                index = int(parts[1].split("]")[0])
             except IndexError:
-                index = None
+                index = -1
+            ctx = ItemGetValueContext(self, path, value, parts[0], index)
             try:
-                value = get_value(self, path, value, parts[0], index)
+                value = get_value(ctx)
             except KeyError:
-                value = _get_value(self, path, value, parts[0], index)
+                value = _get_value(ctx)
             path = os.path.join(path, key)
         return value
 
@@ -339,8 +354,7 @@ class ItemMapper(Mapping[str, object]):
         with self.prefix(prefix):
             return ItemTemplate(text).substitute(self)
 
-    def get_value(self, _item: Item, _path: str, _value: Any, _key: str,
-                  _index: Optional[int]) -> Any:
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
         """ Gets a value by key and optional index. """
         # pylint: disable=no-self-use
         raise KeyError

@@ -26,11 +26,11 @@
 
 from contextlib import contextmanager
 import os
-from typing import Any, Callable, Dict, Iterator, List, Optional, Union
+from typing import Any, Callable, Dict, Iterator, List, Union
 
 from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper
-from rtemsqual.items import Item, ItemCache, ItemMapper
+from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 Lines = Union[str, List[str]]
@@ -82,14 +82,14 @@ class _InterfaceMapper(ItemMapper):
             header_file.add_potential_edge(node, item)
         return value
 
-    def get_value(self, item: Item, path: str, value: Any, key: str,
-                  _index: Optional[int]) -> Any:
-        if path == "/" and key == "name" and item["type"] == "interface":
-            interface_type = item["interface-type"]
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.path == "/" and ctx.key == "name" and ctx.item[
+                "type"] == "interface":
+            interface_type = ctx.item["interface-type"]
             if interface_type == "forward-declaration":
-                return _forward_declaration(item)
+                return _forward_declaration(ctx.item)
             if not self._eval_interface:
-                value = value[key]
+                value = ctx.value[ctx.key]
                 if interface_type == "function":
                     return f"{value}()"
                 if interface_type in ["enumerator", "typedef"]:

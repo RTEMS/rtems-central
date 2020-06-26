@@ -269,7 +269,7 @@ class _Documenter:
         self._documenter_map = documenter_map
         self.used_by = set()  # type: Set[str]
         self._mapper = SphinxMapper(item)
-        self._mapper.add_get_reference("spec", "/spec-name",
+        self._mapper.add_get_reference("spec:/spec-name",
                                        _get_ref_specification_type)
         assert self._name not in documenter_map
         documenter_map[self._name] = self

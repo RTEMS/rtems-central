@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: glossary-type
+  spec-value: group
+  uid: glossary
+- role: spec-refinement
+  spec-key: glossary-type
+  spec-value: term
+  uid: glossary
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: null
+    mandatory-attributes: all
+spec-name: Glossary More
+spec-type: glossary-more
+type: spec

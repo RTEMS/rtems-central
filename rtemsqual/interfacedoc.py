@@ -27,11 +27,11 @@ This module provides functions for the generation of interface documentation.
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List
 
 from rtemsqual.content import CContent, enabled_by_to_exp, ExpressionMapper
 from rtemsqual.sphinxcontent import get_label, get_reference, SphinxContent
-from rtemsqual.items import Item, ItemCache, ItemMapper
+from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 AddDefinition = Callable[[CContent, ItemMapper, Item, Dict[str, Any]], None]
@@ -49,31 +49,21 @@ def _get_reference(name: str) -> str:
 
 
 class _CodeMapper(ItemMapper):
-    def get_value(self, item: Item, path: str, _value: Any, key: str,
-                  _index: Optional[int]) -> Any:
-        # pylint: disable=duplicate-code
-        if path == "/" and key == "name" and item["type"] == "interface":
-            interface_type = item["interface-type"]
-            if interface_type == "forward-declaration":
-                return _forward_declaration(item)
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.type_path_key == "interface/forward-declaration:/name":
+            return _forward_declaration(ctx.item)
         raise KeyError
 
 
 class _Mapper(_CodeMapper):
-    def get_value(self, item: Item, path: str, value: Any, key: str,
-                  index: Optional[int]) -> Any:
-        # pylint: disable=too-many-arguments
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
         try:
-            return super().get_value(item, path, value, key, index)
+            return super().get_value(ctx)
         except KeyError:
-            if path == "/" and key == "name" and item["type"] == "interface":
-                value = value[key]
-                interface_type = item["interface-type"]
-                if interface_type == "function":
-                    return _get_reference(value)
-                if interface_type == "appl-config-option":
-                    return f":ref:`{value}`"
-                return value
+            if ctx.type_path_key == "interface/function:/name":
+                return _get_reference(ctx.value[ctx.key])
+            if ctx.type_path_key == "interface/appl-config-option:/name":
+                return f":ref:`{ctx.value[ctx.key]}`"
         raise KeyError
 
 

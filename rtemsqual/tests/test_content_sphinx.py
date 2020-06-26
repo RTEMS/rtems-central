@@ -261,12 +261,14 @@ def test_license_and_copyrights():
 
 
 def test_substitute(tmpdir):
-    config = create_item_cache_config_and_copy_spec(tmpdir, "spec-sphinx")
+    config = create_item_cache_config_and_copy_spec(tmpdir,
+                                                    "spec-sphinx",
+                                                    with_spec_types=True)
     item_cache = ItemCache(config)
     mapper = SphinxMapper(item_cache["/x"])
     with pytest.raises(KeyError):
         mapper.substitute("${x:/y}")
     assert mapper.substitute("${x:/term}") == ":term:`y`"
     assert mapper.substitute("${x:/plural}") == ":term:`ys <y>`"
-    mapper.add_get_reference("foo", "/name", lambda x, y: x[y])
-    assert mapper.substitute("${y:/name}") == "bar"
+    mapper.add_get_reference("other:/name", lambda x, y: x[y])
+    assert mapper.substitute("${y:/name}") == "foobar"

@@ -26,10 +26,10 @@
 
 import glob
 import re
-from typing import Any, Dict, NamedTuple, Optional
+from typing import Any, Dict, NamedTuple
 
 from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
-from rtemsqual.items import Item, ItemCache, ItemMapper
+from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 
@@ -87,14 +87,13 @@ class _GlossaryMapper(ItemMapper):
         super().__init__(item)
         self._document_terms = document_terms
 
-    def get_value(self, item: Item, _path: str, _value: Any, key: str,
-                  _index: Optional[int]) -> Any:
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
         """ Recursively adds glossary terms to the document terms. """
-        if key == "term":
-            if item.uid not in self._document_terms:
-                self._document_terms[item.uid] = item
-                _GlossaryMapper(item,
-                                self._document_terms).substitute(item["text"])
+        if ctx.type_path_key == "glossary/term:/term":
+            if ctx.item.uid not in self._document_terms:
+                self._document_terms[ctx.item.uid] = ctx.item
+                _GlossaryMapper(ctx.item, self._document_terms).substitute(
+                    ctx.item["text"])
         # The value of this substitute is unused.
         return ""
 

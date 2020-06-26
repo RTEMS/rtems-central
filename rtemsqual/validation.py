@@ -30,19 +30,15 @@ from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper
-from rtemsqual.items import Item, ItemCache, ItemMapper
+from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 
 
 class _CodeMapper(ItemMapper):
-    def get_value(self, item: Item, path: str, _value: Any, key: str,
-                  _index: Optional[int]) -> Any:
-        if path == "/" and key == "test-run" and item[
-                "type"] == "requirement" and item[
-                    "requirement-type"] == "functional" and item[
-                        "functional-type"] == "action":
-            return f"{item['test-name'].replace(' ', '')}_Run"
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.type_path_key == "requirement/functional/action:/test-run":
+            return f"{ctx.item['test-name'].replace(' ', '')}_Run"
         raise KeyError
 
 

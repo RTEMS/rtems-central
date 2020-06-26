@@ -40,7 +40,7 @@ def test_validation(tmpdir):
     generate(validation_config, EmptyItemCache())
 
     item_cache_config = create_item_cache_config_and_copy_spec(
-        tmpdir, "spec-validation")
+        tmpdir, "spec-validation", with_spec_types=True)
     generate(validation_config, ItemCache(item_cache_config))
 
     with open(os.path.join(base_directory, "ts.c"), "r") as src:

@@ -75,9 +75,9 @@ class Mapper(ItemMapper):
     def dup(self, value):
         return value + value
 
-    def get_value(self, item, path, value, key, index):
-        if key == "x-to-b":
-            return value["b"]
+    def get_value(self, ctx):
+        if ctx.key == "x-to-b":
+            return ctx.value["b"]
         raise KeyError
 
 

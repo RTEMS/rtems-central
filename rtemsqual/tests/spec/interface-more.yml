@@ -1,0 +1,85 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: appl-config-group
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: appl-config-option
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: struct
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: union
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: container
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: define
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: domain
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: enum
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: enumerator
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: forward-declaration
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: function
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: group
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: header-file
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: macro
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: typedef
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: variable
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: null
+    mandatory-attributes: all
+spec-name: Interface More
+spec-type: interface-more
+type: spec

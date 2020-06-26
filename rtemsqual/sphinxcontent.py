@@ -25,13 +25,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
-import os
 import re
 from typing import Any, Dict, Callable, Iterable, Iterator, List, Optional, \
     Union
 
 from rtemsqual.content import Content, make_lines
-from rtemsqual.items import Item, ItemMapper
+from rtemsqual.items import Item, ItemGetValueContext, ItemMapper
 
 GenericContent = Union[str, List[str], "Content"]
 GenericContentIterable = Union[Iterable[str], Iterable[List[str]],
@@ -227,20 +226,18 @@ class SphinxMapper(ItemMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self._get_ref = {
-            "glossary:/term": _get_ref_term,
-            "glossary:/plural": _get_ref_term_plural
+            "glossary/term:/term": _get_ref_term,
+            "glossary/term:/plural": _get_ref_term_plural
         }  # type: Dict[str, Callable[[Any, str], str]]
 
-    def add_get_reference(self, type_name: str, path: str,
+    def add_get_reference(self, type_path_key: str,
                           get_ref: Callable[[Any, str], str]) -> None:
         """
         Adds a function to get a reference to the specified path for items of
         the specified type.
         """
-        self._get_ref[f"{type_name}:{path}"] = get_ref
+        self._get_ref[type_path_key] = get_ref
 
-    def get_value(self, item: Item, path: str, value: Any, key: str,
-                  _index: Optional[int]) -> Any:
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
         """ Gets a value by key and optional index. """
-        return self._get_ref[f"{item['type']}:{os.path.join(path, key)}"](
-            value, key)
+        return self._get_ref[ctx.type_path_key](ctx.value, ctx.key)

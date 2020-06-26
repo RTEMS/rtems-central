@@ -29,8 +29,10 @@ import shutil
 from typing import Dict
 
 
-def create_item_cache_config_and_copy_spec(tmp_dir: str,
-                                           spec_dir: str) -> Dict[str, str]:
+def create_item_cache_config_and_copy_spec(
+        tmp_dir: str,
+        spec_dir: str,
+        with_spec_types: bool = False) -> Dict[str, str]:
     """
     Creates an item cache configuration and copies a specification
     directory to the temporary tests directory.
@@ -42,5 +44,10 @@ def create_item_cache_config_and_copy_spec(tmp_dir: str,
     spec_dst = os.path.join(tmp_dir, "spec")
     shutil.copytree(spec_src, spec_dst)
     config["paths"] = [os.path.normpath(spec_dst)]
-    config["spec-type-root-uid"] = None
+    if with_spec_types:
+        spec = os.path.join(os.path.dirname(__file__), "spec")
+        shutil.copytree(spec, os.path.join(spec_dst, "spec"))
+        config["spec-type-root-uid"] = "/spec/root"
+    else:
+        config["spec-type-root-uid"] = None
     return config
