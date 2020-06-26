@@ -291,8 +291,10 @@ class _TestDirectiveItem(_TestItem):
         content.add("static const char * const * const "
                     f"{self.ident}_PreDesc[] = {{")
         with content.indent():
-            content.add(",\n".join(f"{self.ident}_PreDesc_{condition['name']}"
-                                   for condition in self["pre-conditions"]))
+            content.add(",\n".join([
+                f"{self.ident}_PreDesc_{condition['name']}"
+                for condition in self["pre-conditions"]
+            ] + ["NULL"]))
         content.add("};")
 
     def _add_context(self, content: CContent, header: Dict[str, Any]) -> None:
@@ -324,27 +326,15 @@ class _TestDirectiveItem(_TestItem):
         ])
 
     def _add_scope_body(self, content: CContent) -> None:
-        with content.condition("!ctx->in_action_loop"):
-            content.add("return;")
-        with content.for_loop("i = 0",
-                              f"i < RTEMS_ARRAY_SIZE( {self.ident}_PreDesc )",
-                              "++i"):
-            content.add("size_t m;")
-            with content.condition("n > 0"):
-                content.add(["buf[ 0 ] = '/';", "--n;", "++buf;"])
+        with content.condition("ctx->in_action_loop"):
             content.call_function(
-                "m =", "strlcpy",
-                ["buf", f"{self.ident}_PreDesc[ i ][ ctx->pcs[ i ] ]", "n"])
-            with content.first_condition("m < n"):
-                content.add(["n -= m;", "buf += m;"])
-            with content.final_condition(None):
-                content.add("n = 0;")
+                None, "T_get_scope",
+                [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
 
     def _add_fixture_scope(self, content: CContent) -> None:
         params = ["void *arg", "char *buf", "size_t n"]
         with content.function("static void", f"{self.ident}_Scope", params):
-            content.add(
-                [f"{self.context} *ctx;", "size_t i;", "", "ctx = arg;"])
+            content.add([f"{self.context} *ctx;", "", "ctx = arg;"])
             self._add_scope_body(content)
 
     def _add_fixture_method(self, content: CContent,

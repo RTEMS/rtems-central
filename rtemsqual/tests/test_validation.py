@@ -261,7 +261,8 @@ static const char * const ClassicTaskIdentification_PreDesc_Id[] = {
 static const char * const * const ClassicTaskIdentification_PreDesc[] = {
   ClassicTaskIdentification_PreDesc_Name,
   ClassicTaskIdentification_PreDesc_Node,
-  ClassicTaskIdentification_PreDesc_Id
+  ClassicTaskIdentification_PreDesc_Id,
+  NULL
 };
 
 /* Test rtems_task_ident() support */
@@ -475,39 +476,11 @@ static void ClassicTaskIdentification_Teardown_Wrap( void *arg )
 static void ClassicTaskIdentification_Scope( void *arg, char *buf, size_t n )
 {
   ClassicTaskIdentification_Context *ctx;
-  size_t i;
 
   ctx = arg;
 
-  if ( !ctx->in_action_loop ) {
-    return;
-  }
-
-  for (
-    i = 0;
-    i < RTEMS_ARRAY_SIZE( ClassicTaskIdentification_PreDesc );
-    ++i
-  ) {
-    size_t m;
-
-    if ( n > 0 ) {
-      buf[ 0 ] = '/';
-      --n;
-      ++buf;
-    }
-
-    m = strlcpy(
-      buf,
-      ClassicTaskIdentification_PreDesc[ i ][ ctx->pcs[ i ] ],
-      n
-    );
-
-    if ( m < n ) {
-      n -= m;
-      buf += m;
-    } else {
-      n = 0;
-    }
+  if ( ctx->in_action_loop ) {
+    T_get_scope( ClassicTaskIdentification_PreDesc, buf, n, ctx->pcs );
   }
 }
 
@@ -1095,7 +1068,8 @@ static const char * const Action2_PreDesc_B[] = {
 
 static const char * const * const Action2_PreDesc[] = {
   Action2_PreDesc_A,
-  Action2_PreDesc_B
+  Action2_PreDesc_B,
+  NULL
 };
 
 /* Support code */
@@ -1217,31 +1191,11 @@ static void Action2_Teardown_Wrap( void *arg )
 static void Action2_Scope( void *arg, char *buf, size_t n )
 {
   Action2_Context *ctx;
-  size_t i;
 
   ctx = arg;
 
-  if ( !ctx->in_action_loop ) {
-    return;
-  }
-
-  for ( i = 0; i < RTEMS_ARRAY_SIZE( Action2_PreDesc ); ++i ) {
-    size_t m;
-
-    if ( n > 0 ) {
-      buf[ 0 ] = '/';
-      --n;
-      ++buf;
-    }
-
-    m = strlcpy( buf, Action2_PreDesc[ i ][ ctx->pcs[ i ] ], n );
-
-    if ( m < n ) {
-      n -= m;
-      buf += m;
-    } else {
-      n = 0;
-    }
+  if ( ctx->in_action_loop ) {
+    T_get_scope( Action2_PreDesc, buf, n, ctx->pcs );
   }
 }
 
