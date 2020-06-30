@@ -248,8 +248,10 @@ class Item:
     def save(self):
         """ Saves the item to the corresponding file. """
         with open(self.file, "w") as dst:
-            data = self._data.copy()
-            del data["_file"]
+            data = {}
+            for key, value in self._data.items():
+                if not key.startswith("_"):
+                    data[key] = value
             dst.write(
                 yaml.dump(data, default_flow_style=False, allow_unicode=True))
 
