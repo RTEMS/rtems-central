@@ -6,6 +6,8 @@ functional-type: function
 links:
 - role: interface-function
   uid: /if/rtems/userext/ident
+rationale: null
+references: []
 requirement-type: functional
 text: |
   The ${/if/rtems/userext/ident:/name} directive shall identify an Classic API
