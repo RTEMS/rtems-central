@@ -28,7 +28,7 @@ from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
 from rtemsqual.sphinxcontent import get_reference, get_label, \
     SphinxContent, SphinxMapper
-from rtemsqual.items import Item, ItemCache
+from rtemsqual.items import Item, ItemCache, ItemGetValueContext
 from rtemsqual.specverify import NAME
 
 _DocumenterMap = Dict[str, "_Documenter"]
@@ -66,8 +66,8 @@ def _a_or_an(value: str) -> str:
     return "a"
 
 
-def _get_ref_specification_type(value: Any, key: str) -> str:
-    return get_reference(_SPEC_TYPE_PREFIX + get_label(value[key]))
+def _get_ref_specification_type(ctx: ItemGetValueContext) -> Any:
+    return get_reference(_SPEC_TYPE_PREFIX + get_label(ctx.value[ctx.key]))
 
 
 class _AssertContext:
@@ -269,8 +269,8 @@ class _Documenter:
         self._documenter_map = documenter_map
         self.used_by = set()  # type: Set[str]
         self._mapper = SphinxMapper(item)
-        self._mapper.add_get_reference("spec:/spec-name",
-                                       _get_ref_specification_type)
+        self._mapper.add_get_value("spec:/spec-name",
+                                   _get_ref_specification_type)
         assert self._name not in documenter_map
         documenter_map[self._name] = self
 

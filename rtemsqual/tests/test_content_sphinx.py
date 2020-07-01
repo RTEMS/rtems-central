@@ -270,5 +270,5 @@ def test_substitute(tmpdir):
         mapper.substitute("${x:/y}")
     assert mapper.substitute("${x:/term}") == ":term:`y`"
     assert mapper.substitute("${x:/plural}") == ":term:`ys <y>`"
-    mapper.add_get_reference("other:/name", lambda x, y: x[y])
+    mapper.add_get_value("other:/name", lambda ctx: ctx.value[ctx.key])
     assert mapper.substitute("${y:/name}") == "foobar"

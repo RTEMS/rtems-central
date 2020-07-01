@@ -26,8 +26,7 @@
 
 from contextlib import contextmanager
 import re
-from typing import Any, Dict, Callable, Iterable, Iterator, List, Optional, \
-    Union
+from typing import Any, Iterable, Iterator, List, Optional, Union
 
 from rtemsqual.content import Content, make_lines
 from rtemsqual.items import Item, ItemGetValueContext, ItemMapper
@@ -210,34 +209,20 @@ class SphinxContent(Content):
         self.prepend([f".. SPDX-License-Identifier: {self._license}", ""])
 
 
-def _get_ref_term(value: Any, key: str) -> str:
-    return f":term:`{value[key]}`"
+def _get_ref_term(ctx: ItemGetValueContext) -> Any:
+    return f":term:`{ctx.value[ctx.key]}`"
 
 
-def _get_ref_term_plural(value: Any, key: str) -> str:
+def _get_ref_term_plural(ctx: ItemGetValueContext) -> Any:
     try:
-        return f":term:`{value[key]} <{value['term']}>`"
+        return f":term:`{ctx.value[ctx.key]} <{ctx.value['term']}>`"
     except KeyError:
-        return f":term:`{value['term']}s <{value['term']}>`"
+        return f":term:`{ctx.value['term']}s <{ctx.value['term']}>`"
 
 
 class SphinxMapper(ItemMapper):
-    """ Sphinx mapper. """
+    """ Sphinx item mapper. """
     def __init__(self, item: Item):
         super().__init__(item)
-        self._get_ref = {
-            "glossary/term:/term": _get_ref_term,
-            "glossary/term:/plural": _get_ref_term_plural
-        }  # type: Dict[str, Callable[[Any, str], str]]
-
-    def add_get_reference(self, type_path_key: str,
-                          get_ref: Callable[[Any, str], str]) -> None:
-        """
-        Adds a function to get a reference to the specified path for items of
-        the specified type.
-        """
-        self._get_ref[type_path_key] = get_ref
-
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        """ Gets a value by key and optional index. """
-        return self._get_ref[ctx.type_path_key](ctx.value, ctx.key)
+        self.add_get_value("glossary/term:/term", _get_ref_term)
+        self.add_get_value("glossary/term:/plural", _get_ref_term_plural)

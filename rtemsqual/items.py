@@ -293,6 +293,14 @@ class ItemMapper(Mapping[str, object]):
     def __init__(self, item: "Item"):
         self._item = item
         self._prefix = [""]
+        self._get_value = {}  # type: Dict[str, ItemGetValue]
+
+    def add_get_value(self, type_path_key: str,
+                      get_value: ItemGetValue) -> None:
+        """
+        Adds a get value for the specified type and key path.
+        """
+        self._get_value[type_path_key] = get_value
 
     def push_prefix(self, prefix: str) -> None:
         """ Pushes a key path prefix. """
@@ -356,8 +364,7 @@ class ItemMapper(Mapping[str, object]):
 
     def get_value(self, ctx: ItemGetValueContext) -> Any:
         """ Gets a value by key and optional index. """
-        # pylint: disable=no-self-use
-        raise KeyError
+        return self._get_value[ctx.type_path_key](ctx)
 
 
 class _SpecType(NamedTuple):
