@@ -54,50 +54,63 @@ def _forward_declaration(item: Item) -> str:
     return f"{target['interface-type']} {target['name']}"
 
 
+def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
+    return _forward_declaration(ctx.item)
+
+
+def _get_value_function(ctx: ItemGetValueContext) -> Any:
+    return f"{ctx.value[ctx.key]}()"
+
+
+def _get_value_double_colon(ctx: ItemGetValueContext) -> Any:
+    return f"::{ctx.value[ctx.key]}"
+
+
+def _get_value_hash(ctx: ItemGetValueContext) -> Any:
+    return f"#{ctx.value[ctx.key]}"
+
+
 class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
         self._node = node
-        self._eval_interface = False
+        self._code_or_doc = "doc"
+        self.add_get_value("interface/forward-declaration:code:/name",
+                           _get_value_forward_declaration)
+        self.add_get_value("interface/forward-declaration:doc:/name",
+                           _get_value_forward_declaration)
+        self.add_get_value("interface/function:doc:/name", _get_value_function)
+        self.add_get_value("interface/enumerator:doc:/name",
+                           _get_value_double_colon)
+        self.add_get_value("interface/typedef:doc:/name",
+                           _get_value_double_colon)
+        self.add_get_value("interface/define:doc:/name", _get_value_hash)
+        self.add_get_value("interface/enum:doc:/name", _get_value_hash)
+        self.add_get_value("interface/macro:doc:/name", _get_value_hash)
+        self.add_get_value("interface/variable:doc:/name", _get_value_hash)
 
     @contextmanager
-    def interface_evaluation(self) -> Iterator[None]:
-        """ Enables the interface evaluation. """
-        eval_iterface = self._eval_interface
-        self._eval_interface = True
+    def code(self) -> Iterator[None]:
+        """ Enables code mapping. """
+        code_or_doc = self._code_or_doc
+        self._code_or_doc = "code"
         yield
-        self._eval_interface = eval_iterface
+        self._code_or_doc = code_or_doc
 
-    def __getitem__(self, identifier):
-        item, value = self.map(identifier)
-        if self._eval_interface and item["type"] == "interface":
+    def get_value(self, ctx: ItemGetValueContext) -> Any:
+        if self._code_or_doc == "code" and ctx.item["type"] == "interface":
             node = self._node
             header_file = node.header_file
-            if item["interface-type"] == "enumerator":
-                for link in item.links_to_children():
+            if ctx.item["interface-type"] == "enumerator":
+                for link in ctx.item.links_to_children():
                     if link.role == "interface-enumerator":
                         header_file.add_includes(link.item)
             else:
-                header_file.add_includes(item)
-            header_file.add_potential_edge(node, item)
-        return value
-
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        if ctx.path == "/" and ctx.key == "name" and ctx.item[
-                "type"] == "interface":
-            interface_type = ctx.item["interface-type"]
-            if interface_type == "forward-declaration":
-                return _forward_declaration(ctx.item)
-            if not self._eval_interface:
-                value = ctx.value[ctx.key]
-                if interface_type == "function":
-                    return f"{value}()"
-                if interface_type in ["enumerator", "typedef"]:
-                    return f"::{value}"
-                if interface_type in ["define", "enum", "macro", "variable"]:
-                    return f"#{value}"
-                return value
-        raise KeyError
+                header_file.add_includes(ctx.item)
+            header_file.add_potential_edge(node, ctx.item)
+        return super().get_value(
+            ItemGetValueContext(ctx.item, f"{self._code_or_doc}:{ctx.path}",
+                                ctx.value, ctx.key, ctx.index))
 
     def enabled_by_to_defined(self, enabled_by: str) -> str:
         """
@@ -113,7 +126,7 @@ class _InterfaceExpressionMapper(ExpressionMapper):
         self._mapper = mapper
 
     def map_symbol(self, symbol: str) -> str:
-        with self._mapper.interface_evaluation():
+        with self._mapper.code():
             return self._mapper.substitute(symbol)
 
 
@@ -123,7 +136,7 @@ class _ItemLevelExpressionMapper(ExpressionMapper):
         self._mapper = mapper
 
     def map_symbol(self, symbol: str) -> str:
-        with self._mapper.interface_evaluation():
+        with self._mapper.code():
             return self._mapper.substitute(
                 self._mapper.enabled_by_to_defined(symbol))
 
@@ -289,7 +302,7 @@ class Node:
         node.
         """
         if text:
-            with self.mapper.interface_evaluation():
+            with self.mapper.code():
                 return self.mapper.substitute(text.strip("\n"))
         return text
 
