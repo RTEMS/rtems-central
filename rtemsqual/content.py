@@ -437,9 +437,8 @@ def _split_includes(
             except KeyError:
                 pass
             includes_enabled_by.setdefault(inc.path, set()).add(inc.enabled_by)
-        else:
-            if inc.path not in includes_enabled_by:
-                includes_unconditional.add(inc.path)
+        elif inc.path not in includes_enabled_by:
+            includes_unconditional.add(inc.path)
     return includes_unconditional, includes_enabled_by
 
 
