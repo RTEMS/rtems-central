@@ -50,10 +50,75 @@ enabled."""
 }
 
 
-def _generate_feature(content: SphinxContent, item: Item,
+class _ContentAdaptor:
+    """
+    The content adaptor provides a specialized interface to a content class.
+
+    By default, Sphinx content is generated.
+    """
+    def __init__(self, content: Any) -> None:
+        self.content = content
+
+    def add_group(self, name: str, description: str) -> None:
+        """ Adds an option group. """
+        self.content.add_header(name, level=2)
+        self.content.add(description)
+
+    def add_option(self, name: str, index_entries: List[str]) -> None:
+        """ Adds an option. """
+        self.content.add_index_entries([name] + index_entries)
+        self.content.add_label(name)
+        self.content.add_header(name, level=3)
+        self.content.add_definition_item("CONSTANT:", f"``{name}``")
+
+    def add_option_type(self, option_type: str) -> None:
+        """ Adds an option type. """
+        self.content.add_definition_item("OPTION TYPE:", option_type)
+
+    def add_option_default_value(self, value: str) -> None:
+        """ Adds an option default value. """
+        self.content.add_definition_item("DEFAULT VALUE:", value)
+
+    def add_option_default_config(self, config: str) -> None:
+        """ Adds an option default configuration. """
+        self.content.add_definition_item("DEFAULT CONFIGURATION:", config)
+
+    def add_option_value_constraints(self, lines: List[str]) -> None:
+        """ Adds a option value constraints. """
+        self.content.add_definition_item("VALUE CONSTRAINTS:", lines)
+
+    def add_option_description(self, description: str) -> None:
+        """ Adds a option description. """
+        self.content.add_definition_item("DESCRIPTION:", description)
+
+    def add_option_notes(self, notes: Optional[str]) -> None:
+        """ Adds option notes. """
+        if not notes:
+            notes = "None."
+        self.content.add_definition_item("NOTES:", notes)
+
+    def add_licence_and_copyrights(self) -> None:
+        """ Adds the license and copyrights. """
+        self.content.add_licence_and_copyrights()
+
+    def register_license_and_copyrights_of_item(self, item: Item) -> None:
+        """ Registers the license and copyrights of the item. """
+        self.content.register_license_and_copyrights_of_item(item)
+
+    def write(self, filename: str):
+        """ Writes the content to the file specified by the path. """
+        self.content.write(filename)
+
+
+class _SphinxContentAdaptor(_ContentAdaptor):
+    def __init__(self) -> None:
+        super().__init__(SphinxContent())
+
+
+def _generate_feature(content: _ContentAdaptor, item: Item,
                       option_type: str) -> None:
-    content.add_definition_item("DEFAULT CONFIGURATION:",
-                                _OPTION_DEFAULT_CONFIG[option_type](item))
+    content.add_option_default_config(
+        _OPTION_DEFAULT_CONFIG[option_type](item))
 
 
 def _generate_min_max(lines: List[str], value: str, word: str) -> None:
@@ -104,7 +169,7 @@ def _generate_item_texts(lines: List[str], constraints: Dict[str,
         lines.extend([f"  {x}" if x else "" for x in text[1:]])
 
 
-def _resolve_constraint_links(content: SphinxContent, item: Item,
+def _resolve_constraint_links(content: _ContentAdaptor, item: Item,
                               constraints: Dict[str, Any]) -> None:
     texts = []  # type: List[str]
     for parent in item.parents("constraint"):
@@ -114,7 +179,7 @@ def _resolve_constraint_links(content: SphinxContent, item: Item,
         constraints.setdefault("texts", []).extend(reversed(texts))
 
 
-def _generate_constraint(content: SphinxContent, item: Item) -> None:
+def _generate_constraint(content: _ContentAdaptor, item: Item) -> None:
     constraints = item["constraints"]
     _resolve_constraint_links(content, item, constraints)
     lines = []  # type: List[str]
@@ -144,15 +209,15 @@ def _generate_constraint(content: SphinxContent, item: Item) -> None:
         _generate_item_max(lines, constraints)
         _generate_item_set(lines, constraints)
         _generate_item_texts(lines, constraints)
-    content.add_definition_item("VALUE CONSTRAINTS:", lines)
+    content.add_option_value_constraints(lines)
 
 
-def _generate_initializer_or_integer(content: SphinxContent, item: Item,
+def _generate_initializer_or_integer(content: _ContentAdaptor, item: Item,
                                      _option_type: str) -> None:
     default_value = item["default-value"]
     if not isinstance(default_value, str) or " " not in default_value:
         default_value = f"The default value is {default_value}."
-    content.add_definition_item("DEFAULT VALUE:", default_value)
+    content.add_option_default_value(default_value)
     _generate_constraint(content, item)
 
 
@@ -164,31 +229,19 @@ _OPTION_GENERATORS = {
 }
 
 
-def _generate_notes(content: SphinxContent, notes: Optional[str]) -> None:
-    if not notes:
-        notes = "None."
-    content.add_definition_item("NOTES:", notes)
-
-
-def _generate_file(group: Item, options: ItemMap, target: str) -> None:
-    content = SphinxContent()
+def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
     content.register_license_and_copyrights_of_item(group)
-    content.add_header(group["name"], level=2)
-    content.add(group["description"])
+    content.add_group(group["name"], group["description"])
     for item in sorted(options.values(), key=lambda x: x["name"]):
         name = item["name"]
         content.register_license_and_copyrights_of_item(item)
-        content.add_index_entries([name] + item["index-entries"])
-        content.add_label(name)
-        content.add_header(name, level=3)
-        content.add_definition_item("CONSTANT:", f"``{name}``")
+        content.add_option(name, item["index-entries"])
         option_type = item["appl-config-option-type"]
-        content.add_definition_item("OPTION TYPE:", _OPTION_TYPES[option_type])
+        content.add_option_type(_OPTION_TYPES[option_type])
         _OPTION_GENERATORS[option_type](content, item, option_type)
-        content.add_definition_item("DESCRIPTION:", item["description"])
-        _generate_notes(content, item["notes"])
+        content.add_option_description(item["description"])
+        content.add_option_notes(item["notes"])
     content.add_licence_and_copyrights()
-    content.write(target)
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -207,4 +260,6 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         for child in group.children("appl-config-group-member"):
             assert child.type.startswith("interface/appl-config-option")
             options[child.uid] = child
-        _generate_file(group, options, group_config["target"])
+        sphinx_content = _SphinxContentAdaptor()
+        _generate(group, options, sphinx_content)
+        sphinx_content.write(group_config["target"])
