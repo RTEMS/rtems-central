@@ -107,10 +107,9 @@ def _generate_item_texts(lines: List[str], constraints: Dict[str,
 def _resolve_constraint_links(content: SphinxContent, item: Item,
                               constraints: Dict[str, Any]) -> None:
     texts = []  # type: List[str]
-    for link in item.links_to_parents():
-        if link.role == "constraint":
-            content.register_license_and_copyrights_of_item(link.item)
-            texts.append(link.item["text"])
+    for parent in item.parents("constraint"):
+        content.register_license_and_copyrights_of_item(parent)
+        texts.append(parent["text"])
     if texts:
         constraints.setdefault("texts", []).extend(reversed(texts))
 
