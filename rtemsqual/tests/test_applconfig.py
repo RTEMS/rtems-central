@@ -33,7 +33,7 @@ from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 def test_applconfig(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
-        tmpdir, "spec-applconfig")
+        tmpdir, "spec-applconfig", with_spec_types=True)
     item_cache = ItemCache(item_cache_config)
 
     applconfig_config = {}

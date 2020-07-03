@@ -12,7 +12,7 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: null
+- role: appl-config-group-member
   uid: g
 name: k
 notes: null

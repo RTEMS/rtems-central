@@ -31,23 +31,6 @@ from rtemsqual.items import Item, ItemCache
 
 ItemMap = Dict[str, Item]
 
-
-def _gather_groups(item: Item, groups: ItemMap) -> None:
-    for child in item.children():
-        _gather_groups(child, groups)
-    if item["type"] == "interface" and item[
-            "interface-type"] == "appl-config-group":
-        groups[item.uid] = item
-
-
-def _gather_options(item: Item, options: ItemMap) -> None:
-    for child in item.children():
-        _gather_options(child, options)
-    if item["type"] == "interface" and item[
-            "interface-type"] == "appl-config-option":
-        options[item.uid] = item
-
-
 _FEATURE = "This configuration option is a boolean feature define."
 
 _OPTION_TYPES = {
@@ -218,12 +201,11 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the application
                        configuration groups and options.
     """
-    groups = {}  # type: ItemMap
-    for item in item_cache.top_level.values():
-        _gather_groups(item, groups)
-
     for group_config in config["groups"]:
-        group = groups[group_config["uid"]]
+        group = item_cache[group_config["uid"]]
+        assert group.type == "interface/appl-config-group"
         options = {}  # type: ItemMap
-        _gather_options(group, options)
+        for child in group.children("appl-config-group-member"):
+            assert child.type.startswith("interface/appl-config-option")
+            options[child.uid] = child
         _generate_file(group, options, group_config["target"])
