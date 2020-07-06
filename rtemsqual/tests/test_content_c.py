@@ -29,6 +29,39 @@ import pytest
 from rtemsqual.content import CContent, CInclude
 
 
+def test_doxyfy():
+    content = CContent()
+    content.doxyfy(None)
+    assert str(content) == ""
+    content.doxyfy(" ")
+    assert str(content) == ""
+    content.doxyfy([" "])
+    assert str(content) == ""
+    content.doxyfy(CContent())
+    assert str(content) == ""
+    content.doxyfy(""".. code-block:: c
+
+    abc
+
+    def
+
+ghi
+
+.. code-block:: c
+""")
+    assert str(content) == """@code
+abc
+
+def
+@endcode
+
+ghi
+
+@code
+@endcode
+"""
+
+
 def test_add_have_config():
     content = CContent()
     content.add_have_config()

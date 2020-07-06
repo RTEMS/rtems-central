@@ -25,6 +25,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
+import collections
 import itertools
 import os
 import re
@@ -214,23 +215,12 @@ class Content:
                                 self._empty_line_indent))
                 break
 
-    def wrap(self,
-             content: Optional[GenericContent],
-             initial_indent: str = "",
-             subsequent_indent: Optional[str] = None,
-             context: AddContext = _add_context) -> None:
-        """ Adds a gap if needed, then adds the wrapped content.  """
-        if not content:
-            return
-        if isinstance(content, str):
-            text = content
-        elif isinstance(content, list):
-            text = "\n".join(content)
-        else:
-            text = "\n".join(content.lines)
-        text = text.strip()
-        if not text:
-            return
+    def wrap_text(self,
+                  text: str,
+                  initial_indent: str = "",
+                  subsequent_indent: Optional[str] = None,
+                  context: AddContext = _add_context) -> None:
+        """ Adds a gap if needed, then adds the wrapped text.  """
         self._add_gap()
         with context(self):
             if subsequent_indent is None:
@@ -257,6 +247,25 @@ class Content:
                     _indent(wrapper.wrap(block), self._indent,
                             self._empty_line_indent))
                 gap = [self._empty_line_indent]
+
+    def wrap(self,
+             content: Optional[GenericContent],
+             initial_indent: str = "",
+             subsequent_indent: Optional[str] = None,
+             context: AddContext = _add_context) -> None:
+        """ Adds a gap if needed, then adds the wrapped content.  """
+        if not content:
+            return
+        if isinstance(content, str):
+            text = content
+        elif isinstance(content, list):
+            text = "\n".join(content)
+        else:
+            text = "\n".join(content.lines)
+        text = text.strip()
+        if not text:
+            return
+        self.wrap_text(text, initial_indent, subsequent_indent, context)
 
     def paste(self, content: Optional[GenericContent]) -> None:
         """ Pastes the wrapped content directly to the last line.  """
@@ -477,6 +486,39 @@ class CContent(Content):
     # pylint: disable=too-many-public-methods
     def __init__(self):
         super().__init__("BSD-2-Clause", False)
+
+    def doxyfy(self, content: Optional[GenericContent]) -> None:
+        """
+        Adds a gap if needed, then adds the wrapped text with some conversion
+        to Doxygen markup.
+        """
+        if not content:
+            return
+        if isinstance(content, str):
+            text = content
+        elif isinstance(content, list):
+            text = "\n".join(content)
+        else:
+            text = "\n".join(content.lines)
+        text = text.strip()
+        if not text:
+            return
+        blocks = collections.deque(text.split("\n\n"))
+        while blocks:
+            block = blocks.popleft()
+            if block.startswith(".. code-block"):
+                self.add("@code")
+                self.gap = False
+                while blocks:
+                    block = blocks.popleft()
+                    if block.startswith("    "):
+                        self.add(block[4:].replace("\n    ", "\n"))
+                    else:
+                        blocks.appendleft(block)
+                        break
+                self.append("@endcode")
+            else:
+                self.wrap_text(block)
 
     def prepend_spdx_license_identifier(self):
         """
