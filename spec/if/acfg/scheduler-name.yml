@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: integer
+constraints:
+  texts:
+  - |
+    The value of this configuration option shall be a valid integer of type
+    ``rtems_name``.
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+default-value: |
+  The default value is
+
+  * ``"MEDF"`` for the :ref:`EDF SMP Scheduler <SchedulerSMPEDF>`,
+
+  * ``"MPA "`` for the :ref:`Arbitrary Processor Affinity Priority SMP Scheduler <SchedulerSMPPriorityAffinity>`,
+
+  * ``"MPD "`` for the :ref:`Deterministic Priority SMP Scheduler <SchedulerSMPPriority>`,
+
+  * ``"MPS "`` for the :ref:`Simple Priority SMP Scheduler <SchedulerSMPPrioritySimple>`,
+
+  * ``"UCBS"`` for the :ref:`Uniprocessor CBS Scheduler <SchedulerCBS>`,
+
+  * ``"UEDF"`` for the :ref:`Uniprocessor EDF Scheduler <SchedulerEDF>`,
+
+  * ``"UPD "`` for the :ref:`Uniprocessor Deterministic Priority Scheduler <SchedulerPriority>`, and
+
+  * ``"UPS "`` for the :ref:`Uniprocessor Simple Priority Scheduler <SchedulerPrioritySimple>`.
+description: |
+  The value of this configuration option defines the name of the default
+  scheduler.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-schedgeneral
+name: CONFIGURE_SCHEDULER_NAME
+notes: |
+  This scheduler configuration option is an advanced configuration option.
+  Think twice before you use it.
+
+  Schedulers can be identified via c:func:`rtems_scheduler_ident`.
+
+  Use :c:func:`rtems_build_name` to define the scheduler name.
+text: ''
+type: interface

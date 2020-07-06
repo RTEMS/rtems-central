@@ -120,7 +120,7 @@ notes: |
   system for insertion in the local copy of the global object table.
 
   The total number of global objects, including semaphores, is limited by the
-  ${/acfg/opt/mpmaxglobalobjects:/name} application configuration option.
+  ${/if/acfg/mp-max-global-objects:/name} application configuration option.
 
   It is not allowed to create an initially locked MrsP semaphore and the
   ${../status/invalid-number:/name} status code will be returned in SMP
@@ -173,7 +173,7 @@ return:
   - description: |
       There was no inactive semaphore object available to create a new
       semaphore.  The semaphore object maximum is defined by the
-      ${/acfg/opt/maxsemaphores:/name} application configuration option.
+      ${/if/acfg/max-semaphores:/name} application configuration option.
     value: ${../status/too-many:/name}
   - description: |
       In multiprocessing configurations, there was no inactive global object

@@ -50,33 +50,33 @@ glossary:
     target: external/rtems-docs/eng/glossary.rst
 appl-config:
   groups:
-  - uid: /acfg/bdbuf
+  - uid: /if/acfg/group-bdbuf
     target: external/rtems-docs/c-user/config/bdbuf.rst
-  - uid: /acfg/bsp
+  - uid: /if/acfg/group-bsp
     target: external/rtems-docs/c-user/config/bsp-related.rst
-  - uid: /acfg/classic
+  - uid: /if/acfg/group-classic
     target: external/rtems-docs/c-user/config/classic-api.rst
-  - uid: /acfg/classicinit
+  - uid: /if/acfg/group-classicinit
     target: external/rtems-docs/c-user/config/classic-init-task.rst
-  - uid: /acfg/devdrv
+  - uid: /if/acfg/group-devdrv
     target: external/rtems-docs/c-user/config/device-driver.rst
-  - uid: /acfg/eventrecord
+  - uid: /if/acfg/group-eventrecord
     target: external/rtems-docs/c-user/config/event-record.rst
-  - uid: /acfg/filesystem
+  - uid: /if/acfg/group-filesystem
     target: external/rtems-docs/c-user/config/filesystem.rst
-  - uid: /acfg/general
+  - uid: /if/acfg/group-general
     target: external/rtems-docs/c-user/config/general.rst
-  - uid: /acfg/idle
+  - uid: /if/acfg/group-idle
     target: external/rtems-docs/c-user/config/idle-task.rst
-  - uid: /acfg/mpci
+  - uid: /if/acfg/group-mpci
     target: external/rtems-docs/c-user/config/mpci.rst
-  - uid: /acfg/posix
+  - uid: /if/acfg/group-posix
     target: external/rtems-docs/c-user/config/posix-api.rst
-  - uid: /acfg/posixinit
+  - uid: /if/acfg/group-posixinit
     target: external/rtems-docs/c-user/config/posix-init-thread.rst
-  - uid: /acfg/schedgeneral
+  - uid: /if/acfg/group-schedgeneral
     target: external/rtems-docs/c-user/config/scheduler-general.rst
-  - uid: /acfg/stackalloc
+  - uid: /if/acfg/group-stackalloc
     target: external/rtems-docs/c-user/config/task-stack-alloc.rst
 validation:
   base-directory: external/rtems

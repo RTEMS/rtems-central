@@ -19,7 +19,7 @@ links:
 name: RTEMS_MICROSECONDS_TO_TICKS
 notes: |
   The number of clock ticks per second is defined by the
-  ${/acfg/opt/microsecondspertick:/name} application configuration option.
+  ${/if/acfg/microseconds-per-tick:/name} application configuration option.
 params:
 - description: is the microseconds value to convert to clock ticks.
   dir: null

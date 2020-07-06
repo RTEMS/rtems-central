@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  This section describes general system configuration options.
+enabled-by: true
+interface-type: appl-config-group
+links:
+- role: requirement-refinement
+  uid: ../../applconfig
+name: General System Configuration
+text: ''
+type: interface
