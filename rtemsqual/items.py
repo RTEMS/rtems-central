@@ -45,7 +45,7 @@ class ItemGetValueContext(NamedTuple):
     @property
     def type_path_key(self) -> str:
         """ Returns the item type followed the path to the key. """
-        return f"{self.item.type}:{self.path}{self.key}"
+        return f"{self.item.type}:{os.path.join(self.path, self.key)}"
 
 
 ItemMap = Dict[str, "Item"]
