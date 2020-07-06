@@ -193,7 +193,7 @@ def _generate_file(group: Item, options: ItemMap, target: str) -> None:
     content.register_license_and_copyrights_of_item(group)
     content.add_header(group["name"], level=2)
     content.add(group["description"])
-    for item in sorted(options.values(), key=lambda x: x.uid):
+    for item in sorted(options.values(), key=lambda x: x["name"]):
         name = item["name"]
         content.register_license_and_copyrights_of_item(item)
         content.add_index_entries([name] + item["index-entries"])
