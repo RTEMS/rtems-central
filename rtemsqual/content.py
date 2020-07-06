@@ -493,6 +493,18 @@ class CContent(Content):
             self.add(self._copyrights.get_statements())
             self.add(_BSD_2_CLAUSE_LICENSE)
 
+    def prepend_copyrights_and_licenses(self):
+        """
+        Prepends the copyrights and licenses according to the registered
+        copyrights and licenses.
+        """
+        content = CContent()
+        with content.comment_block():
+            content.add(self._copyrights.get_statements())
+            content.add(_BSD_2_CLAUSE_LICENSE)
+        content.append("")
+        self.prepend(content)
+
     def add_have_config(self):
         """ Adds a guarded config.h include. """
         self.add(["#ifdef HAVE_CONFIG_H", "#include \"config.h\"", "#endif"])
