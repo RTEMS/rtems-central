@@ -27,7 +27,7 @@
 import os
 import pytest
 
-from rtemsqual.items import ItemCache, ItemMapper, ItemTemplate
+from rtemsqual.items import EmptyItem, ItemCache, ItemMapper, ItemTemplate
 from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
 
 
@@ -117,3 +117,12 @@ def test_item_mapper(tmpdir):
             pass
     with pytest.raises(AttributeError):
         len(mapper)
+
+
+def test_empty_item_mapper():
+    item = EmptyItem()
+    mapper = ItemMapper(item)
+    assert mapper.item == item
+    item_2 = EmptyItem()
+    mapper.item = item_2
+    assert mapper.item == item_2

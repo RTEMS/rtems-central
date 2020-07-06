@@ -290,10 +290,20 @@ class ItemTemplate(string.Template):
 
 class ItemMapper(Mapping[str, object]):
     """ Maps identifiers to items and attribute values. """
-    def __init__(self, item: "Item"):
+    def __init__(self, item: Item):
         self._item = item
         self._prefix = [""]
         self._get_value = {}  # type: Dict[str, ItemGetValue]
+
+    @property
+    def item(self) -> Item:
+        """ The item of the mapper. """
+        return self._item
+
+    @item.setter
+    def item(self, item: Item) -> None:
+        """ Sets the item of the mapper. """
+        self._item = item
 
     def add_get_value(self, type_path_key: str,
                       get_value: ItemGetValue) -> None:
@@ -493,3 +503,9 @@ class EmptyItemCache(ItemCache):
             "paths": [],
             "spec-type-root-uid": None
         })
+
+
+class EmptyItem(Item):
+    """ Objects of this class represent empty items. """
+    def __init__(self):
+        super().__init__(EmptyItemCache(), "", {})
