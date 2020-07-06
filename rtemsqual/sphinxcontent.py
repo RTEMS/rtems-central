@@ -220,9 +220,21 @@ def _get_ref_term_plural(ctx: ItemGetValueContext) -> Any:
         return f":term:`{ctx.value['term']}s <{ctx.value['term']}>`"
 
 
+def _get_appl_config_option(ctx: ItemGetValueContext) -> Any:
+    return f":ref:`{ctx.value[ctx.key]}`"
+
+
 class SphinxMapper(ItemMapper):
     """ Sphinx item mapper. """
     def __init__(self, item: Item):
         super().__init__(item)
         self.add_get_value("glossary/term:/term", _get_ref_term)
         self.add_get_value("glossary/term:/plural", _get_ref_term_plural)
+        self.add_get_value("interface/appl-config-option/feature-enable:/name",
+                           _get_appl_config_option)
+        self.add_get_value("interface/appl-config-option/feature:/name",
+                           _get_appl_config_option)
+        self.add_get_value("interface/appl-config-option/initializer:/name",
+                           _get_appl_config_option)
+        self.add_get_value("interface/appl-config-option/integer:/name",
+                           _get_appl_config_option)

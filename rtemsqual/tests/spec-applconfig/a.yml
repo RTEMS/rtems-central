@@ -4,7 +4,18 @@ description: description a
 index-entries:
 - index a
 name: a
-notes: notes a
+notes: |
+  notes a
+
+  references:
+
+  * ${b:/name}
+
+  * ${.:/document-reference/terminate}
+
+  * ${func:/name}
+
+  * ${td:/name}
 appl-config-option-type: feature
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

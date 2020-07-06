@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: feature
+  uid: interface-appl-config-option
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: feature-enable
+  uid: interface-appl-config-option
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: integer
+  uid: interface-appl-config-option
+- role: spec-refinement
+  spec-key: appl-config-option-type
+  spec-value: initializer
+  uid: interface-appl-config-option
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: null
+    mandatory-attributes: all
+spec-name: Interface Application Configuration More
+spec-type: interface-appl-config-more
+type: spec

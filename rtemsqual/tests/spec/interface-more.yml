@@ -11,10 +11,6 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: appl-config-option
-  uid: interface
-- role: spec-refinement
-  spec-key: interface-type
   spec-value: struct
   uid: interface
 - role: spec-refinement

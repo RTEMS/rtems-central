@@ -74,6 +74,16 @@ DESCRIPTION:
 NOTES:
     notes a
 
+    references:
+
+    * :ref:`b`
+
+    * :ref:`Terminate`
+
+    * ``func()``
+
+    * ``td``
+
 .. index:: b
 
 .. _b:

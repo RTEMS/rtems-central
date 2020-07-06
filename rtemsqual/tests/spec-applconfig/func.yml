@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+brief: null
+definition:
+  default:
+    body: null
+    params: []
+    return: void
+  variants: []
+description: null
+name: func
+notes: null
+params: []
+interface-type: function
+links: []
+return:
+  return: null
+  return-values: []
+type: interface

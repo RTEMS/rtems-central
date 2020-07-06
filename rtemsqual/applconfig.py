@@ -26,8 +26,9 @@
 
 from typing import Any, Dict, List, Optional
 
-from rtemsqual.sphinxcontent import SphinxContent
-from rtemsqual.items import Item, ItemCache
+from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
+from rtemsqual.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
+    ItemMapper
 
 ItemMap = Dict[str, Item]
 
@@ -56,8 +57,13 @@ class _ContentAdaptor:
 
     By default, Sphinx content is generated.
     """
-    def __init__(self, content: Any) -> None:
+    def __init__(self, mapper: ItemMapper, content: Any) -> None:
+        self.mapper = mapper
         self.content = content
+
+    def substitute(self, text: Optional[str]) -> str:
+        """ Substitutes the optional text using the item mapper. """
+        return self.mapper.substitute(text)
 
     def add_group(self, name: str, description: str) -> None:
         """ Adds an option group. """
@@ -111,14 +117,14 @@ class _ContentAdaptor:
 
 
 class _SphinxContentAdaptor(_ContentAdaptor):
-    def __init__(self) -> None:
-        super().__init__(SphinxContent())
+    def __init__(self, mapper: ItemMapper) -> None:
+        super().__init__(mapper, SphinxContent())
 
 
 def _generate_feature(content: _ContentAdaptor, item: Item,
                       option_type: str) -> None:
     content.add_option_default_config(
-        _OPTION_DEFAULT_CONFIG[option_type](item))
+        content.substitute(_OPTION_DEFAULT_CONFIG[option_type](item)))
 
 
 def _generate_min_max(lines: List[str], value: str, word: str) -> None:
@@ -209,7 +215,8 @@ def _generate_constraint(content: _ContentAdaptor, item: Item) -> None:
         _generate_item_max(lines, constraints)
         _generate_item_set(lines, constraints)
         _generate_item_texts(lines, constraints)
-    content.add_option_value_constraints(lines)
+    content.add_option_value_constraints(
+        [content.substitute(line) for line in lines])
 
 
 def _generate_initializer_or_integer(content: _ContentAdaptor, item: Item,
@@ -217,7 +224,7 @@ def _generate_initializer_or_integer(content: _ContentAdaptor, item: Item,
     default_value = item["default-value"]
     if not isinstance(default_value, str) or " " not in default_value:
         default_value = f"The default value is {default_value}."
-    content.add_option_default_value(default_value)
+    content.add_option_default_value(content.substitute(default_value))
     _generate_constraint(content, item)
 
 
@@ -231,17 +238,78 @@ _OPTION_GENERATORS = {
 
 def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
     content.register_license_and_copyrights_of_item(group)
-    content.add_group(group["name"], group["description"])
+    content.add_group(group["name"], content.substitute(group["description"]))
     for item in sorted(options.values(), key=lambda x: x["name"]):
+        content.mapper.item = item
         name = item["name"]
         content.register_license_and_copyrights_of_item(item)
         content.add_option(name, item["index-entries"])
         option_type = item["appl-config-option-type"]
         content.add_option_type(_OPTION_TYPES[option_type])
         _OPTION_GENERATORS[option_type](content, item, option_type)
-        content.add_option_description(item["description"])
-        content.add_option_notes(item["notes"])
+        content.add_option_description(content.substitute(item["description"]))
+        content.add_option_notes(content.substitute(item["notes"]))
     content.add_licence_and_copyrights()
+
+
+def _get_value_none(_ctx: ItemGetValueContext) -> Any:
+    return None
+
+
+def _sphinx_ref(ref: str) -> str:
+    return f":ref:`{ref}`"
+
+
+_PTHREAD_NAME_NP = "http://man7.org/linux/man-pages/man3/" \
+    "pthread_setname_np.3.html"
+
+_SPHINX_DOC_REFS = {
+    "config-scheduler-clustered":
+    _sphinx_ref("ConfigurationSchedulersClustered"),
+    "config-scheduler-table": _sphinx_ref("ConfigurationSchedulerTable"),
+    "config-unlimited-objects": _sphinx_ref("ConfigUnlimitedObjects"),
+    "mp-proxies": _sphinx_ref("MPCIProxies"),
+    "mrsp": _sphinx_ref("MrsP"),
+    "pthread-setname-np": f"`PTHREAD_SETNAME_NP(3) <{_PTHREAD_NAME_NP}>`_",
+    "scheduler-cbs": _sphinx_ref("SchedulerCBS"),
+    "scheduler-concepts": _sphinx_ref("SchedulingConcepts"),
+    "scheduler-edf": _sphinx_ref("SchedulerEDF"),
+    "scheduler-priority": _sphinx_ref("SchedulerPriority"),
+    "scheduler-priority-simple": _sphinx_ref("SchedulerPrioritySimple"),
+    "scheduler-smp-edf": _sphinx_ref("SchedulerSMPEDF"),
+    "scheduler-smp-priority-affinity":
+    _sphinx_ref("SchedulerSMPPriorityAffinity"),
+    "scheduler-smp-priority": _sphinx_ref("SchedulerSMPPriority"),
+    "scheduler-smp-priority-simple": _sphinx_ref("SchedulerSMPPrioritySimple"),
+    "terminate": _sphinx_ref("Terminate"),
+}
+
+
+def _get_value_sphinx_reference(ctx: ItemGetValueContext) -> Any:
+    return _SPHINX_DOC_REFS[ctx.key]
+
+
+def _get_value_sphinx_function(ctx: ItemGetValueContext) -> Any:
+    return f"``{ctx.value[ctx.key]}()``"
+
+
+def _get_value_sphinx_code(ctx: ItemGetValueContext) -> Any:
+    return f"``{ctx.value[ctx.key]}``"
+
+
+def _add_sphinx_get_values(mapper: ItemMapper) -> None:
+    for key in _SPHINX_DOC_REFS:
+        for opt in ["feature-enable", "feature", "initializer", "integer"]:
+            doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
+            mapper.add_get_value(doc_ref, _get_value_none)
+            mapper.add_get_value(f"{doc_ref}/{key}",
+                                 _get_value_sphinx_reference)
+    mapper.add_get_value("interface/function:/name",
+                         _get_value_sphinx_function)
+    mapper.add_get_value("interface/macro:/name", _get_value_sphinx_function)
+    mapper.add_get_value("interface/struct:/name", _get_value_sphinx_code)
+    mapper.add_get_value("interface/typedef:/name", _get_value_sphinx_code)
+    mapper.add_get_value("interface/union:/name", _get_value_sphinx_code)
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -253,6 +321,8 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the application
                        configuration groups and options.
     """
+    sphinx_mapper = SphinxMapper(EmptyItem())
+    _add_sphinx_get_values(sphinx_mapper)
     for group_config in config["groups"]:
         group = item_cache[group_config["uid"]]
         assert group.type == "interface/appl-config-group"
@@ -260,6 +330,6 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         for child in group.children("appl-config-group-member"):
             assert child.type.startswith("interface/appl-config-option")
             options[child.uid] = child
-        sphinx_content = _SphinxContentAdaptor()
+        sphinx_content = _SphinxContentAdaptor(sphinx_mapper)
         _generate(group, options, sphinx_content)
         sphinx_content.write(group_config["target"])

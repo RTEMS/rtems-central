@@ -30,7 +30,8 @@ import os
 from typing import Any, Callable, Dict, List
 
 from rtemsqual.content import CContent, enabled_by_to_exp, ExpressionMapper
-from rtemsqual.sphinxcontent import get_label, get_reference, SphinxContent
+from rtemsqual.sphinxcontent import get_label, get_reference, SphinxContent, \
+     SphinxMapper
 from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -48,23 +49,25 @@ def _get_reference(name: str) -> str:
     return get_reference(get_label(f"{INTERFACE}{name}"), f"{name}()")
 
 
+def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
+    return _forward_declaration(ctx.item)
+
+
 class _CodeMapper(ItemMapper):
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        if ctx.type_path_key == "interface/forward-declaration:/name":
-            return _forward_declaration(ctx.item)
-        raise KeyError
+    def __init__(self, item: Item):
+        super().__init__(item)
+        self.add_get_value("interface/forward-declaration:/name",
+                           _get_value_forward_declaration)
 
 
-class _Mapper(_CodeMapper):
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        try:
-            return super().get_value(ctx)
-        except KeyError:
-            if ctx.type_path_key == "interface/function:/name":
-                return _get_reference(ctx.value[ctx.key])
-            if ctx.type_path_key == "interface/appl-config-option:/name":
-                return f":ref:`{ctx.value[ctx.key]}`"
-        raise KeyError
+def _get_value_function(ctx: ItemGetValueContext) -> Any:
+    return _get_reference(ctx.value[ctx.key])
+
+
+class _Mapper(SphinxMapper):
+    def __init__(self, item: Item):
+        super().__init__(item)
+        self.add_get_value("interface/function:/name", _get_value_function)
 
 
 def _generate_introduction(target: str, group: Item,
