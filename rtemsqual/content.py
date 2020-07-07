@@ -24,6 +24,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# pylint: disable=too-many-lines
+
 from contextlib import contextmanager
 import collections
 import itertools
@@ -886,6 +888,18 @@ class CContent(Content):
         self.add(["#ifdef __cplusplus", "extern \"C\" {", "#endif"])
         yield
         self.add(["#ifdef __cplusplus", "}", "#endif"])
+
+    def add_paragraph(self, name: str,
+                      content: Optional[GenericContent]) -> None:
+        """ Adds a Doxygen paragraph block. """
+        if content:
+            self.add(f"@par {name}")
+            self.gap = False
+            last = len(self.lines)
+            self.doxyfy(content)
+            if self._empty_line_indent in self.lines[last:]:
+                self.lines.insert(last, f"{self._indent}@parblock")
+                self.lines.append(f"{self._indent}@endparblock")
 
 
 class ExpressionMapper:

@@ -413,6 +413,28 @@ def test_condition():
 """
 
 
+def test_add_paragraph():
+    content = CContent()
+    content.add_paragraph("a", "")
+    assert str(content) == ""
+    content.add_paragraph("a", "b")
+    assert str(content) == """@par a
+b
+"""
+    content = CContent()
+    with content.doxygen_block():
+        content.add_paragraph("a", ["b", "", "c"])
+    assert str(content) == """/**
+ * @par a
+ * @parblock
+ * b
+ *
+ * c
+ * @endparblock
+ */
+"""
+
+
 def test_prepend_copyrights_and_licenses():
     content = CContent()
     content.add("x")
