@@ -24,8 +24,11 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import copy
 from typing import Any, Dict, List, Optional
 
+from rtemsqual.content import CContent, get_value_double_colon, \
+    get_value_doxygen_function, get_value_hash
 from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
 from rtemsqual.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
     ItemMapper
@@ -121,6 +124,64 @@ class _SphinxContentAdaptor(_ContentAdaptor):
         super().__init__(mapper, SphinxContent())
 
 
+class _DoxygenContentAdaptor(_ContentAdaptor):
+    # pylint: disable=attribute-defined-outside-init
+
+    def __init__(self, mapper: ItemMapper) -> None:
+        super().__init__(mapper, CContent())
+        self._reset()
+
+    def _reset(self) -> None:
+        self._name = ""
+        self._option_type = ""
+        self._default_value = ""
+        self._default_config = ""
+        self._value_constraints = []  # type: List[str]
+        self._description = ""
+
+    def add_group(self, name: str, description: str) -> None:
+        identifier = f"RTEMSApplConfig{name.replace(' ', '')}"
+        with self.content.defgroup_block(identifier, name):
+            self.content.add("@ingroup RTEMSApplConfig")
+            self.content.doxyfy(description)
+            self.content.add("@{")
+
+    def add_option(self, name: str, _index_entries: List[str]) -> None:
+        self.content.open_doxygen_block()
+        self._name = name
+
+    def add_option_type(self, option_type: str) -> None:
+        self._option_type = option_type
+
+    def add_option_default_value(self, value: str) -> None:
+        self._default_value = value
+
+    def add_option_default_config(self, config: str) -> None:
+        self._default_config = config
+
+    def add_option_value_constraints(self, lines: List[str]) -> None:
+        self._value_constraints = lines
+
+    def add_option_description(self, description: str) -> None:
+        self._description = description
+
+    def add_option_notes(self, notes: Optional[str]) -> None:
+        self.content.add_brief_description(self._option_type)
+        self.content.doxyfy(self._description)
+        self.content.add_paragraph("Default Value", self._default_value)
+        self.content.add_paragraph("Default Configuration",
+                                   self._default_config)
+        self.content.add_paragraph("Value Constraints",
+                                   self._value_constraints)
+        self.content.add_paragraph("Notes", notes)
+        self.content.close_comment_block()
+        self.content.append(f"#define {self._name}")
+        self._reset()
+
+    def add_licence_and_copyrights(self) -> None:
+        self.content.add("/** @} */")
+
+
 def _generate_feature(content: _ContentAdaptor, item: Item,
                       option_type: str) -> None:
     content.add_option_default_config(
@@ -186,7 +247,7 @@ def _resolve_constraint_links(content: _ContentAdaptor, item: Item,
 
 
 def _generate_constraint(content: _ContentAdaptor, item: Item) -> None:
-    constraints = item["constraints"]
+    constraints = copy.deepcopy(item["constraints"])
     _resolve_constraint_links(content, item, constraints)
     lines = []  # type: List[str]
     count = len(constraints)
@@ -312,6 +373,87 @@ def _add_sphinx_get_values(mapper: ItemMapper) -> None:
     mapper.add_get_value("interface/union:/name", _get_value_sphinx_code)
 
 
+def _c_user_ref(ref: str, name: str) -> str:
+    c_user = "https://docs.rtems.org/branches/master/c-user/"
+    return f"<a href={c_user}{ref}>{name}</a>"
+
+
+_DOXYGEN_DOC_REFS = {
+    "config-scheduler-clustered":
+    _c_user_ref("config/scheduler-clustered.html",
+                "Clustered Scheduler Configuration"),
+    "config-scheduler-table":
+    _c_user_ref(
+        "config/scheduler-clustered.html#configuration-step-3-scheduler-table",
+        "Configuration Step 3 - Scheduler Table"),
+    "config-unlimited-objects":
+    _c_user_ref("config/intro.html#unlimited-objects", "Unlimited Objects"),
+    "mp-proxies":
+    _c_user_ref("multiprocessing.html#proxies", "Proxies"),
+    "mrsp":
+    _c_user_ref(
+        "key_concepts.html#multiprocessor-resource-sharing-protocol-mrsp",
+        "Multiprocessor Resource Sharing Protocol (MrsP)"),
+    "pthread-setname-np":
+    f"<a href={_PTHREAD_NAME_NP}>PTHREAD_SETNAME_NP(3)</a>",
+    "scheduler-cbs":
+    _c_user_ref(
+        "scheduling_concepts.html#constant-bandwidth-server-scheduling-cbs",
+        "Constant Bandwidth Server Scheduling (CBS)"),
+    "scheduler-concepts":
+    _c_user_ref("scheduling_concepts.html", "Scheduling Concepts"),
+    "scheduler-edf":
+    _c_user_ref("scheduling_concepts.html#earliest-deadline-first-scheduler",
+                "Earliest Deadline First Scheduler"),
+    "scheduler-priority":
+    _c_user_ref("scheduling_concepts.html#deterministic-priority-scheduler",
+                "Deterministic Priority Scheduler"),
+    "scheduler-priority-simple":
+    _c_user_ref("scheduling_concepts.html#simple-priority-scheduler",
+                "Simple Priority Scheduler"),
+    "scheduler-smp-edf":
+    _c_user_ref(
+        "scheduling_concepts.html#earliest-deadline-first-smp-scheduler",
+        "Earliest Deadline First SMP Scheduler"),
+    "scheduler-smp-priority-affinity":
+    _c_user_ref(
+        "scheduling_concepts.html"
+        "#arbitrary-processor-affinity-priority-smp-scheduler",
+        "Arbitrary Processor Affinity Priority SMP Scheduler"),
+    "scheduler-smp-priority":
+    _c_user_ref(
+        "scheduling_concepts.html#deterministic-priority-smp-scheduler",
+        "Deterministic Priority SMP Scheduler"),
+    "scheduler-smp-priority-simple":
+    _c_user_ref("scheduling_concepts.html#simple-priority-smp-scheduler",
+                "Simple Priority SMP Scheduler"),
+    "terminate":
+    _c_user_ref("fatal_error.html#announcing-a-fatal-error",
+                "Announcing a Fatal Error"),
+}
+
+
+def _get_value_doxygen_reference(ctx: ItemGetValueContext) -> Any:
+    return _DOXYGEN_DOC_REFS[ctx.key]
+
+
+def _add_doxygen_get_values(mapper: ItemMapper) -> None:
+    for key in _DOXYGEN_DOC_REFS:
+        for opt in ["feature-enable", "feature", "initializer", "integer"]:
+            doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
+            mapper.add_get_value(doc_ref, _get_value_none)
+            mapper.add_get_value(f"{doc_ref}/{key}",
+                                 _get_value_doxygen_reference)
+            name = f"interface/appl-config-option/{opt}:/name"
+            mapper.add_get_value(name, get_value_hash)
+    mapper.add_get_value("interface/function:/name",
+                         get_value_doxygen_function)
+    mapper.add_get_value("interface/macro:/name", get_value_doxygen_function)
+    mapper.add_get_value("interface/struct:/name", get_value_double_colon)
+    mapper.add_get_value("interface/typedef:/name", get_value_double_colon)
+    mapper.add_get_value("interface/union:/name", get_value_double_colon)
+
+
 def generate(config: dict, item_cache: ItemCache) -> None:
     """
     Generates application configuration documentation sources according to the
@@ -323,6 +465,12 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     """
     sphinx_mapper = SphinxMapper(EmptyItem())
     _add_sphinx_get_values(sphinx_mapper)
+    doxygen_mapper = ItemMapper(EmptyItem())
+    _add_doxygen_get_values(doxygen_mapper)
+    doxygen_content = _DoxygenContentAdaptor(doxygen_mapper)
+    with doxygen_content.content.defgroup_block(
+            "RTEMSApplConfig", "Application Configuration Options"):
+        doxygen_content.content.add("@ingroup RTEMSAPI")
     for group_config in config["groups"]:
         group = item_cache[group_config["uid"]]
         assert group.type == "interface/appl-config-group"
@@ -333,3 +481,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         sphinx_content = _SphinxContentAdaptor(sphinx_mapper)
         _generate(group, options, sphinx_content)
         sphinx_content.write(group_config["target"])
+        _generate(group, options, doxygen_content)
+    doxygen_content.content.prepend_copyrights_and_licenses()
+    doxygen_content.content.prepend_spdx_license_identifier()
+    doxygen_content.write(config["doxygen-target"])

@@ -49,6 +49,7 @@ glossary:
     - external/rtems-docs/eng
     target: external/rtems-docs/eng/glossary.rst
 appl-config:
+  doxygen-target: external/rtems/cpukit/doxygen/appl-config.h
   groups:
   - uid: /if/acfg/group-bdbuf
     target: external/rtems-docs/c-user/config/bdbuf.rst
