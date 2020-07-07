@@ -13,7 +13,7 @@ links:
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 notes: |
-  The Console Driver is responsible for providing the :file:`/dev/console`
+  The Console Driver is responsible for providing the ``/dev/console``
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
 
