@@ -7,7 +7,7 @@ default: |
   unmounting other filesystems.
 description: |
   In case this configuration option is defined, then the root IMFS does not
-  support unmounting other filesystems (no support for :c:func:`unmount`).
+  support unmounting other filesystems (no support for ``unmount()``).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

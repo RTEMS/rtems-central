@@ -9,10 +9,10 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 8
 description: |
-  If :ref:`CONFIGURE_UNLIMITED_OBJECTS` is defined, then the value of this
+  If ${unlimited-objects:/name} is defined, then the value of this
   configuration option defines the default objects maximum of all object
-  classes supporting :ref:`ConfigUnlimitedObjects` to
-  ``rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)``.
+  classes supporting ${.:/document-reference/config-unlimited-objects} to
+  ``rtems_resource_unlimited( CONFIGURE_UNLIMITED_ALLOCATION_SIZE )``.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option
@@ -25,6 +25,6 @@ notes: |
   avoid identifying and limiting the resources used.
 
   The object maximum of each class can be configured also individually using
-  the :c:func:`rtems_resource_unlimited` macro.
+  the ${../rtems/config/resource-unlimited:/name} macro.
 text: ''
 type: interface

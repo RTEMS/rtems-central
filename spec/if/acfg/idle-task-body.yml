@@ -8,7 +8,7 @@ constraints:
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  If :ref:`BSP_IDLE_TASK_BODY` is defined, then this will be the default value,
+  If ${bsp-idle-task-body:/name} is defined, then this will be the default value,
   otherwise the default value is ``_CPU_Thread_Idle_body``.
 description: |
   The value of this configuration option initializes the IDLE thread body.
@@ -25,6 +25,6 @@ notes: |
   exists.
 
   IDLE threads can be used to initialize the application, see configuration
-  option :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`.
+  option ${idle-task-init-appl:/name}.
 text: ''
 type: interface

@@ -24,10 +24,10 @@ name: CONFIGURE_TASK_STACK_ALLOCATOR
 notes: |
   A correctly configured system shall configure the following to be consistent:
 
-  * :ref:`CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
+  * ${task-stack-allocator-init:/name}
 
   * `CONFIGURE_TASK_STACK_ALLOCATOR`
 
-  * :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
+  * ${task-stack-deallocator:/name}
 text: ''
 type: interface

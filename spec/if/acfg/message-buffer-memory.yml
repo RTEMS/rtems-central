@@ -23,8 +23,8 @@ links:
   uid: constraint-memsz
 name: CONFIGURE_MESSAGE_BUFFER_MEMORY
 notes: |
-  The configuration options :ref:`CONFIGURE_MAXIMUM_MESSAGE_QUEUES` and
-  :ref:`CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES` define only how many message
+  The configuration options ${max-message-queues:/name} and
+  ${max-posix-message-queues:/name} define only how many message
   queues can be created by the application.  The memory for the message
   buffers is configured by this option.  For each message queue you have to
   reserve some memory for the message buffers.  The size dependes on the

@@ -18,6 +18,6 @@ links:
 name: CONFIGURE_MP_MAXIMUM_NODES
 notes: |
   This configuration option is only evaluated if
-  :ref:`CONFIGURE_MP_APPLICATION` is defined.
+  ${mp-appl:/name} is defined.
 text: ''
 type: interface

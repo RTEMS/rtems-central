@@ -4,7 +4,7 @@ constraints:
   texts:
   - |
     The value of this configuration option shall be a valid integer of type
-    ``rtems_name``.
+    ${../rtems/types/name:/name}.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -20,6 +20,6 @@ links:
   uid: group-classicinit
 name: CONFIGURE_INIT_TASK_NAME
 notes: |
-  Use :c:func:`rtems_build_name` to define the task name.
+  Use ${../rtems/object/build-name:/name} to define the task name.
 text: ''
 type: interface

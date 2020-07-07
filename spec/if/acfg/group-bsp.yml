@@ -5,7 +5,7 @@ description: |
   This section describes configuration options related to the BSP.  Some
   configuration options may have a BSP-specific setting which is defined by
   ``<bsp.h>``.  The BSP-specific settings can be disabled by the
-  :ref:`CONFIGURE_DISABLE_BSP_SETTINGS` configuration option.
+  ${disable-bsp-settings:/name} configuration option.
 enabled-by: true
 interface-type: appl-config-group
 links:

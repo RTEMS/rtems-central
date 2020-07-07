@@ -18,9 +18,9 @@ notes: |
 
   * `CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
 
-  * :ref:`CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
+  * ${posix-init-thread-table:/name}, or
 
-  * :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
+  * ${idle-task-init-appl:/name}
 
   otherwise a compile time error in the configuration file will occur.
 text: ''

@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In case this configuration option is defined, then
-  :ref:`Simple Priority SMP Scheduler <SchedulerSMPPrioritySimple>`
+  ${.:/document-reference/scheduler-smp-priority-simple}
   algorithm is made available to the application.
   application.
 enabled-by: true
@@ -21,8 +21,7 @@ notes: |
   This scheduler algorithm is only available when RTEMS is built with SMP
   support enabled.
 
-  In case no explicit :ref:`clustered scheduler configuration
-  <ConfigurationSchedulersClustered>` is present, then it is used as the
-  scheduler for up to 32 processors.
+  In case no explicit ${.:/document-reference/config-scheduler-clustered}
+  is present, then it is used as the scheduler for up to 32 processors.
 text: ''
 type: interface

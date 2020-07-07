@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
   The default value is two times the value of
-  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`.
+  ${min-task-stack-size:/name}.
 description: |
   The value of this configuration option defines the minimum stack size in
   bytes for every POSIX thread in the system.

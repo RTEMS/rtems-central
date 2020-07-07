@@ -24,10 +24,10 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  :ref:`ConfigUnlimitedObjects`.
+  ${.:/document-reference/config-unlimited-objects}.
 
-  Named semaphores are created with :c:func:`sem_open()`.  Semaphores
-  initialized with :c:func:`sem_init()` are not affected by this configuration
-  option since the storage space for these semaphores is user-provided.
+  Named semaphores are created with ``sem_open()``.  Semaphores initialized
+  with ``sem_init()`` are not affected by this configuration option since the
+  storage space for these semaphores is user-provided.
 text: ''
 type: interface

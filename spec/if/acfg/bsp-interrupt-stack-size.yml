@@ -10,10 +10,10 @@ description: |
 
   * this configuration option is defined by the BSP
 
-  * and :ref:`CONFIGURE_DISABLE_BSP_SETTINGS` is undefined,
+  * and ${disable-bsp-settings:/name} is undefined,
 
   then the value of this configuration option defines the default value of
-  :ref:`CONFIGURE_INTERRUPT_STACK_SIZE`.
+  ${interrupt-stack-size:/name}.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

@@ -22,7 +22,7 @@ name: CONFIGURE_MINIMUM_TASK_STACK_SIZE
 notes: |
   Adjusting this parameter should be done with caution.  Examining the actual
   stack usage using the stack checker usage reporting facility is recommended
-  (see also :ref:`CONFIGURE_STACK_CHECKER_ENABLED`).
+  (see also ${stack-checker-enabled:/name}).
 
   This parameter can be used to lower the minimum from that recommended. This
   can be used in low memory systems to reduce memory consumption for
@@ -35,10 +35,10 @@ notes: |
 
   By default, this configuration parameter defines also the minimum stack
   size of POSIX threads.  This can be changed with the
-  :ref:`CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE`
+  ${min-posix-thread-stack-size:/name}
   configuration option.
 
   In releases before RTEMS 5.1 the ``CONFIGURE_MINIMUM_TASK_STACK_SIZE`` was
-  used to define the default value of :ref:`CONFIGURE_INTERRUPT_STACK_SIZE`.
+  used to define the default value of ${interrupt-stack-size:/name}.
 text: ''
 type: interface

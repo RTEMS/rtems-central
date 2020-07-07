@@ -8,17 +8,18 @@ description: |
   configuration does not need any of the configuration options described in this
   section.
 
-  By default, the :ref:`Deterministic Priority Scheduler <SchedulerPriority>`
+  By default, the ${.:/document-reference/scheduler-priority}
   algorithm is used in uniprocessor configurations.  In case SMP is enabled and
   the configured maximum processors
-  (:ref:`CONFIGURE_MAXIMUM_PROCESSORS <CONFIGURE_MAXIMUM_PROCESSORS>`) is greater
-  than one, then the :ref:`Earliest Deadline First (EDF) SMP Scheduler
-  <SchedulerSMPEDF>` is selected as the default scheduler algorithm.
+  (${max-processors:/name}) is greater
+  than one, then the
+  ${.:/document-reference/scheduler-smp-edf}
+  is selected as the default scheduler algorithm.
 
-  For the :ref:`schedulers built into
-  RTEMS <SchedulingConcepts>`, the configuration is straightforward.  All that is
-  required is to define the configuration option which specifies which scheduler
-  you want for in your application.
+  For the schedulers provided by RTEMS (see ${.:/document-reference/scheduler-concepts}), the
+  configuration is straightforward.  All that is required is to define the
+  configuration option which specifies which scheduler you want for in your
+  application.
 
   The pluggable scheduler interface also enables the user to provide their own
   scheduling algorithm.  If you choose to do this, you must define multiple

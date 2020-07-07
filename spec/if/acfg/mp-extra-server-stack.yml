@@ -14,7 +14,7 @@ default-value: 0
 description: |
   The value of this configuration option defines the number of bytes the
   applications wishes to add to the MPCI task stack on top of
-  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`.
+  ${min-task-stack-size:/name}.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option
@@ -24,6 +24,6 @@ links:
 name: CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
 notes: |
   This configuration option is only evaluated if
-  :ref:`CONFIGURE_MP_APPLICATION` is defined.
+  ${mp-appl:/name} is defined.
 text: ''
 type: interface

@@ -5,7 +5,7 @@ constraints:
   min: 0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-default-value: :ref:`CONFIGURE_MAXIMUM_TASKS`
+default-value: ${max-tasks:/name}
 description: |
   The value of this configuration option defines the maximum number Constant
   Bandwidth Servers that can be concurrently active.
@@ -20,6 +20,6 @@ links:
 name: CONFIGURE_CBS_MAXIMUM_SERVERS
 notes: |
   This configuration option is only evaluated if the configuration option
-  :ref:`CONFIGURE_SCHEDULER_CBS` is defined.
+  ${scheduler-cbs:/name} is defined.
 text: ''
 type: interface

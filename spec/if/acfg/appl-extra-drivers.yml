@@ -4,7 +4,7 @@ constraints:
   texts:
   - |
     The value of this configuration option shall be a list of initializers for
-    structures of type :c:type:`rtems_driver_address_table`.
+    structures of type ${../rtems/io/driver-address-table:/name}.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -23,7 +23,7 @@ notes: |
   The value of this configuration option is placed after the entries of other
   device driver configuration options.
 
-  See :ref:`CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS` for an alternative
+  See ${appl-prerequisite-drivers:/name} for an alternative
   placement of application device driver initializers.
 text: ''
 type: interface

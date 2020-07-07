@@ -14,6 +14,6 @@ links:
 name: CONFIGURE_VERBOSE_SYSTEM_INITIALIZATION
 notes: |
   You may use this feature to debug system initialization issues.  The
-  :c:func:`printk` function is used to print the information.
+  ``printk()`` function is used to print the information.
 text: ''
 type: interface

@@ -4,7 +4,7 @@ constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  The default value is :ref:`BSP_INTERRUPT_STACK_SIZE` in case it is defined,
+  The default value is ${bsp-interrupt-stack-size:/name} in case it is defined,
   otherwise the default value is ``CPU_STACK_MINIMUM_SIZE``.
 description: |
   The value of this configuration option defines the size of an interrupt stack
@@ -25,7 +25,7 @@ links:
 name: CONFIGURE_INTERRUPT_STACK_SIZE
 notes: |
   There is one interrupt stack available for each configured processor
-  (:ref:`CONFIGURE_MAXIMUM_PROCESSORS`).  The interrupt stack areas are
+  (${max-processors:/name}).  The interrupt stack areas are
   statically allocated in a special linker section (``.rtemsstack.interrupt``).
   The placement of this linker section is BSP-specific.
 
@@ -33,11 +33,11 @@ notes: |
   to perform the sequential system initialization before the multithreading
   is started.
 
-  The interrupt stacks are covered by the :ref:`stack checker
-  <CONFIGURE_STACK_CHECKER_ENABLED>`.  However, using a too small interrupt
-  stack size may still result in undefined behaviour.
+  The interrupt stacks are covered by the stack checker, see
+  ${stack-checker-enabled:/name}.  However, using a too small interrupt stack
+  size may still result in undefined behaviour.
 
   In releases before RTEMS 5.1 the default value was
-  :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE` instead of ``CPU_STACK_MINIMUM_SIZE``.
+  ${min-task-stack-size:/name} instead of ``CPU_STACK_MINIMUM_SIZE``.
 text: ''
 type: interface

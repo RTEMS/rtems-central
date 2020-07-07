@@ -4,7 +4,7 @@ constraints:
   texts:
   - |
     The value of this configuration option shall be a pointer to
-    :c:type:`rtems_mpci_table`.
+    ${../rtems/types/mpci-table:/name}.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: '``&MPCI_table``'
@@ -24,6 +24,6 @@ notes: |
   supporting methods.
 
   This configuration option is only evaluated if
-  :ref:`CONFIGURE_MP_APPLICATION` is defined.
+  ${mp-appl:/name} is defined.
 text: ''
 type: interface

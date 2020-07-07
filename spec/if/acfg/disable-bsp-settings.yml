@@ -6,17 +6,17 @@ description: |
   In case this configuration option is defined, then the following BSP related
   configuration options are undefined:
 
-  * :ref:`BSP_IDLE_TASK_BODY`
+  * ${bsp-idle-task-body:/name}
 
-  * :ref:`BSP_IDLE_TASK_STACK_SIZE`
+  * ${bsp-idle-task-stack-size:/name}
 
-  * :ref:`BSP_INITIAL_EXTENSION`
+  * ${bsp-initial-extension:/name}
 
-  * :ref:`BSP_INTERRUPT_STACK_SIZE`
+  * ${bsp-interrupt-stack-size:/name}
 
-  * :ref:`CONFIGURE_BSP_PREREQUISITE_DRIVERS`
+  * ${bsp-prerequisite-drivers:/name}
 
-  * :ref:`CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK`
+  * ${malloc-bsp-supports-sbrk:/name}
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

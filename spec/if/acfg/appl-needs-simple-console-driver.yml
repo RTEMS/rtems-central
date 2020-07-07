@@ -17,20 +17,20 @@ notes: |
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
 
-  This device driver reads via :c:func:`getchark`.
+  This device driver reads via ``getchark()``.
 
-  This device driver writes via :c:func:`rtems_putc`.
+  This device driver writes via ``rtems_putc()``.
 
   The Termios framework is not used.  There is no support to change device
   settings, e.g. baud, stop bits, parity, etc.
 
   The
 
-  * :ref:`CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`,
+  * ${appl-needs-console-driver:/name},
 
-  * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
+  * ${appl-needs-simple-console-driver:/name}, and
 
-  * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
+  * ${appl-needs-simple-task-console-driver:/name}
 
   configuration options are mutually exclusive.
 text: ''

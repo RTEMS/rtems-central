@@ -24,7 +24,7 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_TIMERS
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  :ref:`ConfigUnlimitedObjects`.
+  ${.:/document-reference/config-unlimited-objects}.
 
   Timers are only available if RTEMS was built with the
   ``--enable-posix`` build configuration option.

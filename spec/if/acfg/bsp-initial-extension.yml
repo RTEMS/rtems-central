@@ -4,7 +4,7 @@ constraints:
   texts:
   - |
     The value of this configuration option shall be a list of initializers for
-    structures of type :c:type:`rtems_extensions_table`.
+    structures of type ${../rtems/userext/table:/name}.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -14,7 +14,7 @@ description: |
 
   * this configuration option is defined by the BSP
 
-  * and :ref:`CONFIGURE_DISABLE_BSP_SETTINGS` is undefined,
+  * and ${disable-bsp-settings:/name} is undefined,
 
   then the value of this configuration option is used to initialize the table
   of initial user extensions.

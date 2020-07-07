@@ -7,9 +7,9 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
   The default value is
-  :ref:`CONFIGURE_MAXIMUM_POSIX_KEYS` *
-  :ref:`CONFIGURE_MAXIMUM_TASKS` +
-  :ref:`CONFIGURE_MAXIMUM_POSIX_THREADS`.
+  ${max-posix-keys:/name} *
+  ${max-tasks:/name} +
+  ${max-posix-threads:/name}.
 description: |
   The value of this configuration option defines the maximum number of key
   value pairs used by POSIX API Keys that can be concurrently active.
@@ -26,9 +26,9 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  :ref:`ConfigUnlimitedObjects`.
+  ${.:/document-reference/config-unlimited-objects}.
 
-  A key value pair is created by :c:func:`pthread_setspecific` if the value
-  is not :c:macro:`NULL`, otherwise it is deleted.
+  A key value pair is created by ``pthread_setspecific()`` if the value
+  is not ${../c/null:/name}, otherwise it is deleted.
 text: ''
 type: interface

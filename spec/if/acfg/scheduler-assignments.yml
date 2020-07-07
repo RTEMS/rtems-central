@@ -8,10 +8,10 @@ constraints:
 
     * ``RTEMS_SCHEDULER_ASSIGN( processor_index, attributes )``
 
-    * :c:macro:`RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER`
+    * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
   - |
     The value of this configuration option shall be a list of exactly
-    :ref:`CONFIGURE_MAXIMUM_PROCESSORS` elements.
+    ${max-processors:/name} elements.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: |
@@ -31,6 +31,6 @@ notes: |
   This configuration option is only evaluated in SMP configurations.
 
   This is an advanced configuration option, see
-  :ref:`ConfigurationSchedulersClustered`.
+  ${.:/document-reference/config-scheduler-clustered}.
 text: ''
 type: interface

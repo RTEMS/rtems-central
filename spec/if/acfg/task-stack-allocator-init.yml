@@ -23,8 +23,8 @@ notes: |
 
   * `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
 
-  * :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`
+  * ${task-stack-allocator:/name}
 
-  * :ref:`CONFIGURE_TASK_STACK_DEALLOCATOR`
+  * ${task-stack-deallocator:/name}
 text: ''
 type: interface

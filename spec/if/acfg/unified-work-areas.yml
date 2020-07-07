@@ -26,7 +26,7 @@ notes: |
   pool is very undesirable.
 
   In high memory environments, this is desirable when you want to use the
-  :ref:`ConfigUnlimitedObjects` option.  You will be able to create objects
+  ${.:/document-reference/config-unlimited-objects} option.  You will be able to create objects
   until you run out of all available memory rather then just until you run out
   of RTEMS Workspace.
 text: ''

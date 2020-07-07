@@ -6,43 +6,43 @@ description: |
   By default, the In-Memory Filesystem (IMFS) is used as the base filesystem (also
   known as root filesystem).  In order to save some memory for your application,
   you can disable the filesystem support with the
-  :ref:`CONFIGURE_APPLICATION_DISABLE_FILESYSTEM` configuration option.
+  ${appl-disable-filesystem:/name} configuration option.
   Alternatively, you can strip down the features of the base filesystem with the
-  :ref:`CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM` and
-  :ref:`CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM` configuration options.  These
+  ${use-miniimfs-as-base-filesystem:/name} and
+  ${use-devfs-as-base-filesystem:/name} configuration options.  These
   three configuration options are mutually exclusive.  They are intended for an
   advanced application configuration.
 
   Features of the IMFS can be disabled and enabled with the following
   configuration options:
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_CHMOD`
+  * ${imfs-disable-chmod:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_CHOWN`
+  * ${imfs-disable-chown:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_LINK`
+  * ${imfs-disable-link:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_MKNOD`
+  * ${imfs-disable-mknod:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_MKNOD_FILE`
+  * ${imfs-disable-mknod-file:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_MOUNT`
+  * ${imfs-disable-mount:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_READDIR`
+  * ${imfs-disable-readdir:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_READLINK`
+  * ${imfs-disable-readlink:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_RENAME`
+  * ${imfs-disable-rename:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_RMNOD`
+  * ${imfs-disable-rmnod:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_SYMLINK`
+  * ${imfs-disable-symlink:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_UNMOUNT`
+  * ${imfs-disable-unmount:/name}
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_UTIME`
+  * ${imfs-disable-utime:/name}
 
-  * :ref:`CONFIGURE_IMFS_ENABLE_MKFIFO`
+  * ${imfs-enable-mkfifo:/name}
 enabled-by: true
 interface-type: appl-config-group
 links:

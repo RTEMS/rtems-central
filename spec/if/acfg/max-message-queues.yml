@@ -22,8 +22,8 @@ links:
 name: CONFIGURE_MAXIMUM_MESSAGE_QUEUES
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  :ref:`ConfigUnlimitedObjects`.  You have to account for the memory used to
+  ${.:/document-reference/config-unlimited-objects}.  You have to account for the memory used to
   store the messages of each message queue, see
-  :ref:`CONFIGURE_MESSAGE_BUFFER_MEMORY`.
+  ${message-buffer-memory:/name}.
 text: ''
 type: interface

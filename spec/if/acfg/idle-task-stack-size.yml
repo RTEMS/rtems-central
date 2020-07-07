@@ -3,7 +3,7 @@ appl-config-option-type: integer
 constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: :ref:`CONFIGURE_MINIMUM_TASK_STACK_SIZE`
+default-value: ${min-task-stack-size:/name}
 description: |
   The value of this configuration option defines the task stack size for an
   IDLE task.
@@ -20,6 +20,6 @@ links:
 name: CONFIGURE_IDLE_TASK_STACK_SIZE
 notes: |
   In SMP configurations, there is one IDLE task per configured processor, see
-  :ref:`CONFIGURE_MAXIMUM_PROCESSORS`.
+  ${max-processors:/name}.
 text: ''
 type: interface

@@ -16,20 +16,20 @@ notes: |
   In case this configuration option is defined, then the following
   configuration options will be defined as well
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_CHMOD`,
+  * ${imfs-disable-chmod:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_CHOWN`,
+  * ${imfs-disable-chown:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_LINK`,
+  * ${imfs-disable-link:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_READLINK`,
+  * ${imfs-disable-readlink:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_RENAME`,
+  * ${imfs-disable-rename:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_SYMLINK`,
+  * ${imfs-disable-symlink:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_UTIME`, and
+  * ${imfs-disable-utime:/name}, and
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_UNMOUNT`.
+  * ${imfs-disable-unmount:/name}.
 text: ''
 type: interface

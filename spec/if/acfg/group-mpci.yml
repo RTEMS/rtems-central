@@ -5,7 +5,7 @@ description: |
   This section describes multiprocessing related configuration options.  The
   options are only used if RTEMS was built with the ``--enable-multiprocessing``
   build configuration option.  Additionally, this class of configuration options
-  are only applicable if the configuration option :ref:`CONFIGURE_MP_APPLICATION`
+  are only applicable if the configuration option ${mp-appl:/name}
   is defined.  The multiprocessing (MPCI) support must not be confused with the
   SMP support.
 enabled-by: true

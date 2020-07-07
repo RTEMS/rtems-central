@@ -7,7 +7,7 @@ default: |
   links.
 description: |
   In case this configuration option is defined, then the root IMFS does not
-  support hard links (no support for :c:func:`link`).
+  support hard links (no support for ``link()``).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

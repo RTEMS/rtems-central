@@ -14,15 +14,15 @@ default-value: 255
 description: |
   For the following schedulers
 
-  * :ref:`SchedulerPriority`, which is the default in uniprocessor
+  * ${.:/document-reference/scheduler-priority}, which is the default in uniprocessor
     configurations and can be configured through the
-    :ref:`CONFIGURE_SCHEDULER_PRIORITY` configuration option,
+    ${scheduler-priority:/name} configuration option,
 
-  * :ref:`SchedulerSMPPriority` which can be configured through the
-    :ref:`CONFIGURE_SCHEDULER_PRIORITY_SMP` configuration option, and
+  * ${.:/document-reference/scheduler-smp-priority} which can be configured through the
+    ${scheduler-priority-smp:/name} configuration option, and
 
-  * :ref:`SchedulerSMPPriorityAffinity` which can be configured through the
-    :ref:`CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP` configuration option
+  * ${.:/document-reference/scheduler-smp-priority-affinity} which can be configured through the
+    ${scheduler-priority-affinity-smp:/name} configuration option
 
   this configuration option specifies the maximum numeric priority of any task
   for these schedulers and one less that the number of priority levels for

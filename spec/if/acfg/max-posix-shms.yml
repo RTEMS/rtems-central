@@ -24,6 +24,6 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_SHMS
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  :ref:`ConfigUnlimitedObjects`.
+  ${.:/document-reference/config-unlimited-objects}.
 text: ''
 type: interface

@@ -37,7 +37,7 @@ links:
 name: CONFIGURE_MICROSECONDS_PER_TICK
 notes: |
   This configuration option has no impact if the Clock Driver is not
-  configured, see :ref:`CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER`.
+  configured, see ${appl-does-not-need-clock-driver:/name}.
 
   There may be Clock Driver specific limits on the resolution or maximum value
   of a clock tick quantum.

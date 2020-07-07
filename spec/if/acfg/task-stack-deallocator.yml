@@ -24,9 +24,9 @@ name: CONFIGURE_TASK_STACK_DEALLOCATOR
 notes: |
   A correctly configured system shall configure the following to be consistent:
 
-  * :ref:`CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
+  * ${task-stack-allocator-init:/name}
 
-  * :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`
+  * ${task-stack-allocator:/name}
 
   * `CONFIGURE_TASK_STACK_DEALLOCATOR`
 text: ''

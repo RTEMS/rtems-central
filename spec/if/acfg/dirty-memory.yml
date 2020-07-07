@@ -17,9 +17,9 @@ notes: |
   Dirtying memory can add significantly to system initialization time.  It may
   assist in finding code that incorrectly assumes the contents of free memory
   areas is cleared to zero during system initialization.  In case
-  :ref:`CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY` is also defined, then the
+  ${zero-workspace-automatically:/name} is also defined, then the
   memory is first dirtied and then zeroed.
 
-  See also :ref:`CONFIGURE_MALLOC_DIRTY`.
+  See also ${malloc-dirty:/name}.
 text: ''
 type: interface

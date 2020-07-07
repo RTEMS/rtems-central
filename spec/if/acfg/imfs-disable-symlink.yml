@@ -7,7 +7,7 @@ default: |
   creating symbolic links.
 description: |
   In case this configuration option is defined, then the root IMFS does not
-  support creating symbolic links (no support for :c:func:`symlink`).
+  support creating symbolic links (no support for ``symlink()``).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

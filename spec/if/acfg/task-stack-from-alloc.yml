@@ -25,6 +25,6 @@ links:
 name: CONFIGURE_TASK_STACK_FROM_ALLOCATOR
 notes: |
   This configuration option may be used if a custom task stack allocator is
-  configured, see :ref:`CONFIGURE_TASK_STACK_ALLOCATOR`.
+  configured, see ${task-stack-allocator:/name}.
 text: ''
 type: interface

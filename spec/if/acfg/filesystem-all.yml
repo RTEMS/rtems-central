@@ -6,19 +6,19 @@ description: |
   In case this configuration option is defined, then the following
   configuration options will be defined as well
 
-  * :ref:`CONFIGURE_FILESYSTEM_DOSFS`,
+  * ${filesystem-dosfs:/name},
 
-  * :ref:`CONFIGURE_FILESYSTEM_FTPFS`,
+  * ${filesystem-ftpfs:/name},
 
-  * :ref:`CONFIGURE_FILESYSTEM_IMFS`,
+  * ${filesystem-imfs:/name},
 
-  * :ref:`CONFIGURE_FILESYSTEM_JFFS2`,
+  * ${filesystem-jffs2:/name},
 
-  * :ref:`CONFIGURE_FILESYSTEM_NFS`,
+  * ${filesystem-nfs:/name},
 
-  * :ref:`CONFIGURE_FILESYSTEM_RFS`, and
+  * ${filesystem-rfs:/name}, and
 
-  * :ref:`CONFIGURE_FILESYSTEM_TFTPFS`.
+  * ${filesystem-tftpfs:/name}.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

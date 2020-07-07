@@ -15,6 +15,6 @@ links:
 name: CONFIGURE_FILESYSTEM_DOSFS
 notes: |
   This filesystem requires a Block Device Cache configuration, see
-  :ref:`CONFIGURE_APPLICATION_NEEDS_LIBBLOCK`.
+  ${appl-needs-libblock:/name}.
 text: ''
 type: interface

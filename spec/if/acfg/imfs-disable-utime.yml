@@ -7,7 +7,7 @@ default: |
   changing file times.
 description: |
   In case this configuration option is defined, then the root IMFS does not
-  support changing file times (no support for :c:func:`utime`).
+  support changing file times (no support for ``utime()``).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

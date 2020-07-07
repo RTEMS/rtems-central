@@ -7,7 +7,7 @@ description: |
 
   * this configuration option is defined
 
-  * and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS` is properly defined,
+  * and ${record-per-processor-items:/name} is properly defined,
 
   then the event record extensions are enabled.
 enabled-by: true

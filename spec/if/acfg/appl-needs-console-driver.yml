@@ -17,16 +17,16 @@ notes: |
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
 
-  BSPs should be constructed in a manner that allows :c:func:`printk` to work
+  BSPs should be constructed in a manner that allows ``printk()`` to work
   properly without the need for the Console Driver to be configured.
 
   The
 
-  * :ref:`CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER`,
+  * ${appl-needs-console-driver:/name},
 
-  * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER`, and
+  * ${appl-needs-simple-console-driver:/name}, and
 
-  * :ref:`CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER`
+  * ${appl-needs-simple-task-console-driver:/name}
 
   configuration options are mutually exclusive.
 text: ''

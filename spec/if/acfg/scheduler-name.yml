@@ -10,21 +10,21 @@ copyrights:
 default-value: |
   The default value is
 
-  * ``"MEDF"`` for the :ref:`EDF SMP Scheduler <SchedulerSMPEDF>`,
+  * ``"MEDF"`` for the ${.:/document-reference/scheduler-smp-edf},
 
-  * ``"MPA "`` for the :ref:`Arbitrary Processor Affinity Priority SMP Scheduler <SchedulerSMPPriorityAffinity>`,
+  * ``"MPA "`` for the ${.:/document-reference/scheduler-smp-priority-affinity},
 
-  * ``"MPD "`` for the :ref:`Deterministic Priority SMP Scheduler <SchedulerSMPPriority>`,
+  * ``"MPD "`` for the ${.:/document-reference/scheduler-smp-priority},
 
-  * ``"MPS "`` for the :ref:`Simple Priority SMP Scheduler <SchedulerSMPPrioritySimple>`,
+  * ``"MPS "`` for the ${.:/document-reference/scheduler-smp-priority-simple},
 
-  * ``"UCBS"`` for the :ref:`Uniprocessor CBS Scheduler <SchedulerCBS>`,
+  * ``"UCBS"`` for the ${.:/document-reference/scheduler-cbs},
 
-  * ``"UEDF"`` for the :ref:`Uniprocessor EDF Scheduler <SchedulerEDF>`,
+  * ``"UEDF"`` for the ${.:/document-reference/scheduler-edf},
 
-  * ``"UPD "`` for the :ref:`Uniprocessor Deterministic Priority Scheduler <SchedulerPriority>`, and
+  * ``"UPD "`` for the ${.:/document-reference/scheduler-priority}, and
 
-  * ``"UPS "`` for the :ref:`Uniprocessor Simple Priority Scheduler <SchedulerPrioritySimple>`.
+  * ``"UPS "`` for the ${.:/document-reference/scheduler-priority-simple}.
 description: |
   The value of this configuration option defines the name of the default
   scheduler.
@@ -39,8 +39,8 @@ notes: |
   This scheduler configuration option is an advanced configuration option.
   Think twice before you use it.
 
-  Schedulers can be identified via c:func:`rtems_scheduler_ident`.
+  Schedulers can be identified via ${../rtems/scheduler/ident:/name}.
 
-  Use :c:func:`rtems_build_name` to define the scheduler name.
+  Use ${../rtems/object/build-name:/name} to define the scheduler name.
 text: ''
 type: interface

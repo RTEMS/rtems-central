@@ -16,11 +16,11 @@ notes: |
   The application shall define exactly one of the following configuration
   options
 
-  * :ref:`CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
+  * ${rtems-init-tasks-table:/name},
 
   * `CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
 
-  * :ref:`CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
+  * ${idle-task-init-appl:/name}
 
   otherwise a compile time error in the configuration file will occur.
 text: ''

@@ -26,15 +26,15 @@ notes: |
   The IDLE task shall run at the lowest priority of all tasks in the system.
 
   If this configuration option is defined, then it is mandatory to configure a
-  user IDLE task with the :ref:`CONFIGURE_IDLE_TASK_BODY` configuration option,
+  user IDLE task with the ${idle-task-body:/name} configuration option,
   otherwise a compile time error in the configuration file will occur.
 
   The application shall define exactly one of the following configuration
   options
 
-  * :ref:`CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
+  * ${rtems-init-tasks-table:/name},
 
-  * :ref:`CONFIGURE_POSIX_INIT_THREAD_TABLE`, or
+  * ${posix-init-thread-table:/name}, or
 
   * `CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION`
 

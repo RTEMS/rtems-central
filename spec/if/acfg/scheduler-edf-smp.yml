@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In case this configuration option is defined, then
-  :ref:`Earliest Deadline First (EDF) SMP Scheduler <SchedulerSMPEDF>`
+  ${.:/document-reference/scheduler-smp-edf}
   algorithm is made available to the application.
 enabled-by: true
 index-entries: []
@@ -20,12 +20,11 @@ notes: |
   This scheduler algorithm is only available when RTEMS is built with SMP
   support enabled.
 
-  In case no explicit :ref:`clustered scheduler configuration
-  <ConfigurationSchedulersClustered>` is present, then it is used as the
-  scheduler for up to 32 processors.
+  In case no explicit ${.:/document-reference/config-scheduler-clustered}
+  is present, then it is used as the scheduler for up to 32 processors.
 
   This scheduler algorithm is the default in SMP configurations if
-  :ref:`CONFIGURE_MAXIMUM_PROCESSORS` is
+  ${max-processors:/name} is
   greater than one.
 text: ''
 type: interface

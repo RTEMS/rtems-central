@@ -21,6 +21,6 @@ notes: |
   with the ``RTEMS_GLOBAL`` attribute.
 
   This configuration option is only evaluated if
-  :ref:`CONFIGURE_MP_APPLICATION` is defined.
+  ${mp-appl:/name} is defined.
 text: ''
 type: interface

@@ -17,6 +17,6 @@ links:
 name: CONFIGURE_ATA_DRIVER_TASK_PRIORITY
 notes: |
   This configuration option is only evaluated if the configuration option
-  :ref:`CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER` is defined.
+  ${appl-needs-ata-driver:/name} is defined.
 text: ''
 type: interface

@@ -7,12 +7,12 @@ description: |
 
   * this configuration option is defined
 
-  * and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS` is properly defined,
+  * and ${record-per-processor-items:/name} is properly defined,
 
-  * and :ref:`CONFIGURE_RECORD_FATAL_DUMP_BASE64_ZLIB` is undefined,
+  * and ${record-fatal-dump-base64-zlib:/name} is undefined,
 
   then the event records are dumped in Base64 encoding in a fatal error
-  extension (see :ref:`Terminate`).
+  extension (see ${.:/document-reference/terminate}).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

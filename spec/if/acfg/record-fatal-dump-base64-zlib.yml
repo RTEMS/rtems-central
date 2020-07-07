@@ -7,10 +7,10 @@ description: |
 
   * this configuration option is defined
 
-  * and :ref:`CONFIGURE_RECORD_PER_PROCESSOR_ITEMS` is properly defined,
+  * and ${record-per-processor-items:/name} is properly defined,
 
   then the event records are compressed by zlib and dumped in Base64 encoding
-  in a fatal error extension (see :ref:`Terminate`).
+  in a fatal error extension (see ${.:/document-reference/terminate}).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

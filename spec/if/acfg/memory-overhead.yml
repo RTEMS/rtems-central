@@ -25,6 +25,6 @@ notes: |
   in ``<rtems/confdefs.h>`` has resulted in an underestimation.  Typically the
   memory allocation will be too low when an application does not account for
   all message queue buffers or task stacks, see
-  :ref:`CONFIGURE_MESSAGE_BUFFER_MEMORY`.
+  ${message-buffer-memory:/name}.
 text: ''
 type: interface

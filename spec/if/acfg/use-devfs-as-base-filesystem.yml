@@ -16,29 +16,29 @@ notes: |
   In case this configuration option is defined, then the following
   configuration options will be defined as well
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_CHMOD`,
+  * ${imfs-disable-chmod:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_CHOWN`,
+  * ${imfs-disable-chown:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_LINK`,
+  * ${imfs-disable-link:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_MKNOD_FILE`,
+  * ${imfs-disable-mknod-file:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_MOUNT`,
+  * ${imfs-disable-mount:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_READDIR`,
+  * ${imfs-disable-readdir:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_READLINK`,
+  * ${imfs-disable-readlink:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_RENAME`,
+  * ${imfs-disable-rename:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_RMNOD`,
+  * ${imfs-disable-rmnod:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_SYMLINK`,
+  * ${imfs-disable-symlink:/name},
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_UTIME`, and
+  * ${imfs-disable-utime:/name}, and
 
-  * :ref:`CONFIGURE_IMFS_DISABLE_UNMOUNT`.
+  * ${imfs-disable-unmount:/name}.
 
   In addition, a simplified path evaluation is enabled.  It allows only a look
   up of absolute paths.
