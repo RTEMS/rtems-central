@@ -36,7 +36,7 @@ import textwrap
 from typing import Any, Callable, ContextManager, Dict, Iterable, Iterator, \
     List, NamedTuple, Optional, Set, Tuple, Union
 
-from rtemsqual.items import Item
+from rtemsqual.items import Item, ItemGetValueContext
 
 AddContext = Callable[["Content"], ContextManager[None]]
 GenericContent = Union[str, List[str], "Content"]
@@ -900,6 +900,21 @@ class CContent(Content):
             if self._empty_line_indent in self.lines[last:]:
                 self.lines.insert(last, f"{self._indent}@parblock")
                 self.lines.append(f"{self._indent}@endparblock")
+
+
+def get_value_doxygen_function(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value as a function for Doxygen markup. """
+    return f"{ctx.value[ctx.key]}()"
+
+
+def get_value_double_colon(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value with a :: prefix. """
+    return f"::{ctx.value[ctx.key]}"
+
+
+def get_value_hash(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value with a # prefix. """
+    return f"#{ctx.value[ctx.key]}"
 
 
 class ExpressionMapper:

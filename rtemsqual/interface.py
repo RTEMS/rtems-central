@@ -29,7 +29,8 @@ import os
 from typing import Any, Callable, Dict, Iterator, List, Union
 
 from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
-    ExpressionMapper
+    ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
+    get_value_hash
 from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -58,18 +59,6 @@ def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
     return _forward_declaration(ctx.item)
 
 
-def _get_value_function(ctx: ItemGetValueContext) -> Any:
-    return f"{ctx.value[ctx.key]}()"
-
-
-def _get_value_double_colon(ctx: ItemGetValueContext) -> Any:
-    return f"::{ctx.value[ctx.key]}"
-
-
-def _get_value_hash(ctx: ItemGetValueContext) -> Any:
-    return f"#{ctx.value[ctx.key]}"
-
-
 class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
@@ -79,15 +68,16 @@ class _InterfaceMapper(ItemMapper):
                            _get_value_forward_declaration)
         self.add_get_value("interface/forward-declaration:doc:/name",
                            _get_value_forward_declaration)
-        self.add_get_value("interface/function:doc:/name", _get_value_function)
+        self.add_get_value("interface/function:doc:/name",
+                           get_value_doxygen_function)
         self.add_get_value("interface/enumerator:doc:/name",
-                           _get_value_double_colon)
+                           get_value_double_colon)
         self.add_get_value("interface/typedef:doc:/name",
-                           _get_value_double_colon)
-        self.add_get_value("interface/define:doc:/name", _get_value_hash)
-        self.add_get_value("interface/enum:doc:/name", _get_value_hash)
-        self.add_get_value("interface/macro:doc:/name", _get_value_hash)
-        self.add_get_value("interface/variable:doc:/name", _get_value_hash)
+                           get_value_double_colon)
+        self.add_get_value("interface/define:doc:/name", get_value_hash)
+        self.add_get_value("interface/enum:doc:/name", get_value_hash)
+        self.add_get_value("interface/macro:doc:/name", get_value_hash)
+        self.add_get_value("interface/variable:doc:/name", get_value_hash)
 
     @contextmanager
     def code(self) -> Iterator[None]:
