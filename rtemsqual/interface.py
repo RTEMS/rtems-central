@@ -520,7 +520,7 @@ class _HeaderFile:
 
     def finalize(self) -> None:
         """ Finalizes the header file. """
-        self._content.add_spdx_license_identifier()
+        self._content.prepend_spdx_license_identifier()
         with self._content.file_block():
             self._content.add_ingroup(_get_group_identifiers(self._ingroups))
         self._content.add_copyrights_and_licenses()

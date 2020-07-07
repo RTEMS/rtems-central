@@ -537,7 +537,7 @@ class _TestDirectiveItem(_TestItem):
                                                                  Any]) -> None:
         content = CContent()
         content.register_license_and_copyrights_of_item(self._item)
-        content.add_spdx_license_identifier()
+        content.prepend_spdx_license_identifier()
         with content.file_block():
             content.add_ingroup([self.group_identifier])
         content.add_copyrights_and_licenses()
@@ -624,7 +624,7 @@ class _SourceFile:
             includes.extend(map(CInclude, item.includes))
             local_includes.extend(map(CInclude, item.local_includes))
             content.register_license_and_copyrights_of_item(item.item)
-        content.add_spdx_license_identifier()
+        content.prepend_spdx_license_identifier()
         with content.file_block():
             _add_ingroup(content, self._test_suites)
             _add_ingroup(content, self._test_cases)

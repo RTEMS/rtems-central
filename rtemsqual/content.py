@@ -478,7 +478,7 @@ class CContent(Content):
     def __init__(self):
         super().__init__("BSD-2-Clause", False)
 
-    def add_spdx_license_identifier(self):
+    def prepend_spdx_license_identifier(self):
         """
         Adds an SPDX License Identifier according to the registered licenses.
         """

@@ -387,7 +387,10 @@ def test_prepend_copyrights_and_licenses():
 """
     content.register_copyright("Copyright (C) 1234 Foo Bar")
     content.prepend_copyrights_and_licenses()
-    assert str(content) == """/*
+    content.prepend_spdx_license_identifier()
+    assert str(content) == """/* SPDX-License-Identifier: BSD-2-Clause */
+
+/*
  * Copyright (C) 1234 Foo Bar
  *
  * Redistribution and use in source and binary forms, with or without
