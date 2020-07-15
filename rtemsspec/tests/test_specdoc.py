@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.specdoc module. """
+""" Unit tests for the rtemsspec.specdoc module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -26,9 +26,9 @@
 
 import os
 
-from rtemsqual.items import ItemCache
-from rtemsqual.specdoc import document
-from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
+from rtemsspec.items import ItemCache
+from rtemsspec.specdoc import document
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_document(tmpdir):

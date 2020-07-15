@@ -29,14 +29,14 @@ __all__ = [
     "items", "specdoc", "specverify", "util", "validation"
 ]
 
-import rtemsqual.applconfig
-import rtemsqual.build
-import rtemsqual.content
-import rtemsqual.glossary
-import rtemsqual.interface
-import rtemsqual.interfacedoc
-import rtemsqual.items  # noqa: F401
-import rtemsqual.specdoc
-import rtemsqual.specverify
-import rtemsqual.util  # noqa: F401
-import rtemsqual.validation  # noqa: F401
+import rtemsspec.applconfig
+import rtemsspec.build
+import rtemsspec.content
+import rtemsspec.glossary
+import rtemsspec.interface
+import rtemsspec.interfacedoc
+import rtemsspec.items  # noqa: F401
+import rtemsspec.specdoc
+import rtemsspec.specverify
+import rtemsspec.util  # noqa: F401
+import rtemsspec.validation  # noqa: F401

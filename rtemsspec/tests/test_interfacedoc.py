@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.interfacedoc module. """
+""" Unit tests for the rtemsspec.interfacedoc module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -27,9 +27,9 @@
 import os
 import pytest
 
-from rtemsqual.interfacedoc import generate
-from rtemsqual.items import EmptyItemCache, ItemCache
-from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
+from rtemsspec.interfacedoc import generate
+from rtemsspec.items import EmptyItemCache, ItemCache
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_interfacedoc(tmpdir):

@@ -28,8 +28,8 @@ from contextlib import contextmanager
 import re
 from typing import Any, Iterable, Iterator, List, Optional, Union
 
-from rtemsqual.content import Content, make_lines
-from rtemsqual.items import Item, ItemGetValueContext, ItemMapper
+from rtemsspec.content import Content, make_lines
+from rtemsspec.items import Item, ItemGetValueContext, ItemMapper
 
 GenericContent = Union[str, List[str], "Content"]
 GenericContentIterable = Union[Iterable[str], Iterable[List[str]],

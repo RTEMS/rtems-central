@@ -25,17 +25,17 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rtemsqual
+import rtemsspec
 
 
 def main() -> None:
     """ Generates files of the RTEMS documentation from the specification. """
-    config = rtemsqual.util.load_config("config.yml")
-    item_cache = rtemsqual.items.ItemCache(config["spec"])
-    rtemsqual.applconfig.generate(config["appl-config"], item_cache)
-    rtemsqual.specdoc.document(config["spec-documentation"], item_cache)
-    rtemsqual.glossary.generate(config["glossary"], item_cache)
-    rtemsqual.interfacedoc.generate(config["interface-documentation"],
+    config = rtemsspec.util.load_config("config.yml")
+    item_cache = rtemsspec.items.ItemCache(config["spec"])
+    rtemsspec.applconfig.generate(config["appl-config"], item_cache)
+    rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
+    rtemsspec.glossary.generate(config["glossary"], item_cache)
+    rtemsspec.interfacedoc.generate(config["interface-documentation"],
                                     item_cache)
 
 

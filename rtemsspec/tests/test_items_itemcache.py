@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.items module. """
+""" Unit tests for the rtemsspec.items module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -27,8 +27,8 @@
 import os
 import pytest
 
-from rtemsqual.items import EmptyItem, ItemCache, ItemMapper, ItemTemplate
-from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
+from rtemsspec.items import EmptyItem, ItemCache, ItemMapper, ItemTemplate
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_config_error():

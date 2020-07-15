@@ -25,16 +25,16 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rtemsqual.items
-import rtemsqual.specverify
-import rtemsqual.util
+import rtemsspec.items
+import rtemsspec.specverify
+import rtemsspec.util
 
 
 def main() -> None:
     """ Verfies the specification. """
-    config = rtemsqual.util.load_config("config.yml")
-    item_cache = rtemsqual.items.ItemCache(config["spec"])
-    rtemsqual.specverify.verify(config["spec-verification"], item_cache)
+    config = rtemsspec.util.load_config("config.yml")
+    item_cache = rtemsspec.items.ItemCache(config["spec"])
+    rtemsspec.specverify.verify(config["spec-verification"], item_cache)
 
 
 if __name__ == "__main__":

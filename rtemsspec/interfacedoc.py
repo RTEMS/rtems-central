@@ -29,10 +29,10 @@ This module provides functions for the generation of interface documentation.
 import os
 from typing import Any, Callable, Dict, List
 
-from rtemsqual.content import CContent, enabled_by_to_exp, ExpressionMapper
-from rtemsqual.sphinxcontent import get_label, get_reference, SphinxContent, \
+from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper
+from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
      SphinxMapper
-from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
+from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 AddDefinition = Callable[[CContent, ItemMapper, Item, Dict[str, Any]], None]

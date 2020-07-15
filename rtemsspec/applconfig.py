@@ -27,10 +27,10 @@
 import copy
 from typing import Any, Dict, List, Optional
 
-from rtemsqual.content import CContent, get_value_double_colon, \
+from rtemsspec.content import CContent, get_value_double_colon, \
     get_value_doxygen_function, get_value_hash
-from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
-from rtemsqual.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
+from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
+from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
     ItemMapper
 
 ItemMap = Dict[str, Item]

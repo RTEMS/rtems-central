@@ -28,8 +28,8 @@ import glob
 import re
 from typing import Any, Dict, NamedTuple
 
-from rtemsqual.sphinxcontent import SphinxContent, SphinxMapper
-from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
+from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
+from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 

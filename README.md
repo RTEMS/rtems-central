@@ -10,7 +10,7 @@ development tools such as yapf, flake8, mypy, pylint, pytest, and coverage.
 
 * spec - contains the specification items
 
-* rtemsqual - contains the `rtemsqual` Python package
+* rtemsspec - contains the `rtemsspec` Python package
 
   * tests - contains Python unit tests
 
@@ -133,13 +133,13 @@ $ make coverage-report
 coverage report -m --include=...
 Name                      Stmts   Miss Branch BrPart  Cover   Missing
 ---------------------------------------------------------------------
-rtemsqual/__init__.py         8      0      0      0   100%
-rtemsqual/applconfig.py     130      0     53      0   100%
-rtemsqual/build.py           36      0     14      0   100%
-rtemsqual/content.py        133      0     44      0   100%
-rtemsqual/glossary.py        70      0     31      0   100%
-rtemsqual/items.py          139      0     46      0   100%
-rtemsqual/util.py            26      0      2      0   100%
+rtemsspec/__init__.py         8      0      0      0   100%
+rtemsspec/applconfig.py     130      0     53      0   100%
+rtemsspec/build.py           36      0     14      0   100%
+rtemsspec/content.py        133      0     44      0   100%
+rtemsspec/glossary.py        70      0     31      0   100%
+rtemsspec/items.py          139      0     46      0   100%
+rtemsspec/util.py            26      0      2      0   100%
 ---------------------------------------------------------------------
 TOTAL                       542      0    190      0   100%
 ```

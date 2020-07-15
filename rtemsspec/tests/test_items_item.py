@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.items module. """
+""" Unit tests for the rtemsspec.items module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -27,7 +27,7 @@
 import os
 import pytest
 
-from rtemsqual.items import EmptyItemCache, Item, ItemCache, Link
+from rtemsspec.items import EmptyItemCache, Item, ItemCache, Link
 
 
 def test_to_abs_uid():

@@ -28,9 +28,9 @@ import itertools
 import os
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
-from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
+from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper
-from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
+from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 

@@ -28,7 +28,7 @@ import logging
 import re
 from typing import Any, Dict, List, NamedTuple, Set
 
-from rtemsqual.items import Item, ItemCache
+from rtemsspec.items import Item, ItemCache
 
 _VerifierMap = Dict[str, "_Verifier"]
 

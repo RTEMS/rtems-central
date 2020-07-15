@@ -30,13 +30,13 @@ import string
 import subprocess
 from typing import List
 
-import rtemsqual.applconfig
-import rtemsqual.build
-from rtemsqual.items import ItemCache
-import rtemsqual.glossary
-import rtemsqual.interface
-import rtemsqual.util
-import rtemsqual.validation
+import rtemsspec.applconfig
+import rtemsspec.build
+from rtemsspec.items import ItemCache
+import rtemsspec.glossary
+import rtemsspec.interface
+import rtemsspec.util
+import rtemsspec.validation
 
 
 def _run_command(args: List[str], cwd: str) -> int:
@@ -55,10 +55,10 @@ def _run_command(args: List[str], cwd: str) -> int:
 
 
 def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
-    files = rtemsqual.build.gather_files(config, item_cache)
+    files = rtemsspec.build.gather_files(config, item_cache)
     source_dir = config["source-directory"]
     workspace_dir = config["workspace-directory"]
-    rtemsqual.util.copy_files(source_dir, workspace_dir, files)
+    rtemsspec.util.copy_files(source_dir, workspace_dir, files)
     with open(os.path.join(workspace_dir, "config.ini"), "w") as config_ini:
         content = string.Template(config["config-ini"]).substitute(config)
         config_ini.write(content)
@@ -89,12 +89,12 @@ def _run_pre_qualified_doxygen(config: dict) -> None:
 
 def main() -> None:
     """ Generates glossaries of terms according to the configuration. """
-    config = rtemsqual.util.load_config("config.yml")
+    config = rtemsspec.util.load_config("config.yml")
     item_cache = ItemCache(config["spec"])
-    rtemsqual.glossary.generate(config["glossary"], item_cache)
-    rtemsqual.applconfig.generate(config["appl-config"], item_cache)
-    rtemsqual.interface.generate(config["interface"], item_cache)
-    rtemsqual.validation.generate(config["validation"], item_cache)
+    rtemsspec.glossary.generate(config["glossary"], item_cache)
+    rtemsspec.applconfig.generate(config["appl-config"], item_cache)
+    rtemsspec.interface.generate(config["interface"], item_cache)
+    rtemsspec.validation.generate(config["validation"], item_cache)
     _run_pre_qualified_only_build(config["build"], item_cache)
     _run_pre_qualified_doxygen(config["build"])
 

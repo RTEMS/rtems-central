@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.content module. """
+""" Unit tests for the rtemsspec.content module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -26,8 +26,8 @@
 
 import pytest
 
-from rtemsqual.content import Copyright
-from rtemsqual.content import Copyrights
+from rtemsspec.content import Copyright
+from rtemsspec.content import Copyrights
 
 
 def test_copyright_get_statement():

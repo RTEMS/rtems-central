@@ -1,10 +1,10 @@
-PY_SRC_FILES = $(wildcard *.py) $(wildcard rtemsqual/*.py)
-PY_ALL_FILES = $(PY_SRC_FILES) $(wildcard rtemsqual/tests/*.py)
+PY_SRC_FILES = $(wildcard *.py) $(wildcard rtemsspec/*.py)
+PY_ALL_FILES = $(PY_SRC_FILES) $(wildcard rtemsspec/tests/*.py)
 
 all: check format analyse coverage-report
 
 check: check-env
-	coverage run --branch -m pytest -vv rtemsqual/tests
+	coverage run --branch -m pytest -vv rtemsspec/tests
 
 format: $(PY_ALL_FILES) | check-env
 	yapf -i --parallel $^

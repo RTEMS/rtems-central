@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.specverify module. """
+""" Unit tests for the rtemsspec.specverify module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -26,9 +26,9 @@
 
 import logging
 
-from rtemsqual.items import ItemCache
-from rtemsqual.specverify import verify
-from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
+from rtemsspec.items import ItemCache
+from rtemsspec.specverify import verify
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_no_root_type(caplog, tmpdir):

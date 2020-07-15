@@ -25,15 +25,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rtemsqual
+import rtemsspec
 
 
 def main() -> None:
     """ Generates files of the RTEMS sources from the specification. """
-    config = rtemsqual.util.load_config("config.yml")
-    item_cache = rtemsqual.items.ItemCache(config["spec"])
-    rtemsqual.interface.generate(config["interface"], item_cache)
-    rtemsqual.validation.generate(config["validation"], item_cache)
+    config = rtemsspec.util.load_config("config.yml")
+    item_cache = rtemsspec.items.ItemCache(config["spec"])
+    rtemsspec.interface.generate(config["interface"], item_cache)
+    rtemsspec.validation.generate(config["validation"], item_cache)
 
 
 if __name__ == "__main__":

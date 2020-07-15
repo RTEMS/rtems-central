@@ -26,7 +26,7 @@
 
 from typing import Dict, List
 
-from rtemsqual.items import Item, ItemCache
+from rtemsspec.items import Item, ItemCache
 
 BSPMap = Dict[str, Dict[str, Item]]
 ItemMap = Dict[str, Item]

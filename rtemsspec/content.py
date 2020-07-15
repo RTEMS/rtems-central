@@ -36,7 +36,7 @@ import textwrap
 from typing import Any, Callable, ContextManager, Dict, Iterable, Iterator, \
     List, NamedTuple, Optional, Set, Tuple, Union
 
-from rtemsqual.items import Item, ItemGetValueContext
+from rtemsspec.items import Item, ItemGetValueContext
 
 AddContext = Callable[["Content"], ContextManager[None]]
 GenericContent = Union[str, List[str], "Content"]

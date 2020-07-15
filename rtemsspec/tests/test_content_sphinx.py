@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.sphinxcontent module. """
+""" Unit tests for the rtemsspec.sphinxcontent module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -26,10 +26,10 @@
 
 import pytest
 
-from rtemsqual.sphinxcontent import get_reference, get_label, \
+from rtemsspec.sphinxcontent import get_reference, get_label, \
     SphinxContent, SphinxMapper
-from rtemsqual.items import Item, ItemCache, ItemMapper
-from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
+from rtemsspec.items import Item, ItemCache, ItemMapper
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_add_label():

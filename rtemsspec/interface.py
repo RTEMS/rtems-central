@@ -28,10 +28,10 @@ from contextlib import contextmanager
 import os
 from typing import Any, Callable, Dict, Iterator, List, Union
 
-from rtemsqual.content import CContent, CInclude, enabled_by_to_exp, \
+from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
     get_value_hash
-from rtemsqual.items import Item, ItemCache, ItemGetValueContext, ItemMapper
+from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 Lines = Union[str, List[str]]

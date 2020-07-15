@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.build module. """
+""" Unit tests for the rtemsspec.util module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -24,21 +24,22 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rtemsqual.build import gather_files
-from rtemsqual.items import ItemCache
-from rtemsqual.tests.util import create_item_cache_config_and_copy_spec
+import os
+
+from rtemsspec.util import copy_files, load_config
 
 
-def test_build(tmpdir):
-    item_cache_config = create_item_cache_config_and_copy_spec(
-        tmpdir, "spec-build")
-    item_cache = ItemCache(item_cache_config)
+def test_copy_files(tmpdir):
+    src_dir = os.path.dirname(__file__)
+    copy_files(src_dir, tmpdir, [])
+    filename = "config/c/d.yml"
+    assert not os.path.exists(os.path.join(tmpdir, filename))
+    copy_files(src_dir, tmpdir, [filename])
+    assert os.path.exists(os.path.join(tmpdir, filename))
 
-    build_config = {}
-    build_config["arch"] = "foo"
-    build_config["bsp"] = "bar"
-    build_config["enabled"] = ["A"]
-    build_config["sources"] = ["a", "b"]
-    build_config["uids"] = ["/g"]
-    files = gather_files(build_config, item_cache)
-    assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def"]
+
+def test_load_config():
+    filename = os.path.join(os.path.dirname(__file__), "config", "a.yml")
+    config = load_config(filename)
+    assert config["a"] == "b"
+    assert config["c"] == "d"

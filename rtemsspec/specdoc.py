@@ -26,10 +26,10 @@
 
 from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
 
-from rtemsqual.sphinxcontent import get_reference, get_label, \
+from rtemsspec.sphinxcontent import get_reference, get_label, \
     SphinxContent, SphinxMapper
-from rtemsqual.items import Item, ItemCache, ItemGetValueContext
-from rtemsqual.specverify import NAME
+from rtemsspec.items import Item, ItemCache, ItemGetValueContext
+from rtemsspec.specverify import NAME
 
 _DocumenterMap = Dict[str, "_Documenter"]
 

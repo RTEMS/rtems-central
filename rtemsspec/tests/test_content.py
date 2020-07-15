@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" Unit tests for the rtemsqual.content module. """
+""" Unit tests for the rtemsspec.content module. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -27,7 +27,7 @@
 import os
 import pytest
 
-from rtemsqual.content import Content, enabled_by_to_exp, \
+from rtemsspec.content import Content, enabled_by_to_exp, \
     ExpressionMapper, PythonExpressionMapper
 
 
