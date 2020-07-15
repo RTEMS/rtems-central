@@ -13,7 +13,7 @@ build:
   enabled:
   - RTEMS_QUAL
   - RTEMS_SMP
-  source-directory: external/rtems
+  source-directory: modules/rtems
   sources:
   - bsps/shared/cache/cacheimpl.h
   - bsps/shared/dev/clock/clockimpl.h
@@ -39,61 +39,61 @@ spec:
   spec-type-root-uid: /spec/root
   paths:
   - spec
-  - external/rtems/spec
+  - modules/rtems/spec
 glossary:
   project-groups:
   - /glossary-general
-  project-target: external/rtems-docs/c-user/glossary.rst
+  project-target: modules/rtems-docs/c-user/glossary.rst
   documents:
   - rest-source-paths:
-    - external/rtems-docs/eng
-    target: external/rtems-docs/eng/glossary.rst
+    - modules/rtems-docs/eng
+    target: modules/rtems-docs/eng/glossary.rst
 appl-config:
-  doxygen-target: external/rtems/cpukit/doxygen/appl-config.h
+  doxygen-target: modules/rtems/cpukit/doxygen/appl-config.h
   groups:
   - uid: /if/acfg/group-bdbuf
-    target: external/rtems-docs/c-user/config/bdbuf.rst
+    target: modules/rtems-docs/c-user/config/bdbuf.rst
   - uid: /if/acfg/group-bsp
-    target: external/rtems-docs/c-user/config/bsp-related.rst
+    target: modules/rtems-docs/c-user/config/bsp-related.rst
   - uid: /if/acfg/group-classic
-    target: external/rtems-docs/c-user/config/classic-api.rst
+    target: modules/rtems-docs/c-user/config/classic-api.rst
   - uid: /if/acfg/group-classicinit
-    target: external/rtems-docs/c-user/config/classic-init-task.rst
+    target: modules/rtems-docs/c-user/config/classic-init-task.rst
   - uid: /if/acfg/group-devdrv
-    target: external/rtems-docs/c-user/config/device-driver.rst
+    target: modules/rtems-docs/c-user/config/device-driver.rst
   - uid: /if/acfg/group-eventrecord
-    target: external/rtems-docs/c-user/config/event-record.rst
+    target: modules/rtems-docs/c-user/config/event-record.rst
   - uid: /if/acfg/group-filesystem
-    target: external/rtems-docs/c-user/config/filesystem.rst
+    target: modules/rtems-docs/c-user/config/filesystem.rst
   - uid: /if/acfg/group-general
-    target: external/rtems-docs/c-user/config/general.rst
+    target: modules/rtems-docs/c-user/config/general.rst
   - uid: /if/acfg/group-idle
-    target: external/rtems-docs/c-user/config/idle-task.rst
+    target: modules/rtems-docs/c-user/config/idle-task.rst
   - uid: /if/acfg/group-mpci
-    target: external/rtems-docs/c-user/config/mpci.rst
+    target: modules/rtems-docs/c-user/config/mpci.rst
   - uid: /if/acfg/group-posix
-    target: external/rtems-docs/c-user/config/posix-api.rst
+    target: modules/rtems-docs/c-user/config/posix-api.rst
   - uid: /if/acfg/group-posixinit
-    target: external/rtems-docs/c-user/config/posix-init-thread.rst
+    target: modules/rtems-docs/c-user/config/posix-init-thread.rst
   - uid: /if/acfg/group-schedgeneral
-    target: external/rtems-docs/c-user/config/scheduler-general.rst
+    target: modules/rtems-docs/c-user/config/scheduler-general.rst
   - uid: /if/acfg/group-stackalloc
-    target: external/rtems-docs/c-user/config/task-stack-alloc.rst
+    target: modules/rtems-docs/c-user/config/task-stack-alloc.rst
 validation:
-  base-directory: external/rtems
+  base-directory: modules/rtems
 interface:
   item-level-interfaces:
   - /if/build-options/container
   - /if/compiler/container
   - /if/use/container
   domains:
-    /if/domains/api: external/rtems
+    /if/domains/api: modules/rtems
 interface-documentation:
-- directives-target: external/rtems-docs/c-user/sem/directives.rst
+- directives-target: modules/rtems-docs/c-user/sem/directives.rst
   group: /groups/api/classic/sem
-  introduction-target: external/rtems-docs/c-user/sem/introduction.rst
+  introduction-target: modules/rtems-docs/c-user/sem/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:
   root-type: /spec/root
-  doc-target: external/rtems-docs/eng/req/items.rst
+  doc-target: modules/rtems-docs/eng/req/items.rst

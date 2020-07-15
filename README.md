@@ -12,9 +12,11 @@ development tools such as yapf, flake8, mypy, pylint, pytest, and coverage.
 
 * rtemsqual - contains the `rtemsqual` Python package
 
-* tests - contains Python unit tests
+  * tests - contains Python unit tests
 
-* external - contains Git submodules
+* modules - contains Git submodules
+
+  * rsb - contains the RTEMS Source Builder as a Git submodule
 
   * rtems - contains the RTEMS sources as a Git submodule
 
