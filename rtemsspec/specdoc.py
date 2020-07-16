@@ -558,15 +558,14 @@ def document(config: dict, item_cache: ItemCache) -> None:
     for documenter in documenter_map.values():
         documenter.resolve_used_by()
     documenter_names = set(documenter_map)
-    content.section_label_prefix = "ReqEng"
-    with content.section("Specification Items"):
-        with content.section("Specification Item Hierarchy"):
-            content.add(
-                "The specification item types have the following hierarchy:")
+    content.section_label_prefix = config["section-label-prefix"]
+    with content.section(config["section-name"]):
+        with content.section(config["hierarchy-subsection-name"]):
+            content.add(config["hierarchy-text"])
             root_documenter.hierarchy(content)
-        with content.section("Specification Item Types"):
+        with content.section(config["item-types-subsection-name"]):
             root_documenter.document(content, documenter_names)
-        with content.section("Specification Attribute Sets and Value Types"):
+        with content.section(config["value-types-subsection-name"]):
             documenters = [documenter_map[name] for name in documenter_names]
             for documenter in sorted(documenters, key=lambda x: x.section):
                 documenter.document(content)

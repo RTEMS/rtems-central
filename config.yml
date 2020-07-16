@@ -98,6 +98,12 @@ interface-documentation:
 spec-verification:
   root-type: /spec/root
 spec-documentation:
-  root-type: /spec/root
   doc-target: modules/rtems-docs/eng/req/items.rst
-  label-prefix: SpecType
+  hierarchy-subsection-name: Specification Item Hierarchy
+  hierarchy-text: |
+    The specification item types have the following hierarchy:
+  item-types-subsection-name: Specification Item Types
+  root-type: /spec/root
+  section-label-prefix: ReqEng
+  section-name: Specification Items
+  value-types-subsection-name: Specification Attribute Sets and Value Types

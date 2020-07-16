@@ -39,9 +39,24 @@ def test_document(tmpdir):
     assert item_cache["/root"].type == "spec"
     doc_target = os.path.join(tmpdir, "items.rst")
     config = {
-        "root-type": "/root",
-        "doc-target": doc_target,
-        "label-prefix": "SpecType",
+        "doc-target":
+        doc_target,
+        "hierarchy-subsection-name":
+        "Specification Item Hierarchy",
+        "hierarchy-text":
+        "The specification item types have the following hierarchy:",
+        "item-types-subsection-name":
+        "Specification Item Types",
+        "label-prefix":
+        "SpecType",
+        "root-type":
+        "/root",
+        "section-label-prefix":
+        "ReqEng",
+        "section-name":
+        "Specification Items",
+        "value-types-subsection-name":
+        "Specification Attribute Sets and Value Types",
     }
     document(config, item_cache)
     with open(doc_target, "r") as src:
