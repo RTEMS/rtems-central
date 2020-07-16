@@ -41,6 +41,7 @@ def test_document(tmpdir):
     config = {
         "root-type": "/root",
         "doc-target": doc_target,
+        "label-prefix": "SpecType",
     }
     document(config, item_cache)
     with open(doc_target, "r") as src:

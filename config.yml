@@ -100,3 +100,4 @@ spec-verification:
 spec-documentation:
   root-type: /spec/root
   doc-target: modules/rtems-docs/eng/req/items.rst
+  label-prefix: SpecType

@@ -57,17 +57,11 @@ _MANDATORY_ATTRIBUTES = {
     "they are all optional.",
 }
 
-_SPEC_TYPE_PREFIX = "SpecType"
-
 
 def _a_or_an(value: str) -> str:
     if value[0].lower() in ["a", "e", "i", "o", "u"]:
         return "an"
     return "a"
-
-
-def _get_ref_specification_type(ctx: ItemGetValueContext) -> Any:
-    return get_reference(_SPEC_TYPE_PREFIX + get_label(ctx.value[ctx.key]))
 
 
 class _AssertContext:
@@ -260,7 +254,8 @@ def _maybe_document_assert(content: SphinxContent, type_info: Any) -> None:
 
 class _Documenter:
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, item: Item, documenter_map: _DocumenterMap):
+    def __init__(self, item: Item, documenter_map: _DocumenterMap,
+                 config: dict):
         self._name = item["spec-type"]
         self.section = item["spec-name"]
         self._description = item["spec-description"]
@@ -268,11 +263,16 @@ class _Documenter:
         self._item = item
         self._documenter_map = documenter_map
         self.used_by = set()  # type: Set[str]
+        self._label_prefix = config["label-prefix"]
         self._mapper = SphinxMapper(item)
         self._mapper.add_get_value("spec:/spec-name",
-                                   _get_ref_specification_type)
+                                   self._get_ref_specification_type)
         assert self._name not in documenter_map
         documenter_map[self._name] = self
+
+    def _get_ref_specification_type(self, ctx: ItemGetValueContext) -> Any:
+        return get_reference(self._label_prefix +
+                             get_label(ctx.value[ctx.key]))
 
     def _substitute(self, text: str) -> str:
         if text:
@@ -281,7 +281,7 @@ class _Documenter:
 
     def get_section_reference(self) -> str:
         """ Returns the section reference. """
-        return get_reference(_SPEC_TYPE_PREFIX + get_label(self.section))
+        return get_reference(self._label_prefix + get_label(self.section))
 
     def get_a_section_reference(self) -> str:
         """ Returns a section reference. """
@@ -434,7 +434,7 @@ class _Documenter:
         if self.get_list_element_type():
             return
         content.register_license_and_copyrights_of_item(self._item)
-        with content.section(self.section, _SPEC_TYPE_PREFIX):
+        with content.section(self.section, self._label_prefix):
             last = content.lines[-1]
             self._add_description(content)
             if len(self._info_map) == 1:
@@ -498,15 +498,16 @@ _DOCUMENT = {
 }
 
 
-def _gather_item_documenters(item: Item,
-                             documenter_map: _DocumenterMap) -> None:
+def _gather_item_documenters(item: Item, documenter_map: _DocumenterMap,
+                             config: dict) -> None:
     for link in item.links_to_children():
         if link.role == "spec-member":
-            _Documenter(link.item, documenter_map)
+            _Documenter(link.item, documenter_map, config)
 
 
 def _create_str_documenter(item_cache: ItemCache, name: str, description: str,
-                           documenter_map: _DocumenterMap) -> None:
+                           documenter_map: _DocumenterMap,
+                           config: dict) -> None:
     type_name = name.lower()
     _Documenter(
         Item(
@@ -530,7 +531,7 @@ def _create_str_documenter(item_cache: ItemCache, name: str, description: str,
                 name,
                 "spec-type":
                 type_name,
-            }), documenter_map)
+            }), documenter_map, config)
 
 
 def document(config: dict, item_cache: ItemCache) -> None:
@@ -545,13 +546,13 @@ def document(config: dict, item_cache: ItemCache) -> None:
     _create_str_documenter(
         item_cache, "Name", "A string is a valid name if it matches with the "
         f"``{NAME.pattern.replace('$', '$$')}`` regular expression.",
-        documenter_map)
+        documenter_map, config)
     _create_str_documenter(
         item_cache, "UID",
         "The string shall be a valid absolute or relative item UID.",
-        documenter_map)
-    root_documenter = _Documenter(root_item, documenter_map)
-    _gather_item_documenters(root_item, documenter_map)
+        documenter_map, config)
+    root_documenter = _Documenter(root_item, documenter_map, config)
+    _gather_item_documenters(root_item, documenter_map, config)
     content = SphinxContent()
     content.add_automatically_generated_warning()
     for documenter in documenter_map.values():
