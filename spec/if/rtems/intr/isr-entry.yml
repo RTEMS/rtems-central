@@ -1,10 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Interrupt service routines installed by ${catch:/name} shall have this
+  function pointer type.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: ${/if/impl/isr/handler:/name} ${.:/name}
+  default: void ( *${.:/name} )( void * )
   variants:
   - definition: ${/if/impl/isr/handler-entry:/name} ${.:/name}
     enabled-by: ${/if/impl/cpu/simple-vectored-interrupts:/name} == ${../basedefs/true:/name}
