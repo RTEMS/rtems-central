@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Receives or gets a system event set.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -13,27 +14,33 @@ definition:
     - ${set:/name} *${.:/params[3]/name}
     return: ${../status/code:/name}
   variants: []
-description: null
+description: |
+  This directive performs the same actions as the ${receive:/name} directive
+  except that it operates with a different set of events for each task.
 enabled-by: true
 interface-type: function
 links:
 - role: interface-placement
   uid: header
-- role: interface-ingroup
-  uid: /groups/api/classic/event
 name: rtems_event_system_receive
 notes: null
 params:
-- description: '%'
+- description: |
+    is the event set of interest.  Use ${pending-events:/name} to get the
+    pending events.
   dir: null
   name: event_in
-- description: '%'
+- description: is the option set.
   dir: null
   name: option_set
-- description: '%'
+- description: |
+    is the timeout in clock ticks if the ${../options/wait:/name} option was
+    set.  Use ${../types/no-timeout:/name} to wait potentially forever.
   dir: null
   name: ticks
-- description: '%'
+- description: |
+    is the pointer to an event set.  The received or pending events are stored
+    in the referenced event set if the operation was successful.
   dir: null
   name: event_out
 return:

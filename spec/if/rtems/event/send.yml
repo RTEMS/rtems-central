@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Sends an event set to a task.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -11,7 +12,21 @@ definition:
     - ${set:/name} ${.:/params[1]/name}
     return: ${../status/code:/name}
   variants: []
-description: null
+description: |
+  This directive sends an event set, ``${.:/params[1]/name}``, to the task
+  specified by ``${.:/params[0]/name}``.  Based upon the state of the target
+  task, one of the following situations applies:
+
+  * The target task is blocked waiting for events, then
+
+    * if the waiting task's input event condition is satisfied, then the task
+      is made ready for execution, or
+
+    * otherwise, the event set is posted but left pending and the task remains
+      blocked.
+
+  * The target task is not waiting for events, then the event set is posted and
+    left pending.
 enabled-by: true
 interface-type: function
 links:
@@ -20,15 +35,40 @@ links:
 - role: interface-ingroup
   uid: /groups/api/classic/event
 name: rtems_event_send
-notes: null
+notes: |
+  Events can be sent by tasks or an ${/glossary/isr:/term}. 
+
+  Specifying ${../tasks/self-define:/name} for ``${.:/params[0]/name}`` results
+  in the event set being sent to the calling task.
+
+  The event set to send shall be built by a *bitwise or* of the desired events.
+  The set of valid events is ${event-0:/name} through ${event-31:/name}.  If an
+  event is not explicitly specified in the set, then it is not present.
+
+  Identical events sent to a task are not queued.  In other words, the second,
+  and subsequent, posting of an event to a task before it can perform an
+  ${receive:/name} has no effect.
+
+  The calling task will be preempted if it has preemption enabled and a higher
+  priority task is unblocked as the result of this directive.
+
+  Sending an event set to a global task which does not reside on the local node
+  will generate a request telling the remote node to send the event set to the
+  appropriate task.
 params:
-- description: '%'
+- description: is the identifier of the target task to receive the event set.
   dir: null
   name: id
-- description: '%'
+- description: is the event set to send.
   dir: null
   name: event_in
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../status/successful:/name}
+  - description: |
+      There was no task with the specified identifier.
+    value: ${../status/invalid-id:/name}
 type: interface

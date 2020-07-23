@@ -23,8 +23,6 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
-- role: interface-ingroup
-  uid: /groups/api/classic/clock
 name: rtems_event_transient_clear
 notes: null
 params: []
