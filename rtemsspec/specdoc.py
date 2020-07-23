@@ -258,7 +258,6 @@ class _Documenter:
                  config: dict):
         self._name = item["spec-type"]
         self.section = item["spec-name"]
-        self._description = item["spec-description"]
         self._info_map = item["spec-info"]
         self._item = item
         self._documenter_map = documenter_map
@@ -267,6 +266,7 @@ class _Documenter:
         self._mapper = SphinxMapper(item)
         self._mapper.add_get_value("spec:/spec-name",
                                    self._get_ref_specification_type)
+        self._description = self._substitute(item["spec-description"])
         assert self._name not in documenter_map
         documenter_map[self._name] = self
 
@@ -370,9 +370,9 @@ class _Documenter:
                                   "attributes are mandatory:")
                     for attribute in sorted(mandatory_attributes):
                         content.add_list_item(f"``{attribute}``")
-                    content.add_blank_line()
+                    content.ensure_blank_line()
                 else:
-                    content.add_blank_line()
+                    content.ensure_blank_line()
             content.paste("The explicit attributes for this type are:")
             self._document_attributes(content, info["attributes"])
         if "generic-attributes" in info:
@@ -426,6 +426,8 @@ class _Documenter:
                              "This type refines the following types:",
                              add_blank_line=True)
             content.wrap(self._description)
+        if self._description:
+            content.add_blank_line()
 
     def document(self,
                  content: SphinxContent,

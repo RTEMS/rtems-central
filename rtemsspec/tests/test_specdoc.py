@@ -216,7 +216,7 @@ A
 ^
 
 This type refines the :ref:`SpecTypeRoot` though the ``type`` attribute if the
-value is ``spec``.
+value is ``spec``. A description.
 
 The explicit attributes for this type are:
 
