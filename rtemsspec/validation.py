@@ -632,7 +632,7 @@ class _SourceFile:
         content.add_have_config()
         content.add_includes(includes)
         content.add_includes(local_includes, local=True)
-        content.add_includes([CInclude("t.h")])
+        content.add_includes([CInclude("rtems/test.h")])
         for item in sorted(self._test_cases, key=lambda x: x.name):
             item.generate(content, base_directory, test_case_to_suites)
         for item in sorted(self._test_suites, key=lambda x: x.name):

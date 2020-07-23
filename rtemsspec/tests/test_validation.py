@@ -85,7 +85,7 @@ def test_validation(tmpdir):
 
 #include "green.h"
 
-#include <t.h>
+#include <rtems/test.h>
 
 /**
  * @defgroup RTEMSTestSuiteBlueGreen Blue Green
@@ -152,7 +152,7 @@ def test_validation(tmpdir):
 #include "x.h"
 #include "y.h"
 
-#include <t.h>
+#include <rtems/test.h>
 
 /**
  * @defgroup RTEMSTestCaseClassicTaskIdentification Classic Task Identification
@@ -803,7 +803,7 @@ T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
 
 #include "z.h"
 
-#include <t.h>
+#include <rtems/test.h>
 
 /**
  * @defgroup RTEMSTestCaseTestCase3 Test Case 3
@@ -1000,7 +1000,7 @@ void Action2_Run( int *a, int b, int *c );
 
 #include "b.h"
 
-#include <t.h>
+#include <rtems/test.h>
 
 /**
  * @defgroup RTEMSTestCaseAction2 Action 2
