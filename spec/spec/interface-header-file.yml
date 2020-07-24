@@ -14,6 +14,10 @@ spec-example: null
 spec-info:
   dict:
     attributes:
+      brief:
+        description: |
+          It shall be the brief description of the header file.
+        spec-type: str
       path:
         description: |
           It shall be the path used to include the header file.  For example

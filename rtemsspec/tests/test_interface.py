@@ -56,6 +56,8 @@ def test_interface(tmpdir):
  * @ingroup GroupA
  * @ingroup GroupB
  * @ingroup GroupC
+ *
+ * @brief This header file defines X.
  */
 
 /*

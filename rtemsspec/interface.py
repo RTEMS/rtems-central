@@ -513,6 +513,7 @@ class _HeaderFile:
         self._content.prepend_spdx_license_identifier()
         with self._content.file_block():
             self._content.add_ingroup(_get_group_identifiers(self._ingroups))
+            self._content.add_brief_description(self._item["brief"])
         self._content.add_copyrights_and_licenses()
         with self._content.header_guard(self._item["path"]):
             exp_mapper = _HeaderExpressionMapper(self._item,
