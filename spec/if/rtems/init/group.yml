@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: API
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: |
+brief: |
   This group contains directives to initialize and shutdown the RTEMS
   executive.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
 enabled-by: true
 identifier: RTEMSAPIClassicInit
 interface-type: group
@@ -14,4 +14,7 @@ links:
 - role: interface-ingroup
   uid: ../group
 name: Initialization and Shutdown
+text: |
+  The Classic API shall provide an interface to the Initialization and Shutdown
+  Manager.
 type: interface

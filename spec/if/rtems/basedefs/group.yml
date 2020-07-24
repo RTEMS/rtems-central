@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: API
+brief: |
+  This group contains basic macros and defines to give access to
+  compiler-specific features.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: |
-  This group contains basic macros to give access to compiler-specific
-  features.
+description: null
 enabled-by: true
 identifier: RTEMSAPIBaseDefs
 interface-type: group
@@ -14,4 +14,6 @@ links:
 - role: interface-ingroup
   uid: ../../api
 name: Base Definitions
+text: |
+  The API shall provide an interface to compiler-specific features.
 type: interface

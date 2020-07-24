@@ -1,9 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: API
+brief: |
+  This group contains the Classic API status codes and support functions.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: |
-  This group contains the Classic API status codes and support functions.
+description: null
 enabled-by: true
 identifier: RTEMSAPIClassicStatus
 interface-type: group
@@ -12,5 +12,7 @@ links:
   uid: header
 - role: interface-ingroup
   uid: ../group
-name: Status Codes
+name: Directive Status Codes
+text: |
+  The Classic API shall provide an interface to directive status codes.
 type: interface

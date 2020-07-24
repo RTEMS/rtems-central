@@ -11,4 +11,6 @@ links:
 - role: interface-placement
   uid: rtems/basedefs/header
 name: API
+text: |
+  The system shall have an ${../glossary/api:/term}.
 type: interface

@@ -27,6 +27,10 @@ spec-info:
         description: |
           It shall be the human readable name of the interface group.
         spec-type: str
+      text:
+        description: |
+          It shall state the requirement for the interface group.
+        spec-type: requirement-text
     description: |
       This set of attributes specifies an interface group.
     mandatory-attributes: all

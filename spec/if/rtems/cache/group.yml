@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: API
-copyrights:
-- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: |
+brief: |
   The Cache Manager provides functions to perform maintenance operations for
   data and instruction caches.
+copyrights:
+- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
 enabled-by: true
 identifier: RTEMSAPIClassicCache
 interface-type: group
@@ -14,4 +14,6 @@ links:
 - role: interface-ingroup
   uid: ../group
 name: Cache Manager
+text: |
+  The Classic API shall provide an interface to the Cache Manager.
 type: interface

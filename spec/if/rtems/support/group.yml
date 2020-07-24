@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: API
+brief: |
+  Items of this group should move to other groups.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-description: |
-  Items of this group should move to other groups.
+description: null
 enabled-by: true
 identifier: RTEMSAPIClassicSupport
 interface-type: group
@@ -14,4 +14,6 @@ links:
 - role: interface-ingroup
   uid: ../group
 name: Support Services
+text: |
+  The Classic API should not provide this interface part.
 type: interface
