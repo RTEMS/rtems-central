@@ -178,6 +178,14 @@ def test_add_blank_line():
 """
 
 
+def test_ensure_blank_line():
+    content = Content("BSD-2-Clause", True)
+    content.ensure_blank_line()
+    content.ensure_blank_line()
+    assert str(content) == """
+"""
+
+
 def test_indent():
     content = Content("BSD-2-Clause", True)
     content.add_blank_line()

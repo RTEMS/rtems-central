@@ -386,6 +386,11 @@ class Content:
         """ Adds a blank line. """
         self._lines.append("")
 
+    def ensure_blank_line(self):
+        """ Ensures that the last line is blank. """
+        if not self._lines or self._lines[-1]:
+            self._lines.append("")
+
     def register_license(self, the_license: str) -> None:
         """ Registers a licence for the content. """
         licenses = re.split(r"\s+OR\s+", the_license)
