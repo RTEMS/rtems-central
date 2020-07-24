@@ -14,7 +14,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/event
+  uid: group
 name: RTEMS_PENDING_EVENTS
 notes: null
 type: interface

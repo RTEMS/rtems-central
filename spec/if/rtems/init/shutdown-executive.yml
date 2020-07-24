@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/init
+  uid: group
 name: rtems_shutdown_executive
 notes: |
   This directive does not return to the caller.

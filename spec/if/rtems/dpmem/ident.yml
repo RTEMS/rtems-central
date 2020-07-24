@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/dpmem
+  uid: group
 name: rtems_port_ident
 notes: |
   If the port name is not unique, then the port identifier will match the first

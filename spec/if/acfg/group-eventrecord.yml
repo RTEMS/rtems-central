@@ -7,7 +7,7 @@ enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
-  uid: ../../applconfig
+  uid: ../applconfig
 name: Event Recording Configuration
 text: ''
 type: interface

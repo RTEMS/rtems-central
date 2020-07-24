@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/clock
+  uid: group
 name: rtems_clock_tick_before
 notes: |
   This directive can be used to write busy loops with a timeout.

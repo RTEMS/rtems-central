@@ -15,7 +15,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/modes
+  uid: group
 name: RTEMS_INTERRUPT_LEVEL
 notes: |
   RTEMS supports 256 interrupt levels using the least significant eight bits of

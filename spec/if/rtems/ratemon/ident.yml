@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/ratemon
+  uid: group
 name: rtems_rate_monotonic_ident
 notes: |
   If the period name is not unique, then the period identifier will match the

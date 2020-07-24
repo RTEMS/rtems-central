@@ -8,7 +8,7 @@ enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
-  uid: ../../applconfig
+  uid: ../applconfig
 name: POSIX Initialization Thread Configuration
 text: ''
 type: interface

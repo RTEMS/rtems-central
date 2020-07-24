@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/io
+  uid: group
 name: rtems_io_read
 notes: null
 params:

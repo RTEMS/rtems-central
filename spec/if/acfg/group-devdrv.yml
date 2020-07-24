@@ -8,7 +8,7 @@ enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
-  uid: ../../applconfig
+  uid: ../applconfig
 name: Device Driver Configuration
 text: ''
 type: interface

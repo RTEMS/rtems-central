@@ -52,7 +52,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/ratemon
+  uid: group
 name: rtems_rate_monotonic_period_status
 notes: null
 type: interface

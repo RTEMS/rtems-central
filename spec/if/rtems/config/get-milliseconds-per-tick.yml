@@ -13,7 +13,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/config
+  uid: group
 name: rtems_configuration_get_milliseconds_per_tick
 notes: null
 params: []

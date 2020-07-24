@@ -17,7 +17,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/clock
+  uid: group
 name: rtems_clock_get_uptime
 notes: null
 params:

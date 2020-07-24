@@ -18,7 +18,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/part
+  uid: group
 name: rtems_partition_get_buffer
 notes: null
 params:

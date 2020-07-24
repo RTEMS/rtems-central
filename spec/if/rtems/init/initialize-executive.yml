@@ -18,7 +18,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/init
+  uid: group
 name: rtems_initialize_executive
 notes: |
   This directive should be called by boot_card() only.

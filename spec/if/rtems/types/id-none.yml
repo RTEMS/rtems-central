@@ -14,7 +14,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/types
+  uid: group
 name: RTEMS_ID_NONE
 notes: null
 type: interface

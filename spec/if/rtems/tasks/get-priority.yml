@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/tasks
+  uid: group
 name: rtems_task_get_priority
 notes: null
 params:

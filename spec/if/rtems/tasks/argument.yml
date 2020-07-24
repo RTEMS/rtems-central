@@ -13,7 +13,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/tasks
+  uid: group
 name: rtems_task_argument
 notes: |
   The type is an architecture-specific unsigned integer type which is large

@@ -13,7 +13,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/types
+  uid: group
 name: RTEMS_MINIMUN_HETERO_CONVERSION
 notes: null
 type: interface

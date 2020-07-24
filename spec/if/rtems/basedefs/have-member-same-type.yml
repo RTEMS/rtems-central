@@ -22,7 +22,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/basedefs
+  uid: group
 name: RTEMS_HAVE_MEMBER_SAME_TYPE
 notes: null
 params:

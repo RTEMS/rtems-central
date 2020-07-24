@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/barrier
+  uid: group
 name: rtems_barrier_ident
 notes: |
   If the barrier name is not unique, then the barrier identifier will match the

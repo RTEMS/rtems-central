@@ -13,7 +13,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/timer
+  uid: group
 name: RTEMS_TIMER_SERVER_DEFAULT_PRIORITY
 notes: null
 type: interface

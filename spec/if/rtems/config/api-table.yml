@@ -122,7 +122,7 @@ links:
 - role: interface-placement
   uid: header-2
 - role: interface-ingroup
-  uid: /groups/api/config
+  uid: group
 name: rtems_api_configuration_table
 notes: null
 type: interface

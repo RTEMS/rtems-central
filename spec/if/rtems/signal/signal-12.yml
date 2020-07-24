@@ -14,7 +14,7 @@ links:
 - role: interface-placement
   uid: header-2
 - role: interface-ingroup
-  uid: /groups/api/classic/signal
+  uid: group
 name: RTEMS_SIGNAL_12
 notes: null
 type: interface

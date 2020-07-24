@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/intr
+  uid: group
 name: rtems_interrupt_lock_release_isr
 notes: null
 params:

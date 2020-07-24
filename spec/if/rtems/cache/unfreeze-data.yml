@@ -16,7 +16,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/cache
+  uid: group
 name: rtems_cache_unfreeze_data
 notes: null
 params: []

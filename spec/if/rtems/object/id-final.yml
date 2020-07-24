@@ -13,7 +13,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/object
+  uid: group
 name: RTEMS_OBJECT_ID_FINAL
 notes: null
 type: interface

@@ -22,7 +22,7 @@ links:
 - role: interface-placement
   uid: ../tasks/header
 - role: interface-ingroup
-  uid: /groups/api/classic/tasks
+  uid: ../tasks/group
 name: rtems_scheduler_get_processor_maximum
 notes: null
 params: []

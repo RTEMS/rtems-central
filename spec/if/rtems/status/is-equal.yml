@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/status
+  uid: group
 name: rtems_are_statuses_equal
 notes: null
 params:

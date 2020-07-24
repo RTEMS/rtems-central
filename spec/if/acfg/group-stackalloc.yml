@@ -11,7 +11,7 @@ enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
-  uid: ../../applconfig
+  uid: ../applconfig
 name: Task Stack Allocator Configuration
 text: ''
 type: interface

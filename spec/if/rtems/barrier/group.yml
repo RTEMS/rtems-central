@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  The barrier manager provides a unique synchronization capability which can be
+  used to have a set of tasks block and be unblocked as a set.
+enabled-by: true
+identifier: RTEMSAPIClassicBarrier
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../group
+name: Barrier Manager
+type: interface

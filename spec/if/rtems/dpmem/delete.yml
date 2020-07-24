@@ -17,7 +17,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/dpmem
+  uid: group
 name: rtems_port_delete
 notes: null
 params:

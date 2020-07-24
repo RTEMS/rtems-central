@@ -60,7 +60,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/io
+  uid: group
 name: rtems_driver_address_table
 notes: null
 type: interface

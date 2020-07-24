@@ -18,7 +18,7 @@ links:
 - role: interface-placement
   uid: ../tasks/header
 - role: interface-ingroup
-  uid: /groups/api/classic/tasks
+  uid: ../tasks/group
 name: rtems_scheduler_remove_processor
 notes: |
   This directive shall be called from task context.  It obtains and releases

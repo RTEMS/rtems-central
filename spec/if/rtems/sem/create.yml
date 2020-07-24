@@ -107,7 +107,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/sem
+  uid: group
 name: rtems_semaphore_create
 notes: |
   This directive may cause the calling task to be preempted due to an obtain

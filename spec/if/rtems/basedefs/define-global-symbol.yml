@@ -22,7 +22,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/basedefs
+  uid: group
 name: RTEMS_DEFINE_GLOBAL_SYMBOL
 notes: null
 params:

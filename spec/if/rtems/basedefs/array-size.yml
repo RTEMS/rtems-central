@@ -14,7 +14,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/basedefs
+  uid: group
 name: RTEMS_ARRAY_SIZE
 notes: null
 params:

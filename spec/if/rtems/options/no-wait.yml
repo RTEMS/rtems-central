@@ -16,7 +16,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/options
+  uid: group
 name: RTEMS_NO_WAIT
 notes: null
 type: interface

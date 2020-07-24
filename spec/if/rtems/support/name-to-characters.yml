@@ -26,7 +26,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/support
+  uid: group
 name: rtems_name_to_characters
 notes: null
 params:

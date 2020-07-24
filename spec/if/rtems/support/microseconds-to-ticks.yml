@@ -15,7 +15,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/support
+  uid: group
 name: RTEMS_MICROSECONDS_TO_TICKS
 notes: |
   The number of clock ticks per second is defined by the

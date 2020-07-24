@@ -13,7 +13,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/object
+  uid: group
 name: rtems_object_get_local_node
 notes: null
 params: []
@@ -40,7 +40,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/support
+  uid: group
 name: rtems_object_get_local_node
 notes: null
 params: []

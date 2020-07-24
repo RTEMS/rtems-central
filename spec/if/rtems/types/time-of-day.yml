@@ -69,7 +69,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/types
+  uid: group
 name: rtems_time_of_day
 notes: null
 type: interface

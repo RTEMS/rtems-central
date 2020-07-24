@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/message
+  uid: group
 name: rtems_message_queue_create
 notes: null
 params:

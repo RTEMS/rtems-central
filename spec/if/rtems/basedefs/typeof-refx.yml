@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/basedefs
+  uid: group
 name: RTEMS_TYPEOF_REFX
 notes: null
 params:

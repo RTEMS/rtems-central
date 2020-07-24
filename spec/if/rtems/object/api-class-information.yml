@@ -52,7 +52,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/object
+  uid: group
 name: rtems_object_api_class_information
 notes: null
 type: interface

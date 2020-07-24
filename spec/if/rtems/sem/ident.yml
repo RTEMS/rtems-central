@@ -34,7 +34,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/sem
+  uid: group
 name: rtems_semaphore_ident
 notes: |
   If the semaphore name is not unique, then the semaphore identifier will match

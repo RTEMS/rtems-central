@@ -16,7 +16,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/clock
+  uid: group
 name: rtems_clock_tick
 notes: null
 params: []

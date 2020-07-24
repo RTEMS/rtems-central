@@ -61,7 +61,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/tasks
+  uid: group
 name: rtems_initialization_tasks_table
 notes: null
 type: interface

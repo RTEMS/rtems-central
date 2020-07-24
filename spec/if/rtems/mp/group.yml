@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  The Multiprocessing Manager provides support for heterogeneous
+  multiprocessing systems based on message passing in a network of
+  multiprocessing nodes.
+enabled-by: true
+identifier: RTEMSAPIClassicMP
+interface-type: group
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: ../group
+name: Multiprocessing Manager
+type: interface

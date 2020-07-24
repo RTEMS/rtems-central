@@ -19,7 +19,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/userext
+  uid: group
 name: rtems_extension_create
 notes: null
 params:

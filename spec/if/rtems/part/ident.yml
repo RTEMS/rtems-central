@@ -34,7 +34,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/part
+  uid: group
 name: rtems_partition_ident
 notes: |
   If the partition name is not unique, then the partition identifier will match

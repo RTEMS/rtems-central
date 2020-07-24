@@ -8,7 +8,7 @@ enabled-by: true
 interface-type: appl-config-group
 links:
 - role: requirement-refinement
-  uid: ../../applconfig
+  uid: ../applconfig
 name: Classic API Initialization Task Configuration
 text: ''
 type: interface

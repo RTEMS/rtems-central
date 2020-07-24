@@ -20,7 +20,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/region
+  uid: group
 name: rtems_region_resize_segment
 notes: null
 params:

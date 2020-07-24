@@ -16,7 +16,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/basedefs
+  uid: group
 name: RTEMS_ZERO_LENGTH_ARRAY
 notes: null
 type: interface

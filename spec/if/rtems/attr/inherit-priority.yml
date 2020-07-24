@@ -15,7 +15,7 @@ links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
-  uid: /groups/api/classic/attr
+  uid: group
 name: RTEMS_INHERIT_PRIORITY
 notes: |
   The semaphore instance must be a binary semaphore.
