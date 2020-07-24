@@ -38,6 +38,7 @@ spec:
   cache-directory: cache
   spec-type-root-uid: /spec/root
   paths:
+  - spec-spec
   - spec
   - modules/rtems/spec
 glossary:
