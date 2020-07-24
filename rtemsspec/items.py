@@ -455,7 +455,7 @@ class ItemCache:
     def _load_items_recursive(self, base: str, path: str,
                               cache_dir: str) -> None:
         mid = os.path.abspath(path)
-        mid = mid.replace(os.path.commonprefix([cache_dir, mid]), "")
+        mid = mid.replace(os.path.commonpath([cache_dir, mid]), "").strip("/")
         cache_file = os.path.join(cache_dir, mid, "spec.pickle")
         try:
             mtime = os.path.getmtime(cache_file)
