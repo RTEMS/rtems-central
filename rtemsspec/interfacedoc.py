@@ -46,7 +46,7 @@ def _forward_declaration(item: Item) -> str:
 
 
 def _get_reference(name: str) -> str:
-    return get_reference(get_label(f"{INTERFACE}{name}"), f"{name}()")
+    return get_reference(get_label(f"{INTERFACE} {name}"))
 
 
 def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:

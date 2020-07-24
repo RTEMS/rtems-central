@@ -63,13 +63,12 @@ Introduction
 
 The directives provided by the Group B are:
 
-* :ref:`VeryLongFunction() <InterfaceVeryLongFunction>` - Very long function
-  brief description.
+* :ref:`InterfaceVeryLongFunction` - Very long function brief description.
 
-* :ref:`VeryLongTypeFunction() <InterfaceVeryLongTypeFunction>` - Function
-  brief description with very long return type.
+* :ref:`InterfaceVeryLongTypeFunction` - Function brief description with very
+  long return type.
 
-* :ref:`VoidFunction() <InterfaceVoidFunction>`
+* :ref:`InterfaceVoidFunction`
 """
         assert content == src.read()
 
@@ -121,7 +120,7 @@ DIRECTIVE RETURN VALUES:
     2
         is returned, in case B.
 
-    Sometimes some value.  See :ref:`Function() <InterfaceFunction>`.
+    Sometimes some value.  See :ref:`InterfaceFunction`.
 
 DESCRIPTION:
     VeryLongFunction description.
@@ -177,7 +176,7 @@ Group A brief description.
 
 Group A description. The directives provided by the Group A are:
 
-* :ref:`Function() <InterfaceFunction>` - Function brief description.
+* :ref:`InterfaceFunction` - Function brief description.
 """
         assert content == src.read()
 
@@ -217,8 +216,8 @@ DIRECTIVE PARAMETERS:
         This parameter is parameter 3.
 
 DESCRIPTION:
-    Function description.  References to :ref:`VeryLongFunction()
-    <InterfaceVeryLongFunction>`, Integer, Enum, DEFINE, VERY_LONG_MACRO,
-    Variable, ENUMERATOR_0, Struct, :ref:`a`, and interface.
+    Function description.  References to :ref:`InterfaceVeryLongFunction`,
+    Integer, Enum, DEFINE, VERY_LONG_MACRO, Variable, ENUMERATOR_0, Struct,
+    :ref:`a`, and interface.
 """
         assert content == src.read()
