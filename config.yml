@@ -92,6 +92,9 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/sem/directives.rst
   group: /groups/api/classic/sem
   introduction-target: modules/rtems-docs/c-user/sem/introduction.rst
+- directives-target: modules/rtems-docs/c-user/event/directives.rst
+  group: /groups/api/classic/event
+  introduction-target: modules/rtems-docs/c-user/event/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:
