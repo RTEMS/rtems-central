@@ -90,10 +90,10 @@ interface:
     /if/domains/api: modules/rtems
 interface-documentation:
 - directives-target: modules/rtems-docs/c-user/sem/directives.rst
-  group: /groups/api/classic/sem
+  group: /if/rtems/sem/group
   introduction-target: modules/rtems-docs/c-user/sem/introduction.rst
 - directives-target: modules/rtems-docs/c-user/event/directives.rst
-  group: /groups/api/classic/event
+  group: /if/rtems/event/group
   introduction-target: modules/rtems-docs/c-user/event/introduction.rst
 spec-verification:
   root-type: /spec/root
