@@ -234,8 +234,13 @@ class Item:
     def init_parents(self, item_cache: "ItemCache"):
         """ Initializes the list of links to parents of this items. """
         for data in self._data["links"]:
-            link = Link(item_cache[self.to_abs_uid(data["uid"])], data)
-            self._links_to_parents.append(link)
+            try:
+                link = Link(item_cache[self.to_abs_uid(data["uid"])], data)
+                self._links_to_parents.append(link)
+            except KeyError as err:
+                msg = (f"item '{self.uid}' links "
+                       f"to non-existing item '{data['uid']}'")
+                raise KeyError(msg) from err
 
     def add_link_to_child(self, link: Link):
         """ Adds a link to a child item of this items. """

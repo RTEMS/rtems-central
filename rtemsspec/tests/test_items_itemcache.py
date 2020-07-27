@@ -62,6 +62,15 @@ def test_load(tmpdir):
     assert item_cache_3["/d/c"]["v"] == "x"
 
 
+def test_load_link_error(tmpdir):
+    config = create_item_cache_config_and_copy_spec(tmpdir,
+                                                    "spec-item-cache-2")
+    with pytest.raises(
+            KeyError,
+            match=r"^\"item '/a' links to non-existing item 'nix'\"$"):
+        ItemCache(config)
+
+
 class Mapper(ItemMapper):
     def __init__(self, item):
         super().__init__(item)
