@@ -167,7 +167,8 @@ def test_validation(tmpdir):
 typedef enum {
   ClassicTaskIdentification_Pre_Name_Invalid,
   ClassicTaskIdentification_Pre_Name_Self,
-  ClassicTaskIdentification_Pre_Name_Valid
+  ClassicTaskIdentification_Pre_Name_Valid,
+  ClassicTaskIdentification_Pre_Name_NA
 } ClassicTaskIdentification_Pre_Name;
 
 typedef enum {
@@ -176,12 +177,14 @@ typedef enum {
   ClassicTaskIdentification_Pre_Node_Invalid,
   ClassicTaskIdentification_Pre_Node_SearchAll,
   ClassicTaskIdentification_Pre_Node_SearchOther,
-  ClassicTaskIdentification_Pre_Node_SearchLocal
+  ClassicTaskIdentification_Pre_Node_SearchLocal,
+  ClassicTaskIdentification_Pre_Node_NA
 } ClassicTaskIdentification_Pre_Node;
 
 typedef enum {
   ClassicTaskIdentification_Pre_Id_NullPtr,
-  ClassicTaskIdentification_Pre_Id_Valid
+  ClassicTaskIdentification_Pre_Id_Valid,
+  ClassicTaskIdentification_Pre_Id_NA
 } ClassicTaskIdentification_Pre_Id;
 
 typedef enum {
@@ -189,7 +192,8 @@ typedef enum {
   ClassicTaskIdentification_Post_Status_InvAddr,
   ClassicTaskIdentification_Post_Status_InvName,
   ClassicTaskIdentification_Post_Status_InvNode,
-  ClassicTaskIdentification_Post_Status_InvId
+  ClassicTaskIdentification_Post_Status_InvId,
+  ClassicTaskIdentification_Post_Status_NA
 } ClassicTaskIdentification_Post_Status;
 
 typedef enum {
@@ -197,7 +201,8 @@ typedef enum {
   ClassicTaskIdentification_Post_Id_NullPtr,
   ClassicTaskIdentification_Post_Id_Self,
   ClassicTaskIdentification_Post_Id_LocalTask,
-  ClassicTaskIdentification_Post_Id_RemoteTask
+  ClassicTaskIdentification_Post_Id_RemoteTask,
+  ClassicTaskIdentification_Post_Id_NA
 } ClassicTaskIdentification_Post_Id;
 
 /**
@@ -289,6 +294,9 @@ static void ClassicTaskIdentification_Pre_Name_Prepare(
       ctx->name = rtems_build_name( 'T', 'A', 'S', 'K' );
       break;
     }
+
+    case ClassicTaskIdentification_Pre_Name_NA:
+      break;
   }
 
   /* Epilogue */
@@ -329,6 +337,9 @@ static void ClassicTaskIdentification_Pre_Node_Prepare(
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
       break;
     }
+
+    case ClassicTaskIdentification_Pre_Node_NA:
+      break;
   }
 }
 
@@ -348,6 +359,9 @@ static void ClassicTaskIdentification_Pre_Id_Prepare(
       ctx->id = &ctx->id_value;
       break;
     }
+
+    case ClassicTaskIdentification_Pre_Id_NA:
+      break;
   }
 }
 
@@ -381,6 +395,9 @@ static void ClassicTaskIdentification_Post_Status_Check(
       T_rsc(ctx->status, RTEMS_INVALID_ID);
       break;
     }
+
+    case ClassicTaskIdentification_Post_Status_NA:
+      break;
   }
 }
 
@@ -418,6 +435,9 @@ static void ClassicTaskIdentification_Post_Id_Check(
       T_eq_u32(ctx->id_value, ctx->id_remote_task);
       break;
     }
+
+    case ClassicTaskIdentification_Post_Id_NA:
+      break;
   }
 }
 
@@ -614,6 +634,94 @@ static const uint8_t ClassicTaskIdentification_TransitionMap[][ 2 ] = {
   }
 };
 
+static const struct {
+  uint8_t Pre_Name_NA : 1;
+  uint8_t Pre_Node_NA : 1;
+  uint8_t Pre_Id_NA : 1;
+} ClassicTaskIdentification_TransitionInfo[] = {
+  {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+#if defined(RTEMS_MULTIPROCESSING)
+    0, 0, 0
+#else
+    0, 0, 0
+#endif
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }, {
+#if defined(RTEMS_MULTIPROCESSING)
+    0, 0, 0
+#else
+    0, 0, 0
+#endif
+  }, {
+    0, 0, 0
+  }, {
+    0, 0, 0
+  }
+};
+
 /**
  * @fn void T_case_body_ClassicTaskIdentification( void )
  *
@@ -635,19 +743,37 @@ T_TEST_CASE_FIXTURE(
 
   for (
     ctx->pcs[ 0 ] = ClassicTaskIdentification_Pre_Name_Invalid;
-    ctx->pcs[ 0 ] != ClassicTaskIdentification_Pre_Name_Valid + 1;
+    ctx->pcs[ 0 ] < ClassicTaskIdentification_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
+    if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Name_NA ) {
+      ctx->pcs[ 0 ] = ClassicTaskIdentification_Pre_Name_NA;
+      index += ( ClassicTaskIdentification_Pre_Name_NA - 1 )
+        * ClassicTaskIdentification_Pre_Node_NA
+        * ClassicTaskIdentification_Pre_Id_NA;
+    }
+
     for (
       ctx->pcs[ 1 ] = ClassicTaskIdentification_Pre_Node_Local;
-      ctx->pcs[ 1 ] != ClassicTaskIdentification_Pre_Node_SearchLocal + 1;
+      ctx->pcs[ 1 ] < ClassicTaskIdentification_Pre_Node_NA;
       ++ctx->pcs[ 1 ]
     ) {
+      if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Node_NA ) {
+        ctx->pcs[ 1 ] = ClassicTaskIdentification_Pre_Node_NA;
+        index += ( ClassicTaskIdentification_Pre_Node_NA - 1 )
+          * ClassicTaskIdentification_Pre_Id_NA;
+      }
+
       for (
         ctx->pcs[ 2 ] = ClassicTaskIdentification_Pre_Id_NullPtr;
-        ctx->pcs[ 2 ] != ClassicTaskIdentification_Pre_Id_Valid + 1;
+        ctx->pcs[ 2 ] < ClassicTaskIdentification_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
+        if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Id_NA ) {
+          ctx->pcs[ 2 ] = ClassicTaskIdentification_Pre_Id_NA;
+          index += ( ClassicTaskIdentification_Pre_Id_NA - 1 );
+        }
+
         ClassicTaskIdentification_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
         ClassicTaskIdentification_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
         ClassicTaskIdentification_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
@@ -916,22 +1042,26 @@ extern "C" {
 
 typedef enum {
   Action2_Pre_A_X,
-  Action2_Pre_A_Y
+  Action2_Pre_A_Y,
+  Action2_Pre_A_NA
 } Action2_Pre_A;
 
 typedef enum {
   Action2_Pre_B_X,
-  Action2_Pre_B_Y
+  Action2_Pre_B_Y,
+  Action2_Pre_B_NA
 } Action2_Pre_B;
 
 typedef enum {
   Action2_Post_A_X,
-  Action2_Post_A_Y
+  Action2_Post_A_Y,
+  Action2_Post_A_NA
 } Action2_Post_A;
 
 typedef enum {
   Action2_Post_B_X,
-  Action2_Post_B_Y
+  Action2_Post_B_Y,
+  Action2_Post_B_NA
 } Action2_Post_B;
 
 /* Header code for Action 2 with Action2_Run() */
@@ -1088,6 +1218,9 @@ static void Action2_Pre_A_Prepare( Action2_Context *ctx, Action2_Pre_A state )
       /* Pre A Y */
       break;
     }
+
+    case Action2_Pre_A_NA:
+      break;
   }
 
   /* Pre A epilogue. */
@@ -1107,6 +1240,9 @@ static void Action2_Pre_B_Prepare( Action2_Context *ctx, Action2_Pre_B state )
       /* Pre B Y */
       break;
     }
+
+    case Action2_Pre_B_NA:
+      break;
   }
 
   /* Pre B epilogue. */
@@ -1126,6 +1262,9 @@ static void Action2_Post_A_Check( Action2_Context *ctx, Action2_Post_A state )
       /* Post A Y */
       break;
     }
+
+    case Action2_Post_A_NA:
+      break;
   }
 
   /* Post A epilogue. */
@@ -1145,6 +1284,9 @@ static void Action2_Post_B_Check( Action2_Context *ctx, Action2_Post_B state )
       /* Post B Y */
       break;
     }
+
+    case Action2_Post_B_NA:
+      break;
   }
 
   /* Post B epilogue. */
@@ -1212,14 +1354,29 @@ static const uint8_t Action2_TransitionMap[][ 2 ] = {
     Action2_Post_A_X,
     Action2_Post_B_Y
   }, {
-    Action2_Post_A_X,
-    Action2_Post_B_Y
+    Action2_Post_A_Y,
+    Action2_Post_B_X
   }, {
     Action2_Post_A_X,
     Action2_Post_B_Y
   }, {
-    Action2_Post_A_X,
-    Action2_Post_B_Y
+    Action2_Post_A_Y,
+    Action2_Post_B_X
+  }
+};
+
+static const struct {
+  uint8_t Pre_A_NA : 1;
+  uint8_t Pre_B_NA : 1;
+} Action2_TransitionInfo[] = {
+  {
+    0, 0
+  }, {
+    1, 0
+  }, {
+    0, 0
+  }, {
+    1, 0
   }
 };
 
@@ -1240,14 +1397,25 @@ void Action2_Run( int *a, int b, int *c )
 
   for (
     ctx->pcs[ 0 ] = Action2_Pre_A_X;
-    ctx->pcs[ 0 ] != Action2_Pre_A_Y + 1;
+    ctx->pcs[ 0 ] < Action2_Pre_A_NA;
     ++ctx->pcs[ 0 ]
   ) {
+    if ( Action2_TransitionInfo[ index ].Pre_A_NA ) {
+      ctx->pcs[ 0 ] = Action2_Pre_A_NA;
+      index += ( Action2_Pre_A_NA - 1 )
+        * Action2_Pre_B_NA;
+    }
+
     for (
       ctx->pcs[ 1 ] = Action2_Pre_B_X;
-      ctx->pcs[ 1 ] != Action2_Pre_B_Y + 1;
+      ctx->pcs[ 1 ] < Action2_Pre_B_NA;
       ++ctx->pcs[ 1 ]
     ) {
+      if ( Action2_TransitionInfo[ index ].Pre_B_NA ) {
+        ctx->pcs[ 1 ] = Action2_Pre_B_NA;
+        index += ( Action2_Pre_B_NA - 1 );
+      }
+
       Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
       Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
       /* Action */

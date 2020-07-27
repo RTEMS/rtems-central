@@ -25,6 +25,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import itertools
+import math
 import os
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
@@ -200,14 +201,17 @@ class _TestSuiteItem(_TestItem):
         content.add("/** @} */")
 
 
-class _PostCondition(NamedTuple):
-    """ A set of post conditions with an enabled by expression. """
+class _Transition(NamedTuple):
+    """
+    A transition to a set of post conditions with an enabled by expression.
+    """
     enabled_by: str
-    conditions: Tuple[int, ...]
+    post_conditions: Tuple[int, ...]
+    info: str
 
 
 _DirectiveIndexToEnum = Tuple[Tuple[str, ...], ...]
-_TransitionMap = List[List[_PostCondition]]
+_TransitionMap = List[List[_Transition]]
 
 
 def _directive_state_to_index(
@@ -224,7 +228,8 @@ def _directive_index_to_enum(prefix: str,
         tuple([f"{prefix}_{condition['name']}"] + [
             f"{prefix}_{condition['name']}_{state['name']}"
             for state in condition["states"]
-        ]) for index, condition in enumerate(conditions))
+        ] + [f"{prefix}_{condition['name']}_NA"])
+        for index, condition in enumerate(conditions))
 
 
 def _directive_add_enum(content: CContent,
@@ -353,7 +358,8 @@ class _TestDirectiveItem(_TestItem):
     def _add_transitions(self, condition_index: int, map_index: int,
                          transition: Dict[str,
                                           Any], transition_map: _TransitionMap,
-                         post: Tuple[int, ...]) -> None:
+                         pre_cond_not_applicables: List[str],
+                         post_cond: Tuple[int, ...]) -> None:
         # pylint: disable=too-many-arguments
         if condition_index < self._pre_condition_count:
             condition = self._pre_index_to_condition[condition_index]
@@ -361,22 +367,27 @@ class _TestDirectiveItem(_TestItem):
             map_index *= state_count
             states = transition["pre-conditions"][condition["name"]]
             if isinstance(states, str):
-                assert states == "all"
+                assert states in ["all", "N/A"]
                 for index in range(state_count):
-                    self._add_transitions(condition_index + 1,
-                                          map_index + index, transition,
-                                          transition_map, post)
+                    self._add_transitions(
+                        condition_index + 1, map_index + index, transition,
+                        transition_map,
+                        pre_cond_not_applicables + [str(int(states == "N/A"))],
+                        post_cond)
             else:
                 for state in states:
                     self._add_transitions(
                         condition_index + 1, map_index +
                         self._pre_state_to_index[condition_index][state],
-                        transition, transition_map, post)
+                        transition, transition_map,
+                        pre_cond_not_applicables + ["0"], post_cond)
         else:
             enabled_by = enabled_by_to_exp(transition["enabled-by"],
                                            ExpressionMapper())
             assert enabled_by != "1" or not transition_map[map_index]
-            transition_map[map_index].append(_PostCondition(enabled_by, post))
+            transition_map[map_index].append(
+                _Transition(enabled_by, post_cond,
+                            "    " + ", ".join(pre_cond_not_applicables)))
 
     def _get_transition_map(self) -> _TransitionMap:
         transition_count = 1
@@ -390,7 +401,7 @@ class _TestDirectiveItem(_TestItem):
             post = tuple(self._post_state_to_index[index][
                 transition["post-conditions"][self._post_index_to_name[index]]]
                          for index in range(self._post_condition_count))
-            self._add_transitions(0, 0, transition, transition_map, post)
+            self._add_transitions(0, 0, transition, transition_map, [], post)
         return transition_map
 
     def _post_condition_enumerators(self, conditions: Any) -> str:
@@ -405,30 +416,49 @@ class _TestDirectiveItem(_TestItem):
             f"{self.ident}_TransitionMap[][ {self._post_condition_count} ]"
             " = {", "  {"
         ])
-        elements = []
+        map_elements = []
+        info_elements = []
         for transistions in transition_map:
             assert transistions[0].enabled_by == "1"
             if len(transistions) == 1:
-                elements.append(
+                map_elements.append(
                     self._post_condition_enumerators(
-                        transistions[0].conditions))
+                        transistions[0].post_conditions))
+                info_elements.append(transistions[0].info)
             else:
                 ifelse = "#if "
-                enumerators = []  # type: List[str]
+                map_enumerators = []  # type: List[str]
+                info_enumerators = []  # type: List[str]
                 for variant in transistions[1:]:
-                    enumerators.append(ifelse + variant.enabled_by)
-                    enumerators.append(
-                        self._post_condition_enumerators(variant.conditions))
+                    map_enumerators.append(ifelse + variant.enabled_by)
+                    info_enumerators.append(ifelse + variant.enabled_by)
+                    map_enumerators.append(
+                        self._post_condition_enumerators(
+                            variant.post_conditions))
+                    info_enumerators.append(variant.info)
                     ifelse = "#elif "
-                enumerators.append("#else")
-                enumerators.append(
+                map_enumerators.append("#else")
+                info_enumerators.append("#else")
+                map_enumerators.append(
                     self._post_condition_enumerators(
-                        transistions[0].conditions))
-                enumerators.append("#endif")
-                elements.append("\n".join(enumerators))
-        content.append(["\n  }, {\n".join(elements), "  }", "};"])
+                        transistions[0].post_conditions))
+                info_enumerators.append(transistions[0].info)
+                map_enumerators.append("#endif")
+                info_enumerators.append("#endif")
+                map_elements.append("\n".join(map_enumerators))
+                info_elements.append("\n".join(info_enumerators))
+        content.append(["\n  }, {\n".join(map_elements), "  }", "};"])
+        pre_bits = 2**max(math.ceil(math.log2(self._pre_condition_count)), 3)
+        content.add("static const struct {")
+        with content.indent():
+            for condition in self["pre-conditions"]:
+                content.append(
+                    f"uint{pre_bits}_t Pre_{condition['name']}_NA : 1;")
+        content.add([f"}} {self.ident}_TransitionInfo[] = {{", "  {"])
+        content.append(["\n  }, {\n".join(info_elements), "  }", "};"])
 
     def _add_action(self, content: CContent) -> None:
+        content.add_blank_line()
         for index, enum in enumerate(self._pre_index_to_enum):
             content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")
         content.append(self.substitute_code(self["test-action"]))
@@ -445,8 +475,18 @@ class _TestDirectiveItem(_TestItem):
             var = f"ctx->pcs[ {index} ]"
             begin = self._pre_index_to_enum[index][1]
             end = self._pre_index_to_enum[index][-1]
-            with content.for_loop(f"{var} = {begin}", f"{var} != {end} + 1",
+            with content.for_loop(f"{var} = {begin}", f"{var} < {end}",
                                   f"++{var}"):
+                name = self._item['pre-conditions'][index]["name"]
+                pre_na = f"{self.ident}_TransitionInfo[ index ].Pre_{name}_NA"
+                with content.condition(pre_na):
+                    content.append(f"{var} = {end};")
+                    content.append(f"index += ( {end} - 1 )")
+                    for index_2 in range(index + 1, self._pre_condition_count):
+                        with content.indent():
+                            content.append(
+                                f"* {self._pre_index_to_enum[index_2][-1]}")
+                    content.lines[-1] += ";"
                 self._add_for_loops(content, index + 1)
         else:
             self._add_action(content)
@@ -508,6 +548,9 @@ class _TestDirectiveItem(_TestItem):
                                 self.substitute_code(state["test-code"]))
                             content.append("break;")
                         content.add("}")
+                    content.add(f"case {enum[-1]}:")
+                    with content.indent():
+                        content.append("break;")
                 content.add("}")
                 content.add(self.substitute_code(condition["test-epilogue"]))
 

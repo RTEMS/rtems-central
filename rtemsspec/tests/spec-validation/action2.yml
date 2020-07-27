@@ -138,7 +138,16 @@ transition-map:
     B: Y
   pre-conditions:
     A: all
-    B: all
+    B:
+    - X
+- enabled-by: true
+  post-conditions:
+    A: Y
+    B: X
+  pre-conditions:
+    A: N/A
+    B:
+    - Y
 rationale: null
 references: []
 text: |

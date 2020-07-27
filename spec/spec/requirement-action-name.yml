@@ -10,14 +10,18 @@ spec-example: null
 spec-info:
   str:
     assert:
-    - re: ^[A-Z][a-zA-Z0-9]+$
+      and:
+      - re: ^[A-Z][a-zA-Z0-9]+$
+      - not:
+          eq: NA
     description: |
       It shall be the name of a condition or a state of a condition used to
       define pre-conditions and post-conditions of an action requirement.  It
       shall be formatted in CamelCase.  It should be brief and abbreviated.
       The rationale for this is that the names are used in tables and the
       horizontal space is limited by the page width.  The more conditions you
-      have in an action requirement, the shorter the names should be.
+      have in an action requirement, the shorter the names should be.  The name
+      ``NA`` is reserved and indicates that a condition is not applicable.
 spec-name: Action Requirement Name
 spec-type: requirement-action-name
 type: spec

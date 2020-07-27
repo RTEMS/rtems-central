@@ -15,9 +15,13 @@ spec-info:
     spec-type: requirement-action-name
   str:
     assert:
-      eq: all
+      in:
+      - all
+      - N/A
     description: |
-      The value represents all states of the pre-condition in the transition.
+      The value ``all`` represents all states of the pre-condition in this
+      transition.  The value ``N/A`` marks the pre-condition as not applicable
+      in this transition.
 spec-name: Action Requirement Transition Pre-Condition State Set
 spec-type: requirement-action-transition-pre-states
 type: spec
