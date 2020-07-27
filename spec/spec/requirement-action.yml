@@ -81,6 +81,7 @@ spec-example: |
     test-epilogue: null
     test-prologue: null
   requirement-type: functional
+  skip-reasons: {}
   test-action: |
     /* Call the function of the action */
   test-brief: null
@@ -137,6 +138,9 @@ spec-info:
       pre-conditions:
         description: null
         spec-type: requirement-action-condition-list
+      skip-reasons:
+        description: null
+        spec-type: requirement-action-skip-reasons
       test-action:
         description: |
           It shall be the test action code.

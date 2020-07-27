@@ -83,6 +83,7 @@ pre-conditions:
   test-epilogue: null
   test-prologue: null
 requirement-type: functional
+skip-reasons: {}
 test-action: |
   ctx->status = ( *ctx->action )( ctx->name, ctx->id );
 test-brief: null

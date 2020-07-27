@@ -152,6 +152,7 @@ pre-conditions:
   test-epilogue: null
   test-prologue: null
 requirement-type: functional
+skip-reasons: {}
 test-action: |
   ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
 test-brief: Test rtems_task_ident() brief description.

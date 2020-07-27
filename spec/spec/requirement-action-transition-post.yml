@@ -22,6 +22,16 @@ spec-info:
       key-spec-type: requirement-action-name
       value-spec-type: requirement-action-name
     mandatory-attributes: all
+  str:
+    assert:
+      and:
+      - re: ^[A-Z][a-zA-Z0-9]+$
+      - not:
+          eq: NA
+    description: |
+      It shall be the name of a skip reason.  If a skip reason is given instead
+      of a listing of post-condition states, then this transition is skipped
+      and no test code runs for this transition.
 spec-name: Action Requirement Transition Post-Conditions
 spec-type: requirement-action-transition-post
 type: spec

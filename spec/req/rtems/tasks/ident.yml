@@ -43,6 +43,7 @@ pre-conditions:
   test-epilogue: null
   test-prologue: null
 requirement-type: functional
+skip-reasons: {}
 test-action: |
   if ( ctx->id != NULL ) {
     ctx->status = rtems_task_ident( RTEMS_SELF, 0xdeadbeef, ctx->id );

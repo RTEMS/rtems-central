@@ -635,90 +635,91 @@ static const uint8_t ClassicTaskIdentification_TransitionMap[][ 2 ] = {
 };
 
 static const struct {
+  uint8_t Skip : 1;
   uint8_t Pre_Name_NA : 1;
   uint8_t Pre_Node_NA : 1;
   uint8_t Pre_Id_NA : 1;
 } ClassicTaskIdentification_TransitionInfo[] = {
   {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
-  }, {
-#if defined(RTEMS_MULTIPROCESSING)
-    0, 0, 0
-#else
-    0, 0, 0
-#endif
-  }, {
-    0, 0, 0
-  }, {
-    0, 0, 0
-  }, {
-    0, 0, 0
-  }, {
-    0, 0, 0
-  }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
 #if defined(RTEMS_MULTIPROCESSING)
-    0, 0, 0
+    0, 0, 0, 0
 #else
-    0, 0, 0
+    0, 0, 0, 0
 #endif
   }, {
-    0, 0, 0
+    0, 0, 0, 0
   }, {
-    0, 0, 0
+    0, 0, 0, 0
+  }, {
+    0, 0, 0, 0
+  }, {
+    0, 0, 0, 0
+  }, {
+    0, 0, 0, 0
+  }, {
+#if defined(RTEMS_MULTIPROCESSING)
+    0, 0, 0, 0
+#else
+    0, 0, 0, 0
+#endif
+  }, {
+    0, 0, 0, 0
+  }, {
+    0, 0, 0, 0
   }
 };
 
@@ -772,6 +773,11 @@ T_TEST_CASE_FIXTURE(
         if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Id_NA ) {
           ctx->pcs[ 2 ] = ClassicTaskIdentification_Pre_Id_NA;
           index += ( ClassicTaskIdentification_Pre_Id_NA - 1 );
+        }
+
+        if ( ClassicTaskIdentification_TransitionInfo[ index ].Skip ) {
+          ++index;
+          continue;
         }
 
         ClassicTaskIdentification_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
@@ -1049,6 +1055,7 @@ typedef enum {
 typedef enum {
   Action2_Pre_B_X,
   Action2_Pre_B_Y,
+  Action2_Pre_B_Z,
   Action2_Pre_B_NA
 } Action2_Pre_B;
 
@@ -1193,7 +1200,8 @@ static const char * const Action2_PreDesc_A[] = {
 
 static const char * const Action2_PreDesc_B[] = {
   "X",
-  "Y"
+  "Y",
+  "Z"
 };
 
 static const char * const * const Action2_PreDesc[] = {
@@ -1238,6 +1246,11 @@ static void Action2_Pre_B_Prepare( Action2_Context *ctx, Action2_Pre_B state )
 
     case Action2_Pre_B_Y: {
       /* Pre B Y */
+      break;
+    }
+
+    case Action2_Pre_B_Z: {
+      /* Pre B Z */
       break;
     }
 
@@ -1358,25 +1371,36 @@ static const uint8_t Action2_TransitionMap[][ 2 ] = {
     Action2_Post_B_X
   }, {
     Action2_Post_A_X,
+    Action2_Post_B_X
+  }, {
+    Action2_Post_A_X,
     Action2_Post_B_Y
   }, {
     Action2_Post_A_Y,
     Action2_Post_B_X
+  }, {
+    Action2_Post_A_Y,
+    Action2_Post_B_Y
   }
 };
 
 static const struct {
+  uint8_t Skip : 1;
   uint8_t Pre_A_NA : 1;
   uint8_t Pre_B_NA : 1;
 } Action2_TransitionInfo[] = {
   {
-    0, 0
+    0, 0, 0
   }, {
-    1, 0
+    0, 1, 0
   }, {
-    0, 0
+    0, 0, 0
   }, {
-    1, 0
+    0, 0, 0
+  }, {
+    0, 1, 0
+  }, {
+    1, 0, 0
   }
 };
 
@@ -1414,6 +1438,11 @@ void Action2_Run( int *a, int b, int *c )
       if ( Action2_TransitionInfo[ index ].Pre_B_NA ) {
         ctx->pcs[ 1 ] = Action2_Pre_B_NA;
         index += ( Action2_Pre_B_NA - 1 );
+      }
+
+      if ( Action2_TransitionInfo[ index ].Skip ) {
+        ++index;
+        continue;
       }
 
       Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );

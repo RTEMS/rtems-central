@@ -398,10 +398,20 @@ class _TestDirectiveItem(_TestItem):
         transition_map = [list() for _ in range(transition_count)
                           ]  # type: _TransitionMap
         for transition in self["transition-map"]:
-            post = tuple(self._post_state_to_index[index][
-                transition["post-conditions"][self._post_index_to_name[index]]]
-                         for index in range(self._post_condition_count))
-            self._add_transitions(0, 0, transition, transition_map, [], post)
+            if isinstance(transition["post-conditions"], dict):
+                info = ["0"]
+                post_cond = tuple(
+                    self._post_state_to_index[index][
+                        transition["post-conditions"][
+                            self._post_index_to_name[index]]]
+                    for index in range(self._post_condition_count))
+            else:
+                info = ["1"]
+                post_cond = tuple(
+                    len(self._post_state_to_index[index]) - 1
+                    for index in range(self._post_condition_count))
+            self._add_transitions(0, 0, transition, transition_map, info,
+                                  post_cond)
         return transition_map
 
     def _post_condition_enumerators(self, conditions: Any) -> str:
@@ -448,9 +458,11 @@ class _TestDirectiveItem(_TestItem):
                 map_elements.append("\n".join(map_enumerators))
                 info_elements.append("\n".join(info_enumerators))
         content.append(["\n  }, {\n".join(map_elements), "  }", "};"])
-        pre_bits = 2**max(math.ceil(math.log2(self._pre_condition_count)), 3)
+        pre_bits = 2**max(math.ceil(math.log2(self._pre_condition_count + 1)),
+                          3)
         content.add("static const struct {")
         with content.indent():
+            content.append(f"uint{pre_bits}_t Skip : 1;")
             for condition in self["pre-conditions"]:
                 content.append(
                     f"uint{pre_bits}_t Pre_{condition['name']}_NA : 1;")
@@ -458,6 +470,8 @@ class _TestDirectiveItem(_TestItem):
         content.append(["\n  }, {\n".join(info_elements), "  }", "};"])
 
     def _add_action(self, content: CContent) -> None:
+        with content.condition(f"{self.ident}_TransitionInfo[ index ].Skip"):
+            content.append(["++index;", "continue;"])
         content.add_blank_line()
         for index, enum in enumerate(self._pre_index_to_enum):
             content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")

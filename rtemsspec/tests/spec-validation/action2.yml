@@ -66,11 +66,19 @@ pre-conditions:
       /* Pre B Y */
     text: |
       Pre B Y.
+  - name: Z
+    test-code: |
+      /* Pre B Z */
+    text: |
+      Pre B Z.
   test-epilogue: |
     /* Pre B epilogue. */
   test-prologue: |
     /* Pre B prologue. */
 requirement-type: functional
+skip-reasons:
+  SkipReason: |
+    Skip it due to some reason.
 test-action: |
   /* Action */
 test-brief: |
@@ -148,6 +156,22 @@ transition-map:
     A: N/A
     B:
     - Y
+- enabled-by: true
+  post-conditions:
+    A: X
+    B: X
+  pre-conditions:
+    A:
+    - X
+    B:
+    - Z
+- enabled-by: true
+  post-conditions: SkipReason
+  pre-conditions:
+    A:
+    - Y
+    B:
+    - Z
 rationale: null
 references: []
 text: |
