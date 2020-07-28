@@ -205,7 +205,7 @@ def _document_op_uid(ctx: _AssertContext, negate: bool,
 def _document_op_re(ctx: _AssertContext, negate: bool,
                     assert_info: Any) -> None:
     ctx.paste(f"shall {_negate(negate)}match with "
-              f"the regular expression \"``{assert_info}\"``")
+              f"the regular expression \"``{assert_info}``\"")
 
 
 def _document_op_in(ctx: _AssertContext, negate: bool,

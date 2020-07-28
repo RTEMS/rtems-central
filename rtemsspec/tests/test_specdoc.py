@@ -129,7 +129,7 @@ A value of this type shall be of one of the following variants:
 
     * and, shall be not equal to "``k``",
 
-    * and, shall match with the regular expression "``l"``,
+    * and, shall match with the regular expression "``l``",
 
     * and, shall be true,
 
@@ -171,7 +171,7 @@ A value of this type shall be of one of the following variants:
 
     * or, shall be equal to "``k``",
 
-    * or, shall not match with the regular expression "``l"``,
+    * or, shall not match with the regular expression "``l``",
 
     * or, shall be false,
 
