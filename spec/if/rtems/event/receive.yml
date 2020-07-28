@@ -17,18 +17,18 @@ definition:
 description: |
   This directive can be used to
 
-  * get the pending events of the task, or
+  * get the pending events of the calling task, or
 
   * receive events.
 
-  To *get the pending event set* use the constant ${pending-events:/name} for
-  the ``${.:/params[0]/name}`` parameter.  The pending events are returned to
-  the calling task but the event set of the task is left unaltered.  The
+  To *get the pending events* use the constant ${pending-events:/name} for the
+  ``${.:/params[0]/name}`` parameter.  The pending events are returned to the
+  calling task but the event set of the task is left unaltered.  The
   ``${.:/params[1]/name}`` and ``${.:params[2]/name}`` parameters are ignored
   in this case.  The directive returns immediately and does not block.
 
   To *receive events* you have to define an input event condition and some
-  options.  The option set specified in ``${.:/params[2]/name}`` defines
+  options.  The option set specified in ``${.:/params[1]/name}`` defines
 
   * if the task will wait or poll for the events, and
 
