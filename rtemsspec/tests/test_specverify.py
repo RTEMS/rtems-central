@@ -28,7 +28,8 @@ import logging
 
 from rtemsspec.items import ItemCache
 from rtemsspec.specverify import verify
-from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec, \
+    get_and_clear_log
 
 
 def test_no_root_type(caplog, tmpdir):
@@ -38,9 +39,8 @@ def test_no_root_type(caplog, tmpdir):
     config = {}
     caplog.set_level(logging.INFO)
     verify(config, item_cache)
-    log = "\n".join(
-        [f"{rec.levelname} {rec.message}" for rec in caplog.records])
-    assert log == """ERROR configuration has no root type"""
+    assert get_and_clear_log(
+        caplog) == """ERROR configuration has no root type"""
 
 
 def test_no_root_item(caplog, tmpdir):
@@ -50,9 +50,8 @@ def test_no_root_item(caplog, tmpdir):
     config = {"root-type": "/nix"}
     caplog.set_level(logging.INFO)
     verify(config, item_cache)
-    log = "\n".join(
-        [f"{rec.levelname} {rec.message}" for rec in caplog.records])
-    assert log == """ERROR root type item does not exist in item cache"""
+    assert get_and_clear_log(
+        caplog) == """ERROR root type item does not exist in item cache"""
 
 
 def test_verify(caplog, tmpdir):
@@ -62,9 +61,7 @@ def test_verify(caplog, tmpdir):
     config = {"root-type": "/spec/root"}
     caplog.set_level(logging.INFO)
     verify(config, item_cache)
-    log = "\n".join(
-        [f"{rec.levelname} {rec.message}" for rec in caplog.records])
-    assert log == """INFO type: any-dict
+    assert get_and_clear_log(caplog) == """INFO type: any-dict
 INFO type: bool
 INFO type: c
 INFO type: copyright

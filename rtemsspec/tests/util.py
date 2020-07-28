@@ -51,3 +51,10 @@ def create_item_cache_config_and_copy_spec(
     else:
         config["spec-type-root-uid"] = None
     return config
+
+
+def get_and_clear_log(the_caplog) -> str:
+    log = "\n".join(f"{rec.levelname} {rec.message}"
+                    for rec in the_caplog.records)
+    the_caplog.clear()
+    return log
