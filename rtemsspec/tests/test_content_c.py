@@ -137,7 +137,10 @@ def test_add_includes():
 #endif
 """
     content = CContent()
-    content.add_includes([CInclude("a", "X"), CInclude("b", "X")])
+    content.add_includes(
+        [CInclude("a", "X"),
+         CInclude("b", "X"),
+         CInclude("b", "X")])
     assert str(content) == """#if X
   #include <a>
   #include <b>
