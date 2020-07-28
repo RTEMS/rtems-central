@@ -10,8 +10,12 @@ spec-example: null
 spec-info:
   none: null
   str:
+    assert:
+      not:
+        re: '\n\n'
     description: |
-      It shall be the brief description of the interface.
+      It shall be the brief description of the interface.  It should be a
+      single sentence.
 spec-name: Interface Brief Description
 spec-type: interface-brief
 type: spec
