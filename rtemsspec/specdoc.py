@@ -24,7 +24,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple
+import re
+from typing import Any, Dict, Iterator, List, Optional, Pattern, Set, Tuple
 
 from rtemsspec.sphinxcontent import get_reference, get_label, \
     SphinxContent, SphinxMapper
@@ -316,12 +317,13 @@ class _Documenter:
         return (f"{value} {shall} be "
                 f"{documenter.get_a_section_reference()}.")
 
-    def refinements(self) -> Iterator["_Documenter"]:
+    def refinements(self, ignore: Pattern[Any]) -> Iterator["_Documenter"]:
         """ Yields the refinements of this type. """
-        refinements = set(self._documenter_map[link.item["spec-type"]]
-                          for link in self._item.links_to_children()
-                          if link.role == "spec-refinement")
-        yield from sorted(refinements, key=lambda x: x.section)
+        refinement_set = set(
+            self._documenter_map[child["spec-type"]]
+            for child in self._item.children("spec-refinement")
+            if ignore.search(child["spec-type"]) is None)
+        yield from sorted(refinement_set, key=lambda x: x.section)
 
     def refines(self) -> Iterator[Tuple["_Documenter", str, str]]:
         """ Yields the types refined by type. """
@@ -331,11 +333,11 @@ class _Documenter:
                    if link.role == "spec-refinement"]
         yield from sorted(refines, key=lambda x: x[0].section)
 
-    def hierarchy(self, content: SphinxContent) -> None:
+    def hierarchy(self, content: SphinxContent, ignore) -> None:
         """ Documents the item type hierarchy. """
         with content.list_item(self.get_section_reference()):
-            for refinement in self.refinements():
-                refinement.hierarchy(content)
+            for refinement in self.refinements(ignore):
+                refinement.hierarchy(content, ignore)
 
     def _document_attributes(self, content: SphinxContent,
                              attributes: Any) -> None:
@@ -431,6 +433,7 @@ class _Documenter:
 
     def document(self,
                  content: SphinxContent,
+                 ignore: Pattern[Any],
                  names: Optional[Set[str]] = None) -> None:
         """ Document this type. """
         if self.get_list_element_type():
@@ -453,7 +456,7 @@ class _Documenter:
                                        self._info_map[key])
             content.add_list([
                 refinement.get_section_reference()
-                for refinement in self.refinements()
+                for refinement in self.refinements(ignore)
             ], "This type is refined by the following types:")
             content.add_list(sorted(self.used_by),
                              "This type is used by the following types:")
@@ -464,8 +467,8 @@ class _Documenter:
                     content.add(example)
         if names:
             names.remove(self._name)
-            for refinement in self.refinements():
-                refinement.document(content, names)
+            for refinement in self.refinements(ignore):
+                refinement.document(content, ignore, names)
 
     def _add_used_by(self, type_name: str) -> None:
         if type_name not in _PRIMITIVE_TYPES:
@@ -498,13 +501,6 @@ _DOCUMENT = {
     "none": _Documenter.document_none,
     "str": _Documenter.document_value,
 }
-
-
-def _gather_item_documenters(item: Item, documenter_map: _DocumenterMap,
-                             config: dict) -> None:
-    for link in item.links_to_children():
-        if link.role == "spec-member":
-            _Documenter(link.item, documenter_map, config)
 
 
 def _create_str_documenter(item_cache: ItemCache, name: str, description: str,
@@ -554,7 +550,10 @@ def document(config: dict, item_cache: ItemCache) -> None:
         "The string shall be a valid absolute or relative item UID.",
         documenter_map, config)
     root_documenter = _Documenter(root_item, documenter_map, config)
-    _gather_item_documenters(root_item, documenter_map, config)
+    ignore = re.compile(config["ignore"])
+    for member in root_item.children("spec-member"):
+        if ignore.search(member["spec-type"]) is None:
+            _Documenter(member, documenter_map, config)
     content = SphinxContent()
     content.add_automatically_generated_warning()
     for documenter in documenter_map.values():
@@ -564,12 +563,12 @@ def document(config: dict, item_cache: ItemCache) -> None:
     with content.section(config["section-name"]):
         with content.section(config["hierarchy-subsection-name"]):
             content.add(config["hierarchy-text"])
-            root_documenter.hierarchy(content)
+            root_documenter.hierarchy(content, ignore)
         with content.section(config["item-types-subsection-name"]):
-            root_documenter.document(content, documenter_names)
+            root_documenter.document(content, ignore, documenter_names)
         with content.section(config["value-types-subsection-name"]):
             documenters = [documenter_map[name] for name in documenter_names]
             for documenter in sorted(documenters, key=lambda x: x.section):
-                documenter.document(content)
+                documenter.document(content, ignore)
     content.add_licence_and_copyrights()
     content.write(config["doc-target"])

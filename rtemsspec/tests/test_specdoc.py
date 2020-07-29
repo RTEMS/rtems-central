@@ -45,6 +45,8 @@ def test_document(tmpdir):
         "Specification Item Hierarchy",
         "hierarchy-text":
         "The specification item types have the following hierarchy:",
+        "ignore":
+        "^f$",
         "item-types-subsection-name":
         "Specification Item Types",
         "label-prefix":
