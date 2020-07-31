@@ -159,6 +159,14 @@ def test_add_includes():
   #include <a>
 #endif
 """
+    content = CContent()
+    content.add_includes([CInclude("a", "X"), CInclude("b")])
+    assert str(content) == """#include <b>
+
+#if X
+  #include <a>
+#endif
+"""
 
 
 def test_comment_block():

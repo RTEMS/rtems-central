@@ -477,7 +477,7 @@ def _split_includes(
         includes: List[CInclude]) -> Tuple[Set[str], Dict[str, Set[str]]]:
     includes_unconditional = set()  # type: Set[str]
     includes_enabled_by = {}  # type: Dict[str, Set[str]]
-    for inc in set(includes):
+    for inc in list(dict.fromkeys(includes)):
         if inc.enabled_by and inc.enabled_by != "1":
             try:
                 includes_unconditional.remove(inc.path)
