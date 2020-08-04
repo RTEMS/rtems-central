@@ -70,6 +70,7 @@ test-context:
 - brief: null
   description: null
   member: rtems_id id_local_object
+test-context-support: null
 test-description: null
 test-header: null
 test-includes: []

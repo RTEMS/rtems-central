@@ -190,6 +190,7 @@ test-context:
   description: null
   member: |
     rtems_id id_remote_task
+test-context-support: null
 test-description: Test rtems_task_ident() description.
 test-header: null
 test-includes:

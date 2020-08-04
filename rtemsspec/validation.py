@@ -301,6 +301,7 @@ class _TestDirectiveItem(_TestItem):
         content.add("};")
 
     def _add_context(self, content: CContent, header: Dict[str, Any]) -> None:
+        content.add(self.substitute_code(self["test-context-support"]))
         with content.doxygen_block():
             content.add_brief_description(
                 f"Test context for {self.name} test case.")

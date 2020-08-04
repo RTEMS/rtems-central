@@ -163,6 +163,7 @@ test-context:
 - brief: null
   description: null
   member: rtems_id id_remote_object
+test-context-support: null
 test-description: null
 test-header:
   code: |

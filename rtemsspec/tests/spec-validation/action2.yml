@@ -94,6 +94,8 @@ test-context:
     Context member description.
   member: |
     int member
+test-context-support: |
+  /* Context support code */
 test-description: |
   Test description.
 test-header:

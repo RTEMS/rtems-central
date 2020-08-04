@@ -1159,6 +1159,8 @@ void Action2_Run( int *a, int b, int *c );
  * @{
  */
 
+/* Context support code */
+
 /**
  * @brief Test context for Action 2 test case.
  */

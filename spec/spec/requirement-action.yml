@@ -93,6 +93,7 @@ spec-example: |
   - brief: null
     description: null
     member: option_type option
+  test-context-support: null
   test-description: null
   test-header: null
   test-includes: []
@@ -161,6 +162,12 @@ spec-info:
       test-context:
         description: null
         spec-type: requirement-action-test-context-list
+      test-context-support:
+        description: |
+          If the value is present, then it shall be the test context support
+          code.  The context support code is placed at file scope before the
+          test context definition.
+        spec-type: optional-str
       test-description:
         description: |
           If the value is present, then it shall be the test case description.
