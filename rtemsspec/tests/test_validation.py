@@ -1426,6 +1426,11 @@ static void Action2_Action( Action2_Context *ctx )
   /* Action */
 }
 
+static void Action2_Cleanup( Action2_Context *ctx )
+{
+  /* Cleanup */
+}
+
 static T_fixture_node Action2_Node;
 
 void Action2_Run( int *a, int b, int *c )
@@ -1479,6 +1484,7 @@ void Action2_Run( int *a, int b, int *c )
         ctx,
         Action2_TransitionMap[ index ][ 1 ]
       );
+      Action2_Cleanup( ctx );
       ++index;
     }
   }

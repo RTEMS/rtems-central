@@ -85,6 +85,7 @@ spec-example: |
   test-action: |
     /* Call the function of the action */
   test-brief: null
+  test-cleanup: null
   test-context:
   - brief: null
     description: null
@@ -150,6 +151,12 @@ spec-info:
         description: |
           If the value is present, then it shall be the test case brief
           description.
+        spec-type: optional-str
+      test-cleanup:
+        description: |
+          If the value is present, then it shall be the test cleanup code.  The
+          code is placed in the test action loop body after the test
+          post-condition checks.
         spec-type: optional-str
       test-context:
         description: null

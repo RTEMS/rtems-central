@@ -158,6 +158,7 @@ skip-reasons: {}
 test-action: |
   ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
 test-brief: Test rtems_task_ident() brief description.
+test-cleanup: null
 test-context:
 - brief: |
     Brief context member description.

@@ -495,6 +495,7 @@ class _TestDirectiveItem(_TestItem):
                 f"{enum[0]}_Check(", "  ctx,",
                 f"  {transition_map}[ index ][ {index} ]", ");"
             ])
+        self._add_call(content, "test-cleanup", "Cleanup")
         content.append("++index;")
 
     def _add_for_loops(self, content: CContent, index: int) -> None:
@@ -650,6 +651,7 @@ class _TestDirectiveItem(_TestItem):
         self._add_transition_map(content)
         self._add_function(content, "test-prepare", "Prepare")
         self._add_function(content, "test-action", "Action")
+        self._add_function(content, "test-cleanup", "Cleanup")
         self._add_test_case(content, header)
         content.add("/** @} */")
 

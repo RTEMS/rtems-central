@@ -85,6 +85,8 @@ test-action: |
   /* Action */
 test-brief: |
   Test brief.
+test-cleanup: |
+  /* Cleanup */
 test-context:
 - brief: |
     Context member brief.
