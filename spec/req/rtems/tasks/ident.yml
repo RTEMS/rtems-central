@@ -75,6 +75,7 @@ test-includes: []
 test-local-includes:
 - support-object-ident.h
 test-name: Classic Task Ident
+test-prepare: null
 test-setup:
   brief: null
   code: |

@@ -188,6 +188,7 @@ test-includes: []
 test-local-includes:
 - support-object-ident.h
 test-name: Classic Object Ident
+test-prepare: null
 test-setup: null
 test-stop: null
 test-support: null

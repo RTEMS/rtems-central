@@ -196,6 +196,7 @@ test-includes:
 test-local-includes:
 - x.h
 test-name: Classic Task Identification
+test-prepare: null
 test-setup:
   brief: |
     Setup brief description.

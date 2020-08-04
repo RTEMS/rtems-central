@@ -124,6 +124,8 @@ test-includes:
 test-local-includes:
 - b.h
 test-name: Action 2
+test-prepare: |
+  /* Prepare */
 test-setup:
   brief: |
     Setup brief.

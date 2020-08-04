@@ -471,18 +471,24 @@ class _TestDirectiveItem(_TestItem):
         content.add([f"}} {self.ident}_TransitionInfo[] = {{", "  {"])
         content.append(["\n  }, {\n".join(info_elements), "  }", "};"])
 
-    def _add_action(self, content: CContent) -> None:
-        with content.function("static void", f"{self.ident}_Action",
-                              [f"{self.context} *ctx"]):
-            content.append(self.substitute_code(self["test-action"]))
+    def _add_function(self, content: CContent, key: str, name: str) -> None:
+        if self[key] is not None:
+            with content.function("static void", f"{self.ident}_{name}",
+                                  [f"{self.context} *ctx"]):
+                content.append(self.substitute_code(self[key]))
+
+    def _add_call(self, content: CContent, key: str, name: str) -> None:
+        if self[key] is not None:
+            content.append(f"{self.ident}_{name}( ctx );")
 
     def _add_loop_body(self, content: CContent) -> None:
         with content.condition(f"{self.ident}_TransitionInfo[ index ].Skip"):
             content.append(["++index;", "continue;"])
         content.add_blank_line()
+        self._add_call(content, "test-prepare", "Prepare")
         for index, enum in enumerate(self._pre_index_to_enum):
             content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")
-        content.append(f"{self.ident}_Action( ctx );")
+        self._add_call(content, "test-action", "Action")
         transition_map = f"{self.ident}_TransitionMap"
         for index, enum in enumerate(self._post_index_to_enum):
             content.append([
@@ -642,7 +648,8 @@ class _TestDirectiveItem(_TestItem):
             f"  .initial_context = &{self.ident}_Instance", "};"
         ])
         self._add_transition_map(content)
-        self._add_action(content)
+        self._add_function(content, "test-prepare", "Prepare")
+        self._add_function(content, "test-action", "Action")
         self._add_test_case(content, header)
         content.add("/** @} */")
 

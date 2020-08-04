@@ -97,6 +97,7 @@ spec-example: |
   test-includes: []
   test-local-includes: []
   test-name: RedGreenData
+  test-prepare: null
   test-setup: null
   test-stop: null
   test-support: null
@@ -171,6 +172,12 @@ spec-info:
       test-name:
         description: null
         spec-type: test-name
+      test-prepare:
+        description: |
+          If the value is present, then it shall be the early test preparation
+          code.  The code is placed in the test action loop body before the
+          test pre-condition preparations.
+        spec-type: optional-str
       test-setup:
         description: null
         spec-type: requirement-action-test-fixture

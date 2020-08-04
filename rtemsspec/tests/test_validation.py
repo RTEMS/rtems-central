@@ -1416,6 +1416,11 @@ static const struct {
   }
 };
 
+static void Action2_Prepare( Action2_Context *ctx )
+{
+  /* Prepare */
+}
+
 static void Action2_Action( Action2_Context *ctx )
 {
   /* Action */
@@ -1462,6 +1467,7 @@ void Action2_Run( int *a, int b, int *c )
         continue;
       }
 
+      Action2_Prepare( ctx );
       Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
       Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
       Action2_Action( ctx );
