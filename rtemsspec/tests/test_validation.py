@@ -726,6 +726,13 @@ static const struct {
   }
 };
 
+static void ClassicTaskIdentification_Action(
+  ClassicTaskIdentification_Context *ctx
+)
+{
+  ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
+}
+
 /**
  * @fn void T_case_body_ClassicTaskIdentification( void )
  *
@@ -786,7 +793,7 @@ T_TEST_CASE_FIXTURE(
         ClassicTaskIdentification_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
         ClassicTaskIdentification_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
         ClassicTaskIdentification_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
-        ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
+        ClassicTaskIdentification_Action( ctx );
         ClassicTaskIdentification_Post_Status_Check(
           ctx,
           ClassicTaskIdentification_TransitionMap[ index ][ 0 ]
@@ -1409,6 +1416,11 @@ static const struct {
   }
 };
 
+static void Action2_Action( Action2_Context *ctx )
+{
+  /* Action */
+}
+
 static T_fixture_node Action2_Node;
 
 void Action2_Run( int *a, int b, int *c )
@@ -1452,7 +1464,7 @@ void Action2_Run( int *a, int b, int *c )
 
       Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
       Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
-      /* Action */
+      Action2_Action( ctx );
       Action2_Post_A_Check(
         ctx,
         Action2_TransitionMap[ index ][ 0 ]

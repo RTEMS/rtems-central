@@ -472,12 +472,17 @@ class _TestDirectiveItem(_TestItem):
         content.append(["\n  }, {\n".join(info_elements), "  }", "};"])
 
     def _add_action(self, content: CContent) -> None:
+        with content.function("static void", f"{self.ident}_Action",
+                              [f"{self.context} *ctx"]):
+            content.append(self.substitute_code(self["test-action"]))
+
+    def _add_loop_body(self, content: CContent) -> None:
         with content.condition(f"{self.ident}_TransitionInfo[ index ].Skip"):
             content.append(["++index;", "continue;"])
         content.add_blank_line()
         for index, enum in enumerate(self._pre_index_to_enum):
             content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")
-        content.append(self.substitute_code(self["test-action"]))
+        content.append(f"{self.ident}_Action( ctx );")
         transition_map = f"{self.ident}_TransitionMap"
         for index, enum in enumerate(self._post_index_to_enum):
             content.append([
@@ -505,7 +510,7 @@ class _TestDirectiveItem(_TestItem):
                     content.lines[-1] += ";"
                 self._add_for_loops(content, index + 1)
         else:
-            self._add_action(content)
+            self._add_loop_body(content)
 
     def _add_test_case(self, content: CContent, header: Dict[str,
                                                              Any]) -> None:
@@ -637,6 +642,7 @@ class _TestDirectiveItem(_TestItem):
             f"  .initial_context = &{self.ident}_Instance", "};"
         ])
         self._add_transition_map(content)
+        self._add_action(content)
         self._add_test_case(content, header)
         content.add("/** @} */")
 
