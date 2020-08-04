@@ -246,7 +246,8 @@ static ClassicTaskIdentification_Context
 static const char * const ClassicTaskIdentification_PreDesc_Name[] = {
   "Invalid",
   "Self",
-  "Valid"
+  "Valid",
+  "NA"
 };
 
 static const char * const ClassicTaskIdentification_PreDesc_Node[] = {
@@ -255,12 +256,14 @@ static const char * const ClassicTaskIdentification_PreDesc_Node[] = {
   "Invalid",
   "SearchAll",
   "SearchOther",
-  "SearchLocal"
+  "SearchLocal",
+  "NA"
 };
 
 static const char * const ClassicTaskIdentification_PreDesc_Id[] = {
   "NullPtr",
-  "Valid"
+  "Valid",
+  "NA"
 };
 
 static const char * const * const ClassicTaskIdentification_PreDesc[] = {
@@ -1195,13 +1198,15 @@ static Action2_Context
 
 static const char * const Action2_PreDesc_A[] = {
   "X",
-  "Y"
+  "Y",
+  "NA"
 };
 
 static const char * const Action2_PreDesc_B[] = {
   "X",
   "Y",
-  "Z"
+  "Z",
+  "NA"
 };
 
 static const char * const * const Action2_PreDesc[] = {

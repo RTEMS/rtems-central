@@ -286,8 +286,10 @@ class _TestDirectiveItem(_TestItem):
             content.add("static const char * const "
                         f"{self.ident}_PreDesc_{condition['name']}[] = {{")
             with content.indent():
-                content.add(",\n".join(f"\"{state['name']}\""
-                                       for state in condition["states"]))
+                content.add(",\n".join(
+                    itertools.chain((f"\"{state['name']}\""
+                                     for state in condition["states"]),
+                                    ["\"NA\""])))
             content.add("};")
         content.add("static const char * const * const "
                     f"{self.ident}_PreDesc[] = {{")
