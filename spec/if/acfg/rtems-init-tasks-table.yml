@@ -16,7 +16,7 @@ notes: |
   The application shall define exactly one of the following configuration
   options
 
-  * `CONFIGURE_RTEMS_INIT_TASKS_TABLE`,
+  * ``CONFIGURE_RTEMS_INIT_TASKS_TABLE``,
 
   * ${posix-init-thread-table:/name}, or
 
