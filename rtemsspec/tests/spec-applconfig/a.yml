@@ -16,6 +16,10 @@ notes: |
   * ${func:/name}
 
   * ${td:/name}
+
+  * ${define:/name}
+
+  * ${unspec-define:/name}
 appl-config-option-type: feature
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)

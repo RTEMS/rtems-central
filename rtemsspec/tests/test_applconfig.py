@@ -82,9 +82,13 @@ NOTES:
 
     * :ref:`Terminate`
 
-    * ``func()``
+    * :c:func:`func`
 
-    * ``td``
+    * :c:type:`td`
+
+    * :c:macro:`DEFINE`
+
+    * :c:macro:`UNSPEC_DEFINE`
 
 .. index:: b
 
@@ -424,6 +428,10 @@ NOTES:
  * * func()
  *
  * * ::td
+ *
+ * * #DEFINE
+ *
+ * * #UNSPEC_DEFINE
  * @endparblock
  */
 #define a

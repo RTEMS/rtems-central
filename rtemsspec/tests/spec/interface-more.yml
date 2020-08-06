@@ -67,6 +67,18 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
+  spec-value: unspecified-define
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-function
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-type
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
   spec-value: variable
   uid: interface
 spec-description: null

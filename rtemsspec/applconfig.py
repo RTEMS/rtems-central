@@ -350,12 +350,16 @@ def _get_value_sphinx_reference(ctx: ItemGetValueContext) -> Any:
     return _SPHINX_DOC_REFS[ctx.key]
 
 
+def _get_value_sphinx_define(ctx: ItemGetValueContext) -> Any:
+    return f":c:macro:`{ctx.value[ctx.key]}`"
+
+
 def _get_value_sphinx_function(ctx: ItemGetValueContext) -> Any:
-    return f"``{ctx.value[ctx.key]}()``"
+    return f":c:func:`{ctx.value[ctx.key]}`"
 
 
-def _get_value_sphinx_code(ctx: ItemGetValueContext) -> Any:
-    return f"``{ctx.value[ctx.key]}``"
+def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
+    return f":c:type:`{ctx.value[ctx.key]}`"
 
 
 def _add_sphinx_get_values(mapper: ItemMapper) -> None:
@@ -365,12 +369,19 @@ def _add_sphinx_get_values(mapper: ItemMapper) -> None:
             mapper.add_get_value(doc_ref, _get_value_none)
             mapper.add_get_value(f"{doc_ref}/{key}",
                                  _get_value_sphinx_reference)
+    mapper.add_get_value("interface/define:/name", _get_value_sphinx_define)
     mapper.add_get_value("interface/function:/name",
                          _get_value_sphinx_function)
     mapper.add_get_value("interface/macro:/name", _get_value_sphinx_function)
-    mapper.add_get_value("interface/struct:/name", _get_value_sphinx_code)
-    mapper.add_get_value("interface/typedef:/name", _get_value_sphinx_code)
-    mapper.add_get_value("interface/union:/name", _get_value_sphinx_code)
+    mapper.add_get_value("interface/struct:/name", _get_value_sphinx_type)
+    mapper.add_get_value("interface/typedef:/name", _get_value_sphinx_type)
+    mapper.add_get_value("interface/union:/name", _get_value_sphinx_type)
+    mapper.add_get_value("interface/unspecified-define:/name",
+                         _get_value_sphinx_define)
+    mapper.add_get_value("interface/unspecified-function:/name",
+                         _get_value_sphinx_function)
+    mapper.add_get_value("interface/unspecified-type:/name",
+                         _get_value_sphinx_type)
 
 
 def _c_user_ref(ref: str, name: str) -> str:
@@ -446,12 +457,18 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
                                  _get_value_doxygen_reference)
             name = f"interface/appl-config-option/{opt}:/name"
             mapper.add_get_value(name, get_value_hash)
+    mapper.add_get_value("interface/define:/name", get_value_hash)
     mapper.add_get_value("interface/function:/name",
                          get_value_doxygen_function)
     mapper.add_get_value("interface/macro:/name", get_value_doxygen_function)
     mapper.add_get_value("interface/struct:/name", get_value_double_colon)
     mapper.add_get_value("interface/typedef:/name", get_value_double_colon)
     mapper.add_get_value("interface/union:/name", get_value_double_colon)
+    mapper.add_get_value("interface/unspecified-define:/name", get_value_hash)
+    mapper.add_get_value("interface/unspecified-function:/name",
+                         get_value_doxygen_function)
+    mapper.add_get_value("interface/unspecified-type:/name",
+                         get_value_double_colon)
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
