@@ -7,5 +7,5 @@ links:
 - role: interface-placement
   uid: stdint
 name: int32_t
-reference: null
+reference: https://en.cppreference.com/w/c/types/integer
 type: interface
