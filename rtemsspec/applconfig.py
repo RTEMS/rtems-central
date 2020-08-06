@@ -362,6 +362,22 @@ def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
     return f":c:type:`{ctx.value[ctx.key]}`"
 
 
+def _get_value_sphinx_url(ctx: ItemGetValueContext) -> Any:
+    return f"`{ctx.value[ctx.key]} <{ctx.item['reference']}>`_"
+
+
+def _get_value_sphinx_unspecified_define(ctx: ItemGetValueContext) -> Any:
+    if ctx.item["reference"]:
+        return _get_value_sphinx_url(ctx)
+    return _get_value_sphinx_define(ctx)
+
+
+def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
+    if ctx.item["reference"]:
+        return _get_value_sphinx_url(ctx)
+    return _get_value_sphinx_type(ctx)
+
+
 def _add_sphinx_get_values(mapper: ItemMapper) -> None:
     for key in _SPHINX_DOC_REFS:
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
@@ -377,11 +393,11 @@ def _add_sphinx_get_values(mapper: ItemMapper) -> None:
     mapper.add_get_value("interface/typedef:/name", _get_value_sphinx_type)
     mapper.add_get_value("interface/union:/name", _get_value_sphinx_type)
     mapper.add_get_value("interface/unspecified-define:/name",
-                         _get_value_sphinx_define)
+                         _get_value_sphinx_unspecified_define)
     mapper.add_get_value("interface/unspecified-function:/name",
                          _get_value_sphinx_function)
     mapper.add_get_value("interface/unspecified-type:/name",
-                         _get_value_sphinx_type)
+                         _get_value_sphinx_unspecified_type)
 
 
 def _c_user_ref(ref: str, name: str) -> str:
@@ -448,6 +464,22 @@ def _get_value_doxygen_reference(ctx: ItemGetValueContext) -> Any:
     return _DOXYGEN_DOC_REFS[ctx.key]
 
 
+def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Any:
+    return f"<a href=\"{ctx.item['reference']}\">{ctx.value[ctx.key]}</a>"
+
+
+def _get_value_doxygen_unspecfied_define(ctx: ItemGetValueContext) -> Any:
+    if ctx.item["reference"]:
+        return _get_value_doxygen_url(ctx)
+    return get_value_hash(ctx)
+
+
+def _get_value_doxygen_unspecfied_type(ctx: ItemGetValueContext) -> Any:
+    if ctx.item["reference"]:
+        return _get_value_doxygen_url(ctx)
+    return get_value_double_colon(ctx)
+
+
 def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     for key in _DOXYGEN_DOC_REFS:
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
@@ -464,11 +496,12 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     mapper.add_get_value("interface/struct:/name", get_value_double_colon)
     mapper.add_get_value("interface/typedef:/name", get_value_double_colon)
     mapper.add_get_value("interface/union:/name", get_value_double_colon)
-    mapper.add_get_value("interface/unspecified-define:/name", get_value_hash)
+    mapper.add_get_value("interface/unspecified-define:/name",
+                         _get_value_doxygen_unspecfied_define)
     mapper.add_get_value("interface/unspecified-function:/name",
                          get_value_doxygen_function)
     mapper.add_get_value("interface/unspecified-type:/name",
-                         get_value_double_colon)
+                         _get_value_doxygen_unspecfied_type)
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:

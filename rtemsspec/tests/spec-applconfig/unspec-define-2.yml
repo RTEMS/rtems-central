@@ -4,6 +4,6 @@ copyrights:
 enabled-by: true
 interface-type: unspecified-define
 links: []
-name: UNSPEC_DEFINE
-reference: null
+name: UNSPEC_DEFINE_2
+reference: https://foo
 type: interface

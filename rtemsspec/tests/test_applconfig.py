@@ -90,6 +90,12 @@ NOTES:
 
     * :c:macro:`UNSPEC_DEFINE`
 
+    * `UNSPEC_DEFINE_2 <https://foo>`_
+
+    * :c:type:`unspec_type`
+
+    * `unspec_type_2 <https://bar>`_
+
 .. index:: b
 
 .. _b:
@@ -432,6 +438,12 @@ NOTES:
  * * #DEFINE
  *
  * * #UNSPEC_DEFINE
+ *
+ * * <a href="https://foo">UNSPEC_DEFINE_2</a>
+ *
+ * * ::unspec_type
+ *
+ * * <a href="https://bar">unspec_type_2</a>
  * @endparblock
  */
 #define a
