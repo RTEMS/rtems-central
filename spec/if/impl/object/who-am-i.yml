@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: OBJECTS_WHO_AM_I
+reference: null
 type: interface

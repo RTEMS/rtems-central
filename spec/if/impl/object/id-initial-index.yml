@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: OBJECTS_ID_INITIAL_INDEX
+reference: null
 type: interface

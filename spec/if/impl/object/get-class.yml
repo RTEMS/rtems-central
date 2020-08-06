@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Objects_Get_class
+reference: null
 type: interface

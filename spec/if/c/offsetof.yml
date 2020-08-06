@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stddef
 name: offsetof
+reference: null
 type: interface

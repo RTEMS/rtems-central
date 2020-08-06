@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_MAXIMUM_PROCESSORS
+reference: null
 type: interface

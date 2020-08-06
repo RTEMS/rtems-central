@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Watchdog_Nanoseconds_per_tick
+reference: null
 type: interface

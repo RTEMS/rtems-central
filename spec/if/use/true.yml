@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: 'TRUE'
+reference: null
 type: interface

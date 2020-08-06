@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stdint
 name: SIZE_MAX
+reference: null
 type: interface

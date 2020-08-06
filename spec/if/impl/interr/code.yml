@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: Internal_errors_t
+reference: null
 type: interface

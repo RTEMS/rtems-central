@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Watchdog_Ticks_since_boot
+reference: null
 type: interface

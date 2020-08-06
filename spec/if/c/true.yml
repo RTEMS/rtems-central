@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stdbool
 name: 'true'
+reference: null
 type: interface

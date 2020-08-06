@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: sys-stat
 name: readdir
+reference: null
 type: interface

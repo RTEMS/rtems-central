@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stdint
 name: UINT32_MAX
+reference: null
 type: interface

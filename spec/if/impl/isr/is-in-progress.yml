@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _ISR_Is_in_progress
+reference: null
 type: interface

@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: sys-stat
 name: link
+reference: null
 type: interface

@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: __STDC_VERSION__
+reference: null
 type: interface

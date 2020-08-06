@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header-2
 name: _SMP_lock_Release
+reference: null
 type: interface

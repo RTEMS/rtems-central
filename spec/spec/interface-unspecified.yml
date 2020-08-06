@@ -30,6 +30,11 @@ spec-info:
         description: |
           It shall be the name of the unspecified interface.
         spec-type: str
+      reference:
+        description: |
+          If the value is present, then it shall be an URL to the standard or
+          specification of the interface.
+        spec-type: optional-str
     description: |
       This set of attributes specifies an unspecified interface.
     mandatory-attributes: all

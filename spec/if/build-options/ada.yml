@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: __RTEMS_ADA__
+reference: null
 type: interface

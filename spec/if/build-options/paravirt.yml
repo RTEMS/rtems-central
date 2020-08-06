@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: RTEMS_PARAVIRT
+reference: null
 type: interface

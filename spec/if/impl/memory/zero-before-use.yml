@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Memory_Zero_before_use
+reference: null
 type: interface

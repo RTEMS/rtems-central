@@ -5,4 +5,5 @@ enabled-by: true
 interface-type: unspecified-function
 links: []
 name: rtems_putc
+reference: null
 type: interface

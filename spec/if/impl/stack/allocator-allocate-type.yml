@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: Stack_Allocator_allocate
+reference: null
 type: interface

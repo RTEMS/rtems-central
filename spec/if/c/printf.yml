@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stdio
 name: printf
+reference: null
 type: interface

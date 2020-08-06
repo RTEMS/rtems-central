@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: errno-header
 name: errno
+reference: null
 type: interface

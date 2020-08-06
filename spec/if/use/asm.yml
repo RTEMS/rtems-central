@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: ASM
+reference: null
 type: interface

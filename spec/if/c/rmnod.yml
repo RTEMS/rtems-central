@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: sys-stat
 name: rmnod
+reference: null
 type: interface

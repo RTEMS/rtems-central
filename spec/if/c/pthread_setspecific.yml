@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: pthread
 name: pthread_setspecific
+reference: null
 type: interface

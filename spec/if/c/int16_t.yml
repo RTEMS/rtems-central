@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stdint
 name: int16_t
+reference: null
 type: interface

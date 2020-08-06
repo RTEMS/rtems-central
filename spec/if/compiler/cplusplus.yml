@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: __cplusplus
+reference: null
 type: interface

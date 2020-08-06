@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: sys-cpuset
 name: cpu_set_t
+reference: null
 type: interface

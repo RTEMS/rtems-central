@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stdlib
 name: malloc
+reference: null
 type: interface

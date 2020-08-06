@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Stack_Allocator_avoids_workspace
+reference: null
 type: interface

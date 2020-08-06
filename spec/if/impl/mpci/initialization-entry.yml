@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: MPCI_initialization_entry
+reference: null
 type: interface

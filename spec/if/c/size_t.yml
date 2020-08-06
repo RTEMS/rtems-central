@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: stddef
 name: size_t
+reference: null
 type: interface

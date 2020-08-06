@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: container
 name: RTEMS_SMP
+reference: null
 type: interface

@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_Interrupt_frame
+reference: null
 type: interface

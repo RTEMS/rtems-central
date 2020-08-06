@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: sys-impl-timespec
 name: struct timespec
+reference: null
 type: interface

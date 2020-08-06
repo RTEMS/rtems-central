@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: ISR_Vector_number
+reference: null
 type: interface

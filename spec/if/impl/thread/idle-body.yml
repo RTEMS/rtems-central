@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Thread_Idle_body
+reference: null
 type: interface

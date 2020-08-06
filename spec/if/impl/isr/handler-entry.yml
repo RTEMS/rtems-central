@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: ISR_Handler_entry
+reference: null
 type: interface

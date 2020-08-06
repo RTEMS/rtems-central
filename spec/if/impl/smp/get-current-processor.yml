@@ -7,4 +7,5 @@ links:
 - role: interface-placement
   uid: header
 name: _SMP_Get_current_processor
+reference: null
 type: interface
