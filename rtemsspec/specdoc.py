@@ -54,7 +54,7 @@ _MANDATORY_ATTRIBUTES = {
     "Exactly one of the explicit attributes shall be specified.",
     "none":
     "None of the explicit attributes is mandatory, "
-    "they are all are optional.",
+    "they are all optional.",
 }
 
 _SPEC_TYPE_PREFIX = "SpecType"
