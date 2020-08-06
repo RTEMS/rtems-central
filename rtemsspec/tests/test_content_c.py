@@ -60,6 +60,10 @@ ghi
 @code
 @endcode
 """
+    content = CContent()
+    content.doxyfy(":file:`abc`")
+    assert str(content) == """``abc``
+"""
 
 
 def test_add_have_config():

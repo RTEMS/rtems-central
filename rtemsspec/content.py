@@ -480,6 +480,7 @@ def _align_params(params: List[str]) -> List[str]:
 
 
 _NOT_ALPHANUM = re.compile(r"[^a-zA-Z0-9_]")
+_SPHINX_FILE_TO_DOXYGEN = re.compile(r":file:`([^`]+)`")
 
 
 class CContent(Content):
@@ -508,6 +509,8 @@ class CContent(Content):
         blocks = collections.deque(text.split("\n\n"))
         while blocks:
             block = blocks.popleft()
+            block = _SPHINX_FILE_TO_DOXYGEN.sub(
+                lambda match: f"``{match.group(1)}``", block)
             if block.startswith(".. code-block"):
                 self.add("@code")
                 self.gap = False
