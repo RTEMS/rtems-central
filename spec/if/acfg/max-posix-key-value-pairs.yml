@@ -28,7 +28,7 @@ notes: |
   This object class can be configured in unlimited allocation mode, see
   ${.:/document-reference/config-unlimited-objects}.
 
-  A key value pair is created by ``pthread_setspecific()`` if the value
+  A key value pair is created by ${../c/pthread_setspecific:/name} if the value
   is not ${../c/null:/name}, otherwise it is deleted.
 text: ''
 type: interface

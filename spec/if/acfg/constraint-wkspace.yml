@@ -8,5 +8,5 @@ scope: user
 text: |
   The value of this configuration option shall be small enough so that the
   RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>`` does
-  not overflow an integer of type ``uintptr_t``.
+  not overflow an integer of type ${../c/uintptr_t:/name}.
 type: constraint

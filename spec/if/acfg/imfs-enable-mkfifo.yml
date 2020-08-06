@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default: |
   If this configuration option is undefined, then the root IMFS does not
-  support making FIFOs (no support for ``mkfifo()``).
+  support making FIFOs (no support for ${../c/mkfifo:/name}).
 description: |
   In case this configuration option is defined, then the root IMFS supports
   making FIFOs.

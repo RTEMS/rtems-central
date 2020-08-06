@@ -7,7 +7,7 @@ default: |
   removing files.
 description: |
   In case this configuration option is defined, then the root IMFS does not
-  support removing files (no support for ``rmnod()``).
+  support removing files (no support for ${../c/rmnod:/name}).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

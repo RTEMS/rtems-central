@@ -7,5 +7,5 @@ rationale: null
 scope: user
 text: |
   The value of this configuration option shall be aligned according to
-  ``CPU_INTERRUPT_STACK_ALIGNMENT``.
+  ${../impl/cpu/interrupt-stack-alignment:/name}.
 type: constraint

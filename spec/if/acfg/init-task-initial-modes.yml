@@ -7,8 +7,8 @@ constraints:
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  In SMP  configurations, the default value is ``RTEMS_DEFAULT_MODES``,
-  otherwise the default value is ``RTEMS_NO_PREEMPT``.
+  In SMP  configurations, the default value is ${../rtems/modes/default:/name}
+  otherwise the default value is ${../rtems/modes/no-preempt:/name}.
 description: |
   The value of this configuration option defines the initial execution mode of
   the Classic API initialization task.

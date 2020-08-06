@@ -18,7 +18,7 @@ links:
 name: CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 notes: |
   Filesystems shall be initialized to support file descriptor based device
-  drivers and basic input/output functions such as ``printf()``.
+  drivers and basic input/output functions such as ${../c/printf:/name}.
   Filesystems can be disabled to reduce the memory footprint of an application.
 text: ''
 type: interface

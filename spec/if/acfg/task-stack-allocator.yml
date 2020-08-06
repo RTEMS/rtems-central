@@ -26,7 +26,7 @@ notes: |
 
   * ${task-stack-allocator-init:/name}
 
-  * `CONFIGURE_TASK_STACK_ALLOCATOR`
+  * ``CONFIGURE_TASK_STACK_ALLOCATOR``
 
   * ${task-stack-deallocator:/name}
 text: ''

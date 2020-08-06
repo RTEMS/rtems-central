@@ -1,13 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 constraints:
-  max: '``UINT32_MAX``'
+  max: ${../c/uint32_max:/name}
   min: 0
   texts:
   - |
     The value of this configuration option shall be small enough so that the
     MPCI receive server stack area calculation carried out by
-    ``<rtems/confdefs.h>`` does not overflow an integer of type ``size_t``.
+    ``<rtems/confdefs.h>`` does not overflow an integer of type
+    ${../c/size_t:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: 0

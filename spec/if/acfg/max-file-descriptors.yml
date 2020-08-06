@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 constraints:
-  max: '``SIZE_MAX``'
+  max: ${../c/size_max:/name}
   min: 0
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -21,6 +21,6 @@ links:
 name: CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
 notes: |
   The default value of three file descriptors allows RTEMS to support standard
-  input, output, and error I/O streams on ``/dev/console``.
+  input, output, and error I/O streams on :file:`/dev/console`.
 text: ''
 type: interface

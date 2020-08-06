@@ -27,7 +27,7 @@ notes: |
   ${max-posix-message-queues:/name} define only how many message
   queues can be created by the application.  The memory for the message
   buffers is configured by this option.  For each message queue you have to
-  reserve some memory for the message buffers.  The size dependes on the
+  reserve some memory for the message buffers.  The size depends on the
   maximum number of pending messages and the maximum size of the messages of
   a message queue.  Use the ``CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()`` macro
   to specify the message buffer memory for each message queue and sum them up
@@ -48,7 +48,7 @@ notes: |
   RTEMS Workspace size.
 
   The following example illustrates how the
-  `CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()` help macro can be used to assist in
+  ``CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE()`` help macro can be used to assist in
   calculating the message buffer memory required.  In this example, there are
   two message queues used in this application.  The first message queue has a
   maximum of 24 pending messages with the message structure defined by the

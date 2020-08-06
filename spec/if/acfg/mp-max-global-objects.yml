@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 constraints:
-  max: '``UINT32_MAX``'
+  max: ${../c/uint32_max:/name}
   min: 0
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -18,7 +18,7 @@ links:
 name: CONFIGURE_MP_MAXIMUM_GLOBAL_OBJECTS
 notes: |
   This value corresponds to the total number of objects which can be created
-  with the ``RTEMS_GLOBAL`` attribute.
+  with the ${../rtems/attr/global:/name} attribute.
 
   This configuration option is only evaluated if
   ${mp-appl:/name} is defined.

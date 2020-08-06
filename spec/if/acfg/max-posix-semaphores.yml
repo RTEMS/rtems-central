@@ -26,8 +26,9 @@ notes: |
   This object class can be configured in unlimited allocation mode, see
   ${.:/document-reference/config-unlimited-objects}.
 
-  Named semaphores are created with ``sem_open()``.  Semaphores initialized
-  with ``sem_init()`` are not affected by this configuration option since the
-  storage space for these semaphores is user-provided.
+  Named semaphores are created with ${../c/sem_open:/name}.  Semaphores
+  initialized with ${../c/sem_init:/name} are not affected by this
+  configuration option since the storage space for these semaphores is
+  user-provided.
 text: ''
 type: interface

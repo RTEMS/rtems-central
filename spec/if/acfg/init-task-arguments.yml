@@ -4,7 +4,7 @@ constraints:
   texts:
   - |
     The value of this configuration option shall be a valid integer of type
-    ``rtems_task_argument``.
+    ${../rtems/tasks/argument:/name}.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 0

@@ -28,6 +28,6 @@ notes: |
 
   * ${task-stack-allocator:/name}
 
-  * `CONFIGURE_TASK_STACK_DEALLOCATOR`
+  * ``CONFIGURE_TASK_STACK_DEALLOCATOR``
 text: ''
 type: interface

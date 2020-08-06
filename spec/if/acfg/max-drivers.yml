@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 constraints:
-  max: '``SIZE_MAX``'
+  max: ${../c/size_max:/name}
   texts:
   - |
     It shall be greater than or equal than the number of statically configured
@@ -9,9 +9,43 @@ constraints:
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  This is computed by default, and is set to the number of device drivers
-  configured using the ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER``
-  configuration options.
+  This is computed by default, and is set to the number of statically
+  configured device drivers configured using the following configuration
+  options:
+
+  * ${appl-extra-drivers:/name}
+
+  * ${appl-needs-ata-driver:/name}
+
+  * ${appl-needs-clock-driver:/name}
+
+  * ${appl-needs-console-driver:/name}
+
+  * ${appl-needs-framebuffer-driver:/name}
+
+  * ${appl-needs-ide-driver:/name}
+
+  * ${appl-needs-libblock:/name}
+
+  * ${appl-needs-null-driver:/name}
+
+  * ${appl-needs-rtc-driver:/name}
+
+  * ${appl-needs-simple-console-driver:/name}
+
+  * ${appl-needs-simple-task-console-driver:/name}
+
+  * ${appl-needs-stub-driver:/name}
+
+  * ${appl-needs-timer-driver:/name}
+
+  * ${appl-needs-watchdog-driver:/name}
+
+  * ${appl-needs-zero-driver:/name}
+
+  * ${appl-prerequisite-drivers:/name}
+
+  * ${bsp-prerequisite-drivers:/name}
 description: |
   The value of this configuration option defines the number of device drivers.
 enabled-by: true
@@ -24,10 +58,8 @@ links:
   uid: constraint-memsz
 name: CONFIGURE_MAXIMUM_DRIVERS
 notes: |
-  If the application will dynamically install device drivers, then this
-  configuration parameter shall be larger than the number of statically
-  configured device drivers. Drivers configured using the
-  ``CONFIGURE_APPLICATIONS_NEEDS_XXX_DRIVER`` configuration options are
-  statically installed.
+  If the application will dynamically install device drivers, then the
+  configuration option value shall be larger than the number of statically
+  configured device drivers.
 text: ''
 type: interface

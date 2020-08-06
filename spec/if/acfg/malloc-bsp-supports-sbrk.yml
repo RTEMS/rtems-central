@@ -10,9 +10,9 @@ description: |
   * and ${disable-bsp-settings:/name} is undefined,
 
   then not all memory is made available to the C Program Heap immediately at
-  system initialization time.  When ``malloc()`` or other standard memory
-  allocation functions are unable to allocate memory, they will call the BSP
-  supplied ``sbrk()`` function to obtain more memory.
+  system initialization time.  When ${../c/malloc:/name} or other standard
+  memory allocation functions are unable to allocate memory, they will call the
+  BSP supplied ${../c/sbrk:/name} function to obtain more memory.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

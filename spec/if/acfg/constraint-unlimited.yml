@@ -7,8 +7,7 @@ rationale: null
 scope: user
 text: |
   The value of this configuration option may be defined through
-  ${../rtems/config/resource-unlimited:/name} the enable unlimited objects for
-  this object class, if the value passed to
-  ${../rtems/config/resource-unlimited:/name} satisfies all other constraints
-  of this configuration option.
+  ${../rtems/config/resource-unlimited:/name} the enable unlimited objects for this
+  object class, if the value passed to ${../rtems/config/resource-unlimited:/name}
+  satisfies all other constraints of this configuration option.
 type: constraint

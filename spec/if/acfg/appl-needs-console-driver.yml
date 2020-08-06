@@ -13,16 +13,16 @@ links:
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 notes: |
-  The Console Driver is responsible for providing the ``/dev/console``
+  The Console Driver is responsible for providing the :file:`/dev/console`
   device file.  This device is used to initialize the standard input, output,
   and error file descriptors.
 
-  BSPs should be constructed in a manner that allows ``printk()`` to work
+  BSPs should be constructed in a manner that allows ${../rtems/io/printk:/name} to work
   properly without the need for the Console Driver to be configured.
 
   The
 
-  * ${appl-needs-console-driver:/name},
+  * ``CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER``,
 
   * ${appl-needs-simple-console-driver:/name}, and
 

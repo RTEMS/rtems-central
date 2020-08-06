@@ -4,10 +4,11 @@ constraints:
   texts:
   - |
     The value of this configuration option shall be defined to a valid function
-    pointer of the type ``void ( *initialize )( size_t )`` or to ``NULL``.
+    pointer of the type ``void ( *initialize )( size_t )`` or to
+    ${../c/null:/name}.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: '``NULL``'
+default-value: ${../c/null:/name}
 description: |
   The value of this configuration option initializes the stack allocator
   initialization handler.
@@ -21,7 +22,7 @@ name: CONFIGURE_TASK_STACK_ALLOCATOR_INIT
 notes: |
   A correctly configured system shall configure the following to be consistent:
 
-  * `CONFIGURE_TASK_STACK_ALLOCATOR_INIT`
+  * ``CONFIGURE_TASK_STACK_ALLOCATOR_INIT``
 
   * ${task-stack-allocator:/name}
 

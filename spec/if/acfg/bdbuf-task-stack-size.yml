@@ -4,7 +4,7 @@ constraints:
   min: ${min-task-stack-size:/name}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: '``RTEMS_MINIMUM_STACK_SIZE``'
+default-value: ${../rtems/tasks/minimum-stack-size:/name}
 description: |
   The value of this configuration option defines the task stack size of the
   Block Device Cache tasks in bytes.

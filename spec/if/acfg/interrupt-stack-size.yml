@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
   The default value is ${bsp-interrupt-stack-size:/name} in case it is defined,
-  otherwise the default value is ``CPU_STACK_MINIMUM_SIZE``.
+  otherwise the default value is ${../impl/cpu/stack-minimum-size:/name}.
 description: |
   The value of this configuration option defines the size of an interrupt stack
   in bytes.
@@ -38,6 +38,7 @@ notes: |
   size may still result in undefined behaviour.
 
   In releases before RTEMS 5.1 the default value was
-  ${min-task-stack-size:/name} instead of ``CPU_STACK_MINIMUM_SIZE``.
+  ${min-task-stack-size:/name} instead of
+  ${../impl/cpu/stack-minimum-size:/name}.
 text: ''
 type: interface

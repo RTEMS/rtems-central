@@ -6,7 +6,7 @@ constraints:
     The value of this configuration option shall be a valid task attribute set.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: '``RTEMS_DEFAULT_ATTRIBUTES``'
+default-value: ${../rtems/attr/default:/name}
 description: |
   The value of this configuration option defines the task attributes of the
   Classic API initialization task.

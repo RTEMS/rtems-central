@@ -8,5 +8,5 @@ scope: user
 text: |
   The value of this configuration option shall be small enough so that the
   interrupt stack area calculation carried out by ``<rtems/confdefs.h>`` does
-  not overflow an integer of type ``size_t``.
+  not overflow an integer of type ${../c/size_t:/name}.
 type: constraint
