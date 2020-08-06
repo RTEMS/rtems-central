@@ -6,8 +6,8 @@ default: |
   If this configuration option is undefined, then a base filesystem and the
   configured filesystems are initialized during system initialization.
 description: |
-  In case this configuration option is defined, then **no** base filesystem is
-  initialized during system initialization and **no** filesystems are
+  In case this configuration option is defined, then **no base filesystem** is
+  initialized during system initialization and **no filesystems** are
   configured.
 enabled-by: true
 index-entries: []
