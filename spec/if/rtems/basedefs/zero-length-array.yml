@@ -5,7 +5,10 @@ copyrights:
 - Copyright (C) 2014 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: '0'
-  variants: []
+  variants:
+  - definition: null
+    enabled-by:
+    - ${../../compiler/stdc-version:/name} >= 199409L
 description: |
   Zero-length arrays are valid in C99 as flexible array members.  C++11 does
   not allow flexible array members.  Use the GNU extension which is also
