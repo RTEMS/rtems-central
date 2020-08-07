@@ -48,6 +48,13 @@ def test_applconfig(tmpdir):
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
+.. This file was automatically generated.  Do not edit it manually.
+.. Please have a look at
+..
+.. https://docs.rtems.org/branches/master/eng/req/howto.html
+..
+.. for information how to maintain and re-generate this file.
+
 group name
 ==========
 
@@ -393,6 +400,15 @@ NOTES:
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
  */
 
 /**
