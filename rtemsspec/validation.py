@@ -408,7 +408,7 @@ class _TestDirectiveItem(_TestItem):
             else:
                 info = ["1"]
                 post_cond = tuple(
-                    len(self._post_state_to_index[index]) - 1
+                    len(self._post_state_to_index[index])
                     for index in range(self._post_condition_count))
             self._add_transitions(0, 0, transition, transition_map, info,
                                   post_cond)
