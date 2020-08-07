@@ -260,6 +260,16 @@ def test_license_and_copyrights():
 """
 
 
+def test_comment():
+    content = SphinxContent()
+    with content.comment_block():
+        content.add(["abc", "", "def"])
+    assert str(content) == """.. abc
+..
+.. def
+"""
+
+
 def test_substitute(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir,
                                                     "spec-sphinx",

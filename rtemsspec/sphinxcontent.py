@@ -208,6 +208,10 @@ class SphinxContent(Content):
             self.prepend([f".. {stm}" for stm in statements])
         self.prepend([f".. SPDX-License-Identifier: {self._license}", ""])
 
+    def open_comment_block(self) -> None:
+        """ Opens a comment block. """
+        self.push_indent(".. ", "..")
+
 
 def _get_ref_term(ctx: ItemGetValueContext) -> Any:
     return f":term:`{ctx.value[ctx.key]}`"

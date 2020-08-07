@@ -188,6 +188,16 @@ def test_indent():
 """
 
 
+def test_comment():
+    content = Content("BSD-2-Clause", True)
+    with content.comment_block():
+        content.add(["abc", "", "def"])
+    assert str(content) == """# abc
+#
+# def
+"""
+
+
 def test_write(tmpdir):
     content = Content("BSD-2-Clause", True)
     content.append("x")

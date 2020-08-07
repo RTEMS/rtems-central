@@ -163,6 +163,7 @@ class Content:
     """ This class builds content. """
 
     # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-public-methods
     def __init__(self, the_license: str, pop_indent_gap: bool):
         self._lines = []  # type: List[str]
         self._license = the_license
@@ -391,6 +392,22 @@ class Content:
         self.register_license(item["SPDX-License-Identifier"])
         for statement in item["copyrights"]:
             self.register_copyright(statement)
+
+    def open_comment_block(self) -> None:
+        """ Opens a comment block. """
+        self.push_indent("# ", "#")
+
+    def close_comment_block(self) -> None:
+        """ Closes a comment block. """
+        self.pop_indent()
+        self.gap = True
+
+    @contextmanager
+    def comment_block(self) -> Iterator[None]:
+        """ Opens a comment block context. """
+        self.open_comment_block()
+        yield
+        self.close_comment_block()
 
     def write(self, path: str) -> None:
         """ Writes the content to the file specified by the path. """
@@ -633,13 +650,6 @@ class CContent(Content):
         self.pop_indent()
         self.append(" */")
         self.gap = True
-
-    @contextmanager
-    def comment_block(self) -> Iterator[None]:
-        """ Opens a comment block context. """
-        self.open_comment_block()
-        yield
-        self.close_comment_block()
 
     @contextmanager
     def doxygen_block(self) -> Iterator[None]:
