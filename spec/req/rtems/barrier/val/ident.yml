@@ -17,7 +17,7 @@ actions:
     );
   checks: []
   description: |
-    Run the generic object identification tests for Classic API parition class
+    Run the generic object identification tests for Classic API partition class
     objects defined by ${../../ident-local}.
   links: []
 brief: Test the ${/if/rtems/barrier/ident:/name} directive.
