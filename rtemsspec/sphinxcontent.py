@@ -25,10 +25,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
-import re
 from typing import Any, Iterable, Iterator, List, Optional, Union
 
-from rtemsspec.content import Content, make_lines
+from rtemsspec.content import Content, make_lines, to_camel_case
 from rtemsspec.items import Item, ItemGetValueContext, ItemMapper
 
 GenericContent = Union[str, List[str], "Content"]
@@ -36,12 +35,6 @@ GenericContentIterable = Union[Iterable[str], Iterable[List[str]],
                                Iterable[GenericContent]]
 
 _HEADER_LEVELS = ["#", "*", "=", "-", "^", "\""]
-
-
-def _to_camel_case(name: str) -> str:
-    return name[0].upper() + re.sub(
-        r"\s+(.)", lambda match: match.group(1).upper(),
-        re.sub(r"[^ \t\n\r\f\va-zA-Z0-9]", " ", name[1:].replace("+", "X")))
 
 
 def get_reference(label: str, name: Optional[str] = None) -> str:
@@ -53,7 +46,7 @@ def get_reference(label: str, name: Optional[str] = None) -> str:
 
 def get_label(name: str) -> str:
     """ Returns the label for the specified name. """
-    return _to_camel_case(name.strip())
+    return to_camel_case(name.strip())
 
 
 class SphinxContent(Content):

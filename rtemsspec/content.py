@@ -1031,3 +1031,14 @@ def enabled_by_to_exp(enabled_by: Any, mapper: ExpressionMapper) -> str:
     if exp.startswith("("):
         return exp[1:-1]
     return exp
+
+
+_CAMEL_CASE_TO_UPPER = re.compile(r"\s+(.)")
+_CAMEL_CASE_DISCARD = re.compile(r"[^ \t\n\r\f\va-zA-Z0-9]")
+
+
+def to_camel_case(name: str) -> str:
+    """ Returns the name in CamelCase. """
+    return name[0].upper() + _CAMEL_CASE_TO_UPPER.sub(
+        lambda match: match.group(1).upper(),
+        _CAMEL_CASE_DISCARD.sub(" ", name[1:].replace("+", "X")))
