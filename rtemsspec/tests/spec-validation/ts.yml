@@ -10,6 +10,5 @@ includes:
 links: []
 local-includes:
 - green.h
-name: Blue Green
 target: ts.c
 type: test-suite

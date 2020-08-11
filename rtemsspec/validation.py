@@ -30,7 +30,7 @@ import os
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
-    ExpressionMapper
+    ExpressionMapper, to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -39,7 +39,7 @@ ItemMap = Dict[str, Item]
 class _CodeMapper(ItemMapper):
     def get_value(self, ctx: ItemGetValueContext) -> Any:
         if ctx.type_path_key == "requirement/functional/action:/test-run":
-            return f"{ctx.item['test-name'].replace(' ', '')}_Run"
+            return f"{to_camel_case(ctx.item.uid[1:]).replace(' ', '')}_Run"
         raise KeyError
 
 
@@ -73,9 +73,9 @@ class _TestItem:
     """ A test item with a defaul implementation for test cases. """
     def __init__(self, item: Item):
         self._item = item
-        self._ident = self.name.replace(" ", "")
-        self._code_mapper = _CodeMapper(self._item)
-        self._text_mapper = _TextMapper(self._item)
+        self._ident = to_camel_case(item.uid[1:])
+        self._code_mapper = _CodeMapper(item)
+        self._text_mapper = _TextMapper(item)
 
     def __getitem__(self, key: str):
         return self._item[key]
@@ -98,7 +98,7 @@ class _TestItem:
     @property
     def name(self) -> str:
         """ Returns the name. """
-        return self._item["name"]
+        return f"spec:{self._item.uid}"
 
     @property
     def includes(self) -> List[str]:
@@ -263,10 +263,6 @@ class _TestDirectiveItem(_TestItem):
         self._post_index_to_name = dict(
             (index, condition["name"])
             for index, condition in enumerate(item["post-conditions"]))
-
-    @property
-    def name(self) -> str:
-        return self._item["test-name"]
 
     @property
     def context(self) -> str:

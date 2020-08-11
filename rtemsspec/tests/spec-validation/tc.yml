@@ -45,7 +45,6 @@ includes:
 links: []
 local-includes:
 - x.h
-name: Test Case
 prologue: |
   /* Test case prologue code */
 support: |

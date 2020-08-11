@@ -363,6 +363,22 @@ def test_function():
 """
     content = CContent()
     content.declare_function(
+        "a *",
+        "b", [
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x",
+            "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y",
+            "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z", "..."
+        ],
+        align=False)
+    assert str(content) == """a *b(
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x,
+  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy y,
+  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz z,
+  ...
+);
+"""
+    content = CContent()
+    content.declare_function(
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa *",
         "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", [
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx x",

@@ -23,7 +23,6 @@ includes:
 links: []
 local-includes:
 - z.h
-name: Test Case 3
 prologue: null
 support: null
 target: tc34.c

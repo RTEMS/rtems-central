@@ -49,7 +49,7 @@ def test_validation(tmpdir):
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  */
 
 /*
@@ -88,7 +88,7 @@ def test_validation(tmpdir):
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteBlueGreen Blue Green
+ * @defgroup RTEMSTestSuiteTs spec:/ts
  *
  * @ingroup RTEMSTestSuites
  *
@@ -111,9 +111,9 @@ def test_validation(tmpdir):
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseClassicTaskIdentification
- * @ingroup RTEMSTestCaseTestCase
- * @ingroup RTEMSTestCaseTestCase2
+ * @ingroup RTEMSTestCaseDirective
+ * @ingroup RTEMSTestCaseTc
+ * @ingroup RTEMSTestCaseTc2
  */
 
 /*
@@ -155,9 +155,9 @@ def test_validation(tmpdir):
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseClassicTaskIdentification Classic Task Identification
+ * @defgroup RTEMSTestCaseDirective spec:/directive
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  *
  * @brief Test Case
  *
@@ -165,48 +165,48 @@ def test_validation(tmpdir):
  */
 
 typedef enum {
-  ClassicTaskIdentification_Pre_Name_Invalid,
-  ClassicTaskIdentification_Pre_Name_Self,
-  ClassicTaskIdentification_Pre_Name_Valid,
-  ClassicTaskIdentification_Pre_Name_NA
-} ClassicTaskIdentification_Pre_Name;
+  Directive_Pre_Name_Invalid,
+  Directive_Pre_Name_Self,
+  Directive_Pre_Name_Valid,
+  Directive_Pre_Name_NA
+} Directive_Pre_Name;
 
 typedef enum {
-  ClassicTaskIdentification_Pre_Node_Local,
-  ClassicTaskIdentification_Pre_Node_Remote,
-  ClassicTaskIdentification_Pre_Node_Invalid,
-  ClassicTaskIdentification_Pre_Node_SearchAll,
-  ClassicTaskIdentification_Pre_Node_SearchOther,
-  ClassicTaskIdentification_Pre_Node_SearchLocal,
-  ClassicTaskIdentification_Pre_Node_NA
-} ClassicTaskIdentification_Pre_Node;
+  Directive_Pre_Node_Local,
+  Directive_Pre_Node_Remote,
+  Directive_Pre_Node_Invalid,
+  Directive_Pre_Node_SearchAll,
+  Directive_Pre_Node_SearchOther,
+  Directive_Pre_Node_SearchLocal,
+  Directive_Pre_Node_NA
+} Directive_Pre_Node;
 
 typedef enum {
-  ClassicTaskIdentification_Pre_Id_NullPtr,
-  ClassicTaskIdentification_Pre_Id_Valid,
-  ClassicTaskIdentification_Pre_Id_NA
-} ClassicTaskIdentification_Pre_Id;
+  Directive_Pre_Id_NullPtr,
+  Directive_Pre_Id_Valid,
+  Directive_Pre_Id_NA
+} Directive_Pre_Id;
 
 typedef enum {
-  ClassicTaskIdentification_Post_Status_Ok,
-  ClassicTaskIdentification_Post_Status_InvAddr,
-  ClassicTaskIdentification_Post_Status_InvName,
-  ClassicTaskIdentification_Post_Status_InvNode,
-  ClassicTaskIdentification_Post_Status_InvId,
-  ClassicTaskIdentification_Post_Status_NA
-} ClassicTaskIdentification_Post_Status;
+  Directive_Post_Status_Ok,
+  Directive_Post_Status_InvAddr,
+  Directive_Post_Status_InvName,
+  Directive_Post_Status_InvNode,
+  Directive_Post_Status_InvId,
+  Directive_Post_Status_NA
+} Directive_Post_Status;
 
 typedef enum {
-  ClassicTaskIdentification_Post_Id_Nop,
-  ClassicTaskIdentification_Post_Id_NullPtr,
-  ClassicTaskIdentification_Post_Id_Self,
-  ClassicTaskIdentification_Post_Id_LocalTask,
-  ClassicTaskIdentification_Post_Id_RemoteTask,
-  ClassicTaskIdentification_Post_Id_NA
-} ClassicTaskIdentification_Post_Id;
+  Directive_Post_Id_Nop,
+  Directive_Post_Id_NullPtr,
+  Directive_Post_Id_Self,
+  Directive_Post_Id_LocalTask,
+  Directive_Post_Id_RemoteTask,
+  Directive_Post_Id_NA
+} Directive_Post_Id;
 
 /**
- * @brief Test context for Classic Task Identification test case.
+ * @brief Test context for spec:/directive test case.
  */
 typedef struct {
   /**
@@ -238,19 +238,19 @@ typedef struct {
    *   executed.
    */
   bool in_action_loop;
-} ClassicTaskIdentification_Context;
+} Directive_Context;
 
-static ClassicTaskIdentification_Context
-  ClassicTaskIdentification_Instance;
+static Directive_Context
+  Directive_Instance;
 
-static const char * const ClassicTaskIdentification_PreDesc_Name[] = {
+static const char * const Directive_PreDesc_Name[] = {
   "Invalid",
   "Self",
   "Valid",
   "NA"
 };
 
-static const char * const ClassicTaskIdentification_PreDesc_Node[] = {
+static const char * const Directive_PreDesc_Node[] = {
   "Local",
   "Remote",
   "Invalid",
@@ -260,186 +260,186 @@ static const char * const ClassicTaskIdentification_PreDesc_Node[] = {
   "NA"
 };
 
-static const char * const ClassicTaskIdentification_PreDesc_Id[] = {
+static const char * const Directive_PreDesc_Id[] = {
   "NullPtr",
   "Valid",
   "NA"
 };
 
-static const char * const * const ClassicTaskIdentification_PreDesc[] = {
-  ClassicTaskIdentification_PreDesc_Name,
-  ClassicTaskIdentification_PreDesc_Node,
-  ClassicTaskIdentification_PreDesc_Id,
+static const char * const * const Directive_PreDesc[] = {
+  Directive_PreDesc_Name,
+  Directive_PreDesc_Node,
+  Directive_PreDesc_Id,
   NULL
 };
 
 /* Test rtems_task_ident() support */
 
-static void ClassicTaskIdentification_Pre_Name_Prepare(
-  ClassicTaskIdentification_Context *ctx,
-  ClassicTaskIdentification_Pre_Name state
+static void Directive_Pre_Name_Prepare(
+  Directive_Context *ctx,
+  Directive_Pre_Name state
 )
 {
   /* Prologue */
 
   switch ( state ) {
-    case ClassicTaskIdentification_Pre_Name_Invalid: {
+    case Directive_Pre_Name_Invalid: {
       ctx->name = 1;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Name_Self: {
+    case Directive_Pre_Name_Self: {
       ctx->name = RTEMS_SELF;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Name_Valid: {
+    case Directive_Pre_Name_Valid: {
       ctx->name = rtems_build_name( 'T', 'A', 'S', 'K' );
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Name_NA:
+    case Directive_Pre_Name_NA:
       break;
   }
 
   /* Epilogue */
 }
 
-static void ClassicTaskIdentification_Pre_Node_Prepare(
-  ClassicTaskIdentification_Context *ctx,
-  ClassicTaskIdentification_Pre_Node state
+static void Directive_Pre_Node_Prepare(
+  Directive_Context *ctx,
+  Directive_Pre_Node state
 )
 {
   switch ( state ) {
-    case ClassicTaskIdentification_Pre_Node_Local: {
+    case Directive_Pre_Node_Local: {
       ctx->node = 1;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Node_Remote: {
+    case Directive_Pre_Node_Remote: {
       ctx->node = 2;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Node_Invalid: {
+    case Directive_Pre_Node_Invalid: {
       ctx->node = 256;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Node_SearchAll: {
+    case Directive_Pre_Node_SearchAll: {
       ctx->node = RTEMS_SEARCH_ALL_NODES;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Node_SearchOther: {
+    case Directive_Pre_Node_SearchOther: {
       ctx->node = RTEMS_SEARCH_OTHER_NODES;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Node_SearchLocal: {
+    case Directive_Pre_Node_SearchLocal: {
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Node_NA:
+    case Directive_Pre_Node_NA:
       break;
   }
 }
 
-static void ClassicTaskIdentification_Pre_Id_Prepare(
-  ClassicTaskIdentification_Context *ctx,
-  ClassicTaskIdentification_Pre_Id   state
+static void Directive_Pre_Id_Prepare(
+  Directive_Context *ctx,
+  Directive_Pre_Id   state
 )
 {
   switch ( state ) {
-    case ClassicTaskIdentification_Pre_Id_NullPtr: {
+    case Directive_Pre_Id_NullPtr: {
       ctx->id = NULL;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Id_Valid: {
+    case Directive_Pre_Id_Valid: {
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
       break;
     }
 
-    case ClassicTaskIdentification_Pre_Id_NA:
+    case Directive_Pre_Id_NA:
       break;
   }
 }
 
-static void ClassicTaskIdentification_Post_Status_Check(
-  ClassicTaskIdentification_Context    *ctx,
-  ClassicTaskIdentification_Post_Status state
+static void Directive_Post_Status_Check(
+  Directive_Context    *ctx,
+  Directive_Post_Status state
 )
 {
   switch ( state ) {
-    case ClassicTaskIdentification_Post_Status_Ok: {
+    case Directive_Post_Status_Ok: {
       T_rsc(ctx->status, RTEMS_SUCCESSFUL);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Status_InvAddr: {
+    case Directive_Post_Status_InvAddr: {
       T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Status_InvName: {
+    case Directive_Post_Status_InvName: {
       T_rsc(ctx->status, RTEMS_INVALID_NAME);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Status_InvNode: {
+    case Directive_Post_Status_InvNode: {
       T_rsc(ctx->status, RTEMS_INVALID_NODE);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Status_InvId: {
+    case Directive_Post_Status_InvId: {
       T_rsc(ctx->status, RTEMS_INVALID_ID);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Status_NA:
+    case Directive_Post_Status_NA:
       break;
   }
 }
 
-static void ClassicTaskIdentification_Post_Id_Check(
-  ClassicTaskIdentification_Context *ctx,
-  ClassicTaskIdentification_Post_Id  state
+static void Directive_Post_Id_Check(
+  Directive_Context *ctx,
+  Directive_Post_Id  state
 )
 {
   switch ( state ) {
-    case ClassicTaskIdentification_Post_Id_Nop: {
+    case Directive_Post_Id_Nop: {
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, 0xffffffff);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Id_NullPtr: {
+    case Directive_Post_Id_NullPtr: {
       T_null(ctx->id)
       break;
     }
 
-    case ClassicTaskIdentification_Post_Id_Self: {
+    case Directive_Post_Id_Self: {
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, rtems_task_self());
       break;
     }
 
-    case ClassicTaskIdentification_Post_Id_LocalTask: {
+    case Directive_Post_Id_LocalTask: {
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, ctx->id_local_task);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Id_RemoteTask: {
+    case Directive_Post_Id_RemoteTask: {
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, ctx->id_remote_task);
       break;
     }
 
-    case ClassicTaskIdentification_Post_Id_NA:
+    case Directive_Post_Id_NA:
       break;
   }
 }
@@ -449,9 +449,7 @@ static void ClassicTaskIdentification_Post_Id_Check(
  *
  * Setup description.
  */
-static void ClassicTaskIdentification_Setup(
-  ClassicTaskIdentification_Context *ctx
-)
+static void Directive_Setup( Directive_Context *ctx )
 {
   rtems_status_code sc;
 
@@ -466,18 +464,16 @@ static void ClassicTaskIdentification_Setup(
   T_assert_rsc_success( sc );
 }
 
-static void ClassicTaskIdentification_Setup_Wrap( void *arg )
+static void Directive_Setup_Wrap( void *arg )
 {
-  ClassicTaskIdentification_Context *ctx;
+  Directive_Context *ctx;
 
   ctx = arg;
   ctx->in_action_loop = false;
-  ClassicTaskIdentification_Setup( ctx );
+  Directive_Setup( ctx );
 }
 
-static void ClassicTaskIdentification_Teardown(
-  ClassicTaskIdentification_Context *ctx
-)
+static void Directive_Teardown( Directive_Context *ctx )
 {
   rtems_status_code sc;
 
@@ -487,153 +483,153 @@ static void ClassicTaskIdentification_Teardown(
   }
 }
 
-static void ClassicTaskIdentification_Teardown_Wrap( void *arg )
+static void Directive_Teardown_Wrap( void *arg )
 {
-  ClassicTaskIdentification_Context *ctx;
+  Directive_Context *ctx;
 
   ctx = arg;
   ctx->in_action_loop = false;
-  ClassicTaskIdentification_Teardown( ctx );
+  Directive_Teardown( ctx );
 }
 
-static void ClassicTaskIdentification_Scope( void *arg, char *buf, size_t n )
+static void Directive_Scope( void *arg, char *buf, size_t n )
 {
-  ClassicTaskIdentification_Context *ctx;
+  Directive_Context *ctx;
 
   ctx = arg;
 
   if ( ctx->in_action_loop ) {
-    T_get_scope( ClassicTaskIdentification_PreDesc, buf, n, ctx->pcs );
+    T_get_scope( Directive_PreDesc, buf, n, ctx->pcs );
   }
 }
 
-static T_fixture ClassicTaskIdentification_Fixture = {
-  .setup = ClassicTaskIdentification_Setup_Wrap,
+static T_fixture Directive_Fixture = {
+  .setup = Directive_Setup_Wrap,
   .stop = NULL,
-  .teardown = ClassicTaskIdentification_Teardown_Wrap,
-  .scope = ClassicTaskIdentification_Scope,
-  .initial_context = &ClassicTaskIdentification_Instance
+  .teardown = Directive_Teardown_Wrap,
+  .scope = Directive_Scope,
+  .initial_context = &Directive_Instance
 };
 
-static const uint8_t ClassicTaskIdentification_TransitionMap[][ 2 ] = {
+static const uint8_t Directive_TransitionMap[][ 2 ] = {
   {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_Self
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_Self
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_Self
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_Self
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_Self
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_Self
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_Self
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_Self
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_Self
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_Self
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_Self
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_Self
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_LocalTask
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_LocalTask
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
-  }, {
-#if defined(RTEMS_MULTIPROCESSING)
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_RemoteTask
-#else
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
-#endif
-  }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
-  }, {
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
-  }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
-  }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_LocalTask
-  }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
 #if defined(RTEMS_MULTIPROCESSING)
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_RemoteTask
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_RemoteTask
 #else
-    ClassicTaskIdentification_Post_Status_InvName,
-    ClassicTaskIdentification_Post_Id_Nop
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
 #endif
   }, {
-    ClassicTaskIdentification_Post_Status_InvAddr,
-    ClassicTaskIdentification_Post_Id_NullPtr
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
   }, {
-    ClassicTaskIdentification_Post_Status_Ok,
-    ClassicTaskIdentification_Post_Id_LocalTask
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
+  }, {
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
+  }, {
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_LocalTask
+  }, {
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
+  }, {
+#if defined(RTEMS_MULTIPROCESSING)
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_RemoteTask
+#else
+    Directive_Post_Status_InvName,
+    Directive_Post_Id_Nop
+#endif
+  }, {
+    Directive_Post_Status_InvAddr,
+    Directive_Post_Id_NullPtr
+  }, {
+    Directive_Post_Status_Ok,
+    Directive_Post_Id_LocalTask
   }
 };
 
@@ -642,7 +638,7 @@ static const struct {
   uint8_t Pre_Name_NA : 1;
   uint8_t Pre_Node_NA : 1;
   uint8_t Pre_Id_NA : 1;
-} ClassicTaskIdentification_TransitionInfo[] = {
+} Directive_TransitionInfo[] = {
   {
     0, 0, 0, 0
   }, {
@@ -726,26 +722,21 @@ static const struct {
   }
 };
 
-static void ClassicTaskIdentification_Action(
-  ClassicTaskIdentification_Context *ctx
-)
+static void Directive_Action( Directive_Context *ctx )
 {
   ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
 }
 
 /**
- * @fn void T_case_body_ClassicTaskIdentification( void )
+ * @fn void T_case_body_Directive( void )
  *
  * @brief Test rtems_task_ident() brief description.
  *
  * Test rtems_task_ident() description.
  */
-T_TEST_CASE_FIXTURE(
-  ClassicTaskIdentification,
-  &ClassicTaskIdentification_Fixture
-)
+T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 {
-  ClassicTaskIdentification_Context *ctx;
+  Directive_Context *ctx;
   size_t index;
 
   ctx = T_fixture_context();
@@ -753,54 +744,54 @@ T_TEST_CASE_FIXTURE(
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = ClassicTaskIdentification_Pre_Name_Invalid;
-    ctx->pcs[ 0 ] < ClassicTaskIdentification_Pre_Name_NA;
+    ctx->pcs[ 0 ] = Directive_Pre_Name_Invalid;
+    ctx->pcs[ 0 ] < Directive_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Name_NA ) {
-      ctx->pcs[ 0 ] = ClassicTaskIdentification_Pre_Name_NA;
-      index += ( ClassicTaskIdentification_Pre_Name_NA - 1 )
-        * ClassicTaskIdentification_Pre_Node_NA
-        * ClassicTaskIdentification_Pre_Id_NA;
+    if ( Directive_TransitionInfo[ index ].Pre_Name_NA ) {
+      ctx->pcs[ 0 ] = Directive_Pre_Name_NA;
+      index += ( Directive_Pre_Name_NA - 1 )
+        * Directive_Pre_Node_NA
+        * Directive_Pre_Id_NA;
     }
 
     for (
-      ctx->pcs[ 1 ] = ClassicTaskIdentification_Pre_Node_Local;
-      ctx->pcs[ 1 ] < ClassicTaskIdentification_Pre_Node_NA;
+      ctx->pcs[ 1 ] = Directive_Pre_Node_Local;
+      ctx->pcs[ 1 ] < Directive_Pre_Node_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Node_NA ) {
-        ctx->pcs[ 1 ] = ClassicTaskIdentification_Pre_Node_NA;
-        index += ( ClassicTaskIdentification_Pre_Node_NA - 1 )
-          * ClassicTaskIdentification_Pre_Id_NA;
+      if ( Directive_TransitionInfo[ index ].Pre_Node_NA ) {
+        ctx->pcs[ 1 ] = Directive_Pre_Node_NA;
+        index += ( Directive_Pre_Node_NA - 1 )
+          * Directive_Pre_Id_NA;
       }
 
       for (
-        ctx->pcs[ 2 ] = ClassicTaskIdentification_Pre_Id_NullPtr;
-        ctx->pcs[ 2 ] < ClassicTaskIdentification_Pre_Id_NA;
+        ctx->pcs[ 2 ] = Directive_Pre_Id_NullPtr;
+        ctx->pcs[ 2 ] < Directive_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( ClassicTaskIdentification_TransitionInfo[ index ].Pre_Id_NA ) {
-          ctx->pcs[ 2 ] = ClassicTaskIdentification_Pre_Id_NA;
-          index += ( ClassicTaskIdentification_Pre_Id_NA - 1 );
+        if ( Directive_TransitionInfo[ index ].Pre_Id_NA ) {
+          ctx->pcs[ 2 ] = Directive_Pre_Id_NA;
+          index += ( Directive_Pre_Id_NA - 1 );
         }
 
-        if ( ClassicTaskIdentification_TransitionInfo[ index ].Skip ) {
+        if ( Directive_TransitionInfo[ index ].Skip ) {
           ++index;
           continue;
         }
 
-        ClassicTaskIdentification_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
-        ClassicTaskIdentification_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
-        ClassicTaskIdentification_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
-        ClassicTaskIdentification_Action( ctx );
-        ClassicTaskIdentification_Post_Status_Check(
+        Directive_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
+        Directive_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
+        Directive_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
+        Directive_Action( ctx );
+        Directive_Post_Status_Check(
           ctx,
-          ClassicTaskIdentification_TransitionMap[ index ][ 0 ]
+          Directive_TransitionMap[ index ][ 0 ]
         );
-        ClassicTaskIdentification_Post_Id_Check(
+        Directive_Post_Id_Check(
           ctx,
-          ClassicTaskIdentification_TransitionMap[ index ][ 1 ]
+          Directive_TransitionMap[ index ][ 1 ]
         );
         ++index;
       }
@@ -811,9 +802,9 @@ T_TEST_CASE_FIXTURE(
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTestCase Test Case
+ * @defgroup RTEMSTestCaseTc spec:/tc
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  *
  * @brief Test Case
  *
@@ -823,7 +814,7 @@ T_TEST_CASE_FIXTURE(
 /* Test case support code */
 
 /**
- * @fn void T_case_body_TestCase( void )
+ * @fn void T_case_body_Tc( void )
  *
  * @brief Test case brief description.
  *
@@ -843,7 +834,7 @@ T_TEST_CASE_FIXTURE(
  *
  *   - Test case action 1 check 1 description.
  */
-T_TEST_CASE( TestCase )
+T_TEST_CASE( Tc )
 {
   /* Test case prologue code */
 
@@ -863,9 +854,9 @@ T_TEST_CASE( TestCase )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTestCase2 Test Case 2
+ * @defgroup RTEMSTestCaseTc2 spec:/tc2
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  *
  * @brief Test Case
  *
@@ -873,7 +864,7 @@ T_TEST_CASE( TestCase )
  */
 
 /**
- * @fn void T_case_body_TestCase2( void )
+ * @fn void T_case_body_Tc2( void )
  *
  * @brief Test case 2 brief description.
  *
@@ -889,7 +880,7 @@ T_TEST_CASE( TestCase )
  *
  * - Test case 2 action 1 description.
  */
-T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
+T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
 {
   /* Test case 2 action 0 code */
   /* Test case 2 action 0 check 0 code */
@@ -908,8 +899,8 @@ T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseTestCase3
- * @ingroup RTEMSTestCaseTestCase4
+ * @ingroup RTEMSTestCaseTc3
+ * @ingroup RTEMSTestCaseTc4
  */
 
 /*
@@ -948,9 +939,9 @@ T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseTestCase3 Test Case 3
+ * @defgroup RTEMSTestCaseTc3 spec:/tc3
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  *
  * @brief Test Case
  *
@@ -958,7 +949,7 @@ T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
  */
 
 /**
- * @fn void T_case_body_TestCase3( void )
+ * @fn void T_case_body_Tc3( void )
  *
  * @brief Test case 3 brief description.
  *
@@ -970,7 +961,7 @@ T_TEST_CASE_FIXTURE( TestCase2, &test_case_2_fixture )
  *
  *   - Test case 3 action 0 check 0 description.
  */
-T_TEST_CASE( TestCase3 )
+T_TEST_CASE( Tc3 )
 {
   T_plan(1);
 
@@ -981,9 +972,9 @@ T_TEST_CASE( TestCase3 )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTestCase4 Test Case 4
+ * @defgroup RTEMSTestCaseTc4 spec:/tc4
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  *
  * @brief Test Case
  *
@@ -991,13 +982,13 @@ T_TEST_CASE( TestCase3 )
  */
 
 /**
- * @fn void T_case_body_TestCase4( void )
+ * @fn void T_case_body_Tc4( void )
  *
  * @brief Test case 4 brief description.
  *
  * Test case 4 description.
  */
-T_TEST_CASE( TestCase4 )
+T_TEST_CASE( Tc4 )
 {
   /* Test case 4 epilogue code */
 }
@@ -1150,9 +1141,9 @@ void Action2_Run( int *a, int b, int *c );
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAction2 Action 2
+ * @defgroup RTEMSTestCaseAction2 spec:/action2
  *
- * @ingroup RTEMSTestSuiteBlueGreen
+ * @ingroup RTEMSTestSuiteTs
  *
  * @brief Test Case
  *
@@ -1162,7 +1153,7 @@ void Action2_Run( int *a, int b, int *c );
 /* Context support code */
 
 /**
- * @brief Test context for Action 2 test case.
+ * @brief Test context for spec:/action2 test case.
  */
 typedef struct {
   /**

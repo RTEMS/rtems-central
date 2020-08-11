@@ -23,7 +23,6 @@ links:
   uid: ../ident
 local-includes:
 - support-object-ident-local.h
-name: Classic Barrier Ident
 prologue: |
   rtems_status_code sc;
   rtems_id id_local_object;

@@ -98,7 +98,6 @@ spec-example: |
   test-header: null
   test-includes: []
   test-local-includes: []
-  test-name: RedGreenData
   test-prepare: null
   test-setup: null
   test-stop: null
@@ -183,9 +182,6 @@ spec-info:
         description: |
           It shall be a list of header files included via ``#include "..."``.
         spec-type: list-str
-      test-name:
-        description: null
-        spec-type: test-name
       test-prepare:
         description: |
           If the value is present, then it shall be the early test preparation

@@ -23,7 +23,6 @@ links:
   uid: ../ident
 local-includes:
 - support-object-ident.h
-name: Classic Sem Ident
 prologue: |
   rtems_status_code sc;
   rtems_id id_local_object;

@@ -74,7 +74,6 @@ includes:
 - rtems.h
 links: []
 local-includes: []
-name: Space Profile Classic Barriers
 prologue: |
   static const rtems_name name = rtems_build_name('B', 'A', 'R', 'R');
   rtems_status_code sc;

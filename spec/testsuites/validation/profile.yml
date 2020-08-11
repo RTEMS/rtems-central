@@ -153,6 +153,5 @@ includes:
 - rtems/score/sysstate.h
 links: []
 local-includes: []
-name: Space Profile
 target: testsuites/validation/ts-space-profile.c
 type: test-suite

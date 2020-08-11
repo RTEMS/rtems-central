@@ -23,7 +23,6 @@ links:
   uid: ../ident
 local-includes:
 - support-object-ident.h
-name: Classic Part Ident
 prologue: |
   static long area[32];
   rtems_status_code sc;

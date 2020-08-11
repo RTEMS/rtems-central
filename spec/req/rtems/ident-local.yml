@@ -128,7 +128,6 @@ test-header:
 test-includes: []
 test-local-includes:
 - support-object-ident-local.h
-test-name: Classic Object Local Ident
 test-prepare: null
 test-setup: null
 test-stop: null

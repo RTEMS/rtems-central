@@ -35,9 +35,6 @@ spec-info:
         description: |
           It shall be a list of header files included via ``#include "..."``.
         spec-type: list-str
-      name:
-        description: null
-        spec-type: test-name
       target:
         description: |
           It shall be the path to the generated target test suite source file.

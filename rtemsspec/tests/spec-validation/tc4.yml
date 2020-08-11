@@ -11,7 +11,6 @@ fixture: null
 includes: []
 links: []
 local-includes: []
-name: Test Case 4
 prologue: null
 support: null
 target: tc34.c

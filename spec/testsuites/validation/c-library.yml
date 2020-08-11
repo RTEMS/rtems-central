@@ -68,7 +68,6 @@ includes:
 - rtems/malloc.h
 links: []
 local-includes: []
-name: Space Profile C Library
 prologue: |
   void *p;
   int s;

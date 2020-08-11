@@ -116,6 +116,5 @@ includes:
 - rtems/sysinit.h
 links: []
 local-includes: []
-name: Validation 0
 target: testsuites/validation/ts-validation-0.c
 type: test-suite

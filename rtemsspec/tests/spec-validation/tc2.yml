@@ -34,7 +34,6 @@ includes:
 links: []
 local-includes:
 - y.h
-name: Test Case 2
 prologue: null
 support: null
 target: tc12.c

@@ -23,7 +23,6 @@ links:
   uid: ../ident
 local-includes:
 - support-object-ident-local.h
-name: Classic UserExt Ident
 prologue: |
   static const rtems_extensions_table table;
   rtems_status_code sc;
