@@ -130,6 +130,13 @@ def _get_value(ctx: ItemGetValueContext) -> Any:
     return value
 
 
+def normalize_key_path(key_path: str, prefix: str = "") -> str:
+    """ Normalizes the key path with an optional prefix path. """
+    if not os.path.isabs(key_path):
+        key_path = os.path.join(prefix, key_path)
+    return os.path.normpath(key_path)
+
+
 class Item:
     """ Objects of this class represent a specification item. """
     def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
@@ -155,17 +162,16 @@ class Item:
         """
         return self._data.get(key, default)
 
-    def get_by_key_path(self,
-                        key_path: str,
-                        prefix: str = "",
-                        get_value: ItemGetValue = _get_value) -> Any:
-        """ Gets the attribute value corresponding to the key path. """
-        if not os.path.isabs(key_path):
-            key_path = os.path.join(prefix, key_path)
-        key_path = os.path.normpath(key_path)
+    def get_by_normalized_key_path(
+            self,
+            normalized_key_path: str,
+            get_value: ItemGetValue = _get_value) -> Any:
+        """
+        Gets the attribute value corresponding to the normalized key path.
+        """
         path = "/"
         value = self._data
-        for key in key_path.strip("/").split("/"):
+        for key in normalized_key_path.strip("/").split("/"):
             parts = key.split("[")
             try:
                 index = int(parts[1].split("]")[0])
@@ -178,6 +184,14 @@ class Item:
                 value = _get_value(ctx)
             path = os.path.join(path, key)
         return value
+
+    def get_by_key_path(self,
+                        key_path: str,
+                        prefix: str = "",
+                        get_value: ItemGetValue = _get_value) -> Any:
+        """ Gets the attribute value corresponding to the key path. """
+        return self.get_by_normalized_key_path(
+            normalize_key_path(key_path, prefix), get_value)
 
     @property
     def uid(self) -> str:
