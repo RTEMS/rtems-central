@@ -60,16 +60,16 @@ class _Mapper(ItemMapper):
         """ Resets the test step counter. """
         self._step = 0
 
-    def map(self, identifier: str) -> Tuple[Item, Any]:
+    def map(self, identifier: str) -> Tuple[Item, str, Any]:
         if identifier == "step":
             step = self._step
             self._step = step + 1
-            return self._item, str(step)
+            return self._item, "step", str(step)
         match = _STEPS.search(identifier)
         if match:
             inc = int(match.group(1))
             self._step += inc
-            return self._item, f"Accounts for {inc} test plan steps"
+            return self._item, "step", f"Accounts for {inc} test plan steps"
         return super().map(identifier)
 
 

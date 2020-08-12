@@ -351,7 +351,7 @@ class ItemMapper(Mapping[str, object]):
         yield
         self.pop_prefix()
 
-    def map(self, identifier: str) -> Tuple[Item, Any]:
+    def map(self, identifier: str) -> Tuple[Item, str, Any]:
         """
         Maps an identifier to the corresponding item and attribute value.
         """
@@ -367,13 +367,14 @@ class ItemMapper(Mapping[str, object]):
         else:
             item = self._item.map(uid)
             prefix = ""
-        value = item.get_by_key_path(key_path, prefix, self.get_value)
+        key_path = normalize_key_path(key_path, prefix)
+        value = item.get_by_normalized_key_path(key_path, self.get_value)
         for func in pipes:
             value = getattr(self, func)(value)
-        return item, value
+        return item, key_path, value
 
     def __getitem__(self, identifier):
-        return self.map(identifier)[1]
+        return self.map(identifier)[2]
 
     def __iter__(self):
         raise StopIteration

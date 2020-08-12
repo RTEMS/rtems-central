@@ -102,8 +102,9 @@ def test_item_mapper(tmpdir):
     with mapper.prefix("v"):
         assert mapper[".:."] == "p"
         assert mapper[".:../x/y"] == "z"
-        item_2, value_2 = mapper.map(".:.")
-        assert item == item_2
+        item_2, key_path_2, value_2 = mapper.map(".:.")
+        assert item_2 == item
+        assert key_path_2 == "/v"
         assert value_2 == "p"
         assert mapper.substitute("$$${.:.}") == "$p"
     assert mapper.substitute_with_prefix("$$${.:.}", "v") == "$p"
@@ -118,8 +119,9 @@ def test_item_mapper(tmpdir):
     assert mapper["d/c:a/x-to-b|u|v"] == "vue"
     assert mapper["d/c:a/f[1]"] == 2
     assert mapper["d/c:a/../a/f[3]/g[0]|dup"] == 8
-    item_3, value_3 = mapper.map("/p:/v")
-    assert item == item_3
+    item_3, key_path_3, value_3 = mapper.map("/p:/v")
+    assert item_3 == item
+    assert key_path_3 == "/v"
     assert value_3 == "p"
     with pytest.raises(StopIteration):
         for something in mapper:
