@@ -314,8 +314,9 @@ class ItemTemplate(string.Template):
 
 class ItemMapper(Mapping[str, object]):
     """ Maps identifiers to items and attribute values. """
-    def __init__(self, item: Item):
+    def __init__(self, item: Item, recursive: bool = False):
         self._item = item
+        self._recursive = recursive
         self._prefix = [""]
         self._get_value = {}  # type: Dict[str, ItemGetValue]
 
@@ -373,8 +374,22 @@ class ItemMapper(Mapping[str, object]):
             value = getattr(self, func)(value)
         return item, key_path, value
 
+    @contextmanager
+    def _item_and_prefix(self, item: Item, prefix: str) -> Iterator[None]:
+        item_2 = self._item
+        prefix_2 = self._prefix
+        self._item = item
+        self._prefix = [prefix]
+        yield
+        self._item = item_2
+        self._prefix = prefix_2
+
     def __getitem__(self, identifier):
-        return self.map(identifier)[2]
+        item, key_path, value = self.map(identifier)
+        if self._recursive:
+            with self._item_and_prefix(item, os.path.dirname(key_path)):
+                return self.substitute(value)
+        return value
 
     def __iter__(self):
         raise StopIteration

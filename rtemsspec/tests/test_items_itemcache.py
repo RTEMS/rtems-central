@@ -128,6 +128,8 @@ def test_item_mapper(tmpdir):
             pass
     with pytest.raises(AttributeError):
         len(mapper)
+    recursive_mapper = ItemMapper(item, recursive=True)
+    assert recursive_mapper.substitute("${.:/r1/r2/r3}") == "foobar"
 
 
 def test_empty_item_mapper():

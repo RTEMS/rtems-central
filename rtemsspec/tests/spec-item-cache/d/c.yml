@@ -11,3 +11,4 @@ links:
 - role: null
   uid: ../p
 v: c
+r6: ${../p:/r7}
