@@ -325,17 +325,15 @@ class _TestDirectiveItem(_TestItem):
             f"  {self.ident}_Instance;"
         ])
 
-    def _add_scope_body(self, content: CContent) -> None:
-        with content.condition("ctx->in_action_loop"):
-            content.call_function(
-                None, "T_get_scope",
-                [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
-
     def _add_fixture_scope(self, content: CContent) -> None:
         params = ["void *arg", "char *buf", "size_t n"]
-        with content.function("static void", f"{self.ident}_Scope", params):
+        with content.function("static size_t", f"{self.ident}_Scope", params):
             content.add([f"{self.context} *ctx;", "", "ctx = arg;"])
-            self._add_scope_body(content)
+            with content.condition("ctx->in_action_loop"):
+                content.call_function(
+                    "return", "T_get_scope",
+                    [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
+            content.add("return 0;")
 
     def _add_fixture_method(self, content: CContent,
                             info: Optional[Dict[str, Optional[str]]],

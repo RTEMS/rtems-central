@@ -492,15 +492,17 @@ static void Directive_Teardown_Wrap( void *arg )
   Directive_Teardown( ctx );
 }
 
-static void Directive_Scope( void *arg, char *buf, size_t n )
+static size_t Directive_Scope( void *arg, char *buf, size_t n )
 {
   Directive_Context *ctx;
 
   ctx = arg;
 
   if ( ctx->in_action_loop ) {
-    T_get_scope( Directive_PreDesc, buf, n, ctx->pcs );
+    return T_get_scope( Directive_PreDesc, buf, n, ctx->pcs );
   }
+
+  return 0;
 }
 
 static T_fixture Directive_Fixture = {
@@ -1348,15 +1350,17 @@ static void Action2_Teardown_Wrap( void *arg )
   Action2_Teardown( ctx );
 }
 
-static void Action2_Scope( void *arg, char *buf, size_t n )
+static size_t Action2_Scope( void *arg, char *buf, size_t n )
 {
   Action2_Context *ctx;
 
   ctx = arg;
 
   if ( ctx->in_action_loop ) {
-    T_get_scope( Action2_PreDesc, buf, n, ctx->pcs );
+    return T_get_scope( Action2_PreDesc, buf, n, ctx->pcs );
   }
+
+  return 0;
 }
 
 static T_fixture Action2_Fixture = {
