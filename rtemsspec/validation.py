@@ -70,7 +70,7 @@ def _add_ingroup(content: CContent, items: List["_TestItem"]) -> None:
 
 
 class _TestItem:
-    """ A test item with a defaul implementation for test cases. """
+    """ A test item with a default implementation for test cases. """
     def __init__(self, item: Item):
         self._item = item
         self._ident = to_camel_case(item.uid[1:])
@@ -123,7 +123,7 @@ class _TestItem:
                         text: Optional[str],
                         prefix: Optional[str] = None) -> str:
         """
-        Performs a variable substitution for text with an optinal prefix.
+        Performs a variable substitution for text with an optional prefix.
         """
         if prefix:
             return self._text_mapper.substitute_with_prefix(text, prefix)
