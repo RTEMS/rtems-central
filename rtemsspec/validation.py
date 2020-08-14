@@ -737,21 +737,40 @@ def _get_source_file(filename: str,
     return source_files.setdefault(filename, _SourceFile(filename))
 
 
-def _gather_items(item: Item, source_files: Dict[str, _SourceFile],
-                  test_programs: List[_TestProgram]) -> None:
-    if item["type"] == "test-suite":
-        src = _get_source_file(item["target"], source_files)
-        src.add_test_suite(item)
-    elif item["type"] == "test-case":
-        src = _get_source_file(item["target"], source_files)
-        src.add_test_case(item)
-    elif item["type"] == "requirement" and item[
-            "requirement-type"] == "functional" and item[
-                "functional-type"] == "action":
-        src = _get_source_file(item["test-target"], source_files)
-        src.add_test_directive(item)
-    elif item["type"] == "build" and item["build-type"] == "test-program":
-        test_programs.append(_TestProgram(item))
+def _gather_action(item: Item, source_files: Dict[str, _SourceFile],
+                   _test_programs: List[_TestProgram]) -> None:
+    src = _get_source_file(item["test-target"], source_files)
+    src.add_test_directive(item)
+
+
+def _gather_test_case(item: Item, source_files: Dict[str, _SourceFile],
+                      _test_programs: List[_TestProgram]) -> None:
+    src = _get_source_file(item["target"], source_files)
+    src.add_test_case(item)
+
+
+def _gather_test_program(item: Item, _source_files: Dict[str, _SourceFile],
+                         test_programs: List[_TestProgram]) -> None:
+    test_programs.append(_TestProgram(item))
+
+
+def _gather_test_suite(item: Item, source_files: Dict[str, _SourceFile],
+                       _test_programs: List[_TestProgram]) -> None:
+    src = _get_source_file(item["target"], source_files)
+    src.add_test_suite(item)
+
+
+def _gather_default(_item: Item, _source_files: Dict[str, _SourceFile],
+                    _test_programs: List[_TestProgram]) -> None:
+    pass
+
+
+_GATHER = {
+    "requirement/functional/action": _gather_action,
+    "test-case": _gather_test_case,
+    "build/test-program": _gather_test_program,
+    "test-suite": _gather_test_suite,
+}
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -766,7 +785,8 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     source_files = {}  # type: Dict[str, _SourceFile]
     test_programs = []  # type: List[_TestProgram]
     for item in item_cache.all.values():
-        _gather_items(item, source_files, test_programs)
+        _GATHER.get(item.type, _gather_default)(item, source_files,
+                                                test_programs)
 
     test_case_to_suites = {}  # type: Dict[str, List[_TestItem]]
     for test_program in test_programs:
