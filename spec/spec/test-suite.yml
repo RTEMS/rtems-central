@@ -14,28 +14,28 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      brief:
+      test-brief:
         description: |
           It shall be the test suite brief description.
         spec-type: str
-      code:
+      test-code:
         description: |
           It shall be the test suite code.  The test suite code is placed at
           file scope in the target source file.
         spec-type: str
-      description:
+      test-description:
         description: |
           It shall be the test suite description.
         spec-type: optional-str
-      includes:
+      test-includes:
         description: |
           It shall be a list of header files included via ``#include <...>``.
         spec-type: list-str
-      local-includes:
+      test-local-includes:
         description: |
           It shall be a list of header files included via ``#include "..."``.
         spec-type: list-str
-      target:
+      test-target:
         description: |
           It shall be the path to the generated target test suite source file.
         spec-type: str

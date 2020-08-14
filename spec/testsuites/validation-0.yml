@@ -1,7 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: |
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-brief: |
   This test suite contains a collection of unrelated test cases.
-code: |
+test-code: |
   static char runner_task_stack[ RTEMS_MINIMUM_STACK_SIZE ];
 
   static char buffer[ 512 ];
@@ -106,15 +110,11 @@ code: |
   #define CONFIGURE_INIT
 
   #include <rtems/confdefs.h>
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: null
-enabled-by: true
-includes:
+test-description: null
+test-includes:
 - rtems.h
 - rtems/bspIo.h
 - rtems/sysinit.h
-links: []
-local-includes: []
-target: testsuites/validation/ts-validation-0.c
+test-local-includes: []
+test-target: testsuites/validation/ts-validation-0.c
 type: test-suite

@@ -5,10 +5,13 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: The Blue Green description.
 enabled-by: true
-includes:
-- blue.h
 links: []
-local-includes:
+test-code: |
+  /* Blue green code */
+test-description: The Blue Green description.
+test-includes:
+- blue.h
+test-local-includes:
 - green.h
-target: ts.c
+test-target: ts.c
 type: test-suite

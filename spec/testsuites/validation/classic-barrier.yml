@@ -1,5 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-actions:
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
 - action: |
     id = 0xffffffff;
     sc = rtems_barrier_create(name, RTEMS_BARRIER_AUTOMATIC_RELEASE, 1, &id);
@@ -60,27 +64,23 @@ actions:
   description: |
     Wait with an infinite timeout for the barrier.
   links: []
-brief: |
+test-brief: |
   This test case calls functions of the Barrier Manager which are included in
   the space profile.
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: null
-enabled-by: true
-epilogue: |
+test-description: null
+test-epilogue: |
   T_check_rtems_barriers(T_EVENT_RUN_INITIALIZE_EARLY, T_case_name());
-fixture: null
-includes:
+test-fixture: null
+test-header: null
+test-includes:
 - rtems.h
-links: []
-local-includes: []
-prologue: |
+test-local-includes: []
+test-prologue: |
   static const rtems_name name = rtems_build_name('B', 'A', 'R', 'R');
   rtems_status_code sc;
   rtems_id id;
   rtems_id id2;
   uint32_t released;
-support: null
-target: testsuites/validation/tc-space-profile.c
-test-header: null
+test-support: null
+test-target: testsuites/validation/tc-space-profile.c
 type: test-case

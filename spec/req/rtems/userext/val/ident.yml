@@ -1,5 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-actions:
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../ident
+test-actions:
 - action: |
     ${../../ident-local:/test-run}(
       id_local_object,
@@ -10,20 +16,15 @@ actions:
     Run the generic object identification tests for Classic API user extension
     class objects defined by ${../../ident-local}.
   links: []
-brief: Test the ${/if/rtems/userext/ident:/name} directive.
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: null
-enabled-by: true
-epilogue: null
-fixture: null
-includes: []
-links:
-- role: validation
-  uid: ../ident
-local-includes:
+test-brief: Test the ${/if/rtems/userext/ident:/name} directive.
+test-description: null
+test-epilogue: null
+test-fixture: null
+test-header: null
+test-includes: []
+test-local-includes:
 - support-object-ident-local.h
-prologue: |
+test-prologue: |
   static const rtems_extensions_table table;
   rtems_status_code sc;
   rtems_id id_local_object;
@@ -34,7 +35,7 @@ prologue: |
     &id_local_object
   );
   T_assert_rsc_success( sc );
-support: |
+test-support: |
   static rtems_status_code ClassicUserExtIdentAction(
     rtems_name name,
     rtems_id  *id
@@ -42,6 +43,5 @@ support: |
   {
     return rtems_extension_ident( name, id );
   }
-target: testsuites/validation/tc-userext-ident.c
-test-header: null
+test-target: testsuites/validation/tc-userext-ident.c
 type: test-case

@@ -14,24 +14,24 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      actions:
+      test-actions:
         description: null
         spec-type: test-case-action-list
-      brief:
+      test-brief:
         description: |
           It shall be the test case brief description.
         spec-type: str
-      description:
+      test-description:
         description: |
           It shall be the test case description.
         spec-type: optional-str
-      epilogue:
+      test-epilogue:
         description: |
           If the value is present, then it shall be the test case epilogue
           code.  The epilogue code is placed in the test case body after the
           test case actions.
         spec-type: optional-str
-      fixture:
+      test-fixture:
         description: |
           If the value is present, then it shall be a pointer to the test case
           fixture.  The test case fixture pointer declaration may be provided
@@ -40,27 +40,27 @@ spec-info:
       test-header:
         description: null
         spec-type: test-header
-      includes:
+      test-includes:
         description: |
           It shall be a list of header files included via ``#include <...>``.
         spec-type: list-str
-      local-includes:
+      test-local-includes:
         description: |
           It shall be a list of header files included via ``#include "..."``.
         spec-type: list-str
-      prologue:
+      test-prologue:
         description: |
           If the value is present, then it shall be the test case prologue
           code.  The prologue code is placed in the test case body before the
           test case actions.  A use case is the declaration of local variables
           used by the test case actions.
         spec-type: optional-str
-      support:
+      test-support:
         description: |
           If the value is present, then it shall be the test case support code.
           The support code is placed at file scope before the test case code.
         spec-type: optional-str
-      target:
+      test-target:
         description: |
           It shall be the path to the generated target test case source file.
         spec-type: str

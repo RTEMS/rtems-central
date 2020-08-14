@@ -103,12 +103,22 @@ class _TestItem:
     @property
     def includes(self) -> List[str]:
         """ Returns the list of includes. """
-        return self._item["includes"]
+        return self._item["test-includes"]
 
     @property
     def local_includes(self) -> List[str]:
         """ Returns the list of local includes. """
-        return self._item["local-includes"]
+        return self._item["test-local-includes"]
+
+    @property
+    def brief(self) -> str:
+        """ Returns the substituted brief description. """
+        return self.substitute_text(self["test-brief"])
+
+    @property
+    def description(self) -> str:
+        """ Returns the substituted description. """
+        return self.substitute_text(self["test-description"])
 
     @property
     def group_identifier(self) -> str:
@@ -138,7 +148,7 @@ class _TestItem:
             content.add(["@brief Test Case", "", "@{"])
 
     def _add_test_case_action_description(self, content: CContent) -> None:
-        actions = self["actions"]
+        actions = self["test-actions"]
         if actions:
             content.add("This test case performs the following actions:")
             for action in actions:
@@ -151,7 +161,7 @@ class _TestItem:
 
     def _generate_test_case_actions(self) -> CContent:
         content = CContent()
-        for action in self["actions"]:
+        for action in self["test-actions"]:
             content.add(self.substitute_code(action["action"]))
             for check in action["checks"]:
                 content.append(self.substitute_text(check["check"]))
@@ -161,27 +171,27 @@ class _TestItem:
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
-        content.add(self.substitute_code(self["support"]))
+        content.add(self.substitute_code(self["test-support"]))
         with content.function_block(f"void T_case_body_{self.ident}( void )"):
-            content.add_brief_description(self.substitute_text(self["brief"]))
-            content.wrap(self.substitute_text(self["description"]))
+            content.add_brief_description(self.brief)
+            content.wrap(self.description)
             self._add_test_case_action_description(content)
         content.gap = False
         params = [f"{self.ident}"]
-        fixture = self["fixture"]
+        fixture = self["test-fixture"]
         if fixture:
             params.append(f"&{fixture}")
             name = "T_TEST_CASE_FIXTURE"
         else:
             name = "T_TEST_CASE"
         with content.function("", name, params):
-            content.add(self.substitute_code(self["prologue"]))
+            content.add(self.substitute_code(self["test-prologue"]))
             self._text_mapper.reset_step()
             action_content = self._generate_test_case_actions()
             if self._text_mapper.steps > 0:
                 content.add(f"T_plan({self._text_mapper.steps});")
             content.add(action_content)
-            content.add(self.substitute_code(self["epilogue"]))
+            content.add(self.substitute_code(self["test-epilogue"]))
         content.add("/** @} */")
 
 
@@ -195,9 +205,9 @@ class _TestSuiteItem(_TestItem):
                  _test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
         with content.defgroup_block(self.group_identifier, self.name):
             content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
-            content.wrap(self.substitute_text(self["description"]))
+            content.wrap(self.description)
             content.add("@{")
-        content.add(self.substitute_code(self["code"]))
+        content.add(self.substitute_code(self["test-code"]))
         content.add("/** @} */")
 
 
@@ -268,14 +278,6 @@ class _TestDirectiveItem(_TestItem):
     def context(self) -> str:
         """ Returns the test case context type. """
         return f"{self._ident}_Context"
-
-    @property
-    def includes(self) -> List[str]:
-        return self._item["test-includes"]
-
-    @property
-    def local_includes(self) -> List[str]:
-        return self._item["test-local-includes"]
 
     def _add_pre_condition_descriptions(self, content: CContent) -> None:
         for condition in self["pre-conditions"]:
@@ -536,8 +538,8 @@ class _TestDirectiveItem(_TestItem):
         else:
             with content.function_block(
                     f"void T_case_body_{self.ident}( void )"):
-                content.add_brief_description(self["test-brief"])
-                content.wrap(self["test-description"])
+                content.add_brief_description(self.brief)
+                content.wrap(self.description)
             content.gap = False
             ret = ""
             name = "T_TEST_CASE_FIXTURE"
@@ -592,8 +594,8 @@ class _TestDirectiveItem(_TestItem):
         _directive_add_enum(content, self._post_index_to_enum)
         content.add(self.substitute_code(header["code"]))
         with content.doxygen_block():
-            content.add_brief_description(self["test-brief"])
-            content.wrap(self["test-description"])
+            content.add_brief_description(self.brief)
+            content.wrap(self.description)
             content.add_param_description(header["run-params"])
         content.gap = False
         content.declare_function("void", f"{self.ident}_Run",
@@ -745,7 +747,7 @@ def _gather_action(item: Item, source_files: Dict[str, _SourceFile],
 
 def _gather_test_case(item: Item, source_files: Dict[str, _SourceFile],
                       _test_programs: List[_TestProgram]) -> None:
-    src = _get_source_file(item["target"], source_files)
+    src = _get_source_file(item["test-target"], source_files)
     src.add_test_case(item)
 
 
@@ -756,7 +758,7 @@ def _gather_test_program(item: Item, _source_files: Dict[str, _SourceFile],
 
 def _gather_test_suite(item: Item, source_files: Dict[str, _SourceFile],
                        _test_programs: List[_TestProgram]) -> None:
-    src = _get_source_file(item["target"], source_files)
+    src = _get_source_file(item["test-target"], source_files)
     src.add_test_suite(item)
 
 

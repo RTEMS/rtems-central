@@ -1,8 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: |
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-brief: |
   This test suite contains test cases which call in combination all functions
   included in the space profile.
-code: |
+test-code: |
   #define NAME rtems_build_name('N', 'A', 'M', 'E')
 
   static void fatal_extension(
@@ -142,16 +146,12 @@ code: |
   #define CONFIGURE_INIT
 
   #include <rtems/confdefs.h>
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: null
-enabled-by: true
-includes:
+test-description: null
+test-includes:
 - rtems.h
 - rtems/bspIo.h
 - rtems/sysinit.h
 - rtems/score/sysstate.h
-links: []
-local-includes: []
-target: testsuites/validation/ts-space-profile.c
+test-local-includes: []
+test-target: testsuites/validation/ts-space-profile.c
 type: test-suite

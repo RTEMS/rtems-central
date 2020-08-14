@@ -1,5 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-actions:
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
 - action: |
     p = aligned_alloc(128, 4);
   checks:
@@ -53,26 +57,22 @@ actions:
     Set a source integer variable to one, set a destination integer variable to
     two, and copy the source to the destination variable through memcpy().
   links: []
-brief: |
+test-brief: |
   This test case calls functions of the C Library which are included in the
   space profile.
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-description: null
-enabled-by: true
-epilogue: null
-fixture: null
-includes:
+test-description: null
+test-epilogue: null
+test-fixture: null
+test-header: null
+test-includes:
 - rtems.h
 - stdlib.h
 - rtems/malloc.h
-links: []
-local-includes: []
-prologue: |
+test-local-includes: []
+test-prologue: |
   void *p;
   int s;
   int d;
-support: null
-target: testsuites/validation/tc-space-profile.c
-test-header: null
+test-support: null
+test-target: testsuites/validation/tc-space-profile.c
 type: test-case
