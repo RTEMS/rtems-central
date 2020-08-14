@@ -36,11 +36,16 @@ from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 ItemMap = Dict[str, Item]
 
 
+def _get_test_run(ctx: ItemGetValueContext) -> Any:
+    return f"{to_camel_case(ctx.item.uid[1:]).replace(' ', '')}_Run"
+
+
 class _CodeMapper(ItemMapper):
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        if ctx.type_path_key == "requirement/functional/action:/test-run":
-            return f"{to_camel_case(ctx.item.uid[1:]).replace(' ', '')}_Run"
-        raise KeyError
+    def __init__(self, item: Item):
+        super().__init__(item)
+        self.add_get_value("requirement/functional/action:/test-run",
+                           _get_test_run)
+        self.add_get_value("test-case:/test-run", _get_test_run)
 
 
 class _TextMapper(ItemMapper):
@@ -147,7 +152,8 @@ class _TestItem:
             _add_ingroup(content, test_case_to_suites[self.uid])
             content.add(["@brief Test Case", "", "@{"])
 
-    def _add_test_case_action_description(self, content: CContent) -> None:
+    def add_test_case_action_description(self, content: CContent) -> None:
+        """ Adds the test case action description. """
         actions = self["test-actions"]
         if actions:
             content.add("This test case performs the following actions:")
@@ -167,31 +173,100 @@ class _TestItem:
                 content.append(self.substitute_text(check["check"]))
         return content
 
-    def generate(self, content: CContent, _base_directory: str,
+    def _get_run_params(self, header: Optional[Dict[str, Any]]) -> List[str]:
+        if not header:
+            return []
+        return [
+            self.substitute_text(param["specifier"],
+                                 f"test-header/run-params[{index}]")
+            for index, param in enumerate(header["run-params"])
+        ]
+
+    def add_header_body(self, content: CContent, header: Dict[str,
+                                                              Any]) -> None:
+        """ Adds the test header body. """
+        content.add(self.substitute_code(header["code"]))
+        with content.doxygen_block():
+            content.add_brief_description(self.substitute_text(self.brief))
+            content.wrap(self.substitute_text(self.description))
+            self.add_test_case_action_description(content)
+            content.add_param_description(header["run-params"])
+        content.gap = False
+        content.declare_function("void", f"{self.ident}_Run",
+                                 self._get_run_params(header))
+
+    def generate_header(self, base_directory: str, header: Dict[str,
+                                                                Any]) -> None:
+        """ Generates the test header. """
+        content = CContent()
+        content.register_license_and_copyrights_of_item(self._item)
+        content.prepend_spdx_license_identifier()
+        with content.file_block():
+            content.add_ingroup([self.group_identifier])
+        content.add_copyrights_and_licenses()
+        with content.header_guard(os.path.basename(header["target"])):
+            content.add_includes(list(map(CInclude, header["includes"])))
+            content.add_includes(list(map(CInclude, header["local-includes"])),
+                                 local=True)
+            with content.extern_c():
+                with content.add_to_group(self.group_identifier):
+                    self.add_header_body(content, header)
+        content.write(os.path.join(base_directory, header["target"]))
+
+    def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
-        content.add(self.substitute_code(self["test-support"]))
-        with content.function_block(f"void T_case_body_{self.ident}( void )"):
-            content.add_brief_description(self.brief)
-            content.wrap(self.description)
-            self._add_test_case_action_description(content)
-        content.gap = False
-        params = [f"{self.ident}"]
+        self._text_mapper.reset_step()
+        actions = self._generate_test_case_actions()
         fixture = self["test-fixture"]
-        if fixture:
-            params.append(f"&{fixture}")
-            name = "T_TEST_CASE_FIXTURE"
+        header = self["test-header"]
+        if header:
+            self.generate_header(base_directory, header)
+            if self._text_mapper.steps > 0 and not fixture:
+                fixture = "T_empty_fixture"
+        content.add(self.substitute_code(self["test-support"]))
+        if header:
+            params = self._get_run_params(header)
+            if fixture:
+                ret = "static void"
+                name = f"{self.ident}_Wrap"
+            else:
+                ret = "void"
+                name = f"{self.ident}_Run"
+            align = True
         else:
-            name = "T_TEST_CASE"
-        with content.function("", name, params):
+            ret = ""
+            params = [f"{self.ident}"]
+            if fixture:
+                params.append(f"&{fixture}")
+                name = "T_TEST_CASE_FIXTURE"
+            else:
+                name = "T_TEST_CASE"
+            align = False
+            with content.function_block(
+                    f"void T_case_body_{self.ident}( void )"):
+                content.add_brief_description(self.brief)
+                content.wrap(self.description)
+                self.add_test_case_action_description(content)
+            content.gap = False
+        with content.function(ret, name, params, align=align):
             content.add(self.substitute_code(self["test-prologue"]))
-            self._text_mapper.reset_step()
-            action_content = self._generate_test_case_actions()
             if self._text_mapper.steps > 0:
                 content.add(f"T_plan({self._text_mapper.steps});")
-            content.add(action_content)
+            content.add(actions)
             content.add(self.substitute_code(self["test-epilogue"]))
+        if header and fixture:
+            run = f"{self.ident}_Run"
+            content.add(f"static T_fixture_node {self.ident}_Node;")
+            with content.function("void", run, params, align=align):
+                content.call_function(None, "T_push_fixture",
+                                      [f"&{self.ident}_Node", f"&{fixture}"])
+                content.gap = False
+                content.call_function(
+                    None, name,
+                    [param["name"] for param in header["run-params"]])
+                content.append("T_pop_fixture();")
         content.add("/** @} */")
 
 
@@ -579,51 +654,21 @@ class _TestDirectiveItem(_TestItem):
                 content.add("}")
                 content.add(self.substitute_code(condition["test-epilogue"]))
 
-    def _get_run_params(self, header: Optional[Dict[str, Any]]) -> List[str]:
-        if not header:
-            return []
-        return [
-            self.substitute_text(param["specifier"],
-                                 f"test-header/run-params[{index}]")
-            for index, param in enumerate(header["run-params"])
-        ]
+    def add_test_case_action_description(self, _content: CContent) -> None:
+        pass
 
-    def _generate_header_body(self, content: CContent,
-                              header: Dict[str, Any]) -> None:
+    def add_header_body(self, content: CContent, header: Dict[str,
+                                                              Any]) -> None:
         _directive_add_enum(content, self._pre_index_to_enum)
         _directive_add_enum(content, self._post_index_to_enum)
-        content.add(self.substitute_code(header["code"]))
-        with content.doxygen_block():
-            content.add_brief_description(self.brief)
-            content.wrap(self.description)
-            content.add_param_description(header["run-params"])
-        content.gap = False
-        content.declare_function("void", f"{self.ident}_Run",
-                                 self._get_run_params(header))
-
-    def _generate_header(self, base_directory: str, header: Dict[str,
-                                                                 Any]) -> None:
-        content = CContent()
-        content.register_license_and_copyrights_of_item(self._item)
-        content.prepend_spdx_license_identifier()
-        with content.file_block():
-            content.add_ingroup([self.group_identifier])
-        content.add_copyrights_and_licenses()
-        with content.header_guard(os.path.basename(header["target"])):
-            content.add_includes(list(map(CInclude, header["includes"])))
-            content.add_includes(list(map(CInclude, header["local-includes"])),
-                                 local=True)
-            with content.extern_c():
-                with content.add_to_group(self.group_identifier):
-                    self._generate_header_body(content, header)
-        content.write(os.path.join(base_directory, header["target"]))
+        super().add_header_body(content, header)
 
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
         self.add_test_case_description(content, test_case_to_suites)
         header = self["test-header"]
         if header:
-            self._generate_header(base_directory, header)
+            self.generate_header(base_directory, header)
         else:
             _directive_add_enum(content, self._pre_index_to_enum)
             _directive_add_enum(content, self._post_index_to_enum)

@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-5.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action: |
+    /* Test case action 0 code */
+  checks:
+  - check: |
+      /* Test case action 0 check 0 code */
+    description: |
+      Test case action 0 check 0 description.
+    links: []
+  - check: |
+      /* Test case action 0 check 1 code; step ${step} */
+    description: |
+      Test case action 0 check 1 description.
+    links: []
+  description: |
+    Test case action 0 description.
+  links: []
+- action: |
+    /* Test case action 1 code */
+  checks:
+  - check: |
+      /* Test case action 1 check 0 code; step ${step} */
+    description: |
+      Test case action 1 check 0 description.
+    links: []
+  - check: |
+      /* Test case action 1 check 1 code */
+    description: |
+      Test case action 1 check 1 description.
+    links: []
+  description: |
+    Test case action 1 description.
+  links: []
+test-brief: Test case 5 brief description.
+test-description: Test case 5 description.
+test-epilogue: |
+  /* Test case 5 epilogue code */
+test-fixture: null
+test-header:
+  code: |
+    /* Header code for ${.:/test-run}() */
+  includes:
+  - d.h
+  local-includes:
+  - e.h
+  run-params:
+  - description: |
+      Parameter A description.
+    dir: in
+    name: a
+    specifier: int *${.:name}
+  - description: |
+      Parameter B description.
+    dir: null
+    name: b
+    specifier: int ${.:name}
+  - description: |
+      Parameter C description.
+    dir: out
+    name: c
+    specifier: int *${.:name}
+  target: tc5.h
+test-includes: []
+test-local-includes: []
+test-prologue: null
+test-support: null
+test-target: tc34.c
+type: test-case

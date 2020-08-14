@@ -104,7 +104,6 @@ def test_validation(tmpdir):
 /** @} */
 """
         assert content == src.read()
-
     with open(os.path.join(base_directory, "tc12.c"), "r") as src:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */
 
@@ -894,7 +893,6 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
 /** @} */
 """
         assert content == src.read()
-
     with open(os.path.join(base_directory, "tc34.c"), "r") as src:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */
 
@@ -903,6 +901,8 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  *
  * @ingroup RTEMSTestCaseTc3
  * @ingroup RTEMSTestCaseTc4
+ * @ingroup RTEMSTestCaseTc5
+ * @ingroup RTEMSTestCaseTc6
  */
 
 /*
@@ -996,6 +996,207 @@ T_TEST_CASE( Tc4 )
 }
 
 /** @} */
+
+/**
+ * @defgroup RTEMSTestCaseTc5 spec:/tc5
+ *
+ * @ingroup RTEMSTestSuiteTs
+ *
+ * @brief Test Case
+ *
+ * @{
+ */
+
+static void Tc5_Wrap( int *a, int b, int *c )
+{
+  T_plan(2);
+
+  /* Test case action 0 code */
+  /* Test case action 0 check 0 code */
+  /* Test case action 0 check 1 code; step 0 */
+
+  /* Test case action 1 code */
+  /* Test case action 1 check 0 code; step 1 */
+  /* Test case action 1 check 1 code */
+
+  /* Test case 5 epilogue code */
+}
+
+static T_fixture_node Tc5_Node;
+
+void Tc5_Run( int *a, int b, int *c )
+{
+  T_push_fixture( &Tc5_Node, &T_empty_fixture );
+  Tc5_Wrap( a, b, c );
+  T_pop_fixture();
+}
+
+/** @} */
+
+/**
+ * @defgroup RTEMSTestCaseTc6 spec:/tc6
+ *
+ * @ingroup RTEMSTestSuiteTs
+ *
+ * @brief Test Case
+ *
+ * @{
+ */
+
+void Tc6_Run( void )
+{
+}
+
+/** @} */
+"""
+        assert content == src.read()
+    with open(os.path.join(base_directory, "tc5.h"), "r") as src:
+        content = """/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestCaseTc5
+ */
+
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef _TC5_H
+#define _TC5_H
+
+#include <d.h>
+
+#include "e.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @addtogroup RTEMSTestCaseTc5
+ *
+ * @{
+ */
+
+/* Header code for Tc5_Run() */
+
+/**
+ * @brief Test case 5 brief description.
+ *
+ * Test case 5 description.
+ *
+ * This test case performs the following actions:
+ *
+ * - Test case action 0 description.
+ *
+ *   - Test case action 0 check 0 description.
+ *
+ *   - Test case action 0 check 1 description.
+ *
+ * - Test case action 1 description.
+ *
+ *   - Test case action 1 check 0 description.
+ *
+ *   - Test case action 1 check 1 description.
+ *
+ * @param[in] a Parameter A description.
+ *
+ * @param b Parameter B description.
+ *
+ * @param[out] c Parameter C description.
+ */
+void Tc5_Run( int *a, int b, int *c );
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _TC5_H */
+"""
+        assert content == src.read()
+    with open(os.path.join(base_directory, "tc6.h"), "r") as src:
+        content = """/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestCaseTc6
+ */
+
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef _TC6_H
+#define _TC6_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @addtogroup RTEMSTestCaseTc6
+ *
+ * @{
+ */
+
+/**
+ */
+void Tc6_Run( void );
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _TC6_H */
 """
         assert content == src.read()
     with open(os.path.join(base_directory, "action2.h"), "r") as src:
