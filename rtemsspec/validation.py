@@ -98,7 +98,7 @@ class _TestItem:
     @property
     def name(self) -> str:
         """ Returns the name. """
-        return f"spec:{self._item.uid}"
+        return self._item.spec
 
     @property
     def includes(self) -> List[str]:

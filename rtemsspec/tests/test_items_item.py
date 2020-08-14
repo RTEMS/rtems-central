@@ -44,6 +44,11 @@ def test_uid():
     assert item.uid == "x"
 
 
+def test_spec():
+    item = Item(EmptyItemCache(), "x", {})
+    assert item.spec == "spec:x"
+
+
 def test_contains():
     data = {}
     data["x"] = "y"

@@ -184,6 +184,11 @@ class Item:
         """ Returns the UID of the item. """
         return self._uid
 
+    @property
+    def spec(self) -> str:
+        """ Returns the UID of the item with an URL-like format. """
+        return f"spec:{self._uid}"
+
     def to_abs_uid(self, abs_or_rel_uid: str) -> str:
         """
         Returns the absolute UID of an absolute UID or an UID relative to this
