@@ -37,6 +37,9 @@ spec-info:
           fixture.  The test case fixture pointer declaration may be provided
           by the test case support code or via an included header file.
         spec-type: optional-str
+      test-header:
+        description: null
+        spec-type: test-header
       includes:
         description: |
           It shall be a list of header files included via ``#include <...>``.

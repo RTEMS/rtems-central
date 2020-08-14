@@ -43,4 +43,5 @@ support: |
     return rtems_barrier_ident( name, id );
   }
 target: testsuites/validation/tc-barrier-ident.c
+test-header: null
 type: test-case

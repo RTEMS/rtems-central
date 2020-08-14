@@ -12,8 +12,8 @@ spec-info:
     attributes:
       code:
         description: |
-          If the value is present, then it shall be the test case header code.
-          The header code is placed at file scope after the test enum
+          If the value is present, then it shall be the test header code.  The
+          header code is placed at file scope after the general test
           declarations and before the test run function declaration.
         spec-type: optional-str
       includes:
@@ -28,21 +28,21 @@ spec-info:
         spec-type: list-str
       run-params:
         description: null
-        spec-type: requirement-action-test-run-param-list
+        spec-type: test-run-param-list
       target:
         description: |
           It shall be the path to the generated test header file.
         spec-type: str
     description: |
-      This set of attributes specifies an action requirement test header.  In
-      case a test header is specified, then instead of a test case a test run
-      function will be generated.  The test run function will be declared in
-      the test header target file and defined in the test source target file.
-      The test run function can be used to compose test cases.  The test header
-      file is not automatically included in the test source file.  It should be
-      added to the includes or local includes of the test.
+      This set of attributes specifies a test header.  In case a test header is
+      specified, then instead of a test case a test run function will be
+      generated.  The test run function will be declared in the test header
+      target file and defined in the test source target file.  The test run
+      function can be used to compose test cases.  The test header file is not
+      automatically included in the test source file.  It should be added to
+      the includes or local includes of the test.
     mandatory-attributes: all
   none: null
-spec-name: Action Requirement Test Header
-spec-type: requirement-action-test-header
+spec-name: Test Header
+spec-type: test-header
 type: spec

@@ -43,4 +43,5 @@ support: |
     return rtems_extension_ident( name, id );
   }
 target: testsuites/validation/tc-userext-ident.c
+test-header: null
 type: test-case

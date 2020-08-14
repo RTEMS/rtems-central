@@ -41,4 +41,5 @@ support: |
     return rtems_rate_monotonic_ident( name, id );
   }
 target: testsuites/validation/tc-ratemon-ident.c
+test-header: null
 type: test-case

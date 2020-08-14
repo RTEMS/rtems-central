@@ -26,4 +26,5 @@ local-includes:
 prologue: null
 support: null
 target: tc34.c
+test-header: null
 type: test-case

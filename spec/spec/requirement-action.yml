@@ -173,7 +173,7 @@ spec-info:
         spec-type: optional-str
       test-header:
         description: null
-        spec-type: requirement-action-test-header
+        spec-type: test-header
       test-includes:
         description: |
           It shall be a list of header files included via ``#include <...>``.

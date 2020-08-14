@@ -50,4 +50,5 @@ prologue: |
 support: |
   /* Test case support code */
 target: tc12.c
+test-header: null
 type: test-case

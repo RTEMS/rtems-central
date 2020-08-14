@@ -74,4 +74,5 @@ prologue: |
   int d;
 support: null
 target: testsuites/validation/tc-space-profile.c
+test-header: null
 type: test-case

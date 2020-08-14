@@ -45,4 +45,5 @@ support: |
     return rtems_message_queue_ident( name, node, id );
   }
 target: testsuites/validation/tc-message-ident.c
+test-header: null
 type: test-case

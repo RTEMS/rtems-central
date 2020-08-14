@@ -82,4 +82,5 @@ prologue: |
   uint32_t released;
 support: null
 target: testsuites/validation/tc-space-profile.c
+test-header: null
 type: test-case

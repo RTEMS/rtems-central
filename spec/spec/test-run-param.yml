@@ -29,9 +29,10 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies a parameter for the test run function.
-      The parameter is also added as a member to the test context, see
-      ${requirement-action-test-context:/spec-name}.
+      In case this parameter is used in an ${requirement-action:/spec-name}
+      item, then the parameter is also added as a member to the test context,
+      see ${requirement-action-test-context:/spec-name}.
     mandatory-attributes: all
-spec-name: Action Requirement Test Run Parameter
-spec-type: requirement-action-test-run-param
+spec-name: Test Run Parameter
+spec-type: test-run-param
 type: spec

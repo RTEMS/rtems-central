@@ -41,4 +41,5 @@ support: |
     return rtems_timer_ident( name, id );
   }
 target: testsuites/validation/tc-timer-ident.c
+test-header: null
 type: test-case
