@@ -839,14 +839,14 @@ T_TEST_CASE( Tc )
 {
   /* Test case prologue code */
 
-  T_plan(2);
+  T_plan(125);
 
   /* Test case action 0 code */
-  /* Test case action 0 check 0 code */
-  /* Test case action 0 check 1 code; step 0 */
+  /* Test case action 0 check 0 code: Accounts for 123 test plan steps */
+  /* Test case action 0 check 1 code; step 123 */
 
   /* Test case action 1 code */
-  /* Test case action 1 check 0 code; step 1 */
+  /* Test case action 1 check 0 code; step 124 */
   /* Test case action 1 check 1 code */
 
   /* Test case epilogue code */

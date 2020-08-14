@@ -8,7 +8,7 @@ test-actions:
     /* Test case action 0 code */
   checks:
   - check: |
-      /* Test case action 0 check 0 code */
+      /* Test case action 0 check 0 code: ${steps/123} */
     description: |
       Test case action 0 check 0 description.
     links: []

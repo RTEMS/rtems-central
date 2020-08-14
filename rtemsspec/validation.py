@@ -27,6 +27,7 @@
 import itertools
 import math
 import os
+import re
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
@@ -35,30 +36,27 @@ from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 
+_STEPS = re.compile(r"^steps/([0-9]+)$")
+
 
 def _get_test_run(ctx: ItemGetValueContext) -> Any:
     return f"{to_camel_case(ctx.item.uid[1:]).replace(' ', '')}_Run"
 
 
-class _CodeMapper(ItemMapper):
-    def __init__(self, item: Item):
-        super().__init__(item)
-        self.add_get_value("requirement/functional/action:/test-run",
-                           _get_test_run)
-        self.add_get_value("test-case:/test-run", _get_test_run)
-
-
-class _TextMapper(ItemMapper):
+class _Mapper(ItemMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self._step = 0
+        self.add_get_value("requirement/functional/action:/test-run",
+                           _get_test_run)
+        self.add_get_value("test-case:/test-run", _get_test_run)
 
     @property
     def steps(self):
         """ The count of test steps. """
         return self._step
 
-    def reset_step(self):
+    def reset(self):
         """ Resets the test step counter. """
         self._step = 0
 
@@ -67,6 +65,11 @@ class _TextMapper(ItemMapper):
             step = self._step
             self._step = step + 1
             return self._item, str(step)
+        match = _STEPS.search(identifier)
+        if match:
+            inc = int(match.group(1))
+            self._step += inc
+            return self._item, f"Accounts for {inc} test plan steps"
         return super().map(identifier)
 
 
@@ -79,8 +82,7 @@ class _TestItem:
     def __init__(self, item: Item):
         self._item = item
         self._ident = to_camel_case(item.uid[1:])
-        self._code_mapper = _CodeMapper(item)
-        self._text_mapper = _TextMapper(item)
+        self._mapper = _Mapper(item)
 
     def __getitem__(self, key: str):
         return self._item[key]
@@ -132,7 +134,7 @@ class _TestItem:
 
     def substitute_code(self, text: Optional[str]) -> str:
         """ Performs a variable substitution for code. """
-        return self._code_mapper.substitute(text)
+        return self._mapper.substitute(text)
 
     def substitute_text(self,
                         text: Optional[str],
@@ -141,8 +143,8 @@ class _TestItem:
         Performs a variable substitution for text with an optional prefix.
         """
         if prefix:
-            return self._text_mapper.substitute_with_prefix(text, prefix)
-        return self._text_mapper.substitute(text)
+            return self._mapper.substitute_with_prefix(text, prefix)
+        return self._mapper.substitute(text)
 
     def add_test_case_description(
             self, content: CContent,
@@ -217,13 +219,13 @@ class _TestItem:
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
-        self._text_mapper.reset_step()
+        self._mapper.reset()
         actions = self._generate_test_case_actions()
         fixture = self["test-fixture"]
         header = self["test-header"]
         if header:
             self.generate_header(base_directory, header)
-            if self._text_mapper.steps > 0 and not fixture:
+            if self._mapper.steps > 0 and not fixture:
                 fixture = "T_empty_fixture"
         content.add(self.substitute_code(self["test-support"]))
         if header:
@@ -252,8 +254,8 @@ class _TestItem:
             content.gap = False
         with content.function(ret, name, params, align=align):
             content.add(self.substitute_code(self["test-prologue"]))
-            if self._text_mapper.steps > 0:
-                content.add(f"T_plan({self._text_mapper.steps});")
+            if self._mapper.steps > 0:
+                content.add(f"T_plan({self._mapper.steps});")
             content.add(actions)
             content.add(self.substitute_code(self["test-epilogue"]))
         if header and fixture:
