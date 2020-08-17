@@ -31,7 +31,7 @@ from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 def test_build(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
-        tmpdir, "spec-build")
+        tmpdir, "spec-build", with_spec_types=True)
     item_cache = ItemCache(item_cache_config)
 
     build_config = {}
@@ -41,4 +41,4 @@ def test_build(tmpdir):
     build_config["sources"] = ["a", "b"]
     build_config["uids"] = ["/g"]
     files = gather_files(build_config, item_cache)
-    assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def"]
+    assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def", "th"]

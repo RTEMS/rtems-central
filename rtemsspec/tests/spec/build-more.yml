@@ -7,6 +7,26 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: build-type
+  spec-value: bsp
+  uid: build
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: group
+  uid: build
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: objects
+  uid: build
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: option
+  uid: build
+- role: spec-refinement
+  spec-key: build-type
+  spec-value: start-file
+  uid: build
+- role: spec-refinement
+  spec-key: build-type
   spec-value: test-program
   uid: build
 spec-description: null
