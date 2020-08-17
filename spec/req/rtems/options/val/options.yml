@@ -48,7 +48,7 @@ test-actions:
     - role: validation
       uid: ../default
     - role: validation
-      uid: /if/rtems/options/default
+      uid: /if/rtems/options/event-all
   - check: |
       T_step_eq_u32( ${step}, RTEMS_WAIT, 0 );
     description: |

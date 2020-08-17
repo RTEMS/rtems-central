@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /if/rtems/modes/group
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  Each task mode mask constant except ${/if/rtems/modes/interrupt-mask} shall
+  be a power of two representable as an integer of type
+  ${/if/rtems/modes/mode:/name}.
+type: requirement
