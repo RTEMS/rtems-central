@@ -152,7 +152,10 @@ class _TestItem:
         """ Adds the test case description. """
         with content.defgroup_block(self.group_identifier, self.name):
             _add_ingroup(content, test_case_to_suites[self.uid])
-            content.add(["@brief Test Case", "", "@{"])
+            content.add_brief_description(self.brief)
+            content.wrap(self.description)
+            self.add_test_case_action_description(content)
+            content.add("@{")
 
     def add_test_case_action_description(self, content: CContent) -> None:
         """ Adds the test case action description. """
@@ -189,9 +192,7 @@ class _TestItem:
         """ Adds the test header body. """
         content.add(self.substitute_code(header["code"]))
         with content.doxygen_block():
-            content.add_brief_description(self.substitute_text(self.brief))
-            content.wrap(self.substitute_text(self.description))
-            self.add_test_case_action_description(content)
+            content.add_brief_description("Runs the parameterized test case.")
             content.add_param_description(header["run-params"])
         content.gap = False
         content.declare_function("void", f"{self.ident}_Run",
@@ -248,9 +249,7 @@ class _TestItem:
             align = False
             with content.function_block(
                     f"void T_case_body_{self.ident}( void )"):
-                content.add_brief_description(self.brief)
-                content.wrap(self.description)
-                self.add_test_case_action_description(content)
+                pass
             content.gap = False
         with content.function(ret, name, params, align=align):
             content.add(self.substitute_code(self["test-prologue"]))
@@ -281,7 +280,8 @@ class _TestSuiteItem(_TestItem):
     def generate(self, content: CContent, _base_directory: str,
                  _test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
         with content.defgroup_block(self.group_identifier, self.name):
-            content.add(["@ingroup RTEMSTestSuites", "", "@brief Test Suite"])
+            content.add("@ingroup RTEMSTestSuites")
+            content.add_brief_description(self.brief)
             content.wrap(self.description)
             content.add("@{")
         content.add(self.substitute_code(self["test-code"]))
@@ -615,8 +615,7 @@ class _TestDirectiveItem(_TestItem):
         else:
             with content.function_block(
                     f"void T_case_body_{self.ident}( void )"):
-                content.add_brief_description(self.brief)
-                content.wrap(self.description)
+                pass
             content.gap = False
             ret = ""
             name = "T_TEST_CASE_FIXTURE"

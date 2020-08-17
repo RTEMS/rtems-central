@@ -92,7 +92,7 @@ def test_validation(tmpdir):
  *
  * @ingroup RTEMSTestSuites
  *
- * @brief Test Suite
+ * @brief The Blue Green brief description.
  *
  * The Blue Green description.
  *
@@ -158,7 +158,9 @@ def test_validation(tmpdir):
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
+ * @brief Test rtems_task_ident() brief description.
+ *
+ * Test rtems_task_ident() description.
  *
  * @{
  */
@@ -730,10 +732,6 @@ static void Directive_Action( Directive_Context *ctx )
 
 /**
  * @fn void T_case_body_Directive( void )
- *
- * @brief Test rtems_task_ident() brief description.
- *
- * Test rtems_task_ident() description.
  */
 T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 {
@@ -807,16 +805,6 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
- *
- * @{
- */
-
-/* Test case support code */
-
-/**
- * @fn void T_case_body_Tc( void )
- *
  * @brief Test case brief description.
  *
  * Test case description.
@@ -834,6 +822,14 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
  *   - Test case action 1 check 0 description.
  *
  *   - Test case action 1 check 1 description.
+ *
+ * @{
+ */
+
+/* Test case support code */
+
+/**
+ * @fn void T_case_body_Tc( void )
  */
 T_TEST_CASE( Tc )
 {
@@ -859,14 +855,6 @@ T_TEST_CASE( Tc )
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
- *
- * @{
- */
-
-/**
- * @fn void T_case_body_Tc2( void )
- *
  * @brief Test case 2 brief description.
  *
  * Test case 2 description.
@@ -880,6 +868,12 @@ T_TEST_CASE( Tc )
  *   - Test case 2 action 0 check 1 description.
  *
  * - Test case 2 action 1 description.
+ *
+ * @{
+ */
+
+/**
+ * @fn void T_case_body_Tc2( void )
  */
 T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
 {
@@ -945,14 +939,6 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
- *
- * @{
- */
-
-/**
- * @fn void T_case_body_Tc3( void )
- *
  * @brief Test case 3 brief description.
  *
  * Test case 3 description.
@@ -962,6 +948,12 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  * - Test case 3 action 0 description.
  *
  *   - Test case 3 action 0 check 0 description.
+ *
+ * @{
+ */
+
+/**
+ * @fn void T_case_body_Tc3( void )
  */
 T_TEST_CASE( Tc3 )
 {
@@ -978,17 +970,15 @@ T_TEST_CASE( Tc3 )
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
+ * @brief Test case 4 brief description.
+ *
+ * Test case 4 description.
  *
  * @{
  */
 
 /**
  * @fn void T_case_body_Tc4( void )
- *
- * @brief Test case 4 brief description.
- *
- * Test case 4 description.
  */
 T_TEST_CASE( Tc4 )
 {
@@ -1002,7 +992,23 @@ T_TEST_CASE( Tc4 )
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
+ * @brief Test case 5 brief description.
+ *
+ * Test case 5 description.
+ *
+ * This test case performs the following actions:
+ *
+ * - Test case action 0 description.
+ *
+ *   - Test case action 0 check 0 description.
+ *
+ *   - Test case action 0 check 1 description.
+ *
+ * - Test case action 1 description.
+ *
+ *   - Test case action 1 check 0 description.
+ *
+ *   - Test case action 1 check 1 description.
  *
  * @{
  */
@@ -1037,8 +1043,6 @@ void Tc5_Run( int *a, int b, int *c )
  * @defgroup RTEMSTestCaseTc6 spec:/tc6
  *
  * @ingroup RTEMSTestSuiteTs
- *
- * @brief Test Case
  *
  * @{
  */
@@ -1104,23 +1108,7 @@ extern "C" {
 /* Header code for Tc5_Run() */
 
 /**
- * @brief Test case 5 brief description.
- *
- * Test case 5 description.
- *
- * This test case performs the following actions:
- *
- * - Test case action 0 description.
- *
- *   - Test case action 0 check 0 description.
- *
- *   - Test case action 0 check 1 description.
- *
- * - Test case action 1 description.
- *
- *   - Test case action 1 check 0 description.
- *
- *   - Test case action 1 check 1 description.
+ * @brief Runs the parameterized test case.
  *
  * @param[in] a Parameter A description.
  *
@@ -1187,6 +1175,7 @@ extern "C" {
  */
 
 /**
+ * @brief Runs the parameterized test case.
  */
 void Tc6_Run( void );
 
@@ -1278,9 +1267,7 @@ typedef enum {
 /* Header code for Action 2 with Action2_Run() */
 
 /**
- * @brief Test brief.
- *
- * Test description.
+ * @brief Runs the parameterized test case.
  *
  * @param[in] a Parameter A description.
  *
@@ -1348,7 +1335,9 @@ void Action2_Run( int *a, int b, int *c );
  *
  * @ingroup RTEMSTestSuiteTs
  *
- * @brief Test Case
+ * @brief Test brief.
+ *
+ * Test description.
  *
  * @{
  */

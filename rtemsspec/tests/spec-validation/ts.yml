@@ -6,6 +6,7 @@ copyrights:
 description: The Blue Green description.
 enabled-by: true
 links: []
+test-brief: The Blue Green brief description.
 test-code: |
   /* Blue green code */
 test-description: The Blue Green description.
