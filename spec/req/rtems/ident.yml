@@ -185,15 +185,15 @@ test-header:
     name: action
     specifier: |
       rtems_status_code ( *${.:name} )( rtems_name, uint32_t, rtems_id * )
-  target: testsuites/validation/support-object-ident.h
+  target: testsuites/validation/tr-object-ident.h
 test-includes: []
 test-local-includes:
-- support-object-ident.h
+- tr-object-ident.h
 test-prepare: null
 test-setup: null
 test-stop: null
 test-support: null
-test-target: testsuites/validation/support-object-ident.c
+test-target: testsuites/validation/tr-object-ident.c
 test-teardown: null
 text: ${.:text-template}
 transition-map:

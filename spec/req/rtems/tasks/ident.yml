@@ -75,7 +75,7 @@ test-description: null
 test-header: null
 test-includes: []
 test-local-includes:
-- support-object-ident.h
+- tr-object-ident.h
 test-prepare: null
 test-setup:
   brief: null

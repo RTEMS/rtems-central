@@ -23,7 +23,7 @@ test-fixture: null
 test-header: null
 test-includes: []
 test-local-includes:
-- support-object-ident.h
+- tr-object-ident.h
 test-prologue: |
   rtems_status_code sc;
   rtems_id id_local_object;
