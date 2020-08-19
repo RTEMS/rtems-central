@@ -53,15 +53,6 @@ _OPTION_DEFAULT_CONFIG = {
 enabled."""
 }
 
-_AUTOMATICALLY_GENERATED_WARNING = [
-    "This file was automatically generated.  Do not edit it manually.",
-    "Please have a look at",
-    "",
-    "https://docs.rtems.org/branches/master/eng/req/howto.html",
-    "",
-    "for information how to maintain and re-generate this file.",
-]
-
 
 class _ContentAdaptor:
     """
@@ -79,8 +70,7 @@ class _ContentAdaptor:
 
     def add_group(self, name: str, description: str) -> None:
         """ Adds an option group. """
-        with self.content.comment_block():
-            self.content.append(_AUTOMATICALLY_GENERATED_WARNING)
+        self.content.add_automatically_generated_warning()
         self.content.add_header(name, level=2)
         self.content.add(description)
 
@@ -529,8 +519,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     doxygen_mapper = ItemMapper(EmptyItem())
     _add_doxygen_get_values(doxygen_mapper)
     doxygen_content = _DoxygenContentAdaptor(doxygen_mapper)
-    with doxygen_content.content.comment_block():
-        doxygen_content.content.append(_AUTOMATICALLY_GENERATED_WARNING)
+    doxygen_content.content.add_automatically_generated_warning()
     with doxygen_content.content.defgroup_block(
             "RTEMSApplConfig", "Application Configuration Options"):
         doxygen_content.content.add("@ingroup RTEMSAPI")

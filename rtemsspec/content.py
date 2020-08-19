@@ -158,6 +158,15 @@ def _add_context(_content: "Content") -> Iterator[None]:
 
 _SPECIAL_BLOCK = re.compile(r"^( *\* | *[0-9]+\. | +)")
 
+_AUTOMATICALLY_GENERATED_WARNING = [
+    "This file was automatically generated.  Do not edit it manually.",
+    "Please have a look at",
+    "",
+    "https://docs.rtems.org/branches/master/eng/req/howto.html",
+    "",
+    "for information how to maintain and re-generate this file.",
+]
+
 
 class Content:
     """ This class builds content. """
@@ -408,6 +417,11 @@ class Content:
         self.open_comment_block()
         yield
         self.close_comment_block()
+
+    def add_automatically_generated_warning(self) -> None:
+        """ Adds a warning that the file is automatically generated. """
+        with self.comment_block():
+            self.append(_AUTOMATICALLY_GENERATED_WARNING)
 
     def write(self, path: str) -> None:
         """ Writes the content to the file specified by the path. """
