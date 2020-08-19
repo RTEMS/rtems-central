@@ -42,6 +42,8 @@ pre-conditions:
       The pre-condition status shall be specified by ${../ident}.
   test-epilogue: null
   test-prologue: null
+rationale: null
+references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
@@ -102,6 +104,7 @@ test-support: |
   }
 test-target: testsuites/validation/tc-task-ident.c
 test-teardown: null
+text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
@@ -115,7 +118,4 @@ transition-map:
   pre-conditions:
     Pre:
     - Generic
-rationale: null
-references: []
-text: ${.:text-template}
 type: requirement

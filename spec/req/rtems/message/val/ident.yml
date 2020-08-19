@@ -1,14 +1,4 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-includes: []
-links:
-- role: validation
-  uid: ../ident
-local-includes:
-- support-object-ident.h
-target: testsuites/validation/tc-message-ident.c
 actions:
 - action: |
     ${../../ident:/test-run}(
@@ -21,9 +11,18 @@ actions:
     class objects defined by ${../../ident}.
   links: []
 brief: Test the ${/if/rtems/message/ident:/name} directive.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
+enabled-by: true
 epilogue: null
 fixture: null
+includes: []
+links:
+- role: validation
+  uid: ../ident
+local-includes:
+- support-object-ident.h
 name: Classic Message Ident
 prologue: |
   rtems_status_code sc;
@@ -46,4 +45,5 @@ support: |
   {
     return rtems_message_queue_ident( name, node, id );
   }
+target: testsuites/validation/tc-message-ident.c
 type: test-case

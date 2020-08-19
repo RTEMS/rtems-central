@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: '${event-31:/name}'
+  default: ${event-31:/name}
   variants: []
 description: null
 enabled-by: true

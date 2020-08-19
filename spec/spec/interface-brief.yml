@@ -12,7 +12,7 @@ spec-info:
   str:
     assert:
       not:
-        re: '\n\n'
+        re: \n\n
     description: |
       It shall be the brief description of the interface.  It should be a
       single sentence.

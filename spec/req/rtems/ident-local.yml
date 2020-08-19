@@ -82,6 +82,8 @@ pre-conditions:
       The id parameter shall point to an object identifier.
   test-epilogue: null
   test-prologue: null
+rationale: null
+references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
@@ -130,6 +132,7 @@ test-stop: null
 test-support: null
 test-target: testsuites/validation/support-object-ident-local.c
 test-teardown: null
+text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
@@ -157,7 +160,4 @@ transition-map:
     - Valid
     Name:
     - Valid
-rationale: null
-references: []
-text: ${.:text-template}
 type: requirement

@@ -27,6 +27,6 @@ params:
   name: delta
 return:
   return: |
-   The tick counter value delta ticks in the future is returned.
+    The tick counter value delta ticks in the future is returned.
   return-values: []
 type: interface

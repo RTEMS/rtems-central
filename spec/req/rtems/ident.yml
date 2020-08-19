@@ -135,6 +135,8 @@ pre-conditions:
       The id parameter shall point to an object identifier.
   test-epilogue: null
   test-prologue: null
+rationale: null
+references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
@@ -179,7 +181,8 @@ test-header:
       is the action handler.
     dir: null
     name: action
-    specifier: rtems_status_code ( *${.:name} )( rtems_name, uint32_t, rtems_id * )
+    specifier: |
+      rtems_status_code ( *${.:name} )( rtems_name, uint32_t, rtems_id * )
   target: testsuites/validation/support-object-ident.h
 test-includes: []
 test-local-includes:
@@ -190,6 +193,7 @@ test-stop: null
 test-support: null
 test-target: testsuites/validation/support-object-ident.c
 test-teardown: null
+text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
@@ -248,7 +252,4 @@ transition-map:
     Node:
     - SearchOther
     - Remote
-rationale: null
-references: []
-text: ${.:text-template}
 type: requirement

@@ -1,18 +1,18 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-includes: []
-links: []
-local-includes: []
-target: tc34.c
 actions: []
 brief: Test case 4 brief description.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: Test case 4 description.
+enabled-by: true
 epilogue: |
   /* Test case 4 epilogue code */
 fixture: null
+includes: []
+links: []
+local-includes: []
 name: Test Case 4
 prologue: null
 support: null
+target: tc34.c
 type: test-case

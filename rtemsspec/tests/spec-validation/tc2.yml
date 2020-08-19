@@ -1,13 +1,4 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-includes:
-- b.h
-links: []
-local-includes:
-- y.h
-target: tc12.c
 actions:
 - action: |
     /* Test case 2 action 0 code */
@@ -32,10 +23,19 @@ actions:
     Test case 2 action 1 description.
   links: []
 brief: Test case 2 brief description.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: Test case 2 description.
+enabled-by: true
 epilogue: null
 fixture: test_case_2_fixture
+includes:
+- b.h
+links: []
+local-includes:
+- y.h
 name: Test Case 2
 prologue: null
 support: null
+target: tc12.c
 type: test-case

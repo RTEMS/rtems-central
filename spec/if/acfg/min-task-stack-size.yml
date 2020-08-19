@@ -3,7 +3,7 @@ appl-config-option-type: integer
 constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: '${../impl/cpu/stack-minimum-size:/name}'
+default-value: ${../impl/cpu/stack-minimum-size:/name}
 description: |
   The value of this configuration option defines the minimum stack size in
   bytes for every user task or thread in the system.

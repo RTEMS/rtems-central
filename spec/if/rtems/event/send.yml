@@ -36,7 +36,7 @@ links:
   uid: group
 name: rtems_event_send
 notes: |
-  Events can be sent by tasks or an ${/glossary/isr:/term}. 
+  Events can be sent by tasks or an ${/glossary/isr:/term}.
 
   Specifying ${../tasks/self-define:/name} for ``${.:/params[0]/name}`` results
   in the event set being sent to the calling task.

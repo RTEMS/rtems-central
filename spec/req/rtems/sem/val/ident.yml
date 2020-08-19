@@ -1,14 +1,4 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-includes: []
-links:
-- role: validation
-  uid: ../ident
-local-includes:
-- support-object-ident.h
-target: testsuites/validation/tc-sem-ident.c
 actions:
 - action: |
     ${../../ident:/test-run}(
@@ -21,9 +11,18 @@ actions:
     objects defined by ${../../ident}.
   links: []
 brief: Test the ${/if/rtems/sem/ident:/name} directive.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
+enabled-by: true
 epilogue: null
 fixture: null
+includes: []
+links:
+- role: validation
+  uid: ../ident
+local-includes:
+- support-object-ident.h
 name: Classic Sem Ident
 prologue: |
   rtems_status_code sc;
@@ -46,4 +45,5 @@ support: |
   {
     return rtems_semaphore_ident( name, node, id );
   }
+target: testsuites/validation/tc-sem-ident.c
 type: test-case

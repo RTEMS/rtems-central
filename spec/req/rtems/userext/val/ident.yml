@@ -1,14 +1,4 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-includes: []
-links:
-- role: validation
-  uid: ../ident
-local-includes:
-- support-object-ident-local.h
-target: testsuites/validation/tc-userext-ident.c
 actions:
 - action: |
     ${../../ident-local:/test-run}(
@@ -21,9 +11,18 @@ actions:
     class objects defined by ${../../ident-local}.
   links: []
 brief: Test the ${/if/rtems/userext/ident:/name} directive.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
+enabled-by: true
 epilogue: null
 fixture: null
+includes: []
+links:
+- role: validation
+  uid: ../ident
+local-includes:
+- support-object-ident-local.h
 name: Classic UserExt Ident
 prologue: |
   static const rtems_extensions_table table;
@@ -44,4 +43,5 @@ support: |
   {
     return rtems_extension_ident( name, id );
   }
+target: testsuites/validation/tc-userext-ident.c
 type: test-case

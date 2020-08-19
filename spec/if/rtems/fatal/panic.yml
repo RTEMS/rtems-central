@@ -8,8 +8,9 @@ definition:
     body: null
     params:
     - const char *${.:/params[0]/name}
-    - ...
-    return: ${../basedefs/no-return:/name} ${../basedefs/printflike:/name}( 1, 2 ) void
+    - '...'
+    return: |
+      ${../basedefs/no-return:/name} ${../basedefs/printflike:/name}( 1, 2 ) void
   variants: []
 description: null
 enabled-by: true
@@ -27,7 +28,7 @@ params:
   name: fmt
 - description: '%'
   dir: null
-  name: ...
+  name: '...'
 return:
   return: null
   return-values: []

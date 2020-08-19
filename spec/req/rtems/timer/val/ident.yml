@@ -1,14 +1,4 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-includes: []
-links:
-- role: validation
-  uid: ../ident
-local-includes:
-- support-object-ident-local.h
-target: testsuites/validation/tc-timer-ident.c
 actions:
 - action: |
     ${../../ident-local:/test-run}(
@@ -21,9 +11,18 @@ actions:
     objects defined by ${../../ident-local}.
   links: []
 brief: Test the ${/if/rtems/timer/ident:/name} directive.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
+enabled-by: true
 epilogue: null
 fixture: null
+includes: []
+links:
+- role: validation
+  uid: ../ident
+local-includes:
+- support-object-ident-local.h
 name: Classic Timer Ident
 prologue: |
   rtems_status_code sc;
@@ -42,4 +41,5 @@ support: |
   {
     return rtems_timer_ident( name, id );
   }
+target: testsuites/validation/tc-timer-ident.c
 type: test-case

@@ -9,7 +9,7 @@ definition:
 description: |
   In uniprocessor configurations, this macro evaluates to a compile time
   constant of one.
- 
+
   In SMP configurations, this macro returns the minimum of the processors
   (physically or virtually) available by the platform and the configured
   processor maximum.  Not all processors in the range from processor index zero
