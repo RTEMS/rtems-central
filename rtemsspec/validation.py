@@ -314,7 +314,7 @@ class _TestDirectiveItem(_TestItem):
                 content.add_description_block(
                     "This member contains a copy of the corresponding "
                     f"{self.ident}_Run() parameter.", None)
-                content.add(f"{param};")
+                content.add(f"{param.strip()};")
             content.add_description_block(
                 "This member defines the pre-condition states "
                 "for the next action.", None)

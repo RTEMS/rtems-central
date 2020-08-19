@@ -104,7 +104,8 @@ test-header:
       Parameter A description.
     dir: in
     name: a
-    specifier: int *${.:name}
+    specifier: |
+      int *${.:name}
   - description: |
       Parameter B description.
     dir: null

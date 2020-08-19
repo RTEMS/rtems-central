@@ -747,6 +747,7 @@ class CContent(Content):
             ret = ""
             space = ""
         if params:
+            params = [param.strip() for param in params]
             param_line = "( " + ", ".join(params) + " )"
         else:
             param_line = "()"
@@ -771,7 +772,9 @@ class CContent(Content):
                          align: bool = True) -> None:
         # pylint: disable=too-many-arguments
         """ Adds a function declaration. """
-        if not params:
+        if params:
+            params = [param.strip() for param in params]
+        else:
             params = ["void"]
         param_line = f"( {', '.join(params)} )"
         space = "" if not ret or ret.endswith("*") else " "
