@@ -48,6 +48,13 @@ def test_document(tmpdir):
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
+.. This file was automatically generated.  Do not edit it manually.
+.. Please have a look at
+..
+.. https://docs.rtems.org/branches/master/eng/req/howto.html
+..
+.. for information how to maintain and re-generate this file.
+
 .. _ReqEngSpecificationItems:
 
 Specification Items

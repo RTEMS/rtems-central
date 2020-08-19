@@ -553,6 +553,7 @@ def document(config: dict, item_cache: ItemCache) -> None:
     root_documenter = _Documenter(root_item, documenter_map)
     _gather_item_documenters(root_item, documenter_map)
     content = SphinxContent()
+    content.add_automatically_generated_warning()
     for documenter in documenter_map.values():
         documenter.resolve_used_by()
     documenter_names = set(documenter_map)
