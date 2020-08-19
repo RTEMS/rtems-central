@@ -77,6 +77,15 @@ def test_validation(tmpdir):
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -138,6 +147,15 @@ def test_validation(tmpdir):
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -924,6 +942,15 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -1088,6 +1115,15 @@ void Tc6_Run( void )
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
+ */
+
 #ifndef _TC5_H
 #define _TC5_H
 
@@ -1161,6 +1197,15 @@ void Tc5_Run( int *a, int b, int *c );
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
+ */
+
 #ifndef _TC6_H
 #define _TC6_H
 
@@ -1220,6 +1265,15 @@ void Tc6_Run( void );
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
  */
 
 #ifndef _ACTION2_H
@@ -1318,6 +1372,15 @@ void Action2_Run( int *a, int b, int *c );
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H

@@ -207,6 +207,7 @@ class _TestItem:
         with content.file_block():
             content.add_ingroup([self.group_identifier])
         content.add_copyrights_and_licenses()
+        content.add_automatically_generated_warning()
         with content.header_guard(os.path.basename(header["target"])):
             content.add_includes(list(map(CInclude, header["includes"])))
             content.add_includes(list(map(CInclude, header["local-includes"])),
@@ -746,6 +747,7 @@ class _SourceFile:
             _add_ingroup(content, self._test_suites)
             _add_ingroup(content, self._test_cases)
         content.add_copyrights_and_licenses()
+        content.add_automatically_generated_warning()
         content.add_have_config()
         content.add_includes(includes)
         content.add_includes(local_includes, local=True)
