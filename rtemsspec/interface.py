@@ -515,6 +515,7 @@ class _HeaderFile:
             self._content.add_ingroup(_get_group_identifiers(self._ingroups))
             self._content.add_brief_description(self._item["brief"])
         self._content.add_copyrights_and_licenses()
+        self._content.add_automatically_generated_warning()
         with self._content.header_guard(self._item["path"]):
             exp_mapper = _HeaderExpressionMapper(self._item,
                                                  self.enabled_by_defined)

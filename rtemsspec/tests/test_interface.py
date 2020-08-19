@@ -85,6 +85,15 @@ def test_interface(tmpdir):
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
+ */
+
 #ifndef _H_H
 #define _H_H
 
