@@ -19,10 +19,10 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
-name: rtems_task_create_from_config
+name: rtems_task_construct
 notes: |
-  In contrast to tasks created by ${create:/name}, the tasks created by this
-  directive use a user-provided task storage area.  The task storage area
+  In contrast to tasks created by ${create:/name}, the tasks constructed by
+  this directive use a user-provided task storage area.  The task storage area
   contains the task stack, the thread-local storage, and the floating-point
   context on architectures with a separate floating-point context.
 
@@ -32,16 +32,15 @@ notes: |
   system resources.  The stack space estimate done by <rtems/confdefs.h>
   assumes that all tasks are created by ${create:/name}.  The estimate can be
   adjusted to take user-provided task storage areas into account through the
-  ${../../acfg/tasks-created-from-config:/name} application configuration
-  option or a custom task stack allocator, see
-  ${../../acfg/task-stack-allocator:/name}.
+  ${../../acfg/min-tasks-with-user-provided-storage:/name} application
+  configuration option.
 params:
 - description: is the task configuration.
   dir: null
   name: config
 - description: |
     is the pointer to an object identifier variable.  The identifier of the
-    created task object will be stored in this variable, in case of a
+    constructed task object will be stored in this variable, in case of a
     successful operation.
   dir: out
   name: id
@@ -74,14 +73,14 @@ return:
       floating-point context.
     value: ${../status/invalid-size:/name}
   - description: |
-      There was no inactive task object available to create a task.
+      There was no inactive task object available to construct a task.
     value: ${../status/too-many:/name}
   - description: |
       In multiprocessing configurations, there was no inactive global object
-      available to create a global task.
+      available to construct a global task.
     value: ${../status/too-many:/name}
   - description: |
-      One of the task create extensions failed during the task creation.
+      One of the task create extensions failed during the task construction.
     value: ${../status/unsatisfied:/name}
   - description: |
       In SMP configurations, the non-preemption mode was not supported.

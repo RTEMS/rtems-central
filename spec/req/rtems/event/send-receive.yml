@@ -461,14 +461,14 @@ test-prepare: |
 test-setup:
   brief: null
   code: |
-    static char  task_stack[ RTEMS_MINIMUM_STACK_SIZE ];
+    static char  task_storage[ RTEMS_MINIMUM_STACK_SIZE ];
     static const rtems_task_config task_config = {
       .name = rtems_build_name( 'W', 'O', 'R', 'K' ),
       .initial_priority = PRIO_LOW,
-      .stack_area = task_stack,
-      .stack_size = sizeof( task_stack ),
+      .storage_area = task_storage,
+      .storage_size = sizeof( task_storage ),
       .initial_modes = RTEMS_DEFAULT_MODES,
-      .attribute_set = RTEMS_DEFAULT_ATTRIBUTES
+      .attributes = RTEMS_DEFAULT_ATTRIBUTES
     };
 
     rtems_status_code   sc;

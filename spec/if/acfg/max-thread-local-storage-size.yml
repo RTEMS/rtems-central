@@ -26,5 +26,9 @@ notes: |
   objects used by the application in the statically-linked executable is greater
   than a non-zero value of this configuration option, then a fatal error will
   occur during system initialization.
+
+  Use ${../rtems/basedefs/align-up:/name} and
+  ${../rtems/tasks/storage-alignment:/name} to adjust the size to meet the
+  minimum alignment requirement of a thread-local storage area.
 text: ''
 type: interface

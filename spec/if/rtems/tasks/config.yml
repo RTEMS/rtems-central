@@ -1,8 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This structure defines a task configuration used to build a task.  This
-  structure defines the configuration of a task created by
-  ${create-from-config:/name}.
+  This structure defines the configuration of a task constructed by
+  ${construct:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -31,9 +30,10 @@ definition:
       storage, and the floating-point context on architectures with a separate
       floating-point context.
 
-      There are no alignment requirements for the task storage area.  To avoid
-      memory waste, use the ${storage-alignment:/name} variable attribute to
-      enforce the recommended alignment of the task storage area.
+      The task storage area begin address and size should be aligned by
+      ${storage-alignment:/name}.  To avoid memory waste, use
+      ${../basedefs/aligned:/name} and ${storage-alignment:/name} to enforce
+      the recommended alignment of a statically allocated task storage area.
     kind: member
     name: storage_area
   variants: []
@@ -53,11 +53,15 @@ definition:
       task storage area.
     definition: ${../../c/size_t:/name} ${.:name}
     description: |
-      If the value is less than the actual thread-local storage size, then the
-      task creation by ${create-from-config:/name} fails.
+      Use ${../basedefs/align-up:/name} and ${storage-alignment:/name} to
+      adjust the size to meet the minimum alignment requirement of a
+      thread-local storage area used to construct a task.
 
-      If the is less than the task storage area size, then the task creation by
-      ${create-from-config:/name} fails.
+      If the value is less than the actual thread-local storage size, then the
+      task construction by ${construct:/name} fails.
+
+      If the is less than the task storage area size, then the task
+      construction by ${construct:/name} fails.
     kind: member
     name: maximum_thread_local_storage_size
   variants: []
@@ -66,10 +70,12 @@ definition:
       This member defines the optional handler to free the task storage area.
     definition: void ( *${.:name} )( void * )
     description: |
-      It is called when the task creation aborts due to a failed task create
-      extension or the task is deleted.  It is called from task context under
+      It is called on exactly two mutually exclusive occasions.  Firstly, when
+      the task construction aborts due to a failed task create extension, or
+      secondly, when the task is deleted.  It is called from task context under
       protection of the object allocator lock.  It is allowed to call free() in
-      this handler.  The handler may be ${../../c/null:/name}.
+      this handler.  If handler is ${../../c/null:/name}, then no action will
+      be performed.
     kind: member
     name: storage_free
   variants: []

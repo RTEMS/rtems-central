@@ -5,7 +5,7 @@ enabled-by: true
 functional-type: action
 links:
 - role: interface-function
-  uid: /if/rtems/tasks/create-from-config
+  uid: /if/rtems/tasks/construct
 post-conditions:
 - name: Status
   states:
@@ -19,7 +19,7 @@ post-conditions:
       T_rsc_success( sc );
     text: |
       The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
-      referenced by the id parameter shall identify the created task.
+      referenced by the id parameter shall identify the constructed task.
   - name: InvAddress
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
@@ -134,7 +134,7 @@ pre-conditions:
         rtems_status_code sc;
         rtems_id id;
 
-        sc = rtems_task_create_from_config( &valid_task_config, &id );
+        sc = rtems_task_construct( &valid_task_config, &id );
 
         if ( sc == RTEMS_SUCCESSFUL ) {
           Objects_Control           *obj;
@@ -230,7 +230,7 @@ test-action: |
     ctx->config.maximum_thread_local_storage_size + ctx->stack_size,
     ctx->config.attributes
   );
-  ctx->status = rtems_task_create_from_config( &ctx->config, ctx->id );
+  ctx->status = rtems_task_construct( &ctx->config, ctx->id );
 test-brief: null
 test-cleanup: |
   Chain_Node *node;
@@ -303,9 +303,9 @@ test-stop: null
 test-support: |
   static _Thread_local int tls_variable;
 
-  #define MAX_TLS_SIZE 128
+  #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 128, RTEMS_TASK_STORAGE_ALIGNMENT )
 
-  RTEMS_TASK_STORAGE_ALIGNMENT static char task_storage[
+  RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char task_storage[
     RTEMS_TASK_STORAGE_SIZE(
       MAX_TLS_SIZE + RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_FLOATING_POINT
@@ -327,14 +327,13 @@ test-support: |
     (void) executing;
     (void) created;
 
-    return
-      ReqRtemsTasksCreateFromConfigErrors_Instance.create_extension_status;
+    return ReqRtemsTasksConstructErrors_Instance.create_extension_status;
   }
 
   static const rtems_extensions_table extensions = {
     .thread_create = ThreadCreate
   };
-test-target: testsuites/validation/tc-tasks-create-from-config-errors.c
+test-target: testsuites/validation/tc-task-construct-errors.c
 test-teardown:
   brief: null
   code: |

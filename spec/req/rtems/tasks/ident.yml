@@ -84,10 +84,10 @@ test-setup:
     static const rtems_task_config task_config = {
       .name = ClassicObjectIdentName,
       .initial_priority = 1,
-      .stack_area = task_storage,
-      .stack_size = sizeof( task_storage ),
+      .storage_area = task_storage,
+      .storage_size = sizeof( task_storage ),
       .initial_modes = RTEMS_DEFAULT_MODES,
-      .attribute_set = RTEMS_DEFAULT_ATTRIBUTES
+      .attributes = RTEMS_DEFAULT_ATTRIBUTES
     };
     rtems_status_code sc;
 

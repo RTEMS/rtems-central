@@ -6,6 +6,6 @@ interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header
-name: CPU_STACK_ALIGNMENT
+name: CPU_HEAP_ALIGNMENT
 reference: null
 type: interface

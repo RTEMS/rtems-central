@@ -35,7 +35,7 @@ test-code: |
     rtems_fatal(RTEMS_FATAL_SOURCE_APPLICATION, 123);
   }
 
-  static char init_task_stack[RTEMS_MINIMUM_STACK_SIZE];
+  static char init_task_storage[RTEMS_MINIMUM_STACK_SIZE];
 
   static char buffer[512];
 
@@ -75,10 +75,10 @@ test-code: |
     static const rtems_task_config task_config = {
       .name = NAME,
       .initial_priority = 1,
-      .stack_area = init_task_stack,
-      .stack_size = sizeof(init_task_stack),
+      .storage_area = init_task_storage,
+      .storage_size = sizeof(init_task_storage),
       .initial_modes = RTEMS_DEFAULT_MODES,
-      .attribute_set = RTEMS_DEFAULT_ATTRIBUTES
+      .attributes = RTEMS_DEFAULT_ATTRIBUTES
     };
     rtems_id id;
     rtems_status_code sc;

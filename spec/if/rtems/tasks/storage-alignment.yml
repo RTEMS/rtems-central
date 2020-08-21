@@ -1,12 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This variable attribute defines the recommended alignment of a task storage
-  area.
+  This constant defines the recommended alignment of a task storage area in
+  bytes.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    ${../basedefs/aligned:/name}( ${../../impl/cpu/stack-alignment:/name} )
+  default: ${../../impl/cpu/heap-alignment:/name}
   variants: []
 description: null
 enabled-by: true
@@ -17,5 +16,7 @@ links:
 - role: interface-ingroup
   uid: group
 name: RTEMS_TASK_STORAGE_ALIGNMENT
-notes: null
+notes: |
+  Use it with ${../basedefs/aligned:/name} to define the alignment of a
+  statically allocated task storage area.
 type: interface
