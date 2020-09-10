@@ -78,6 +78,9 @@ class _InterfaceMapper(ItemMapper):
         self.add_get_value("interface/enum:doc:/name", get_value_hash)
         self.add_get_value("interface/macro:doc:/name", get_value_hash)
         self.add_get_value("interface/variable:doc:/name", get_value_hash)
+        for opt in ["feature-enable", "feature", "initializer", "integer"]:
+            name = f"interface/appl-config-option/{opt}:doc:/name"
+            self.add_get_value(name, get_value_hash)
 
     @contextmanager
     def code(self) -> Iterator[None]:
