@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This variable attribute defines the recommended alignment of a task storage
+  area.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: |
+    ${../basedefs/aligned:/name}( ${../../impl/cpu/stack-alignment:/name} )
+  variants: []
+description: null
+enabled-by: true
+interface-type: define
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: RTEMS_TASK_STORAGE_ALIGNMENT
+notes: null
+type: interface

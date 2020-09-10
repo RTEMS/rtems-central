@@ -1,0 +1,500 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: /if/rtems/tasks/create-from-config
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, 0xffffffff );
+
+      sc = rtems_task_delete( ctx->id_value );
+      T_rsc_success( sc );
+    text: |
+      The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
+      referenced by the id parameter shall identify the created task.
+  - name: InvAddress
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+      T_null( ctx->id );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_ADDRESS.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_NAME.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  - name: InvPrio
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_PRIORITY.  If the id parameter is not
+      NULL, then the value of the object identifier referenced by the id
+      parameter shall be unchanged.
+  - name: InvSize
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_SIZE );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_SIZE.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_TOO_MANY.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  - name: Unsatisfied
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_UNSATISFIED.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+pre-conditions:
+- name: Id
+  states:
+  - name: Id
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      The id parameter shall reference an object identifier value.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      The id parameter shall be NULL.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.name = rtems_build_name( 'N', 'A', 'M', 'E' );
+    text: |
+      The name of the task configuration shall be valid.
+  - name: Inv
+    test-code: |
+      ctx->config.name = 0;
+    text: |
+      The name of the task configuration shall be invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Prio
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.initial_priority = 254;
+    text: |
+      The initial priority of the task configuration shall be valid.
+  - name: Zero
+    test-code: |
+      ctx->config.initial_priority = 0;
+    text: |
+      The initial priority of the task configuration shall be zero.
+  - name: Inv
+    test-code: |
+      ctx->config.initial_priority = 0xffffffff;
+    text: |
+      The initial priority of the task configuration shall be invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Tasks
+  states:
+  - name: Avail
+    test-code: |
+      /* Nothing to do */
+    text: |
+      There shall be at least one inactive task object available.
+  - name: None
+    test-code: |
+      create_extension_status = ctx->create_extension_status;
+      ctx->create_extension_status = true;
+
+      while ( true ) {
+        rtems_status_code sc;
+        rtems_id id;
+
+        sc = rtems_task_create_from_config( &valid_task_config, &id );
+
+        if ( sc == RTEMS_SUCCESSFUL ) {
+          Objects_Control           *obj;
+          const Objects_Information *info;
+
+          info = _Objects_Get_information_id( id );
+          T_quiet_assert_not_null( info );
+          obj = _Objects_Get_no_protection( id, info );
+          T_quiet_assert_not_null( obj );
+          _Chain_Append_unprotected( &ctx->tasks, &obj->Node );
+        } else {
+          T_quiet_rsc( sc, RTEMS_TOO_MANY );
+          break;
+        }
+      }
+
+      ctx->create_extension_status = create_extension_status;
+    text: |
+      There shall be no inactive task object available.
+  test-epilogue: null
+  test-prologue: |
+    bool create_extension_status;
+- name: TLS
+  states:
+  - name: Enough
+    test-code: |
+      ctx->config.maximum_thread_local_storage_size = MAX_TLS_SIZE;
+    text: |
+      The maximum thread-local storage size of the task configuration shall be
+      greater than or equal to the thread-local storage size.
+  - name: Small
+    test-code: |
+      ctx->config.maximum_thread_local_storage_size = 0;
+    text: |
+      The maximum thread-local storage size of the task configuration shall be
+      less than the thread-local storage size.
+  test-epilogue: null
+  test-prologue: null
+- name: Stack
+  states:
+  - name: Enough
+    test-code: |
+      ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
+    text: |
+      The task stack size of the task configuration shall be greater than or
+      equal to the configured minimum size.
+  - name: Small
+    test-code: |
+      ctx->stack_size = 0;
+    text: |
+      The task stack size of the task configuration shall be less than to the
+      configured minimum size.
+  test-epilogue: null
+  test-prologue: null
+- name: Ext
+  states:
+  - name: Ok
+    test-code: |
+      ctx->create_extension_status = true;
+    text: |
+      None of the task create extensions shall fail.
+  - name: Err
+    test-code: |
+      ctx->create_extension_status = false;
+    text: |
+      At least one of the task create extensions shall fail.
+  test-epilogue: null
+  test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->config.initial_modes &= ~RTEMS_PREEMPT_MASK;
+      ctx->config.initial_modes |= RTEMS_PREEMPT;
+    text: |
+      The preemptible mode in the initial modes of the task configuration shall
+      be set to preemptible.
+  - name: 'No'
+    test-code: |
+      ctx->config.initial_modes &= ~RTEMS_PREEMPT_MASK;
+      ctx->config.initial_modes |= RTEMS_NO_PREEMPT;
+    text: |
+      The preemptible mode in the initial modes of the task configuration shall
+      be set to non-preemptible.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->config.storage_size = RTEMS_TASK_STORAGE_SIZE(
+    ctx->config.maximum_thread_local_storage_size + ctx->stack_size,
+    ctx->config.attributes
+  );
+  ctx->status = rtems_task_create_from_config( &ctx->config, ctx->id );
+test-brief: null
+test-cleanup: |
+  Chain_Node *node;
+
+  while ( ( node = _Chain_Get_unprotected( &ctx->tasks ) ) ) {
+    Objects_Control   *obj;
+    rtems_status_code  sc;
+
+    obj = (Objects_Control *) node;
+    sc = rtems_task_delete( obj->id );
+    T_quiet_rsc_success( sc );
+  }
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_task_config config
+- brief: null
+  description: null
+  member: rtems_id *id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: bool create_extension_status
+- brief: null
+  description: null
+  member: size_t stack_size
+- brief: null
+  description: null
+  member: rtems_id extension_id
+- brief: null
+  description: null
+  member: Chain_Control tasks
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/chainimpl.h
+- rtems/score/objectimpl.h
+- string.h
+test-local-includes: []
+test-prepare: |
+  ctx->id_value = 0xffffffff;
+  memset( &ctx->config, 0, sizeof( ctx->config ) );
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+    int var;
+
+    var = tls_variable;
+    RTEMS_OBFUSCATE_VARIABLE( var );
+    tls_variable = var;
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'T', 'C', 'F', 'C' ),
+      &extensions,
+      &ctx->extension_id
+    );
+    T_rsc_success( sc );
+
+    _Chain_Initialize_empty( &ctx->tasks );
+  description: null
+test-stop: null
+test-support: |
+  static _Thread_local int tls_variable;
+
+  #define MAX_TLS_SIZE 128
+
+  RTEMS_TASK_STORAGE_ALIGNMENT static char task_storage[
+    RTEMS_TASK_STORAGE_SIZE(
+      MAX_TLS_SIZE + RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_FLOATING_POINT
+    )
+  ];
+
+  static const rtems_task_config valid_task_config = {
+    .name = rtems_build_name( 'T', 'A', 'S', 'K' ),
+    .initial_priority = 1,
+    .storage_area = task_storage,
+    .storage_size = sizeof( task_storage ),
+    .maximum_thread_local_storage_size = MAX_TLS_SIZE,
+    .initial_modes = RTEMS_DEFAULT_MODES,
+    .attributes = RTEMS_DEFAULT_MODES
+  };
+
+  static bool ThreadCreate( rtems_tcb *executing, rtems_tcb *created )
+  {
+    (void) executing;
+    (void) created;
+
+    return
+      ReqRtemsTasksCreateFromConfigErrors_Instance.create_extension_status;
+  }
+
+  static const rtems_extensions_table extensions = {
+    .thread_create = ThreadCreate
+  };
+test-target: testsuites/validation/tc-tasks-create-from-config-errors.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_extension_delete( ctx->extension_id );
+    T_rsc_success( sc );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Valid
+    Tasks:
+    - Avail
+    TLS:
+    - Enough
+    Stack:
+    - Enough
+    Ext:
+    - Ok
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddress
+  pre-conditions:
+    Id:
+    - 'Null'
+    Name: all
+    Prio: all
+    Tasks: all
+    TLS: all
+    Stack: all
+    Ext: all
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Inv
+    Prio: all
+    Tasks: all
+    TLS: all
+    Stack: all
+    Ext: all
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: InvPrio
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Zero
+    - Inv
+    Tasks: all
+    TLS: all
+    Stack: all
+    Ext: all
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Valid
+    Tasks:
+    - None
+    TLS: all
+    Stack: all
+    Ext: all
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Valid
+    Tasks:
+    - Avail
+    TLS:
+    - Small
+    Stack: all
+    Ext: all
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Valid
+    Tasks:
+    - Avail
+    TLS:
+    - Enough
+    Stack:
+    - Small
+    Ext: all
+    Preempt: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsatisfied
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Valid
+    Tasks:
+    - Avail
+    TLS:
+    - Enough
+    Stack:
+    - Enough
+    Ext:
+    - Err
+    Preempt: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: Unsatisfied
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    Prio:
+    - Valid
+    Tasks:
+    - Avail
+    TLS:
+    - Enough
+    Stack:
+    - Enough
+    Ext:
+    - Ok
+    Preempt:
+    - 'No'
+type: requirement

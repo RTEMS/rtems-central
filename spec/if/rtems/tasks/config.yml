@@ -1,12 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This structure defines a task configuration used to build a task.
+  This structure defines a task configuration used to build a task.  This
+  structure defines the configuration of a task created by
+  ${create-from-config:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
 - default:
     brief: |
-      This member is the name of the task.
+      This member defines the name of the task.
     definition: ${../types/name:/name} ${.:name}
     description: null
     kind: member
@@ -14,7 +16,7 @@ definition:
   variants: []
 - default:
     brief: |
-      This member is the initial priority of the task.
+      This member defines the initial priority of the task.
     definition: ${priority:/name} ${.:name}
     description: null
     kind: member
@@ -22,32 +24,58 @@ definition:
   variants: []
 - default:
     brief: |
-      This member is task stack area begin address for the task.
+      This member shall point to the task storage area begin.
     definition: void *${.:name}
-    description: null
+    description: |
+      The task storage area will contain the task stack, the thread-local
+      storage, and the floating-point context on architectures with a separate
+      floating-point context.
+
+      There are no alignment requirements for the task storage area.  To avoid
+      memory waste, use the ${storage-alignment:/name} variable attribute to
+      enforce the recommended alignment of the task storage area.
     kind: member
-    name: stack_area
+    name: storage_area
   variants: []
 - default:
     brief: |
-      This member is task stack area size in bytes for the task.
-    definition: ${/if/c/size_t:/name} ${.:name}
-    description: null
+      This member defines size of the task storage area in bytes.
+    definition: ${../../c/size_t:/name} ${.:name}
+    description: |
+      Use the ${storage-size:/name} macro to determine the recommended task
+      storage area size.
     kind: member
-    name: stack_size
+    name: storage_size
   variants: []
 - default:
     brief: |
-      This member is the function to free the task stack area if the task gets
-      deleted.
+      This member defines the maximum thread-local storage size supported by the
+      task storage area.
+    definition: ${../../c/size_t:/name} ${.:name}
+    description: |
+      If the value is less than the actual thread-local storage size, then the
+      task creation by ${create-from-config:/name} fails.
+
+      If the is less than the task storage area size, then the task creation by
+      ${create-from-config:/name} fails.
+    kind: member
+    name: maximum_thread_local_storage_size
+  variants: []
+- default:
+    brief: |
+      This member defines the optional handler to free the task storage area.
     definition: void ( *${.:name} )( void * )
-    description: null
+    description: |
+      It is called when the task creation aborts due to a failed task create
+      extension or the task is deleted.  It is called from task context under
+      protection of the object allocator lock.  It is allowed to call free() in
+      this handler.  The handler may be ${../../c/null:/name}.
     kind: member
-    name: stack_free
+    name: storage_free
   variants: []
 - default:
     brief: |
-      This member is set of initial modes of the task.
+      This member defines the initial modes of the task.
     definition: ${../modes/mode:/name} ${.:name}
     description: null
     kind: member
@@ -55,11 +83,11 @@ definition:
   variants: []
 - default:
     brief: |
-      This member is set of attributes of the task.
+      This member defines the attributes of the task.
     definition: ${../attr/attribute:/name} ${.:name}
     description: null
     kind: member
-    name: attribute_set
+    name: attributes
   variants: []
 definition-kind: typedef-only
 description: null
