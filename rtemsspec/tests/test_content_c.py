@@ -455,6 +455,28 @@ b
 """
 
 
+def test_defgroup():
+    content = CContent()
+    with content.defgroup_block("a", "b"):
+        content.add("c")
+    assert str(content) == """/**
+ * @defgroup a b
+ *
+ * c
+ */
+"""
+    content = CContent()
+    with content.defgroup_block(
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"):
+        pass
+    assert str(content) == """/**
+ * @defgroup aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \\
+ *   bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+ */
+"""
+
+
 def test_prepend_copyrights_and_licenses():
     content = CContent()
     content.add("x")

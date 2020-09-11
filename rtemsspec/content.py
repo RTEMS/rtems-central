@@ -651,7 +651,10 @@ class CContent(Content):
 
     def open_defgroup_block(self, identifier: str, name: str) -> None:
         """ Opens a Doxygen @defgroup comment block. """
-        self._open_comment_block(["/**", f" * @defgroup {identifier} {name}"])
+        defgroup = [f" * @defgroup {identifier} {name}"]
+        if len(self._indent) + len(defgroup[0]) > 79:
+            defgroup = [f" * @defgroup {identifier} \\", f" *   {name}"]
+        self._open_comment_block(["/**"] + defgroup)
         self.gap = True
 
     def open_function_block(self, function: str) -> None:
