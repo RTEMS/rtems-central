@@ -806,10 +806,7 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
           ctx,
           Directive_TransitionMap[ index ][ 0 ]
         );
-        Directive_Post_Id_Check(
-          ctx,
-          Directive_TransitionMap[ index ][ 1 ]
-        );
+        Directive_Post_Id_Check( ctx, Directive_TransitionMap[ index ][ 1 ] );
         ++index;
       }
     }
@@ -1726,14 +1723,8 @@ void Action2_Run( int *a, int b, int *c )
       Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
       Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
       Action2_Action( ctx );
-      Action2_Post_A_Check(
-        ctx,
-        Action2_TransitionMap[ index ][ 0 ]
-      );
-      Action2_Post_B_Check(
-        ctx,
-        Action2_TransitionMap[ index ][ 1 ]
-      );
+      Action2_Post_A_Check( ctx, Action2_TransitionMap[ index ][ 0 ] );
+      Action2_Post_B_Check( ctx, Action2_TransitionMap[ index ][ 1 ] );
       Action2_Cleanup( ctx );
       ++index;
     }

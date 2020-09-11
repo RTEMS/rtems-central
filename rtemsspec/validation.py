@@ -554,7 +554,8 @@ class _TestDirectiveItem(_TestItem):
 
     def _add_call(self, content: CContent, key: str, name: str) -> None:
         if self[key] is not None:
-            content.append(f"{self.ident}_{name}( ctx );")
+            content.gap = False
+            content.call_function(None, f"{self.ident}_{name}", ["ctx"])
 
     def _add_loop_body(self, content: CContent) -> None:
         with content.condition(f"{self.ident}_TransitionInfo[ index ].Skip"):
@@ -562,14 +563,16 @@ class _TestDirectiveItem(_TestItem):
         content.add_blank_line()
         self._add_call(content, "test-prepare", "Prepare")
         for index, enum in enumerate(self._pre_index_to_enum):
-            content.append(f"{enum[0]}_Prepare( ctx, ctx->pcs[ {index} ] );")
+            content.gap = False
+            content.call_function(None, f"{enum[0]}_Prepare",
+                                  ["ctx", f"ctx->pcs[ {index} ]"])
         self._add_call(content, "test-action", "Action")
         transition_map = f"{self.ident}_TransitionMap"
         for index, enum in enumerate(self._post_index_to_enum):
-            content.append([
-                f"{enum[0]}_Check(", "  ctx,",
-                f"  {transition_map}[ index ][ {index} ]", ");"
-            ])
+            content.gap = False
+            content.call_function(
+                None, f"{enum[0]}_Check",
+                ["ctx", f"{transition_map}[ index ][ {index} ]"])
         self._add_call(content, "test-cleanup", "Cleanup")
         content.append("++index;")
 
