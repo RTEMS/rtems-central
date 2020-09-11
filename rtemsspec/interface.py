@@ -76,7 +76,8 @@ class _InterfaceMapper(ItemMapper):
                            get_value_double_colon)
         self.add_get_value("interface/define:doc:/name", get_value_hash)
         self.add_get_value("interface/enum:doc:/name", get_value_hash)
-        self.add_get_value("interface/macro:doc:/name", get_value_hash)
+        self.add_get_value("interface/macro:doc:/name",
+                           get_value_doxygen_function)
         self.add_get_value("interface/variable:doc:/name", get_value_hash)
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
             name = f"interface/appl-config-option/{opt}:doc:/name"
