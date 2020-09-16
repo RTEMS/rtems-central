@@ -70,7 +70,7 @@ definition:
 
       The application may configure the maximum thread-local storage size for
       all threads explicitly through the
-      ${/acfg/if/max-thread-local-storage-size} configuration option.
+      ${/acfg/if/max-thread-local-storage-size:/name} configuration option.
     kind: member
     name: maximum_thread_local_storage_size
   variants: []
