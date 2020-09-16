@@ -45,7 +45,7 @@ notes: |
   configuration option.
 
   The ${/acfg/if/max-tasks:/name} should include tasks constructed by
-  ${create:/name}.
+  ${.:/name}.
 params:
 - description: is the task configuration.
   dir: null
