@@ -1,0 +1,128 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure contains a summary of the Classic API configuration.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Tasks which are
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_tasks
+  variants: []
+- default:
+    brief: |
+      This field indicates if Classic API Notepads are enabled or disabled for
+      this application.
+    definition: ${/c/if/bool:/name} ${.:name}
+    description: null
+    kind: member
+    name: notepads_enabled
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Timers which are
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_timers
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Semaphores which
+      are configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_semaphores
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Message Queues
+      which are configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_message_queues
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Partitions which
+      are configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_partitions
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Regions which are
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_regions
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Dual Ported Memory
+      Areas which are configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_ports
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Rate Monotonic
+      Periods which are configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_periods
+  variants: []
+- default:
+    brief: |
+      This field contains the maximum number of Classic API Barriers which are
+      configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: maximum_barriers
+  variants: []
+- default:
+    brief: |
+      This field contains the number of Classic API Initialization
+      Tasks which are configured for this application.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: null
+    kind: member
+    name: number_of_initialization_tasks
+  variants: []
+- default:
+    brief: |
+      This field contains the pointer to Classic API Initialization Tasks Table
+      of this application.
+    definition: const ${../../task/if/initialization-table:/name} *${.:name}
+    description: null
+    kind: member
+    name: User_initialization_tasks_table
+  variants: []
+definition-kind: typedef-only
+description: |
+  Use ${get-api-configuration:/name} to get the configuration table.
+enabled-by: true
+interface-type: struct
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: group
+name: rtems_api_configuration_table
+notes: null
+type: interface

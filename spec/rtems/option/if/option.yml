@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This type defines the control block used to manage option sets.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default: ${/c/if/uint32_t:/name} ${.:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_option
+notes: null
+type: interface

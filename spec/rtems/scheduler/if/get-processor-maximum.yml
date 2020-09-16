@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns the processor maximum supported by the system.
+copyrights:
+- Copyright (C) 2013, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/smp/if/get-processor-maximum:/name}()
+  variants: []
+description: |
+  In uniprocessor configurations, this macro evaluates to a compile time
+  constant of one.
+
+  In SMP configurations, this macro returns the minimum of the processors
+  (physically or virtually) available by the platform and the configured
+  processor maximum.  Not all processors in the range from processor index zero
+  to the last processor index (which is the processor maximum minus one) may be
+  configured to be used by a scheduler or may be online (online processors have
+  a scheduler assigned).
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: ../../task/if/header
+- role: interface-ingroup
+  uid: ../../task/if/group
+name: rtems_scheduler_get_processor_maximum
+notes: null
+params: []
+return:
+  return: |
+    The processor maximum supported by the system is returned.
+  return-values: []
+type: interface

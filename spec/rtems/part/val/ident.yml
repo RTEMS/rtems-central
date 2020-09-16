@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/ident
+test-actions:
+- action: |
+    ${../../req/ident:/test-run}(
+      id_local_object,
+      ClassicPartIdentAction
+    );
+  checks: []
+  description: |
+    Run the generic object identification tests for Classic API partition class
+    objects defined by ${../../req/ident}.
+  links: []
+test-brief: Test the ${../if/ident:/name} directive.
+test-description: null
+test-epilogue: null
+test-fixture: null
+test-header: null
+test-includes: []
+test-local-includes:
+- tr-object-ident.h
+test-prologue: |
+  static long area[32];
+  rtems_status_code sc;
+  rtems_id id_local_object;
+
+  sc = rtems_partition_create(
+    ClassicObjectIdentName,
+    area,
+    sizeof( area ),
+    sizeof( area ),
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id_local_object
+  );
+  T_assert_rsc_success( sc );
+test-support: |
+  static rtems_status_code ClassicPartIdentAction(
+    rtems_name name,
+    uint32_t   node,
+    rtems_id  *id
+  )
+  {
+    return rtems_partition_ident( name, node, id );
+  }
+test-target: testsuites/validation/tc-part-ident.c
+type: test-case

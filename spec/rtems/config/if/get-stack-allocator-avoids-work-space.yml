@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns true, if the thread stack allocator avoids the workspace, otherwise
+  returns false.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/stack/if/allocator-avoids-workspace:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_configuration_get_stack_allocator_avoids_work_space
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
+type: interface

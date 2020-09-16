@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Removes a processor from set of processors owned by the scheduler instance.
+copyrights:
+- Copyright (C) 2016, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: ../../task/if/header
+- role: interface-ingroup
+  uid: ../../task/if/group
+name: rtems_scheduler_remove_processor
+notes: |
+  This directive shall be called from task context.  It obtains and releases
+  the objects allocator lock.  Removing a processor from a scheduler instance
+  is a complex operation that involves all tasks of the system.
+params:
+- description: is the scheduler instance identifier.
+  dir: null
+  name: scheduler_id
+- description: is the index of the processor to remove.
+  dir: null
+  name: cpu_index
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The scheduler instance identifier was invalid.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The processor was not owned by the specified scheduler instance.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The set of processors owned by the specified scheduler instance would
+      have been empty after the processor removal and there was at least one
+      non-idle task that used this scheduler instance as its home scheduler
+      instance.
+    value: ${../../status/if/resource-in-use:/name}
+type: interface

@@ -1,0 +1,53 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Maps a POSIX thread priority to the corresponding Classic API task priority.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - int ${.:/params[1]/name}
+    - ${../../task/if/priority:/name} *${.:/params[2]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: ../../task/if/header
+- role: interface-ingroup
+  uid: ../../task/if/group
+name: rtems_scheduler_map_priority_from_posix
+notes: null
+params:
+- description: is the scheduler instance identifier.
+  dir: null
+  name: scheduler_id
+- description: is the POSIX thread priority to map.
+  dir: null
+  name: posix_priority
+- description: |
+    is the pointer to a Classic API task priority variable.  The Classic API
+    task priority value corresponding to the specified POSIX thread priority
+    value will be stored in this variable, in case of a successful operation.
+  dir: out
+  name: priority
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The scheduler instance identifier was invalid.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The POSIX thread priority was invalid.
+    value: ${../../status/if/invalid-priority:/name}
+type: interface

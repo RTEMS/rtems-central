@@ -1,0 +1,101 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Creates a task object.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - ${priority:/name} ${.:/params[1]/name}
+    - ${/c/if/size_t:/name} ${.:/params[2]/name}
+    - ${../../mode/if/mode:/name} ${.:/params[3]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[4]/name}
+    - ${../../type/if/id:/name} *${.:/params[5]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: |
+  This directive creates a task which resides on the local node. It allocates
+  and initializes a TCB, a stack, and an optional floating point context area.
+  The mode parameter contains values which sets the task’s initial execution
+  mode. The RTEMS_FLOATING_POINT attribute should be specified if the created
+  task is to use a numeric coprocessor. For performance reasons, it is
+  recommended that tasks not using the numeric coprocessor should specify the
+  RTEMS_NO_FLOATING_POINT attribute. If the RTEMS_GLOBAL attribute is
+  specified, the task can be accessed from remote nodes. The task id, returned
+  in id, is used in other task related directives to access the task. When
+  created, a task is placed in the dormant state and can only be made ready to
+  execute using the directive rtems_task_start().
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_task_create
+notes: null
+params:
+- description: is the user-defined task name.
+  dir: null
+  name: name
+- description: is the initial task priority.
+  dir: null
+  name: initial_priority
+- description: is the task stack size in bytes.
+  dir: null
+  name: stack_size
+- description: is the initial task mode.
+  dir: null
+  name: initial_modes
+- description: is the task attribute set.
+  dir: null
+  name: attribute_set
+- description: |
+    is the pointer to an object identifier variable.  The object identifier of
+    the new task will be stored in this variable, in case of a successful
+    operation.
+  dir: out
+  name: id
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[5]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The task name was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The initial task priority was invalid.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      The multiprocessing support was not configured.
+    value: ${../../status/if/mp-not-configured:/name}
+  - description: |
+      There was no inactive task object available to create a new task.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      In multiprocessing configurations, there was no inactive global object
+      available to create a new global task.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      There was not enough memory to allocate the task storage area.  The task
+      storage area contains the task stack, the thread-local storage, and the
+      floating point context.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      One of the task create extensions failed to create the new task.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      In SMP configurations, the non-preemption mode was not supported.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      In SMP configurations, the interrupt level mode was not supported.
+    value: ${../../status/if/unsatisfied:/name}
+type: interface

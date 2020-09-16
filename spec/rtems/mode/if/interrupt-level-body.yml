@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Returns a mode with the desired interrupt level in the proper bit-field
+  location.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    return: ${mode:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_level_body
+notes: |
+  This function is used by bindings from languages other than C and C++.
+params:
+- description: is the desired interrupt level.
+  dir: null
+  name: level
+return:
+  return: |
+    A mode with the desired interrupt level in the proper bit-field location is
+    returned.
+  return-values: []
+type: interface

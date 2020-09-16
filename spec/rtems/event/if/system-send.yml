@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Sends a system event set to a task.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${set:/name} ${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+name: rtems_event_system_send
+notes: null
+params:
+- description: is the identifier of the target task to receive the event set.
+  dir: null
+  name: id
+- description: is the event set to send.
+  dir: null
+  name: event_in
+return:
+  return: null
+  return-values: []
+type: interface

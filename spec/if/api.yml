@@ -9,9 +9,9 @@ identifier: RTEMSAPI
 interface-type: group
 links:
 - role: requirement-refinement
-  uid: ../system
+  uid: ../req/system
 - role: interface-placement
-  uid: rtems/basedefs/header
+  uid: ../rtems/basedefs/if/header
 name: API
 text: |
   The system shall have an ${../glossary/api:/term}.

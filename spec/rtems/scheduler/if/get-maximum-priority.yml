@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Gets the maximum task priority of the scheduler instance.
+copyrights:
+- Copyright (C) 2018, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    body: null
+    params:
+    - ${../../type/if/id:/name} ${.:/params[0]/name}
+    - ${../../task/if/priority:/name} *${.:/params[1]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: ../../task/if/header
+- role: interface-ingroup
+  uid: ../../task/if/group
+name: rtems_scheduler_get_maximum_priority
+notes: null
+params:
+- description: is the scheduler instance identifier.
+  dir: null
+  name: scheduler_id
+- description: |
+    is the pointer to a task priority variable.  The maximum priority of the
+    scheduler instance will be stored in this variable, if the operation is
+    successful.
+  dir: out
+  name: priority
+return:
+  return: null
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The scheduler instance identifier was invalid.
+    value: ${../../status/if/invalid-id:/name}
+type: interface

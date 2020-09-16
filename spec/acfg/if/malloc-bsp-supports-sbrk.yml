@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+appl-config-option-type: feature-enable
+copyrights:
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+description: |
+  If
+
+  * this configuration option is defined by the BSP
+
+  * and ${disable-bsp-settings:/name} is undefined,
+
+  then not all memory is made available to the C Program Heap immediately at
+  system initialization time.  When ${/c/if/malloc:/name} or other standard
+  memory allocation functions are unable to allocate memory, they will call the
+  BSP supplied ${/c/if/sbrk:/name} function to obtain more memory.
+enabled-by: true
+index-entries: []
+interface-type: appl-config-option
+links:
+- role: appl-config-group-member
+  uid: group-bsp
+name: CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
+notes: |
+  This option should not be defined by the application. Only the BSP knows how
+  it allocates memory to the C Program Heap.
+text: ''
+type: interface

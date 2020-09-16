@@ -51,49 +51,49 @@ glossary:
 appl-config:
   doxygen-target: modules/rtems/cpukit/doxygen/appl-config.h
   groups:
-  - uid: /if/acfg/group-bdbuf
+  - uid: /acfg/if/group-bdbuf
     target: modules/rtems-docs/c-user/config/bdbuf.rst
-  - uid: /if/acfg/group-bsp
+  - uid: /acfg/if/group-bsp
     target: modules/rtems-docs/c-user/config/bsp-related.rst
-  - uid: /if/acfg/group-classic
+  - uid: /acfg/if/group-classic
     target: modules/rtems-docs/c-user/config/classic-api.rst
-  - uid: /if/acfg/group-classicinit
+  - uid: /acfg/if/group-classicinit
     target: modules/rtems-docs/c-user/config/classic-init-task.rst
-  - uid: /if/acfg/group-devdrv
+  - uid: /acfg/if/group-devdrv
     target: modules/rtems-docs/c-user/config/device-driver.rst
-  - uid: /if/acfg/group-eventrecord
+  - uid: /acfg/if/group-eventrecord
     target: modules/rtems-docs/c-user/config/event-record.rst
-  - uid: /if/acfg/group-filesystem
+  - uid: /acfg/if/group-filesystem
     target: modules/rtems-docs/c-user/config/filesystem.rst
-  - uid: /if/acfg/group-general
+  - uid: /acfg/if/group-general
     target: modules/rtems-docs/c-user/config/general.rst
-  - uid: /if/acfg/group-idle
+  - uid: /acfg/if/group-idle
     target: modules/rtems-docs/c-user/config/idle-task.rst
-  - uid: /if/acfg/group-mpci
+  - uid: /acfg/if/group-mpci
     target: modules/rtems-docs/c-user/config/mpci.rst
-  - uid: /if/acfg/group-posix
+  - uid: /acfg/if/group-posix
     target: modules/rtems-docs/c-user/config/posix-api.rst
-  - uid: /if/acfg/group-posixinit
+  - uid: /acfg/if/group-posixinit
     target: modules/rtems-docs/c-user/config/posix-init-thread.rst
-  - uid: /if/acfg/group-schedgeneral
+  - uid: /acfg/if/group-schedgeneral
     target: modules/rtems-docs/c-user/config/scheduler-general.rst
-  - uid: /if/acfg/group-stackalloc
+  - uid: /acfg/if/group-stackalloc
     target: modules/rtems-docs/c-user/config/task-stack-alloc.rst
 validation:
   base-directory: modules/rtems
 interface:
   item-level-interfaces:
-  - /if/build-options/container
-  - /if/compiler/container
-  - /if/use/container
+  - /build-options/if/container
+  - /compiler/if/container
+  - /user/if/container
   domains:
-    /if/domains/api: modules/rtems
+    /if/domain: modules/rtems
 interface-documentation:
 - directives-target: modules/rtems-docs/c-user/sem/directives.rst
-  group: /if/rtems/sem/group
+  group: /rtems/sem/if/group
   introduction-target: modules/rtems-docs/c-user/sem/introduction.rst
 - directives-target: modules/rtems-docs/c-user/event/directives.rst
-  group: /if/rtems/event/group
+  group: /rtems/event/if/group
   introduction-target: modules/rtems-docs/c-user/event/introduction.rst
 spec-verification:
   root-type: /spec/root

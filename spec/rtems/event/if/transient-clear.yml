@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Clears the transient event.
+copyrights:
+- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default:
+    body: |
+      ${set:/name} event_out;
+
+      (void) ${system-receive:/name}(
+        ${system-transient:/name},
+        ${../../option/if/event-all:/name} | ${../../option/if/no-wait:/name},
+        0,
+        &event_out
+      );
+    params: []
+    return: void
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+name: rtems_event_transient_clear
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
+type: interface

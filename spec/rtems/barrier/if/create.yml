@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: '%'
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+definition:
+  default:
+    body: null
+    params:
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
+    - ${../../attr/if/attribute:/name} ${.:/params[1]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[2]/name}
+    - ${../../type/if/id:/name} *${.:/params[3]/name}
+    return: ${../../status/if/code:/name}
+  variants: []
+description: null
+enabled-by: true
+interface-type: function
+links:
+- role: interface-placement
+  uid: header
+- role: interface-ingroup
+  uid: group
+name: rtems_barrier_create
+notes: null
+params:
+- description: '%'
+  dir: null
+  name: name
+- description: '%'
+  dir: null
+  name: attribute_set
+- description: '%'
+  dir: null
+  name: maximum_waiters
+- description: '%'
+  dir: null
+  name: id
+return:
+  return: null
+  return-values: []
+type: interface
