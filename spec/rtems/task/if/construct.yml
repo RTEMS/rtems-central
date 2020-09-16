@@ -26,14 +26,26 @@ notes: |
   contains the task stack, the thread-local storage, and the floating-point
   context on architectures with a separate floating-point context.
 
-  It is not recommended to mix ${create:/name} and ${.:/name} in an
-  application.  This directive is intended for applications which do not want
-  to use the RTEMS Workspace and instead statically allocate all operating
-  system resources.  The stack space estimate done by <rtems/confdefs.h>
-  assumes that all tasks are created by ${create:/name}.  The estimate can be
-  adjusted to take user-provided task storage areas into account through the
+  This directive is intended for applications which do not want to use the
+  RTEMS Workspace and instead statically allocate all operating system
+  resources.  It is not recommended to use ${create:/name} and ${.:/name}
+  together in an application.  It is also not recommended to use ${.:/name} for
+  drivers or general purpose libraries.  The reason for these recommendations
+  is that the task configuration needs settings which can be only given with a
+  through knowledge of the application resources.
+
+  An application based solely on static allocation can avoid any runtime memory
+  allocators.  This can simplfiy the application architecture as well as any
+  analysis that may be required.
+
+  The stack space estimate done by <rtems/confdefs.h> assumes that all tasks
+  are created by ${create:/name}.  The estimate can be adjusted to take
+  user-provided task storage areas into account through the
   ${/acfg/if/min-tasks-with-user-provided-storage:/name} application
   configuration option.
+
+  The ${/acfg/if/max-tasks:/name} should include tasks constructed by
+  ${create:/name}.
 params:
 - description: is the task configuration.
   dir: null

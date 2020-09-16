@@ -62,6 +62,15 @@ definition:
 
       If the is less than the task storage area size, then the task
       construction by ${construct:/name} fails.
+
+      The actual thread-local storage size is determined when the application
+      executable is linked.  The ``rtems-exeinfo`` command line tool included
+      in the RTEMS Tools can be used to obtain the thread-local storage size
+      and alignment of an application executable.
+
+      The application may configure the maximum thread-local storage size for
+      all threads explicitly through the
+      ${/acfg/if/max-thread-local-storage-size} configuration option.
     kind: member
     name: maximum_thread_local_storage_size
   variants: []

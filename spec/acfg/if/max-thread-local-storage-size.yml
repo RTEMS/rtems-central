@@ -30,5 +30,10 @@ notes: |
   Use ${/rtems/basedefs/if/align-up:/name} and
   ${/rtems/task/if/storage-alignment:/name} to adjust the size to meet the
   minimum alignment requirement of a thread-local storage area.
+
+  The actual thread-local storage size is determined when the application
+  executable is linked.  The ``rtems-exeinfo`` command line tool included in
+  the RTEMS Tools can be used to obtain the thread-local storage size and
+  alignment of an application executable.
 text: ''
 type: interface
