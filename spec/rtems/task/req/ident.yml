@@ -20,7 +20,7 @@ post-conditions:
       thread.
   - name: Generic
     test-code: |
-      /* Checks performed by ${../req/ident:/test-run}() */
+      /* Checks performed by ${../../req/ident:/test-run}() */
     text: |
       The post-condition status shall be specified by ${../req/ident}.
   test-epilogue: null
@@ -37,7 +37,7 @@ pre-conditions:
   - name: Generic
     test-code: |
       ctx->id = NULL;
-      /* Preparation performed by ${../req/ident:/test-run}() */
+      /* Preparation performed by ${../../req/ident:/test-run}() */
     text: |
       The pre-condition status shall be specified by ${../req/ident}.
   test-epilogue: null
@@ -50,7 +50,7 @@ test-action: |
   if ( ctx->id != NULL ) {
     ctx->status = rtems_task_ident( RTEMS_SELF, 0xdeadbeef, ctx->id );
   } else {
-    ${../req/ident:/test-run}(
+    ${../../req/ident:/test-run}(
       ctx->id_local_object,
       ClassicTaskIdentAction
     );
