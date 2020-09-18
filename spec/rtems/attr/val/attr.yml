@@ -8,14 +8,14 @@ test-actions:
     /* No action */
   checks:
   - check: |
-      T_step_true( ${step}, IsPowerOfTwo( RTEMS_BARRIER_MANUAL_RELEASE ) );
+      T_step_true( ${step}, IsPowerOfTwo( RTEMS_BARRIER_AUTOMATIC_RELEASE ) );
     description: |
-      Check that RTEMS_BARRIER_MANUAL_RELEASE is a power of two.
+      Check that RTEMS_BARRIER_AUTOMATIC_RELEASE is a power of two.
     links:
     - role: validation
       uid: ../req/bit-set
     - role: validation
-      uid: ../if/barrier-manual-release
+      uid: ../if/barrier-automatic-release
   - check: |
       T_step_true( ${step}, IsPowerOfTwo( RTEMS_BINARY_SEMAPHORE ) );
     description: |
