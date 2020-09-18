@@ -90,9 +90,9 @@ interface:
   domains:
     /if/domain: modules/rtems
 interface-documentation:
-- directives-target: modules/rtems-docs/c-user/sem/directives.rst
+- directives-target: modules/rtems-docs/c-user/semaphore/directives.rst
   group: /rtems/sem/if/group
-  introduction-target: modules/rtems-docs/c-user/sem/introduction.rst
+  introduction-target: modules/rtems-docs/c-user/semaphore/introduction.rst
 - directives-target: modules/rtems-docs/c-user/event/directives.rst
   group: /rtems/event/if/group
   introduction-target: modules/rtems-docs/c-user/event/introduction.rst
