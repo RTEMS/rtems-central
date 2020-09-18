@@ -89,6 +89,32 @@ def test_add():
 b
 c
 """
+    content = Content("BSD-2-Clause", True)
+    content.add("a")
+    assert str(content) == """a
+"""
+    content.add_blank_line()
+    assert str(content) == """a
+
+"""
+    content.add("b")
+    assert str(content) == """a
+
+b
+"""
+    content = Content("BSD-2-Clause", True)
+    content.add("a")
+    assert str(content) == """a
+"""
+    content.ensure_blank_line()
+    assert str(content) == """a
+
+"""
+    content.add("b")
+    assert str(content) == """a
+
+b
+"""
 
 
 def test_wrap():

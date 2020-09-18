@@ -385,11 +385,13 @@ class Content:
     def add_blank_line(self):
         """ Adds a blank line. """
         self._lines.append("")
+        self._gap = False
 
     def ensure_blank_line(self):
         """ Ensures that the last line is blank. """
         if not self._lines or self._lines[-1]:
             self._lines.append("")
+            self._gap = False
 
     def register_license(self, the_license: str) -> None:
         """ Registers a licence for the content. """
