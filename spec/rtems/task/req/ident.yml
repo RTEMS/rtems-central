@@ -121,7 +121,16 @@ test-support: |
     .attributes = TASK_ATTRIBUTES
   };
 test-target: testsuites/validation/tc-task-ident.c
-test-teardown: null
+test-teardown:
+  brief: null
+  code: |
+    if ( ctx->id_local_object != 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_task_delete( ctx->id_local_object );
+      T_rsc_success( sc );
+    }
+  description: null
 text: ${.:text-template}
 transition-map:
 - enabled-by: true

@@ -18,7 +18,9 @@ test-actions:
   links: []
 test-brief: Test the ${../if/ident:/name} directive.
 test-description: null
-test-epilogue: null
+test-epilogue: |
+  sc = rtems_partition_delete( id_local_object );
+  T_rsc_success( sc );
 test-fixture: null
 test-header: null
 test-includes: []
