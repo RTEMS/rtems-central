@@ -433,6 +433,7 @@ class _HeaderFile:
     def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
         self._item = item
         self._content = CContent()
+        self._content.register_license_and_copyrights_of_item(item)
         self._ingroups = {}  # type: ItemMap
         self._includes = []  # type: List[Item]
         self._nodes = {}  # type: Dict[str, Node]
