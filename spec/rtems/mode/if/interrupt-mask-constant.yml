@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  This task mode constant has the same value as ${interrupt-mask:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
@@ -15,5 +16,7 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_interrupt_mask
-notes: null
+notes: |
+  This task mode constant is used by bindings from languages other than C and
+  C++.
 type: interface

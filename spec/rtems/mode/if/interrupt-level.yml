@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the processor dependent interrupt level which corresponds to the
-  requested interrupt level.
+  Returns the task mode with the processor-dependent interrupt level
+  corresponding to the specified interrupt level.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
@@ -18,12 +18,14 @@ links:
   uid: group
 name: RTEMS_INTERRUPT_LEVEL
 notes: |
-  RTEMS supports 256 interrupt levels using the least significant eight bits of
-  the mode set. On any particular CPU, fewer than 256 levels may be supported.
+  The Classic API supports 256 interrupt levels using the least significant
+  eight bits of the mode set.  On any particular processor variant, fewer than
+  256 levels may be supported.  At least level 0 (all interrupts enabled) and
+  level 1 (interrupts disabled, on most architectures) are supported.
 params:
-- description: is the mode set.
+- description: is the interrupt level.
   dir: null
-  name: _mode_set
+  name: _interrupt_level
 return:
   return: null
   return-values: []
