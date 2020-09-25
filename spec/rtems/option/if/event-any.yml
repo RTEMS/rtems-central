@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This option constant indicates that the task wishes to wait until any events
-  of interest are available.
+  This option constant indicates that the task wishes to wait until at least
+  one of the events of interest are available.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)

@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This option constant indicates that the task is to not wait on the resource.
+  This option constant indicates that the task does not want to wait on the
+  resource.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
@@ -8,8 +9,8 @@ definition:
   default: '0x00000001'
   variants: []
 description: |
-  If the resource is not available, then directives shall return immediately
-  with a status to indicate unsatisfied.
+  If the resource is not available, then the directives shall return
+  immediately with a status to indicate that the request is unsatisfied.
 enabled-by: true
 interface-type: define
 links:
