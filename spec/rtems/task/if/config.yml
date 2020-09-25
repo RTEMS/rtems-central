@@ -82,9 +82,9 @@ definition:
       It is called on exactly two mutually exclusive occasions.  Firstly, when
       the task construction aborts due to a failed task create extension, or
       secondly, when the task is deleted.  It is called from task context under
-      protection of the object allocator lock.  It is allowed to call free() in
-      this handler.  If handler is ${/c/if/null:/name}, then no action will
-      be performed.
+      protection of the object allocator lock.  It is allowed to call
+      ${/c/if/free:/name} in this handler.  If handler is ${/c/if/null:/name},
+      then no action will be performed.
     kind: member
     name: storage_free
   variants: []
