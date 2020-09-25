@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This attribute constant indicates that the Classic API Semaphore instance
-  created will be a simple binary semaphore.
+  This attribute constant indicates that the Classic API Semaphore object shall
+  be a simple binary semaphore.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)

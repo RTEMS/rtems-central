@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This attribute constant indicates that the Classic API Semaphore instance
-  created will use the Multiprocessor Resource Sharing Protocol.
+  This attribute constant indicates that the Classic API Semaphore object shall
+  use the Multiprocessor Resource Sharing Protocol.
 copyrights:
 - Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -17,5 +17,5 @@ links:
   uid: group
 name: RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
 notes: |
-  The semaphore instance must be a binary semaphore.
+  The semaphore object shall be a binary semaphore (${binary-semaphore:/name}).
 type: interface
