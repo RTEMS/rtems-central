@@ -17,10 +17,11 @@ links:
   uid: group
 name: rtems_configuration_get_maximum_processors
 notes: |
-  The actual number of processors available for the application will be less
-  than or equal to the configured maximum number of processors.
+  The actual number of processors available to the application is returned by
+  ${../../scheduler/if/get-processor-maximum:/name}.  It will be less than or
+  equal to the configured maximum number of processors.
 
-  On uniprocessor configurations this macro is a compile time constant which
+  In uniprocessor configurations, this macro is a compile time constant which
   evaluates to one.
 params: []
 return:

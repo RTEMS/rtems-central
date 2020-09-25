@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns true, if the thread stack allocator avoids the workspace, otherwise
-  returns false.
+  Returns true, if the thread stack allocator avoids the RTEMS Workspace,
+  otherwise returns false.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:

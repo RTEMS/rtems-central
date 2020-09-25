@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns true, if the workspace is zeroed during system initialization,
-  otherwise returns false.
+  Returns true, if the RTEMS Workspace is zeroed during system initialization
+  for this application, otherwise returns false.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:

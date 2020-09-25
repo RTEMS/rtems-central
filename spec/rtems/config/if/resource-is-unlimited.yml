@@ -15,7 +15,9 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_resource_is_unlimited
-notes: null
+notes: |
+  This function is implemented as a macro and can be used to define compile
+  time constants.
 params:
 - description: is the resource number.
   dir: null

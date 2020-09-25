@@ -1,8 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  This constant evaluates to ${../../basedefs/if/true:/name}, if the this
+  processor variant has hardware floating point support, otherwise evaluates to
+  ${../../basedefs/if/false:/name}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: ${/score/cpu/if/hardware-fp:/name}
   variants: []
