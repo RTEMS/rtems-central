@@ -217,7 +217,8 @@ DIRECTIVE PARAMETERS:
 
 DESCRIPTION:
     Function description.  References to :ref:`InterfaceVeryLongFunction`,
-    Integer, Enum, DEFINE, VERY_LONG_MACRO, Variable, ENUMERATOR_0, Struct,
+    :c:type:`Integer`, :c:type:`Enum`, :c:macro:`DEFINE`,
+    :c:func:`VERY_LONG_MACRO`, Variable, ENUMERATOR_0, :c:type:`Struct`,
     :ref:`a`, and interface.
 """
         assert content == src.read()

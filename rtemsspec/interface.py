@@ -82,6 +82,8 @@ class _InterfaceMapper(ItemMapper):
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
             name = f"interface/appl-config-option/{opt}:doc:/name"
             self.add_get_value(name, get_value_hash)
+        self.add_get_value("interface/unspecified-function:doc:/name",
+                           get_value_doxygen_function)
 
     @contextmanager
     def code(self) -> Iterator[None]:

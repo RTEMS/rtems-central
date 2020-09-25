@@ -221,6 +221,34 @@ def _get_appl_config_option(ctx: ItemGetValueContext) -> Any:
     return f":ref:`{ctx.value[ctx.key]}`"
 
 
+def _get_value_sphinx_macro(ctx: ItemGetValueContext) -> Any:
+    return f":c:macro:`{ctx.value[ctx.key]}`"
+
+
+def _get_value_sphinx_function(ctx: ItemGetValueContext) -> Any:
+    return f":c:func:`{ctx.value[ctx.key]}`"
+
+
+def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
+    return f":c:type:`{ctx.value[ctx.key]}`"
+
+
+def _get_value_sphinx_url(ctx: ItemGetValueContext) -> Any:
+    return f"`{ctx.value[ctx.key]} <{ctx.item['reference']}>`_"
+
+
+def _get_value_sphinx_unspecified_define(ctx: ItemGetValueContext) -> Any:
+    if ctx.item["reference"]:
+        return _get_value_sphinx_url(ctx)
+    return _get_value_sphinx_macro(ctx)
+
+
+def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
+    if ctx.item["reference"]:
+        return _get_value_sphinx_url(ctx)
+    return _get_value_sphinx_type(ctx)
+
+
 class SphinxMapper(ItemMapper):
     """ Sphinx item mapper. """
     def __init__(self, item: Item):
@@ -235,3 +263,17 @@ class SphinxMapper(ItemMapper):
                            _get_appl_config_option)
         self.add_get_value("interface/appl-config-option/integer:/name",
                            _get_appl_config_option)
+        self.add_get_value("interface/define:/name", _get_value_sphinx_macro)
+        self.add_get_value("interface/enum:/name", _get_value_sphinx_type)
+        self.add_get_value("interface/function:/name",
+                           _get_value_sphinx_function)
+        self.add_get_value("interface/macro:/name", _get_value_sphinx_function)
+        self.add_get_value("interface/struct:/name", _get_value_sphinx_type)
+        self.add_get_value("interface/typedef:/name", _get_value_sphinx_type)
+        self.add_get_value("interface/union:/name", _get_value_sphinx_type)
+        self.add_get_value("interface/unspecified-define:/name",
+                           _get_value_sphinx_unspecified_define)
+        self.add_get_value("interface/unspecified-function:/name",
+                           _get_value_sphinx_function)
+        self.add_get_value("interface/unspecified-type:/name",
+                           _get_value_sphinx_unspecified_type)

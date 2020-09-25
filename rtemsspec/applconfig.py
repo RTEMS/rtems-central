@@ -351,34 +351,6 @@ def _get_value_sphinx_reference(ctx: ItemGetValueContext) -> Any:
     return _SPHINX_DOC_REFS[ctx.key]
 
 
-def _get_value_sphinx_define(ctx: ItemGetValueContext) -> Any:
-    return f":c:macro:`{ctx.value[ctx.key]}`"
-
-
-def _get_value_sphinx_function(ctx: ItemGetValueContext) -> Any:
-    return f":c:func:`{ctx.value[ctx.key]}`"
-
-
-def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
-    return f":c:type:`{ctx.value[ctx.key]}`"
-
-
-def _get_value_sphinx_url(ctx: ItemGetValueContext) -> Any:
-    return f"`{ctx.value[ctx.key]} <{ctx.item['reference']}>`_"
-
-
-def _get_value_sphinx_unspecified_define(ctx: ItemGetValueContext) -> Any:
-    if ctx.item["reference"]:
-        return _get_value_sphinx_url(ctx)
-    return _get_value_sphinx_define(ctx)
-
-
-def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
-    if ctx.item["reference"]:
-        return _get_value_sphinx_url(ctx)
-    return _get_value_sphinx_type(ctx)
-
-
 def _add_sphinx_get_values(mapper: ItemMapper) -> None:
     for key in _SPHINX_DOC_REFS:
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
@@ -386,19 +358,6 @@ def _add_sphinx_get_values(mapper: ItemMapper) -> None:
             mapper.add_get_value(doc_ref, _get_value_none)
             mapper.add_get_value(f"{doc_ref}/{key}",
                                  _get_value_sphinx_reference)
-    mapper.add_get_value("interface/define:/name", _get_value_sphinx_define)
-    mapper.add_get_value("interface/function:/name",
-                         _get_value_sphinx_function)
-    mapper.add_get_value("interface/macro:/name", _get_value_sphinx_function)
-    mapper.add_get_value("interface/struct:/name", _get_value_sphinx_type)
-    mapper.add_get_value("interface/typedef:/name", _get_value_sphinx_type)
-    mapper.add_get_value("interface/union:/name", _get_value_sphinx_type)
-    mapper.add_get_value("interface/unspecified-define:/name",
-                         _get_value_sphinx_unspecified_define)
-    mapper.add_get_value("interface/unspecified-function:/name",
-                         _get_value_sphinx_function)
-    mapper.add_get_value("interface/unspecified-type:/name",
-                         _get_value_sphinx_unspecified_type)
 
 
 def _c_user_ref(ref: str, name: str) -> str:
