@@ -5,7 +5,7 @@ enabled-by: true
 functional-type: action
 links:
 - role: interface-function
-  uid: /rtems/task/if/construct
+  uid: ../if/construct
 post-conditions:
 - name: Status
   states:
