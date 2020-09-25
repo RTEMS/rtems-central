@@ -27,6 +27,6 @@ params:
 return:
   return: Otherwise, a text describing the status code.
   return-values:
-  - description: The passed status code is invalid.
+  - description: The specified status code is invalid.
     value: '"?"'
 type: interface

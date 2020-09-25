@@ -28,23 +28,23 @@ return:
   return: null
   return-values:
   - description: |
-      The status code is ${successful:/name}.
+      The status code was ${successful:/name}.
     value: '0'
   - description: |
-      The status code is ${invalid-number:/name}.
+      The status code was ${invalid-number:/name}.
     value: EBADF
   - description: |
-      The status code is ${resource-in-use:/name}.
+      The status code was ${resource-in-use:/name}.
     value: EBUSY
   - description: |
-      The status code is ${interrupted:/name}.
+      The status code was ${interrupted:/name}.
     value: EINTR
   - description: |
-      The status code is ${invalid-clock:/name},
+      The status code was ${invalid-clock:/name},
       ${invalid-name:/name}, or ${invalid-node:/name}.
     value: EINVAL
   - description: |
-      The status code is ${already-suspended:/name},
+      The status code was ${already-suspended:/name},
       ${called-from-isr:/name},
       ${illegal-on-remote-object:/name},
       ${illegal-on-self:/name}, ${incorrect-state:/name},
@@ -56,19 +56,19 @@ return:
       ${task-exitted:/name}, or ${too-many:/name}.
     value: EIO
   - description: |
-      The status code is ${unsatisfied:/name}.
+      The status code was ${unsatisfied:/name}.
     value: ENODEV
   - description: |
-      The status code is ${no-memory:/name}.
+      The status code was ${no-memory:/name}.
     value: ENOMEM
   - description: |
-      The status code is ${not-configured:/name} or
+      The status code was ${not-configured:/name} or
       ${not-implemented:/name}.
     value: ENOSYS
   - description: |
-      The status code is ${not-owner-of-resource:/name}.
+      The status code was ${not-owner-of-resource:/name}.
     value: EPERM
   - description: |
-      The status code is ${timeout:/name}.
+      The status code was ${timeout:/name}.
     value: ETIMEDOUT
 type: interface
