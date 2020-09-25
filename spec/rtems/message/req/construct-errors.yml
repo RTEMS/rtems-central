@@ -1,0 +1,456 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/construct
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, 0xffffffff );
+
+      sc = rtems_message_queue_delete( ctx->id_value );
+      T_rsc_success( sc );
+    text: |
+      The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
+      referenced by the id parameter shall identify the constructed message
+      queue.
+  - name: InvAddress
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+      T_null( ctx->id );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_ADDRESS.
+  - name: InvName
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NAME );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_NAME.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  - name: InvNumber
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_NUMBER.  If the id parameter is not
+      NULL, then the value of the object identifier referenced by the id
+      parameter shall be unchanged.
+  - name: InvSize
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_SIZE );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_INVALID_SIZE.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  - name: TooMany
+    test-code: |
+      T_rsc( ctx->status, RTEMS_TOO_MANY );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_TOO_MANY.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  - name: Unsatisfied
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED  );
+      T_eq_u32( ctx->id_value, 0xffffffff );
+    text: |
+      The status shall be RTEMS_UNSATISFIED.  If the id parameter is not NULL,
+      then the value of the object identifier referenced by the id parameter
+      shall be unchanged.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+pre-conditions:
+- name: Id
+  states:
+  - name: Id
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      The id parameter shall reference an object identifier value.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      The id parameter shall be NULL.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.name = rtems_build_name( 'N', 'A', 'M', 'E' );
+    text: |
+      The name of the message queue configuration shall be valid.
+  - name: Invalid
+    test-code: |
+      ctx->config.name = 0;
+    text: |
+      The name of the message queue configuration shall be invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: MaxPending
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+    text: |
+      The maximum number of pending messages of the message queue configuration
+      shall be valid.
+  - name: Zero
+    test-code: |
+      ctx->config.maximum_pending_messages = 0;
+    text: |
+      The maximum number of pending messages of the message queue configuration
+      shall be zero.
+  - name: Big
+    test-code: |
+      ctx->config.maximum_pending_messages = UINT32_MAX;
+    text: |
+      The maximum number of pending messages of the message queue configuration
+      shall be big enough so that a calculation to get the message buffer
+      storage area size overflows.
+  test-epilogue: null
+  test-prologue: null
+- name: MaxSize
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.maximum_message_size = MAX_MESSAGE_SIZE;
+    text: |
+      The maximum message size of the message queue configuration shall be
+      valid.
+  - name: Zero
+    test-code: |
+      ctx->config.maximum_message_size = 0;
+    text: |
+      The maximum message size of the message queue configuration shall be
+      zero.
+  - name: Big
+    test-code: |
+      ctx->config.maximum_message_size = SIZE_MAX;
+    text: |
+      The maximum message size of the message queue configuration
+      shall be big enough so that a calculation to get the message buffer
+      storage area size overflows.
+  test-epilogue: null
+  test-prologue: null
+- name: Queues
+  states:
+  - name: Avail
+    test-code: |
+      /* Nothing to do */
+    text: |
+      There shall be at least one inactive message queue object available.
+  - name: None
+    test-code: |
+      memset( &config, 0, sizeof( config ) );
+      config.name = rtems_build_name( 'M', 'S', 'G', 'Q' );
+      config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+      config.maximum_message_size = MAX_MESSAGE_SIZE;
+      config.storage_size = sizeof( exhaust_buffers[ 0 ] );
+      config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
+
+      i = 0;
+
+      while ( i < MAX_MESSAGE_QUEUES ) {
+        rtems_status_code sc;
+        rtems_id          id;
+
+        config.storage_area = exhaust_buffers[ i ];
+
+        sc = rtems_message_queue_construct( &config, &id );
+
+        if ( sc == RTEMS_SUCCESSFUL ) {
+          Objects_Control           *obj;
+          const Objects_Information *info;
+
+          info = _Objects_Get_information_id( id );
+          T_quiet_assert_not_null( info );
+          obj = _Objects_Get_no_protection( id, info );
+          T_quiet_assert_not_null( obj );
+          _Chain_Append_unprotected( &ctx->message_queues, &obj->Node );
+        } else {
+          T_quiet_rsc( sc, RTEMS_TOO_MANY );
+          break;
+        }
+
+        ++i;
+      }
+    text: |
+      There shall be no inactive message queue object available.
+  test-epilogue: null
+  test-prologue: |
+      rtems_message_queue_config config;
+      size_t                     i;
+- name: Area
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.storage_area = buffers;
+    text: |
+      The message buffer storage area begin pointer of the message queue
+      configuration shall be valid.
+  - name: 'Null'
+    test-code: |
+      ctx->config.storage_area = NULL;
+    text: |
+      The message buffer storage area begin pointer of the message queue
+      configuration shall be NULL.
+  test-epilogue: null
+  test-prologue: null
+- name: AreaSize
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config.storage_size = sizeof( buffers );
+    text: |
+      The message buffer storage area size of the message queue configuration
+      shall be valid.
+  - name: Invalid
+    test-code: |
+      ctx->config.storage_size = SIZE_MAX;
+    text: |
+      The message buffer storage area size of the message queue configuration
+      shall be invalid.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_message_queue_construct( &ctx->config, ctx->id );
+test-brief: null
+test-cleanup: |
+  Chain_Node *node;
+
+  while ( ( node = _Chain_Get_unprotected( &ctx->message_queues ) ) ) {
+    Objects_Control   *obj;
+    rtems_status_code  sc;
+
+    obj = (Objects_Control *) node;
+    sc = rtems_message_queue_delete( obj->id );
+    T_quiet_rsc_success( sc );
+  }
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_message_queue_config config
+- brief: null
+  description: null
+  member: rtems_id *id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: Chain_Control message_queues
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/chainimpl.h
+- rtems/score/objectimpl.h
+- string.h
+test-local-includes: []
+test-prepare: |
+  ctx->id_value = 0xffffffff;
+  memset( &ctx->config, 0, sizeof( ctx->config ) );
+test-setup:
+  brief: null
+  code: |
+    _Chain_Initialize_empty( &ctx->message_queues );
+  description: null
+test-stop: null
+test-support: |
+  #define MAX_MESSAGE_QUEUES 4
+
+  #define MAX_PENDING_MESSAGES 1
+
+  #define MAX_MESSAGE_SIZE 1
+
+  static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
+    exhaust_buffers[ MAX_MESSAGE_QUEUES ][ MAX_PENDING_MESSAGES ];
+
+  static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
+    buffers[ MAX_PENDING_MESSAGES ];
+test-target: testsuites/validation/tc-message-construct-errors.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Valid
+    MaxSize:
+    - Valid
+    Queues:
+    - Avail
+    Area:
+    - Valid
+    AreaSize:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddress
+  pre-conditions:
+    Id:
+    - 'Null'
+    Name: all
+    MaxPending: all
+    MaxSize: all
+    Queues: all
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: InvName
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Invalid
+    MaxPending: all
+    MaxSize: all
+    Queues: all
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: InvNumber
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Zero
+    MaxSize: all
+    Queues: all
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Valid
+    - Big
+    MaxSize:
+    - Zero
+    Queues: all
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Valid
+    - Big
+    MaxSize:
+    - Valid
+    - Big
+    Queues:
+    - None
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: InvNumber
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Big
+    MaxSize:
+    - Valid
+    Queues: 
+    - Avail
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: InvSize
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Valid
+    - Big
+    MaxSize:
+    - Big
+    Queues:
+    - Avail
+    Area: all
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsatisfied
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Valid
+    MaxSize:
+    - Valid
+    Queues:
+    - Avail
+    Area:
+    - 'Null'
+    AreaSize: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsatisfied
+  pre-conditions:
+    Id:
+    - Id
+    Name:
+    - Valid
+    MaxPending:
+    - Valid
+    MaxSize:
+    - Valid
+    Queues:
+    - Avail
+    Area:
+    - Valid
+    AreaSize:
+    - Invalid
+type: requirement
