@@ -1,13 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This is an invalid object identifier.
+  This constant represents an invalid RTEMS object identifier.
 copyrights:
 - Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: ${/score/object/if/id-none:/name}
   variants: []
 description: |
-  No object can have this identifier.
+  No RTEMS object can have this identifier.
 enabled-by: true
 interface-type: define
 links:

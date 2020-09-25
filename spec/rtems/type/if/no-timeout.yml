@@ -1,8 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  This clock tick interval constant indicates that the calling task is willing
+  to wait potentially forever on a resource.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: |
     ( (${interval:/name}) ${/score/watchdog/if/no-timeout:/name} )
