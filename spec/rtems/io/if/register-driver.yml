@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Registers and initializes the device with the specified device driver address
+  table and device major number in the Device Driver Table.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -8,7 +10,7 @@ definition:
     body: null
     params:
     - ${device-major-number:/name} ${.:/params[0]/name}
-    - const rtems_driver_address_table *${.:/params[1]/name}
+    - const ${driver-address-table:/name} *${.:/params[1]/name}
     - ${device-major-number:/name} *${.:/params[2]/name}
     return: ${../../status/if/code:/name}
   variants: []
@@ -21,18 +23,53 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_io_register_driver
-notes: null
+notes: |
+  If the device major number equals zero a device major number will be
+  obtained.  The device major number of the registered driver will be returned.
+
+  After a successful registration ${initialize:/name} routine will be called to
+  initialize the device.
 params:
-- description: '%'
+- description: |
+    is the device major number.  Use a value of zero to let the system obtain a
+    device major number automatically.
   dir: null
   name: major
-- description: '%'
+- description: |
+    is the device driver address table.
   dir: null
   name: driver_table
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to a device major number variable.  The device major number
+    of the registered device will be stored in this variable, in case of a
+    successful operation.
+  dir: out
   name: registered_major
 return:
-  return: null
-  return-values: []
+  return: |
+    Other status codes may be returned by the device driver initialization
+    routine.
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The device major number of the device was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The device driver address table was empty.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The device major number of the device was out of range, see
+      ${/acfg/if/max-drivers:/name}.
+    value: ${../../status/if/invalid-number:/name}
+  - description: |
+      The system was unable to obtain a device major number.
+    value: ${../../status/if/too-many:/name}
+  - description: |
+      The device major number was in use.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The directive was called from interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
 type: interface

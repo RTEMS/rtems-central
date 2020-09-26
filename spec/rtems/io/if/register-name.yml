@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Registers the device specified by the device major and minor numbers in the
+  file system under the specified name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -21,18 +23,28 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_io_register_name
-notes: null
+notes: |
+  The device is registered as a character device.
 params:
-- description: '%'
+- description: |
+    is the device name in the file system.
   dir: null
   name: device_name
-- description: '%'
+- description: |
+    is the device major number.
   dir: null
   name: major
-- description: '%'
+- description: |
+    is the device minor number.
   dir: null
   name: minor
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The name was already in use or other errors occurred.
+    value: ${../../status/if/too-many:/name}
 type: interface

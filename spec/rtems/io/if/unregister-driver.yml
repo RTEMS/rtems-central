@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Removes a device driver specified by the device major number from the Device
+  Driver Table.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -19,12 +21,23 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_io_unregister_driver
-notes: null
+notes: |
+  Currently no specific checks are made and the driver is not closed.
 params:
-- description: '%'
+- description: |
+    is the major number of the device.
   dir: null
   name: major
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The device major number was invalid.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The directive was called from interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
 type: interface
