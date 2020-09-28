@@ -9,6 +9,8 @@ description: |
 enabled-by: true
 interface-type: appl-config-group
 links:
+- role: interface-placement
+  uid: ../../if/domain
 - role: requirement-refinement
   uid: ../../req/applconfig
 name: BSP Related Configuration Options
