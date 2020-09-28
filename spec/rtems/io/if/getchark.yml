@@ -6,6 +6,6 @@ interface-type: unspecified-function
 links:
 - role: interface-placement
   uid: header-3
-name: rtems_putc
+name: getchark
 reference: null
 type: interface
