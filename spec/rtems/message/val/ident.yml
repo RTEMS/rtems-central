@@ -28,17 +28,25 @@ test-local-includes:
 - tr-object-ident.h
 test-prologue: |
   rtems_status_code sc;
-  rtems_id id_local_object;
+  rtems_id          id_local_object;
 
-  sc = rtems_message_queue_create(
-    ClassicObjectIdentName,
-    1,
-    1,
-    RTEMS_DEFAULT_ATTRIBUTES,
+  sc = rtems_message_queue_construct(
+    &ClassicObjectIdentConfig,
     &id_local_object
   );
   T_assert_rsc_success( sc );
 test-support: |
+  static RTEMS_MESSAGE_QUEUE_BUFFER( 1 ) ClassicMessageIdentBuffers[ 1 ];
+
+  static rtems_message_queue_config ClassicObjectIdentConfig = {
+    .name = ClassicObjectIdentName,
+    .maximum_pending_messages = RTEMS_ARRAY_SIZE( ClassicMessageIdentBuffers ),
+    .maximum_message_size = 1,
+    .storage_area = ClassicMessageIdentBuffers,
+    .storage_size = sizeof( ClassicMessageIdentBuffers ),
+    .attributes = RTEMS_DEFAULT_ATTRIBUTES
+  };
+
   static rtems_status_code ClassicMessageIdentAction(
     rtems_name name,
     uint32_t   node,
