@@ -214,7 +214,7 @@ spec-info:
         spec-type: none
       substitute:
         description: |
-          The action Performs a ``$${VARIABLE}`` substitution on the action
+          The action performs a ``$${VARIABLE}`` substitution on the action
           value.  Use ``$$$$`` for a plain ``$$`` character.
         spec-type: none
     description: |
