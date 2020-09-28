@@ -3,7 +3,9 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 interface-type: unspecified-function
-links: []
+links:
+- role: interface-placement
+  uid: header-3
 name: rtems_putc
 reference: null
 type: interface

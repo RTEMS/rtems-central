@@ -1,15 +1,12 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: This header file defines the IO library API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-definition: []
-definition-kind: struct-only
-description: null
 enabled-by: true
-interface-type: struct
+interface-type: header-file
 links:
 - role: interface-placement
-  uid: header-4
-name: rtems_printer
-notes: null
+  uid: /if/domain
+path: rtems/libio.h
+prefix: cpukit/include
 type: interface
