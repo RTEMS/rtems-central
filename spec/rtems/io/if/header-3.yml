@@ -3,7 +3,7 @@ brief: This header file defines the polled character IO driver API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-interface-type: header-file
+interface-type: container
 links:
 - role: interface-placement
   uid: /if/domain
