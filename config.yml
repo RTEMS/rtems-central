@@ -95,6 +95,9 @@ interface:
   domains:
     /if/domain: modules/rtems
 interface-documentation:
+- directives-target: modules/rtems-docs/c-user/io/directives.rst
+  group: /rtems/io/if/group
+  introduction-target: modules/rtems-docs/c-user/io/introduction.rst
 - directives-target: modules/rtems-docs/c-user/semaphore/directives.rst
   group: /rtems/sem/if/group
   introduction-target: modules/rtems-docs/c-user/semaphore/introduction.rst
