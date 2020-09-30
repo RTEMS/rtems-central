@@ -314,11 +314,11 @@ transition-map:
     - Valid
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvName
   pre-conditions:
-    Id:
-    - 'Null'
-    Name: all
+    Id: all
+    Name:
+    - Invalid
     MaxPending: all
     MaxSize: all
     Queues: all
@@ -326,12 +326,12 @@ transition-map:
     AreaSize: all
 - enabled-by: true
   post-conditions:
-    Status: InvName
+    Status: InvAddress
   pre-conditions:
     Id:
-    - Id
+    - 'Null'
     Name:
-    - Invalid
+    - Valid
     MaxPending: all
     MaxSize: all
     Queues: all

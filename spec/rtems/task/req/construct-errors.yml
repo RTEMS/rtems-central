@@ -365,11 +365,11 @@ transition-map:
     Preempt: all
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvName
   pre-conditions:
-    Id:
-    - 'Null'
-    Name: all
+    Id: all
+    Name:
+    - Inv
     Prio: all
     Tasks: all
     TLS: all
@@ -378,12 +378,12 @@ transition-map:
     Preempt: all
 - enabled-by: true
   post-conditions:
-    Status: InvName
+    Status: InvAddress
   pre-conditions:
     Id:
-    - Id
+    - 'Null'
     Name:
-    - Inv
+    - Valid
     Prio: all
     Tasks: all
     TLS: all
