@@ -29,7 +29,9 @@ description: |
   * the constant ${../../object/if/search-other-nodes:/name} to search in all nodes
     except the local node.
 enabled-by: true
-index-entries: []
+index-entries:
+- get ID of a partition
+- obtain ID of a partition
 interface-type: function
 links:
 - role: interface-placement

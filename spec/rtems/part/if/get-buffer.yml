@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Tries to get a buffer from the specified partition.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -11,9 +12,14 @@ definition:
     - void **${.:/params[1]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive allows a buffer to be obtained from the partition specified in
+  the ${.:/params[0]/name} parameter.  The address of the allocated buffer is
+  returned through the ${.:/params[1]/name} parameter.
 enabled-by: true
-index-entries: []
+index-entries:
+- get buffer from partition
+- obtain buffer from partition
 interface-type: function
 links:
 - role: interface-placement
@@ -21,15 +27,38 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_partition_get_buffer
-notes: null
+notes: |
+  This directive will not cause the running task to be preempted.
+
+  All buffers begin on a four byte boundary.
+
+  A task cannot wait on a buffer to become available.
+
+  Getting a buffer from a global partition which does not reside on the local
+  node will generate a request telling the remote node to allocate a buffer
+  from the specified partition.
 params:
-- description: '%'
+- description: is the partition identifier.
   dir: null
   name: id
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to a buffer pointer variable.  The pointer to the allocated
+    buffer will be stored in this variable, in case of a successful operation.
+  dir: out
   name: buffer
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no partition with the specified identifier.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The ``${.:/params[1]/name}`` parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no free buffer available to return.
+    value: ${../../status/if/unsatisfied:/name}
 type: interface
