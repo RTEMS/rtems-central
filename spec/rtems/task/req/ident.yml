@@ -22,7 +22,7 @@ post-conditions:
     test-code: |
       /* Checks performed by ${../../req/ident:/test-run}() */
     text: |
-      The post-condition status shall be specified by ${../req/ident}.
+      The post-condition status shall be specified by ${../../req/ident}.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -39,7 +39,7 @@ pre-conditions:
       ctx->id = NULL;
       /* Preparation performed by ${../../req/ident:/test-run}() */
     text: |
-      The pre-condition status shall be specified by ${../req/ident}.
+      The pre-condition status shall be specified by ${../../req/ident}.
   test-epilogue: null
   test-prologue: null
 rationale: null

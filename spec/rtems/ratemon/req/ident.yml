@@ -11,5 +11,6 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/ident:/name} directive shall identify an Classic API
-  rate monotonic class object by its name as specified by ${../req/ident-local}.
+  rate monotonic class object by its name as specified by
+  ${../../req/ident-local}.
 type: requirement

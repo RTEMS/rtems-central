@@ -11,5 +11,6 @@ references: []
 requirement-type: functional
 text: |
   The ${../if/ident:/name} directive shall identify an Classic API
-  user extension class object by its name as specified by ${../req/ident-local}.
+  user extension class object by its name as specified by
+  ${../../req/ident-local}.
 type: requirement
