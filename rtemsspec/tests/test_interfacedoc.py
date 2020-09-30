@@ -56,17 +56,36 @@ def test_interfacedoc(tmpdir):
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
+.. Do not manually edit this file.  It is part of the RTEMS quality process
+.. and was automatically generated.
+..
+.. If you find something that needs to be fixed or worded better please
+.. post a report to an RTEMS mailing list or raise a bug report:
+..
+.. https://docs.rtems.org/branches/master/user/support/bugs.html
+..
+.. For information on updating and regenerating please refer to:
+..
+.. https://docs.rtems.org/branches/master/eng/req/howto.html
+
+.. Generated from spec:/gb
+
 .. _GroupBIntroduction:
 
 Introduction
 ============
 
-The directives provided by the Group B are:
+.. The following list was generated from:
+.. spec:/func4
+.. spec:/func2
+.. spec:/func3
 
-* :ref:`InterfaceVeryLongFunction` - Very long function brief description.
+The directives provided by the Group B are:
 
 * :ref:`InterfaceVeryLongTypeFunction` - Function brief description with very
   long return type.
+
+* :ref:`InterfaceVeryLongFunction` - Very long function brief description.
 
 * :ref:`InterfaceVoidFunction`
 """
@@ -77,56 +96,34 @@ The directives provided by the Group B are:
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
+.. Do not manually edit this file.  It is part of the RTEMS quality process
+.. and was automatically generated.
+..
+.. If you find something that needs to be fixed or worded better please
+.. post a report to an RTEMS mailing list or raise a bug report:
+..
+.. https://docs.rtems.org/branches/master/user/support/bugs.html
+..
+.. For information on updating and regenerating please refer to:
+..
+.. https://docs.rtems.org/branches/master/eng/req/howto.html
+
 .. _GroupBDirectives:
 
 Directives
 ==========
 
-.. _InterfaceVeryLongFunction:
+This section details the directives of the Group B. A subsection is dedicated
+to each of this manager's directives and lists the calling sequence,
+parameters, description, return values, and notes of the directive.
 
-VeryLongFunction()
-------------------
+.. Generated from spec:/func4
 
-Very long function brief description.
+.. raw:: latex
 
-CALLING SEQUENCE:
-    .. code-block:: c
+    \\clearpage
 
-        int VeryLongFunction(
-          int                  VeryLongParam0,
-          const struct Struct *VeryLongParam1,
-          struct Struct    *( *VeryLongParam2 )( void ),
-          struct Struct       *VeryLongParam3
-        );
-
-DIRECTIVE PARAMETERS:
-    VeryLongParam0
-        This parameter is very long parameter 0 with some super important and
-        extra very long description which makes a lot of sense.
-
-    VeryLongParam1
-        This parameter is very long parameter 1.
-
-    VeryLongParam2
-        This parameter is very long parameter 2.
-
-    VeryLongParam3
-        This parameter is very long parameter 3.
-
-DIRECTIVE RETURN VALUES:
-    1
-        is returned, in case A.
-
-    2
-        is returned, in case B.
-
-    Sometimes some value.  See :ref:`InterfaceFunction`.
-
-DESCRIPTION:
-    VeryLongFunction description.
-
-NOTES:
-    VeryLongFunction notes.
+.. index:: VeryLongTypeFunction()
 
 .. _InterfaceVeryLongTypeFunction:
 
@@ -135,30 +132,103 @@ VeryLongTypeFunction()
 
 Function brief description with very long return type.
 
-CALLING SEQUENCE:
-    .. code-block:: c
+.. rubric:: CALLING SEQUENCE:
 
-        #if 1
-          NotSoVeryLongType VeryLongTypeFunction( void );
-        #else
-          VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
-          VeryLongTypeFunction( void );
-        #endif
+.. code-block:: c
 
-DIRECTIVE RETURN VALUES:
-    This function returns an object with a very long type.
+    #if 1
+      NotSoVeryLongType VeryLongTypeFunction( void );
+    #else
+      VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
+      VeryLongTypeFunction( void );
+    #endif
+
+.. rubric:: RETURN VALUES:
+
+This function returns an object with a very long type.
+
+.. Generated from spec:/func2
+
+.. raw:: latex
+
+    \\clearpage
+
+.. index:: VeryLongFunction()
+
+.. _InterfaceVeryLongFunction:
+
+VeryLongFunction()
+------------------
+
+Very long function brief description.
+
+.. rubric:: CALLING SEQUENCE:
+
+.. code-block:: c
+
+    int VeryLongFunction(
+      int                  VeryLongParam0,
+      const struct Struct *VeryLongParam1,
+      struct Struct    *( *VeryLongParam2 )( void ),
+      struct Struct       *VeryLongParam3
+    );
+
+.. rubric:: PARAMETERS:
+
+``VeryLongParam0``
+    This parameter is very long parameter 0 with some super important and extra
+    very long description which makes a lot of sense.
+
+``VeryLongParam1``
+    This parameter is very long parameter 1.
+
+``VeryLongParam2``
+    This parameter is very long parameter 2.
+
+``VeryLongParam3``
+    This parameter is very long parameter 3.
+
+.. rubric:: DESCRIPTION:
+
+VeryLongFunction description.
+
+.. rubric:: RETURN VALUES:
+
+``1``
+    is returned, in case A.
+
+``2``
+    is returned, in case B.
+
+:c:type:`Enum`
+    is returned, in case C.
+
+Sometimes some value.  See :ref:`InterfaceFunction`.
+
+.. rubric:: NOTES:
+
+VeryLongFunction notes.
+
+.. Generated from spec:/func3
+
+.. raw:: latex
+
+    \\clearpage
+
+.. index:: VoidFunction()
 
 .. _InterfaceVoidFunction:
 
 VoidFunction()
 --------------
 
-CALLING SEQUENCE:
-    .. code-block:: c
+.. rubric:: CALLING SEQUENCE:
 
-        #if 1
-          void VoidFunction( void );
-        #endif
+.. code-block:: c
+
+    #if 1
+      void VoidFunction( void );
+    #endif
 """
         assert content == src.read()
 
@@ -167,10 +237,27 @@ CALLING SEQUENCE:
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
+.. Do not manually edit this file.  It is part of the RTEMS quality process
+.. and was automatically generated.
+..
+.. If you find something that needs to be fixed or worded better please
+.. post a report to an RTEMS mailing list or raise a bug report:
+..
+.. https://docs.rtems.org/branches/master/user/support/bugs.html
+..
+.. For information on updating and regenerating please refer to:
+..
+.. https://docs.rtems.org/branches/master/eng/req/howto.html
+
+.. Generated from spec:/ga
+
 .. _GroupAIntroduction:
 
 Introduction
 ============
+
+.. The following list was generated from:
+.. spec:/func
 
 Group A brief description.
 
@@ -185,10 +272,34 @@ Group A description. The directives provided by the Group A are:
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
+.. Do not manually edit this file.  It is part of the RTEMS quality process
+.. and was automatically generated.
+..
+.. If you find something that needs to be fixed or worded better please
+.. post a report to an RTEMS mailing list or raise a bug report:
+..
+.. https://docs.rtems.org/branches/master/user/support/bugs.html
+..
+.. For information on updating and regenerating please refer to:
+..
+.. https://docs.rtems.org/branches/master/eng/req/howto.html
+
 .. _GroupADirectives:
 
 Directives
 ==========
+
+This section details the directives of the Group A. A subsection is dedicated
+to each of this manager's directives and lists the calling sequence,
+parameters, description, return values, and notes of the directive.
+
+.. Generated from spec:/func
+
+.. raw:: latex
+
+    \\clearpage
+
+.. index:: Function()
 
 .. _InterfaceFunction:
 
@@ -197,28 +308,31 @@ Function()
 
 Function brief description.
 
-CALLING SEQUENCE:
-    .. code-block:: c
+.. rubric:: CALLING SEQUENCE:
 
-        void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
+.. code-block:: c
 
-DIRECTIVE PARAMETERS:
-    Param0
-        This parameter is parameter 0.
+    void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
 
-    Param1
-        This parameter is parameter 1.
+.. rubric:: PARAMETERS:
 
-    Param2
-        This parameter is parameter 2.
+``Param0``
+    This parameter is parameter 0.
 
-    Param3
-        This parameter is parameter 3.
+``Param1``
+    This parameter is parameter 1.
 
-DESCRIPTION:
-    Function description.  References to :ref:`InterfaceVeryLongFunction`,
-    :c:type:`Integer`, :c:type:`Enum`, :c:macro:`DEFINE`,
-    :c:func:`VERY_LONG_MACRO`, Variable, ENUMERATOR_0, :c:type:`Struct`,
-    :ref:`a`, and interface.
+``Param2``
+    This parameter is parameter 2.
+
+``Param3``
+    This parameter is parameter 3.
+
+.. rubric:: DESCRIPTION:
+
+Function description.  References to :ref:`InterfaceVeryLongFunction`,
+:c:type:`Integer`, :c:type:`Enum`, :c:macro:`DEFINE`,
+:c:func:`VERY_LONG_MACRO`, Variable, :c:macro:`ENUMERATOR_0`, :c:type:`Struct`,
+:ref:`a`, and interface.
 """
         assert content == src.read()

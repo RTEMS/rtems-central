@@ -224,6 +224,8 @@ void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
  *
  * @retval 2 is returned, in case B.
  *
+ * @retval #Enum is returned, in case C.
+ *
  * @return Sometimes some value.  See Function().
  */
 static inline int VeryLongFunction(

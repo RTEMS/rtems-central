@@ -51,4 +51,6 @@ return:
     value: 1
   - description: is returned, in case B.
     value: 2
+  - description: is returned, in case C.
+    value: ${enum:/name}
 type: interface

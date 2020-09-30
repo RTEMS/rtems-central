@@ -27,7 +27,7 @@ This module provides functions for the generation of interface documentation.
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Set
 
 from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper
 from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
@@ -74,13 +74,22 @@ def _generate_introduction(target: str, group: Item,
                            items: List[Item]) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
+    content.add_automatically_generated_warning()
     group_name = group["name"]
+    content.add(f".. Generated from spec:{group.uid}")
     with content.section("Introduction", get_label(group_name)):
+        # This needs to be in front of the list since comment blocks have an
+        # effect on the list layout in the HTML output
+        content.add(".. The following list was generated from:")
+        for item in items:
+            content.append(f".. spec:{item.uid}")
+
         content.append("")
         content.gap = False
         content.wrap(group["brief"])
         content.wrap(group["description"])
         content.paste(f"The directives provided by the {group_name} are:")
+
         for item in items:
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
@@ -132,50 +141,69 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
             add_definition(content, mapper, item, default)
 
 
+def _generate_directive(content: SphinxContent, mapper: _Mapper,
+                        code_mapper: _CodeMapper, item: Item) -> None:
+    content.wrap(item["brief"])
+    content.add(".. rubric:: CALLING SEQUENCE:")
+    with content.directive("code-block", "c"):
+        code = CContent()
+        _add_definition(code, code_mapper, item, "definition",
+                        item["definition"], _add_function_definition)
+        content.add(code)
+    if item["params"]:
+        content.add(".. rubric:: PARAMETERS:")
+        for param in item["params"]:
+            param_name = mapper.substitute(param["name"])
+            content.add_definition_item(
+                f"``{param_name}``",
+                mapper.substitute(f"This parameter {param['description']}"),
+                wrap=True)
+    if item["description"]:
+        content.add(".. rubric:: DESCRIPTION:")
+        content.wrap(mapper.substitute(item["description"]))
+    ret = item["return"]
+    if ret["return"] or ret["return-values"]:
+        content.add(".. rubric:: RETURN VALUES:")
+        if ret["return-values"]:
+            for retval in ret["return-values"]:
+                if isinstance(retval["value"], str):
+                    value = mapper.substitute(str(retval["value"]))
+                else:
+                    value = f"``{str(retval['value'])}``"
+                content.add_definition_item(value,
+                                            mapper.substitute(
+                                                retval["description"]),
+                                            wrap=True)
+        content.wrap(mapper.substitute(ret["return"]))
+    if item["notes"]:
+        content.add(".. rubric:: NOTES:")
+        content.wrap(mapper.substitute(item["notes"]))
+
+
 def _generate_directives(target: str, group: Item, items: List[Item]) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
+    content.add_automatically_generated_warning()
     group_name = group["name"]
     with content.section("Directives", get_label(group_name)):
+        content.wrap([
+            f"This section details the directives of the {group_name}.",
+            "A subsection is dedicated to each of this manager's directives",
+            "and lists the calling sequence, parameters, description,",
+            "return values, and notes of the directive."
+        ])
         for item in items:
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
             code_mapper = _CodeMapper(item)
             mapper = _Mapper(item)
-            with content.section(f"{name}()", "Interface"):
-                content.wrap(item["brief"])
-                with content.definition_item("CALLING SEQUENCE:"):
-                    with content.directive("code-block", "c"):
-                        code = CContent()
-                        _add_definition(code, code_mapper, item, "definition",
-                                        item["definition"],
-                                        _add_function_definition)
-                        content.add(code)
-                if item["params"]:
-                    with content.definition_item("DIRECTIVE PARAMETERS:"):
-                        for param in item["params"]:
-                            content.add_definition_item(
-                                mapper.substitute(param["name"]),
-                                mapper.substitute(
-                                    f"This parameter {param['description']}"),
-                                wrap=True)
-                ret = item["return"]
-                if ret["return"] or ret["return-values"]:
-                    with content.definition_item("DIRECTIVE RETURN VALUES:"):
-                        if ret["return-values"]:
-                            for retval in ret["return-values"]:
-                                content.add_definition_item(
-                                    mapper.substitute(str(retval["value"])),
-                                    mapper.substitute(retval["description"]),
-                                    wrap=True)
-                        content.wrap(mapper.substitute(ret["return"]))
-                content.add_definition_item("DESCRIPTION:",
-                                            mapper.substitute(
-                                                item["description"]),
-                                            wrap=True)
-                content.add_definition_item("NOTES:",
-                                            mapper.substitute(item["notes"]),
-                                            wrap=True)
+            content.add(f".. Generated from spec:{item.uid}")
+            with content.directive("raw", "latex"):
+                content.add("\\clearpage")
+            directive = f"{name}()"
+            content.add_index_entries([directive] + item["index-entries"])
+            with content.section(directive, "Interface"):
+                _generate_directive(content, mapper, code_mapper, item)
     content.add_licence_and_copyrights()
     content.write(target)
 
@@ -188,13 +216,20 @@ def generate(config: list, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the interfaces.
     """
     for doc_config in config:
-        items = []  # type: List[Item]
+        items = set()  # type: Set[Item]
         group = item_cache[doc_config["group"]]
         assert group["type"] == "interface"
         assert group["interface-type"] == "group"
         for child in group.children("interface-ingroup"):
             if child["interface-type"] in ["function"]:
-                items.append(child)
-        items.sort(key=lambda x: x["name"])
-        _generate_introduction(doc_config["introduction-target"], group, items)
-        _generate_directives(doc_config["directives-target"], group, items)
+                items.add(child)
+        ordered_items = []  # type: List[Item]
+        for parent in group.parents("documentation-order"):
+            if parent in items:
+                ordered_items.append(parent)
+                items.remove(parent)
+        ordered_items.extend(sorted(items, key=lambda x: x["name"]))
+        _generate_introduction(doc_config["introduction-target"], group,
+                               ordered_items)
+        _generate_directives(doc_config["directives-target"], group,
+                             ordered_items)

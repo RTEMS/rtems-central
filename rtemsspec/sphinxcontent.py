@@ -265,6 +265,8 @@ class SphinxMapper(ItemMapper):
                            _get_appl_config_option)
         self.add_get_value("interface/define:/name", _get_value_sphinx_macro)
         self.add_get_value("interface/enum:/name", _get_value_sphinx_type)
+        self.add_get_value("interface/enumerator:/name",
+                           _get_value_sphinx_macro)
         self.add_get_value("interface/function:/name",
                            _get_value_sphinx_function)
         self.add_get_value("interface/macro:/name", _get_value_sphinx_function)
