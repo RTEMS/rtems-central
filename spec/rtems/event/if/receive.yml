@@ -21,13 +21,13 @@ description: |
 
   * receive events.
 
-  To *get the pending events* use the constant ${pending-events:/name} for the
-  ``${.:/params[0]/name}`` parameter.  The pending events are returned to the
-  calling task but the event set of the task is left unaltered.  The
+  To **get the pending events** use the constant ${pending-events:/name} for
+  the ``${.:/params[0]/name}`` parameter.  The pending events are returned to
+  the calling task but the event set of the task is left unaltered.  The
   ``${.:/params[1]/name}`` and ``${.:params[2]/name}`` parameters are ignored
   in this case.  The directive returns immediately and does not block.
 
-  To *receive events* you have to define an input event condition and some
+  To **receive events** you have to define an input event condition and some
   options.  The option set specified in ``${.:/params[1]/name}`` defines
 
   * if the task will wait or poll for the events, and
@@ -37,31 +37,26 @@ description: |
   The option set is built through a *bitwise or* of the option constants
   described below.
 
-  The task can *wait* or *poll* for the events.
+  The task can **wait** or **poll** for the events.
 
-  * Waiting for events is the default and can be emphasized through the use of
-    the ${../../option/if/wait:/name} option.  The ``${.:/params[2]/name}``
+  * **Waiting** for events is the default and can be emphasized through the use
+    of the ${../../option/if/wait:/name} option.  The ``${.:/params[2]/name}``
     parameter defines how long the task is willing to wait.  Use
-    ${../../type/if/no-timeout:/name} to wait potentially forever, otherwise set a
-    timeout interval in clock ticks.
+    ${../../type/if/no-timeout:/name} to wait potentially forever, otherwise
+    set a timeout interval in clock ticks.
 
-  * Not waiting for events (polling) is selected by the
-    ${../../option/if/no-wait:/name} option.  If this option is defined, then the
-    ``${.:/params[2]/name}`` parameter is ignored.
+  * Not waiting for events (**polling**) is selected by the
+    ${../../option/if/no-wait:/name} option.  If this option is defined, then
+    the ``${.:/params[2]/name}`` parameter is ignored.
 
-  The task can receive *all* or *any* of the input events specified in
+  The task can receive **all** or **any** of the input events specified in
   ``${.:/params[0]/name}``.
 
-  * Receiving all input events is the default and can be emphasized through the use
-    of the ${../../option/if/event-all:/name} option.
+  * Receiving **all** input events is the default and can be emphasized through
+    the use of the ${../../option/if/event-all:/name} option.
 
-  * Receiving any of the input events is selected by the
+  * Receiving **any** of the input events is selected by the
     ${../../option/if/event-any:/name} option.
-
-  To receive all events use the constant ${all-events:/name} for the
-  ``${.:/params[0]/name}`` parameter.  This constant is identical to
-  ${event-0:/name} | ... | ${event-31:/name} and should not be confused with
-  the option ${../../option/if/event-all:/name}.
 enabled-by: true
 interface-type: function
 links:
@@ -78,12 +73,18 @@ notes: |
   Any pending events that do not correspond to any of the events specified in
   ``${.:/params[0]/name}`` will be left pending.
 
-  A task can *receive all of the pending events* by calling the directive with
-  a value of ${all-events:/name} for the ``${.:/params[0]/name}`` parameter and
-  ${../../option/if/no-wait:/name} | ${../../option/if/event-any:/name} for the
-  ``${.:/params[1]/name}`` parameter.  The pending events are returned to the
-  calling task and the event set of the task is cleared.  If no events are
-  pending then the ${../../status/if/unsatisfied:/name} status code will be returned.
+  To receive all events use the constant ${all-events:/name} for the
+  ``${.:/params[0]/name}`` parameter.  This constant is identical to
+  ${event-0:/name} | ... | ${event-31:/name} and should not be confused with
+  the option ${../../option/if/event-all:/name}.
+
+  A task can **receive all of the pending events** by calling the directive
+  with a value of ${all-events:/name} for the ``${.:/params[0]/name}``
+  parameter and ${../../option/if/no-wait:/name} |
+  ${../../option/if/event-any:/name} for the ``${.:/params[1]/name}``
+  parameter.  The pending events are returned to the calling task and the event
+  set of the task is cleared.  If no events are pending then the
+  ${../../status/if/unsatisfied:/name} status code will be returned.
 params:
 - description: |
     is the event set of interest.  Use ${pending-events:/name} to get the
@@ -94,8 +95,9 @@ params:
   dir: null
   name: option_set
 - description: |
-    is the timeout in clock ticks if the ${../../option/if/wait:/name} option was
-    set.  Use ${../../type/if/no-timeout:/name} to wait potentially forever.
+    is the timeout in clock ticks if the ${../../option/if/wait:/name} option
+    was set.  Use ${../../type/if/no-timeout:/name} to wait potentially
+    forever.
   dir: null
   name: ticks
 - description: |
