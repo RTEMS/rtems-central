@@ -87,10 +87,8 @@ spec-info:
           ``cic`` is available with the configuration item context.
         spec-type: optional-str
       stlib:
-        description: |
-          It shall be a list of external static library identifiers used to
-          link this test program, e.g. ``m`` for ``libm.a``.
-        spec-type: list-str
+        description: null
+        spec-type: build-stlib-list
       use-after:
         description: null
         spec-type: build-use-after-list

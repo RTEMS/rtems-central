@@ -10,9 +10,9 @@ spec-example: null
 spec-info:
   str:
     description: |
-      It shall be an internal static library identifier.  They are used to link
-      programs referenced by this item, e.g. ``z`` for ``libz.a``.  They are
-      placed after the use items of the build item context.
+      It shall be an internal static library identifier.  The library is used
+      to link programs referenced by this item, e.g. ``z`` for ``libz.a``.  The
+      library is placed after the use items of the build item context.
 spec-name: Build Use After Directive
 spec-type: build-use-after
 type: spec

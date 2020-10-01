@@ -69,10 +69,8 @@ spec-info:
         description: null
         spec-type: build-source-list
       stlib:
-        description: |
-          It shall be a list of external static library identifiers used to
-          link this test program, e.g. ``m`` for ``libm.a``.
-        spec-type: list-str
+        description: null
+        spec-type: build-stlib-list
       target:
         description: null
         spec-type: build-target
