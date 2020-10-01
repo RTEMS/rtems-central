@@ -8,7 +8,7 @@ definition:
 - default:
     brief: |
       This member is the device driver initialization entry.
-    definition: rtems_device_driver_entry ${.:name}
+    definition: ${device-driver-entry:/name} ${.:name}
     description: |
       This entry is called by ${initialize:/name}
     kind: member
@@ -17,7 +17,7 @@ definition:
 - default:
     brief: |
       This member is the device driver open entry.
-    definition: rtems_device_driver_entry ${.:name}
+    definition: ${device-driver-entry:/name} ${.:name}
     description: |
       This entry is called by ${open:/name}.
     kind: member
@@ -26,7 +26,7 @@ definition:
 - default:
     brief: |
       This member is the device driver close entry.
-    definition: rtems_device_driver_entry ${.:name}
+    definition: ${device-driver-entry:/name} ${.:name}
     description: |
       This entry is called by ${close:/name}.
     kind: member
@@ -35,7 +35,7 @@ definition:
 - default:
     brief: |
       This member is the device driver read entry.
-    definition: rtems_device_driver_entry ${.:name}
+    definition: ${device-driver-entry:/name} ${.:name}
     description: |
       This entry is called by ${read:/name}.
     kind: member
@@ -44,7 +44,7 @@ definition:
 - default:
     brief: |
       This member is the device driver write entry.
-    definition: rtems_device_driver_entry ${.:name}
+    definition: ${device-driver-entry:/name} ${.:name}
     description: |
       This entry is called by ${write:/name}.
     kind: member
@@ -53,7 +53,7 @@ definition:
 - default:
     brief: |
       This member is the device driver control entry.
-    definition: rtems_device_driver_entry ${.:name}
+    definition: ${device-driver-entry:/name} ${.:name}
     description: |
       This entry is called by ${control:/name}.
     kind: member
