@@ -40,13 +40,6 @@ class _Glossary(NamedTuple):
     term_to_item: ItemMap = {}
 
 
-def _gather_glossary_groups(item: Item, glossary_groups: ItemMap) -> None:
-    for child in item.children():
-        _gather_glossary_groups(child, glossary_groups)
-    if item["type"] == "glossary" and item["glossary-type"] == "group":
-        glossary_groups[item.uid] = item
-
-
 def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
     for child in item.children():
         _gather_glossary_terms(child, glossary)
@@ -126,8 +119,9 @@ def generate(config: dict, item_cache: ItemCache) -> None:
                        groups and terms.
     """
     groups = {}  # type: ItemMap
-    for item in item_cache.top_level.values():
-        _gather_glossary_groups(item, groups)
+    for uid, item in item_cache.all.items():
+        if item.type == "glossary/group":
+            groups[uid] = item
 
     project_glossary = _Glossary()
     for group in config["project-groups"]:
