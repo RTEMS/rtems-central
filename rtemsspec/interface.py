@@ -564,9 +564,10 @@ def _generate_header_file(item: Item, domains: Dict[str, str],
 
 def _visit_header_files(item: Item, domains: Dict[str, str],
                         enabled_by_defined: Dict[str, str]) -> None:
-    for child in item.children():
-        _visit_header_files(child, domains, enabled_by_defined)
-    if item["type"] == "interface" and item["interface-type"] == "header-file":
+    for item in item.links_to_children(
+        ["interface-placement", "interface-ingroup"]):
+        _visit_header_files(item, domains, enabled_by_defined)
+    if item.type == "interface/header-file":
         _generate_header_file(item, domains, enabled_by_defined)
 
 
