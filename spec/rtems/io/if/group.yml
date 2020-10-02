@@ -15,6 +15,24 @@ links:
   uid: header
 - role: interface-ingroup
   uid: ../../if/group
+- role: documentation-order
+  uid: register-driver
+- role: documentation-order
+  uid: unregister-driver
+- role: documentation-order
+  uid: initialize
+- role: documentation-order
+  uid: register-name
+- role: documentation-order
+  uid: open
+- role: documentation-order
+  uid: close
+- role: documentation-order
+  uid: read
+- role: documentation-order
+  uid: write
+- role: documentation-order
+  uid: control
 name: Input/Output Interface Manager
 text: |
   The Classic API shall provide an interface to the Input/Output Interface Manager.
