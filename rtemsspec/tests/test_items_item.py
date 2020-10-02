@@ -137,6 +137,11 @@ def test_children():
     children = [item for item in parent.children("c")]
     assert len(children) == 1
     assert children[0] == child
+    children = [item for item in parent.children(["c", "d"])]
+    assert len(children) == 1
+    assert children[0] == child
+    children = [item for item in parent.children([])]
+    assert len(children) == 0
     children = [item for item in parent.children("d")]
     assert len(children) == 0
     links = [link for link in parent.links_to_children()]
@@ -165,6 +170,11 @@ def test_parents():
     parents = [item for item in child.parents("c")]
     assert len(parents) == 1
     assert parents[0] == parent
+    parents = [item for item in child.parents(["c", "d"])]
+    assert len(parents) == 1
+    assert parents[0] == parent
+    parents = [item for item in child.parents([])]
+    assert len(parents) == 0
     parents = [item for item in child.parents("d")]
     assert len(parents) == 0
     links = [link for link in child.links_to_parents()]

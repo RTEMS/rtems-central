@@ -29,8 +29,8 @@ import os
 import pickle
 import string
 import stat
-from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Mapping, \
-    Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, \
+    Mapping, Optional, Tuple, Union
 import yaml
 
 
@@ -239,28 +239,42 @@ class Item:
         """ Yields the links to the parents of this items. """
         yield from self._links_to_parents
 
-    def parents(self, role: Optional[str] = None) -> Iterator["Item"]:
+    def parents(
+            self,
+            role: Optional[Union[str,
+                                 Iterable[str]]] = None) -> Iterator["Item"]:
         """ Yields the parents of this items. """
         if role is None:
             for link in self._links_to_parents:
                 yield link.item
-        else:
+        elif isinstance(role, str):
             for link in self._links_to_parents:
                 if link.role == role:
+                    yield link.item
+        else:
+            for link in self._links_to_parents:
+                if link.role in role:
                     yield link.item
 
     def links_to_children(self) -> Iterator[Link]:
         """ Yields the links to the children of this items. """
         yield from self._links_to_children
 
-    def children(self, role: Optional[str] = None) -> Iterator["Item"]:
+    def children(
+            self,
+            role: Optional[Union[str,
+                                 Iterable[str]]] = None) -> Iterator["Item"]:
         """ Yields the children of this items. """
         if role is None:
             for link in self._links_to_children:
                 yield link.item
-        else:
+        elif isinstance(role, str):
             for link in self._links_to_children:
                 if link.role == role:
+                    yield link.item
+        else:
+            for link in self._links_to_children:
+                if link.role in role:
                     yield link.item
 
     def init_parents(self, item_cache: "ItemCache"):
