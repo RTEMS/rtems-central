@@ -146,6 +146,19 @@ class Item:
         self._links_to_parents = []  # type: List[Link]
         self._links_to_children = []  # type: List[Link]
 
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Item):
+            return NotImplemented
+        return self._uid == other._uid  # pylint: disable=protected-access
+
+    def __lt__(self, other: Any) -> bool:
+        if not isinstance(other, Item):
+            return NotImplemented
+        return self._uid < other._uid  # pylint: disable=protected-access
+
+    def __hash__(self) -> int:
+        return hash(self._uid)
+
     def __contains__(self, key: str) -> bool:
         return key in self._data
 

@@ -39,6 +39,27 @@ def test_to_abs_uid():
     assert item.to_abs_uid("../../z") == "/z"
 
 
+def test_eq():
+    a = Item(EmptyItemCache(), "a", {})
+    b = Item(EmptyItemCache(), "b", {})
+    assert a == a
+    assert a != b
+    assert a != 0
+
+
+def test_lt():
+    a = Item(EmptyItemCache(), "a", {})
+    b = Item(EmptyItemCache(), "b", {})
+    assert a < b
+    with pytest.raises(TypeError):
+        b = a < 0
+
+
+def test_hash():
+    a = Item(EmptyItemCache(), "a", {})
+    assert hash(a) == hash("a")
+
+
 def test_uid():
     item = Item(EmptyItemCache(), "x", {})
     assert item.uid == "x"
