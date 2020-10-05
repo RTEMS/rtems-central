@@ -12,6 +12,7 @@ copyrights:
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicIntr
+index-entries: []
 interface-type: group
 links:
 - role: interface-placement

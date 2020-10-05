@@ -1,30 +1,31 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Function brief description with very long return type.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Function brief description with very long return type.
 definition:
   default:
     body: null
     params: []
     return: VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
   variants:
-  - enabled-by: true
-    definition:
+  - definition:
       body: null
       params: []
       return: NotSoVeryLongType
+    enabled-by: true
 description: null
-name: VeryLongTypeFunction
-notes: null
-params: []
-return:
-  return: This function returns an object with a very long type.
-  return-values: []
+enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement
   uid: h4
 - role: interface-ingroup
   uid: gb
+name: VeryLongTypeFunction
+notes: null
+params: []
+return:
+  return: This function returns an object with a very long type.
+  return-values: []
 type: interface

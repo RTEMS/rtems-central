@@ -29,6 +29,7 @@ description: |
   created, a task is placed in the dormant state and can only be made ready to
   execute using the directive rtems_task_start().
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

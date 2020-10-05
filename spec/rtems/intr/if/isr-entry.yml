@@ -12,6 +12,7 @@ definition:
     enabled-by: ${/score/cpu/if/simple-vectored-interrupts:/name} == ${../../basedefs/if/true:/name}
 description: null
 enabled-by: true
+index-entries: []
 interface-type: typedef
 links:
 - role: interface-placement

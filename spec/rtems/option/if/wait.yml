@@ -11,6 +11,7 @@ description: |
   If the resource is not available, then the task shall block and wait for
   request completion.
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

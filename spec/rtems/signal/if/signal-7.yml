@@ -9,6 +9,7 @@ definition:
   variants: []
 description: null
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

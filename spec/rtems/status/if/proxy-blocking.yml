@@ -12,6 +12,7 @@ description: |
   This is referred to as proxying operations and this status indicates that the
   operation could not be completed immediately and the proxy is blocking.
 enabled-by: true
+index-entries: []
 interface-type: enumerator
 links: []
 name: RTEMS_PROXY_BLOCKING

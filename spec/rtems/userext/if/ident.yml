@@ -16,6 +16,7 @@ description: |
   This directive obtains the extension set identifier associated with the
   extension set name specified in ``${.:/params[0]/name}``.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

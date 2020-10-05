@@ -3,6 +3,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: Command Line
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: Command Line

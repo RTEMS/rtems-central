@@ -16,6 +16,7 @@ description: |
   The scheduler instance is selected according to the highest numbered online
   processor in the specified processor set.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

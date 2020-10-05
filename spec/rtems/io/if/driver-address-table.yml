@@ -64,6 +64,7 @@ description: |
   This structure is used to register a device driver via
   ${register-driver:/name}.
 enabled-by: true
+index-entries: []
 interface-type: struct
 links:
 - role: interface-placement

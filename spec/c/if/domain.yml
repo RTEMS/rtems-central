@@ -5,6 +5,7 @@ description: |
   This interface domain contains standard interfaces of the C programming
   language.
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: C Language

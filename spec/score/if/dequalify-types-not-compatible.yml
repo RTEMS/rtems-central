@@ -21,6 +21,7 @@ definition:
 description: null
 enabled-by:
   not: ASM
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

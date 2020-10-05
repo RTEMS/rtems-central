@@ -1,20 +1,21 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Variable brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by:
-  not: ASM
-brief: Variable brief description.
 definition:
   default: |
     ${forward-decl:/name} *${.:/name}
   variants: []
 description: Variable description.
-name: Variable
-notes: null
+enabled-by:
+  not: ASM
+index-entries: []
 interface-type: variable
 links:
 - role: interface-ingroup
   uid: gc
 - role: interface-placement
   uid: h
+name: Variable
+notes: null
 type: interface

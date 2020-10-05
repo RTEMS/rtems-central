@@ -1,8 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Function brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Function brief description.
 definition:
   default:
     body: null
@@ -17,6 +16,14 @@ description: |
   Function description.  References to ${func2:/name}, ${td:/name},
   ${enum:/name}, ${define:/name}, ${macro:/name}, ${var:/name},
   ${enumerator-0:/name}, ${s:/name}, ${option:/name}, and ${option:/type}.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: h
+- role: interface-ingroup
+  uid: ga
 name: Function
 notes: null
 params:
@@ -32,12 +39,6 @@ params:
 - description: is parameter 3.
   dir: inout
   name: Param3
-interface-type: function
-links:
-- role: interface-placement
-  uid: h
-- role: interface-ingroup
-  uid: ga
 return:
   return: null
   return-values: []

@@ -8,6 +8,7 @@ description: |
   in special areas of memory or to utilize a Memory Management Unit so that stack
   overflows are detected in hardware.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

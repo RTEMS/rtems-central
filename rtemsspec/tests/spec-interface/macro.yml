@@ -1,8 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Very long macro brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Very long macro brief description.
 definition:
   default: |
     do {
@@ -13,6 +12,14 @@ definition:
     ${.:/params[0]/name} + 1;
   variants: []
 description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: h
+- role: interface-ingroup
+  uid: gb
 name: VERY_LONG_MACRO
 notes: null
 params:
@@ -37,10 +44,4 @@ return:
     value: 1
   - description: is returned, in case B.
     value: 2
-interface-type: macro
-links:
-- role: interface-placement
-  uid: h
-- role: interface-ingroup
-  uid: gb
 type: interface

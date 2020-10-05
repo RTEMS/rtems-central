@@ -18,6 +18,7 @@ description: |
   This directive performs the same actions as the ${receive:/name} directive
   except that it operates with a different set of events for each task.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

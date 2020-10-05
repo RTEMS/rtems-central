@@ -5,6 +5,7 @@ description: |
   This section describes configuration options related to the Block Device Cache
   (bdbuf).
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

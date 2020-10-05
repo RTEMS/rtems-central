@@ -44,6 +44,7 @@ description: |
 
   * ${imfs-enable-mkfifo:/name}
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

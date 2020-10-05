@@ -11,6 +11,7 @@ description: |
   initialized using rtems_build_name() to encode four ASCII characters.  A
   value of zero may have a special meaning in some directives.
 enabled-by: true
+index-entries: []
 interface-type: typedef
 links:
 - role: interface-placement

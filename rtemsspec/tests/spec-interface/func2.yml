@@ -1,8 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Very long function brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Very long function brief description.
 definition:
   default:
     body: |
@@ -19,6 +18,14 @@ definition:
   variants: []
 description: |
   VeryLongFunction description.
+enabled-by: true
+index-entries: []
+interface-type: function
+links:
+- role: interface-placement
+  uid: h
+- role: interface-ingroup
+  uid: gb
 name: VeryLongFunction
 notes: |
   VeryLongFunction notes.
@@ -44,10 +51,4 @@ return:
     value: 1
   - description: is returned, in case B.
     value: 2
-interface-type: function
-links:
-- role: interface-placement
-  uid: h
-- role: interface-ingroup
-  uid: gb
 type: interface

@@ -9,6 +9,7 @@ copyrights:
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicDPMem
+index-entries: []
 interface-type: group
 links:
 - role: interface-placement

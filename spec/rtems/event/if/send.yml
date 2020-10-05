@@ -28,6 +28,7 @@ description: |
   * The target task is not waiting for events, then the event set is posted and
     left pending.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

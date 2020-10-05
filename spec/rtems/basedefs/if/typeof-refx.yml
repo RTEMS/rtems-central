@@ -14,6 +14,7 @@ definition:
 description: |
   The reference type idea is based on libHX by Jan Engelhardt.
 enabled-by: true
+index-entries: []
 interface-type: macro
 links:
 - role: interface-placement

@@ -10,6 +10,7 @@ definition:
   variants: []
 description: null
 enabled-by: true
+index-entries: []
 interface-type: macro
 links:
 - role: interface-placement

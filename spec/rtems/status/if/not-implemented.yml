@@ -12,6 +12,7 @@ description: |
   This is a hint that you have stumbled across an opportunity to submit code to
   the RTEMS Project.
 enabled-by: true
+index-entries: []
 interface-type: enumerator
 links: []
 name: RTEMS_NOT_IMPLEMENTED

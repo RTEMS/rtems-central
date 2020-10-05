@@ -4,6 +4,7 @@ copyrights:
 description: |
   This interface domain contains the implementation of the system.
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: Implementation

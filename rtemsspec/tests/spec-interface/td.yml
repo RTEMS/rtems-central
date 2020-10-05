@@ -1,15 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Typedef Integer brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Typedef Integer brief description.
 definition:
   default: |
     ${uint32_t:/name} ${.:/name} /* ${other:/comment} */
   variants: []
 description: Typedef Integer description.
-name: Integer
-notes: null
+enabled-by: true
+index-entries: []
 interface-type: typedef
 links:
 - role: other
@@ -18,4 +17,6 @@ links:
   uid: gb
 - role: interface-placement
   uid: h
+name: Integer
+notes: null
 type: interface

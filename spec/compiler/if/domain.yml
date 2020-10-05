@@ -4,6 +4,7 @@ copyrights:
 description: |
   This interface domain contains interfaces provided by the compiler.
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: Compiler

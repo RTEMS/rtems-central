@@ -3,6 +3,7 @@ brief: This header file defines the Clock Manager API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+index-entries: []
 interface-type: header-file
 links:
 - role: interface-placement

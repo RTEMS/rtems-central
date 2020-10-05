@@ -25,6 +25,7 @@ description: |
   scheduling algorithm.  If you choose to do this, you must define multiple
   configuration option.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

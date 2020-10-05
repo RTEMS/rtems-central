@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: null
 description: null
+enabled-by: true
 identifier: GroupB
-name: Group B
+index-entries: []
 interface-type: group
 links:
 - role: interface-ingroup
@@ -14,4 +14,5 @@ links:
   uid: other
 - role: interface-placement
   uid: h
+name: Group B
 type: interface

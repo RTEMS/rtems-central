@@ -1,18 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: null
 definition:
   defaults: null
   variants: []
 description: null
-name: ASM
-notes: null
+enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement
   uid: command-line
 - role: other
   uid: command-line
+name: ASM
+notes: null
 type: interface

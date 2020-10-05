@@ -6,6 +6,7 @@ copyrights:
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicModes
+index-entries: []
 interface-type: group
 links:
 - role: interface-placement

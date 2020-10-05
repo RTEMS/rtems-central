@@ -7,6 +7,7 @@ description: |
   ``<bsp.h>``.  The BSP-specific settings can be disabled by the
   ${disable-bsp-settings:/name} configuration option.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

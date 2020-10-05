@@ -1,12 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Enum B brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Enum B brief description.
 definition-kind: typedef-and-enum
 description: null
-name: EnumB
-notes: null
+enabled-by: true
+index-entries: []
 interface-type: enum
 links:
 - role: interface-enumerator
@@ -15,4 +14,6 @@ links:
   uid: h
 - role: interface-ingroup
   uid: gb
+name: EnumB
+notes: null
 type: interface

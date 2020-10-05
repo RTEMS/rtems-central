@@ -13,6 +13,7 @@ description: |
   Iterates through the system initialization linker set and invokes the
   registered handlers.  The final step is to start multitasking.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

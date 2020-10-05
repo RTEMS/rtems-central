@@ -16,6 +16,7 @@ description: |
   shutdown and multitasking halted.  The system is terminated with a fatal
   source of RTEMS_FATAL_SOURCE_EXIT and the specified result code.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

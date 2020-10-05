@@ -9,6 +9,7 @@ definition:
 description: |
   No RTEMS object can have this identifier.
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

@@ -5,6 +5,7 @@ description: |
   This section describes configuration options related to the device drivers.
   Note that network device drivers are not covered by the following options.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

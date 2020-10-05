@@ -14,6 +14,11 @@ spec-example: null
 spec-info:
   dict:
     attributes:
+      index-entries:
+        description: |
+          It shall be a list of additional document index entries.  A document
+          index entry derived from the interface name is added automatically.
+        spec-type: list-str
       interface-type:
         description: |
           It shall be the interface item type.

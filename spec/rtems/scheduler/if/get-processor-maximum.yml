@@ -17,6 +17,7 @@ description: |
   configured to be used by a scheduler or may be online (online processors have
   a scheduler assigned).
 enabled-by: true
+index-entries: []
 interface-type: macro
 links:
 - role: interface-placement

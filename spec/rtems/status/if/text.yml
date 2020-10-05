@@ -12,6 +12,7 @@ definition:
 description: |
   The text for each status code is the enumerator constant.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

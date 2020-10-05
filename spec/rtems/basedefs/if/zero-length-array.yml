@@ -14,6 +14,7 @@ description: |
   not allow flexible array members.  Use the GNU extension which is also
   supported by other compilers.
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

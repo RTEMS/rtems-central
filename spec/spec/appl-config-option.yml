@@ -23,12 +23,6 @@ spec-info:
           The ${appl-config-option-value:/spec-name} items have an
           attribute for constraints.
         spec-type: interface-description
-      index-entries:
-        description: |
-          It shall be a list of additional application configuration option
-          document index entries.  The application configuration option name is
-          automatically added to the document index.
-        spec-type: list-str
       name:
         description: null
         spec-type: appl-config-option-name

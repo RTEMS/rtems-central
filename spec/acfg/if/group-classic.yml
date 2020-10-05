@@ -4,6 +4,7 @@ copyrights:
 description: |
   This section describes configuration options related to the Classic API.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

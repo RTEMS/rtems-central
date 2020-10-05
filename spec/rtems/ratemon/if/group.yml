@@ -10,6 +10,7 @@ copyrights:
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicRatemon
+index-entries: []
 interface-type: group
 links:
 - role: interface-placement

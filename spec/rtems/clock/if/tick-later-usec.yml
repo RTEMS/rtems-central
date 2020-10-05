@@ -22,6 +22,7 @@ definition:
   variants: []
 description: null
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

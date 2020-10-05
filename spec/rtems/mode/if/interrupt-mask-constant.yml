@@ -9,6 +9,7 @@ definition:
   variants: []
 description: '%'
 enabled-by: true
+index-entries: []
 interface-type: variable
 links:
 - role: interface-placement

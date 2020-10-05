@@ -1,8 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: null
 definition:
   default: |
     \
@@ -18,12 +17,14 @@ definition:
       - defined(C)
       - defined(D)
 description: null
-name: DEFINE
-notes: null
+enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement
   uid: h
 - role: interface-ingroup
   uid: ga
+name: DEFINE
+notes: null
 type: interface

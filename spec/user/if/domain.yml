@@ -6,6 +6,7 @@ description: |
   interface.  For example, defines provided by the user for an included header
   file.
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: Use of Interface

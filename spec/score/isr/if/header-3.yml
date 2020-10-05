@@ -3,6 +3,7 @@ brief: This header file defines interfaces of the ISR Lock Handler
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+index-entries: []
 interface-type: header-file
 links:
 - role: interface-placement

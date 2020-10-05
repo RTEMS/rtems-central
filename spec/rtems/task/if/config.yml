@@ -107,6 +107,7 @@ definition:
 definition-kind: typedef-only
 description: null
 enabled-by: true
+index-entries: []
 interface-type: struct
 links:
 - role: interface-placement

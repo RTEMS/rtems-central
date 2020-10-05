@@ -15,6 +15,7 @@ description: |
   Use this attribute for function definitions.  Do not use it for function
   declarations.
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

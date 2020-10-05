@@ -117,6 +117,7 @@ definition-kind: typedef-only
 description: |
   Use ${get-api-configuration:/name} to get the configuration table.
 enabled-by: true
+index-entries: []
 interface-type: struct
 links:
 - role: interface-placement

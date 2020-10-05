@@ -103,6 +103,7 @@ description: |
     with the ${set-priority:/name} directive using the returned semaphore
     identifier.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

@@ -15,6 +15,7 @@ definition:
 description: |
   The variable must be simple enough to fit into a register.
 enabled-by: true
+index-entries: []
 interface-type: macro
 links:
 - role: interface-placement

@@ -6,6 +6,7 @@ description: |
   This group contains the RTEMS Application Programming Interface (API).
 enabled-by: true
 identifier: RTEMSAPI
+index-entries: []
 interface-type: group
 links:
 - role: requirement-refinement

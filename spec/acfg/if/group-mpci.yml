@@ -9,6 +9,7 @@ description: |
   is defined.  The multiprocessing (MPCI) support must not be confused with the
   SMP support.
 enabled-by: true
+index-entries: []
 interface-type: appl-config-group
 links:
 - role: interface-placement

@@ -13,6 +13,7 @@ definition:
     - defined(${/compiler/if/user-label-prefix:/name})
 description: null
 enabled-by: true
+index-entries: []
 interface-type: macro
 links:
 - role: interface-placement

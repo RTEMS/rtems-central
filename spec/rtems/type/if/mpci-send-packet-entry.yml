@@ -8,6 +8,7 @@ definition:
   variants: []
 description: null
 enabled-by: RTEMS_MULTIPROCESSING
+index-entries: []
 interface-type: typedef
 links:
 - role: interface-placement

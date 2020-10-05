@@ -16,6 +16,7 @@ description: |
   This directive obtains the port identifier associated with the port name
   specified in ``${.:/params[0]/name}``.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

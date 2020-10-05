@@ -6,6 +6,7 @@ copyrights:
 definition-kind: typedef-only
 description: null
 enabled-by: true
+index-entries: []
 interface-type: enum
 links:
 - role: interface-placement

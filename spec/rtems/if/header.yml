@@ -4,6 +4,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 enabled-by: true
+index-entries: []
 interface-type: header-file
 links:
 - role: interface-placement

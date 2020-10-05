@@ -11,6 +11,7 @@ description: |
   The value of this constant is identical to ${event-0:/name} | ... |
   ${event-31:/name}.
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

@@ -8,6 +8,7 @@ copyrights:
 description: null
 enabled-by: true
 identifier: RTEMSAPIClassicBarrier
+index-entries: []
 interface-type: group
 links:
 - role: interface-placement

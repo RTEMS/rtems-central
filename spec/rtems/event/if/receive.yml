@@ -58,6 +58,7 @@ description: |
   * Receiving **any** of the input events is selected by the
     ${../../option/if/event-any:/name} option.
 enabled-by: true
+index-entries: []
 interface-type: function
 links:
 - role: interface-placement

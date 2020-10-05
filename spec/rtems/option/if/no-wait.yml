@@ -12,6 +12,7 @@ description: |
   If the resource is not available, then the directives shall return
   immediately with a status to indicate that the request is unsatisfied.
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

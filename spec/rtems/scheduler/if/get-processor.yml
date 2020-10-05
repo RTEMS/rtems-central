@@ -15,6 +15,7 @@ description: |
   is the range of integers starting with zero up to
   ${get-processor-maximum:/name} minus one.
 enabled-by: true
+index-entries: []
 interface-type: macro
 links:
 - role: interface-placement

@@ -4,6 +4,7 @@ copyrights:
 description: |
   This interface domain contains interfaces provided by the build system.
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: Build Options

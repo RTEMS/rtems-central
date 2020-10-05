@@ -12,6 +12,7 @@ definition:
     - defined(${/compiler/if/gnuc:/name})
 description: null
 enabled-by: true
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement

@@ -4,6 +4,7 @@ copyrights:
 description: |
   This interface domain contains the API of the system.
 enabled-by: true
+index-entries: []
 interface-type: domain
 links: []
 name: Application Programming Interface

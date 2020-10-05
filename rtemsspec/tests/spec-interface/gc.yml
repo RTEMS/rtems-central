@@ -1,13 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Group C brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Group C brief description.
 description: Group C description.
+enabled-by: true
 identifier: GroupC
-name: Group C
+index-entries: []
 interface-type: group
 links:
 - role: interface-placement
   uid: h2
+name: Group C
 type: interface

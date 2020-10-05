@@ -9,6 +9,7 @@ definition:
   variants: []
 description: null
 enabled-by: true
+index-entries: []
 interface-type: enumerator
 links: []
 name: RTEMS_UNSATISFIED

@@ -1,14 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Enum C brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
-brief: Enum C brief description.
 definition-kind: typedef-and-enum
 description: null
-name: EnumC
-notes: null
+enabled-by: true
+index-entries: []
 interface-type: enum
 links:
 - role: interface-placement
   uid: h2
+name: EnumC
+notes: null
 type: interface

@@ -8,6 +8,7 @@ definition:
 description: null
 enabled-by:
 - not: 'TRUE'
+index-entries: []
 interface-type: define
 links:
 - role: interface-placement
