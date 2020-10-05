@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  The Input/Output Interface Manager provides a well-defined mechanism for
+  The Input/Output (I/O) Manager provides a well-defined mechanism for
   accessing device drivers and a structured methodology for organizing device
   drivers.
 copyrights:
@@ -34,7 +34,7 @@ links:
   uid: write
 - role: documentation-order
   uid: control
-name: Input/Output Interface Manager
+name: I/O Manager
 text: |
-  The Classic API shall provide an interface to the Input/Output Interface Manager.
+  The Classic API shall provide an interface to the I/O Manager.
 type: interface

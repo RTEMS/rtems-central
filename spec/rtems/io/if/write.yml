@@ -44,7 +44,7 @@ params:
   name: argument
 return:
   return: |
-    Other status codes may be returned by the device driver write routine.
+    Other status codes may be returned by the device driver write entry.
   return-values:
   - description: |
       The requested operation was successful.

@@ -29,8 +29,8 @@ notes: |
   If the device major number equals zero a device major number will be
   obtained.  The device major number of the registered driver will be returned.
 
-  After a successful registration ${initialize:/name} routine will be called to
-  initialize the device.
+  After a successful registration, the ${initialize:/name} directive will be
+  called to initialize the device.
 params:
 - description: |
     is the device major number.  Use a value of zero to let the system obtain a
@@ -49,8 +49,7 @@ params:
   name: registered_major
 return:
   return: |
-    Other status codes may be returned by the device driver initialization
-    routine.
+    Other status codes may be returned by ${initialize:/name}.
   return-values:
   - description: |
       The requested operation was successful.
@@ -69,7 +68,7 @@ return:
       The system was unable to obtain a device major number.
     value: ${../../status/if/too-many:/name}
   - description: |
-      The device major number was in use.
+      The device major number was already in use.
     value: ${../../status/if/resource-in-use:/name}
   - description: |
       The directive was called from interrupt context.

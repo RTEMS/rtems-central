@@ -50,7 +50,7 @@ params:
 return:
   return: |
     Other status codes may be returned by the device driver initialization
-    routine.
+    entry.
   return-values:
   - description: |
       The requested operation was successful.

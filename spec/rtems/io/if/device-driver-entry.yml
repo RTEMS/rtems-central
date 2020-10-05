@@ -10,7 +10,7 @@ definition:
       ${device-major-number:/name},
       ${device-minor-number:/name},
       void *
-    );
+    )
   variants: []
 description: null
 enabled-by: true

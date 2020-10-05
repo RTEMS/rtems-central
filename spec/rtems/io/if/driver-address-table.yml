@@ -10,7 +10,7 @@ definition:
       This member is the device driver initialization entry.
     definition: ${device-driver-entry:/name} ${.:name}
     description: |
-      This entry is called by ${initialize:/name}
+      This entry is called by ${initialize:/name}.
     kind: member
     name: initialization_entry
   variants: []
