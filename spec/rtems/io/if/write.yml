@@ -17,7 +17,8 @@ description: |
   This directive calls the device driver write entry registered in the Device
   Driver Table for the specified device major number.
 enabled-by: true
-index-entries: []
+index-entries:
+- write to a device
 interface-type: function
 links:
 - role: interface-placement

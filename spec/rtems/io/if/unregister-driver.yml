@@ -14,7 +14,8 @@ definition:
   variants: []
 description: null
 enabled-by: true
-index-entries: []
+index-entries:
+- unregister a device driver
 interface-type: function
 links:
 - role: interface-placement

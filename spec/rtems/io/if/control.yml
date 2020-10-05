@@ -17,7 +17,9 @@ description: |
   This directive calls the device driver I/O control entry registered in the
   Device Driver Table for the specified device major number.
 enabled-by: true
-index-entries: []
+index-entries:
+- IO control
+- special device services
 interface-type: function
 links:
 - role: interface-placement

@@ -16,7 +16,8 @@ definition:
   variants: []
 description: null
 enabled-by: true
-index-entries: []
+index-entries:
+- register a device driver
 interface-type: function
 links:
 - role: interface-placement

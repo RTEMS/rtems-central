@@ -16,7 +16,8 @@ definition:
   variants: []
 description: null
 enabled-by: true
-index-entries: []
+index-entries:
+- register a device in the file system
 interface-type: function
 links:
 - role: interface-placement
