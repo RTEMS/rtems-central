@@ -40,9 +40,8 @@ GetLines = Callable[["Node", Item, Any], Lines]
 
 def _get_ingroups(item: Item) -> ItemMap:
     ingroups = {}  # type: ItemMap
-    for link in item.links_to_parents():
-        if link.role == "interface-ingroup":
-            ingroups[link.item.uid] = link.item
+    for group in item.parents("interface-ingroup"):
+        ingroups[group.uid] = group
     return ingroups
 
 
@@ -98,9 +97,8 @@ class _InterfaceMapper(ItemMapper):
             node = self._node
             header_file = node.header_file
             if ctx.item["interface-type"] == "enumerator":
-                for link in ctx.item.links_to_children():
-                    if link.role == "interface-enumerator":
-                        header_file.add_includes(link.item)
+                for child in ctx.item.children("interface-enumerator"):
+                    header_file.add_includes(child)
             else:
                 header_file.add_includes(ctx.item)
             header_file.add_potential_edge(node, ctx.item)
@@ -238,13 +236,11 @@ class Node:
         """ Generates an enum. """
         with self._enum_struct_or_union():
             enumerators = []  # type: List[CContent]
-            for link in self.item.links_to_parents():
-                if link.role != "interface-enumerator":
-                    continue
-                enumerator = self._get_description(link.item, {})
+            for parent in self.item.parents("interface-enumerator"):
+                enumerator = self._get_description(parent, {})
                 enumerator.append(
-                    _add_definition(self, link.item, "definition",
-                                    link.item["definition"],
+                    _add_definition(self, parent, "definition",
+                                    parent["definition"],
                                     Node._get_enumerator_definition))
                 enumerators.append(enumerator)
             for enumerator in enumerators[0:-1]:
@@ -443,10 +439,9 @@ class _HeaderFile:
 
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
-        for link in item.links_to_parents():
-            if link.role == "interface-placement" and link.item[
-                    "interface-type"] == "header-file":
-                self._includes.append(link.item)
+        for parent in item.parents("interface-placement"):
+            if parent.type == "interface/header-file":
+                self._includes.append(parent)
 
     def add_ingroup(self, item: Item) -> None:
         """ Adds an ingroup to the header file. """
@@ -474,9 +469,8 @@ class _HeaderFile:
 
     def generate_nodes(self) -> None:
         """ Generates all nodes of this header file. """
-        for link in self._item.links_to_children():
-            if link.role == "interface-placement":
-                self._add_child(link.item)
+        for child in self._item.children("interface-placement"):
+            self._add_child(child)
         for node in self._nodes.values():
             self._resolve_ingroups(node)
             node.generate()
@@ -564,9 +558,8 @@ def _generate_header_file(item: Item, domains: Dict[str, str],
 
 def _visit_header_files(item: Item, domains: Dict[str, str],
                         enabled_by_defined: Dict[str, str]) -> None:
-    for item in item.links_to_children(
-        ["interface-placement", "interface-ingroup"]):
-        _visit_header_files(item, domains, enabled_by_defined)
+    for child in item.children(["interface-placement", "interface-ingroup"]):
+        _visit_header_files(child, domains, enabled_by_defined)
     if item.type == "interface/header-file":
         _generate_header_file(item, domains, enabled_by_defined)
 
@@ -575,10 +568,9 @@ def _gather_enabled_by_defined(item_level_interfaces: List[str],
                                item_cache: ItemCache) -> Dict[str, str]:
     enabled_by_defined = {}  # type: Dict[str, str]
     for uid in item_level_interfaces:
-        for link in item_cache[uid].links_to_children():
-            if link.role == "interface-placement":
-                define = f"defined(${{{link.item.uid}:/name}})"
-                enabled_by_defined[link.item["name"]] = define
+        for child in item_cache[uid].children("interface-placement"):
+            define = f"defined(${{{child.uid}:/name}})"
+            enabled_by_defined[child["name"]] = define
     return enabled_by_defined
 
 
