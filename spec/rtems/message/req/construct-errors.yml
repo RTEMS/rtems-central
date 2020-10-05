@@ -192,8 +192,8 @@ pre-conditions:
       There shall be no inactive message queue object available.
   test-epilogue: null
   test-prologue: |
-      rtems_message_queue_config config;
-      size_t                     i;
+    rtems_message_queue_config config;
+    size_t                     i;
 - name: Area
   states:
   - name: Valid
@@ -298,159 +298,159 @@ transition-map:
   post-conditions:
     Status: Ok
   pre-conditions:
-    Id:
-    - Id
-    Name:
-    - Valid
-    MaxPending:
-    - Valid
-    MaxSize:
-    - Valid
-    Queues:
-    - Avail
     Area:
     - Valid
     AreaSize:
     - Valid
+    Id:
+    - Id
+    MaxPending:
+    - Valid
+    MaxSize:
+    - Valid
+    Name:
+    - Valid
+    Queues:
+    - Avail
 - enabled-by: true
   post-conditions:
     Status: InvName
   pre-conditions:
-    Id: all
-    Name:
-    - Invalid
-    MaxPending: all
-    MaxSize: all
-    Queues: all
     Area: all
     AreaSize: all
+    Id: all
+    MaxPending: all
+    MaxSize: all
+    Name:
+    - Invalid
+    Queues: all
 - enabled-by: true
   post-conditions:
     Status: InvAddress
   pre-conditions:
-    Id:
-    - 'Null'
-    Name:
-    - Valid
-    MaxPending: all
-    MaxSize: all
-    Queues: all
     Area: all
     AreaSize: all
+    Id:
+    - 'Null'
+    MaxPending: all
+    MaxSize: all
+    Name:
+    - Valid
+    Queues: all
 - enabled-by: true
   post-conditions:
     Status: InvNumber
   pre-conditions:
+    Area: all
+    AreaSize: all
     Id:
     - Id
-    Name:
-    - Valid
     MaxPending:
     - Zero
     MaxSize: all
+    Name:
+    - Valid
     Queues: all
-    Area: all
-    AreaSize: all
 - enabled-by: true
   post-conditions:
     Status: InvSize
   pre-conditions:
+    Area: all
+    AreaSize: all
     Id:
     - Id
-    Name:
-    - Valid
     MaxPending:
     - Valid
     - Big
     MaxSize:
     - Zero
+    Name:
+    - Valid
     Queues: all
-    Area: all
-    AreaSize: all
 - enabled-by: true
   post-conditions:
     Status: TooMany
   pre-conditions:
+    Area: all
+    AreaSize: all
     Id:
     - Id
-    Name:
-    - Valid
     MaxPending:
     - Valid
     - Big
     MaxSize:
     - Valid
     - Big
+    Name:
+    - Valid
     Queues:
     - None
-    Area: all
-    AreaSize: all
 - enabled-by: true
   post-conditions:
     Status: InvNumber
   pre-conditions:
+    Area: all
+    AreaSize: all
     Id:
     - Id
-    Name:
-    - Valid
     MaxPending:
     - Big
     MaxSize:
     - Valid
-    Queues: 
+    Name:
+    - Valid
+    Queues:
     - Avail
-    Area: all
-    AreaSize: all
 - enabled-by: true
   post-conditions:
     Status: InvSize
   pre-conditions:
+    Area: all
+    AreaSize: all
     Id:
     - Id
-    Name:
-    - Valid
     MaxPending:
     - Valid
     - Big
     MaxSize:
     - Big
+    Name:
+    - Valid
     Queues:
     - Avail
-    Area: all
-    AreaSize: all
 - enabled-by: true
   post-conditions:
     Status: Unsatisfied
   pre-conditions:
-    Id:
-    - Id
-    Name:
-    - Valid
-    MaxPending:
-    - Valid
-    MaxSize:
-    - Valid
-    Queues:
-    - Avail
     Area:
     - 'Null'
     AreaSize: all
-- enabled-by: true
-  post-conditions:
-    Status: Unsatisfied
-  pre-conditions:
     Id:
     - Id
-    Name:
-    - Valid
     MaxPending:
     - Valid
     MaxSize:
     - Valid
+    Name:
+    - Valid
     Queues:
     - Avail
+- enabled-by: true
+  post-conditions:
+    Status: Unsatisfied
+  pre-conditions:
     Area:
     - Valid
     AreaSize:
     - Invalid
+    Id:
+    - Id
+    MaxPending:
+    - Valid
+    MaxSize:
+    - Valid
+    Name:
+    - Valid
+    Queues:
+    - Avail
 type: requirement

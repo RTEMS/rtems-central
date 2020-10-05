@@ -25,13 +25,13 @@ notes: |
   In contrast to message queues created by ${create:/name}, the message queues
   constructed by this directive use a user-provided message buffer storage
   area.
- 
+
   This directive is intended for applications which do not want to use the
   RTEMS Workspace and instead statically allocate all operating system
   resources.  An application based solely on static allocation can avoid any
   runtime memory allocators.  This can simplify the application architecture
   as well as any analysis that may be required.
- 
+
   The value for ${/acfg/if/message-buffer-memory:/name} should not include
   memory for message queues constructed by ${.:/name}.
 params:

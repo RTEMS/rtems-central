@@ -348,152 +348,152 @@ transition-map:
   post-conditions:
     Status: Ok
   pre-conditions:
+    Ext:
+    - Ok
     Id:
     - Id
     Name:
     - Valid
+    Preempt: all
     Prio:
     - Valid
-    Tasks:
-    - Avail
-    TLS:
-    - Enough
     Stack:
     - Enough
-    Ext:
-    - Ok
-    Preempt: all
+    TLS:
+    - Enough
+    Tasks:
+    - Avail
 - enabled-by: true
   post-conditions:
     Status: InvName
   pre-conditions:
+    Ext: all
     Id: all
     Name:
     - Inv
-    Prio: all
-    Tasks: all
-    TLS: all
-    Stack: all
-    Ext: all
     Preempt: all
+    Prio: all
+    Stack: all
+    TLS: all
+    Tasks: all
 - enabled-by: true
   post-conditions:
     Status: InvAddress
   pre-conditions:
+    Ext: all
     Id:
     - 'Null'
     Name:
     - Valid
-    Prio: all
-    Tasks: all
-    TLS: all
-    Stack: all
-    Ext: all
     Preempt: all
+    Prio: all
+    Stack: all
+    TLS: all
+    Tasks: all
 - enabled-by: true
   post-conditions:
     Status: InvPrio
   pre-conditions:
+    Ext: all
     Id:
     - Id
     Name:
     - Valid
+    Preempt: all
     Prio:
     - Zero
     - Inv
-    Tasks: all
-    TLS: all
     Stack: all
-    Ext: all
-    Preempt: all
+    TLS: all
+    Tasks: all
 - enabled-by: true
   post-conditions:
     Status: TooMany
   pre-conditions:
+    Ext: all
     Id:
     - Id
     Name:
     - Valid
+    Preempt: all
     Prio:
     - Valid
+    Stack: all
+    TLS: all
     Tasks:
     - None
-    TLS: all
-    Stack: all
-    Ext: all
-    Preempt: all
 - enabled-by: true
   post-conditions:
     Status: InvSize
   pre-conditions:
+    Ext: all
     Id:
     - Id
     Name:
     - Valid
+    Preempt: all
     Prio:
     - Valid
-    Tasks:
-    - Avail
+    Stack: all
     TLS:
     - Small
-    Stack: all
-    Ext: all
-    Preempt: all
+    Tasks:
+    - Avail
 - enabled-by: true
   post-conditions:
     Status: InvSize
   pre-conditions:
+    Ext: all
     Id:
     - Id
     Name:
     - Valid
+    Preempt: all
     Prio:
     - Valid
-    Tasks:
-    - Avail
-    TLS:
-    - Enough
     Stack:
     - Small
-    Ext: all
-    Preempt: all
+    TLS:
+    - Enough
+    Tasks:
+    - Avail
 - enabled-by: true
   post-conditions:
     Status: Unsatisfied
   pre-conditions:
+    Ext:
+    - Err
     Id:
     - Id
     Name:
     - Valid
+    Preempt: all
     Prio:
     - Valid
-    Tasks:
-    - Avail
-    TLS:
-    - Enough
     Stack:
     - Enough
-    Ext:
-    - Err
-    Preempt: all
+    TLS:
+    - Enough
+    Tasks:
+    - Avail
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: Unsatisfied
   pre-conditions:
+    Ext:
+    - Ok
     Id:
     - Id
     Name:
     - Valid
-    Prio:
-    - Valid
-    Tasks:
-    - Avail
-    TLS:
-    - Enough
-    Stack:
-    - Enough
-    Ext:
-    - Ok
     Preempt:
     - 'No'
+    Prio:
+    - Valid
+    Stack:
+    - Enough
+    TLS:
+    - Enough
+    Tasks:
+    - Avail
 type: requirement
