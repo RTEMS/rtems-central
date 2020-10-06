@@ -78,12 +78,17 @@ def test_validation(tmpdir):
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -150,12 +155,17 @@ def test_validation(tmpdir):
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -940,12 +950,17 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -1113,12 +1128,17 @@ void Tc6_Run( void )
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifndef _TC5_H
@@ -1195,12 +1215,17 @@ void Tc5_Run( int *a, int b, int *c );
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifndef _TC6_H
@@ -1265,12 +1290,17 @@ void Tc6_Run( void );
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifndef _ACTION2_H
@@ -1372,12 +1402,17 @@ void Action2_Run( int *a, int b, int *c );
  */
 
 /*
- * This file was automatically generated.  Do not edit it manually.
- * Please have a look at
+ * Do not manually edit this file.  It is part of the RTEMS quality process
+ * and was automatically generated.
+ *
+ * If you find something that needs to be fixed or worded better please
+ * post a report to an RTEMS mailing list or raise a bug report:
+ *
+ * https://docs.rtems.org/branches/master/user/support/bugs.html
+ *
+ * For information on updating and regenerating please refer to:
  *
  * https://docs.rtems.org/branches/master/eng/req/howto.html
- *
- * for information how to maintain and re-generate this file.
  */
 
 #ifdef HAVE_CONFIG_H

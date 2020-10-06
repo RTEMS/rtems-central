@@ -159,12 +159,17 @@ def _add_context(_content: "Content") -> Iterator[None]:
 _SPECIAL_BLOCK = re.compile(r"^( *\* | *[0-9]+\. | +)")
 
 _AUTOMATICALLY_GENERATED_WARNING = [
-    "This file was automatically generated.  Do not edit it manually.",
-    "Please have a look at",
+    "Do not manually edit this file.  It is part of the RTEMS quality process",
+    "and was automatically generated.",
+    "",
+    "If you find something that needs to be fixed or worded better please",
+    "post a report to an RTEMS mailing list or raise a bug report:",
+    "",
+    "https://docs.rtems.org/branches/master/user/support/bugs.html",
+    "",
+    "For information on updating and regenerating please refer to:",
     "",
     "https://docs.rtems.org/branches/master/eng/req/howto.html",
-    "",
-    "for information how to maintain and re-generate this file.",
 ]
 
 
