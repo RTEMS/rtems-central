@@ -1,0 +1,168 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/return-buffer
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+
+      sc = rtems_partition_get_buffer( ctx->id_value, &ctx->buffer_in_use );
+      T_rsc_success( sc );
+      T_eq_ptr( ctx->buffer_in_use, buffers );
+    text: |
+      The status shall be RTEMS_SUCCESSFUL.  The returned buffer shall be made
+      available for re-use.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The status shall be RTEMS_INVALID_ID.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The status shall be RTEMS_INVALID_ADDRESS.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+pre-conditions:
+- name: Id
+  states:
+  - name: Id
+    test-code: |
+      ctx->id = ctx->id_value;
+    text: |
+      The id parameter shall reference a partition object.
+  - name: Invalid
+    test-code: |
+      ctx->id = 0;
+    text: |
+      The id parameter shall not reference a partition object.
+  test-epilogue: null
+  test-prologue: null
+- name: Buf
+  states:
+  - name: Valid
+    test-code: |
+      ctx->buffer = ctx->buffer_in_use;
+    text: |
+      The buffer parameter shall reference a buffer previously returned by
+      ${../if/get-buffer:/name}.
+  - name: Invalid
+    test-code: |
+      ctx->buffer = (void *) (uintptr_t) 1;
+    text: |
+      The buffer parameter shall be an address outside the buffer area of the
+      partition.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_partition_return_buffer( ctx->id, ctx->buffer );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_id id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: void *buffer
+- brief: null
+  description: null
+  member: void *buffer_in_use
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->buffer_in_use = 0;
+    ctx->id_value = 0;
+
+    sc = rtems_partition_create(
+      rtems_build_name( 'N', 'A', 'M', 'E' ),
+      buffers,
+      sizeof( buffers ),
+      sizeof( buffers[ 0 ] ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->id_value
+    );
+    T_assert_rsc_success( sc );
+
+    sc = rtems_partition_get_buffer( ctx->id_value, &ctx->buffer_in_use );
+    T_assert_rsc_success( sc );
+    T_assert_eq_ptr( ctx->buffer_in_use, buffers );
+  description: null
+test-stop: null
+test-support: |
+  #define BUFFER_COUNT 1
+
+  #define BUFFER_SIZE ( 2 * sizeof( void * ) )
+
+  static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
+    buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+test-target: testsuites/validation/tc-part-return.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    if ( ctx->buffer_in_use != NULL ) {
+      sc = rtems_partition_return_buffer( ctx->id_value, ctx->buffer_in_use );
+      T_rsc_success( sc );
+    }
+
+    if ( ctx->id_value != 0 ) {
+      sc = rtems_partition_delete( ctx->id_value );
+      T_rsc_success( sc );
+    }
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Id
+    Buf:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+  pre-conditions:
+    Id:
+    - Invalid
+    Buf: all
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+  pre-conditions:
+    Id:
+    - Id
+    Buf:
+    - Invalid
+type: requirement

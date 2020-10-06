@@ -1,0 +1,208 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/get-buffer
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+      T_eq_ptr( ctx->buffer_pointer, buffers );
+    text: |
+      The status shall be RTEMS_SUCCESSFUL.  The buffer pointer variable shall
+      reference a buffer in the buffer area used to create the partition.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+      T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
+    text: |
+      The status shall be RTEMS_INVALID_ID.  If the buffer parameter is not
+      NULL, then the value of the buffer pointer referenced by the buffer
+      parameter shall be unchanged.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The status shall be RTEMS_INVALID_ADDRESS.
+  - name: Unsatisfied
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
+      T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
+    text: |
+      The status shall be RTEMS_UNSATISFIED.  If the buffer parameter is not
+      NULL, then the value of the buffer pointer referenced by the buffer
+      parameter shall be unchanged.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Id
+    test-code: |
+      ctx->id = ctx->id_value;
+    text: |
+      The id parameter shall reference a partition object.
+  - name: Invalid
+    test-code: |
+      ctx->id = 0;
+    text: |
+      The id parameter shall not reference a partition object.
+  test-epilogue: null
+  test-prologue: null
+- name: Buf
+  states:
+  - name: Valid
+    test-code: |
+      ctx->buffer = &ctx->buffer_pointer;
+    text: |
+      The buffer parameter shall reference a buffer pointer variable.
+  - name: 'Null'
+    test-code: |
+      ctx->buffer = NULL;
+    text: |
+      The buffer parameter shall be NULL.
+  test-epilogue: null
+  test-prologue: null
+- name: Avail
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      The partition shall have at least one free buffer available.
+  - name: 'No'
+    test-code: |
+      sc = rtems_partition_get_buffer( ctx->id_value, &ctx->stolen_buffer );
+      T_rsc_success( sc );
+    text: |
+      The partition shall have no buffer available.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_partition_get_buffer( ctx->id, ctx->buffer );
+test-brief: null
+test-cleanup: |
+  rtems_status_code sc;
+
+  if ( (uintptr_t) ctx->buffer_pointer != 1 ) {
+    sc = rtems_partition_return_buffer( ctx->id_value, ctx->buffer_pointer );
+    T_rsc_success( sc );
+  }
+
+  if ( ctx->stolen_buffer != NULL ) {
+    sc = rtems_partition_return_buffer( ctx->id_value, ctx->stolen_buffer );
+    T_rsc_success( sc );
+  }
+test-context:
+- brief: null
+  description: null
+  member: rtems_status_code status
+- brief: null
+  description: null
+  member: rtems_id id
+- brief: null
+  description: null
+  member: rtems_id id_value
+- brief: null
+  description: null
+  member: void **buffer
+- brief: null
+  description: null
+  member: void *buffer_pointer
+- brief: null
+  description: null
+  member: void *stolen_buffer
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: |
+  ctx->buffer_pointer = (void *) (uintptr_t) 1;
+  ctx->stolen_buffer = NULL;
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    ctx->id_value = 0;
+    sc = rtems_partition_create(
+      rtems_build_name( 'N', 'A', 'M', 'E' ),
+      buffers,
+      sizeof( buffers ),
+      sizeof( buffers[ 0 ] ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->id_value
+    );
+    T_assert_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  #define BUFFER_COUNT 1
+
+  #define BUFFER_SIZE ( 2 * sizeof( void * ) )
+
+  static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
+    buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+test-target: testsuites/validation/tc-part-get.c
+test-teardown:
+  brief: null
+  code: |
+    if ( ctx->id_value != 0 ) {
+      rtems_status_code sc;
+
+      sc = rtems_partition_delete( ctx->id_value );
+      T_rsc_success( sc );
+    }
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+  pre-conditions:
+    Id:
+    - Id
+    Buf:
+    - Valid
+    Avail:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+  pre-conditions:
+    Id: all
+    Buf:
+    - 'Null'
+    Avail: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+  pre-conditions:
+    Id:
+    - Invalid
+    Buf:
+    - Valid
+    Avail: all
+- enabled-by: true
+  post-conditions:
+    Status: Unsatisfied
+  pre-conditions:
+    Id:
+    - Id
+    Buf:
+    - Valid
+    Avail:
+    - 'No'
+type: requirement
