@@ -80,6 +80,8 @@ def test_add():
     content = Content("BSD-2-Clause", True)
     content.add("")
     assert str(content) == ""
+    content.add([""])
+    assert str(content) == ""
     content.add("a")
     assert str(content) == """a
 """
