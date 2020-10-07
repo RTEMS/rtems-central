@@ -104,6 +104,9 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/event/directives.rst
   group: /rtems/event/if/group
   introduction-target: modules/rtems-docs/c-user/event/introduction.rst
+- directives-target: modules/rtems-docs/c-user/partition/directives.rst
+  group: /rtems/part/if/group
+  introduction-target: modules/rtems-docs/c-user/partition/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:
