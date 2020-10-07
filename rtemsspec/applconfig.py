@@ -68,14 +68,17 @@ class _ContentAdaptor:
         """ Substitutes the optional text using the item mapper. """
         return self.mapper.substitute(text)
 
-    def add_group(self, name: str, description: str) -> None:
+    def add_group(self, uid: str, name: str, description: str) -> None:
         """ Adds an option group. """
         self.content.add_automatically_generated_warning()
+        self.content.add(f".. Generated from spec:{uid}")
         self.content.add_header(name, level=2)
         self.content.add(description)
 
-    def add_option(self, name: str, index_entries: List[str]) -> None:
+    def add_option(self, uid: str, name: str,
+                   index_entries: List[str]) -> None:
         """ Adds an option. """
+        self.content.add(f".. Generated from spec:{uid}")
         self.content.add_index_entries([name] + index_entries)
         self.content.add_label(name)
         self.content.add_header(name, level=3)
@@ -140,14 +143,17 @@ class _DoxygenContentAdaptor(_ContentAdaptor):
         self._value_constraints = []  # type: List[str]
         self._description = ""
 
-    def add_group(self, name: str, description: str) -> None:
+    def add_group(self, uid: str, name: str, description: str) -> None:
         identifier = f"RTEMSApplConfig{name.replace(' ', '')}"
+        self.content.add(f"/* Generated from spec:{uid} */")
         with self.content.defgroup_block(identifier, name):
             self.content.add("@ingroup RTEMSApplConfig")
             self.content.doxyfy(description)
             self.content.add("@{")
 
-    def add_option(self, name: str, _index_entries: List[str]) -> None:
+    def add_option(self, uid: str, name: str,
+                   _index_entries: List[str]) -> None:
+        self.content.add(f"/* Generated from spec:{uid} */")
         self.content.open_doxygen_block()
         self._name = name
 
@@ -300,12 +306,13 @@ _OPTION_GENERATORS = {
 
 def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
     content.register_license_and_copyrights_of_item(group)
-    content.add_group(group["name"], content.substitute(group["description"]))
+    content.add_group(group.uid, group["name"],
+                      content.substitute(group["description"]))
     for item in sorted(options.values(), key=lambda x: x["name"]):
         content.mapper.item = item
         name = item["name"]
         content.register_license_and_copyrights_of_item(item)
-        content.add_option(name, item["index-entries"])
+        content.add_option(item.uid, name, item["index-entries"])
         option_type = item["appl-config-option-type"]
         content.add_option_type(_OPTION_TYPES[option_type])
         _OPTION_GENERATORS[option_type](content, item, option_type)

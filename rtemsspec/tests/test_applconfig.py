@@ -60,10 +60,14 @@ def test_applconfig(tmpdir):
 ..
 .. https://docs.rtems.org/branches/master/eng/req/howto.html
 
+.. Generated from spec:/g
+
 group name
 ==========
 
 description
+
+.. Generated from spec:/a
 
 .. index:: a
 .. index:: index a
@@ -108,6 +112,8 @@ NOTES:
 
     * `unspec_type_2 <https://bar>`_
 
+.. Generated from spec:/b
+
 .. index:: b
 
 .. _b:
@@ -131,6 +137,8 @@ DESCRIPTION:
 
 NOTES:
     None.
+
+.. Generated from spec:/c
 
 .. index:: c
 
@@ -168,6 +176,8 @@ DESCRIPTION:
 NOTES:
     notes c
 
+.. Generated from spec:/e
+
 .. index:: e
 
 .. _e:
@@ -194,6 +204,8 @@ DESCRIPTION:
 NOTES:
     None.
 
+.. Generated from spec:/f
+
 .. index:: f
 
 .. _f:
@@ -218,6 +230,8 @@ DESCRIPTION:
 
 NOTES:
     None.
+
+.. Generated from spec:/h
 
 .. index:: h
 
@@ -244,6 +258,8 @@ DESCRIPTION:
 NOTES:
     None.
 
+.. Generated from spec:/i
+
 .. index:: i
 
 .. _i:
@@ -269,6 +285,8 @@ DESCRIPTION:
 
 NOTES:
     None.
+
+.. Generated from spec:/j
 
 .. index:: j
 
@@ -300,6 +318,8 @@ DESCRIPTION:
 NOTES:
     None.
 
+.. Generated from spec:/k
+
 .. index:: k
 
 .. _k:
@@ -330,6 +350,8 @@ DESCRIPTION:
 NOTES:
     None.
 
+.. Generated from spec:/l
+
 .. index:: l
 
 .. _l:
@@ -355,6 +377,8 @@ DESCRIPTION:
 
 NOTES:
     None.
+
+.. Generated from spec:/m
 
 .. index:: m
 
@@ -427,6 +451,8 @@ NOTES:
  * @ingroup RTEMSAPI
  */
 
+/* Generated from spec:/g */
+
 /**
  * @defgroup RTEMSApplConfiggroupname group name
  *
@@ -436,6 +462,8 @@ NOTES:
  *
  * @{
  */
+
+/* Generated from spec:/a */
 
 /**
  * @brief This configuration option is a boolean feature define.
@@ -474,6 +502,8 @@ NOTES:
  */
 #define a
 
+/* Generated from spec:/b */
+
 /**
  * @brief This configuration option is a boolean feature define.
  *
@@ -484,6 +514,8 @@ NOTES:
  * enabled.
  */
 #define b
+
+/* Generated from spec:/c */
 
 /**
  * @brief This configuration option is an integer define.
@@ -514,6 +546,8 @@ NOTES:
  */
 #define c
 
+/* Generated from spec:/e */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -526,6 +560,8 @@ NOTES:
  * The value of this configuration option shall be greater than or equal to -2.
  */
 #define e
+
+/* Generated from spec:/f */
 
 /**
  * @brief This configuration option is an integer define.
@@ -540,6 +576,8 @@ NOTES:
  */
 #define f
 
+/* Generated from spec:/h */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -553,6 +591,8 @@ NOTES:
  */
 #define h
 
+/* Generated from spec:/i */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -565,6 +605,8 @@ NOTES:
  * The value of this configuration option shall be an element of {1, 2, 3}.
  */
 #define i
+
+/* Generated from spec:/j */
 
 /**
  * @brief This configuration option is an integer define.
@@ -586,6 +628,8 @@ NOTES:
  */
 #define j
 
+/* Generated from spec:/k */
+
 /**
  * @brief This configuration option is an integer define.
  *
@@ -606,6 +650,8 @@ NOTES:
  */
 #define k
 
+/* Generated from spec:/l */
+
 /**
  * @brief This configuration option is an initializer define.
  *
@@ -619,6 +665,8 @@ NOTES:
  * and less than or equal to 2.
  */
 #define l
+
+/* Generated from spec:/m */
 
 /**
  * @brief This configuration option is an initializer define.
