@@ -7,8 +7,6 @@ test-brief: |
   This general purpose validation test suite provides enough resources to run
   basic tests for all specified managers and functions.
 test-code: |
-  #include <rtems/test-info.h>
-
   const char rtems_test_name[] = "Validation0";
 
   static char buffer[ 512 ];
@@ -31,7 +29,7 @@ test-code: |
     .buf = buffer,
     .buf_size = sizeof( buffer ),
     .putchar = rtems_put_char,
-    .verbosity = T_VERBOSE,
+    .verbosity = RTEMS_TEST_VERBOSITY,
     .now = T_now_clock,
     .action_count = T_ARRAY_SIZE( actions ),
     .actions = actions
@@ -168,6 +166,8 @@ test-includes:
 - rtems.h
 - rtems/bspIo.h
 - rtems/sysinit.h
+- rtems/test-info.h
+- rtems/testopts.h
 test-local-includes: []
 test-target: testsuites/validation/ts-validation-0.c
 type: test-suite
