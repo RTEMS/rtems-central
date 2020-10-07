@@ -99,6 +99,8 @@ def test_interface(tmpdir):
  * https://docs.rtems.org/branches/master/eng/req/howto.html
  */
 
+/* Generated from spec:/h */
+
 #ifndef _H_H
 #define _H_H
 
@@ -118,6 +120,8 @@ def test_interface(tmpdir):
 extern "C" {
 #endif
 
+/* Generated from spec:/ga */
+
 /**
  * @defgroup GroupA Group A
  *
@@ -126,14 +130,20 @@ extern "C" {
  * Group A description.
  */
 
+/* Generated from spec:/gb */
+
 /**
  * @defgroup GroupB Group B
  *
  * @ingroup GroupA
  */
 
+/* Generated from spec:/forward-decl */
+
 /* Forward declaration */
 struct Struct;
+
+/* Generated from spec:/enum */
 
 /**
  * @ingroup GroupB
@@ -159,6 +169,8 @@ typedef enum {
   ENUMERATOR_2
 } Enum;
 
+/* Generated from spec:/define */
+
 /**
  * @ingroup GroupA
  */
@@ -171,6 +183,8 @@ typedef enum {
     ((float_t) 123)
 #endif
 
+/* Generated from spec:/enum3 */
+
 /**
  * @ingroup GroupB
  *
@@ -182,6 +196,8 @@ typedef enum EnumB {
    */
   ENUMERATOR_B = ENUMERATOR_A
 } EnumB;
+
+/* Generated from spec:/func */
 
 /**
  * @ingroup GroupA
@@ -201,6 +217,8 @@ typedef enum EnumB {
  * @param[in,out] Param3 is parameter 3.
  */
 void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
+
+/* Generated from spec:/func2 */
 
 /**
  * @ingroup GroupB
@@ -241,6 +259,8 @@ static inline int VeryLongFunction(
   return VeryLongParam0 + 1;
 }
 
+/* Generated from spec:/macro */
+
 /**
  * @ingroup GroupB
  *
@@ -274,6 +294,8 @@ static inline int VeryLongFunction(
   } while ( 0 ); \\
   VeryLongParam0 + 1;
 
+/* Generated from spec:/macro2 */
+
 /**
  * @ingroup GroupB
  *
@@ -288,6 +310,8 @@ static inline int VeryLongFunction(
 #else
   #define MACRO( Param0 ) ( ( Param0 ) + 1 )
 #endif
+
+/* Generated from spec:/s */
 
 /**
  * @ingroup GroupC
@@ -336,6 +360,8 @@ struct Struct {
   Enum some_member_4;
 };
 
+/* Generated from spec:/td */
+
 /**
  * @ingroup GroupB
  *
@@ -345,6 +371,8 @@ struct Struct {
  */
 typedef uint32_t Integer /* Some comment. */;
 
+/* Generated from spec:/td3 */
+
 /**
  * @ingroup GroupB
  */
@@ -353,6 +381,8 @@ typedef uint32_t Integer /* Some comment. */;
 #endif
 
 #if !defined(ASM)
+  /* Generated from spec:/var */
+
   /**
    * @ingroup GroupC
    *

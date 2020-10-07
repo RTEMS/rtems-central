@@ -210,6 +210,7 @@ class Node:
             self.content.append(f"}} {name};")
 
     def _generate(self) -> None:
+        self.content.add(f"/* Generated from spec:{self.item.uid} */")
         _NODE_GENERATORS[self.item["interface-type"]](self)
 
     def generate(self) -> None:
@@ -517,6 +518,7 @@ class _HeaderFile:
             self._content.add_brief_description(self._item["brief"])
         self._content.add_copyrights_and_licenses()
         self._content.add_automatically_generated_warning()
+        self._content.add(f"/* Generated from spec:{self._item.uid} */")
         with self._content.header_guard(self._item["path"]):
             exp_mapper = _HeaderExpressionMapper(self._item,
                                                  self.enabled_by_defined)
