@@ -8,7 +8,7 @@ definition:
   default: '0xffffffff'
   variants: []
 description: |
-  The value of this constant is identical to ${event-0:/name} | ... |
+  The value of this constant is identical to ${event-00:/name} | ... |
   ${event-31:/name}.
 enabled-by: true
 index-entries: []

@@ -43,8 +43,8 @@ notes: |
   in the event set being sent to the calling task.
 
   The event set to send shall be built by a *bitwise or* of the desired events.
-  The set of valid events is ${event-0:/name} through ${event-31:/name}.  If an
-  event is not explicitly specified in the set, then it is not present.
+  The set of valid events is ${event-00:/name} through ${event-31:/name}.  If
+  an event is not explicitly specified in the set, then it is not present.
 
   Identical events sent to a task are not queued.  In other words, the second,
   and subsequent, posting of an event to a task before it can perform an

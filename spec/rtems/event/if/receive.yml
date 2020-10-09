@@ -76,7 +76,7 @@ notes: |
 
   To receive all events use the constant ${all-events:/name} for the
   ``${.:/params[0]/name}`` parameter.  This constant is identical to
-  ${event-0:/name} | ... | ${event-31:/name} and should not be confused with
+  ${event-00:/name} | ... | ${event-31:/name} and should not be confused with
   the option ${../../option/if/event-all:/name}.
 
   A task can **receive all of the pending events** by calling the directive
