@@ -26,8 +26,9 @@ This module provides functions for the generation of interface documentation.
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import functools
 import os
-from typing import Any, Callable, Dict, List, Set
+from typing import Any, Callable, Dict, List, Tuple
 
 from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper
 from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
@@ -208,6 +209,14 @@ def _generate_directives(target: str, group: Item, items: List[Item]) -> None:
     content.write(target)
 
 
+def _directive_key(order: List[Item], item: Item) -> Tuple[int, str]:
+    try:
+        index = order.index(item) - len(order)
+    except ValueError:
+        index = 1
+    return (index, item.uid)
+
+
 def generate(config: list, item_cache: ItemCache) -> None:
     """
     Generates interface documentation according to the configuration.
@@ -216,20 +225,14 @@ def generate(config: list, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the interfaces.
     """
     for doc_config in config:
-        items = set()  # type: Set[Item]
+        items = []  # type: List[Item]
         group = item_cache[doc_config["group"]]
         assert group["type"] == "interface"
         assert group["interface-type"] == "group"
         for child in group.children("interface-ingroup"):
-            if child["interface-type"] in ["function"]:
-                items.add(child)
-        ordered_items = []  # type: List[Item]
-        for parent in group.parents("documentation-order"):
-            if parent in items:
-                ordered_items.append(parent)
-                items.remove(parent)
-        ordered_items.extend(sorted(items, key=lambda x: x["name"]))
-        _generate_introduction(doc_config["introduction-target"], group,
-                               ordered_items)
-        _generate_directives(doc_config["directives-target"], group,
-                             ordered_items)
+            if child["interface-type"] == "function":
+                items.append(child)
+        items.sort(key=functools.partial(
+            _directive_key, list(group.parents("documentation-order"))))
+        _generate_introduction(doc_config["introduction-target"], group, items)
+        _generate_directives(doc_config["directives-target"], group, items)
