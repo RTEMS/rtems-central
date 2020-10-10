@@ -19,6 +19,8 @@ links:
 - role: placement-order
   uid: func2
 - role: placement-order
+  uid: func3
+- role: placement-order
   uid: enum
 name: Group B
 type: interface

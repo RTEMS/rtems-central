@@ -138,6 +138,20 @@ extern "C" {
  * @ingroup GroupA
  */
 
+/* Generated from spec:/define */
+
+/**
+ * @ingroup GroupA
+ */
+#if defined(A) || (B > C)
+  #define DEFINE ((float_t) 456)
+#elif defined(C) && defined(D)
+  #define DEFINE ((float_t) 789)
+#else
+  #define DEFINE \\
+    ((float_t) 123)
+#endif
+
 /* Generated from spec:/forward-decl */
 
 /* Forward declaration */
@@ -168,20 +182,6 @@ typedef enum {
    */
   ENUMERATOR_2
 } Enum;
-
-/* Generated from spec:/define */
-
-/**
- * @ingroup GroupA
- */
-#if defined(A) || (B > C)
-  #define DEFINE ((float_t) 456)
-#elif defined(C) && defined(D)
-  #define DEFINE ((float_t) 789)
-#else
-  #define DEFINE \\
-    ((float_t) 123)
-#endif
 
 /* Generated from spec:/enum3 */
 
@@ -217,47 +217,6 @@ typedef enum EnumB {
  * @param[in,out] Param3 is parameter 3.
  */
 void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
-
-/* Generated from spec:/func2 */
-
-/**
- * @ingroup GroupB
- *
- * @brief Very long function brief description.
- *
- * VeryLongFunction description.
- *
- * VeryLongFunction notes.
- *
- * @param VeryLongParam0 is very long parameter 0 with some super important and
- *   extra very long description which makes a lot of sense.
- *
- * @param[in] VeryLongParam1 is very long parameter 1.
- *
- * @param[out] VeryLongParam2 is very long parameter 2.
- *
- * @param[in,out] VeryLongParam3 is very long parameter 3.
- *
- * @retval 1 is returned, in case A.
- *
- * @retval 2 is returned, in case B.
- *
- * @retval #Enum is returned, in case C.
- *
- * @return Sometimes some value.  See Function().
- */
-static inline int VeryLongFunction(
-  int                  VeryLongParam0,
-  const struct Struct *VeryLongParam1,
-  struct Struct    *( *VeryLongParam2 )( void ),
-  struct Struct       *VeryLongParam3
-)
-{
-  (void) VeryLongParam1;
-  (void) VeryLongParam2;
-  (void) VeryLongParam3;
-  return VeryLongParam0 + 1;
-}
 
 /* Generated from spec:/macro */
 
@@ -392,6 +351,47 @@ typedef uint32_t Integer /* Some comment. */;
    */
   extern struct Struct *Variable;
 #endif
+
+/* Generated from spec:/func2 */
+
+/**
+ * @ingroup GroupB
+ *
+ * @brief Very long function brief description.
+ *
+ * VeryLongFunction description.
+ *
+ * VeryLongFunction notes.
+ *
+ * @param VeryLongParam0 is very long parameter 0 with some super important and
+ *   extra very long description which makes a lot of sense.
+ *
+ * @param[in] VeryLongParam1 is very long parameter 1.
+ *
+ * @param[out] VeryLongParam2 is very long parameter 2.
+ *
+ * @param[in,out] VeryLongParam3 is very long parameter 3.
+ *
+ * @retval 1 is returned, in case A.
+ *
+ * @retval 2 is returned, in case B.
+ *
+ * @retval #Enum is returned, in case C.
+ *
+ * @return Sometimes some value.  See Function().
+ */
+static inline int VeryLongFunction(
+  int                  VeryLongParam0,
+  const struct Struct *VeryLongParam1,
+  struct Struct    *( *VeryLongParam2 )( void ),
+  struct Struct       *VeryLongParam3
+)
+{
+  (void) VeryLongParam1;
+  (void) VeryLongParam2;
+  (void) VeryLongParam3;
+  return VeryLongParam0 + 1;
+}
 
 #ifdef __cplusplus
 }

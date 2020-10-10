@@ -26,7 +26,7 @@
 
 from contextlib import contextmanager
 import os
-from typing import Any, Callable, Dict, Iterator, List, Union
+from typing import Any, Callable, Dict, Iterator, List, Union, Set
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
@@ -176,6 +176,8 @@ def _add_definition(node: "Node", item: Item, prefix: str,
 
 class Node:
     """ Nodes of a header file. """
+
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, header_file: "_HeaderFile", item: Item,
                  ingroups: ItemMap):
         self.header_file = header_file
@@ -185,6 +187,13 @@ class Node:
         self.depends_on = set()  # type: Set["Node"]
         self.content = CContent()
         self.mapper = _InterfaceMapper(self)
+        try:
+            group = next(item.children("placement-order"))
+        except StopIteration:
+            self.index = None
+        else:
+            self.index = (group.uid,
+                          list(group.parents("placement-order")).index(item))
 
     def __lt__(self, other: "Node") -> bool:
         return self.item.uid < other.item.uid
@@ -427,6 +436,34 @@ _NODE_GENERATORS = {
 }
 
 
+def _is_ready_to_bubble(before: Node, after: Node) -> bool:
+    if after in before.dependents:
+        return False
+
+    # Move the groups towards the top of the header file
+    group = "interface/group"
+    if (before.item.type == group) ^ (after.item.type == group):
+        return after.item.type == group
+
+    # Move items with an explicit placement order towards the bottom of the
+    # file
+    if before.index and after.index:
+        return before.index > after.index
+    if after.index:
+        return False
+
+    return before > after
+
+
+def _bubble_sort(nodes: List[Node]) -> List[Node]:
+    node_count = len(nodes)
+    for i in range(node_count - 1):
+        for j in range(node_count - 1 - i):
+            if _is_ready_to_bubble(nodes[j], nodes[j + 1]):
+                nodes[j], nodes[j + 1] = nodes[j + 1], nodes[j]
+    return nodes
+
+
 class _HeaderFile:
     """ A header file. """
     def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
@@ -480,9 +517,14 @@ class _HeaderFile:
     def _get_nodes_in_dependency_order(self) -> List[Node]:
         """
         Gets the nodes of this header file ordered according to node
-        dependencies and UIDs.
+        dependencies and other criteria.
 
-        Performs a topological sort using Kahn's algorithm.
+        The nodes form a partially ordered set (poset).  The ordering is done
+        in two steps.  Firstly, a topological sort using Kahn's algorithm is
+        carried out.  Secondly, the nodes are sorted using a bubble sort which
+        takes node dependencies into account.  There are more efficient ways to
+        do this, however, if you experience run time problems due to this
+        method, then maybe you should reconsider your header file organization.
         """
         nodes_in_dependency_order = []  # type: List[Node]
 
@@ -491,25 +533,23 @@ class _HeaderFile:
         for node in self._nodes.values():
             in_degree[node.item.uid] = len(node.dependents)
 
-        # Create a queue with all nodes with no incoming edges sorted by UID
+        # Create a queue with all nodes with no incoming edges
         queue = []  # type: List[Node]
         for node in self._nodes.values():
             if in_degree[node.item.uid] == 0:
                 queue.append(node)
-        queue.sort(reverse=True)
 
         # Topological sort
         while queue:
             node = queue.pop(0)
             nodes_in_dependency_order.insert(0, node)
 
-            # Sort by UID
-            for other in sorted(node.depends_on):
+            for other in node.depends_on:
                 in_degree[other.item.uid] -= 1
                 if in_degree[other.item.uid] == 0:
                     queue.append(other)
 
-        return nodes_in_dependency_order
+        return _bubble_sort(nodes_in_dependency_order)
 
     def finalize(self) -> None:
         """ Finalizes the header file. """
