@@ -101,7 +101,7 @@ class _InterfaceMapper(ItemMapper):
                     header_file.add_includes(child)
             else:
                 header_file.add_includes(ctx.item)
-            header_file.add_potential_edge(node, ctx.item)
+            header_file.add_dependency(node, ctx.item)
         return super().get_value(
             ItemGetValueContext(ctx.item, f"{self._code_or_doc}:{ctx.path}",
                                 ctx.value, ctx.key, ctx.index))
@@ -181,8 +181,8 @@ class Node:
         self.header_file = header_file
         self.item = item
         self.ingroups = ingroups
-        self.in_edges = {}  # type: ItemMap
-        self.out_edges = {}  # type: ItemMap
+        self.dependents = set()  # type: Set["Node"]
+        self.depends_on = set()  # type: Set["Node"]
         self.content = CContent()
         self.mapper = _InterfaceMapper(self)
 
@@ -272,7 +272,7 @@ class Node:
         """ Generates a group. """
         self.header_file.add_ingroup(self.item)
         for ingroup in self.ingroups.values():
-            self.header_file.add_potential_edge(self, ingroup)
+            self.header_file.add_dependency(self, ingroup)
         self.content.add_group(self.item["identifier"], self.item["name"],
                                _get_group_identifiers(self.ingroups),
                                self.item["brief"], self.item["description"])
@@ -455,18 +455,19 @@ class _HeaderFile:
         self._nodes[item.uid] = Node(self, item, ingroups)
         self._content.register_license_and_copyrights_of_item(item)
 
-    def add_potential_edge(self, node: Node, item: Item) -> None:
+    def add_dependency(self, node: Node, item: Item) -> None:
         """
-        Adds a potential edge from a node to another node identified by an
-        item.
+        Adds a dependency from a node to another node identified by an item if
+        the item corresponds to a node and it is not a self reference.
         """
         if item.uid in self._nodes and item.uid != node.item.uid:
-            node.out_edges[item.uid] = item
-            self._nodes[item.uid].in_edges[node.item.uid] = node.item
+            other = self._nodes[item.uid]
+            node.depends_on.add(other)
+            other.dependents.add(node)
 
     def _resolve_ingroups(self, node: Node) -> None:
         for ingroup in node.ingroups.values():
-            self.add_potential_edge(node, ingroup)
+            self.add_dependency(node, ingroup)
 
     def generate_nodes(self) -> None:
         """ Generates all nodes of this header file. """
@@ -488,7 +489,7 @@ class _HeaderFile:
         # Get incoming edge degrees for all nodes
         in_degree = {}  # type: Dict[str, int]
         for node in self._nodes.values():
-            in_degree[node.item.uid] = len(node.in_edges)
+            in_degree[node.item.uid] = len(node.dependents)
 
         # Create a queue with all nodes with no incoming edges sorted by UID
         queue = []  # type: List[Node]
@@ -503,10 +504,10 @@ class _HeaderFile:
             nodes_in_dependency_order.insert(0, node)
 
             # Sort by UID
-            for uid in sorted(node.out_edges):
-                in_degree[uid] -= 1
-                if in_degree[uid] == 0:
-                    queue.append(self._nodes[uid])
+            for other in sorted(node.depends_on):
+                in_degree[other.item.uid] -= 1
+                if in_degree[other.item.uid] == 0:
+                    queue.append(other)
 
         return nodes_in_dependency_order
 
