@@ -117,7 +117,7 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
                     prefix: str, value: Dict[str, Any],
                     add_definition: AddDefinition) -> None:
     # pylint: disable=too-many-arguments
-    assert item["interface-type"] == "function"
+    assert item.type == "interface/function"
     default = value["default"]
     variants = value["variants"]
     if variants:
@@ -227,10 +227,9 @@ def generate(config: list, item_cache: ItemCache) -> None:
     for doc_config in config:
         items = []  # type: List[Item]
         group = item_cache[doc_config["group"]]
-        assert group["type"] == "interface"
-        assert group["interface-type"] == "group"
+        assert group.type == "interface/group"
         for child in group.children("interface-ingroup"):
-            if child["interface-type"] == "function":
+            if child.type == "interface/function":
                 items.append(child)
         items.sort(key=functools.partial(
             _directive_key, list(group.parents("placement-order"))))
