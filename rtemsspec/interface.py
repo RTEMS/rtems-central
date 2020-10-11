@@ -448,11 +448,11 @@ def _is_ready_to_bubble(before: Node, after: Node) -> bool:
     # Move items with an explicit placement order towards the bottom of the
     # file
     if before.index and after.index:
-        return before.index > after.index
+        return after.index < before.index
     if after.index:
         return False
 
-    return before > after
+    return after < before
 
 
 def _bubble_sort(nodes: List[Node]) -> List[Node]:
