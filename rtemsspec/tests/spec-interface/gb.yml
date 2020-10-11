@@ -14,11 +14,11 @@ links:
   uid: other
 - role: interface-placement
   uid: h
-- role: documentation-order
+- role: placement-order
   uid: func4
-- role: documentation-order
+- role: placement-order
   uid: func2
-- role: documentation-order
+- role: placement-order
   uid: enum
 name: Group B
 type: interface

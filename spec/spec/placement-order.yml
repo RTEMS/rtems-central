@@ -7,7 +7,7 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: role
-  spec-value: documentation-order
+  spec-value: placement-order
   uid: link
 spec-description: null
 spec-example: null
@@ -15,8 +15,10 @@ spec-info:
   dict:
     attributes: {}
     description: |
-      It defines the documentation order role of links.
+      This link role defines the placement order of items in a container item
+      (for example an interface function in a header file or a documentation
+      section).
     mandatory-attributes: all
-spec-name: Documentation Order Link Role
-spec-type: documentation-order-role
+spec-name: Placement Order Link Role
+spec-type: placement-order-role
 type: spec

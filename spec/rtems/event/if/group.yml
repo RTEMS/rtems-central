@@ -15,9 +15,9 @@ links:
   uid: header
 - role: interface-ingroup
   uid: ../../if/group
-- role: documentation-order
+- role: placement-order
   uid: send
-- role: documentation-order
+- role: placement-order
   uid: receive
 name: Event Manager
 text: |

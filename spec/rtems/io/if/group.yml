@@ -16,23 +16,23 @@ links:
   uid: header
 - role: interface-ingroup
   uid: ../../if/group
-- role: documentation-order
+- role: placement-order
   uid: register-driver
-- role: documentation-order
+- role: placement-order
   uid: unregister-driver
-- role: documentation-order
+- role: placement-order
   uid: initialize
-- role: documentation-order
+- role: placement-order
   uid: register-name
-- role: documentation-order
+- role: placement-order
   uid: open
-- role: documentation-order
+- role: placement-order
   uid: close
-- role: documentation-order
+- role: placement-order
   uid: read
-- role: documentation-order
+- role: placement-order
   uid: write
-- role: documentation-order
+- role: placement-order
   uid: control
 name: I/O Manager
 text: |

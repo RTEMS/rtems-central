@@ -233,6 +233,6 @@ def generate(config: list, item_cache: ItemCache) -> None:
             if child["interface-type"] == "function":
                 items.append(child)
         items.sort(key=functools.partial(
-            _directive_key, list(group.parents("documentation-order"))))
+            _directive_key, list(group.parents("placement-order"))))
         _generate_introduction(doc_config["introduction-target"], group, items)
         _generate_directives(doc_config["directives-target"], group, items)
