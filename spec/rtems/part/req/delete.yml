@@ -62,7 +62,7 @@ pre-conditions:
   test-prologue: null
 - name: InUse
   states:
-  - name: Yes
+  - name: 'Yes'
     test-code: |
       ctx->buffer = NULL;
       sc = rtems_partition_get_buffer( ctx->id_value, &ctx->buffer );
@@ -70,7 +70,7 @@ pre-conditions:
       T_not_null( ctx->buffer );
     text: |
       The partition shall have at least one buffer in use.
-  - name: No
+  - name: 'No'
     test-code: |
       ctx->buffer = NULL;
     text: |
@@ -150,7 +150,7 @@ transition-map:
     Id:
     - Id
     InUse:
-    - No
+    - 'No'
 - enabled-by: true
   post-conditions:
     Status: InvId
@@ -165,5 +165,5 @@ transition-map:
     Id:
     - Id
     InUse:
-    - Yes
+    - 'Yes'
 type: requirement

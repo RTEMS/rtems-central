@@ -172,37 +172,37 @@ transition-map:
   post-conditions:
     Status: Ok
   pre-conditions:
-    Id:
-    - Id
-    Buf:
-    - Valid
     Avail:
     - 'Yes'
+    Buf:
+    - Valid
+    Id:
+    - Id
 - enabled-by: true
   post-conditions:
     Status: InvAddr
   pre-conditions:
-    Id: all
+    Avail: all
     Buf:
     - 'Null'
-    Avail: all
+    Id: all
 - enabled-by: true
   post-conditions:
     Status: InvId
   pre-conditions:
-    Id:
-    - Invalid
+    Avail: all
     Buf:
     - Valid
-    Avail: all
+    Id:
+    - Invalid
 - enabled-by: true
   post-conditions:
     Status: Unsatisfied
   pre-conditions:
-    Id:
-    - Id
-    Buf:
-    - Valid
     Avail:
     - 'No'
+    Buf:
+    - Valid
+    Id:
+    - Id
 type: requirement

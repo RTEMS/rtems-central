@@ -320,114 +320,114 @@ transition-map:
   pre-conditions:
     Id:
     - Id
-    Name:
-    - Valid
-    Start:
-    - Valid
     Length:
     - Valid
-    Size:
+    Name:
     - Valid
     Parts:
     - Avail
+    Size:
+    - Valid
+    Start:
+    - Valid
 - enabled-by: true
   post-conditions:
     Status: InvName
   pre-conditions:
     Id: all
+    Length: all
     Name:
     - Invalid
-    Start: all
-    Length: all
-    Size: all
     Parts: all
+    Size: all
+    Start: all
 - enabled-by: true
   post-conditions:
     Status: InvAddress
   pre-conditions:
     Id:
     - 'Null'
+    Length: all
     Name:
     - Valid
-    Start: all
-    Length: all
-    Size: all
     Parts: all
+    Size: all
+    Start: all
 - enabled-by: true
   post-conditions:
     Status: InvAddress
   pre-conditions:
     Id:
     - Id
+    Length: all
     Name:
     - Valid
+    Parts: all
+    Size: all
     Start:
     - 'Null'
-    Length: all
-    Size: all
-    Parts: all
 - enabled-by: true
   post-conditions:
     Status: InvSize
   pre-conditions:
     Id:
     - Id
-    Name:
-    - Valid
-    Start:
-    - Valid
-    - BadAlign
     Length:
     - Zero
     - Invalid
-    Size: all
+    Name:
+    - Valid
     Parts: all
+    Size: all
+    Start:
+    - Valid
+    - BadAlign
 - enabled-by: true
   post-conditions:
     Status: InvSize
   pre-conditions:
     Id:
     - Id
-    Name:
-    - Valid
-    Start:
-    - Valid
-    - BadAlign
     Length:
     - Valid
+    Name:
+    - Valid
+    Parts: all
     Size:
     - Zero
     - Small
-    Parts: all
+    Start:
+    - Valid
+    - BadAlign
 - enabled-by: true
   post-conditions:
     Status: InvAddress
   pre-conditions:
     Id:
     - Id
+    Length:
+    - Valid
     Name:
+    - Valid
+    Parts: all
+    Size:
     - Valid
     Start:
     - BadAlign
-    Length:
-    - Valid
-    Size:
-    - Valid
-    Parts: all
 - enabled-by: true
   post-conditions:
     Status: TooMany
   pre-conditions:
     Id:
     - Id
-    Name:
-    - Valid
-    Start:
-    - Valid
     Length:
     - Valid
-    Size:
+    Name:
     - Valid
     Parts:
     - None
+    Size:
+    - Valid
+    Start:
+    - Valid
 type: requirement
