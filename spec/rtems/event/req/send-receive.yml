@@ -634,8 +634,9 @@ test-support: |
     ctx = (Context *) arg;
 
     while ( true ) {
-      rtems_status_code   sc;
-      rtems_task_priority prio;
+      rtems_status_code    sc;
+      rtems_task_priority  prio;
+      T_thread_switch_log *log;
 
       Wait( ctx->worker_wakeup );
 
@@ -648,12 +649,26 @@ test-support: |
           T_eq_u32( prio, PRIO_LOW );
           break;
         case PRIO_OTHER:
+          log = T_thread_switch_record_4( &ctx->thread_switch_log );
+          T_null( log );
           sc = rtems_task_set_scheduler(
             RTEMS_SELF,
             ctx->other_sched,
             PRIO_LOW
           );
           T_rsc_success( sc );
+
+          /*
+           * Make sure the context switch to the IDLE thread on the previous
+           * CPU is recorded, otherwise the preemption check may sporadically
+           * fail on some targets.
+           */
+          while (ctx->thread_switch_log.log.recorded < 2) {
+            RTEMS_COMPILER_MEMORY_BARRIER();
+          }
+
+          log = T_thread_switch_record( NULL );
+          T_eq_ptr( log, &ctx->thread_switch_log.log );
           break;
         case PRIO_LOW:
           break;
