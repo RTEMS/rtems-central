@@ -356,16 +356,18 @@ class Node:
     def _get_function_definition(self, item: Item, definition: Any) -> Lines:
         content = CContent()
         name = item["name"]
+        attrs = self.substitute_code(definition["attributes"])
+        attrs = f"{attrs} " if attrs else ""
         ret = self.substitute_code(definition["return"])
         params = [
             self.substitute_code(param) for param in definition["params"]
         ]
         body = definition["body"]
         if body:
-            with content.function("static inline " + ret, name, params):
+            with content.function(f"{attrs}static inline {ret}", name, params):
                 content.add(self.substitute_code(body))
         else:
-            content.declare_function(ret, name, params)
+            content.declare_function(f"{attrs}{ret}", name, params)
         return content.lines
 
     def _get_macro_definition(self, item: Item, definition: Any) -> Lines:

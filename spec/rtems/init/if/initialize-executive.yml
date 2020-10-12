@@ -5,10 +5,10 @@ copyrights:
 - Copyright (C) 2015, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
-    attributes: null
+    attributes: ${../../basedefs/if/no-return:/name}
     body: null
     params: []
-    return: ${../../basedefs/if/no-return:/name} void
+    return: void
   variants: []
 description: |
   Iterates through the system initialization linker set and invokes the

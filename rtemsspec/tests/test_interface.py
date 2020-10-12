@@ -380,7 +380,7 @@ typedef uint32_t Integer /* Some comment. */;
  *
  * @return Sometimes some value.  See Function().
  */
-static inline int VeryLongFunction(
+__attribute__((__const__)) static inline int VeryLongFunction(
   int                  VeryLongParam0,
   const struct Struct *VeryLongParam1,
   struct Struct    *( *VeryLongParam2 )( void ),

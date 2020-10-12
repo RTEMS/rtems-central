@@ -5,10 +5,10 @@ copyrights:
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
   default:
-    attributes: null
+    attributes: ${../../basedefs/if/no-return:/name}
     body: null
     params: []
-    return: ${../../basedefs/if/no-return:/name} void
+    return: void
   variants: []
 description: null
 enabled-by: true

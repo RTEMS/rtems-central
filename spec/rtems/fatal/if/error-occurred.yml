@@ -5,11 +5,11 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
-    attributes: null
+    attributes: ${../../basedefs/if/no-return:/name}
     body: null
     params:
     - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
-    return: ${../../basedefs/if/no-return:/name} void
+    return: void
   variants: []
 description: null
 enabled-by: true
