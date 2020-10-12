@@ -6,6 +6,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    attributes: null
     body: null
     params: []
     return: const ${api-table:/name} *

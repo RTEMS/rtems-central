@@ -6,6 +6,7 @@ copyrights:
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    attributes: null
     body: |
       *${.:/params[1]/name} = (char) ( ${.:/params[0]/name} >> 24 );
       *${.:/params[2]/name} = (char) ( ${.:/params[0]/name} >> 16 );

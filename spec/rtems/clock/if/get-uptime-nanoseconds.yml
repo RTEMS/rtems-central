@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    attributes: null
     body: null
     params: []
     return: ${/c/if/uint64_t:/name}

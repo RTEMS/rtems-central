@@ -6,6 +6,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    attributes: null
     body: null
     params: []
     return: ${/c/if/uint32_t:/name}

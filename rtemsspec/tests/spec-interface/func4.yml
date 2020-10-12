@@ -4,11 +4,13 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    attributes: null
     body: null
     params: []
     return: VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
   variants:
   - definition:
+      attributes: null
       body: null
       params: []
       return: NotSoVeryLongType

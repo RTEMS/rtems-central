@@ -6,6 +6,7 @@ definition:
   default: null
   variants:
   - definition:
+      attributes: null
       body: null
       params: []
       return: void

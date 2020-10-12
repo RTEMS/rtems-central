@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    attributes: null
     body: |
       return ${/score/object/if/local-node:/name};
     params: []

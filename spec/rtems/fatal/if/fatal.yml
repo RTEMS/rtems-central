@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    attributes: null
     body: |
       ${/score/interr/if/terminate:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} );
     params:

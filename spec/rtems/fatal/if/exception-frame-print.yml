@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    attributes: null
     body: |
       ${/score/cpu/if/exception-frame-print:/name}( ${.:/params[0]/name} );
     params:

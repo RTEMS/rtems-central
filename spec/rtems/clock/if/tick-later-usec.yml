@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    attributes: null
     body: |
       ${../../type/if/interval:/name} us_per_tick;
 

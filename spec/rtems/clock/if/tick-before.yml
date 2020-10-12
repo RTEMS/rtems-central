@@ -6,6 +6,7 @@ copyrights:
 - Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    attributes: null
     body: |
       return (${/c/if/int32_t:/name}) ( ${.:/params[0]/name} - ${/score/watchdog/if/ticks-since-boot:/name} ) > 0;
     params:

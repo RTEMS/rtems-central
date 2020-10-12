@@ -5,6 +5,7 @@ copyrights:
 - Copyright (C) 2017, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
+    attributes: null
     body: null
     params:
     - ${/c/if/size_t:/name} ${.:/params[0]/name}

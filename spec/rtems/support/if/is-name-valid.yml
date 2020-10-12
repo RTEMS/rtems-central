@@ -6,6 +6,7 @@ copyrights:
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
+    attributes: null
     body: |
       return ${.:/params[0]/name} != 0;
     params:

@@ -10,6 +10,13 @@ spec-example: null
 spec-info:
   dict:
     attributes:
+      attributes:
+        description: |
+          If the value is present, then it shall be the function attributes.
+          On the attributes a context-sensitive substitution of item variables
+          is performed.  A function attribute is for example the indication
+          that the function does not return to the caller.
+        spec-type: optional-str
       body:
         description: |
           If the value is present, then it shall be the definition of a static
