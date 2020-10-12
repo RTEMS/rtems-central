@@ -97,7 +97,7 @@ params:
   name: option_set
 - description: |
     is the timeout in clock ticks if the ${../../option/if/wait:/name} option
-    was set.  Use ${../../type/if/no-timeout:/name} to wait potentially
+    is set.  Use ${../../type/if/no-timeout:/name} to wait potentially
     forever.
   dir: null
   name: ticks
