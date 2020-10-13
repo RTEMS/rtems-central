@@ -178,11 +178,10 @@ class Node:
     """ Nodes of a header file. """
 
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, header_file: "_HeaderFile", item: Item,
-                 ingroups: ItemMap):
+    def __init__(self, header_file: "_HeaderFile", item: Item):
         self.header_file = header_file
         self.item = item
-        self.ingroups = ingroups
+        self.ingroups = _get_ingroups(item)
         self.dependents = set()  # type: Set["Node"]
         self.depends_on = set()  # type: Set["Node"]
         self.content = CContent()
@@ -279,7 +278,6 @@ class Node:
 
     def generate_group(self) -> None:
         """ Generates a group. """
-        self.header_file.add_ingroup(self.item)
         for ingroup in self.ingroups.values():
             self.header_file.add_dependency(self, ingroup)
         self.content.add_group(self.item["identifier"], self.item["name"],
@@ -472,7 +470,7 @@ class _HeaderFile:
         self._item = item
         self._content = CContent()
         self._content.register_license_and_copyrights_of_item(item)
-        self._ingroups = {}  # type: ItemMap
+        self._ingroups = _get_ingroups(item)
         self._includes = []  # type: List[Item]
         self._nodes = {}  # type: Dict[str, Node]
         self.enabled_by_defined = enabled_by_defined
@@ -483,15 +481,8 @@ class _HeaderFile:
             if parent.type == "interface/header-file":
                 self._includes.append(parent)
 
-    def add_ingroup(self, item: Item) -> None:
-        """ Adds an ingroup to the header file. """
-        self._ingroups[item.uid] = item
-
     def _add_child(self, item: Item) -> None:
-        ingroups = _get_ingroups(item)
-        if item["interface-type"] != "group":
-            self._ingroups.update(ingroups)
-        self._nodes[item.uid] = Node(self, item, ingroups)
+        self._nodes[item.uid] = Node(self, item)
         self._content.register_license_and_copyrights_of_item(item)
 
     def add_dependency(self, node: Node, item: Item) -> None:
@@ -601,14 +592,6 @@ def _generate_header_file(item: Item, domains: Dict[str, str],
     header_file.write(domain_path)
 
 
-def _visit_header_files(item: Item, domains: Dict[str, str],
-                        enabled_by_defined: Dict[str, str]) -> None:
-    for child in item.children(["interface-placement", "interface-ingroup"]):
-        _visit_header_files(child, domains, enabled_by_defined)
-    if item.type == "interface/header-file":
-        _generate_header_file(item, domains, enabled_by_defined)
-
-
 def _gather_enabled_by_defined(item_level_interfaces: List[str],
                                item_cache: ItemCache) -> Dict[str, str]:
     enabled_by_defined = {}  # type: Dict[str, str]
@@ -626,7 +609,9 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param config: A dictionary with configuration entries.
     :param item_cache: The specification item cache containing the interfaces.
     """
+    domains = config["domains"]
     enabled_by_defined = _gather_enabled_by_defined(
         config["item-level-interfaces"], item_cache)
-    for item in item_cache.top_level.values():
-        _visit_header_files(item, config["domains"], enabled_by_defined)
+    for item in item_cache.all.values():
+        if item.type == "interface/header-file":
+            _generate_header_file(item, domains, enabled_by_defined)

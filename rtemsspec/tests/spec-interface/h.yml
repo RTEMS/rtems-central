@@ -25,6 +25,12 @@ links:
   uid: h4
 - role: interface-placement
   uid: domain-abc
+- role: interface-ingroup
+  uid: ga
+- role: interface-ingroup
+  uid: gc
+- role: interface-ingroup
+  uid: gb
 path: h.h
 prefix: include
 type: interface
