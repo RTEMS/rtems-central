@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: API
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  This group contains the implementation software architecture components.
+enabled-by: true
+identifier: RTEMSImpl
+index-entries: []
+interface-type: group
+links:
+- role: requirement-refinement
+  uid: system
+name: API
+text: |
+  The system shall a software architecture component containing the
+  implementation software architecture components.
+type: interface

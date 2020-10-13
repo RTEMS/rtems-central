@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This group contains the Event Manager implementation.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: ClassicEventImpl
+index-entries: []
+interface-type: group
+links:
+- role: interface-ingroup
+  uid: ../../if/group
+name: Event Manager
+text: |
+  There shall be a software architecture component containing the Event Manager
+  implementation.
+type: interface

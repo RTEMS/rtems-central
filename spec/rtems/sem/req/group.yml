@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This group contains the Semaphore Manager implementation.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: ClassicSemImpl
+index-entries: []
+interface-type: group
+links:
+- role: interface-ingroup
+  uid: ../../if/group
+name: Semaphore Manager
+text: |
+  There shall be a software architecture component containing the Semaphore
+  Manager implementation.
+type: interface
