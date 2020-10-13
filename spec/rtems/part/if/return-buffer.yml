@@ -14,8 +14,8 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive returns the buffer specified by ${.:/params[1]/name} to the
-  partition specified by ${.:/params[0]/name}.
+  This directive returns the buffer specified by ``${.:/params[1]/name}`` to the
+  partition specified by ``${.:/params[0]/name}``.
 enabled-by: true
 index-entries:
 - return buffer to partition

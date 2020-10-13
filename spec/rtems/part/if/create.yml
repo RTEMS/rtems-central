@@ -32,13 +32,14 @@ description: |
   The partition can have **local** or **global** scope in a multiprocessing
   network (this attribute does not refer to SMP systems).
 
-  * A **local** is the default and can be emphasized through the use of the
-    ${../../attr/if/local:/name} attribute.  A local partition can be only used
-    by the node which created it.
+  * A **local** scope is the default and can be emphasized through the use of
+    the ${../../attr/if/local:/name} attribute.  A local partition can be only
+    used by the node which created it.
 
-  * A **global** is created if the ${../../attr/if/global:/name} attribute is
-    set.  The memory space used for the partition must reside in shared memory.
-    Setting the global attribute in a single node system has no effect.
+  * A **global** scope is established if the ${../../attr/if/global:/name}
+    attribute is set.  The memory space used for the partition must reside in
+    shared memory.  Setting the global attribute in a single node system has no
+    effect.
 enabled-by: true
 index-entries:
 - create a partition
