@@ -15,8 +15,10 @@ build:
   - RTEMS_SMP
   source-directory: modules/rtems
   sources:
+  - bsps/shared/doxygen.h
   - bsps/shared/cache/cacheimpl.h
   - bsps/shared/dev/clock/clockimpl.h
+  - bsps/sparc/shared/doxygen.h
   - cpukit/doxygen.h
   - cpukit/doxygen/appl-config.h
   - cpukit/doxygen/top-level-groups.h
