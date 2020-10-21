@@ -42,7 +42,7 @@ INTERFACE = "Interface"
 
 
 def _forward_declaration(item: Item) -> str:
-    target = next(item.parents("interface-target"))
+    target = item.parent("interface-target")
     return f"{target['interface-type']} {target['name']}"
 
 

@@ -50,7 +50,7 @@ def _get_group_identifiers(groups: ItemMap) -> List[str]:
 
 
 def _forward_declaration(item: Item) -> str:
-    target = next(item.parents("interface-target"))
+    target = item.parent("interface-target")
     return f"{target['interface-type']} {target['name']}"
 
 
@@ -187,8 +187,8 @@ class Node:
         self.content = CContent()
         self.mapper = _InterfaceMapper(self)
         try:
-            group = next(item.children("placement-order"))
-        except StopIteration:
+            group = item.child("placement-order")
+        except IndexError:
             self.index = None
         else:
             self.index = (group.uid,
@@ -581,7 +581,7 @@ class _HeaderFile:
 
 def _generate_header_file(item: Item, domains: Dict[str, str],
                           enabled_by_defined: Dict[str, str]) -> None:
-    domain = next(item.parents("interface-placement"))
+    domain = item.parent("interface-placement")
     assert domain["interface-type"] == "domain"
     domain_path = domains.get(domain.uid, None)
     if domain_path is None:

@@ -139,6 +139,8 @@ def normalize_key_path(key_path: str, prefix: str = "") -> str:
 
 class Item:
     """ Objects of this class represent a specification item. """
+
+    # pylint: disable=too-many-public-methods
     def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
         self._item_cache = item_cache
         self._uid = uid
@@ -256,6 +258,15 @@ class Item:
                 if link.role in role:
                     yield link.item
 
+    def parent(self,
+               role: Optional[Union[str, Iterable[str]]] = None,
+               index: Optional[int] = 0) -> "Item":
+        """ Returns the parent with the specified role and index. """
+        for item_index, item in enumerate(self.parents(role)):
+            if item_index == index:
+                return item
+        raise IndexError
+
     def links_to_children(self) -> Iterator[Link]:
         """ Yields the links to the children of this items. """
         yield from self._links_to_children
@@ -276,6 +287,15 @@ class Item:
             for link in self._links_to_children:
                 if link.role in role:
                     yield link.item
+
+    def child(self,
+              role: Optional[Union[str, Iterable[str]]] = None,
+              index: Optional[int] = 0) -> "Item":
+        """ Returns the child with the specified role and index. """
+        for item_index, item in enumerate(self.children(role)):
+            if item_index == index:
+                return item
+        raise IndexError
 
     def init_parents(self, item_cache: "ItemCache"):
         """ Initializes the list of links to parents of this items. """
