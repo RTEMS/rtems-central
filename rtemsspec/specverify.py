@@ -525,6 +525,16 @@ class SpecVerifier:
                 logging.info("finished specification item verification")
         return log_filter.get_verify_info()
 
+    def verify(self, item: Item) -> VerifyStatus:
+        """ Verifies the item. """
+        with _add_filter() as log_filter:
+            if self._root_verifier is None:
+                logging.error("root type item does not exist in item cache")
+            else:
+                self._root_verifier.verify(_Path(item, f"{item.uid}:"),
+                                           item.data)
+        return log_filter.get_verify_info()
+
 
 def verify(config: dict, item_cache: ItemCache) -> VerifyStatus:
     """

@@ -27,7 +27,7 @@
 import logging
 
 from rtemsspec.items import ItemCache
-from rtemsspec.specverify import verify
+from rtemsspec.specverify import SpecVerifier, verify
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec, \
     get_and_clear_log
 
@@ -54,18 +54,31 @@ def test_no_root_item(caplog, tmpdir):
     item_cache = ItemCache(item_cache_config)
     config = {"root-type": "/nix"}
     caplog.set_level(logging.INFO)
-    verify(config, item_cache)
+    info = verify(config, item_cache)
     assert get_and_clear_log(
         caplog) == """ERROR root type item does not exist in item cache"""
+    assert info.critical == 0
+    assert info.error == 1
+    assert info.warning == 0
+    assert info.info == 0
+    assert info.debug == 0
+    verifier = SpecVerifier(item_cache, "/nix")
+    info = verifier.verify("/blub")
+    assert get_and_clear_log(
+        caplog) == """ERROR root type item does not exist in item cache"""
+    assert info.critical == 0
+    assert info.error == 1
+    assert info.warning == 0
+    assert info.info == 0
+    assert info.debug == 0
 
 
 def test_verify(caplog, tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-verify")
     item_cache = ItemCache(item_cache_config)
-    config = {"root-type": "/spec/root"}
     caplog.set_level(logging.INFO)
-    verify(config, item_cache)
+    verifier = SpecVerifier(item_cache, "/spec/root")
     assert get_and_clear_log(caplog) == """INFO type: any-dict
 INFO type: bool
 INFO type: c
@@ -130,8 +143,10 @@ INFO type: spec-str
 INFO type: str
 INFO type: str-contains
 INFO type: uid
-INFO type: x
-INFO start specification item verification
+INFO type: x"""
+    info = verifier.verify_all(item_cache)
+    assert get_and_clear_log(
+        caplog) == """INFO start specification item verification
 INFO /c1: verify using type 'root'
 INFO /c1:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
 INFO /c1:/copyrights: verify using type 'copyrights'
@@ -1909,3 +1924,35 @@ INFO /spec2/x:/spec-info/str/assert: verify using type 'spec-assert-str'
 INFO /spec2/x:/spec-info/str/assert/eq: verify using type 'str'
 INFO /spec2/x:/spec-type: verify using type 'name'
 INFO finished specification item verification"""
+    assert info.critical == 0
+    assert info.error == 91
+    assert info.warning == 1
+    assert info.info == 1686
+    assert info.debug == 0
+    info = verifier.verify(item_cache["/spec2/x"])
+    assert get_and_clear_log(
+        caplog) == """INFO /spec2/x: verify using type 'root'
+INFO /spec2/x:/SPDX-License-Identifier: verify using type 'spdx-license-identifier'
+INFO /spec2/x:/copyrights: verify using type 'copyrights'
+INFO /spec2/x:/copyrights[0]: verify using type 'copyright'
+INFO /spec2/x:/enabled-by: verify using type 'enabled-by'
+INFO /spec2/x:/links: verify using type 'links'
+INFO /spec2/x:/links[0]: verify using type 'link'
+INFO /spec2/x:/links[0]/role: verify using type 'name'
+INFO /spec2/x:/links[0]/uid: verify using type 'uid'
+INFO /spec2/x:/links[0]: verify using type 'spec-member'
+INFO /spec2/x:/type: verify using type 'name'
+INFO /spec2/x: verify using type 'spec'
+ERROR /spec2/x: missing mandatory keys for type 'spec': ['spec-description', 'spec-name']
+INFO /spec2/x:/spec-example: verify using type 'optional-str'
+INFO /spec2/x:/spec-info: verify using type 'spec-info'
+INFO /spec2/x:/spec-info/str: verify using type 'spec-str'
+ERROR /spec2/x:/spec-info/str: missing mandatory keys for type 'spec-str': ['description']
+INFO /spec2/x:/spec-info/str/assert: verify using type 'spec-assert-str'
+INFO /spec2/x:/spec-info/str/assert/eq: verify using type 'str'
+INFO /spec2/x:/spec-type: verify using type 'name'"""
+    assert info.critical == 0
+    assert info.error == 2
+    assert info.warning == 0
+    assert info.info == 18
+    assert info.debug == 0
