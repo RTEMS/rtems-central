@@ -60,6 +60,11 @@ def test_load(tmpdir):
         out.write("links:\n- role: null\n  uid: ../p\nv: x\n")
     item_cache_3 = ItemCache(config)
     assert item_cache_3["/d/c"]["v"] == "x"
+    item = item_cache_3.add_volatile_item(
+        os.path.join(os.path.dirname(__file__), "spec/root.yml"), "/foo/bar")
+    assert item.uid == "/foo/bar"
+    assert item.type == ""
+    assert item["type"] == "spec"
 
 
 def test_load_link_error(tmpdir):

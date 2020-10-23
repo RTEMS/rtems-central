@@ -297,7 +297,7 @@ class Item:
                 return item
         raise IndexError
 
-    def init_parents(self, item_cache: "ItemCache"):
+    def init_parents(self, item_cache: "ItemCache") -> None:
         """ Initializes the list of links to parents of this items. """
         for data in self._data["links"]:
             try:
@@ -307,6 +307,11 @@ class Item:
                 msg = (f"item '{self.uid}' links "
                        f"to non-existing item '{data['uid']}'")
                 raise KeyError(msg) from err
+
+    def init_children(self) -> None:
+        """ Initializes the list of links to children of this items. """
+        for link in self.links_to_parents():
+            link.item.add_link_to_child(Link.create(link, self))
 
     def add_link_to_child(self, link: Link):
         """ Adds a link to a child item of this items. """
@@ -482,13 +487,27 @@ def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
     return new_type
 
 
+def _load_item(path: str, uid: str) -> Any:
+    with open(path, "r") as src:
+        data = yaml.safe_load(src.read())
+        data["_file"] = os.path.abspath(path)
+        data["_uid"] = uid
+    return data
+
+
 class ItemCache:
     """ This class provides a cache of specification items. """
     def __init__(self, config: Any):
         self._items = {}  # type: ItemMap
         self._top_level = {}  # type: ItemMap
         self._load_items(config)
-        self._set_types(config)
+        spec_root = config["spec-type-root-uid"]
+        if spec_root:
+            self._root_type = _gather_spec_refinements(self[spec_root])
+        else:
+            self._root_type = None
+        for item in self._items.values():
+            self._set_type(item)
 
     def __getitem__(self, uid: str) -> Item:
         return self._items[uid]
@@ -503,6 +522,26 @@ class ItemCache:
         """ Returns the map of top-level specification items. """
         return self._top_level
 
+    def add_volatile_item(self, path: str, uid: str) -> Item:
+        """
+        Adds an item stored in the specified file to the cache and returns it.
+
+        The item is not added to the persistent cache storage.
+        """
+        data = _load_item(path, uid)
+        item = self._add_item(uid, data)
+        item.init_parents(self)
+        item.init_children()
+        self._set_type(item)
+        return item
+
+    def _add_item(self, uid: str, data: Any) -> Item:
+        item = Item(self, uid, data)
+        self._items[uid] = item
+        if not item["links"]:
+            self._top_level[uid] = item
+        return item
+
     def _load_items_in_dir(self, base: str, path: str, cache_file: str,
                            update_cache: bool) -> None:
         data_by_uid = {}  # type: Dict[str, Any]
@@ -512,11 +551,7 @@ class ItemCache:
                 if name.endswith(".yml") and not name.startswith("."):
                     uid = "/" + os.path.relpath(path2, base).replace(
                         ".yml", "")
-                    with open(path2, "r") as yaml_src:
-                        data = yaml.safe_load(yaml_src.read())
-                        data["_file"] = os.path.abspath(path2)
-                        data["_uid"] = uid
-                        data_by_uid[uid] = data
+                    data_by_uid[uid] = _load_item(path2, uid)
             os.makedirs(os.path.dirname(cache_file), exist_ok=True)
             with open(cache_file, "wb") as out:
                 pickle.dump(data_by_uid, out)
@@ -524,10 +559,7 @@ class ItemCache:
             with open(cache_file, "rb") as pickle_src:
                 data_by_uid = pickle.load(pickle_src)
         for uid, data in iter(data_by_uid.items()):
-            item = Item(self, uid, data)
-            self._items[uid] = item
-            if not item["links"]:
-                self._top_level[uid] = item
+            self._add_item(uid, data)
 
     def _load_items_recursive(self, base: str, path: str,
                               cache_dir: str) -> None:
@@ -554,9 +586,7 @@ class ItemCache:
 
     def _init_children(self) -> None:
         for uid in sorted(self._items):
-            item = self._items[uid]
-            for link in item.links_to_parents():
-                link.item.add_link_to_child(Link.create(link, item))
+            self._items[uid].init_children()
 
     def _load_items(self, config: Any) -> None:
         cache_dir = os.path.abspath(config["cache-directory"])
@@ -565,21 +595,15 @@ class ItemCache:
         self._init_parents()
         self._init_children()
 
-    def _set_types(self, config: Any) -> None:
-        spec_root = config["spec-type-root-uid"]
-        if spec_root:
-            root_type = _gather_spec_refinements(self[spec_root])
-        else:
-            root_type = None
-        for item in self._items.values():
-            spec_type = root_type
-            value = item.data
-            path = []  # type: List[str]
-            while spec_type is not None:
-                type_name = value[spec_type.key]
-                path.append(type_name)
-                spec_type = spec_type.refinements[type_name]
-            item["_type"] = "/".join(path)
+    def _set_type(self, item: Item) -> None:
+        spec_type = self._root_type
+        value = item.data
+        path = []  # type: List[str]
+        while spec_type is not None:
+            type_name = value[spec_type.key]
+            path.append(type_name)
+            spec_type = spec_type.refinements[type_name]
+        item["_type"] = "/".join(path)
 
 
 class EmptyItemCache(ItemCache):
