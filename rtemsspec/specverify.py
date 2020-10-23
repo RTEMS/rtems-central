@@ -449,6 +449,36 @@ def _gather_item_verifiers(item: Item, verifier_map: _VerifierMap) -> None:
             _create_verifier(link.item, verifier_map)
 
 
+class SpecVerifier:
+    """ Verifies items according to the specification of the specification. """
+
+    # pylint: disable=too-few-public-methods
+    def __init__(self, item_cache: ItemCache, root_uid: str):
+        verifier_map = {}  # type: _VerifierMap
+        _NameVerifier("name", verifier_map)
+        _UIDVerifier("uid", verifier_map)
+        _Verifier("bool", verifier_map)
+        _Verifier("float", verifier_map)
+        _Verifier("int", verifier_map)
+        _Verifier("none", verifier_map)
+        _Verifier("str", verifier_map)
+        try:
+            root_item = item_cache[root_uid]
+        except KeyError:
+            logging.error("root type item does not exist in item cache")
+            return
+        self._root_verifier = _create_verifier(root_item, verifier_map)
+        _gather_item_verifiers(root_item, verifier_map)
+        for name in sorted(verifier_map):
+            logging.info("type: %s", name)
+            verifier_map[name].resolve_type_refinements()
+        logging.info("start specification item verification")
+        for key in sorted(item_cache.all):
+            item = item_cache[key]
+            self._root_verifier.verify(_Path(item, f"{item.uid}:"), item.data)
+        logging.info("finished specification item verification")
+
+
 def verify(config: dict, item_cache: ItemCache) -> None:
     """
     Verifies specification items according to the configuration.
@@ -456,31 +486,9 @@ def verify(config: dict, item_cache: ItemCache) -> None:
     :param config: A dictionary with configuration entries.
     :param item_cache: The specification item cache.
     """
-    verifier_map = {}  # type: _VerifierMap
-    _NameVerifier("name", verifier_map)
-    _UIDVerifier("uid", verifier_map)
-    _Verifier("bool", verifier_map)
-    _Verifier("float", verifier_map)
-    _Verifier("int", verifier_map)
-    _Verifier("none", verifier_map)
-    _Verifier("str", verifier_map)
     try:
         root_uid = config["root-type"]
     except KeyError:
         logging.error("configuration has no root type")
         return
-    try:
-        root_item = item_cache[root_uid]
-    except KeyError:
-        logging.error("root type item does not exist in item cache")
-        return
-    root_verifier = _create_verifier(root_item, verifier_map)
-    _gather_item_verifiers(root_item, verifier_map)
-    for name in sorted(verifier_map):
-        logging.info("type: %s", name)
-        verifier_map[name].resolve_type_refinements()
-    logging.info("start specification item verification")
-    for key in sorted(item_cache.all):
-        item = item_cache[key]
-        root_verifier.verify(_Path(item, f"{item.uid}:"), item.data)
-    logging.info("finished specification item verification")
+    SpecVerifier(item_cache, root_uid)
