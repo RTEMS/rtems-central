@@ -38,9 +38,14 @@ def test_no_root_type(caplog, tmpdir):
     item_cache = ItemCache(item_cache_config)
     config = {}
     caplog.set_level(logging.INFO)
-    verify(config, item_cache)
+    info = verify(config, item_cache)
     assert get_and_clear_log(
         caplog) == """ERROR configuration has no root type"""
+    assert info.critical == 0
+    assert info.error == 1
+    assert info.warning == 0
+    assert info.info == 0
+    assert info.debug == 0
 
 
 def test_no_root_item(caplog, tmpdir):
