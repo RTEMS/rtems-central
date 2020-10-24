@@ -47,6 +47,7 @@ spec:
   paths:
   - spec-spec
   - spec
+  - spec-glossary
   - modules/rtems/spec
 glossary:
   project-groups:
