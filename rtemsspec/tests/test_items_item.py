@@ -85,6 +85,12 @@ def test_data():
     assert item.data == {"x": "y"}
 
 
+def test_cache():
+    item_cache = EmptyItemCache()
+    item = Item(item_cache, "i", {})
+    assert item.cache == item_cache
+
+
 def test_get_key_path():
     data = {}
     data["a"] = {"b": "c", "d": [1, 2, 3]}

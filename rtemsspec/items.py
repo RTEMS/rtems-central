@@ -142,7 +142,7 @@ class Item:
 
     # pylint: disable=too-many-public-methods
     def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
-        self._item_cache = item_cache
+        self._cache = item_cache
         self._uid = uid
         self._data = data
         self._links_to_parents = []  # type: List[Link]
@@ -169,6 +169,11 @@ class Item:
 
     def __setitem__(self, key: str, value: Any) -> None:
         self._data[key] = value
+
+    @property
+    def cache(self) -> "ItemCache":
+        """ Returns the cache of the items. """
+        return self._cache
 
     def get(self, key: str, default: Any) -> Any:
         """
@@ -235,7 +240,7 @@ class Item:
         Maps the absolute UID or the UID relative to this item to the
         corresponding item.
         """
-        return self._item_cache[self.to_abs_uid(abs_or_rel_uid)]
+        return self._cache[self.to_abs_uid(abs_or_rel_uid)]
 
     def links_to_parents(self) -> Iterator[Link]:
         """ Yields the links to the parents of this items. """
