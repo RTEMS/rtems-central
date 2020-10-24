@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: BSD-2-Clause
-""" Generates files of the RTEMS documentation from the specification. """
+""" Generates files of the modules from the specification. """
 
 # Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 #
@@ -29,9 +29,11 @@ import rtemsspec
 
 
 def main() -> None:
-    """ Generates files of the RTEMS documentation from the specification. """
+    """ Generates files of the modules from the specification. """
     config = rtemsspec.util.load_config("config.yml")
     item_cache = rtemsspec.items.ItemCache(config["spec"])
+    rtemsspec.interface.generate(config["interface"], item_cache)
+    rtemsspec.validation.generate(config["validation"], item_cache)
     rtemsspec.applconfig.generate(config["appl-config"], item_cache)
     rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
     rtemsspec.glossary.generate(config["glossary"], item_cache)
