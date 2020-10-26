@@ -64,13 +64,20 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
     return content
 
 
+_TERM = re.compile(r":term:`([^`]+)`")
+_TERM_2 = re.compile(r"^[^<]+<([^>]+)>")
+
+
 def _find_glossary_terms(path: str, document_terms: ItemMap,
                          glossary: _Glossary) -> None:
     for src in glob.glob(path + "/**/*.rst", recursive=True):
         if src.endswith("glossary.rst"):
             continue
         with open(src, "r") as out:
-            for term in re.findall(":term:`([^`]+)`", out.read()):
+            for term in _TERM.findall(out.read()):
+                match = _TERM_2.search(term)
+                if match:
+                    term = match.group(1)
                 item = glossary.term_to_item[term]
                 document_terms[item.uid] = item
 
