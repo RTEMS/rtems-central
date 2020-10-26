@@ -251,8 +251,8 @@ def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
 
 class SphinxMapper(ItemMapper):
     """ Sphinx item mapper. """
-    def __init__(self, item: Item):
-        super().__init__(item)
+    def __init__(self, item: Item, recursive: bool = False):
+        super().__init__(item, recursive)
         self.add_get_value("glossary/term:/term", _get_ref_term)
         self.add_get_value("glossary/term:/plural", _get_ref_term_plural)
         self.add_get_value("interface/appl-config-option/feature-enable:/name",
