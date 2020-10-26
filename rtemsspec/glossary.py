@@ -106,7 +106,8 @@ def _resolve_glossary_terms(document_terms: ItemMap) -> None:
 
 def _generate_project_glossary(glossary: _Glossary, header: str,
                                target: str) -> None:
-    _generate_glossary_content(glossary.uid_to_item, header, target)
+    if target:
+        _generate_glossary_content(glossary.uid_to_item, header, target)
 
 
 def _generate_document_glossary(config: dict, glossary: _Glossary) -> None:

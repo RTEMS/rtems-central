@@ -27,8 +27,17 @@
 import os
 
 from rtemsspec.glossary import generate
-from rtemsspec.items import ItemCache
+from rtemsspec.items import EmptyItemCache, ItemCache
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
+
+
+def test_empty_glossary():
+    glossary_config = {}
+    glossary_config["project-groups"] = []
+    glossary_config["project-header"] = None
+    glossary_config["project-target"] = None
+    glossary_config["documents"] = []
+    generate(glossary_config, EmptyItemCache())
 
 
 def test_glossary(tmpdir):
