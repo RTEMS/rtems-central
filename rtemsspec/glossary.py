@@ -50,9 +50,10 @@ def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
         glossary.term_to_item[term] = item
 
 
-def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
+def _generate_glossary_content(terms: ItemMap, header: str,
+                               target: str) -> None:
     content = SphinxContent()
-    content.add_header("Glossary", level=1)
+    content.add_header(header, level=1)
     content.add(".. glossary::")
     with content.indent():
         content.add(":sorted:")
@@ -61,7 +62,7 @@ def _generate_glossary_content(terms: ItemMap) -> SphinxContent:
             text = SphinxMapper(item).substitute(item["text"])
             content.add_definition_item(item["term"], text)
     content.add_licence_and_copyrights()
-    return content
+    content.write(target)
 
 
 _TERM = re.compile(r":term:`([^`]+)`")
@@ -103,9 +104,9 @@ def _resolve_glossary_terms(document_terms: ItemMap) -> None:
         _GlossaryMapper(term, document_terms).substitute(term["text"])
 
 
-def _generate_project_glossary(target: str, glossary: _Glossary) -> None:
-    content = _generate_glossary_content(glossary.uid_to_item)
-    content.write(target)
+def _generate_project_glossary(glossary: _Glossary, header: str,
+                               target: str) -> None:
+    _generate_glossary_content(glossary.uid_to_item, header, target)
 
 
 def _generate_document_glossary(config: dict, glossary: _Glossary) -> None:
@@ -113,8 +114,8 @@ def _generate_document_glossary(config: dict, glossary: _Glossary) -> None:
     for path in config["rest-source-paths"]:
         _find_glossary_terms(path, document_terms, glossary)
     _resolve_glossary_terms(document_terms)
-    content = _generate_glossary_content(document_terms)
-    content.write(config["target"])
+    _generate_glossary_content(document_terms, config["header"],
+                               config["target"])
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -134,7 +135,8 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     for group in config["project-groups"]:
         _gather_glossary_terms(groups[group], project_glossary)
 
-    _generate_project_glossary(config["project-target"], project_glossary)
+    _generate_project_glossary(project_glossary, config["project-header"],
+                               config["project-target"])
 
     for document_config in config["documents"]:
         _generate_document_glossary(document_config, project_glossary)

@@ -38,9 +38,11 @@ def test_glossary(tmpdir):
 
     glossary_config = {}
     glossary_config["project-groups"] = ["/g"]
+    glossary_config["project-header"] = "Project Glossary"
     project_glossary = os.path.join(tmpdir, "project", "glossary.rst")
     glossary_config["project-target"] = project_glossary
     doc = {}
+    doc["header"] = "Glossary"
     doc["rest-source-paths"] = [str(tmpdir)]
     document_glossary = os.path.join(tmpdir, "document", "glossary.rst")
     doc["target"] = document_glossary
@@ -52,8 +54,8 @@ def test_glossary(tmpdir):
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
-Glossary
-********
+Project Glossary
+****************
 
 .. glossary::
     :sorted:

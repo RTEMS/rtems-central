@@ -52,9 +52,11 @@ spec:
 glossary:
   project-groups:
   - /glossary-general
+  project-header: Glossary
   project-target: modules/rtems-docs/c-user/glossary.rst
   documents:
-  - rest-source-paths:
+  - header: Glossary
+    rest-source-paths:
     - modules/rtems-docs/eng
     target: modules/rtems-docs/eng/glossary.rst
 appl-config:
