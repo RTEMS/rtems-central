@@ -505,6 +505,7 @@ class ItemCache:
     def __init__(self, config: Any):
         self._items = {}  # type: ItemMap
         self._top_level = {}  # type: ItemMap
+        self._updates = 0
         self._load_items(config)
         spec_root = config["spec-type-root-uid"]
         if spec_root:
@@ -516,6 +517,14 @@ class ItemCache:
 
     def __getitem__(self, uid: str) -> Item:
         return self._items[uid]
+
+    @property
+    def updates(self) -> bool:
+        """
+        Returns true if the item cache updates occurred due to new, modified,
+        or removed files.
+        """
+        return self._updates > 0
 
     @property
     def all(self) -> ItemMap:
@@ -551,6 +560,7 @@ class ItemCache:
                            update_cache: bool) -> None:
         data_by_uid = {}  # type: Dict[str, Any]
         if update_cache:
+            self._updates += 1
             for name in os.listdir(path):
                 path2 = os.path.join(path, name)
                 if name.endswith(".yml") and not name.startswith("."):

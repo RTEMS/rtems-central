@@ -39,6 +39,7 @@ def test_config_error():
 def test_load(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
     item_cache = ItemCache(config)
+    assert item_cache.updates
     cache_dir = config["cache-directory"]
     assert os.path.exists(os.path.join(cache_dir, "spec", "spec.pickle"))
     assert os.path.exists(os.path.join(cache_dir, "spec", "d", "spec.pickle"))
@@ -55,10 +56,12 @@ def test_load(tmpdir):
     assert a["/p"]["v"] == "p"
     assert a["/d/c"]["v"] == "c"
     item_cache_2 = ItemCache(config)
+    assert not item_cache_2.updates
     assert item_cache_2["/d/c"]["v"] == "c"
     with open(os.path.join(tmpdir, "spec", "d", "c.yml"), "w+") as out:
         out.write("links:\n- role: null\n  uid: ../p\nv: x\n")
     item_cache_3 = ItemCache(config)
+    assert item_cache_3.updates
     assert item_cache_3["/d/c"]["v"] == "x"
     item = item_cache_3.add_volatile_item(
         os.path.join(os.path.dirname(__file__), "spec/root.yml"), "/foo/bar")
@@ -67,6 +70,7 @@ def test_load(tmpdir):
     assert item["type"] == "spec"
     os.remove(os.path.join(tmpdir, "spec", "d", "c.yml"))
     item_cache_4 = ItemCache(config)
+    assert item_cache_4.updates
     with pytest.raises(KeyError):
         item_cache_4["/d/c"]
 
