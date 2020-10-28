@@ -173,6 +173,8 @@ def test_parents():
     child.init_parents(item_cache)
     for link in child.links_to_parents():
         link.item.add_link_to_child(Link.create(link, child))
+        link["foo"] = "bar"
+    assert child["links"][0]["foo"] == "bar"
     parents = [item for item in child.parents()]
     assert len(parents) == 1
     assert parents[0] == parent

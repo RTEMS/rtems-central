@@ -112,6 +112,9 @@ class Link:
     def __getitem__(self, name: str) -> Any:
         return self._data[name]
 
+    def __setitem__(self, key: str, value: Any) -> None:
+        self._data[key] = value
+
     @property
     def item(self) -> "Item":
         """ The item referenced by this link. """
