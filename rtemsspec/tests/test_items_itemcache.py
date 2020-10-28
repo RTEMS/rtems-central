@@ -65,6 +65,10 @@ def test_load(tmpdir):
     assert item.uid == "/foo/bar"
     assert item.type == ""
     assert item["type"] == "spec"
+    os.remove(os.path.join(tmpdir, "spec", "d", "c.yml"))
+    item_cache_4 = ItemCache(config)
+    with pytest.raises(KeyError):
+        item_cache_4["/d/c"]
 
 
 def test_load_link_error(tmpdir):

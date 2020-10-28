@@ -576,10 +576,13 @@ class ItemCache:
             update_cache = False
         except FileNotFoundError:
             update_cache = True
+        else:
+            update_cache = mtime <= os.path.getmtime(path)
         for name in os.listdir(path):
             path2 = os.path.join(path, name)
             if name.endswith(".yml") and not name.startswith("."):
-                update_cache = update_cache or mtime <= os.path.getmtime(path2)
+                if not update_cache:
+                    update_cache = mtime <= os.path.getmtime(path2)
             else:
                 if stat.S_ISDIR(os.lstat(path2).st_mode):
                     self._load_items_recursive(base, path2, cache_dir)
