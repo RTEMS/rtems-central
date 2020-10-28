@@ -48,10 +48,10 @@ class _Filter(logging.Filter):
         super().__init__()
         self._counts = {}  # type: Dict[int, int]
 
-    def filter(self, record: logging.LogRecord) -> int:
+    def filter(self, record: logging.LogRecord) -> bool:
         count = self._counts.get(record.levelno, 0)
         self._counts[record.levelno] = count + 1
-        return 1
+        return True
 
     def get_verify_info(self) -> VerifyStatus:
         """ Returns the gathered verify information. """
