@@ -36,8 +36,8 @@ ItemMap = Dict[str, Item]
 
 class _Glossary(NamedTuple):
     """ A glossary of terms. """
-    uid_to_item: ItemMap = {}
-    term_to_item: ItemMap = {}
+    uid_to_item: ItemMap
+    term_to_item: ItemMap
 
 
 def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
@@ -132,7 +132,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         if item.type == "glossary/group":
             groups[uid] = item
 
-    project_glossary = _Glossary()
+    project_glossary = _Glossary({}, {})
     for group in config["project-groups"]:
         _gather_glossary_terms(groups[group], project_glossary)
 
