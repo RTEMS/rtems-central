@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This flag is used in resource numbers to indicate an unlimited resource.
+  This flag is used in augment a resource number so that it indicates an
+  unlimited resource.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:

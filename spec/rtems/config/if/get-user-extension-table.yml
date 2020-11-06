@@ -1,7 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the pointer to the initial extensions table configured for this
-  application.
+  Gets the initial extensions table configured for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -20,6 +19,8 @@ name: rtems_configuration_get_user_extension_table
 notes: null
 params: []
 return:
-  return: null
+  return: |
+    Returns the pointer to the initial extensions table configured for this
+    application.
   return-values: []
 type: interface

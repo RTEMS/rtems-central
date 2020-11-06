@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns true, if the RTEMS Workspace and C Program Heap are unified,
-  otherwise returns false.
+  Indicates if the RTEMS Workspace and C Program Heap are configured to be
+  unified for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -17,9 +17,12 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_configuration_get_unified_work_area
-notes: null
+notes: |
+  See ${/acfg/if/unified-work-areas:/name}.
 params: []
 return:
-  return: null
+  return: |
+    Returns true, if the RTEMS Workspace and C Program Heap are configured to
+    be unified for this application, otherwise false.
   return-values: []
 type: interface

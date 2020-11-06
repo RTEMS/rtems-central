@@ -1,7 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the thread stack space size in bytes of configured for this
-  application.
+  Gets the thread stack space size in bytes of configured for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -24,6 +23,8 @@ name: rtems_configuration_get_stack_space_size
 notes: null
 params: []
 return:
-  return: null
+  return: |
+    Returns the thread stack space size in bytes of configured for this
+    application.
   return-values: []
 type: interface

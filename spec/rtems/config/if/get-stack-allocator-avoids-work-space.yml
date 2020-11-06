@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns true, if the thread stack allocator avoids the RTEMS Workspace,
-  otherwise returns false.
+  Indicates if the thread stack allocator is configured to avoid the RTEMS
+  Workspace for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -18,8 +18,11 @@ links:
   uid: group
 name: rtems_configuration_get_stack_allocator_avoids_work_space
 notes: null
+  See ${/acfg/if/task-stack-no-workspace:/name}.
 params: []
 return:
-  return: null
+  return: |
+    Returns true, if the thread stack allocator is configured to avoid the
+    RTEMS Workspace for this application, otherwise false.
   return-values: []
 type: interface

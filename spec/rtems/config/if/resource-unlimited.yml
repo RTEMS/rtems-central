@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the resource number configured for unlimited resources.
+  Augments the resource number so that it indicates an unlimited resource.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ((${.:/params[0]/name}) | ${unlimited-objects:/name})
+  default: ( (${.:/params[0]/name}) | ${unlimited-objects:/name} )
   variants: []
 description: null
 enabled-by: true
@@ -20,10 +20,11 @@ notes: |
   This function is implemented as a macro and can be used to define compile
   time constants.
 params:
-- description: is the resource number.
+- description: is the resource number to augment.
   dir: null
   name: _resource
 return:
-  return: null
+  return: |
+    Returns the resource number augmented to indicate an unlimited resource.
   return-values: []
 type: interface

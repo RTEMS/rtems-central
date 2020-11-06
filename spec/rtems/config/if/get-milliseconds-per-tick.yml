@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the number of milliseconds per clock tick configured for this
+  Gets the number of milliseconds per clock tick configured for this
   application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: (${/score/watchdog/if/microseconds-per-tick:/name} / 1000)
+  default: ( ${/score/watchdog/if/microseconds-per-tick:/name} / 1000 )
   variants: []
 description: null
 enabled-by: true
@@ -17,9 +17,12 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_configuration_get_milliseconds_per_tick
-notes: null
+notes: |
+  See ${/acfg/if/microseconds-per-tick:/name}.
 params: []
 return:
-  return: null
+  return: |
+    Returns the number of milliseconds per clock tick configured for this
+    application.
   return-values: []
 type: interface

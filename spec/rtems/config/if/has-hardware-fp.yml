@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This constant evaluates to ${../../basedefs/if/true:/name}, if the this
-  processor variant has hardware floating point support, otherwise evaluates to
+  This constant evaluates to ${../../basedefs/if/true:/name}, if this processor
+  variant has hardware floating point support, otherwise to
   ${../../basedefs/if/false:/name}.
 copyrights:
 - Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)

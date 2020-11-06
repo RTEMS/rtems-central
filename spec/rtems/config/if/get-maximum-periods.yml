@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the maximum number of Classic API Rate Monotonic Periods which are
-  configured for this application.
+  Gets the maximum number of Classic API Rate Monotonic Periods configured for
+  this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -21,9 +21,12 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_configuration_get_maximum_periods
-notes: null
+notes: |
+  See ${/acfg/if/max-periods:/name}.
 params: []
 return:
-  return: null
+  return: |
+    Returns the maximum number of Classic API Rate Monotonic Periods configured
+    for this application.
   return-values: []
 type: interface

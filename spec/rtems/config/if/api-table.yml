@@ -7,17 +7,18 @@ copyrights:
 definition:
 - default:
     brief: |
-      This member contains the maximum number of Classic API Tasks which are
-      configured for this application.
+      This member contains the maximum number of Classic API Tasks configured
+      for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-tasks:/name}.
     kind: member
     name: maximum_tasks
   variants: []
 - default:
     brief: |
-      This member indicates if Classic API Notepads are enabled or disabled for
-      this application.
+      This member is true, if the Classic API Notepads are enabled, otherwise
+      it is false.
     definition: ${/c/if/bool:/name} ${.:name}
     description: null
     kind: member
@@ -25,82 +26,91 @@ definition:
   variants: []
 - default:
     brief: |
-      This member contains the maximum number of Classic API Timers which are
-      configured for this application.
+      This member contains the maximum number of Classic API Timers configured
+      for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-timers:/name}.
     kind: member
     name: maximum_timers
   variants: []
 - default:
     brief: |
-      This member contains the maximum number of Classic API Semaphores which
-      are configured for this application.
+      This member contains the maximum number of Classic API Semaphores
+      configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-semaphores:/name}.
     kind: member
     name: maximum_semaphores
   variants: []
 - default:
     brief: |
       This member contains the maximum number of Classic API Message Queues
-      which are configured for this application.
+      configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-message-queues:/name}.
     kind: member
     name: maximum_message_queues
   variants: []
 - default:
     brief: |
-      This member contains the maximum number of Classic API Partitions which
-      are configured for this application.
+      This member contains the maximum number of Classic API Partitions
+      configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-partitions:/name}.
     kind: member
     name: maximum_partitions
   variants: []
 - default:
     brief: |
-      This member contains the maximum number of Classic API Regions which are
-      configured for this application.
+      This member contains the maximum number of Classic API Regions configured
+      for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-regions:/name}.
     kind: member
     name: maximum_regions
   variants: []
 - default:
     brief: |
-      This member contains the maximum number of Classic API Dual Ported Memory
-      Areas which are configured for this application.
+      This member contains the maximum number of Classic API Dual-Ported
+      Memories configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-ports:/name}.
     kind: member
     name: maximum_ports
   variants: []
 - default:
     brief: |
       This member contains the maximum number of Classic API Rate Monotonic
-      Periods which are configured for this application.
+      Periods configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-periods:/name}.
     kind: member
     name: maximum_periods
   variants: []
 - default:
     brief: |
-      This member contains the maximum number of Classic API Barriers which are
+      This member contains the maximum number of Classic API Barriers
       configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/max-barriers:/name}.
     kind: member
     name: maximum_barriers
   variants: []
 - default:
     brief: |
       This member contains the number of Classic API Initialization
-      Tasks which are configured for this application.
+      Tasks configured for this application.
     definition: ${/c/if/uint32_t:/name} ${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/rtems-init-tasks-table:/name}.
     kind: member
     name: number_of_initialization_tasks
   variants: []
@@ -109,7 +119,8 @@ definition:
       This member contains the pointer to Classic API Initialization Tasks
       Table of this application.
     definition: const ${../../task/if/initialization-table:/name} *${.:name}
-    description: null
+    description: |
+      See ${/acfg/if/rtems-init-tasks-table:/name}.
     kind: member
     name: User_initialization_tasks_table
   variants: []
