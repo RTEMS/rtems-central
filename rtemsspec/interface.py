@@ -282,7 +282,8 @@ class Node:
             self.header_file.add_dependency(self, ingroup)
         self.content.add_group(self.item["identifier"], self.item["name"],
                                _get_group_identifiers(self.ingroups),
-                               self.item["brief"], self.item["description"])
+                               self.substitute_text(self.item["brief"]),
+                               self.substitute_text(self.item["description"]))
 
     def generate_macro(self) -> None:
         """ Generates a macro. """
