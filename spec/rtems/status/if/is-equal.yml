@@ -1,7 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns true, if the left hand side status code is equal to the right hand
-  side status code, otherwise returns false.
+  Checks if the status codes are equal.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1989, 2008 On-Line Applications Research Corporation (OAR)
@@ -34,6 +33,8 @@ params:
   dir: null
   name: right_status_code
 return:
-  return: null
+  return: |
+    Returns true, if the left hand side status code is equal to the right hand
+    side status code, otherwise false.
   return-values: []
 type: interface

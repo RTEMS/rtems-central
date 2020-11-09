@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: Returns a text describing the specified status code.
+brief: |
+  Maps the status code to a descriptive text.
 copyrights:
 - Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -27,8 +28,9 @@ params:
   dir: null
   name: status_code
 return:
-  return: Otherwise, a text describing the status code.
+  return: |
+    Returns a text describing the status code, if the status code is valid.
   return-values:
-  - description: The specified status code is invalid.
+  - description: The status code is invalid.
     value: '"?"'
 type: interface
