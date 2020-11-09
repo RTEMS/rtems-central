@@ -18,5 +18,6 @@ links:
 - role: interface-ingroup
   uid: group
 name: RTEMS_LOCAL
-notes: null
+notes: |
+  This attribute does not refer to SMP systems.
 type: interface

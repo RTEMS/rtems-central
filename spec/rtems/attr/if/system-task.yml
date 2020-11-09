@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This attribute constant is used to indicate that the Classic API Task object
-  shall be a system task.
+  This attribute constant indicates that the Classic API task created by
+  ${../../task/if/create:/name} or ${../../task/if/construct:/name} shall be a
+  system task.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
