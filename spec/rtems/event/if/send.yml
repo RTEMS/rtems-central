@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Sends an event set to a task.
+  Sends the event set to the task.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -14,9 +14,9 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive sends an event set, ``${.:/params[1]/name}``, to the task
-  specified by ``${.:/params[0]/name}``.  Based upon the state of the target
-  task, one of the following situations applies:
+  This directive sends the event set, ``${.:/params[1]/name}``, to the target
+  task identified by ``${.:/params[0]/name}``.  Based upon the state of the
+  target task, one of the following situations applies:
 
   * The target task is blocked waiting for events, then
 

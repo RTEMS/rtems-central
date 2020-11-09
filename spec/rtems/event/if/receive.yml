@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Receives or gets an event set.
+  Receives or gets an event set from the calling task.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -29,7 +29,7 @@ description: |
   in this case.  The directive returns immediately and does not block.
 
   To **receive events** you have to define an input event condition and some
-  options.  The option set specified in ``${.:/params[1]/name}`` defines
+  options.  The **option set** specified in ``${.:/params[1]/name}`` defines
 
   * if the task will wait or poll for the events, and
 
@@ -75,17 +75,16 @@ notes: |
   Any pending events that do not correspond to any of the events specified in
   ``${.:/params[0]/name}`` will be left pending.
 
-  To receive all events use the constant ${all-events:/name} for the
-  ``${.:/params[0]/name}`` parameter.  This constant is identical to
-  ${event-00:/name} | ... | ${event-31:/name} and should not be confused with
-  the option ${../../option/if/event-all:/name}.
+  To receive all events use the event set constant ${all-events:/name} for the
+  ``${.:/params[0]/name}`` parameter.  Do not confuse this event set constant
+  with the directive option ${../../option/if/event-all:/name}.
 
   A task can **receive all of the pending events** by calling the directive
   with a value of ${all-events:/name} for the ``${.:/params[0]/name}``
-  parameter and ${../../option/if/no-wait:/name} |
-  ${../../option/if/event-any:/name} for the ``${.:/params[1]/name}``
-  parameter.  The pending events are returned to the calling task and the event
-  set of the task is cleared.  If no events are pending then the
+  parameter and the bitwise or of the ${../../option/if/no-wait:/name} and
+  ${../../option/if/event-any:/name} options for the ``${.:/params[1]/name}``
+  parameter.  The pending events are returned and the event set of the task is
+  cleared.  If no events are pending then the
   ${../../status/if/unsatisfied:/name} status code will be returned.
 params:
 - description: |
