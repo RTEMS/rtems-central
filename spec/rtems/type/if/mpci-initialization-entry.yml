@@ -1,7 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This type defines the prototype for the initialization entry point in an
-  MPCI.
+  MPCI initialization routines shall have this type.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2006 On-Line Applications Research Corporation (OAR)

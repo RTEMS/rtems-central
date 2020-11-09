@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This type is used to represent a Classic API object name.
+  This type represents Classic API object names.
 copyrights:
 - Copyright (C) 2009, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -8,8 +8,8 @@ definition:
   variants: []
 description: |
   It is an unsigned 32-bit integer which can be treated as a numeric value or
-  initialized using rtems_build_name() to encode four ASCII characters.  A
-  value of zero may have a special meaning in some directives.
+  initialized using ${../../object/if/build-name:/name} to encode four ASCII
+  characters.  A value of zero may have a special meaning in some directives.
 enabled-by: true
 index-entries: []
 interface-type: typedef
