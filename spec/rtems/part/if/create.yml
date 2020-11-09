@@ -25,9 +25,9 @@ description: |
   returned in ``${.:/params[5]/name}``.  This partition identifier is used to
   access the partition with other partition related directives.
 
-  The attribute set is built through a *bitwise or* of the attribute constants
-  described below.  Attributes not mentioned below are not evaluated by this
-  directive and have no effect.
+  The **attribute set** specified in ``${.:/params[4]/name}`` is built through
+  a *bitwise or* of the attribute constants described below.  Attributes not
+  mentioned below are not evaluated by this directive and have no effect.
 
   The partition can have **local** or **global** scope in a multiprocessing
   network (this attribute does not refer to SMP systems).
@@ -139,4 +139,9 @@ return:
       The ``${.:/params[1]/name}`` parameter was not on a pointer size
       boundary.
     value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no inactive object available to create a new partition.  The
+      number of partitions available to the application is configured through
+      the ${/acfg/if/max-partitions:/name} configuration option.
+    value: ${../../status/if/too-many:/name}
 type: interface

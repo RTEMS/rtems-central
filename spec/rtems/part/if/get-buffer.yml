@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Tries to get a buffer from the specified partition.
+  Tries to get a buffer from the partition.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -31,13 +31,14 @@ name: rtems_partition_get_buffer
 notes: |
   This directive will not cause the running task to be preempted.
 
-  All buffers begin on a four byte boundary.
+  The buffer start alignment is determined by the memory area and buffer size
+  used to create the partition.
 
   A task cannot wait on a buffer to become available.
 
   Getting a buffer from a global partition which does not reside on the local
   node will generate a request telling the remote node to allocate a buffer
-  from the specified partition.
+  from the partition.
 params:
 - description: is the partition identifier.
   dir: null
@@ -60,6 +61,6 @@ return:
       The ``${.:/params[1]/name}`` parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
-      There was no free buffer available to return.
+      There was no free buffer available to allocate and return.
     value: ${../../status/if/unsatisfied:/name}
 type: interface

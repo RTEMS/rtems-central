@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies a partition object by the specified object name.
+  Identifies a partition by the object name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -15,7 +15,7 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive obtains the partition identifier associated with the partition
+  This directive obtains a partition identifier associated with the partition
   name specified in ``${.:/params[0]/name}``.
 
   The node to search is specified in ``${.:/params[1]/name}``.  It shall be

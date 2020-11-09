@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns a buffer to the specified partition.
+  Returns the buffer to the partition.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -31,7 +31,7 @@ notes: |
 
   Returning a buffer to a global partition which does not reside on the local
   node will generate a request telling the remote node to return the buffer to
-  the specified partition.
+  the partition.
 
   Returning a buffer multiple times is an error.  It will corrupt the internal
   state of the partition.
@@ -52,7 +52,7 @@ return:
       There was no partition with the specified identifier.
     value: ${../../status/if/invalid-id:/name}
   - description: |
-      The buffer referenced by ``${.:/params[1]/name}`` was no in the specified
+      The buffer referenced by ``${.:/params[1]/name}`` was not in the
       partition.
     value: ${../../status/if/invalid-address:/name}
 type: interface
