@@ -1,11 +1,11 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the element count of the specified array.
+  Gets the element count of the array.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    (sizeof(_array) / sizeof((_array)[0]))
+    ( sizeof( _array ) / sizeof( ( _array )[ 0 ] ) )
   variants: []
 description: null
 enabled-by: true
@@ -20,10 +20,11 @@ name: RTEMS_ARRAY_SIZE
 notes: null
 params:
 - description: |
-    is the name of the array.
+    is the name of the array.  This parameter is evaluated twice.
   dir: null
   name: _array
 return:
-  return: The element count of the specified array.
+  return: |
+    Returns the element count of the array.
   return-values: []
 type: interface

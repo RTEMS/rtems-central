@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Tells the compiler that a specific variable or function is used.
+  Tells the compiler that the variable or function is used.
 copyrights:
 - Copyright (C) 2009 embedded brains GmbH (http://www.embedded-brains.de)
 definition:

@@ -28,6 +28,6 @@ params:
   name: _y
 return:
   return: |
-    The concatenation of the tokens _x and _y.
+    Returns the concatenation of the tokens _x and _y.
   return-values: []
 type: interface

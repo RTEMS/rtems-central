@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Asserts at compile time that the specified condition is satisfied.
+  Asserts at compile time that the condition is satisfied.
 copyrights:
 - Copyright (C) 2011, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:

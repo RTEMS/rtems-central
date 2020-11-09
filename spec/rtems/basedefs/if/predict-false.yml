@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the value of the specified integral expression and tells the compiler
-  that the predicted value is false (1).
+  Evaluates the integral expression and tells the compiler that the predicted
+  value is false (0).
 copyrights:
 - Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -25,10 +25,12 @@ name: RTEMS_PREDICT_FALSE
 notes: null
 params:
 - description: |
-    is the expression.
+    is the integral expression.
   dir: null
   name: _exp
 return:
-  return: The value of the expression.
+  return: |
+    Returns the value of the integral expression and tells the compiler that
+    the predicted value is false (0).
   return-values: []
 type: interface

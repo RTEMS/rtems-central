@@ -24,6 +24,6 @@ params:
   name: _x
 return:
   return: |
-    The stringification of the expansion of token _x.
+    Returns the stringification of the expansion of token _x.
   return-values: []
 type: interface
