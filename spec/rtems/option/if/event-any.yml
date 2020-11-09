@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   This option constant indicates that the task wishes to wait until at least
-  one of the events of interest are available.
+  one of the events of interest is available in ${../../event/if/receive:/name}
+  and ${../../event/if/system-receive:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
