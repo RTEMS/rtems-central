@@ -17,7 +17,7 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_configuration_get_stack_allocator_avoids_work_space
-notes: null
+notes: |
   See ${/acfg/if/task-stack-no-workspace:/name}.
 params: []
 return:
