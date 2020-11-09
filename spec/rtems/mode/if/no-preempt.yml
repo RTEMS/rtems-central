@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This task mode constant is used to indicate preemption is disabled.
+  This task mode constant indicates that preemption is disabled.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)

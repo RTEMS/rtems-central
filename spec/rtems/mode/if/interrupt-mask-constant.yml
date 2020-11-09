@@ -7,7 +7,7 @@ copyrights:
 definition:
   default: const ${/c/if/uint32_t:/name} ${.:/name}
   variants: []
-description: '%'
+description: null
 enabled-by: true
 index-entries: []
 interface-type: variable

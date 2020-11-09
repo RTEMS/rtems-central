@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the task mode with the processor-dependent interrupt level
-  corresponding to the specified interrupt level.
+  Maps the interrupt level to the associated processor-dependent task mode
+  interrupt level.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
@@ -24,10 +24,12 @@ notes: |
   256 levels may be supported.  At least level 0 (all interrupts enabled) and
   level 1 (interrupts disabled, on most architectures) are supported.
 params:
-- description: is the interrupt level.
+- description: is the interrupt level to map.
   dir: null
   name: _interrupt_level
 return:
   return: null
+    Returns the processor-dependent task mode interrupt level associated with
+    the interrupt level.
   return-values: []
 type: interface

@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This task mode constant is used when the user wishes to obtain the current
-  task mode of the executing task.
+  This task mode constant indicates that the current task mode of the executing
+  task shall be returned by ${../../task/if/mode:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
