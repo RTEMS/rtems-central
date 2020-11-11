@@ -235,6 +235,27 @@ class _TestItem:
                 content.append(f"{method}( ctx );")
         return wrap
 
+    def add_default_context_members(self, content: CContent) -> None:
+        """ Adds the default context members to the content """
+
+    def add_context(self, content: CContent) -> None:
+        """ Adds the context to the content. """
+        content.add(self.substitute_code(self["test-context-support"]))
+        with content.doxygen_block():
+            content.add_brief_description(
+                f"Test context for {self.name} test case.")
+        content.append("typedef struct {")
+        with content.indent():
+            for info in self["test-context"]:
+                content.add_description_block(info["brief"],
+                                              info["description"])
+                content.add(f"{info['member'].strip()};")
+            self.add_default_context_members(content)
+        content.add([
+            f"}} {self.context};", "", f"static {self.context}",
+            f"  {self.ident}_Instance;"
+        ])
+
     def generate_header(self, base_directory: str, header: Dict[str,
                                                                 Any]) -> None:
         """ Generates the test header. """
@@ -405,34 +426,20 @@ class _ActionRequirementTestItem(_TestItem):
             ] + ["NULL"]))
         content.add("};")
 
-    def _add_context(self, content: CContent, header: Dict[str, Any]) -> None:
-        content.add(self.substitute_code(self["test-context-support"]))
-        with content.doxygen_block():
-            content.add_brief_description(
-                f"Test context for {self.name} test case.")
-        content.append("typedef struct {")
-        with content.indent():
-            for info in self["test-context"]:
-                content.add_description_block(info["brief"],
-                                              info["description"])
-                content.add(f"{info['member'].strip()};")
-            for param in self._get_run_params(header):
-                content.add_description_block(
-                    "This member contains a copy of the corresponding "
-                    f"{self.ident}_Run() parameter.", None)
-                content.add(f"{param.strip()};")
+    def add_default_context_members(self, content: CContent) -> None:
+        for param in self._get_run_params(self["test-header"]):
             content.add_description_block(
-                "This member defines the pre-condition states "
-                "for the next action.", None)
-            content.add(f"size_t pcs[ {self._pre_condition_count} ];")
-            content.add_description_block(
-                "This member indicates if the test action loop "
-                "is currently executed.", None)
-            content.add("bool in_action_loop;")
-        content.add([
-            f"}} {self.context};", "", f"static {self.context}",
-            f"  {self.ident}_Instance;"
-        ])
+                "This member contains a copy of the corresponding "
+                f"{self.ident}_Run() parameter.", None)
+            content.add(f"{param.strip()};")
+        content.add_description_block(
+            "This member defines the pre-condition states "
+            "for the next action.", None)
+        content.add(f"size_t pcs[ {self._pre_condition_count} ];")
+        content.add_description_block(
+            "This member indicates if the test action loop "
+            "is currently executed.", None)
+        content.add("bool in_action_loop;")
 
     def _add_fixture_scope(self, content: CContent) -> None:
         params = ["void *arg", "char *buf", "size_t n"]
@@ -689,7 +696,7 @@ class _ActionRequirementTestItem(_TestItem):
         else:
             _add_condition_enum(content, self._pre_index_to_enum)
             _add_condition_enum(content, self._post_index_to_enum)
-        self._add_context(content, header)
+        self.add_context(content)
         self._add_pre_condition_descriptions(content)
         content.add(self.substitute_code(self["test-support"]))
         self._add_handler(content, self["pre-conditions"],
