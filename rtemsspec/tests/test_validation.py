@@ -78,11 +78,10 @@ def test_validation(tmpdir):
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
@@ -155,11 +154,10 @@ def test_validation(tmpdir):
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
@@ -950,11 +948,10 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
@@ -1128,11 +1125,10 @@ void Tc6_Run( void )
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
@@ -1215,11 +1211,10 @@ void Tc5_Run( int *a, int b, int *c );
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
@@ -1290,11 +1285,10 @@ void Tc6_Run( void );
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *
@@ -1402,11 +1396,10 @@ void Action2_Run( int *a, int b, int *c );
  */
 
 /*
- * Do not manually edit this file.  It is part of the RTEMS quality process
- * and was automatically generated.
- *
- * If you find something that needs to be fixed or worded better please
- * post a report to an RTEMS mailing list or raise a bug report:
+ * This file is part of the RTEMS quality process and was automatically
+ * generated.  If you find something that needs to be fixed or
+ * worded better please post a report or patch to an RTEMS mailing list
+ * or raise a bug report:
  *
  * https://docs.rtems.org/branches/master/user/support/bugs.html
  *

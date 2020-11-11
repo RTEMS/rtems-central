@@ -56,11 +56,10 @@ def test_interfacedoc(tmpdir):
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
-.. Do not manually edit this file.  It is part of the RTEMS quality process
-.. and was automatically generated.
-..
-.. If you find something that needs to be fixed or worded better please
-.. post a report to an RTEMS mailing list or raise a bug report:
+.. This file is part of the RTEMS quality process and was automatically
+.. generated.  If you find something that needs to be fixed or
+.. worded better please post a report or patch to an RTEMS mailing list
+.. or raise a bug report:
 ..
 .. https://docs.rtems.org/branches/master/user/support/bugs.html
 ..
@@ -96,11 +95,10 @@ The directives provided by the Group B are:
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
-.. Do not manually edit this file.  It is part of the RTEMS quality process
-.. and was automatically generated.
-..
-.. If you find something that needs to be fixed or worded better please
-.. post a report to an RTEMS mailing list or raise a bug report:
+.. This file is part of the RTEMS quality process and was automatically
+.. generated.  If you find something that needs to be fixed or
+.. worded better please post a report or patch to an RTEMS mailing list
+.. or raise a bug report:
 ..
 .. https://docs.rtems.org/branches/master/user/support/bugs.html
 ..
@@ -237,11 +235,10 @@ VoidFunction()
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
-.. Do not manually edit this file.  It is part of the RTEMS quality process
-.. and was automatically generated.
-..
-.. If you find something that needs to be fixed or worded better please
-.. post a report to an RTEMS mailing list or raise a bug report:
+.. This file is part of the RTEMS quality process and was automatically
+.. generated.  If you find something that needs to be fixed or
+.. worded better please post a report or patch to an RTEMS mailing list
+.. or raise a bug report:
 ..
 .. https://docs.rtems.org/branches/master/user/support/bugs.html
 ..
@@ -272,11 +269,10 @@ Group A description. The directives provided by the Group A are:
 
 .. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 
-.. Do not manually edit this file.  It is part of the RTEMS quality process
-.. and was automatically generated.
-..
-.. If you find something that needs to be fixed or worded better please
-.. post a report to an RTEMS mailing list or raise a bug report:
+.. This file is part of the RTEMS quality process and was automatically
+.. generated.  If you find something that needs to be fixed or
+.. worded better please post a report or patch to an RTEMS mailing list
+.. or raise a bug report:
 ..
 .. https://docs.rtems.org/branches/master/user/support/bugs.html
 ..
