@@ -17,7 +17,7 @@ spec-info:
         description: |
           It shall be the test code to prepare or check the state of the
           condition.  The code may use a local variable ``ctx`` which points to
-          the test context, see ${requirement-action-test-context:/spec-name}.
+          the test context, see ${test-context:/spec-name}.
         spec-type: str
       text:
         description: |

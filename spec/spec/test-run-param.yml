@@ -31,7 +31,7 @@ spec-info:
       This set of attributes specifies a parameter for the test run function.
       In case this parameter is used in an ${requirement-action:/spec-name}
       item, then the parameter is also added as a member to the test context,
-      see ${requirement-action-test-context:/spec-name}.
+      see ${test-context:/spec-name}.
     mandatory-attributes: all
 spec-name: Test Run Parameter
 spec-type: test-run-param

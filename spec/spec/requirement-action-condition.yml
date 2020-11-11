@@ -22,7 +22,7 @@ spec-info:
           The epilogue code is placed in the test condition preparation or
           check before the state-specific code.  The code may use a local
           variable ``ctx`` which points to the test context, see
-          ${requirement-action-test-context:/spec-name}.
+          ${test-context:/spec-name}.
         spec-type: optional-str
       test-prologue:
         description: |
@@ -30,7 +30,7 @@ spec-info:
           The prologue code is placed in the test condition preparation or
           check after the state-specific code.  The code may use a local
           variable ``ctx`` which points to the test context, see
-          ${requirement-action-test-context:/spec-name}.
+          ${test-context:/spec-name}.
         spec-type: optional-str
     description: |
       This set of attributes defines an action pre-condition or post-condition.

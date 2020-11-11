@@ -27,6 +27,6 @@ spec-info:
       This set of attributes defines an action requirement test context member.
     mandatory-attributes: all
   none: null
-spec-name: Action Requirement Test Context Member
-spec-type: requirement-action-test-context
+spec-name: Test Context Member
+spec-type: test-context
 type: spec

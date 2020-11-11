@@ -1,0 +1,87 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: type
+  spec-value: runtime-measurement-test
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      params:
+        description: null
+        spec-type: runtime-measurement-params
+      test-brief:
+        description: |
+          If the value is present, then it shall be the test case brief
+          description.
+        spec-type: optional-str
+      test-cleanup:
+        description: |
+          If the value is present, then it shall be the measure runtime request
+          cleanup method.  The method is called after each measure runtime
+          request.
+        spec-type: test-support-method
+      test-context:
+        description: null
+        spec-type: test-context-list
+      test-context-support:
+        description: |
+          If the value is present, then it shall be the test context support
+          code.  The context support code is placed at file scope before the
+          test context definition.
+        spec-type: optional-str
+      test-description:
+        description: |
+          If the value is present, then it shall be the test case description.
+        spec-type: optional-str
+      test-includes:
+        description: |
+          It shall be a list of header files included via ``#include <...>``.
+        spec-type: list-str
+      test-local-includes:
+        description: |
+          It shall be a list of header files included via ``#include "..."``.
+        spec-type: list-str
+      test-prepare:
+        description: |
+          If the value is present, then it shall be the measure runtime request
+          prepare method.  The method is called before each measure runtime
+          request.
+        spec-type: test-support-method
+      test-setup:
+        description: |
+          If the value is present, then it shall be the test case setup fixture
+          method.
+        spec-type: test-support-method
+      test-stop:
+        description: |
+          If the value is present, then it shall be the test case stop fixture
+          method.
+        spec-type: test-support-method
+      test-support:
+        description: |
+          If the value is present, then it shall be the test case support code.
+          The support code is placed at file scope before the test case code.
+        spec-type: optional-str
+      test-target:
+        description: |
+          It shall be the path to the generated test case source file.
+        spec-type: str
+      test-teardown:
+        description: |
+          If the value is present, then it shall be the test case teardown
+          fixture method.
+        spec-type: test-support-method
+    description: |
+      This set of attributes specifies a runtime measurement test case.
+    mandatory-attributes: all
+spec-name: Runtime Measurement Test Item Type
+spec-type: runtime-measurement-test
+type: spec

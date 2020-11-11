@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      sample-count:
+        description: |
+          It shall be the sample count of the runtime measurement context.
+        spec-type: int
+    description: |
+      This set of attributes defines parameters of the runtime measurement test
+      case.
+    generic-attributes:
+      description: null
+      key-spec-type: name
+      value-spec-type: any
+    mandatory-attributes: all
+spec-name: Runtime Measurement Parameter Set
+spec-type: runtime-measurement-params
+type: spec

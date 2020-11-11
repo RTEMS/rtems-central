@@ -12,22 +12,22 @@ spec-info:
     attributes:
       brief:
         description: |
-          It shall be the test fixture method brief description.
+          It shall be the test support method brief description.
         spec-type: optional-str
       code:
         description: |
-          It shall be the test fixture method code.  The code may use a local
+          It shall be the test support method code.  The code may use a local
           variable ``ctx`` which points to the test context, see
-          ${requirement-action-test-context:/spec-name}.
+          ${test-context:/spec-name}.
         spec-type: str
       description:
         description: |
-          It shall be the test fixture method description.
+          It shall be the test support method description.
         spec-type: optional-str
     description: |
-      This set of attributes defines an action requirement test fixture method.
+      This set of attributes defines an action requirement test support method.
     mandatory-attributes: all
   none: null
-spec-name: Action Requirement Test Fixture Method
-spec-type: requirement-action-test-fixture
+spec-name: Test Support Method
+spec-type: test-support-method
 type: spec

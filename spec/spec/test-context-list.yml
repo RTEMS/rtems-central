@@ -10,7 +10,7 @@ spec-example: null
 spec-info:
   list:
     description: null
-    spec-type: requirement-action-test-context
-spec-name: Action Requirement Test Context List
-spec-type: requirement-action-test-context-list
+    spec-type: test-context
+spec-name: Test Context List
+spec-type: test-context-list
 type: spec

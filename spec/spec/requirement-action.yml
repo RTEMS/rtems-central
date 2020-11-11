@@ -160,7 +160,7 @@ spec-info:
         spec-type: optional-str
       test-context:
         description: null
-        spec-type: requirement-action-test-context-list
+        spec-type: test-context-list
       test-context-support:
         description: |
           If the value is present, then it shall be the test context support
@@ -190,10 +190,10 @@ spec-info:
         spec-type: optional-str
       test-setup:
         description: null
-        spec-type: requirement-action-test-fixture
+        spec-type: test-support-method
       test-stop:
         description: null
-        spec-type: requirement-action-test-fixture
+        spec-type: test-support-method
       test-support:
         description: |
           If the value is present, then it shall be the test case support code.
@@ -205,7 +205,7 @@ spec-info:
         spec-type: str
       test-teardown:
         description: null
-        spec-type: requirement-action-test-fixture
+        spec-type: test-support-method
       transition-map:
         description: null
         spec-type: requirement-action-transition-list
