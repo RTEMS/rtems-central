@@ -298,20 +298,19 @@ class _Transition(NamedTuple):
     info: str
 
 
-_DirectiveIndexToEnum = Tuple[Tuple[str, ...], ...]
+_ConditionIndexToEnum = Tuple[Tuple[str, ...], ...]
 _TransitionMap = List[List[_Transition]]
 
 
-def _directive_state_to_index(
-        conditions: List[Any]) -> Tuple[Dict[str, int], ...]:
+def _state_to_index(conditions: List[Any]) -> Tuple[Dict[str, int], ...]:
     return tuple(
         dict((state["name"], index)
              for index, state in enumerate(condition["states"]))
         for condition in conditions)
 
 
-def _directive_index_to_enum(prefix: str,
-                             conditions: List[Any]) -> _DirectiveIndexToEnum:
+def _condition_index_to_enum(prefix: str,
+                             conditions: List[Any]) -> _ConditionIndexToEnum:
     return tuple(
         tuple([f"{prefix}_{condition['name']}"] + [
             f"{prefix}_{condition['name']}_{state['name']}"
@@ -320,8 +319,8 @@ def _directive_index_to_enum(prefix: str,
         for index, condition in enumerate(conditions))
 
 
-def _directive_add_enum(content: CContent,
-                        index_to_enum: _DirectiveIndexToEnum) -> None:
+def _add_condition_enum(content: CContent,
+                        index_to_enum: _ConditionIndexToEnum) -> None:
     for enum in index_to_enum:
         content.add("typedef enum {")
         with content.indent():
@@ -329,22 +328,20 @@ def _directive_add_enum(content: CContent,
         content.add(f"}} {enum[0]};")
 
 
-class _TestDirectiveItem(_TestItem):
-    """ A test directive item. """
+class _ActionRequirementTestItem(_TestItem):
+    """ An action requirement test item. """
 
     # pylint: disable=too-many-instance-attributes
     def __init__(self, item: Item):
         super().__init__(item)
         self._pre_condition_count = len(item["pre-conditions"])
         self._post_condition_count = len(item["post-conditions"])
-        self._pre_index_to_enum = _directive_index_to_enum(
+        self._pre_index_to_enum = _condition_index_to_enum(
             f"{self.ident}_Pre", item["pre-conditions"])
-        self._post_index_to_enum = _directive_index_to_enum(
+        self._post_index_to_enum = _condition_index_to_enum(
             f"{self.ident}_Post", item["post-conditions"])
-        self._pre_state_to_index = _directive_state_to_index(
-            item["pre-conditions"])
-        self._post_state_to_index = _directive_state_to_index(
-            item["post-conditions"])
+        self._pre_state_to_index = _state_to_index(item["pre-conditions"])
+        self._post_state_to_index = _state_to_index(item["post-conditions"])
         self._pre_index_to_condition = dict(
             (index, condition)
             for index, condition in enumerate(item["pre-conditions"]))
@@ -636,7 +633,7 @@ class _TestDirectiveItem(_TestItem):
             content.add(epilogue)
 
     def _add_handler(self, content: CContent, conditions: List[Any],
-                     index_to_enum: _DirectiveIndexToEnum,
+                     index_to_enum: _ConditionIndexToEnum,
                      action: str) -> None:
         for condition_index, condition in enumerate(conditions):
             enum = index_to_enum[condition_index]
@@ -664,8 +661,8 @@ class _TestDirectiveItem(_TestItem):
 
     def add_header_body(self, content: CContent, header: Dict[str,
                                                               Any]) -> None:
-        _directive_add_enum(content, self._pre_index_to_enum)
-        _directive_add_enum(content, self._post_index_to_enum)
+        _add_condition_enum(content, self._pre_index_to_enum)
+        _add_condition_enum(content, self._post_index_to_enum)
         super().add_header_body(content, header)
 
     def generate(self, content: CContent, base_directory: str,
@@ -675,8 +672,8 @@ class _TestDirectiveItem(_TestItem):
         if header:
             self.generate_header(base_directory, header)
         else:
-            _directive_add_enum(content, self._pre_index_to_enum)
-            _directive_add_enum(content, self._post_index_to_enum)
+            _add_condition_enum(content, self._pre_index_to_enum)
+            _add_condition_enum(content, self._post_index_to_enum)
         self._add_context(content, header)
         self._add_pre_condition_descriptions(content)
         content.add(self.substitute_code(self["test-support"]))
@@ -721,17 +718,17 @@ class _SourceFile:
         """ The test cases of the source file. """
         return self._test_cases
 
-    def add_test_suite(self, test_suite: Item) -> None:
+    def add_test_suite(self, item: Item) -> None:
         """ Adds a test suite to the source file. """
-        self._test_suites.append(_TestSuiteItem(test_suite))
+        self._test_suites.append(_TestSuiteItem(item))
 
-    def add_test_case(self, test_case: Item) -> None:
+    def add_test_case(self, item: Item) -> None:
         """ Adds a test case to the source file. """
-        self._test_cases.append(_TestItem(test_case))
+        self._test_cases.append(_TestItem(item))
 
-    def add_test_directive(self, test_directive: Item) -> None:
-        """ Adds a test directive to the source file. """
-        self._test_cases.append(_TestDirectiveItem(test_directive))
+    def add_action_requirement_test(self, item: Item) -> None:
+        """ Adds an action requirement test to the source file. """
+        self._test_cases.append(_ActionRequirementTestItem(item))
 
     def generate(self, base_directory: str,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
@@ -790,10 +787,11 @@ def _get_source_file(filename: str,
     return source_files.setdefault(filename, _SourceFile(filename))
 
 
-def _gather_action(item: Item, source_files: Dict[str, _SourceFile],
-                   _test_programs: List[_TestProgram]) -> None:
+def _gather_action_requirement_test(
+        item: Item, source_files: Dict[str, _SourceFile],
+        _test_programs: List[_TestProgram]) -> None:
     src = _get_source_file(item["test-target"], source_files)
-    src.add_test_directive(item)
+    src.add_action_requirement_test(item)
 
 
 def _gather_test_case(item: Item, source_files: Dict[str, _SourceFile],
@@ -819,9 +817,9 @@ def _gather_default(_item: Item, _source_files: Dict[str, _SourceFile],
 
 
 _GATHER = {
-    "requirement/functional/action": _gather_action,
-    "test-case": _gather_test_case,
     "build/test-program": _gather_test_program,
+    "requirement/functional/action": _gather_action_requirement_test,
+    "test-case": _gather_test_case,
     "test-suite": _gather_test_suite,
 }
 
