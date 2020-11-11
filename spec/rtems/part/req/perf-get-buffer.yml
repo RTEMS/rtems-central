@@ -1,0 +1,64 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: runtime-measurement-request
+  uid: ../val/performance
+limits:
+  sparc/leon3:
+    DirtyCache:
+      max-upper-bound: 0.000005
+      mean-upper-bound: 0.000005
+    FullCache:
+      max-upper-bound: 0.000005
+      mean-upper-bound: 0.000005
+    HotCache:
+      max-upper-bound: 0.000005
+      mean-upper-bound: 0.000005
+    Load/1:
+      max-upper-bound: 0.00001
+      mean-upper-bound: 0.00001
+    Load/2:
+      max-upper-bound: 0.00001
+      mean-upper-bound: 0.00001
+    Load/3:
+      max-upper-bound: 0.00001
+      mean-upper-bound: 0.00001
+    Load/4:
+      max-upper-bound: 0.00001
+      mean-upper-bound: 0.00001
+params: {}
+rationale: null
+references: []
+test-body:
+  brief: |
+    Get a buffer.
+  code: |
+    ctx->status = rtems_partition_get_buffer( ctx->part_many, &ctx->buffer );
+  description: null
+test-cleanup: null
+test-prepare: null
+test-setup: null
+test-teardown:
+  brief: |
+    Return the buffer.
+  code: |
+    rtems_status_code sc;
+
+    T_quiet_rsc_success( ctx->status );
+
+    sc = rtems_partition_return_buffer( ctx->part_many, ctx->buffer );
+    T_quiet_rsc_success( sc );
+
+    return tic == toc;
+  description: null
+text: |
+  When a partition has exactly ${../val/performance:/params/buffer-count} free
+  buffers, the ${.:limit-kind} runtime of exactly
+  ${../val/performance:/params/sample-count} successful calls to
+  ${../if/get-buffer:/name} in the ${.:/environment} shall be
+  ${.:limit-condition}.
+non-functional-type: performance-runtime
+requirement-type: non-functional
+type: requirement

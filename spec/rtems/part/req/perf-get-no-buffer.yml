@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: runtime-measurement-request
+  uid: ../val/performance
+limits: {}
+params: {}
+rationale: null
+references: []
+test-body:
+  brief: |
+    Try to get a buffer.
+  code: |
+    ctx->status = rtems_partition_get_buffer( ctx->part_one, &ctx->buffer );
+  description: null
+test-cleanup:
+  brief: |
+    Return the buffer.
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_partition_return_buffer( ctx->part_one, ctx->buffer_2 );
+    T_rsc_success( sc );
+  description: null
+test-prepare:
+  brief: |
+    Get the buffer.
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_partition_get_buffer( ctx->part_one, &ctx->buffer_2 );
+    T_rsc_success( sc );
+  description: null
+test-setup: null
+test-teardown:
+  brief: |
+    Check the status code.
+  code: |
+    T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
+
+    return tic == toc;
+  description: null
+text: |
+  When a partition has no free buffers, the ${.:limit-kind} runtime of exactly
+  ${../val/performance:/params/sample-count} unsatisfied calls to
+  ${../if/get-buffer:/name} in the ${.:/environment} shall be
+  ${.:limit-condition}.
+non-functional-type: performance-runtime
+requirement-type: non-functional
+type: requirement
