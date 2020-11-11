@@ -79,6 +79,8 @@ def _add_ingroup(content: CContent, items: List["_TestItem"]) -> None:
 
 class _TestItem:
     """ A test item with a default implementation for test cases. """
+
+    # pylint: disable=too-many-public-methods
     def __init__(self, item: Item):
         self._item = item
         self._ident = to_camel_case(item.uid[1:])
@@ -234,6 +236,16 @@ class _TestItem:
             if info:
                 content.append(f"{method}( ctx );")
         return wrap
+
+    def add_function(self, content: CContent, key: str, name: str) -> None:
+        """
+        Adds a function with the name to the content if there is one defined
+        for the attribute key.
+        """
+        if self[key] is not None:
+            with content.function("static void", f"{self.ident}_{name}",
+                                  [f"{self.context} *ctx"]):
+                content.append(self.substitute_code(self[key]))
 
     def add_default_context_members(self, content: CContent) -> None:
         """ Adds the default context members to the content """
@@ -565,12 +577,6 @@ class _ActionRequirementTestItem(_TestItem):
         content.add([f"}} {self.ident}_TransitionInfo[] = {{", "  {"])
         content.append(["\n  }, {\n".join(info_elements), "  }", "};"])
 
-    def _add_function(self, content: CContent, key: str, name: str) -> None:
-        if self[key] is not None:
-            with content.function("static void", f"{self.ident}_{name}",
-                                  [f"{self.context} *ctx"]):
-                content.append(self.substitute_code(self[key]))
-
     def _add_call(self, content: CContent, key: str, name: str) -> None:
         if self[key] is not None:
             content.gap = False
@@ -724,9 +730,9 @@ class _ActionRequirementTestItem(_TestItem):
             f"  .initial_context = &{self.ident}_Instance", "};"
         ])
         self._add_transition_map(content)
-        self._add_function(content, "test-prepare", "Prepare")
-        self._add_function(content, "test-action", "Action")
-        self._add_function(content, "test-cleanup", "Cleanup")
+        self.add_function(content, "test-prepare", "Prepare")
+        self.add_function(content, "test-action", "Action")
+        self.add_function(content, "test-cleanup", "Cleanup")
         self._add_test_case(content, header)
         content.add("/** @} */")
 
