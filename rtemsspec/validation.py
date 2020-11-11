@@ -205,36 +205,56 @@ class _TestItem:
         content.declare_function("void", f"{self.ident}_Run",
                                  self._get_run_params(header))
 
-    def add_support_method(
-            self,
-            content: CContent,
-            key: str,
-            name: str,
-            mandatory_code: Optional[GenericContent] = None,
-            optional_code: Optional[GenericContent] = None) -> str:
+    def add_support_method(self,
+                           content: CContent,
+                           key: str,
+                           name: str,
+                           mandatory_code: Optional[GenericContent] = None,
+                           optional_code: Optional[GenericContent] = None,
+                           ret: str = "void",
+                           extra_params: Optional[List[str]] = None,
+                           extra_args: Optional[List[str]] = None,
+                           do_wrap: bool = True) -> str:
         """ Adds a support method to the content. """
 
         # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-locals
         info = self[key]
         if not info and not mandatory_code:
             return "NULL"
+        if extra_params is None:
+            extra_params = []
+        if extra_args is None:
+            extra_args = []
         method = f"{self.ident}_{name}"
         wrap = f"{method}_Wrap"
         if info:
             content.add_description_block(
                 self.substitute_text(info["brief"]),
                 self.substitute_text(info["description"]))
-            with content.function("static void", method,
-                                  [f"{self.context} *ctx"]):
+            params = [f"{self.context} *ctx"] + extra_params
+            with content.function(f"static {ret}", method, params):
+                if not do_wrap:
+                    content.gap = False
+                    content.add(mandatory_code)
+                    content.gap = False
+                    content.add(optional_code)
                 content.add(self.substitute_code(info["code"]))
-        with content.function("static void", wrap, ["void *arg"]):
+        if not do_wrap:
+            assert info
+            return method
+        params = ["void *arg"] + extra_params
+        with content.function(f"static {ret}", wrap, params):
             content.add([f"{self.context} *ctx;", "", "ctx = arg;"])
             content.gap = False
             content.add(mandatory_code)
             content.gap = False
             content.add(optional_code)
             if info:
-                content.append(f"{method}( ctx );")
+                content.gap = False
+                ret_2 = None if ret == "void" else "return"
+                args = ["ctx"] + extra_args
+                content.call_function(ret_2, f"{method}", args)
         return wrap
 
     def add_function(self, content: CContent, key: str, name: str) -> None:
@@ -737,6 +757,71 @@ class _ActionRequirementTestItem(_TestItem):
         content.add("/** @} */")
 
 
+class _RuntimeMeasurementTestItem(_TestItem):
+    """ A runtime measurement test item. """
+    def add_test_case_action_description(self, _content: CContent) -> None:
+        pass
+
+    def add_default_context_members(self, content: CContent) -> None:
+        content.add_description_block(
+            "This member references the measure runtime context.", None)
+        content.add("T_measure_runtime_context *context;")
+        content.add_description_block(
+            "This member provides the measure runtime request.", None)
+        content.add("T_measure_runtime_request request;")
+
+    def generate(self, content: CContent, base_directory: str,
+                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+        self.add_test_case_description(content, test_case_to_suites)
+        self.add_context(content)
+        content.add(self.substitute_code(self["test-support"]))
+        setup = f"{self.ident}_Setup_Context"
+        with content.function("static void", setup, [f"{self.context} *ctx"]):
+            content.add([
+                "T_measure_runtime_config config;",
+                "",
+                "memset( &config, 0, sizeof( config ) );",
+                f"config.sample_count = {self['params']['sample-count']};",
+                "ctx->request.arg = ctx;",
+                "ctx->context = T_measure_runtime_create( &config );",
+                "T_assert_not_null( ctx->context );",
+            ])
+        setup = self.add_support_method(content,
+                                        "test-setup",
+                                        "Setup",
+                                        mandatory_code=f"{setup}( ctx );")
+        stop = self.add_support_method(content, "test-stop", "Stop")
+        teardown = self.add_support_method(content, "test-teardown",
+                                           "Teardown")
+        content.add([
+            f"static T_fixture {self.ident}_Fixture = {{",
+            f"  .setup = {setup},", f"  .stop = {stop},",
+            f"  .teardown = {teardown},", "  .scope = NULL,",
+            f"  .initial_context = &{self.ident}_Instance", "};"
+        ])
+        self.add_support_method(content,
+                                "test-prepare",
+                                "Prepare",
+                                do_wrap=False)
+        self.add_support_method(content,
+                                "test-cleanup",
+                                "Cleanup",
+                                do_wrap=False)
+        with content.function_block(f"void T_case_body_{self.ident}( void )"):
+            pass
+        content.gap = False
+        ret = ""
+        name = "T_TEST_CASE_FIXTURE"
+        params = [f"{self.ident}", f"&{self.ident}_Fixture"]
+        with content.function(ret, name, params, align=False):
+            content.add([
+                f"{self.context} *ctx;",
+                "",
+                "ctx = T_fixture_context();",
+            ])
+        content.add("/** @} */")
+
+
 class _SourceFile:
     """ A test source file. """
     def __init__(self, filename: str):
@@ -766,6 +851,10 @@ class _SourceFile:
     def add_action_requirement_test(self, item: Item) -> None:
         """ Adds an action requirement test to the source file. """
         self._test_cases.append(_ActionRequirementTestItem(item))
+
+    def add_runtime_measurement_test(self, item: Item) -> None:
+        """ Adds a runtime measurement test to the source file. """
+        self._test_cases.append(_RuntimeMeasurementTestItem(item))
 
     def generate(self, base_directory: str,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
@@ -831,6 +920,13 @@ def _gather_action_requirement_test(
     src.add_action_requirement_test(item)
 
 
+def _gather_runtime_measurement_test(
+        item: Item, source_files: Dict[str, _SourceFile],
+        _test_programs: List[_TestProgram]) -> None:
+    src = _get_source_file(item["test-target"], source_files)
+    src.add_runtime_measurement_test(item)
+
+
 def _gather_test_case(item: Item, source_files: Dict[str, _SourceFile],
                       _test_programs: List[_TestProgram]) -> None:
     src = _get_source_file(item["test-target"], source_files)
@@ -856,6 +952,7 @@ def _gather_default(_item: Item, _source_files: Dict[str, _SourceFile],
 _GATHER = {
     "build/test-program": _gather_test_program,
     "requirement/functional/action": _gather_action_requirement_test,
+    "runtime-measurement-test": _gather_runtime_measurement_test,
     "test-case": _gather_test_case,
     "test-suite": _gather_test_suite,
 }

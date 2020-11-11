@@ -916,6 +916,7 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
 /**
  * @file
  *
+ * @ingroup RTEMSTestCaseRtm
  * @ingroup RTEMSTestCaseTc3
  * @ingroup RTEMSTestCaseTc4
  * @ingroup RTEMSTestCaseTc5
@@ -965,10 +966,138 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
 #endif
 
 #include <c.h>
+#include <u.h>
 
+#include "v.h"
 #include "z.h"
 
 #include <rtems/test.h>
+
+/**
+ * @defgroup RTEMSTestCaseRtm spec:/rtm
+ *
+ * @ingroup RTEMSTestSuiteTs
+ *
+ * @brief Test brief.
+ *
+ * Test description.
+ *
+ * @{
+ */
+
+/* Context support code */
+
+/**
+ * @brief Test context for spec:/rtm test case.
+ */
+typedef struct {
+  /**
+   * @brief Context member brief.
+   *
+   * Context member description.
+   */
+  int member;
+
+  /**
+   * @brief This member references the measure runtime context.
+   */
+  T_measure_runtime_context *context;
+
+  /**
+   * @brief This member provides the measure runtime request.
+   */
+  T_measure_runtime_request request;
+} Rtm_Context;
+
+static Rtm_Context
+  Rtm_Instance;
+
+/* Support code */
+
+static void Rtm_Setup_Context( Rtm_Context *ctx )
+{
+  T_measure_runtime_config config;
+
+  memset( &config, 0, sizeof( config ) );
+  config.sample_count = 100;
+  ctx->request.arg = ctx;
+  ctx->context = T_measure_runtime_create( &config );
+  T_assert_not_null( ctx->context );
+}
+
+static void Rtm_Setup_Wrap( void *arg )
+{
+  Rtm_Context *ctx;
+
+  ctx = arg;
+  Rtm_Setup_Context( ctx );
+}
+
+/**
+ * @brief Stop brief.
+ *
+ * Stop description.
+ */
+static void Rtm_Stop( Rtm_Context *ctx )
+{
+  /* Stop code */
+}
+
+static void Rtm_Stop_Wrap( void *arg )
+{
+  Rtm_Context *ctx;
+
+  ctx = arg;
+  Rtm_Stop( ctx );
+}
+
+/**
+ * @brief Teardown brief.
+ *
+ * Teardown description.
+ */
+static void Rtm_Teardown( Rtm_Context *ctx )
+{
+  /* Teardown code */
+}
+
+static void Rtm_Teardown_Wrap( void *arg )
+{
+  Rtm_Context *ctx;
+
+  ctx = arg;
+  Rtm_Teardown( ctx );
+}
+
+static T_fixture Rtm_Fixture = {
+  .setup = Rtm_Setup_Wrap,
+  .stop = Rtm_Stop_Wrap,
+  .teardown = Rtm_Teardown_Wrap,
+  .scope = NULL,
+  .initial_context = &Rtm_Instance
+};
+
+/**
+ * @brief Cleanup brief.
+ *
+ * Cleanup description.
+ */
+static void Rtm_Cleanup( Rtm_Context *ctx )
+{
+  /* Cleanup code */
+}
+
+/**
+ * @fn void T_case_body_Rtm( void )
+ */
+T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
+{
+  Rtm_Context *ctx;
+
+  ctx = T_fixture_context();
+}
+
+/** @} */
 
 /**
  * @defgroup RTEMSTestCaseTc3 spec:/tc3

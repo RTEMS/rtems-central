@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+params:
+  sample-count: 100
+test-brief: |
+  Test brief.
+test-cleanup:
+  brief: |
+    Cleanup brief.
+  code: |
+    /* Cleanup code */
+  description: |
+    Cleanup description.
+test-context:
+- brief: |
+    Context member brief.
+  description: |
+    Context member description.
+  member: |
+    int member
+test-context-support: |
+  /* Context support code */
+test-description: |
+  Test description.
+test-includes:
+- u.h
+test-local-includes:
+- v.h
+test-prepare: null
+test-setup: null
+test-stop:
+  brief: |
+    Stop brief.
+  code: |
+    /* Stop code */
+  description: |
+    Stop description.
+test-support: |
+  /* Support code */
+test-target: tc34.c
+test-teardown:
+  brief: |
+    Teardown brief.
+  code: |
+    /* Teardown code */
+  description: |
+    Teardown description.
+type: runtime-measurement-test
