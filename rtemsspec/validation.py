@@ -31,7 +31,7 @@ import re
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
-    ExpressionMapper, to_camel_case
+    ExpressionMapper, GenericContent, to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -101,6 +101,11 @@ class _TestItem:
     def ident(self) -> str:
         """ Returns the test identifier. """
         return self._ident
+
+    @property
+    def context(self) -> str:
+        """ Returns the test case context type. """
+        return f"{self._ident}_Context"
 
     @property
     def name(self) -> str:
@@ -197,6 +202,38 @@ class _TestItem:
         content.gap = False
         content.declare_function("void", f"{self.ident}_Run",
                                  self._get_run_params(header))
+
+    def add_support_method(
+            self,
+            content: CContent,
+            key: str,
+            name: str,
+            mandatory_code: Optional[GenericContent] = None,
+            optional_code: Optional[GenericContent] = None) -> str:
+        """ Adds a support method to the content. """
+
+        # pylint: disable=too-many-arguments
+        info = self[key]
+        if not info and not mandatory_code:
+            return "NULL"
+        method = f"{self.ident}_{name}"
+        wrap = f"{method}_Wrap"
+        if info:
+            content.add_description_block(
+                self.substitute_text(info["brief"]),
+                self.substitute_text(info["description"]))
+            with content.function("static void", method,
+                                  [f"{self.context} *ctx"]):
+                content.add(self.substitute_code(info["code"]))
+        with content.function("static void", wrap, ["void *arg"]):
+            content.add([f"{self.context} *ctx;", "", "ctx = arg;"])
+            content.gap = False
+            content.add(mandatory_code)
+            content.gap = False
+            content.add(optional_code)
+            if info:
+                content.append(f"{method}( ctx );")
+        return wrap
 
     def generate_header(self, base_directory: str, header: Dict[str,
                                                                 Any]) -> None:
@@ -349,11 +386,6 @@ class _ActionRequirementTestItem(_TestItem):
             (index, condition["name"])
             for index, condition in enumerate(item["post-conditions"]))
 
-    @property
-    def context(self) -> str:
-        """ Returns the test case context type. """
-        return f"{self._ident}_Context"
-
     def _add_pre_condition_descriptions(self, content: CContent) -> None:
         for condition in self["pre-conditions"]:
             content.add("static const char * const "
@@ -411,23 +443,6 @@ class _ActionRequirementTestItem(_TestItem):
                     "return", "T_get_scope",
                     [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
             content.add("return 0;")
-
-    def _add_fixture_method(self, content: CContent,
-                            info: Optional[Dict[str, Optional[str]]],
-                            name: str) -> str:
-        if not info:
-            return "NULL"
-        method = f"{self.ident}_{name}"
-        wrap = f"{method}_Wrap"
-        content.add_description_block(info["brief"], info["description"])
-        with content.function("static void", method, [f"{self.context} *ctx"]):
-            content.add(self.substitute_code(info["code"]))
-        with content.function("static void", wrap, ["void *arg"]):
-            content.add([
-                f"{self.context} *ctx;", "", "ctx = arg;",
-                "ctx->in_action_loop = false;", f"{method}( ctx );"
-            ])
-        return wrap
 
     def _add_transitions(self, condition_index: int, map_index: int,
                          transition: Dict[str,
@@ -681,10 +696,19 @@ class _ActionRequirementTestItem(_TestItem):
                           self._pre_index_to_enum, "Prepare")
         self._add_handler(content, self["post-conditions"],
                           self._post_index_to_enum, "Check")
-        setup = self._add_fixture_method(content, self["test-setup"], "Setup")
-        stop = self._add_fixture_method(content, self["test-stop"], "Stop")
-        teardown = self._add_fixture_method(content, self["test-teardown"],
-                                            "Teardown")
+        optional_code = "ctx->in_action_loop = false;"
+        setup = self.add_support_method(content,
+                                        "test-setup",
+                                        "Setup",
+                                        optional_code=optional_code)
+        stop = self.add_support_method(content,
+                                       "test-stop",
+                                       "Stop",
+                                       optional_code=optional_code)
+        teardown = self.add_support_method(content,
+                                           "test-teardown",
+                                           "Teardown",
+                                           optional_code=optional_code)
         self._add_fixture_scope(content)
         content.add([
             f"static T_fixture {self.ident}_Fixture = {{",
