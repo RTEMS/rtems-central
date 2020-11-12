@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+    - in:
+      - max-lower-bound
+      - max-upper-bound
+      - mean-lower-bound
+      - mean-upper-bound
+      - min-lower-bound
+      - min-upper-bound
+    description: |
+      It specifies the kind of a runtime measurement value.
+spec-name: Runtime Measurement Value Kind
+spec-type: requirement-performance-runtime-kind
+type: spec

@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes provides a set of runtime measurement values each
+      of a specified kind.  The unit of the values shall be one second.
+    generic-attributes:
+      description: null
+      key-spec-type: requirement-performance-runtime-kind
+      value-spec-type: float
+    mandatory-attributes: all
+spec-name: Runtime Measurement Value Table
+spec-type: requirement-performance-runtime-values
+type: spec

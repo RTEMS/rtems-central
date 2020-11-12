@@ -1,0 +1,71 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: build-configuration
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: constraint
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: design
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: documentation
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: interface
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: interface-requirement
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: maintainability
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: performance
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: portability
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: quality
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: reliability
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: resource
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: safety
+  uid: requirement-non-functional
+spec-description: |
+  Items of this type state a non-functional requirement with the non-functional
+  type defined by the specification type refinement.
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: null
+    mandatory-attributes: all
+spec-name: Generic Non-Functional Requirement Item Type
+spec-type: requirement-non-functional-generic
+type: spec

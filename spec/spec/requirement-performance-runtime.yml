@@ -1,0 +1,155 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: performance-runtime
+  uid: requirement-non-functional
+spec-description: |
+  The item shall have exactly one link with the
+  ${runtime-measurement-request-role:/spec-name}.  A requirement text processor
+  shall support a substitution of $${.:/limit-kind}:
+
+  * For a ${requirement-performance-runtime-kind:/spec-name} of
+    ``min-lower-bound`` or ``min-upper-bound``, the substitution of
+    $${.:/limit-kind} shall be ``"minimum"``.
+
+  * For a ${requirement-performance-runtime-kind:/spec-name} of
+    ``mean-lower-bound`` or ``mean-upper-bound``, the substitution of
+    $${.:/limit-kind} shall be ``"mean"``.
+
+  * For a ${requirement-performance-runtime-kind:/spec-name} of
+    ``max-lower-bound`` or ``max-upper-bound``, the substitution of
+    $${.:/limit-kind} shall be ``"maximum"``.
+
+  A requirement text processor shall support a substitution of
+  $${.:/limit-condition}:
+
+  * For a ${requirement-performance-runtime-kind:/spec-name} of
+    ``min-lower-bound``, ``mean-lower-bound``, or ``max-lower-bound``, the
+    substitution of $${.:/limit-condition} shall be ``"greater than or equal to
+    <value>"`` with <value> being the value of the corresponding entry in the
+    ${requirement-performance-runtime-values:/spec-name}.
+
+  * For a ${requirement-performance-runtime-kind:/spec-name} of
+    ``min-upper-bound``, ``mean-upper-bound``, or ``max-upper-bound``, the
+    substitution of $${.:/limit-condition} shall be ``"less than or equal to
+    <value>"`` with <value> being the value of the corresponding entry in the
+    ${requirement-performance-runtime-values:/spec-name}.
+
+  A requirement text processor shall support a substitution of
+  $${.:/environment}.  The value of the substitution shall be ``"<environment>
+  environment"`` with <environment> being the environment of the corresponding
+  entry in the ${requirement-performance-runtime-envs:/spec-name}.
+spec-example: |
+  SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+  copyrights:
+  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  enabled-by: true
+  links:
+  - role: runtime-measurement-request
+    uid: ../val/performance
+  limits:
+    sparc/leon3:
+      DirtyCache:
+        max-upper-bound: 0.000005
+        mean-upper-bound: 0.000005
+      FullCache:
+        max-upper-bound: 0.000005
+        mean-upper-bound: 0.000005
+      HotCache:
+        max-upper-bound: 0.000005
+        mean-upper-bound: 0.000005
+      Load/1:
+        max-upper-bound: 0.00001
+        mean-upper-bound: 0.00001
+      Load/2:
+        max-upper-bound: 0.00001
+        mean-upper-bound: 0.00001
+      Load/3:
+        max-upper-bound: 0.00001
+        mean-upper-bound: 0.00001
+      Load/4:
+        max-upper-bound: 0.00001
+        mean-upper-bound: 0.00001
+  params: {}
+  rationale: null
+  references: []
+  test-body:
+    brief: |
+      Get a buffer.
+    code: |
+      ctx->status = rtems_partition_get_buffer( ctx->part_many, &ctx->buffer );
+    description: null
+  test-cleanup: null
+  test-prepare: null
+  test-setup: null
+  test-teardown:
+    brief: |
+      Return the buffer.
+    code: |
+      rtems_status_code sc;
+
+      T_quiet_rsc_success( ctx->status );
+
+      sc = rtems_partition_return_buffer( ctx->part_many, ctx->buffer );
+      T_quiet_rsc_success( sc );
+
+      return tic == toc;
+    description: null
+  text: |
+    When a partition has exactly ${../val/performance:/params/buffer-count} free
+    buffers, the ${.:limit-kind} runtime of exactly
+    ${../val/performance:/params/sample-count} successful calls to
+    ${../if/get-buffer:/name} in the ${.:/environment} shall be
+    ${.:limit-condition}.
+  non-functional-type: performance-runtime
+  requirement-type: non-functional
+  type: requirement
+spec-info:
+  dict:
+    attributes:
+      limits:
+        description: null
+        spec-type: requirement-performance-runtime-limits
+      params:
+        description: null
+        spec-type: requirement-performance-runtime-params
+      test-body:
+        description: |
+          It shall provide the code of the measure runtime body handler.  In
+          contrast to other methods, this method is mandatory.
+        spec-type: test-support-method
+      test-setup:
+        description: |
+          It may provide the code of the measure runtime setup handler.
+        spec-type: test-support-method
+      test-teardown:
+        description: |
+          It may provide the code of the measure runtime teardown handler.
+        spec-type: test-support-method
+      test-prepare:
+        description: |
+          It may provide the code to prepare the measure runtime request.  This
+          method is called after the prepare method of the corresponding
+          ${runtime-measurement-test:/spec-name} item and before the request.
+        spec-type: test-support-method
+      test-cleanup:
+        description: |
+          It may provide the code to clean up the measure runtime request.
+          This method is called before the cleanup method of the corresponding
+          ${runtime-measurement-test:/spec-name} item and after the request.
+        spec-type: test-support-method
+    description: |
+      This set of attributes specifies non-functional runtime performance
+      requirements and the corresponding validation test code.  Along with the
+      requirement, the test code to execute a measure runtime request is
+      specified.
+    mandatory-attributes: all
+spec-name: Runtime Performance Requirement Item Type
+spec-type: requirement-performance-runtime
+type: spec

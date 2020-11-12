@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes provides runtime performance limits for a set of
+      runtime measurement environments.
+    generic-attributes:
+      description: null
+      key-spec-type: requirement-performance-runtime-env
+      value-spec-type: requirement-performance-runtime-values
+    mandatory-attributes: all
+spec-name: Runtime Measurement Environment Table
+spec-type: requirement-performance-runtime-envs
+type: spec
