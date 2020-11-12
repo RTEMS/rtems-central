@@ -4,7 +4,7 @@ brief: |
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ( (${.:/params[0]/name}) | ${unlimited-objects:/name} )
+  default: ( ( ${.:/params[0]/name} ) | ${unlimited-objects:/name} )
   variants: []
 description: null
 enabled-by: true
