@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 2018 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    extern char _name[]
+    extern char ${.:/params[0]/name}[]
   variants: []
 description: |
   This macro must be placed at file scope.

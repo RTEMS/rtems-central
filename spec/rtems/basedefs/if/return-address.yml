@@ -7,7 +7,7 @@ definition:
   default: ${/c/if/null:/name}
   variants:
   - definition: |
-      ${/compiler/if/builtin-return-address:/name}(0)
+      ${/compiler/if/builtin-return-address:/name}( 0 )
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

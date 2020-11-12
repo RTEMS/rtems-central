@@ -8,7 +8,7 @@ definition:
   default: ''
   variants:
   - definition: |
-      __attribute__((__deprecated__))
+      __attribute__(( __deprecated__ ))
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

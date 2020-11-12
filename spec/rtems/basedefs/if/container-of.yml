@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 2014 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    ( (_type *) ( (${/c/if/uintptr_t:/name}) ( _m ) - ${/c/if/offsetof:/name}( _type, _member_name ) ) )
+    ( (${.:/params[1]/name} *) ( (${/c/if/uintptr_t:/name}) ( ${.:/params[0]/name} ) - ${/c/if/offsetof:/name}( ${.:/params[1]/name}, ${.:/params[2]/name} ) ) )
   variants: []
 description: null
 enabled-by: true

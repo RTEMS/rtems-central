@@ -9,8 +9,8 @@ definition:
   variants:
   - definition: |
       ${/compiler/if/builtin-types-compatible-p:/name}(
-        ${/compiler/if/typeof:/name}( ( (_t_lhs *) 0 )->_m_lhs ),
-        ${/compiler/if/typeof:/name}( ( (_t_rhs *) 0 )->_m_rhs )
+        ${/compiler/if/typeof:/name}( ( (${.:/params[0]/name} *) 0 )->${.:/params[1]/name} ),
+        ${/compiler/if/typeof:/name}( ( (${.:/params[2]/name} *) 0 )->${.:/params[3]/name} )
       )
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})

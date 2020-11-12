@@ -9,7 +9,7 @@ definition:
   default: ''
   variants:
   - definition: |
-      __attribute__((__pure__))
+      __attribute__(( __pure__ ))
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

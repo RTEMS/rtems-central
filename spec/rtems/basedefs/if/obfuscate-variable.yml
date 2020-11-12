@@ -6,10 +6,10 @@ copyrights:
 - Copyright (C) 2016, 2018 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    (void) (_var)
+    (void) ( ${.:/params[0]/name} )
   variants:
   - definition: |
-      ${/compiler/if/asm:/name}( "" : "+r" ( _var ) )
+      ${/compiler/if/asm:/name}( "" : "+r" ( ${.:/params[0]/name} ) )
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: |

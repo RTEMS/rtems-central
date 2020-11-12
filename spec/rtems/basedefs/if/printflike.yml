@@ -8,7 +8,7 @@ definition:
   default: ''
   variants:
   - definition: |
-      __attribute__((__format__(__printf__, _format_pos, _ap_pos)))
+      __attribute__(( __format__( __printf__, ${.:/params[0]/name}, ${.:/params[1]/name} ) ))
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

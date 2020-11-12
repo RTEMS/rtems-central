@@ -6,7 +6,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2014 Paval Pisa
 definition:
-  default: ${dequalify-depthx:/name}(*, _type, _var)
+  default: ${dequalify-depthx:/name}( *, ${.:/params[0]/name}, ${.:/params[1]/name} )
   variants: []
 description: null
 enabled-by: true

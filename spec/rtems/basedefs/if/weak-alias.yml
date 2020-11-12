@@ -7,7 +7,7 @@ definition:
   default: ''
   variants:
   - definition: |
-      __attribute__((__weak__, __alias__(#_target)))
+      __attribute__(( __weak__, __alias__( #${.:/params[0]/name} ) ))
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

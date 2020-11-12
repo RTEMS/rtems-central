@@ -5,15 +5,15 @@ copyrights:
 - Copyright (C) 2011, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    struct rtems_static_assert_ ## _msg
-      { int rtems_static_assert_ ## _msg : (_cond) ? 1 : -1; }
+    struct rtems_static_assert_ ## ${.:/params[1]/name}
+      { int rtems_static_assert_ ## ${.:/params[1]/name} : ( ${.:/params[0]/name} ) ? 1 : -1; }
   variants:
   - definition: |
-      static_assert(_cond, # _msg)
+      static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
     enabled-by:
     - ${/compiler/if/cplusplus:/name} >= 201103L
   - definition: |
-      _Static_assert(_cond, # _msg)
+      _Static_assert( ${.:/params[0]/name}, # ${.:/params[1]/name} )
     enabled-by:
     - ${/compiler/if/stdc-version:/name} >= 201112L
 description: null

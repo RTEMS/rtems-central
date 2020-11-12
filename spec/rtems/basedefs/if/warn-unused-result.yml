@@ -8,7 +8,7 @@ definition:
   default: ''
   variants:
   - definition: |
-      __attribute__((__warn_unused_result__))
+      __attribute__(( __warn_unused_result__ ))
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null

@@ -6,19 +6,20 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2014 Paval Pisa
 definition:
-  default: ((_type)(${/c/if/uintptr_t:/name})(const volatile void *)(_var))
+  default: |
+    ( (${.:/params[1]/name}) (${/c/if/uintptr_t:/name}) (const volatile void *)( ${.:/params[2]/name} ) )
   variants:
   - definition: |
-      (const_cast<_type>(_var))
+      ( const_cast<${.:/params[1]/name}>( ${.:/params[2]/name} ) )
     enabled-by:
     - defined(${/compiler/if/cplusplus:/name})
   - definition: |
-      ${/compiler/if/builtin-choose-expr:/name}(${/compiler/if/builtin-types-compatible-p:/name}(
-          ${typeof-refx:/name}(_ptr_level, _var),
-          ${typeof-refx:/name}(_ptr_level, _type)
-        ) || ${/compiler/if/builtin-types-compatible-p:/name}(_type, void *),
-      (_type)(_var),
-      ${/score/if/dequalify-types-not-compatible:/name}())
+      ${/compiler/if/builtin-choose-expr:/name}( ${/compiler/if/builtin-types-compatible-p:/name}(
+          ${typeof-refx:/name}( ${.:/params[0]/name}, ${.:/params[2]/name} ),
+          ${typeof-refx:/name}( ${.:/params[0]/name}, ${.:/params[1]/name} )
+        ) || ${/compiler/if/builtin-types-compatible-p:/name}( ${.:/params[1]/name}, void * ),
+      (${.:/params[1]/name}) ( ${.:/params[2]/name} ),
+      ${/score/if/dequalify-types-not-compatible:/name}() )
     enabled-by:
     - defined(${/compiler/if/gnuc:/name})
 description: null
