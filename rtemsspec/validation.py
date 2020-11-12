@@ -24,6 +24,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# pylint: disable=too-many-lines
+
 import itertools
 import math
 import os
@@ -757,6 +759,23 @@ class _ActionRequirementTestItem(_TestItem):
         content.add("/** @} */")
 
 
+class _RuntimeMeasurementRequestItem(_TestItem):
+    """ A runtime measurement request item. """
+    def __init__(self, item: Item, context: str):
+        super().__init__(item)
+        self._context = context
+
+    @property
+    def context(self) -> str:
+        return self._context
+
+
+def _add_call_method(content: CContent, name: str) -> None:
+    if name != "NULL":
+        content.gap = False
+        content.call_function(None, name, ["ctx"])
+
+
 class _RuntimeMeasurementTestItem(_TestItem):
     """ A runtime measurement test item. """
     def add_test_case_action_description(self, _content: CContent) -> None:
@@ -769,6 +788,55 @@ class _RuntimeMeasurementTestItem(_TestItem):
         content.add_description_block(
             "This member provides the measure runtime request.", None)
         content.add("T_measure_runtime_request request;")
+
+    def _add_requests(self, content: CContent) -> CContent:
+        requests = CContent()
+        prepare = self.add_support_method(content,
+                                          "test-prepare",
+                                          "Prepare",
+                                          do_wrap=False)
+        cleanup = self.add_support_method(content,
+                                          "test-cleanup",
+                                          "Cleanup",
+                                          do_wrap=False)
+        for item in self.item.children("runtime-measurement-request"):
+            req = _RuntimeMeasurementRequestItem(item, self.context)
+            requests.add_blank_line()
+            _add_call_method(requests, prepare)
+            name = req.add_support_method(content,
+                                          "test-prepare",
+                                          "Prepare",
+                                          do_wrap=False)
+            _add_call_method(requests, name)
+            name = req.add_support_method(content, "test-setup", "Setup")
+            requests.append([
+                f"ctx->request.name = \"{req.ident}\";",
+                f"ctx->request.setup = {name};"
+            ])
+            name = req.add_support_method(content, "test-body", "Body")
+            requests.append([f"ctx->request.body = {name};"])
+            extra_params = [
+                "T_ticks *delta", "uint32_t tic", "uint32_t toc",
+                "unsigned int retry"
+            ]
+            extra_args = ["delta", "tic", "toc", "retry"]
+            name = req.add_support_method(content,
+                                          "test-teardown",
+                                          "Teardown",
+                                          ret="bool",
+                                          extra_params=extra_params,
+                                          extra_args=extra_args)
+            requests.append([f"ctx->request.teardown = {name};"])
+            requests.gap = False
+            requests.call_function(None, "T_measure_runtime",
+                                   ["ctx->context", "&ctx->request"])
+            name = req.add_support_method(content,
+                                          "test-cleanup",
+                                          "Cleanup",
+                                          do_wrap=False)
+            _add_call_method(requests, name)
+            _add_call_method(requests, cleanup)
+        return requests
 
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
@@ -799,14 +867,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
             f"  .teardown = {teardown},", "  .scope = NULL,",
             f"  .initial_context = &{self.ident}_Instance", "};"
         ])
-        self.add_support_method(content,
-                                "test-prepare",
-                                "Prepare",
-                                do_wrap=False)
-        self.add_support_method(content,
-                                "test-cleanup",
-                                "Cleanup",
-                                do_wrap=False)
+        requests = self._add_requests(content)
         with content.function_block(f"void T_case_body_{self.ident}( void )"):
             pass
         content.gap = False
@@ -819,6 +880,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
                 "",
                 "ctx = T_fixture_context();",
             ])
+            content.append(requests)
         content.add("/** @} */")
 
 

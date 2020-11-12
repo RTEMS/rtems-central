@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: runtime-measurement-request
+  uid: rtm
+limits: {}
+params: {}
+rationale: null
+references: []
+test-body:
+  brief: |
+    Body brief.
+  code: |
+    /* Body code */
+  description: |
+    Body description.
+test-cleanup:
+  brief: |
+    Cleanup brief.
+  code: |
+    /* Cleanup code */
+  description: |
+    Cleanup description.
+test-prepare: null
+test-setup: null
+test-teardown:
+  brief: |
+    Teardown brief.
+  code: |
+    /* Teardown code */
+  description: |
+    Teardown description.
+non-functional-type: performance-runtime
+requirement-type: non-functional
+text: |
+  Text.
+type: requirement

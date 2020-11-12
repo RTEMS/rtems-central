@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: requirement-type
+  spec-value: non-functional
+  uid: requirement
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      non-functional-type:
+        description: null
+        spec-type: name
+    description: null
+    mandatory-attributes: all
+spec-name: None-Functional
+spec-type: non-functional
+type: spec

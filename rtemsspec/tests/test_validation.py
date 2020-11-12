@@ -1088,6 +1088,64 @@ static void Rtm_Cleanup( Rtm_Context *ctx )
 }
 
 /**
+ * @brief Body brief.
+ *
+ * Body description.
+ */
+static void Rpr_Body( Rtm_Context *ctx )
+{
+  /* Body code */
+}
+
+static void Rpr_Body_Wrap( void *arg )
+{
+  Rtm_Context *ctx;
+
+  ctx = arg;
+  Rpr_Body( ctx );
+}
+
+/**
+ * @brief Teardown brief.
+ *
+ * Teardown description.
+ */
+static bool Rpr_Teardown(
+  Rtm_Context *ctx,
+  T_ticks     *delta,
+  uint32_t     tic,
+  uint32_t     toc,
+  unsigned int retry
+)
+{
+  /* Teardown code */
+}
+
+static bool Rpr_Teardown_Wrap(
+  void        *arg,
+  T_ticks     *delta,
+  uint32_t     tic,
+  uint32_t     toc,
+  unsigned int retry
+)
+{
+  Rtm_Context *ctx;
+
+  ctx = arg;
+  return Rpr_Teardown( ctx, delta, tic, toc, retry );
+}
+
+/**
+ * @brief Cleanup brief.
+ *
+ * Cleanup description.
+ */
+static void Rpr_Cleanup( Rtm_Context *ctx )
+{
+  /* Cleanup code */
+}
+
+/**
  * @fn void T_case_body_Rtm( void )
  */
 T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
@@ -1095,6 +1153,14 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
   Rtm_Context *ctx;
 
   ctx = T_fixture_context();
+
+  ctx->request.name = "Rpr";
+  ctx->request.setup = NULL;
+  ctx->request.body = Rpr_Body_Wrap;
+  ctx->request.teardown = Rpr_Teardown_Wrap;
+  T_measure_runtime( ctx->context, &ctx->request );
+  Rpr_Cleanup( ctx );
+  Rtm_Cleanup( ctx );
 }
 
 /** @} */
