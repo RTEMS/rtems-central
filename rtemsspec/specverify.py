@@ -241,6 +241,13 @@ class _Verifier:
         """ Resolves the type refinements for this type. """
 
 
+class _AnyVerifier(_Verifier):
+    def verify(self, path: _Path, _value: Any) -> Set[str]:
+        """ Does not verify the value. """
+        self.verify_info(path)
+        return set()
+
+
 class _NameVerifier(_Verifier):
     def verify(self, path: _Path, value: Any) -> Set[str]:
         """ Verifies a name. """
@@ -493,6 +500,7 @@ class SpecVerifier:
     # pylint: disable=too-few-public-methods
     def __init__(self, item_cache: ItemCache, root_uid: str):
         verifier_map = {}  # type: _VerifierMap
+        _AnyVerifier("any", verifier_map)
         _NameVerifier("name", verifier_map)
         _UIDVerifier("uid", verifier_map)
         _Verifier("bool", verifier_map)

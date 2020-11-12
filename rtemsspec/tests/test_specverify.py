@@ -79,7 +79,8 @@ def test_verify(caplog, tmpdir):
     item_cache = ItemCache(item_cache_config)
     caplog.set_level(logging.INFO)
     verifier = SpecVerifier(item_cache, "/spec/root")
-    assert get_and_clear_log(caplog) == """INFO type: any-dict
+    assert get_and_clear_log(caplog) == """INFO type: any
+INFO type: any-dict
 INFO type: bool
 INFO type: c
 INFO type: copyright
@@ -230,6 +231,7 @@ INFO /d:/enabled-by: verify using type 'enabled-by'
 INFO /d:/links: verify using type 'links'
 INFO /d:/type: verify using type 'name'
 INFO /d: verify using type 'd'
+INFO /d:/any: verify using type 'any'
 INFO /d:/d-type: verify using type 'name'
 INFO /d: verify using type 'd-a'
 INFO /d:/d-type: verify using type 'x'
@@ -1459,6 +1461,10 @@ INFO /spec2/d:/spec-info: verify using type 'spec-info'
 INFO /spec2/d:/spec-info/dict: verify using type 'spec-dict'
 ERROR /spec2/d:/spec-info/dict: missing mandatory keys for type 'spec-dict': ['description']
 INFO /spec2/d:/spec-info/dict/attributes: verify using type 'spec-attributes'
+INFO /spec2/d:/spec-info/dict/attributes/any: verify using type 'name'
+INFO /spec2/d:/spec-info/dict/attributes/any: verify using type 'spec-attribute-value'
+INFO /spec2/d:/spec-info/dict/attributes/any/description: verify using type 'optional-str'
+INFO /spec2/d:/spec-info/dict/attributes/any/spec-type: verify using type 'name'
 INFO /spec2/d:/spec-info/dict/attributes/d-type: verify using type 'name'
 INFO /spec2/d:/spec-info/dict/attributes/d-type: verify using type 'spec-attribute-value'
 ERROR /spec2/d:/spec-info/dict/attributes/d-type: missing mandatory keys for type 'spec-attribute-value': ['description']
@@ -1927,7 +1933,7 @@ INFO finished specification item verification"""
     assert info.critical == 0
     assert info.error == 91
     assert info.warning == 1
-    assert info.info == 1686
+    assert info.info == 1691
     assert info.debug == 0
     info = verifier.verify(item_cache["/spec2/x"])
     assert get_and_clear_log(

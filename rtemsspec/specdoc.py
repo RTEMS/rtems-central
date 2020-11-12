@@ -35,6 +35,7 @@ from rtemsspec.specverify import NAME
 _DocumenterMap = Dict[str, "_Documenter"]
 
 _PRIMITIVE_TYPES = {
+    "any": "The attribute value may have any type.",
     "bool": "{} {} be a boolean.",
     "float": "{} {} be a floating-point number.",
     "int": "{} {} be an integer number.",
