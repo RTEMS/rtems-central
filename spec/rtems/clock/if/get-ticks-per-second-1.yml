@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the number of clock ticks per second configured for this application.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -13,12 +14,17 @@ interface-type: macro
 links:
 - role: interface-placement
   uid: header
-- role: interface-ingroup
-  uid: group
 name: rtems_clock_get_ticks_per_second
-notes: null
+notes: |
+  The number of clock ticks per second is defined indirectly by the
+  ${/acfg/if/microseconds-per-tick:/name} configuration option.
+
+  This macro is an optimized variant for C/C++ without a function call
+  overhead.
 params: []
 return:
-  return: null
+  return: |
+    Returns the number of clock ticks per second configured for this
+    application.
   return-values: []
 type: interface
