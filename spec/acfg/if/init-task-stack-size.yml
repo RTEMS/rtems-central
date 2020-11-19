@@ -17,6 +17,13 @@ links:
 - role: constraint
   uid: constraint-stackspace
 name: CONFIGURE_INIT_TASK_STACK_SIZE
-notes: null
+notes: |
+  The
+
+  * ``CONFIGURE_INIT_TASK_STACK_SIZE`` and
+
+  * ${init-task-construct-storage-size:/name}
+
+  configuration options are mutually exclusive.
 text: ''
 type: interface
