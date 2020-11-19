@@ -221,7 +221,7 @@ This type is used by the following types:
 A
 ^
 
-This type refines the :ref:`SpecTypeRoot` though the ``type`` attribute if the
+This type refines the :ref:`SpecTypeRoot` through the ``type`` attribute if the
 value is ``spec``. A description.
 
 The explicit attributes for this type are:
@@ -246,9 +246,9 @@ B
 
 This type refines the following types:
 
-* :ref:`SpecTypeD` though the ``d1`` attribute if the value is ``b``
+* :ref:`SpecTypeD` through the ``d1`` attribute if the value is ``b``
 
-* :ref:`SpecTypeRoot` though the ``type`` attribute if the value is ``b``
+* :ref:`SpecTypeRoot` through the ``type`` attribute if the value is ``b``
 
 Generic attributes may be specified. Each generic attribute key shall be a
 :ref:`SpecTypeName`. Each generic attribute value shall be a list. Each list

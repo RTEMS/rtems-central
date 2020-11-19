@@ -417,7 +417,7 @@ class _Documenter:
 
     def _add_description(self, content: SphinxContent) -> None:
         refines = [
-            f"{documenter.get_section_reference()} though the "
+            f"{documenter.get_section_reference()} through the "
             f"``{key}`` attribute if the value is ``{value}``"
             for documenter, key, value in self.refines()
         ]
