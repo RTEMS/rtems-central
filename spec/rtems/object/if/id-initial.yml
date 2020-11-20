@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Builds the object identifier with the lowest index from the API, class, and
+  MPCI node components.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -17,18 +19,24 @@ links:
 - role: interface-ingroup
   uid: group
 name: RTEMS_OBJECT_ID_INITIAL
-notes: null
+notes: |
+  This directive is strictly local and does not impact task scheduling.
 params:
-- description: '%'
+- description: |
+    is the API of the object identifier to build.
   dir: null
   name: _api
-- description: '%'
+- description: |
+    is the class of the object identifier to build.
   dir: null
   name: _class
-- description: '%'
+- description: |
+    is the MPCI node of the object identifier to build.
   dir: null
   name: _node
 return:
-  return: null
+  return: |
+    Returns the object identifier with the lowest index built from the API,
+    class, and MPCI node components.
   return-values: []
 type: interface

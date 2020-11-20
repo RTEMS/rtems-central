@@ -112,6 +112,9 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/partition/directives.rst
   group: /rtems/part/if/group
   introduction-target: modules/rtems-docs/c-user/partition/introduction.rst
+- directives-target: modules/rtems-docs/c-user/object-services/directives.rst
+  group: /rtems/object/if/group
+  introduction-target: modules/rtems-docs/c-user/object-services/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:

@@ -1,8 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the lowest valid class value of the object API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 1988, 2009 On-Line Applications Research Corporation (OAR)
 definition:
   default:
     attributes: null
@@ -21,12 +22,18 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_object_api_minimum_class
-notes: null
+notes: |
+  This directive is strictly local and does not impact task scheduling.
 params:
-- description: '%'
+- description: |
+    is the object API to get the lowest valid class value.
   dir: null
   name: api
 return:
-  return: null
-  return-values: []
+  return: |
+    Returns the lowest valid class value of the object API.
+  return-values:
+  - description: |
+      The object API was invalid.
+    value: -1
 type: interface

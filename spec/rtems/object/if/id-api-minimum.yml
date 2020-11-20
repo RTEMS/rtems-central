@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the lowest valid value for the API component of an object identifier.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -16,9 +17,14 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_object_id_api_minimum
-notes: null
+notes: |
+  This directive is strictly local and does not impact task scheduling.
+
+  A body is also provided.
 params: []
 return:
-  return: null
+  return: |
+    Returns the lowest valid value for the API component of an object
+    identifier.
   return-values: []
 type: interface

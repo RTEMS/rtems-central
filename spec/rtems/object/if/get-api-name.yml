@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets a descriptive name of the object API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -21,12 +22,20 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_object_get_api_name
-notes: null
+notes: |
+  This directive is strictly local and does not impact task scheduling.
+
+  The string returned is from constant space.  Do not modify or free it.
 params:
-- description: '%'
+- description: |
+    is the object API to get the name.
   dir: null
   name: api
 return:
-  return: null
-  return-values: []
+  return: |
+    Returns a descriptive name of the API, if the API was valid.
+  return-values:
+  - description: |
+      The API was invalid.
+    value: '"BAD API"'
 type: interface

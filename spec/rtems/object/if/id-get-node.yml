@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the MPCI node component of the object identifier.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -16,12 +17,20 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_object_id_get_node
-notes: null
+notes: |
+  This directive is strictly local and does not impact task scheduling.
+
+  This directive does not validate the object identifier provided in
+  ``${.:/params[0]/name}``.
+
+  A body is also provided.
 params:
-- description: '%'
+- description: |
+    is the object identifier with the MPCI node component to get.
   dir: null
   name: _id
 return:
-  return: null
+  return: |
+    Returns the MPCI node component of the object identifier.
   return-values: []
 type: interface

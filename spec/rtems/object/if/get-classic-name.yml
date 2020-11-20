@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the object name associated with the object identifier.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -22,15 +23,35 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_object_get_classic_name
-notes: null
+notes: |
+  This directive is strictly local and does not impact task scheduling.
 params:
-- description: '%'
+- description: |
+    is the object identifier to get the name.
   dir: null
   name: id
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to an object name variable.  The object name associated with
+    the object identifier will be stored in this variable, in case of a
+    successful operation.
+  dir: out
   name: name
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no object information available for the object identifier.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The object name associated with the object identifier was a string.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      There was no object associated with the object identifier.
+    value: ${../../status/if/invalid-id:/name}
 type: interface
