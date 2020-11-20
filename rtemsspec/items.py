@@ -497,7 +497,12 @@ def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
 
 def _load_item(path: str, uid: str) -> Any:
     with open(path, "r") as src:
-        data = yaml.safe_load(src.read())
+        try:
+            data = yaml.safe_load(src.read())
+        except yaml.parser.ParserError as err:
+            msg = ("YAML parser error while loading specification item file "
+                   f"'{path}': {str(err)}")
+            raise IOError(msg) from err
         data["_file"] = os.path.abspath(path)
         data["_uid"] = uid
     return data

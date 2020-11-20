@@ -84,6 +84,18 @@ def test_load_link_error(tmpdir):
         ItemCache(config)
 
 
+def test_load_parser_error(tmpdir):
+    config = create_item_cache_config_and_copy_spec(tmpdir,
+                                                    "spec-item-cache-3")
+    match = r"""YAML parser error while loading specification item file '.*invalid.yml': while parsing a block mapping
+expected <block end>, but found ':'
+  in "<unicode string>", line 1, column 1:
+    :
+    \^"""
+    with pytest.raises(IOError, match=match):
+        ItemCache(config)
+
+
 class Mapper(ItemMapper):
     def __init__(self, item):
         super().__init__(item)
