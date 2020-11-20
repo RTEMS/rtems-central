@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: |
-    ${used:/name}
+    ${unused:/name}
   variants: []
 description: null
 enabled-by: true
@@ -16,6 +16,6 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
-name: RTEMS_COMPILER_USED_ATTRIBUTE
+name: RTEMS_COMPILER_UNUSED_ATTRIBUTE
 notes: null
 type: interface
