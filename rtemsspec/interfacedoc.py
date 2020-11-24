@@ -105,10 +105,6 @@ def _generate_introduction(target: str, group: Item,
     content.write(target)
 
 
-def _sanitize_name(name: str) -> str:
-    return name.lstrip("_")
-
-
 def _add_function_definition(content: CContent, mapper: ItemMapper, item: Item,
                              value: Dict[str, Any]) -> None:
     ret = mapper.substitute(value["return"])
@@ -121,7 +117,7 @@ def _add_macro_definition(content: CContent, _mapper: ItemMapper, item: Item,
                           _value: Dict[str, Any]) -> None:
     ret = "#define"
     name = item["name"]
-    params = [_sanitize_name(param["name"]) for param in item["params"]]
+    params = [param["name"] for param in item["params"]]
     content.call_function(ret, name, params, semicolon="")
 
 
@@ -171,8 +167,9 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
     if item["params"]:
         content.add(".. rubric:: PARAMETERS:")
         for param in item["params"]:
+            param_name = mapper.substitute(param["name"])
             content.add_definition_item(
-                f"``{_sanitize_name(param['name'])}``",
+                f"``{param_name}``",
                 mapper.substitute(f"This parameter {param['description']}"),
                 wrap=True)
     if item["description"]:
