@@ -767,7 +767,8 @@ class CContent(Content):
     def call_function(self,
                       ret: Optional[str],
                       name: str,
-                      params: Optional[List[str]] = None) -> None:
+                      params: Optional[List[str]] = None,
+                      semicolon: str = ";") -> None:
         """ Adds a function call. """
         if ret:
             space = " "
@@ -779,16 +780,16 @@ class CContent(Content):
             param_line = "( " + ", ".join(params) + " )"
         else:
             param_line = "()"
-        line = f"{ret}{space}{name}{param_line};"
+        line = f"{ret}{space}{name}{param_line}{semicolon}"
         if len(self._indent) + len(line) > 79:
             if params:
-                self._function(ret, name, params, param_line, space, ";")
+                self._function(ret, name, params, param_line, space, semicolon)
             elif ret:
                 self.add(ret)
                 with self.indent():
-                    self.add(f"{name}();")
+                    self.add(f"{name}(){semicolon}")
             else:
-                self.add(f"{name}();")
+                self.add(f"{name}(){semicolon}")
         else:
             self.add(line)
 

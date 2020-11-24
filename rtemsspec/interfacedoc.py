@@ -28,7 +28,7 @@ This module provides functions for the generation of interface documentation.
 
 import functools
 import os
-from typing import Any, Callable, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper
 from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
@@ -36,7 +36,6 @@ from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
-AddDefinition = Callable[[CContent, ItemMapper, Item, Dict[str, Any]], None]
 
 INTERFACE = "Interface"
 
@@ -69,6 +68,7 @@ class _Mapper(SphinxMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self.add_get_value("interface/function:/name", _get_value_function)
+        self.add_get_value("interface/macro:/name", _get_value_function)
 
 
 def _generate_introduction(target: str, group: Item,
@@ -107,17 +107,30 @@ def _generate_introduction(target: str, group: Item,
 
 def _add_function_definition(content: CContent, mapper: ItemMapper, item: Item,
                              value: Dict[str, Any]) -> None:
-    name = item["name"]
     ret = mapper.substitute(value["return"])
+    name = item["name"]
     params = [mapper.substitute(param) for param in value["params"]]
     content.declare_function(ret, name, params)
 
 
+def _add_macro_definition(content: CContent, _mapper: ItemMapper, item: Item,
+                          _value: Dict[str, Any]) -> None:
+    ret = "#define"
+    name = item["name"]
+    params = [param["name"] for param in item["params"]]
+    content.call_function(ret, name, params, semicolon="")
+
+
+_ADD_DEFINITION = {
+    "interface/function": _add_function_definition,
+    "interface/macro": _add_macro_definition,
+}
+
+
 def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
-                    prefix: str, value: Dict[str, Any],
-                    add_definition: AddDefinition) -> None:
+                    prefix: str, value: Dict[str, Any]) -> None:
     # pylint: disable=too-many-arguments
-    assert item.type == "interface/function"
+    add_definition = _ADD_DEFINITION[item.type]
     default = value["default"]
     variants = value["variants"]
     if variants:
@@ -149,7 +162,7 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
     with content.directive("code-block", "c"):
         code = CContent()
         _add_definition(code, code_mapper, item, "definition",
-                        item["definition"], _add_function_definition)
+                        item["definition"])
         content.add(code)
     if item["params"]:
         content.add(".. rubric:: PARAMETERS:")
@@ -229,7 +242,7 @@ def generate(config: list, item_cache: ItemCache) -> None:
         group = item_cache[doc_config["group"]]
         assert group.type == "interface/group"
         for child in group.children("interface-ingroup"):
-            if child.type == "interface/function":
+            if child.type in ["interface/function", "interface/macro"]:
                 items.append(child)
         items.sort(key=functools.partial(
             _directive_key, list(group.parents("placement-order"))))

@@ -78,6 +78,9 @@ Introduction
 .. spec:/func4
 .. spec:/func2
 .. spec:/func3
+.. spec:/macro
+.. spec:/macro2
+.. spec:/macro3
 
 The directives provided by the Group B are:
 
@@ -87,6 +90,12 @@ The directives provided by the Group B are:
 * :ref:`InterfaceVeryLongFunction` - Very long function brief description.
 
 * :ref:`InterfaceVoidFunction`
+
+* :ref:`InterfaceVERYLONGMACRO` - Very long macro brief description.
+
+* :ref:`InterfaceMACRO` - Short macro brief description.
+
+* :ref:`InterfaceMACRO` - Macro without parameters.
 """
         assert content == src.read()
 
@@ -227,6 +236,112 @@ VoidFunction()
     #if 1
       void VoidFunction( void );
     #endif
+
+.. Generated from spec:/macro
+
+.. raw:: latex
+
+    \\clearpage
+
+.. index:: VERY_LONG_MACRO()
+
+.. _InterfaceVERYLONGMACRO:
+
+VERY_LONG_MACRO()
+-----------------
+
+Very long macro brief description.
+
+.. rubric:: CALLING SEQUENCE:
+
+.. code-block:: c
+
+    #define VERY_LONG_MACRO(
+      VeryLongParam0,
+      VeryLongParam1,
+      VeryLongParam2,
+      VeryLongParam3
+    )
+
+.. rubric:: PARAMETERS:
+
+``VeryLongParam0``
+    This parameter is very long parameter 0 with some super important and extra
+    very long description which makes a lot of sense.
+
+``VeryLongParam1``
+    This parameter is very long parameter 1.
+
+``VeryLongParam2``
+    This parameter is very long parameter 2.
+
+``VeryLongParam3``
+    This parameter is very long parameter 3.
+
+.. rubric:: RETURN VALUES:
+
+``1``
+    is returned, in case A.
+
+``2``
+    is returned, in case B.
+
+Sometimes some value.
+
+.. Generated from spec:/macro2
+
+.. raw:: latex
+
+    \\clearpage
+
+.. index:: MACRO()
+
+.. _InterfaceMACRO:
+
+MACRO()
+-------
+
+Short macro brief description.
+
+.. rubric:: CALLING SEQUENCE:
+
+.. code-block:: c
+
+    #if defined(0)
+      #define MACRO( Param0 )
+    #else
+      #define MACRO( Param0 )
+    #endif
+
+.. rubric:: PARAMETERS:
+
+``Param0``
+    This parameter is parameter 0.
+
+.. rubric:: RETURN VALUES:
+
+Sometimes some value.
+
+.. Generated from spec:/macro3
+
+.. raw:: latex
+
+    \\clearpage
+
+.. index:: MACRO()
+
+.. _InterfaceMACRO:
+
+MACRO()
+-------
+
+Macro without parameters.
+
+.. rubric:: CALLING SEQUENCE:
+
+.. code-block:: c
+
+    #define MACRO()
 """
         assert content == src.read()
 
@@ -328,7 +443,7 @@ Function brief description.
 
 Function description.  References to :ref:`InterfaceVeryLongFunction`,
 :c:type:`Integer`, :c:type:`Enum`, :c:macro:`DEFINE`,
-:c:func:`VERY_LONG_MACRO`, Variable, :c:macro:`ENUMERATOR_0`, :c:type:`Struct`,
-:ref:`a`, and interface.
+:ref:`InterfaceVERYLONGMACRO`, Variable, :c:macro:`ENUMERATOR_0`,
+:c:type:`Struct`, :ref:`a`, and interface.
 """
         assert content == src.read()
