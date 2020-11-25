@@ -2,11 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de
 enabled-by: true
-functional-type: function
 links: []
+non-functional-type: design
 rationale: null
 references: []
-requirement-type: functional
+requirement-type: non-functional
 text: |
-  The system shall shall be a real-time operating system.
+  The software product shall shall be a real-time operating system.
 type: requirement
