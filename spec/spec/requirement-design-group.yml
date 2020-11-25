@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: design-group
+  uid: requirement-non-functional
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      identifier:
+        description: null
+        spec-type: interface-group-identifier
+    description: |
+      This set of attributes specifies a design group requirement.  Design group
+      requirements have an explicit reference to the associated Doxygen group
+      specified by the ``identifier`` attribute.  Design group requirements
+      have an implicit validation by inspection method.  The qualification
+      toolchain shall perform the inspection and check that the specified
+      Doxygen group exists in the software source code.
+    mandatory-attributes: all
+spec-name: Design Group Requirement Item Type
+spec-type: requirement-design-group
+type: spec
