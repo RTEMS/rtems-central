@@ -145,10 +145,9 @@ spec-info:
           ${runtime-measurement-test:/spec-name} item and after the request.
         spec-type: test-support-method
     description: |
-      This set of attributes specifies non-functional runtime performance
-      requirements and the corresponding validation test code.  Along with the
-      requirement, the test code to execute a measure runtime request is
-      specified.
+      This set of attributes specifies a runtime performance requirement.
+      Along with the requirement, the validation test code to execute a measure
+      runtime request is specified.
     mandatory-attributes: all
 spec-name: Runtime Performance Requirement Item Type
 spec-type: requirement-performance-runtime
