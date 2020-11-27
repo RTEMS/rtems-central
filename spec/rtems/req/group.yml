@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This group contains the Classic API manager implementations.
+  This group contains the Classic API implementation.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
@@ -11,8 +11,10 @@ interface-type: group
 links:
 - role: interface-ingroup
   uid: /req/impl
-name: Classic
+- role: interface-placement
+  uid: /rtems/type/if/header
+name: Classic API
 text: |
-  There shall be a software architecture component containing the Classic API
+  The software architecture shall have a component containing the Classic API
   implementation.
 type: interface
