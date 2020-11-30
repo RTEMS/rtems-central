@@ -30,7 +30,7 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_object_get_name
-notes: 
+notes: |
   This directive may cause the calling task to be preempted due to an obtain
   and release of the object allocator mutex.
 params:

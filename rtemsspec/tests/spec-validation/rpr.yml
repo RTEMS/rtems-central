@@ -2,13 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+limits: {}
 links:
 - role: runtime-measurement-request
   uid: rtm
-limits: {}
+non-functional-type: performance-runtime
 params: {}
 rationale: null
 references: []
+requirement-type: non-functional
 test-body:
   brief: |
     Body brief.
@@ -32,8 +34,6 @@ test-teardown:
     /* Teardown code */
   description: |
     Teardown description.
-non-functional-type: performance-runtime
-requirement-type: non-functional
 text: |
   Text.
 type: requirement

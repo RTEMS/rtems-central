@@ -2,35 +2,37 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-links:
-- role: runtime-measurement-request
-  uid: ../val/performance
 limits:
   sparc/leon3:
     DirtyCache:
-      max-upper-bound: 0.000005
-      mean-upper-bound: 0.000005
+      max-upper-bound: 5.0e-06
+      mean-upper-bound: 5.0e-06
     FullCache:
-      max-upper-bound: 0.000005
-      mean-upper-bound: 0.000005
+      max-upper-bound: 5.0e-06
+      mean-upper-bound: 5.0e-06
     HotCache:
-      max-upper-bound: 0.000005
-      mean-upper-bound: 0.000005
+      max-upper-bound: 5.0e-06
+      mean-upper-bound: 5.0e-06
     Load/1:
-      max-upper-bound: 0.00001
-      mean-upper-bound: 0.00001
+      max-upper-bound: 1.0e-05
+      mean-upper-bound: 1.0e-05
     Load/2:
-      max-upper-bound: 0.00001
-      mean-upper-bound: 0.00001
+      max-upper-bound: 1.0e-05
+      mean-upper-bound: 1.0e-05
     Load/3:
-      max-upper-bound: 0.00001
-      mean-upper-bound: 0.00001
+      max-upper-bound: 1.0e-05
+      mean-upper-bound: 1.0e-05
     Load/4:
-      max-upper-bound: 0.00001
-      mean-upper-bound: 0.00001
+      max-upper-bound: 1.0e-05
+      mean-upper-bound: 1.0e-05
+links:
+- role: runtime-measurement-request
+  uid: ../val/performance
+non-functional-type: performance-runtime
 params: {}
 rationale: null
 references: []
+requirement-type: non-functional
 test-body:
   brief: |
     Get a buffer.
@@ -59,6 +61,4 @@ text: |
   ${../val/performance:/params/sample-count} successful calls to
   ${../if/get-buffer:/name} in the ${.:/environment} shall be
   ${.:limit-condition}.
-non-functional-type: performance-runtime
-requirement-type: non-functional
 type: requirement

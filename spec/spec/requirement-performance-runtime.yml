@@ -124,13 +124,11 @@ spec-info:
           It shall provide the code of the measure runtime body handler.  In
           contrast to other methods, this method is mandatory.
         spec-type: test-support-method
-      test-setup:
+      test-cleanup:
         description: |
-          It may provide the code of the measure runtime setup handler.
-        spec-type: test-support-method
-      test-teardown:
-        description: |
-          It may provide the code of the measure runtime teardown handler.
+          It may provide the code to clean up the measure runtime request.
+          This method is called before the cleanup method of the corresponding
+          ${runtime-measurement-test:/spec-name} item and after the request.
         spec-type: test-support-method
       test-prepare:
         description: |
@@ -138,11 +136,13 @@ spec-info:
           method is called after the prepare method of the corresponding
           ${runtime-measurement-test:/spec-name} item and before the request.
         spec-type: test-support-method
-      test-cleanup:
+      test-setup:
         description: |
-          It may provide the code to clean up the measure runtime request.
-          This method is called before the cleanup method of the corresponding
-          ${runtime-measurement-test:/spec-name} item and after the request.
+          It may provide the code of the measure runtime setup handler.
+        spec-type: test-support-method
+      test-teardown:
+        description: |
+          It may provide the code of the measure runtime teardown handler.
         spec-type: test-support-method
     description: |
       This set of attributes specifies a runtime performance requirement.

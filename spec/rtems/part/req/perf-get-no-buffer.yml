@@ -2,13 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+limits: {}
 links:
 - role: runtime-measurement-request
   uid: ../val/performance
-limits: {}
+non-functional-type: performance-runtime
 params: {}
 rationale: null
 references: []
+requirement-type: non-functional
 test-body:
   brief: |
     Try to get a buffer.
@@ -47,6 +49,4 @@ text: |
   ${../val/performance:/params/sample-count} unsatisfied calls to
   ${../if/get-buffer:/name} in the ${.:/environment} shall be
   ${.:limit-condition}.
-non-functional-type: performance-runtime
-requirement-type: non-functional
 type: requirement

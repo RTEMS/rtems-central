@@ -4,8 +4,8 @@ copyrights:
 enabled-by: true
 links: []
 params:
-  sample-count: 1000
   buffer-count: 100
+  sample-count: 1000
 test-brief: |
   This test case provides a context to run Partition Manager performance tests.
 test-cleanup: null

@@ -28,7 +28,7 @@ params:
   dir: null
   name: _interrupt_level
 return:
-  return: null
+  return: |
     Returns the processor-dependent task mode interrupt level associated with
     the interrupt level.
   return-values: []
