@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Creates a timer.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -12,9 +13,13 @@ definition:
     - ${../../type/if/id:/name} *${.:/params[1]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive creates a timer.  The assigned object identifier is returned
+  in ${.:/params[1]/name}.  This identifier is used to access the timer with
+  other timer related directives.
 enabled-by: true
-index-entries: []
+index-entries:
+- create a timer
 interface-type: function
 links:
 - role: interface-placement
@@ -22,15 +27,41 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_timer_create
-notes: null
+notes: |
+  This directive may cause the calling task to be preempted due to an obtain
+  and release of the object allocator mutex.
+
+  For control and maintenance of the timer, RTEMS allocates a
+  ${/glossary/tmcb:/term} from the local TMCB free pool and initializes it.
+
+  In SMP configurations, the processor of the currently executing thread
+  determines the processor used for the created timer.  During the life-time of
+  the timer this processor is used to manage the timer internally.
 params:
-- description: '%'
+- description: is the name of the timer.
   dir: null
   name: name
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to an object identifier variable.  The identifier of the
+    created timer object will be stored in this variable, in case of a
+    successful operation.
+  dir: out
   name: id
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The timer name was invalid.
+    value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no inactive object available to create a new timer.  The number
+      of timers available to the application is configured through the
+      ${/acfg/if/max-timers:/name} configuration option.
+    value: ${../../status/if/too-many:/name}
 type: interface

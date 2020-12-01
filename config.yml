@@ -100,6 +100,9 @@ interface:
   domains:
     /if/domain: modules/rtems
 interface-documentation:
+- directives-target: modules/rtems-docs/c-user/timer/directives.rst
+  group: /rtems/timer/if/group
+  introduction-target: modules/rtems-docs/c-user/timer/introduction.rst
 - directives-target: modules/rtems-docs/c-user/io/directives.rst
   group: /rtems/io/if/group
   introduction-target: modules/rtems-docs/c-user/io/introduction.rst

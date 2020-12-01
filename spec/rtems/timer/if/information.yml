@@ -1,38 +1,43 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  The structure contains information about a timer.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
 - default:
     brief: |
-      This member is
+      The timer class member indicates how the timer was most recently fired.
     definition: ${classes:/name} ${.:name}
-    description: '%'
+    description: null
     kind: member
     name: the_class
   variants: []
 - default:
     brief: |
-      This member is
+      This member indicates the initial requested interval.
     definition: ${/score/watchdog/if/interval:/name} ${.:name}
-    description: '%'
+    description: null
     kind: member
     name: initial
   variants: []
 - default:
     brief: |
-      This member is
+      This member indicates the time the timer was initially scheduled.
     definition: ${/score/watchdog/if/interval:/name} ${.:name}
-    description: '%'
+    description: |
+      The time is in clock ticks since the clock driver initialization or the
+      last clock tick counter overflow.
     kind: member
     name: start_time
   variants: []
 - default:
     brief: |
-      This member is
+      This member indicates the time the timer was scheduled to fire.
     definition: ${/score/watchdog/if/interval:/name} ${.:name}
-    description: '%'
+    description: |
+      The time is in clock ticks since the clock driver initialization or the
+      last clock tick counter overflow.
     kind: member
     name: stop_time
   variants: []

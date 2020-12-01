@@ -1,5 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: This header file defines the Timer Manager API.
+brief: |
+  This header file provides the Timer Manager API.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
@@ -8,6 +9,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: /if/domain
+- role: interface-ingroup
+  uid: ../req/group
 path: rtems/rtems/timer.h
 prefix: cpukit/include
 type: interface
