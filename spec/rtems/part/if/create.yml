@@ -21,9 +21,9 @@ description: |
   This directive creates a partition of fixed size buffers from a physically
   contiguous memory space which starts at ${.:/params[1]/name} and is
   ${.:/params[2]/name} bytes in size.  Each allocated buffer is to be of
-  ${.:/params[3]/name} in bytes.  The assigned partition identifier is
-  returned in ${.:/params[5]/name}.  This partition identifier is used to
-  access the partition with other partition related directives.
+  ${.:/params[3]/name} in bytes.  The assigned object identifier is returned in
+  ${.:/params[5]/name}.  This identifier is used to access the partition with
+  other partition related directives.
 
   The **attribute set** specified in ${.:/params[4]/name} is built through
   a *bitwise or* of the attribute constants described below.  Attributes not
@@ -103,7 +103,7 @@ params:
     is the pointer to an object identifier variable.  The identifier of the
     created partition object will be stored in this variable, in case of a
     successful operation.
-  dir: null
+  dir: out
   name: id
 return:
   return: null
