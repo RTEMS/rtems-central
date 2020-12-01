@@ -64,11 +64,17 @@ def _get_value_function(ctx: ItemGetValueContext) -> Any:
     return _get_reference(ctx.value[ctx.key])
 
 
+def _get_param(ctx: ItemGetValueContext) -> Any:
+    return f"``{ctx.value[ctx.key].lstrip('_')}``"
+
+
 class _Mapper(SphinxMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self.add_get_value("interface/function:/name", _get_value_function)
         self.add_get_value("interface/macro:/name", _get_value_function)
+        self.add_get_value("interface/function:/params/name", _get_param)
+        self.add_get_value("interface/macro:/params/name", _get_param)
 
 
 def _generate_introduction(target: str, group: Item,

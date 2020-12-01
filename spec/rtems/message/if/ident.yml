@@ -16,9 +16,9 @@ definition:
   variants: []
 description: |
   This directive obtains the message queue identifier associated with the
-  message queue name specified in ``${.:/params[0]/name}``.
+  message queue name specified in ${.:/params[0]/name}.
 
-  The node to search is specified in ``${.:/params[1]/name}``.  It shall be
+  The node to search is specified in ${.:/params[1]/name}.  It shall be
 
   * a valid node number,
 

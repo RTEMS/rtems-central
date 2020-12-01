@@ -15,7 +15,7 @@ definition:
   variants: []
 description: |
   This directive obtains the region identifier associated with the region name
-  specified in ``${.:/params[0]/name}``.
+  specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
 interface-type: function

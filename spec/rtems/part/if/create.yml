@@ -19,13 +19,13 @@ definition:
   variants: []
 description: |
   This directive creates a partition of fixed size buffers from a physically
-  contiguous memory space which starts at ``${.:/params[1]/name}`` and is
-  ``${.:/params[2]/name}`` bytes in size.  Each allocated buffer is to be of
-  ``${.:/params[3]/name}`` in bytes.  The assigned partition identifier is
-  returned in ``${.:/params[5]/name}``.  This partition identifier is used to
+  contiguous memory space which starts at ${.:/params[1]/name} and is
+  ${.:/params[2]/name} bytes in size.  Each allocated buffer is to be of
+  ${.:/params[3]/name} in bytes.  The assigned partition identifier is
+  returned in ${.:/params[5]/name}.  This partition identifier is used to
   access the partition with other partition related directives.
 
-  The **attribute set** specified in ``${.:/params[4]/name}`` is built through
+  The **attribute set** specified in ${.:/params[4]/name} is built through
   a *bitwise or* of the attribute constants described below.  Attributes not
   mentioned below are not evaluated by this directive and have no effect.
 
@@ -54,7 +54,7 @@ notes: |
   This directive may cause the calling task to be preempted due to an obtain
   and release of the object allocator mutex.
 
-  The partition buffer area specified by the ``${.:/params[1]/name}`` must be
+  The partition buffer area specified by the ${.:/params[1]/name} must be
   properly aligned.  It must be possible to directly store target architecture
   pointers and also the user data.  For example, if the user data contains some
   long double or vector data types, the partition buffer area and the buffer
@@ -63,9 +63,9 @@ notes: |
   factor.  Use ${alignment:/name} to specify the minimum alignment of a
   partition buffer type.
 
-  The ``${.:/params[3]/name}`` parameter must be an integral multiple of the
+  The ${.:/params[3]/name} parameter must be an integral multiple of the
   pointer size on the target architecture.  Additionally,
-  ``${.:/params[3]/name}`` must be large enough to hold two pointers on the
+  ${.:/params[3]/name} must be large enough to hold two pointers on the
   target architecture.  This is required for RTEMS to manage the buffers when
   they are free.
 
@@ -115,28 +115,28 @@ return:
       The partition name was invalid.
     value: ${../../status/if/invalid-name:/name}
   - description: |
-      The ``${.:/params[5]/name}`` parameter was ${/c/if/null:/name}.
+      The ${.:/params[5]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
-      The ``${.:/params[2]/name}`` parameter was 0.
+      The ${.:/params[2]/name} parameter was 0.
     value: ${../../status/if/invalid-size:/name}
   - description: |
-      The ``${.:/params[3]/name}`` parameter was 0.
+      The ${.:/params[3]/name} parameter was 0.
     value: ${../../status/if/invalid-size:/name}
   - description: |
-      The ``${.:/params[2]/name}`` parameter was less than the
-      ``${.:/params[3]/name}`` parameter.
+      The ${.:/params[2]/name} parameter was less than the
+      ${.:/params[3]/name} parameter.
     value: ${../../status/if/invalid-size:/name}
   - description: |
-      The ``${.:/params[3]/name}`` parameter was not an integral multiple of
+      The ${.:/params[3]/name} parameter was not an integral multiple of
       the pointer size.
     value: ${../../status/if/invalid-size:/name}
   - description: |
-      The ``${.:/params[3]/name}`` parameter was less than two times the
+      The ${.:/params[3]/name} parameter was less than two times the
       pointer size.
     value: ${../../status/if/invalid-size:/name}
   - description: |
-      The ``${.:/params[1]/name}`` parameter was not on a pointer size
+      The ${.:/params[1]/name} parameter was not on a pointer size
       boundary.
     value: ${../../status/if/invalid-address:/name}
   - description: |

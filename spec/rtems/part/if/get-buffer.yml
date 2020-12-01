@@ -15,8 +15,8 @@ definition:
   variants: []
 description: |
   This directive allows a buffer to be obtained from the partition specified in
-  the ``${.:/params[0]/name}`` parameter.  The address of the allocated buffer is
-  returned through the ``${.:/params[1]/name}`` parameter.
+  the ${.:/params[0]/name} parameter.  The address of the allocated buffer is
+  returned through the ${.:/params[1]/name} parameter.
 enabled-by: true
 index-entries:
 - get buffer from partition
@@ -58,7 +58,7 @@ return:
       There was no partition with the specified identifier.
     value: ${../../status/if/invalid-id:/name}
   - description: |
-      The ``${.:/params[1]/name}`` parameter was ${/c/if/null:/name}.
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
       There was no free buffer available to allocate and return.

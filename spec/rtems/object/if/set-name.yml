@@ -31,14 +31,14 @@ notes: |
   This directive can be used to set the name of objects which do not have a
   naming scheme per their API.
 
-  If the object specified by ``${.:/params[0]/name}`` is of a class that has a
+  If the object specified by ${.:/params[0]/name} is of a class that has a
   string name, this directive will free the existing name to the RTEMS Workspace
   and allocate enough memory from the RTEMS Workspace to make a copy of the
-  string located at ``${.:/params[1]/name}``.
+  string located at ${.:/params[1]/name}.
 
-  If the object specified by ``${.:/params[0]/name}`` is of a class that has a
+  If the object specified by ${.:/params[0]/name} is of a class that has a
   32-bit integer style name, then the first four characters in
-  ``${.:/params[1]/name}`` will be used to construct the name.
+  ${.:/params[1]/name} will be used to construct the name.
 params:
 - description: |
     is the object identifier of the object to set the name.

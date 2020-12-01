@@ -59,6 +59,10 @@ def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
     return _forward_declaration(ctx.item)
 
 
+def _get_value_params(ctx: ItemGetValueContext) -> Any:
+    return f"``{ctx.value[ctx.key]}``"
+
+
 class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
@@ -70,6 +74,8 @@ class _InterfaceMapper(ItemMapper):
                            _get_value_forward_declaration)
         self.add_get_value("interface/function/doc:/name",
                            get_value_doxygen_function)
+        self.add_get_value("interface/function/doc:/params/name",
+                           _get_value_params)
         self.add_get_value("interface/enumerator/doc:/name",
                            get_value_double_colon)
         self.add_get_value("interface/typedef/doc:/name",
@@ -78,6 +84,8 @@ class _InterfaceMapper(ItemMapper):
         self.add_get_value("interface/enum/doc:/name", get_value_hash)
         self.add_get_value("interface/macro/doc:/name",
                            get_value_doxygen_function)
+        self.add_get_value("interface/macro/doc:/params/name",
+                           _get_value_params)
         self.add_get_value("interface/variable/doc:/name", get_value_hash)
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
             name = f"interface/appl-config-option/{opt}/doc:/name"

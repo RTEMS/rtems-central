@@ -15,7 +15,7 @@ definition:
   variants: []
 description: |
   This directive obtains the barrier identifier associated with the barrier
-  name specified in ``${.:/params[0]/name}``.
+  name specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
 interface-type: function

@@ -14,8 +14,8 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive sends the event set, ``${.:/params[1]/name}``, to the target
-  task identified by ``${.:/params[0]/name}``.  Based upon the state of the
+  This directive sends the event set, ${.:/params[1]/name}, to the target
+  task identified by ${.:/params[0]/name}.  Based upon the state of the
   target task, one of the following situations applies:
 
   * The target task is blocked waiting for events, then
@@ -40,7 +40,7 @@ name: rtems_event_send
 notes: |
   Events can be sent by tasks or an ${/glossary/isr:/term}.
 
-  Specifying ${../../task/if/self-define:/name} for ``${.:/params[0]/name}`` results
+  Specifying ${../../task/if/self-define:/name} for ${.:/params[0]/name} results
   in the event set being sent to the calling task.
 
   The event set to send shall be built by a *bitwise or* of the desired events.

@@ -23,13 +23,13 @@ description: |
   * receive events.
 
   To **get the pending events** use the constant ${pending-events:/name} for
-  the ``${.:/params[0]/name}`` parameter.  The pending events are returned to
+  the ${.:/params[0]/name} parameter.  The pending events are returned to
   the calling task but the event set of the task is left unaltered.  The
-  ``${.:/params[1]/name}`` and ``${.:params[2]/name}`` parameters are ignored
+  ${.:/params[1]/name} and ${.:/params[2]/name} parameters are ignored
   in this case.  The directive returns immediately and does not block.
 
   To **receive events** you have to define an input event condition and some
-  options.  The **option set** specified in ``${.:/params[1]/name}`` defines
+  options.  The **option set** specified in ${.:/params[1]/name} defines
 
   * if the task will wait or poll for the events, and
 
@@ -41,17 +41,17 @@ description: |
   The task can **wait** or **poll** for the events.
 
   * **Waiting** for events is the default and can be emphasized through the use
-    of the ${../../option/if/wait:/name} option.  The ``${.:/params[2]/name}``
+    of the ${../../option/if/wait:/name} option.  The ${.:/params[2]/name}
     parameter defines how long the task is willing to wait.  Use
     ${../../type/if/no-timeout:/name} to wait potentially forever, otherwise
     set a timeout interval in clock ticks.
 
   * Not waiting for events (**polling**) is selected by the
     ${../../option/if/no-wait:/name} option.  If this option is defined, then
-    the ``${.:/params[2]/name}`` parameter is ignored.
+    the ${.:/params[2]/name} parameter is ignored.
 
   The task can receive **all** or **any** of the input events specified in
-  ``${.:/params[0]/name}``.
+  ${.:/params[0]/name}.
 
   * Receiving **all** input events is the default and can be emphasized through
     the use of the ${../../option/if/event-all:/name} option.
@@ -71,18 +71,18 @@ notes: |
   This directive shall be called by a task.  Calling this directive from
   interrupt context is undefined behaviour.
 
-  This directive only affects the events specified in ``${.:/params[0]/name}``.
+  This directive only affects the events specified in ${.:/params[0]/name}.
   Any pending events that do not correspond to any of the events specified in
-  ``${.:/params[0]/name}`` will be left pending.
+  ${.:/params[0]/name} will be left pending.
 
   To receive all events use the event set constant ${all-events:/name} for the
-  ``${.:/params[0]/name}`` parameter.  Do not confuse this event set constant
+  ${.:/params[0]/name} parameter.  Do not confuse this event set constant
   with the directive option ${../../option/if/event-all:/name}.
 
   A task can **receive all of the pending events** by calling the directive
-  with a value of ${all-events:/name} for the ``${.:/params[0]/name}``
+  with a value of ${all-events:/name} for the ${.:/params[0]/name}
   parameter and the bitwise or of the ${../../option/if/no-wait:/name} and
-  ${../../option/if/event-any:/name} options for the ``${.:/params[1]/name}``
+  ${../../option/if/event-any:/name} options for the ${.:/params[1]/name}
   parameter.  The pending events are returned and the event set of the task is
   cleared.  If no events are pending then the
   ${../../status/if/unsatisfied:/name} status code will be returned.
@@ -113,7 +113,7 @@ return:
       The requested operation was successful.
     value: ${../../status/if/successful:/name}
   - description: |
-      The ``${.:/params[3]/name}`` parameter was ${/c/if/null:/name}.
+      The ${.:/params[3]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
       The events of interest were not immediately available.

@@ -15,7 +15,7 @@ definition:
   variants: []
 description: |
   This directive obtains the period identifier associated with the period name
-  specified in ``${.:/params[0]/name}``.
+  specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
 interface-type: function
