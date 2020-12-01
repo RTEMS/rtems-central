@@ -31,7 +31,8 @@ from typing import Any, Callable, Dict, Iterator, List, Union, Set
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
     get_value_hash
-from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
+from rtemsspec.items import Item, ItemCache, ItemGetValueContext, \
+    ItemGetValueMap, ItemMapper
 
 ItemMap = Dict[str, Item]
 Lines = Union[str, List[str]]
@@ -63,25 +64,25 @@ class _InterfaceMapper(ItemMapper):
         super().__init__(node.item)
         self._node = node
         self._code_or_doc = "doc"
-        self.add_get_value("interface/forward-declaration:code:/name",
+        self.add_get_value("interface/forward-declaration/code:/name",
                            _get_value_forward_declaration)
-        self.add_get_value("interface/forward-declaration:doc:/name",
+        self.add_get_value("interface/forward-declaration/doc:/name",
                            _get_value_forward_declaration)
-        self.add_get_value("interface/function:doc:/name",
+        self.add_get_value("interface/function/doc:/name",
                            get_value_doxygen_function)
-        self.add_get_value("interface/enumerator:doc:/name",
+        self.add_get_value("interface/enumerator/doc:/name",
                            get_value_double_colon)
-        self.add_get_value("interface/typedef:doc:/name",
+        self.add_get_value("interface/typedef/doc:/name",
                            get_value_double_colon)
-        self.add_get_value("interface/define:doc:/name", get_value_hash)
-        self.add_get_value("interface/enum:doc:/name", get_value_hash)
-        self.add_get_value("interface/macro:doc:/name",
+        self.add_get_value("interface/define/doc:/name", get_value_hash)
+        self.add_get_value("interface/enum/doc:/name", get_value_hash)
+        self.add_get_value("interface/macro/doc:/name",
                            get_value_doxygen_function)
-        self.add_get_value("interface/variable:doc:/name", get_value_hash)
+        self.add_get_value("interface/variable/doc:/name", get_value_hash)
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
-            name = f"interface/appl-config-option/{opt}:doc:/name"
+            name = f"interface/appl-config-option/{opt}/doc:/name"
             self.add_get_value(name, get_value_hash)
-        self.add_get_value("interface/unspecified-function:doc:/name",
+        self.add_get_value("interface/unspecified-function/doc:/name",
                            get_value_doxygen_function)
 
     @contextmanager
@@ -92,19 +93,17 @@ class _InterfaceMapper(ItemMapper):
         yield
         self._code_or_doc = code_or_doc
 
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        if self._code_or_doc == "code" and ctx.item["type"] == "interface":
+    def get_value_map(self, item: Item) -> ItemGetValueMap:
+        if self._code_or_doc == "code" and item["type"] == "interface":
             node = self._node
             header_file = node.header_file
-            if ctx.item["interface-type"] == "enumerator":
-                for child in ctx.item.children("interface-enumerator"):
+            if item["interface-type"] == "enumerator":
+                for child in item.children("interface-enumerator"):
                     header_file.add_includes(child)
             else:
-                header_file.add_includes(ctx.item)
-            header_file.add_dependency(node, ctx.item)
-        return super().get_value(
-            ItemGetValueContext(ctx.item, f"{self._code_or_doc}:{ctx.path}",
-                                ctx.value, ctx.key, ctx.index))
+                header_file.add_includes(item)
+            header_file.add_dependency(node, item)
+        return self._get_value_map.get(f"{item.type}/{self._code_or_doc}", {})
 
     def enabled_by_to_defined(self, enabled_by: str) -> str:
         """

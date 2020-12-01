@@ -321,10 +321,6 @@ def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
     content.add_licence_and_copyrights()
 
 
-def _get_value_none(_ctx: ItemGetValueContext) -> Any:
-    return None
-
-
 def _sphinx_ref(ref: str) -> str:
     return f":ref:`{ref}`"
 
@@ -354,17 +350,14 @@ _SPHINX_DOC_REFS = {
 }
 
 
-def _get_value_sphinx_reference(ctx: ItemGetValueContext) -> Any:
-    return _SPHINX_DOC_REFS[ctx.key]
+def _get_value_sphinx_reference(_ctx: ItemGetValueContext) -> Any:
+    return _SPHINX_DOC_REFS
 
 
 def _add_sphinx_get_values(mapper: ItemMapper) -> None:
-    for key in _SPHINX_DOC_REFS:
-        for opt in ["feature-enable", "feature", "initializer", "integer"]:
-            doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
-            mapper.add_get_value(doc_ref, _get_value_none)
-            mapper.add_get_value(f"{doc_ref}/{key}",
-                                 _get_value_sphinx_reference)
+    for opt in ["feature-enable", "feature", "initializer", "integer"]:
+        doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
+        mapper.add_get_value(doc_ref, _get_value_sphinx_reference)
 
 
 def _c_user_ref(ref: str, name: str) -> str:
@@ -427,8 +420,8 @@ _DOXYGEN_DOC_REFS = {
 }
 
 
-def _get_value_doxygen_reference(ctx: ItemGetValueContext) -> Any:
-    return _DOXYGEN_DOC_REFS[ctx.key]
+def _get_value_doxygen_reference(_ctx: ItemGetValueContext) -> Any:
+    return _DOXYGEN_DOC_REFS
 
 
 def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Any:
@@ -448,14 +441,11 @@ def _get_value_doxygen_unspecfied_type(ctx: ItemGetValueContext) -> Any:
 
 
 def _add_doxygen_get_values(mapper: ItemMapper) -> None:
-    for key in _DOXYGEN_DOC_REFS:
-        for opt in ["feature-enable", "feature", "initializer", "integer"]:
-            doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
-            mapper.add_get_value(doc_ref, _get_value_none)
-            mapper.add_get_value(f"{doc_ref}/{key}",
-                                 _get_value_doxygen_reference)
-            name = f"interface/appl-config-option/{opt}:/name"
-            mapper.add_get_value(name, get_value_hash)
+    for opt in ["feature-enable", "feature", "initializer", "integer"]:
+        doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
+        mapper.add_get_value(doc_ref, _get_value_doxygen_reference)
+        name = f"interface/appl-config-option/{opt}:/name"
+        mapper.add_get_value(name, get_value_hash)
     mapper.add_get_value("interface/define:/name", get_value_hash)
     mapper.add_get_value("interface/function:/name",
                          get_value_doxygen_function)

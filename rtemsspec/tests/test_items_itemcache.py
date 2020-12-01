@@ -96,6 +96,11 @@ expected <block end>, but found ':'
         ItemCache(config)
 
 
+def get_x_to_b_value(ctx):
+    assert ctx.key == "x-to-b"
+    return ctx.value["b"]
+
+
 class Mapper(ItemMapper):
     def __init__(self, item):
         super().__init__(item)
@@ -108,11 +113,6 @@ class Mapper(ItemMapper):
 
     def dup(self, value):
         return value + value
-
-    def get_value(self, ctx):
-        if ctx.key == "x-to-b":
-            return ctx.value["b"]
-        raise KeyError
 
 
 def test_item_mapper(tmpdir):
@@ -141,6 +141,7 @@ def test_item_mapper(tmpdir):
     assert mapper["d/c:v"] == "c"
     assert mapper["d/c:a/b"] == "e"
     assert mapper["d/c:a/b|u"] == "ue"
+    mapper.add_get_value(":/a/x-to-b", get_x_to_b_value)
     assert mapper["d/c:a/x-to-b|u|v"] == "vue"
     assert mapper["d/c:a/f[1]"] == 2
     assert mapper["d/c:a/../a/f[3]/g[0]|dup"] == 8

@@ -42,14 +42,10 @@ class ItemGetValueContext(NamedTuple):
     key: str
     index: Any  # should be int, but this triggers a mypy error
 
-    @property
-    def type_path_key(self) -> str:
-        """ Returns the item type followed the path to the key. """
-        return f"{self.item.type}:{os.path.join(self.path, self.key)}"
-
 
 ItemMap = Dict[str, "Item"]
 ItemGetValue = Callable[[ItemGetValueContext], Any]
+ItemGetValueMap = Dict[str, Tuple[ItemGetValue, Any]]
 
 
 def _is_enabled_op_and(enabled: List[str], enabled_by: Any) -> bool:
@@ -185,10 +181,8 @@ class Item:
         """
         return self._data.get(key, default)
 
-    def get_by_normalized_key_path(
-            self,
-            normalized_key_path: str,
-            get_value: ItemGetValue = _get_value) -> Any:
+    def get_by_normalized_key_path(self, normalized_key_path: str,
+                                   get_value_map: ItemGetValueMap) -> Any:
         """
         Gets the attribute value corresponding to the normalized key path.
         """
@@ -201,20 +195,16 @@ class Item:
             except IndexError:
                 index = -1
             ctx = ItemGetValueContext(self, path, value, parts[0], index)
-            try:
-                value = get_value(ctx)
-            except KeyError:
-                value = _get_value(ctx)
+            get_value, get_value_map = get_value_map.get(
+                parts[0], (_get_value, {}))
+            value = get_value(ctx)
             path = os.path.join(path, key)
         return value
 
-    def get_by_key_path(self,
-                        key_path: str,
-                        prefix: str = "",
-                        get_value: ItemGetValue = _get_value) -> Any:
+    def get_by_key_path(self, key_path: str, prefix: str = "") -> Any:
         """ Gets the attribute value corresponding to the key path. """
         return self.get_by_normalized_key_path(
-            normalize_key_path(key_path, prefix), get_value)
+            normalize_key_path(key_path, prefix), {})
 
     @property
     def uid(self) -> str:
@@ -378,7 +368,7 @@ class ItemMapper(Mapping[str, object]):
         self._item = item
         self._recursive = recursive
         self._prefix = [""]
-        self._get_value = {}  # type: Dict[str, ItemGetValue]
+        self._get_value_map = {}  # type: Dict[str, ItemGetValueMap]
 
     @property
     def item(self) -> Item:
@@ -395,7 +385,12 @@ class ItemMapper(Mapping[str, object]):
         """
         Adds a get value for the specified type and key path.
         """
-        self._get_value[type_path_key] = get_value
+        type_name, path_key = type_path_key.split(":")
+        keys = path_key.strip("/").split("/")
+        get_value_map = self._get_value_map.setdefault(type_name, {})
+        for key in keys[:-1]:
+            _, get_value_map = get_value_map.setdefault(key, (_get_value, {}))
+        get_value_map[keys[-1]] = (get_value, {})
 
     def push_prefix(self, prefix: str) -> None:
         """ Pushes a key path prefix. """
@@ -411,6 +406,10 @@ class ItemMapper(Mapping[str, object]):
         self.push_prefix(prefix)
         yield
         self.pop_prefix()
+
+    def get_value_map(self, item: Item) -> ItemGetValueMap:
+        """ Returns the get value map for the item. """
+        return self._get_value_map.get(item.type, {})
 
     def map(self, identifier: str) -> Tuple[Item, str, Any]:
         """
@@ -429,7 +428,8 @@ class ItemMapper(Mapping[str, object]):
             item = self._item.map(uid)
             prefix = ""
         key_path = normalize_key_path(key_path, prefix)
-        value = item.get_by_normalized_key_path(key_path, self.get_value)
+        value = item.get_by_normalized_key_path(key_path,
+                                                self.get_value_map(item))
         for func in pipes:
             value = getattr(self, func)(value)
         return item, key_path, value
@@ -471,10 +471,6 @@ class ItemMapper(Mapping[str, object]):
             return ""
         with self.prefix(prefix):
             return ItemTemplate(text).substitute(self)
-
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        """ Gets a value by key and optional index. """
-        return self._get_value[ctx.type_path_key](ctx)
 
 
 class _SpecType(NamedTuple):
