@@ -87,14 +87,14 @@ class _GlossaryMapper(ItemMapper):
     def __init__(self, item: Item, document_terms: ItemMap):
         super().__init__(item)
         self._document_terms = document_terms
+        self.add_get_value("glossary/term:/term", self._add_to_terms)
+        self.add_get_value("glossary/term:/plural", self._add_to_terms)
 
-    def get_value(self, ctx: ItemGetValueContext) -> Any:
-        """ Recursively adds glossary terms to the document terms. """
-        if ctx.type_path_key == "glossary/term:/term":
-            if ctx.item.uid not in self._document_terms:
-                self._document_terms[ctx.item.uid] = ctx.item
-                _GlossaryMapper(ctx.item, self._document_terms).substitute(
-                    ctx.item["text"])
+    def _add_to_terms(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.item.uid not in self._document_terms:
+            self._document_terms[ctx.item.uid] = ctx.item
+            _GlossaryMapper(ctx.item,
+                            self._document_terms).substitute(ctx.item["text"])
         # The value of this substitute is unused.
         return ""
 
