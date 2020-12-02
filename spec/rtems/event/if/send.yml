@@ -71,6 +71,7 @@ return:
       The requested operation was successful.
     value: ${../../status/if/successful:/name}
   - description: |
-      There was no task with the specified identifier.
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
 type: interface

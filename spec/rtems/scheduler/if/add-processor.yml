@@ -43,7 +43,8 @@ return:
       was not online.
     value: ${../../status/if/incorrect-state:/name}
   - description: |
-      The scheduler instance identifier was invalid.
+      There was no scheduler associated with the identifier specified by
+      ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
       The processor was not configured to be used by the application.

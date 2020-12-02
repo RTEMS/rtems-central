@@ -49,7 +49,8 @@ return:
       The requested operation was successful.
     value: ${../../status/if/successful:/name}
   - description: |
-      There was no partition with the specified identifier.
+      There was no partition associated with the identifier specified by
+      ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
       The buffer referenced by ${.:/params[1]/name} was not in the
