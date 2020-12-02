@@ -495,8 +495,8 @@ def _load_item(path: str, uid: str) -> Any:
     with open(path, "r") as src:
         try:
             data = yaml.safe_load(src.read())
-        except yaml.parser.ParserError as err:
-            msg = ("YAML parser error while loading specification item file "
+        except yaml.YAMLError as err:
+            msg = ("YAML error while loading specification item file "
                    f"'{path}': {str(err)}")
             raise IOError(msg) from err
         data["_file"] = os.path.abspath(path)

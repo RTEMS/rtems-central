@@ -84,10 +84,10 @@ def test_load_link_error(tmpdir):
         ItemCache(config)
 
 
-def test_load_parser_error(tmpdir):
+def test_load_yaml_error(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir,
                                                     "spec-item-cache-3")
-    match = r"""YAML parser error while loading specification item file '.*invalid.yml': while parsing a block mapping
+    match = r"""YAML error while loading specification item file '.*invalid.yml': while parsing a block mapping
 expected <block end>, but found ':'
   in "<unicode string>", line 1, column 1:
     :
