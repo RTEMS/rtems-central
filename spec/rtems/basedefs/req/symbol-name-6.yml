@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../if/symbol-name
+non-functional-type: interface
+rationale: |
+  First, if the ``__USER_LABEL_PREFIX__`` is defined when the macro is
+  defined, it must also be defined at all places where the macro is used.
+  Second, value of the ``__USER_LABEL_PREFIX__`` is not stored in the
+  macro but can be different each time the macro is called.
+references: []
+requirement-type: non-functional
+text: |
+  While the symbol ``__USER_LABEL_PREFIX__`` *is* defined
+  during pre-processing of the ``basedefs.h`` file,
+  the ${../if/symbol-name:/name} macro shall
+  use the value which the ``__USER_LABEL_PREFIX__`` has at the place
+  the macro call is processed.
+type: requirement

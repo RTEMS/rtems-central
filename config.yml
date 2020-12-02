@@ -30,6 +30,7 @@ build:
   - cpukit/score/src/opt_ntp.h
   - gccdeps.py
   - long_gcc.py
+  - testsuites/validation/tc-basedefs-pendant.h
   - testsuites/validation/tr-event-constant.h
   - testsuites/validation/tr-event-send-receive.h
   - testsuites/validation/tr-object-ident.h
