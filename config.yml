@@ -34,6 +34,7 @@ build:
   - testsuites/validation/tr-event-send-receive.h
   - testsuites/validation/tr-object-ident.h
   - testsuites/validation/tr-object-ident-local.h
+  - testsuites/validation/ts-default.h
   - waf
   - wscript
   uids:
