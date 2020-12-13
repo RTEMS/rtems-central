@@ -539,7 +539,6 @@ class ItemCache:
     """ This class provides a cache of specification items. """
     def __init__(self, config: Any):
         self._items = {}  # type: ItemMap
-        self._top_level = {}  # type: ItemMap
         self._updates = 0
         self._load_items(config)
         spec_root = config["spec-type-root-uid"]
@@ -566,11 +565,6 @@ class ItemCache:
         """ Returns the map of all specification items. """
         return self._items
 
-    @property
-    def top_level(self) -> ItemMap:
-        """ Returns the map of top-level specification items. """
-        return self._top_level
-
     def add_volatile_item(self, path: str, uid: str) -> Item:
         """
         Adds an item stored in the specified file to the cache and returns it.
@@ -587,8 +581,6 @@ class ItemCache:
     def _add_item(self, uid: str, data: Any) -> Item:
         item = Item(self, uid, data)
         self._items[uid] = item
-        if not item["links"]:
-            self._top_level[uid] = item
         return item
 
     def _load_items_in_dir(self, base: str, path: str, cache_file: str,

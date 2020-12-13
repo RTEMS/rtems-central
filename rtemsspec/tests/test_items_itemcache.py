@@ -45,9 +45,7 @@ def test_load(tmpdir):
     assert os.path.exists(os.path.join(cache_dir, "spec", "d", "spec.pickle"))
     assert item_cache["/d/c"]["v"] == "c"
     assert item_cache["/p"]["v"] == "p"
-    t = item_cache.top_level
-    assert len(t) == 1
-    p = t["/p"]
+    p = item_cache["/p"]
     assert p["v"] == "p"
     assert p.map("/p") == p
     assert p.map("p") == p
