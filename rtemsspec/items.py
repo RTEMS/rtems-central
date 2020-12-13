@@ -537,10 +537,19 @@ def _load_item(path: str, uid: str) -> Any:
 
 class ItemCache:
     """ This class provides a cache of specification items. """
-    def __init__(self, config: Any):
+    def __init__(self,
+                 config: Any,
+                 post_process_load: Optional[Callable[[ItemMap],
+                                                      None]] = None):
         self._items = {}  # type: ItemMap
         self._updates = 0
-        self._load_items(config)
+        cache_dir = os.path.abspath(config["cache-directory"])
+        for path in config["paths"]:
+            self._load_items_recursive(path, path, cache_dir)
+        if post_process_load:
+            post_process_load(self._items)
+        self._init_parents()
+        self._init_children()
         spec_root = config["spec-type-root-uid"]
         if spec_root:
             self._root_type = _gather_spec_refinements(self[spec_root])
@@ -632,13 +641,6 @@ class ItemCache:
     def _init_children(self) -> None:
         for uid in sorted(self._items):
             self._items[uid].init_children()
-
-    def _load_items(self, config: Any) -> None:
-        cache_dir = os.path.abspath(config["cache-directory"])
-        for path in config["paths"]:
-            self._load_items_recursive(path, path, cache_dir)
-        self._init_parents()
-        self._init_children()
 
     def _set_type(self, item: Item) -> None:
         spec_type = self._root_type

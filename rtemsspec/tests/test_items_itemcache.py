@@ -38,7 +38,14 @@ def test_config_error():
 
 def test_load(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
-    item_cache = ItemCache(config)
+    item_count = 0
+
+    def post_process_load(items):
+        nonlocal item_count
+        item_count = len(items)
+
+    item_cache = ItemCache(config, post_process_load)
+    assert item_count == len(item_cache.all)
     assert item_cache.updates
     cache_dir = config["cache-directory"]
     assert os.path.exists(os.path.join(cache_dir, "spec", "spec.pickle"))
