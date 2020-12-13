@@ -128,7 +128,7 @@ def test_item_mapper(tmpdir):
     assert base_mapper["d/c:v"] == "c"
     mapper = Mapper(item)
     assert mapper.substitute(None) == ""
-    assert mapper.substitute_with_prefix(None, "v") == ""
+    assert mapper.substitute(None, prefix="v") == ""
     with mapper.prefix("v"):
         assert mapper[".:."] == "p"
         assert mapper[".:../x/y"] == "z"
@@ -137,7 +137,7 @@ def test_item_mapper(tmpdir):
         assert key_path_2 == "/v"
         assert value_2 == "p"
         assert mapper.substitute("$$${.:.}") == "$p"
-    assert mapper.substitute_with_prefix("$$${.:.}", "v") == "$p"
+    assert mapper.substitute("$$${.:.}", prefix="v") == "$p"
     with mapper.prefix("x"):
         with mapper.prefix("y"):
             assert mapper[".:."] == "z"
@@ -154,13 +154,9 @@ def test_item_mapper(tmpdir):
     assert item_3 == item
     assert key_path_3 == "/v"
     assert value_3 == "p"
-    with pytest.raises(StopIteration):
-        for something in mapper:
-            pass
-    with pytest.raises(AttributeError):
-        len(mapper)
     recursive_mapper = ItemMapper(item, recursive=True)
     assert recursive_mapper.substitute("${.:/r1/r2/r3}") == "foobar"
+    assert recursive_mapper[".:/r1/r2/r3"] == "foobar"
 
 
 def test_empty_item_mapper():

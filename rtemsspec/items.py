@@ -31,7 +31,7 @@ import pickle
 import string
 import stat
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, \
-    Mapping, Optional, Tuple, Union
+    Optional, Tuple, Union
 import yaml
 
 
@@ -393,7 +393,26 @@ class ItemTemplate(string.Template):
     idpattern = "[a-zA-Z0-9._/-]+(:[][a-zA-Z0-9._/-]+)?(|[a-zA-Z0-9_]+)*"
 
 
-class ItemMapper(Mapping[str, object]):
+class _ItemMapperContext(dict):
+    """ Context to map identifiers to items and attribute values. """
+    def __init__(self, mapper: "ItemMapper", item: Optional[Item],
+                 prefix: Optional[str], recursive: bool):
+        super().__init__()
+        self._mapper = mapper
+        self._item = item
+        self._prefix = prefix
+        self._recursive = recursive
+
+    def __getitem__(self, identifier):
+        item, key_path, value = self._mapper.map(identifier, self._item,
+                                                 self._prefix)
+        if self._recursive:
+            return self._mapper.substitute(value, item,
+                                           os.path.dirname(key_path))
+        return value
+
+
+class ItemMapper:
     """ Maps identifiers to items and attribute values. """
     def __init__(self, item: Item, recursive: bool = False):
         self._item = item
@@ -442,9 +461,13 @@ class ItemMapper(Mapping[str, object]):
         """ Returns the get value map for the item. """
         return self._get_value_map.get(item.type, {})
 
-    def map(self, identifier: str) -> Tuple[Item, str, Any]:
+    def map(self,
+            identifier: str,
+            item: Optional[Item] = None,
+            prefix: Optional[str] = None) -> Tuple[Item, str, Any]:
         """
-        Maps an identifier to the corresponding item and attribute value.
+        Maps an identifier with item and prefix to the corresponding item and
+        attribute value.
         """
         uid_key_path, *pipes = identifier.split("|")
         colon = uid_key_path.find(":")
@@ -453,8 +476,10 @@ class ItemMapper(Mapping[str, object]):
         else:
             uid, key_path = uid_key_path, "/_uid"
         if uid == ".":
-            item = self._item
-            prefix = "/".join(self._prefix)
+            if item is None:
+                item = self._item
+            if prefix is None:
+                prefix = "/".join(self._prefix)
         else:
             item = self._item.map(uid)
             prefix = ""
@@ -465,43 +490,24 @@ class ItemMapper(Mapping[str, object]):
             value = getattr(self, func)(value)
         return item, key_path, value
 
-    @contextmanager
-    def _item_and_prefix(self, item: Item, prefix: str) -> Iterator[None]:
-        item_2 = self._item
-        prefix_2 = self._prefix
-        self._item = item
-        self._prefix = [prefix]
-        yield
-        self._item = item_2
-        self._prefix = prefix_2
-
     def __getitem__(self, identifier):
         item, key_path, value = self.map(identifier)
         if self._recursive:
-            with self._item_and_prefix(item, os.path.dirname(key_path)):
-                return self.substitute(value)
+            return self.substitute(value, item, os.path.dirname(key_path))
         return value
 
-    def __iter__(self):
-        raise StopIteration
-
-    def __len__(self):
-        raise AttributeError
-
-    def substitute(self, text: Optional[str]) -> str:
-        """ Performs a variable substitution using the item mapper. """
-        if not text:
-            return ""
-        return ItemTemplate(text).substitute(self)
-
-    def substitute_with_prefix(self, text: Optional[str], prefix: str) -> str:
+    def substitute(self,
+                   text: Optional[str],
+                   item: Optional[Item] = None,
+                   prefix: Optional[str] = None) -> str:
         """
-        Performs a variable substitution using the item mapper with a prefix.
+        Performs a variable substitution using the item mapper with the item
+        and prefix.
         """
         if not text:
             return ""
-        with self.prefix(prefix):
-            return ItemTemplate(text).substitute(self)
+        context = _ItemMapperContext(self, item, prefix, self._recursive)
+        return ItemTemplate(text).substitute(context)
 
 
 class _SpecType(NamedTuple):

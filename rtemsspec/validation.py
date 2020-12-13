@@ -62,7 +62,10 @@ class _Mapper(ItemMapper):
         """ Resets the test step counter. """
         self._step = 0
 
-    def map(self, identifier: str) -> Tuple[Item, str, Any]:
+    def map(self,
+            identifier: str,
+            item: Optional[Item] = None,
+            prefix: Optional[str] = None) -> Tuple[Item, str, Any]:
         if identifier == "step":
             step = self._step
             self._step = step + 1
@@ -72,7 +75,7 @@ class _Mapper(ItemMapper):
             inc = int(match.group(1))
             self._step += inc
             return self._item, "step", f"Accounts for {inc} test plan steps"
-        return super().map(identifier)
+        return super().map(identifier, item, prefix)
 
 
 def _add_ingroup(content: CContent, items: List["_TestItem"]) -> None:
@@ -151,9 +154,7 @@ class _TestItem:
         """
         Performs a variable substitution for text with an optional prefix.
         """
-        if prefix:
-            return self._mapper.substitute_with_prefix(text, prefix)
-        return self._mapper.substitute(text)
+        return self._mapper.substitute(text, prefix=prefix)
 
     def add_test_case_description(
             self, content: CContent,
