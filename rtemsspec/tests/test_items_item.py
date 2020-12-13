@@ -91,6 +91,19 @@ def test_cache():
     assert item.cache == item_cache
 
 
+def test_digest():
+    i = Item(EmptyItemCache(), "i", {})
+    assert i.digest == "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"
+    i["_ignored"] = "nix"
+    assert i.digest == "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"
+    i["a"] = {"b": ["c", 1, False, 1.25], "d": None}
+    assert i.digest == "24944e62a4e79b109c5fa97264b8c2fd694a630ede9a82ca7de36a64d01cbc902d29611490cef78e915b44b022b622de058fed2e4bdda394cb37ab9636d06925"
+    i["a"] = {"b": ["e", 1, False, 1.25], "d": None}
+    assert i.digest == "da696508ae767be7d34f16d51a2fe151a942c213596f5de4baf3c048ee519dd97dc19ab813c8730b861fad4c9c82f18652ad87402c84f80aaa59d24f3ed83c20"
+    i["a"] = {"b": ["e", "1", False, 1.25], "d": None}
+    assert i.digest == "7404cafe87a132de131d1e88170ce6d671de36bba811f9a10892a82a21a8e923f7596838d0f9cced24fe34620485603165efd9f64fffb2363c96253fd640b086"
+
+
 def test_get_key_path():
     data = {}
     data["a"] = {"b": "c", "d": [1, 2, 3]}

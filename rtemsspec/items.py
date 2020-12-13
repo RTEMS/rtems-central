@@ -25,6 +25,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
+import hashlib
 import os
 import pickle
 import string
@@ -136,6 +137,29 @@ def normalize_key_path(key_path: str, prefix: str = "") -> str:
     return os.path.normpath(key_path)
 
 
+_TYPES = {
+    type(True): "B".encode("utf-8"),
+    type(1.0): "F".encode("utf-8"),
+    type(1): "I".encode("utf-8"),
+    type(None): "N".encode("utf-8"),
+    type(""): "S".encode("utf-8"),
+}
+
+
+def _hash_data(data, state) -> None:
+    if isinstance(data, list):
+        for value in data:
+            _hash_data(value, state)
+    elif isinstance(data, dict):
+        for key, value in sorted(data.items()):
+            if not key.startswith("_"):
+                state.update(key.encode("utf-8"))
+                _hash_data(value, state)
+    else:
+        state.update(_TYPES[type(data)])
+        state.update(str(data).encode("utf-8"))
+
+
 class Item:
     """ Objects of this class represent a specification item. """
 
@@ -173,6 +197,13 @@ class Item:
     def cache(self) -> "ItemCache":
         """ Returns the cache of the items. """
         return self._cache
+
+    @property
+    def digest(self) -> str:
+        """ Returns the digest of the item data. """
+        state = hashlib.sha512()
+        _hash_data(self._data, state)
+        return state.hexdigest()
 
     def get(self, key: str, default: Any) -> Any:
         """
