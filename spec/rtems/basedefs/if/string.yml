@@ -1,10 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Stringifies _x without expanding.
+  Stringifies the arguments without expanding them.
 copyrights:
 - Copyright (C) 2015 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: '#${.:/params[0]/name}'
+  default: '#__VA_ARGS__'
   variants: []
 description: null
 enabled-by: true
@@ -19,11 +19,11 @@ name: RTEMS_STRING
 notes: null
 params:
 - description: |
-    is the token to stringify.
+    are the arguments to stringify.
   dir: null
-  name: _x
+  name: ...
 return:
   return: |
-    Returns the stringification of the token _x.
+    Returns the stringification of the arguments.
   return-values: []
 type: interface
