@@ -506,8 +506,16 @@ class ItemMapper:
         """
         if not text:
             return ""
-        context = _ItemMapperContext(self, item, prefix, self._recursive)
-        return ItemTemplate(text).substitute(context)
+        try:
+            context = _ItemMapperContext(self, item, prefix, self._recursive)
+            return ItemTemplate(text).substitute(context)
+        except Exception as err:
+            spec = self._item.spec if item is None else item.spec
+            if prefix is None:
+                prefix = "/".join(self._prefix)
+            msg = (f"substitution for {spec} using prefix '{prefix}' "
+                   f"failed for text: {text}")
+            raise ValueError(msg) from err
 
 
 class _SpecType(NamedTuple):

@@ -276,7 +276,8 @@ def test_substitute(tmpdir):
                                                     with_spec_types=True)
     item_cache = ItemCache(config)
     mapper = SphinxMapper(item_cache["/x"])
-    with pytest.raises(KeyError):
+    match = r"substitution for spec:/x using prefix '' failed for text: \${x:/y}"
+    with pytest.raises(ValueError, match=match):
         mapper.substitute("${x:/y}")
     assert mapper.substitute("${x:/term}") == ":term:`y`"
     assert mapper.substitute("${x:/plural}") == ":term:`ys <y>`"

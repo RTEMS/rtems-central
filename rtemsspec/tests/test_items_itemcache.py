@@ -158,6 +158,9 @@ def test_item_mapper(tmpdir):
     recursive_mapper = ItemMapper(item, recursive=True)
     assert recursive_mapper.substitute("${.:/r1/r2/r3}") == "foobar"
     assert recursive_mapper[".:/r1/r2/r3"] == "foobar"
+    match = r"substitution for spec:/p using prefix 'blub' failed for text: \${}"
+    with pytest.raises(ValueError, match=match):
+        mapper.substitute("${}", item, "blub")
 
 
 def test_empty_item_mapper():
