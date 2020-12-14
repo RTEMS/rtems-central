@@ -48,8 +48,9 @@ def test_load(tmpdir):
     assert item_count == len(item_cache.all)
     assert item_cache.updates
     cache_dir = config["cache-directory"]
-    assert os.path.exists(os.path.join(cache_dir, "spec", "spec.pickle"))
-    assert os.path.exists(os.path.join(cache_dir, "spec", "d", "spec.pickle"))
+    assert os.path.exists(os.path.join(cache_dir, "0", "spec", "spec.pickle"))
+    assert os.path.exists(
+        os.path.join(cache_dir, "0", "spec", "d", "spec.pickle"))
     assert item_cache["/d/c"]["v"] == "c"
     assert item_cache["/p"]["v"] == "p"
     p = item_cache["/p"]

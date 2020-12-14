@@ -550,8 +550,8 @@ class ItemCache:
         self._items = {}  # type: ItemMap
         self._updates = 0
         cache_dir = os.path.abspath(config["cache-directory"])
-        for path in config["paths"]:
-            self._load_items_recursive(path, path, cache_dir)
+        for index, path in enumerate(config["paths"]):
+            self._load_items_recursive(str(index), path, path, cache_dir)
         if post_process_load:
             post_process_load(self._items)
         self._init_parents()
@@ -618,11 +618,11 @@ class ItemCache:
         for uid, data in iter(data_by_uid.items()):
             self._add_item(uid, data)
 
-    def _load_items_recursive(self, base: str, path: str,
+    def _load_items_recursive(self, index: str, base: str, path: str,
                               cache_dir: str) -> None:
         mid = os.path.abspath(path)
         mid = mid.replace(os.path.commonpath([cache_dir, mid]), "").strip("/")
-        cache_file = os.path.join(cache_dir, mid, "spec.pickle")
+        cache_file = os.path.join(cache_dir, index, mid, "spec.pickle")
         try:
             mtime = os.path.getmtime(cache_file)
             update_cache = False
@@ -637,7 +637,7 @@ class ItemCache:
                     update_cache = mtime <= os.path.getmtime(path2)
             else:
                 if stat.S_ISDIR(os.lstat(path2).st_mode):
-                    self._load_items_recursive(base, path2, cache_dir)
+                    self._load_items_recursive(index, base, path2, cache_dir)
         self._load_items_in_dir(base, path, cache_file, update_cache)
 
     def _init_parents(self) -> None:
