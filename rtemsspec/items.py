@@ -266,26 +266,30 @@ class Item:
         """
         return self._cache[self.to_abs_uid(abs_or_rel_uid)]
 
-    def links_to_parents(self) -> Iterator[Link]:
+    def links_to_parents(
+            self,
+            role: Optional[Union[str,
+                                 Iterable[str]]] = None) -> Iterator[Link]:
         """ Yields the links to the parents of this items. """
-        yield from self._links_to_parents
+        if role is None:
+            for link in self._links_to_parents:
+                yield link
+        elif isinstance(role, str):
+            for link in self._links_to_parents:
+                if link.role == role:
+                    yield link
+        else:
+            for link in self._links_to_parents:
+                if link.role in role:
+                    yield link
 
     def parents(
             self,
             role: Optional[Union[str,
                                  Iterable[str]]] = None) -> Iterator["Item"]:
         """ Yields the parents of this items. """
-        if role is None:
-            for link in self._links_to_parents:
-                yield link.item
-        elif isinstance(role, str):
-            for link in self._links_to_parents:
-                if link.role == role:
-                    yield link.item
-        else:
-            for link in self._links_to_parents:
-                if link.role in role:
-                    yield link.item
+        for link in self.links_to_parents(role):
+            yield link.item
 
     def parent(self,
                role: Optional[Union[str, Iterable[str]]] = None,
@@ -296,26 +300,39 @@ class Item:
                 return item
         raise IndexError
 
-    def links_to_children(self) -> Iterator[Link]:
+    def parent_link(self,
+                    role: Optional[Union[str, Iterable[str]]] = None,
+                    index: Optional[int] = 0) -> Link:
+        """ Returns the parent link with the specified role and index. """
+        for link_index, link in enumerate(self.links_to_parents(role)):
+            if link_index == index:
+                return link
+        raise IndexError
+
+    def links_to_children(
+            self,
+            role: Optional[Union[str,
+                                 Iterable[str]]] = None) -> Iterator[Link]:
         """ Yields the links to the children of this items. """
-        yield from self._links_to_children
+        if role is None:
+            for link in self._links_to_children:
+                yield link
+        elif isinstance(role, str):
+            for link in self._links_to_children:
+                if link.role == role:
+                    yield link
+        else:
+            for link in self._links_to_children:
+                if link.role in role:
+                    yield link
 
     def children(
             self,
             role: Optional[Union[str,
                                  Iterable[str]]] = None) -> Iterator["Item"]:
         """ Yields the children of this items. """
-        if role is None:
-            for link in self._links_to_children:
-                yield link.item
-        elif isinstance(role, str):
-            for link in self._links_to_children:
-                if link.role == role:
-                    yield link.item
-        else:
-            for link in self._links_to_children:
-                if link.role in role:
-                    yield link.item
+        for link in self.links_to_children(role):
+            yield link.item
 
     def child(self,
               role: Optional[Union[str, Iterable[str]]] = None,
@@ -324,6 +341,15 @@ class Item:
         for item_index, item in enumerate(self.children(role)):
             if item_index == index:
                 return item
+        raise IndexError
+
+    def child_link(self,
+                   role: Optional[Union[str, Iterable[str]]] = None,
+                   index: Optional[int] = 0) -> Link:
+        """ Returns the child link with the specified role and index. """
+        for link_index, link in enumerate(self.links_to_children(role)):
+            if link_index == index:
+                return link
         raise IndexError
 
     def init_parents(self, item_cache: "ItemCache") -> None:

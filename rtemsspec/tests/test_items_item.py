@@ -171,6 +171,9 @@ def test_children():
     assert parent.child("c") == child
     with pytest.raises(IndexError):
         parent.child("c", 1)
+    assert parent.child_link("c").item == child
+    with pytest.raises(IndexError):
+        parent.child_link("c", 1)
 
 
 def test_parents():
@@ -209,6 +212,9 @@ def test_parents():
     assert child.parent("c") == parent
     with pytest.raises(IndexError):
         child.parent("c", 1)
+    assert child.parent_link("c").item == parent
+    with pytest.raises(IndexError):
+        child.parent_link("c", 1)
 
 
 def _is_enabled(enabled, enabled_by):
