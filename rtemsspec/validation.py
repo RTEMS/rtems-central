@@ -852,6 +852,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
                 "memset( &config, 0, sizeof( config ) );",
                 f"config.sample_count = {self['params']['sample-count']};",
                 "ctx->request.arg = ctx;",
+                "ctx->request.flags = T_MEASURE_RUNTIME_REPORT_SAMPLES;",
                 "ctx->context = T_measure_runtime_create( &config );",
                 "T_assert_not_null( ctx->context );",
             ])
