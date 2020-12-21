@@ -1021,6 +1021,7 @@ static void Rtm_Setup_Context( Rtm_Context *ctx )
   memset( &config, 0, sizeof( config ) );
   config.sample_count = 100;
   ctx->request.arg = ctx;
+  ctx->request.flags = T_MEASURE_RUNTIME_REPORT_SAMPLES;
   ctx->context = T_measure_runtime_create( &config );
   T_assert_not_null( ctx->context );
 }
