@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Creates a timer.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -14,9 +14,10 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive creates a timer.  The assigned object identifier is returned
-  in ${.:/params[1]/name}.  This identifier is used to access the timer with
-  other timer related directives.
+  This directive creates a timer which resides on the local node.  The timer
+  has the user-defined object name specified in ${.:/params[0]/name}.  The
+  assigned object identifier is returned in ${.:/params[1]/name}.  This
+  identifier is used to access the timer with other timer related directives.
 enabled-by: true
 index-entries:
 - create a timer
@@ -26,25 +27,32 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../constraint/max
+- role: constraint
+  uid: /constraint/obj-unlimited-alloc
 name: rtems_timer_create
 notes: |
-  This directive may cause the calling task to be preempted due to an obtain
-  and release of the object allocator mutex.
+  The processor used to maintain the timer is the processor of the calling task
+  at some point during the timer creation.
 
   For control and maintenance of the timer, RTEMS allocates a
   ${/glossary/tmcb:/term} from the local TMCB free pool and initializes it.
-
-  In SMP configurations, the processor of the currently executing thread
-  determines the processor used for the created timer.  During the life-time of
-  the timer this processor is used to manage the timer internally.
 params:
-- description: is the name of the timer.
+- description: |
+    is the object name of the timer.
   dir: null
   name: name
 - description: |
     is the pointer to an object identifier variable.  The identifier of the
-    created timer object will be stored in this variable, in case of a
-    successful operation.
+    created timer will be stored in this variable, in case of a successful
+    operation.
   dir: out
   name: id
 return:
@@ -54,14 +62,14 @@ return:
       The requested operation was successful.
     value: ${../../status/if/successful:/name}
   - description: |
-      The timer name was invalid.
+      The ${.:/params[0]/name} parameter was invalid.
     value: ${../../status/if/invalid-name:/name}
   - description: |
       The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
-      There was no inactive object available to create a new timer.  The number
-      of timers available to the application is configured through the
-      ${/acfg/if/max-timers:/name} configuration option.
+      There was no inactive object available to create a timer.  The number of
+      timers available to the application is configured through the
+      ${/acfg/if/max-timers:/name} application configuration option.
     value: ${../../status/if/too-many:/name}
 type: interface

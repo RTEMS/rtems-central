@@ -42,8 +42,8 @@ params:
   name: config
 - description: |
     is the pointer to an object identifier variable.  The identifier of the
-    constructed message queue object will be stored in this variable, in case
-    of a successful operation.
+    constructed message queue will be stored in this variable, in case of a
+    successful operation.
   dir: out
   name: id
 return:

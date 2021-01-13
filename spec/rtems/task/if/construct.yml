@@ -54,8 +54,8 @@ params:
   name: config
 - description: |
     is the pointer to an object identifier variable.  The identifier of the
-    constructed task object will be stored in this variable, in case of a
-    successful operation.
+    constructed task will be stored in this variable, in case of a successful
+    operation.
   dir: out
   name: id
 return:
