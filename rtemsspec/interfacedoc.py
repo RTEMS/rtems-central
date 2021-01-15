@@ -30,7 +30,7 @@ import functools
 import os
 from typing import Any, Dict, List, Tuple
 
-from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper
+from rtemsspec.content import CContent
 from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
      SphinxMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
@@ -143,28 +143,14 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
                     prefix: str, value: Dict[str, Any]) -> None:
     # pylint: disable=too-many-arguments
     add_definition = _ADD_DEFINITION[item.type]
-    default = value["default"]
-    variants = value["variants"]
-    if variants:
-        ifelse = "#if "
-        with mapper.prefix(os.path.join(prefix, "variants")):
-            for variant in variants:
-                enabled_by = enabled_by_to_exp(variant["enabled-by"],
-                                               ExpressionMapper())
-                content.append(f"{ifelse}{enabled_by}")
-                with content.indent():
-                    add_definition(content, mapper, item,
-                                   variant["definition"])
-                ifelse = "#elif "
-        if default is not None:
-            content.append("#else")
-            with mapper.prefix(os.path.join(prefix, "default")):
-                with content.indent():
-                    add_definition(content, mapper, item, default)
-        content.append("#endif")
-    else:
-        with mapper.prefix(os.path.join(prefix, "default")):
-            add_definition(content, mapper, item, default)
+    key = "default"
+    definition = value[key]
+    if not definition:
+        # Assume that all definitions have the same interface
+        key = "variants"
+        definition = value["variants"][0]["definition"]
+    with mapper.prefix(os.path.join(prefix, key)):
+        add_definition(content, mapper, item, definition)
 
 
 def _generate_directive(content: SphinxContent, mapper: _Mapper,

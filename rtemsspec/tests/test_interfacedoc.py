@@ -151,12 +151,8 @@ Function brief description with very long return type.
 
 .. code-block:: c
 
-    #if 1
-      NotSoVeryLongType VeryLongTypeFunction( void );
-    #else
-      VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
-      VeryLongTypeFunction( void );
-    #endif
+    VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
+    VeryLongTypeFunction( void );
 
 .. rubric:: RETURN VALUES:
 
@@ -241,9 +237,7 @@ VoidFunction()
 
 .. code-block:: c
 
-    #if 1
-      void VoidFunction( void );
-    #endif
+    void VoidFunction( void );
 
 .. Generated from spec:/macro
 
@@ -315,11 +309,7 @@ Short macro brief description.
 
 .. code-block:: c
 
-    #if defined(0)
-      #define MACRO( Param0 )
-    #else
-      #define MACRO( Param0 )
-    #endif
+    #define MACRO( Param0 )
 
 .. rubric:: PARAMETERS:
 
