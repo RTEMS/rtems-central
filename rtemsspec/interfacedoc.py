@@ -64,21 +64,25 @@ class _CodeMapper(ItemMapper):
                            _get_value_forward_declaration)
 
 
-def _get_value_function(ctx: ItemGetValueContext) -> Any:
-    return _get_reference(ctx.value[ctx.key])
-
-
 def _get_param(ctx: ItemGetValueContext) -> Any:
     return f"``{_sanitize_name(ctx.value[ctx.key])}``"
 
 
 class _Mapper(SphinxMapper):
-    def __init__(self, item: Item):
+    def __init__(self, item: Item, group_uids: List[str]):
         super().__init__(item)
-        self.add_get_value("interface/function:/name", _get_value_function)
-        self.add_get_value("interface/macro:/name", _get_value_function)
+        self._group_uids = set(group_uids)
+        self.add_get_value("interface/function:/name", self._get_function)
+        self.add_get_value("interface/macro:/name", self._get_function)
         self.add_get_value("interface/function:/params/name", _get_param)
         self.add_get_value("interface/macro:/params/name", _get_param)
+
+    def _get_function(self, ctx: ItemGetValueContext) -> Any:
+        name = ctx.value[ctx.key]
+        for group in ctx.item.parents("interface-ingroup"):
+            if group.uid in self._group_uids:
+                return _get_reference(name)
+        return f":c:func:`{name}`"
 
 
 def _generate_introduction(target: str, group: Item,
@@ -191,7 +195,8 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
         content.wrap(mapper.substitute(item["notes"]))
 
 
-def _generate_directives(target: str, group: Item, items: List[Item]) -> None:
+def _generate_directives(target: str, group: Item, group_uids: List[str],
+                         items: List[Item]) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
     content.add_automatically_generated_warning()
@@ -207,7 +212,7 @@ def _generate_directives(target: str, group: Item, items: List[Item]) -> None:
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
             code_mapper = _CodeMapper(item)
-            mapper = _Mapper(item)
+            mapper = _Mapper(item, group_uids)
             content.add(f".. Generated from spec:{item.uid}")
             with content.directive("raw", "latex"):
                 content.add("\\clearpage")
@@ -234,6 +239,7 @@ def generate(config: list, item_cache: ItemCache) -> None:
     :param config: A dictionary with configuration entries.
     :param item_cache: The specification item cache containing the interfaces.
     """
+    group_uids = [doc_config["group"] for doc_config in config]
     for doc_config in config:
         items = []  # type: List[Item]
         group = item_cache[doc_config["group"]]
@@ -244,4 +250,5 @@ def generate(config: list, item_cache: ItemCache) -> None:
         items.sort(key=functools.partial(
             _directive_key, list(group.parents("placement-order"))))
         _generate_introduction(doc_config["introduction-target"], group, items)
-        _generate_directives(doc_config["directives-target"], group, items)
+        _generate_directives(doc_config["directives-target"], group,
+                             group_uids, items)

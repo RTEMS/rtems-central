@@ -25,7 +25,8 @@ links:
 - role: interface-ingroup
   uid: gb
 name: VeryLongTypeFunction
-notes: null
+notes: |
+  See also ${func5:/name}.
 params: []
 return:
   return: This function returns an object with a very long type.

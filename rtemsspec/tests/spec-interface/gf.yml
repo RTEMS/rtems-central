@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: Group F brief description.
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+description: Group F description.
+enabled-by: true
+identifier: GroupF
+index-entries: []
+interface-type: group
+links: []
+name: Group F
+type: interface

@@ -158,6 +158,10 @@ Function brief description with very long return type.
 
 This function returns an object with a very long type.
 
+.. rubric:: NOTES:
+
+See also :c:func:`Func5`.
+
 .. Generated from spec:/func2
 
 .. raw:: latex
