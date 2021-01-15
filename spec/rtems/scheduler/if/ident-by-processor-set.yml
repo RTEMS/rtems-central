@@ -23,7 +23,7 @@ links:
 - role: interface-placement
   uid: ../../task/if/header
 - role: interface-ingroup
-  uid: ../../task/if/group
+  uid: group
 name: rtems_scheduler_ident_by_processor_set
 notes: null
 params:

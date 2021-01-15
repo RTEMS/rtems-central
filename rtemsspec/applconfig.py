@@ -337,7 +337,7 @@ _SPHINX_DOC_REFS = {
     "mrsp": _sphinx_ref("MrsP"),
     "pthread-setname-np": f"`PTHREAD_SETNAME_NP(3) <{_PTHREAD_NAME_NP}>`_",
     "scheduler-cbs": _sphinx_ref("SchedulerCBS"),
-    "scheduler-concepts": _sphinx_ref("SchedulingConcepts"),
+    "scheduler-concepts": _sphinx_ref("RTEMSAPIClassicScheduler"),
     "scheduler-edf": _sphinx_ref("SchedulerEDF"),
     "scheduler-priority": _sphinx_ref("SchedulerPriority"),
     "scheduler-priority-simple": _sphinx_ref("SchedulerPrioritySimple"),

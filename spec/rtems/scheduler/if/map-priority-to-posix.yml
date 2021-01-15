@@ -21,7 +21,7 @@ links:
 - role: interface-placement
   uid: ../../task/if/header
 - role: interface-ingroup
-  uid: ../../task/if/group
+  uid: group
 name: rtems_scheduler_map_priority_to_posix
 notes: null
 params:
