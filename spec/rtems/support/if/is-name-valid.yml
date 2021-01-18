@@ -10,7 +10,7 @@ definition:
     body: |
       return ${.:/params[0]/name} != 0;
     params:
-    - ${../../status/if/code:/name} ${.:/params[0]/name}
+    - ${../../type/if/name:/name} ${.:/params[0]/name}
     return: ${/c/if/bool:/name}
   variants: []
 description: null
