@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Deletes the timer.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -13,8 +13,8 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive deletes the timer specified by the ${.:/params[0]/name}
-  parameter.  If the timer is running, it is automatically canceled.
+  This directive deletes the timer specified by ${.:/params[0]/name}.  If the
+  timer is running, it is automatically canceled.
 enabled-by: true
 index-entries:
 - delete a timer
@@ -24,14 +24,19 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
+- role: constraint
+  uid: ../../constraint/delete-by-any-task
+- role: constraint
+  uid: /constraint/obj-unlimited-free
 name: rtems_timer_delete
 notes: |
-  This directive may cause the calling task to be preempted due to an obtain
-  and release of the object allocator mutex.
-
   The ${/glossary/tmcb:/term} for the deleted timer is reclaimed by RTEMS.
-
-  A timer can be deleted by a task other than the task which created the timer.
 params:
 - description: is the timer identifier.
   dir: null
