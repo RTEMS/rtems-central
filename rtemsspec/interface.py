@@ -408,8 +408,8 @@ class Node:
         with content.doxygen_block():
             content.add_ingroup(_get_group_identifiers(ingroups))
             content.add_brief_description(self.substitute_text(item["brief"]))
-            content.wrap(self.substitute_text(item["description"]))
-            content.wrap(self.substitute_text(item["notes"]))
+            content.doxyfy(self.substitute_text(item["description"]))
+            content.doxyfy(self.substitute_text(item["notes"]))
             if "params" in item:
                 content.add_param_description(item["params"],
                                               self.substitute_text)

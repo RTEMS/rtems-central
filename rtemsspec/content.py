@@ -33,8 +33,8 @@ import os
 import re
 import sys
 import textwrap
-from typing import Any, Callable, ContextManager, Dict, Iterable, Iterator, \
-    List, NamedTuple, Optional, Set, Tuple, Union
+from typing import Any, Callable, ContextManager, Deque, Dict, Iterable, \
+    Iterator, List, NamedTuple, Optional, Set, Tuple, Union
 
 from rtemsspec.items import Item, ItemGetValueContext
 
@@ -235,6 +235,15 @@ class Content:
                                 self._empty_line_indent))
                 break
 
+    def _add_verbatim(self, blocks: Deque[str]) -> None:
+        while blocks:
+            block = blocks.popleft()
+            if block.startswith("    "):
+                self.add(block[4:].replace("\n    ", "\n"))
+            else:
+                blocks.appendleft(block)
+                break
+
     def wrap_text(self,
                   text: str,
                   initial_indent: str = "",
@@ -254,12 +263,20 @@ class Content:
             wrapper.initial_indent = initial_indent
             wrapper.width = 79 - len(self._indent)
             gap = []  # type: List[str]
-            for block in text.split("\n\n"):
+            blocks = collections.deque(text.split("\n\n"))
+            while blocks:
+                block = blocks.popleft()
                 match = _SPECIAL_BLOCK.search(block)
                 if match:
                     space = len(match.group(0)) * " "
                     wrapper.subsequent_indent = f"{subsequent_indent}{space}"
                     block = block.replace(f"\n{space}", "\n")
+                elif block.startswith(".. code-block"):
+                    self.add(block)
+                    with self.indent():
+                        self.gap = True
+                        self._add_verbatim(blocks)
+                    continue
                 else:
                     wrapper.subsequent_indent = subsequent_indent
                 self._lines.extend(gap)
@@ -560,13 +577,7 @@ class CContent(Content):
             if block.startswith(".. code-block"):
                 self.add("@code")
                 self.gap = False
-                while blocks:
-                    block = blocks.popleft()
-                    if block.startswith("    "):
-                        self.add(block[4:].replace("\n    ", "\n"))
-                    else:
-                        blocks.appendleft(block)
-                        break
+                self._add_verbatim(blocks)
                 self.append("@endcode")
             else:
                 self.wrap_text(block)

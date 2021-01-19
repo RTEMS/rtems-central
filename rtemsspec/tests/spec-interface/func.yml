@@ -18,6 +18,11 @@ description: |
   ${enum:/name}, ${define:/name}, ${macro:/name}, ${var:/name},
   ${enumerator-0:/name}, ${s:/name}, ${option:/name}, and ${option:/type}.
   Second parameter is ${.:/params[1]/name}.
+
+  .. code-block:
+
+      these two lines
+      are not wrapped
 enabled-by: true
 index-entries: []
 interface-type: function

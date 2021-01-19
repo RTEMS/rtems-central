@@ -461,5 +461,10 @@ Function description.  References to :ref:`InterfaceVeryLongFunction`,
 :c:type:`Integer`, :c:type:`Enum`, :c:macro:`DEFINE`,
 :ref:`InterfaceVERYLONGMACRO`, Variable, :c:macro:`ENUMERATOR_0`,
 :c:type:`Struct`, :ref:`a`, and interface. Second parameter is ``Param1``.
+
+.. code-block:
+
+    these two lines
+    are not wrapped
 """
         assert content == src.read()

@@ -211,6 +211,11 @@ typedef enum EnumB {
  * #DEFINE, VERY_LONG_MACRO(), #Variable, ::ENUMERATOR_0, Struct, #a, and
  * interface. Second parameter is ``Param1``.
  *
+ * @code
+ * these two lines
+ * are not wrapped
+ * @endcode
+ *
  * @param Param0 is parameter 0.
  *
  * @param[in] Param1 is parameter 1.
