@@ -61,11 +61,15 @@ def test_interfacedoc(tmpdir):
 .. worded better please post a report or patch to an RTEMS mailing list
 .. or raise a bug report:
 ..
-.. https://docs.rtems.org/branches/master/user/support/bugs.html
+.. https://www.rtems.org/bugs.html
 ..
-.. For information on updating and regenerating please refer to:
+.. For information on updating and regenerating please refer to the How-To
+.. section in the Software Requirements Engineering chapter of the
+.. RTEMS Software Engineering manual.  The manual is provided as a part of
+.. a release.  For development sources please refer to the online
+.. documentation at:
 ..
-.. https://docs.rtems.org/branches/master/eng/req/howto.html
+.. https://docs.rtems.org
 
 .. Generated from spec:/gb
 
@@ -109,11 +113,15 @@ The directives provided by the Group B are:
 .. worded better please post a report or patch to an RTEMS mailing list
 .. or raise a bug report:
 ..
-.. https://docs.rtems.org/branches/master/user/support/bugs.html
+.. https://www.rtems.org/bugs.html
 ..
-.. For information on updating and regenerating please refer to:
+.. For information on updating and regenerating please refer to the How-To
+.. section in the Software Requirements Engineering chapter of the
+.. RTEMS Software Engineering manual.  The manual is provided as a part of
+.. a release.  For development sources please refer to the online
+.. documentation at:
 ..
-.. https://docs.rtems.org/branches/master/eng/req/howto.html
+.. https://docs.rtems.org
 
 .. _GroupBDirectives:
 
@@ -355,11 +363,15 @@ Macro without parameters.
 .. worded better please post a report or patch to an RTEMS mailing list
 .. or raise a bug report:
 ..
-.. https://docs.rtems.org/branches/master/user/support/bugs.html
+.. https://www.rtems.org/bugs.html
 ..
-.. For information on updating and regenerating please refer to:
+.. For information on updating and regenerating please refer to the How-To
+.. section in the Software Requirements Engineering chapter of the
+.. RTEMS Software Engineering manual.  The manual is provided as a part of
+.. a release.  For development sources please refer to the online
+.. documentation at:
 ..
-.. https://docs.rtems.org/branches/master/eng/req/howto.html
+.. https://docs.rtems.org
 
 .. Generated from spec:/ga
 
@@ -389,11 +401,15 @@ Group A description. The directives provided by the Group A are:
 .. worded better please post a report or patch to an RTEMS mailing list
 .. or raise a bug report:
 ..
-.. https://docs.rtems.org/branches/master/user/support/bugs.html
+.. https://www.rtems.org/bugs.html
 ..
-.. For information on updating and regenerating please refer to:
+.. For information on updating and regenerating please refer to the How-To
+.. section in the Software Requirements Engineering chapter of the
+.. RTEMS Software Engineering manual.  The manual is provided as a part of
+.. a release.  For development sources please refer to the online
+.. documentation at:
 ..
-.. https://docs.rtems.org/branches/master/eng/req/howto.html
+.. https://docs.rtems.org
 
 .. _GroupADirectives:
 

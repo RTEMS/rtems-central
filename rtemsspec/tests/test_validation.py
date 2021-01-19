@@ -83,11 +83,15 @@ def test_validation(tmpdir):
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifdef HAVE_CONFIG_H
@@ -159,11 +163,15 @@ def test_validation(tmpdir):
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifdef HAVE_CONFIG_H
@@ -954,11 +962,15 @@ T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifdef HAVE_CONFIG_H
@@ -1326,11 +1338,15 @@ void Tc6_Run( void )
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifndef _TC5_H
@@ -1412,11 +1428,15 @@ void Tc5_Run( int *a, int b, int *c );
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifndef _TC6_H
@@ -1486,11 +1506,15 @@ void Tc6_Run( void );
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifndef _ACTION2_H
@@ -1597,11 +1621,15 @@ void Action2_Run( int *a, int b, int *c );
  * worded better please post a report or patch to an RTEMS mailing list
  * or raise a bug report:
  *
- * https://docs.rtems.org/branches/master/user/support/bugs.html
+ * https://www.rtems.org/bugs.html
  *
- * For information on updating and regenerating please refer to:
+ * For information on updating and regenerating please refer to the How-To
+ * section in the Software Requirements Engineering chapter of the
+ * RTEMS Software Engineering manual.  The manual is provided as a part of
+ * a release.  For development sources please refer to the online
+ * documentation at:
  *
- * https://docs.rtems.org/branches/master/eng/req/howto.html
+ * https://docs.rtems.org
  */
 
 #ifdef HAVE_CONFIG_H
