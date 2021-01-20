@@ -6,9 +6,11 @@ install:
 - source:
   - abc
 links:
-- role: null
+- role: build-dependency
   uid: o
-- role: null
+- role: build-dependency
+  uid: op
+- role: build-dependency
   uid: d
 source:
 - def

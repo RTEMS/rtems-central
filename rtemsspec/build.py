@@ -32,14 +32,18 @@ BSPMap = Dict[str, Dict[str, Item]]
 ItemMap = Dict[str, Item]
 
 
-def _extend_by_install_and_source(item: Item, source_files: List[str]) -> None:
+def _extend_by_install(item: Item, source_files: List[str]) -> None:
     for install in item["install"]:
         source_files.extend(install["source"])
-    source_files.extend(item["source"])
 
 
 def _extend_by_source(item: Item, source_files: List[str]) -> None:
     source_files.extend(item["source"])
+
+
+def _extend_by_install_and_source(item: Item, source_files: List[str]) -> None:
+    _extend_by_install(item, source_files)
+    _extend_by_source(item, source_files)
 
 
 def _extend_by_nothing(_item: Item, _source_files: List[str]) -> None:
@@ -52,7 +56,7 @@ _EXTEND_SOURCE_FILES = {
     "config-file": _extend_by_nothing,
     "config-header": _extend_by_nothing,
     "test-program": _extend_by_source,
-    "group": _extend_by_nothing,
+    "group": _extend_by_install,
     "library": _extend_by_install_and_source,
     "objects": _extend_by_install_and_source,
     "option": _extend_by_nothing,
@@ -63,10 +67,8 @@ _EXTEND_SOURCE_FILES = {
 
 def _gather_source_files(item: Item, enabled: List[str],
                          source_files: List[str]) -> None:
-    for parent in item.parents():
-        if parent["type"] == "build" and parent["build-type"] in [
-                "group", "objects", "start-file", "test-program"
-        ] and parent.is_enabled(enabled):
+    for parent in item.parents("build-dependency"):
+        if parent.is_enabled(enabled):
             _gather_source_files(parent, enabled, source_files)
     _EXTEND_SOURCE_FILES[item["build-type"]](item, source_files)
 
