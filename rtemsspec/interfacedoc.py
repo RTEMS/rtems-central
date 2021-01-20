@@ -199,6 +199,14 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
     if item["notes"]:
         content.add(".. rubric:: NOTES:")
         content.wrap(mapper.substitute(item["notes"]))
+    constraints = [
+        mapper.substitute(parent["text"], parent)
+        for parent in item.parents("constraint")
+    ]
+    if constraints:
+        content.add(".. rubric:: CONSTRAINTS:")
+        content.add_list(constraints,
+                         "The following constraints apply to this directive:")
 
 
 def _generate_directives(target: str, group: Item, group_uids: List[str],

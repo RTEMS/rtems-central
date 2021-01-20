@@ -461,5 +461,11 @@ parameter is ``Param1``.
 
     these two lines
     are not wrapped
+
+.. rubric:: CONSTRAINTS:
+
+The following constraints apply to this directive:
+
+* Constraint A for :ref:`InterfaceFunction`.
 """
         assert content == src.read()

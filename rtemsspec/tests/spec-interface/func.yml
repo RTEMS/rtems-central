@@ -31,6 +31,8 @@ links:
   uid: h
 - role: interface-ingroup
   uid: ga
+- role: constraint
+  uid: constraint-a
 name: Function
 notes: null
 params:
