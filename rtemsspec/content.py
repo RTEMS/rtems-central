@@ -967,6 +967,11 @@ def get_value_doxygen_function(ctx: ItemGetValueContext) -> Any:
     return f"{ctx.value[ctx.key]}()"
 
 
+def get_value_doxygen_group(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value as a group reference for Doxygen markup. """
+    return f"@ref {ctx.value['identifier']}"
+
+
 def get_value_double_colon(ctx: ItemGetValueContext) -> Any:
     """ Gets a value with a :: prefix. """
     return f"::{ctx.value[ctx.key]}"

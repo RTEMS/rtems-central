@@ -73,8 +73,9 @@ class _Mapper(SphinxMapper):
         super().__init__(item)
         self._group_uids = set(group_uids)
         self.add_get_value("interface/function:/name", self._get_function)
-        self.add_get_value("interface/macro:/name", self._get_function)
         self.add_get_value("interface/function:/params/name", _get_param)
+        self.add_get_value("interface/group:/name", self._get_group)
+        self.add_get_value("interface/macro:/name", self._get_function)
         self.add_get_value("interface/macro:/params/name", _get_param)
 
     def _get_function(self, ctx: ItemGetValueContext) -> Any:
@@ -83,6 +84,11 @@ class _Mapper(SphinxMapper):
             if group.uid in self._group_uids:
                 return _get_reference(name)
         return f":c:func:`{name}`"
+
+    def _get_group(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.item.uid in self._group_uids:
+            return get_reference(ctx.value["identifier"])
+        return ctx.value[ctx.key]
 
 
 def _generate_introduction(target: str, group: Item,

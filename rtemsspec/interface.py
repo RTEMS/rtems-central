@@ -30,7 +30,7 @@ from typing import Any, Callable, Dict, Iterator, List, Union, Set
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
-    get_value_hash
+    get_value_doxygen_group, get_value_hash
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, \
     ItemGetValueMap, ItemMapper
 
@@ -82,6 +82,8 @@ class _InterfaceMapper(ItemMapper):
                            get_value_double_colon)
         self.add_get_value("interface/define/doc:/name", get_value_hash)
         self.add_get_value("interface/enum/doc:/name", get_value_hash)
+        self.add_get_value("interface/group/doc:/name",
+                           get_value_doxygen_group)
         self.add_get_value("interface/macro/doc:/name",
                            get_value_doxygen_function)
         self.add_get_value("interface/macro/doc:/params/name",

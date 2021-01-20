@@ -208,8 +208,8 @@ typedef enum EnumB {
  * @brief Function brief description.
  *
  * Function description.  References to VeryLongFunction(), ::Integer, #Enum,
- * #DEFINE, VERY_LONG_MACRO(), #Variable, ::ENUMERATOR_0, Struct, #a, and
- * interface. Second parameter is ``Param1``.
+ * #DEFINE, VERY_LONG_MACRO(), #Variable, ::ENUMERATOR_0, Struct, #a,
+ * interface, @ref GroupA, and @ref GroupF.  Second parameter is ``Param1``.
  *
  * @code
  * these two lines

@@ -16,8 +16,8 @@ definition:
 description: |
   Function description.  References to ${func2:/name}, ${td:/name},
   ${enum:/name}, ${define:/name}, ${macro:/name}, ${var:/name},
-  ${enumerator-0:/name}, ${s:/name}, ${option:/name}, and ${option:/type}.
-  Second parameter is ${.:/params[1]/name}.
+  ${enumerator-0:/name}, ${s:/name}, ${option:/name}, ${option:/type},
+  ${ga:/name}, and ${gf:/name}.  Second parameter is ${.:/params[1]/name}.
 
   .. code-block:
 
