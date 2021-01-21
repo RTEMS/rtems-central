@@ -8,10 +8,11 @@ build:
     RTEMS_QUAL_ONLY = True
     BUILD_TESTS = False
     BUILD_VALIDATIONTESTS = True
-    INSTALL_LEGACY_MAKEFILES = False
   doxyfile-template: templates/Doxyfile
   enabled:
+  - INSTALL_LEGACY_MAKEFILES
   - RTEMS_QUAL
+  - RTEMS_QUAL_ONLY
   - RTEMS_SMP
   source-directory: modules/rtems
   sources:
