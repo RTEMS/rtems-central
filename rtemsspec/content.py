@@ -450,6 +450,43 @@ class Content:
         yield
         self.close_comment_block()
 
+    def add_list_item(self, content: GenericContent) -> None:
+        """ Adds a list item. """
+        self.wrap(content, initial_indent="* ", subsequent_indent="  ")
+
+    def add_list(self,
+                 items: GenericContentIterable,
+                 prologue: Optional[GenericContent] = None,
+                 epilogue: Optional[GenericContent] = None,
+                 add_blank_line: bool = False) -> None:
+        """ Adds a list with introduction. """
+        if items:
+            self.wrap(prologue)
+            for item in items:
+                self.add_list_item(item)
+            if add_blank_line:
+                self.add_blank_line()
+            self.wrap(epilogue)
+
+    def open_list_item(self, content: GenericContent) -> None:
+        """ Opens a list item. """
+        self.add(["* "])
+        self.push_indent("  ")
+        self.gap = True
+        self.paste(content)
+
+    def close_list_item(self) -> None:
+        """ Closes a list item. """
+        self.pop_indent()
+        self.gap = True
+
+    @contextmanager
+    def list_item(self, content: GenericContent) -> Iterator[None]:
+        """ Opens a list item context. """
+        self.open_list_item(content)
+        yield
+        self.close_list_item()
+
     def add_automatically_generated_warning(self) -> None:
         """ Adds a warning that the file is automatically generated. """
         with self.comment_block():
