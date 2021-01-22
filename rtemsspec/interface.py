@@ -410,11 +410,10 @@ class Node:
         with content.doxygen_block():
             content.add_ingroup(_get_group_identifiers(ingroups))
             content.add_brief_description(self.substitute_text(item["brief"]))
-            content.doxyfy(self.substitute_text(item["description"]))
-            content.doxyfy(self.substitute_text(item["notes"]))
             if "params" in item:
                 content.add_param_description(item["params"],
                                               self.substitute_text)
+            content.doxyfy(self.substitute_text(item["description"]))
             if "return" in item:
                 ret = item["return"]
                 for retval in ret["return-values"]:
@@ -423,6 +422,7 @@ class Node:
                                      f"@retval {retval['value']} "))
                 content.wrap(self.substitute_text(ret["return"]),
                              initial_indent="@return ")
+            content.add_paragraph("Notes", self.substitute_text(item["notes"]))
         return content
 
     def _add_generic_definition(self, get_lines: GetLines) -> None:

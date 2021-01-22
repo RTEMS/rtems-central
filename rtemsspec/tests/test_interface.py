@@ -207,6 +207,14 @@ typedef enum EnumB {
  *
  * @brief Function brief description.
  *
+ * @param Param0 is parameter 0.
+ *
+ * @param[in] Param1 is parameter 1.
+ *
+ * @param[out] Param2 is parameter 2.
+ *
+ * @param[in,out] Param3 is parameter 3.
+ *
  * Function description.  References to VeryLongFunction(), ::Integer, #Enum,
  * #DEFINE, VERY_LONG_MACRO(), #Variable, ::ENUMERATOR_0, Struct, #a,
  * interface, @ref GroupA, and @ref GroupF.  Second parameter is ``Param1``.
@@ -215,14 +223,6 @@ typedef enum EnumB {
  * these two lines
  * are not wrapped
  * @endcode
- *
- * @param Param0 is parameter 0.
- *
- * @param[in] Param1 is parameter 1.
- *
- * @param[out] Param2 is parameter 2.
- *
- * @param[in,out] Param3 is parameter 3.
  */
 void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
 
@@ -367,10 +367,6 @@ typedef uint32_t Integer /* Some comment. */;
  *
  * @brief Very long function brief description.
  *
- * VeryLongFunction description.
- *
- * VeryLongFunction notes.
- *
  * @param VeryLongParam0 is very long parameter 0 with some super important and
  *   extra very long description which makes a lot of sense.
  *
@@ -380,6 +376,8 @@ typedef uint32_t Integer /* Some comment. */;
  *
  * @param[in,out] VeryLongParam3 is very long parameter 3.
  *
+ * VeryLongFunction description.
+ *
  * @retval 1 is returned, in case A.
  *
  * @retval 2 is returned, in case B.
@@ -387,6 +385,9 @@ typedef uint32_t Integer /* Some comment. */;
  * @retval #Enum is returned, in case C.
  *
  * @return Sometimes some value.  See Function().
+ *
+ * @par Notes
+ * VeryLongFunction notes.
  */
 __attribute__((__const__)) static inline int VeryLongFunction(
   int                  VeryLongParam0,
