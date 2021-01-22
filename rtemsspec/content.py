@@ -583,6 +583,10 @@ _NOT_ALPHANUM = re.compile(r"[^a-zA-Z0-9_]")
 _SPHINX_FILE_TO_DOXYGEN = re.compile(r":file:`([^`]+)`")
 
 
+def _make_str(value: Optional[str]) -> str:
+    return value if value else ""
+
+
 class CContent(Content):
     """ This class builds C content. """
 
@@ -943,7 +947,7 @@ class CContent(Content):
     def add_param_description(
             self,
             params: Iterable[Dict[str, str]],
-            substitute: Callable[[str], str] = lambda x: x) -> None:
+            substitute: Callable[[Optional[str]], str] = _make_str) -> None:
         """ Adds a list of parameter descriptions. """
         for param in params:
             self.wrap(param["name"] + " " + substitute(param["description"]),

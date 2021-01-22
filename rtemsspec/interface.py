@@ -26,7 +26,7 @@
 
 from contextlib import contextmanager
 import os
-from typing import Any, Callable, Dict, Iterator, List, Union, Set
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union, Set
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
@@ -316,14 +316,16 @@ class Node:
                 return self.mapper.substitute(text.strip("\n"))
         return text
 
-    def substitute_text(self, text: str) -> str:
+    def substitute_text(self,
+                        text: Optional[str],
+                        item: Optional[Item] = None) -> str:
         """
         Performs a variable substitution on a description using the item mapper
         of the node.
         """
         if text:
-            return self.mapper.substitute(text.strip("\n"))
-        return text
+            return self.mapper.substitute(text.strip("\n"), item)
+        return ""
 
     def _get_compound_definition(self, item: Item, definition: Any) -> Lines:
         content = CContent()
@@ -423,6 +425,16 @@ class Node:
                 content.wrap(self.substitute_text(ret["return"]),
                              initial_indent="@return ")
             content.add_paragraph("Notes", self.substitute_text(item["notes"]))
+            constraints = [
+                self.substitute_text(parent["text"], parent)
+                for parent in item.parents("constraint")
+            ]
+            if constraints:
+                constraint_content = CContent()
+                constraint_content.add_list(
+                    constraints,
+                    "The following constraints apply to this directive:")
+                content.add_paragraph("Constraints", constraint_content)
         return content
 
     def _add_generic_definition(self, get_lines: GetLines) -> None:

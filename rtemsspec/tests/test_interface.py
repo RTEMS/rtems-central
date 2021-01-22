@@ -223,6 +223,13 @@ typedef enum EnumB {
  * these two lines
  * are not wrapped
  * @endcode
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this directive:
+ *
+ * * Constraint A for Function().
+ * @endparblock
  */
 void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
 
