@@ -502,13 +502,18 @@ class ItemMapper:
         else:
             uid, key_path = uid_key_path, "/_uid"
         if uid == ".":
-            if item is None:
-                item = self._item
             if prefix is None:
                 prefix = "/".join(self._prefix)
+            if item is None:
+                item = self._item
         else:
-            item = self._item.map(uid)
             prefix = ""
+            try:
+                item = self._item.map(uid)
+            except KeyError as err:
+                msg = (f"item '{uid}' relative to {self._item.spec} "
+                       f"specified by '{identifier}' does not exist")
+                raise ValueError(msg) from err
         key_path = normalize_key_path(key_path, prefix)
         value = item.get_by_normalized_key_path(key_path,
                                                 self.get_value_map(item))

@@ -161,6 +161,9 @@ def test_item_mapper(tmpdir):
     match = r"substitution for spec:/p using prefix 'blub' failed for text: \${}"
     with pytest.raises(ValueError, match=match):
         mapper.substitute("${}", item, "blub")
+    match = r"item 'boom' relative to spec:/p specified by 'boom:bam' does not exist"
+    with pytest.raises(ValueError, match=match):
+        mapper.map("boom:bam", item, "blub")
 
 
 def test_empty_item_mapper():
