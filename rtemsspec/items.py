@@ -515,8 +515,13 @@ class ItemMapper:
                        f"specified by '{identifier}' does not exist")
                 raise ValueError(msg) from err
         key_path = normalize_key_path(key_path, prefix)
-        value = item.get_by_normalized_key_path(key_path,
-                                                self.get_value_map(item))
+        try:
+            value = item.get_by_normalized_key_path(key_path,
+                                                    self.get_value_map(item))
+        except Exception as err:
+            msg = (f"cannot get value for '{key_path}' of {item.spec} "
+                   f"specified by '{identifier}'")
+            raise ValueError(msg) from err
         for func in pipes:
             value = getattr(self, func)(value)
         return item, key_path, value

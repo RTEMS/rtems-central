@@ -164,6 +164,9 @@ def test_item_mapper(tmpdir):
     match = r"item 'boom' relative to spec:/p specified by 'boom:bam' does not exist"
     with pytest.raises(ValueError, match=match):
         mapper.map("boom:bam", item, "blub")
+    match = r"cannot get value for 'blub/bam' of spec:/p specified by '.:bam'"
+    with pytest.raises(ValueError, match=match):
+        mapper.map(".:bam", item, "blub")
 
 
 def test_empty_item_mapper():
