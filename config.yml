@@ -23,6 +23,7 @@ build:
   - cpukit/doxygen.h
   - cpukit/doxygen/appl-config.h
   - cpukit/doxygen/top-level-groups.h
+  - cpukit/libc/string/local.h
   - cpukit/libcsupport/src/malloc_p.h
   - cpukit/libtest/t-test-rtems.h
   - cpukit/score/cpu/sparc/syscall.h
