@@ -14,9 +14,9 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive allows a buffer to be obtained from the partition specified in
-  the ${.:/params[0]/name} parameter.  The address of the allocated buffer is
-  returned through the ${.:/params[1]/name} parameter.
+  This directive allows a buffer to be obtained from the partition specified by
+  ${.:/params[0]/name}.  The address of the allocated buffer is returned
+  through the ${.:/params[1]/name} parameter.
 enabled-by: true
 index-entries:
 - get buffer from partition
@@ -27,10 +27,16 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr-local
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt-local
+- role: constraint
+  uid: /constraint/directive-remote
 name: rtems_partition_get_buffer
 notes: |
-  This directive will not cause the running task to be preempted.
-
   The buffer start alignment is determined by the memory area and buffer size
   used to create the partition.
 

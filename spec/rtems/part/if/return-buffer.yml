@@ -25,14 +25,16 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr-local
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt-local
+- role: constraint
+  uid: /constraint/directive-remote
 name: rtems_partition_return_buffer
 notes: |
-  This directive will not cause the running task to be preempted.
-
-  Returning a buffer to a global partition which does not reside on the local
-  node will generate a request telling the remote node to return the buffer to
-  the partition.
-
   Returning a buffer multiple times is an error.  It will corrupt the internal
   state of the partition.
 params:
