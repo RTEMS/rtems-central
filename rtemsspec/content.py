@@ -742,6 +742,10 @@ class CContent(Content):
         yield
         self.close_comment_block()
 
+        # Discard empty Doxygen blocks
+        if self._lines[-2] == "/**":
+            self._lines = self._lines[:-3]
+
     @contextmanager
     def file_block(self) -> Iterator[None]:
         """ Opens a Doxygen @file comment block context. """

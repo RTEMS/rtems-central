@@ -239,6 +239,9 @@ void Function(
   int       *Param4
 );
 
+/* Generated from spec:/func6 */
+void Function6( int Param0 );
+
 /* Generated from spec:/macro */
 
 /**
