@@ -5,8 +5,15 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: |
-    ${/score/object/if/build-name:/name}( ${.:/params[0]/name}, ${.:/params[1]/name}, ${.:/params[2]/name}, ${.:/params[3]/name} )
+  default:
+    attributes: null
+    body: null
+    params:
+    - char ${.:/params[0]/name}
+    - char ${.:/params[1]/name}
+    - char ${.:/params[2]/name}
+    - char ${.:/params[3]/name}
+    return: ${../../type/if/name:/name}
   variants: []
 description: |
   This directive takes the four characters provided as arguments and composes a
@@ -14,32 +21,35 @@ description: |
   8-bits and ${.:/params[3]/name} in the least significant 8-bits.
 enabled-by: true
 index-entries: []
-interface-type: macro
+interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_build_name
-notes: |
-  This directive is strictly local and does not impact task scheduling.
+notes: null
 params:
 - description: |
     is the first character of the name.
   dir: null
-  name: _c1
+  name: c1
 - description: |
     is the second character of the name.
   dir: null
-  name: _c2
+  name: c2
 - description: |
     is the third character of the name.
   dir: null
-  name: _c3
+  name: c3
 - description: |
     is the fourth character of the name.
   dir: null
-  name: _c4
+  name: c4
 return:
   return: |
     Returns the object name composed of the four characters.

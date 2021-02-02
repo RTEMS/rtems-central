@@ -21,10 +21,12 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_object_get_api_name
 notes: |
-  This directive is strictly local and does not impact task scheduling.
-
   The string returned is from constant space.  Do not modify or free it.
 params:
 - description: |

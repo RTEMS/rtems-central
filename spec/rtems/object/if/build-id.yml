@@ -3,41 +3,51 @@ brief: |
   Builds the object identifier from the API, class, MPCI node, and index
   components.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: |
-    ${/score/object/if/build-id:/name}( ${.:/params[0]/name}, ${.:/params[1]/name}, ${.:/params[2]/name}, ${.:/params[3]/name} )
+  default:
+    attributes: null
+    body: null
+    params:
+    - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[2]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[3]/name}
+    return: ${../../type/if/id:/name}
   variants: []
 description: null
 enabled-by: true
 index-entries: []
-interface-type: macro
+interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_build_id
-notes: |
-  This directive is strictly local and does not impact task scheduling.
+notes: null
 params:
 - description: |
     is the API of the object identifier to build.
   dir: null
-  name: _api
+  name: api
 - description: |
     is the class of the object identifier to build.
   dir: null
-  name: _class
+  name: the_class
 - description: |
     is the MPCI node of the object identifier to build.
   dir: null
-  name: _node
+  name: node
 - description: |
     is the index of the object identifier to build.
   dir: null
-  name: _index
+  name: index
 return:
   return: |
     Returns the object identifier built from the API, class, MPCI node, and

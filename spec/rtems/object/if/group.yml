@@ -20,7 +20,11 @@ links:
 - role: placement-order
   uid: build-id
 - role: placement-order
+  uid: build-id-macro
+- role: placement-order
   uid: build-name
+- role: placement-order
+  uid: build-name-macro
 - role: placement-order
   uid: get-classic-name
 - role: placement-order
@@ -30,15 +34,27 @@ links:
 - role: placement-order
   uid: id-get-api
 - role: placement-order
+  uid: id-get-api-macro
+- role: placement-order
   uid: id-get-class
+- role: placement-order
+  uid: id-get-class-macro
 - role: placement-order
   uid: id-get-node
 - role: placement-order
+  uid: id-get-node-macro
+- role: placement-order
   uid: id-get-index
+- role: placement-order
+  uid: id-get-index-macro
 - role: placement-order
   uid: id-api-minimum
 - role: placement-order
+  uid: id-api-minimum-macro
+- role: placement-order
   uid: id-api-maximum
+- role: placement-order
+  uid: id-api-maximum-macro
 - role: placement-order
   uid: api-minimum-class
 - role: placement-order

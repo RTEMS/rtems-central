@@ -18,9 +18,12 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: RTEMS_OBJECT_ID_INITIAL
-notes: |
-  This directive is strictly local and does not impact task scheduling.
+notes: null
 params:
 - description: |
     is the API of the object identifier to build.

@@ -23,11 +23,14 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_object_set_name
 notes: |
-  This directive may cause the calling task to be preempted due to an obtain
-  and release of the object allocator mutex.
-
   This directive can be used to set the name of objects which do not have a
   naming scheme per their API.
 
