@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies a period object by the specified object name.
+  Identifies a period by the object name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -14,7 +14,7 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive obtains the period identifier associated with the period name
+  This directive obtains a period identifier associated with the period name
   specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
@@ -24,18 +24,24 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_rate_monotonic_ident
 notes: |
   If the period name is not unique, then the period identifier will match the
   first period with that name in the search order.  However, this period
-  identifier is not guaranteed to correspond to the desired period.  The period
-  identifier is used with other rate monotonic related directives to access the
-  period.
+  identifier is not guaranteed to correspond to the desired period.
 
   The objects are searched from lowest to the highest index.  Only the local
   node is searched.
+
+  The period identifier is used with other rate monotonic related directives to
+  access the period.
 params:
-- description: is the object name to look up.
+- description: |
+    is the object name to look up.
   dir: null
   name: name
 - description: |

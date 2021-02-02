@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies a port object by the specified object name.
+  Identifies a port by the object name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -14,7 +14,7 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive obtains the port identifier associated with the port name
+  This directive obtains a port identifier associated with the port name
   specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
@@ -24,17 +24,24 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_port_ident
 notes: |
   If the port name is not unique, then the port identifier will match the first
   port with that name in the search order.  However, this port identifier is
-  not guaranteed to correspond to the desired port.  The port identifier is
-  used with other dual-ported memory related directives to access the port.
+  not guaranteed to correspond to the desired port.
 
   The objects are searched from lowest to the highest index.  Only the local
   node is searched.
+  
+  The port identifier is used with other dual-ported memory related directives
+  to access the port.
 params:
-- description: is the object name to look up.
+- description: |
+    is the object name to look up.
   dir: null
   name: name
 - description: |

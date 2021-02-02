@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies a message queue object by the specified object name.
+  Identifies a message queue by the object name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -15,7 +15,7 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive obtains the message queue identifier associated with the
+  This directive obtains a message queue identifier associated with the
   message queue name specified in ${.:/params[0]/name}.
 
   The node to search is specified in ${.:/params[1]/name}.  It shall be
@@ -37,28 +37,37 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_message_queue_ident
 notes: |
   If the message queue name is not unique, then the message queue identifier
   will match the first message queue with that name in the search order.
   However, this message queue identifier is not guaranteed to correspond to the
-  desired message queue.  The message queue identifier is used with other
-  message related directives to access the message queue.
+  desired message queue.
 
-  If node is ${../../object/if/search-all-nodes:/name}, all nodes are searched with
-  the local node being searched first.  All other nodes are searched with the
-  lowest numbered node searched first.
+  The objects are searched from lowest to the highest index.  If
+  ${.:/params[1]/name} is ${../../object/if/search-all-nodes:/name}, all nodes
+  are searched with the local node being searched first.  All other nodes are
+  searched from lowest to the highest node number.
 
   If node is a valid node number which does not represent the local node, then
   only the message queues exported by the designated node are searched.
 
   This directive does not generate activity on remote nodes.  It accesses only
   the local copy of the global object table.
+
+  The message queue identifier is used with other message related directives to
+  access the message queue.
 params:
-- description: is the object name to look up.
+- description: |
+    is the object name to look up.
   dir: null
   name: name
-- description: is the node or node set to search for a matching object.
+- description: |
+    is the node or node set to search for a matching object.
   dir: null
   name: node
 - description: |

@@ -39,28 +39,37 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_partition_ident
 notes: |
   If the partition name is not unique, then the partition identifier will match
   the first partition with that name in the search order.  However, this
   partition identifier is not guaranteed to correspond to the desired
-  partition.  The partition identifier is used with other partition related
-  directives to access the partition.
+  partition.
 
-  If node is ${../../object/if/search-all-nodes:/name}, all nodes are searched with
-  the local node being searched first.  All other nodes are searched with the
-  lowest numbered node searched first.
+  The objects are searched from lowest to the highest index.  If
+  ${.:/params[1]/name} is ${../../object/if/search-all-nodes:/name}, all nodes
+  are searched with the local node being searched first.  All other nodes are
+  searched from lowest to the highest node number.
 
   If node is a valid node number which does not represent the local node, then
   only the partitions exported by the designated node are searched.
 
   This directive does not generate activity on remote nodes.  It accesses only
   the local copy of the global object table.
+
+  The partition identifier is used with other partition related directives to
+  access the partition.
 params:
-- description: is the object name to look up.
+- description: |
+    is the object name to look up.
   dir: null
   name: name
-- description: is the node or node set to search for a matching object.
+- description: |
+    is the node or node set to search for a matching object.
   dir: null
   name: node
 - description: |

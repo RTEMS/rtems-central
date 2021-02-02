@@ -14,7 +14,7 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive obtains the timer identifier associated with the timer name
+  This directive obtains a timer identifier associated with the timer name
   specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries:
@@ -25,17 +25,24 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_timer_ident
 notes: |
   If the timer name is not unique, then the timer identifier will match the
   first timer with that name in the search order.  However, this timer
-  identifier is not guaranteed to correspond to the desired timer.  The timer
-  identifier is used with other timer related directives to access the timer.
+  identifier is not guaranteed to correspond to the desired timer.
 
   The objects are searched from lowest to the highest index.  Only the local
   node is searched.
+
+  The timer identifier is used with other timer related directives to access
+  the timer.
 params:
-- description: is the object name to look up.
+- description: |
+    is the object name to look up.
   dir: null
   name: name
 - description: |

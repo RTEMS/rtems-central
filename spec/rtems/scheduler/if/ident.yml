@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies a scheduler instance by its name.
+  Identifies a scheduler by the object name.
 copyrights:
 - Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -12,7 +12,9 @@ definition:
     - ${../../type/if/id:/name} *${.:/params[1]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive obtains a scheduler identifier associated with the scheduler
+  name specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -21,11 +23,19 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_scheduler_ident
 notes: |
   The scheduler name is determined by the scheduler configuration.
+
+  The scheduler identifier is used with other scheduler related directives to
+  access the scheduler.
 params:
-- description: is the scheduler name.
+- description: |
+    is the scheduler name to look up.
   dir: null
   name: name
 - description: |

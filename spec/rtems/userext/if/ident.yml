@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies an extension set object by the specified object name.
+  Identifies an extension set by the object name.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -14,7 +14,7 @@ definition:
     return: ${../../status/if/code:/name}
   variants: []
 description: |
-  This directive obtains the extension set identifier associated with the
+  This directive obtains an extension set identifier associated with the
   extension set name specified in ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
@@ -24,18 +24,25 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_extension_ident
 notes: |
   If the extension set name is not unique, then the extension set identifier
   will match the first extension set with that name in the search order.
   However, this extension set identifier is not guaranteed to correspond to the
-  desired extension set.  The extension set identifier is used with other
-  extension related directives to access the extension set.
+  desired extension set.
 
   The objects are searched from lowest to the highest index.  Only the local
   node is searched.
+
+  The extension set identifier is used with other extension related directives
+  to access the extension set.
 params:
-- description: is the object name to look up.
+- description: |
+    is the object name to look up.
   dir: null
   name: name
 - description: |
