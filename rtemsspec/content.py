@@ -950,8 +950,10 @@ class CContent(Content):
             substitute: Callable[[Optional[str]], str] = _make_str) -> None:
         """ Adds a list of parameter descriptions. """
         for param in params:
-            self.wrap(param["name"] + " " + substitute(param["description"]),
-                      initial_indent=_PARAM[param["dir"]])
+            description = param["description"]
+            if description:
+                self.wrap(param["name"] + " " + substitute(description),
+                          initial_indent=_PARAM[param["dir"]])
 
     def add_description_block(self, brief: Optional[str],
                               description: Optional[str]) -> None:

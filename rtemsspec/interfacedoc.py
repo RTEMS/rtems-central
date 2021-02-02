@@ -175,10 +175,12 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
     if item["params"]:
         content.add(".. rubric:: PARAMETERS:")
         for param in item["params"]:
-            content.add_definition_item(
-                f"``{_sanitize_name(param['name'])}``",
-                mapper.substitute(f"This parameter {param['description']}"),
-                wrap=True)
+            description = param["description"]
+            if description:
+                content.add_definition_item(
+                    f"``{_sanitize_name(param['name'])}``",
+                    mapper.substitute(f"This parameter {description}"),
+                    wrap=True)
     if item["description"]:
         content.add(".. rubric:: DESCRIPTION:")
         content.wrap(mapper.substitute(item["description"]))

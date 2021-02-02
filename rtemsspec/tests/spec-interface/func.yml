@@ -11,6 +11,7 @@ definition:
     - const int *${.:/params[1]/name}
     - int *${.:/params[2]/name}
     - int *${.:/params[3]/name}
+    - int *${.:/params[4]/name}
     return: void
   variants: []
 description: |
@@ -48,6 +49,9 @@ params:
 - description: is parameter 3.
   dir: inout
   name: Param3
+- description: null
+  dir: null
+  name: Param4
 return:
   return: null
   return-values: []

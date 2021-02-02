@@ -231,7 +231,13 @@ typedef enum EnumB {
  * * Constraint A for Function().
  * @endparblock
  */
-void Function( int Param0, const int *Param1, int *Param2, int *Param3 );
+void Function(
+  int        Param0,
+  const int *Param1,
+  int       *Param2,
+  int       *Param3,
+  int       *Param4
+);
 
 /* Generated from spec:/macro */
 
