@@ -161,7 +161,14 @@ class _TestItem:
             test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Adds the test case description. """
         with content.defgroup_block(self.group_identifier, self.name):
-            _add_ingroup(content, test_case_to_suites[self.uid])
+            try:
+                test_suites = test_case_to_suites[self.uid]
+            except KeyError as err:
+                msg = (f"the target file '{self['test-target']}' of "
+                       f"{self.item.spec} is not a source file of an item of "
+                       "type 'build/test-program'")
+                raise ValueError(msg) from err
+            _add_ingroup(content, test_suites)
             content.add_brief_description(self.brief)
             content.wrap(self.description)
             self.add_test_case_action_description(content)

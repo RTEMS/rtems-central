@@ -28,14 +28,13 @@ import os
 import pytest
 
 from rtemsspec.validation import generate
-from rtemsspec.items import EmptyItemCache, ItemCache
+from rtemsspec.items import EmptyItemCache, Item, ItemCache
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_validation(tmpdir):
-    validation_config = {}
     base_directory = os.path.join(tmpdir, "base")
-    validation_config["base-directory"] = base_directory
+    validation_config = {"base-directory": base_directory}
 
     generate(validation_config, EmptyItemCache())
 
@@ -1988,3 +1987,92 @@ void Action2_Run( int *a, int b, int *c )
 /** @} */
 """
         assert content == src.read()
+
+
+def _add_item(item_cache, uid, data, item_type):
+    item = Item(item_cache, uid, data)
+    item["_type"] = item_type
+    item_cache.all[item.uid] = item
+    return item
+
+
+def test_validation_invalid_actions():
+    item_cache = EmptyItemCache()
+    validation_config = {"base-directory": "/foobar"}
+    spdx = "CC-BY-SA-4.0 OR BSD-2-Clause"
+    copyright = "Copyright (C) 2021 John Doe"
+    action_data = {
+        "SPDX-License-Identifier":
+        spdx,
+        "copyrights": [copyright],
+        "enabled-by":
+        True,
+        "functional-type":
+        "action",
+        "links": [],
+        "post-conditions": [{
+            "name": "X",
+            "states": [],
+            "test-epilogue": None,
+            "test-prologue": None,
+        }],
+        "pre-conditions": [{
+            "name": "A",
+            "states": [],
+            "test-epilogue": None,
+            "test-prologue": None,
+        }],
+        "rationale":
+        None,
+        "references": [],
+        "requirement-type":
+        "functional",
+        "skip-reasons": {},
+        "test-action":
+        None,
+        "test-brief":
+        None,
+        "test-cleanup":
+        None,
+        "test-context": [],
+        "test-context-support":
+        None,
+        "test-description":
+        None,
+        "test-header":
+        None,
+        "test-includes": [],
+        "test-local-includes": [],
+        "test-name":
+        "A",
+        "test-prepare":
+        None,
+        "test-setup":
+        None,
+        "test-stop":
+        None,
+        "test-support":
+        None,
+        "test-target":
+        "a.c",
+        "test-teardown":
+        None,
+        "text":
+        None,
+        "transition-map": [{
+            "enabled-by": True,
+            "post-conditions": {
+                "X": "X0",
+            },
+            "pre-conditions": {
+                "A": "all"
+            },
+        }],
+        "type":
+        "requirement",
+    }
+    _add_item(item_cache, "/a", action_data, "requirement/functional/action")
+    match = ("the target file 'a.c' of spec:/a is not a source file of an "
+             "item of type 'build/test-program'")
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)
