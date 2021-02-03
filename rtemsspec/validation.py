@@ -602,8 +602,12 @@ class _ActionRequirementTestItem(_TestItem):
         ])
         map_elements = []
         info_elements = []
-        for transistions in transition_map:
-            assert transistions[0].enabled_by == "1"
+        for map_index, transistions in enumerate(transition_map):
+            if not transistions or transistions[0].enabled_by != "1":
+                raise ValueError(
+                    f"transition map of {self.item.spec} contains no default "
+                    "entry for pre-condition set "
+                    f"{{{self._map_index_to_pre_conditions(map_index)}}}")
             if len(transistions) == 1:
                 map_elements.append(
                     self._post_condition_enumerators(

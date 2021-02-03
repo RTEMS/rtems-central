@@ -2122,3 +2122,18 @@ def test_validation_invalid_actions():
              "set {A=A0} defined by transition map entry 0")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
+    action_data["transition-map"][1]["pre-conditions"]["A"] = ["A1"]
+    action_data["pre-conditions"][0]["states"].append({
+        "name": "A1",
+        "test-code": None,
+        "text": None
+    })
+    action_data["pre-conditions"][0]["states"].append({
+        "name": "A2",
+        "test-code": None,
+        "text": None
+    })
+    match = ("transition map of spec:/a contains no default entry "
+             "for pre-condition set {A=A2}")
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)
