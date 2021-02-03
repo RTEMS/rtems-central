@@ -531,7 +531,9 @@ class _ActionRequirementTestItem(_TestItem):
         transition_count = 1
         for condition in self["pre-conditions"]:
             state_count = len(condition["states"])
-            assert state_count > 0
+            if state_count == 0:
+                raise ValueError(f"pre-condition '{condition['name']}' of "
+                                 f"{self.item.spec} has no states")
             transition_count *= state_count
         transition_map = [list() for _ in range(transition_count)
                           ]  # type: _TransitionMap

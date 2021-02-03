@@ -2076,3 +2076,16 @@ def test_validation_invalid_actions():
              "item of type 'build/test-program'")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
+    test_program_data = {
+        "SPDX-License-Identifier": spdx,
+        "copyrights": [copyright],
+        "build-type": "test-program",
+        "enabled-by": True,
+        "links": [],
+        "source": ["a.c"],
+        "type": "build",
+    }
+    _add_item(item_cache, "/tp", test_program_data, "build/test-program")
+    match = "pre-condition 'A' of spec:/a has no states"
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)
