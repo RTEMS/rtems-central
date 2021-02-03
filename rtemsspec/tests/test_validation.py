@@ -2098,3 +2098,13 @@ def test_validation_invalid_actions():
              "post-condition state 'X0'")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
+    action_data["post-conditions"][0]["states"] = [{
+        "name": "X0",
+        "test-code": None,
+        "text": None
+    }]
+    action_data["transition-map"][0]["pre-conditions"]["A"] = ["a"]
+    match = ("transition map entry 0 of spec:/a refers to non-existent "
+             "state 'a' of pre-condition 'A'")
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)

@@ -493,12 +493,13 @@ class _ActionRequirementTestItem(_TestItem):
                     [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
             content.add("return 0;")
 
-    def _add_transitions(self, condition_index: int, map_index: int,
-                         transition: Dict[str,
-                                          Any], transition_map: _TransitionMap,
+    def _add_transitions(self, trans_index: int, condition_index: int,
+                         map_index: int, transition: Dict[str, Any],
+                         transition_map: _TransitionMap,
                          pre_cond_not_applicables: List[str],
                          post_cond: Tuple[int, ...]) -> None:
         # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-locals
         if condition_index < self._pre_condition_count:
             condition = self._pre_index_to_condition[condition_index]
             state_count = len(condition["states"])
@@ -508,17 +509,26 @@ class _ActionRequirementTestItem(_TestItem):
                 assert states in ["all", "N/A"]
                 for index in range(state_count):
                     self._add_transitions(
-                        condition_index + 1, map_index + index, transition,
-                        transition_map,
+                        trans_index, condition_index + 1, map_index + index,
+                        transition, transition_map,
                         pre_cond_not_applicables + [str(int(states == "N/A"))],
                         post_cond)
             else:
                 for state in states:
-                    self._add_transitions(
-                        condition_index + 1, map_index +
-                        self._pre_state_to_index[condition_index][state],
-                        transition, transition_map,
-                        pre_cond_not_applicables + ["0"], post_cond)
+                    try:
+                        index = self._pre_state_to_index[condition_index][
+                            state]
+                    except KeyError as err:
+                        msg = (f"transition map entry {trans_index} of "
+                               f"{self.item.spec} refers to non-existent "
+                               f"state {err} of pre-condition "
+                               f"'{condition['name']}'")
+                        raise ValueError(msg) from err
+                    self._add_transitions(trans_index, condition_index + 1,
+                                          map_index + index, transition,
+                                          transition_map,
+                                          pre_cond_not_applicables + ["0"],
+                                          post_cond)
         else:
             enabled_by = enabled_by_to_exp(transition["enabled-by"],
                                            ExpressionMapper())
@@ -556,8 +566,8 @@ class _ActionRequirementTestItem(_TestItem):
                 post_cond = tuple(
                     len(self._post_state_to_index[index])
                     for index in range(self._post_condition_count))
-            self._add_transitions(0, 0, transition, transition_map, info,
-                                  post_cond)
+            self._add_transitions(trans_index, 0, 0, transition,
+                                  transition_map, info, post_cond)
         return transition_map
 
     def _post_condition_enumerators(self, conditions: Any) -> str:
