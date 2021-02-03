@@ -71,11 +71,14 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-tick
 name: rtems_event_receive
 notes: |
-  This directive shall be called by a task.  Calling this directive from
-  interrupt context is undefined behaviour.
-
   This directive only affects the events specified in ${.:/params[0]/name}.
   Any pending events that do not correspond to any of the events specified in
   ${.:/params[0]/name} will be left pending.

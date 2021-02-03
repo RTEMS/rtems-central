@@ -19,6 +19,14 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-may-preempt
 name: rtems_event_transient_send
 notes: null
 params:

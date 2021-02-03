@@ -24,6 +24,12 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/clock-tick
 name: rtems_event_system_receive
 notes: null
 params:
