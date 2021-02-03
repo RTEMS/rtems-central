@@ -396,6 +396,7 @@ class _Transition(NamedTuple):
     enabled_by: str
     post_conditions: Tuple[int, ...]
     info: str
+    map_entry_index: int
 
 
 _ConditionIndexToEnum = Tuple[Tuple[str, ...], ...]
@@ -493,6 +494,16 @@ class _ActionRequirementTestItem(_TestItem):
                     [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
             content.add("return 0;")
 
+    def _map_index_to_pre_conditions(self, map_index: int) -> str:
+        conditions = []
+        for condition in reversed(self.item["pre-conditions"]):
+            states = condition["states"]
+            count = len(states)
+            index = int(map_index % count)
+            conditions.append(f"{condition['name']}={states[index]['name']}")
+            map_index //= count
+        return ", ".join(reversed(conditions))
+
     def _add_transitions(self, trans_index: int, condition_index: int,
                          map_index: int, transition: Dict[str, Any],
                          transition_map: _TransitionMap,
@@ -532,10 +543,17 @@ class _ActionRequirementTestItem(_TestItem):
         else:
             enabled_by = enabled_by_to_exp(transition["enabled-by"],
                                            ExpressionMapper())
-            assert enabled_by != "1" or not transition_map[map_index]
+            if enabled_by == "1" and transition_map[map_index]:
+                raise ValueError(
+                    f"transition map entry {trans_index} of "
+                    f"{self.item.spec} duplicates pre-condition set "
+                    f"{{{self._map_index_to_pre_conditions(map_index)}}} "
+                    "defined by transition map entry "
+                    f"{transition_map[map_index][0].map_entry_index}")
             transition_map[map_index].append(
                 _Transition(enabled_by, post_cond,
-                            "    " + ", ".join(pre_cond_not_applicables)))
+                            "    " + ", ".join(pre_cond_not_applicables),
+                            trans_index))
 
     def _get_transition_map(self) -> _TransitionMap:
         transition_count = 1

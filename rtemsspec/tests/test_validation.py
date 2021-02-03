@@ -2108,3 +2108,17 @@ def test_validation_invalid_actions():
              "state 'a' of pre-condition 'A'")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
+    action_data["transition-map"][0]["pre-conditions"]["A"] = ["A0"]
+    action_data["transition-map"].append({
+        "enabled-by": True,
+        "post-conditions": {
+            "X": "X0",
+        },
+        "pre-conditions": {
+            "A": "all"
+        },
+    })
+    match = ("transition map entry 1 of spec:/a duplicates pre-condition "
+             "set {A=A0} defined by transition map entry 0")
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)
