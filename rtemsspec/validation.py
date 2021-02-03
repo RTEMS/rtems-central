@@ -537,14 +537,20 @@ class _ActionRequirementTestItem(_TestItem):
             transition_count *= state_count
         transition_map = [list() for _ in range(transition_count)
                           ]  # type: _TransitionMap
-        for transition in self["transition-map"]:
+        for trans_index, transition in enumerate(self["transition-map"]):
             if isinstance(transition["post-conditions"], dict):
-                info = ["0"]
-                post_cond = tuple(
-                    self._post_state_to_index[index][
-                        transition["post-conditions"][
-                            self._post_index_to_name[index]]]
-                    for index in range(self._post_condition_count))
+                try:
+                    info = ["0"]
+                    post_cond = tuple(
+                        self._post_state_to_index[index][
+                            transition["post-conditions"][
+                                self._post_index_to_name[index]]]
+                        for index in range(self._post_condition_count))
+                except KeyError as err:
+                    msg = (f"transition map entry {trans_index} of "
+                           f"{self.item.spec} refers to non-existent "
+                           f"post-condition state {err}")
+                    raise ValueError(msg) from err
             else:
                 info = ["1"]
                 post_cond = tuple(
