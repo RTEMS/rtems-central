@@ -5,8 +5,6 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
-    rtems_option options;
-
     /* No action */
   checks:
   - check: |
@@ -64,6 +62,8 @@ test-actions:
     Validate the default option constants.
   links: []
 - action: |
+    rtems_option options;
+
     options = 0;
     options |= RTEMS_EVENT_ANY;
     options |= RTEMS_NO_WAIT;

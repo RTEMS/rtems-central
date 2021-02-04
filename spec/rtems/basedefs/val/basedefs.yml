@@ -6,6 +6,7 @@ links: []
 test-actions:
 - action: |
     int alias_result;
+
     alias_result = ori_func( 3 ) + alias_func( 5 );
   checks:
   - check: |
@@ -107,7 +108,7 @@ test-actions:
 - action: |
     char unaligned_var = 'c';
     char aligned_var RTEMS_ALIGNED( 8 ) = 'd';
-    alias_result = ori_func( 3 ) + alias_func( 5 );
+
     (void) unaligned_var;
   checks:
   - check: |

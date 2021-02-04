@@ -5,8 +5,6 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
-    rtems_mode modes;
-
     /* No action */
   checks:
   - check: |
@@ -183,6 +181,8 @@ test-actions:
     Validate the task mode mask constants except RTEMS_INTERRUPT_MASK.
   links: []
 - action: |
+    rtems_mode modes;
+
     modes = 0;
     modes |= 0xff;
     modes |= RTEMS_ASR_MASK;

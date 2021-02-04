@@ -188,13 +188,18 @@ class _TestItem:
                                  initial_indent="  - ",
                                  subsequent_indent="    ")
 
-    def _generate_test_case_actions(self) -> CContent:
-        content = CContent()
-        for action in self["test-actions"]:
-            content.add(self.substitute_code(action["action"]))
-            for check in action["checks"]:
-                content.append(self.substitute_text(check["check"]))
-        return content
+    def _add_test_case_actions(self, content: CContent) -> CContent:
+        actions = CContent()
+        for index, action in enumerate(self["test-actions"]):
+            method = f"{self._ident}_Action_{index}"
+            actions.gap = False
+            actions.call_function(None, method, ["ctx"])
+            params = [f"{self.context} *ctx"]
+            with content.function("static void", method, params):
+                content.add(self.substitute_code(action["action"]))
+                for check in action["checks"]:
+                    content.append(self.substitute_text(check["check"]))
+        return actions
 
     def _get_run_params(self, header: Optional[Dict[str, Any]]) -> List[str]:
         if not header:
@@ -280,11 +285,18 @@ class _TestItem:
 
     def add_default_context_members(self, content: CContent) -> None:
         """ Adds the default context members to the content """
+        for param in self._get_run_params(self["test-header"]):
+            content.add_description_block(
+                "This member contains a copy of the corresponding "
+                f"{self.ident}_Run() parameter.", None)
+            content.add(f"{param.strip()};")
 
     def add_context(self, content: CContent) -> str:
         """ Adds the context to the content. """
         content.add(self.substitute_code(self["test-context-support"]))
-        if not self["test-context"]:
+        if not self["test-context"] and (
+                not self["test-header"]
+                or not self["test-header"]["run-params"]):
             return "NULL"
         with content.doxygen_block():
             content.add_brief_description(
@@ -355,22 +367,29 @@ class _TestItem:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
         fixture = self._add_context_and_fixture(content)
+        content.add(self.substitute_code(self["test-support"]))
         self._mapper.reset()
-        actions = self._generate_test_case_actions()
+        actions = self._add_test_case_actions(content)
         header = self["test-header"]
+        prologue = CContent()
+        prologue.add([f"{self.context} *ctx;"])
+        epilogue = CContent()
         if header:
             self.generate_header(base_directory, header)
-            if self._mapper.steps > 0 and not fixture:
-                fixture = "T_empty_fixture"
-        content.add(self.substitute_code(self["test-support"]))
-        if header:
+            ret = "void"
+            name = f"{self.ident}_Run"
             params = self._get_run_params(header)
+            if self._mapper.steps > 0 and not fixture:
+                fixture = "&T_empty_fixture"
             if fixture:
-                ret = "static void"
-                name = f"{self.ident}_Wrap"
-            else:
-                ret = "void"
-                name = f"{self.ident}_Run"
+                content.add(f"static T_fixture_node {self.ident}_Node;")
+                prologue.call_function("ctx =", "T_push_fixture",
+                                       [f"&{self.ident}_Node", fixture])
+                prologue.add([
+                    f"ctx->{param['name']} = {param['name']};"
+                    for param in header["run-params"]
+                ])
+                epilogue.add("T_pop_fixture();")
             align = True
         else:
             ret = ""
@@ -380,26 +399,18 @@ class _TestItem:
                 name = "T_TEST_CASE_FIXTURE"
             else:
                 name = "T_TEST_CASE"
+            prologue.add("ctx = T_fixture_context();")
             align = False
             with content.function_block(
                     f"void T_case_body_{self.ident}( void )"):
                 pass
             content.gap = False
         with content.function(ret, name, params, align=align):
+            content.add(prologue)
             if self._mapper.steps > 0:
                 content.add(f"T_plan( {self._mapper.steps} );")
             content.add(actions)
-        if header and fixture:
-            run = f"{self.ident}_Run"
-            content.add(f"static T_fixture_node {self.ident}_Node;")
-            with content.function("void", run, params, align=align):
-                content.call_function(None, "T_push_fixture",
-                                      [f"&{self.ident}_Node", f"&{fixture}"])
-                content.gap = False
-                content.call_function(
-                    None, name,
-                    [param["name"] for param in header["run-params"]])
-                content.append("T_pop_fixture();")
+            content.add(epilogue)
         content.add("/** @} */")
 
 
@@ -501,11 +512,7 @@ class _ActionRequirementTestItem(_TestItem):
         content.add("};")
 
     def add_default_context_members(self, content: CContent) -> None:
-        for param in self._get_run_params(self["test-header"]):
-            content.add_description_block(
-                "This member contains a copy of the corresponding "
-                f"{self.ident}_Run() parameter.", None)
-            content.add(f"{param.strip()};")
+        super().add_default_context_members(content)
         content.add_description_block(
             "This member defines the pre-condition states "
             "for the next action.", None)

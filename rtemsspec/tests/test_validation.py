@@ -858,20 +858,33 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 
 /* Test case support code */
 
+static void Tc_Action_0( void *ctx )
+{
+  /* Test case action 0 code */
+  /* Test case action 0 check 0 code: Accounts for 123 test plan steps */
+  /* Test case action 0 check 1 code; step 123 */
+}
+
+static void Tc_Action_1( void *ctx )
+{
+  /* Test case action 1 code */
+  /* Test case action 1 check 0 code; step 124 */
+  /* Test case action 1 check 1 code */
+}
+
 /**
  * @fn void T_case_body_Tc( void )
  */
 T_TEST_CASE( Tc )
 {
+  void *ctx;
+
+  ctx = T_fixture_context();
+
   T_plan( 125 );
 
-  /* Test case action 0 code */
-  /* Test case action 0 check 0 code: Accounts for 123 test plan steps */
-  /* Test case action 0 check 1 code; step 123 */
-
-  /* Test case action 1 code */
-  /* Test case action 1 check 0 code; step 124 */
-  /* Test case action 1 check 1 code */
+  Tc_Action_0( ctx );
+  Tc_Action_1( ctx );
 }
 
 /** @} */
@@ -939,16 +952,29 @@ static T_fixture Tc2_Fixture = {
   .initial_context = &Tc2_Instance
 };
 
+static void Tc2_Action_0( Tc2_Context *ctx )
+{
+  /* Test case 2 action 0 code */
+  /* Test case 2 action 0 check 0 code */
+  /* Test case 2 action 0 check 1 code */
+}
+
+static void Tc2_Action_1( Tc2_Context *ctx )
+{
+  /* Test case 2 action 1 code */
+}
+
 /**
  * @fn void T_case_body_Tc2( void )
  */
 T_TEST_CASE_FIXTURE( Tc2, &Tc2_Fixture )
 {
-  /* Test case 2 action 0 code */
-  /* Test case 2 action 0 check 0 code */
-  /* Test case 2 action 0 check 1 code */
+  Tc2_Context *ctx;
 
-  /* Test case 2 action 1 code */
+  ctx = T_fixture_context();
+
+  Tc2_Action_0( ctx );
+  Tc2_Action_1( ctx );
 }
 
 /** @} */
@@ -965,10 +991,11 @@ T_TEST_CASE_FIXTURE( Tc2, &Tc2_Fixture )
  * @ingroup RTEMSTestCaseTc4
  * @ingroup RTEMSTestCaseTc5
  * @ingroup RTEMSTestCaseTc6
+ * @ingroup RTEMSTestCaseTc7
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -1232,15 +1259,24 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
  * @{
  */
 
+static void Tc3_Action_0( void *ctx )
+{
+  /* Test case 3 action 0 code */
+  /* Test case 3 action 0 check 0 code; step 0 */
+}
+
 /**
  * @fn void T_case_body_Tc3( void )
  */
 T_TEST_CASE( Tc3 )
 {
+  void *ctx;
+
+  ctx = T_fixture_context();
+
   T_plan( 1 );
 
-  /* Test case 3 action 0 code */
-  /* Test case 3 action 0 check 0 code; step 0 */
+  Tc3_Action_0( ctx );
 }
 
 /** @} */
@@ -1262,6 +1298,9 @@ T_TEST_CASE( Tc3 )
  */
 T_TEST_CASE( Tc4 )
 {
+  void *ctx;
+
+  ctx = T_fixture_context();
 }
 
 /** @} */
@@ -1292,14 +1331,49 @@ T_TEST_CASE( Tc4 )
  * @{
  */
 
-static void Tc5_Wrap( int *a, int b, int *c )
-{
-  T_plan( 2 );
+/**
+ * @brief Test context for spec:/tc5 test case.
+ */
+typedef struct {
+  /**
+   * @brief This member contains a copy of the corresponding Tc5_Run()
+   *   parameter.
+   */
+  int *a;
 
+  /**
+   * @brief This member contains a copy of the corresponding Tc5_Run()
+   *   parameter.
+   */
+  int b;
+
+  /**
+   * @brief This member contains a copy of the corresponding Tc5_Run()
+   *   parameter.
+   */
+  int *c;
+} Tc5_Context;
+
+static Tc5_Context
+  Tc5_Instance;
+
+static T_fixture Tc5_Fixture = {
+  .setup = NULL,
+  .stop = NULL,
+  .teardown = NULL,
+  .scope = NULL,
+  .initial_context = &Tc5_Instance
+};
+
+static void Tc5_Action_0( Tc5_Context *ctx )
+{
   /* Test case action 0 code */
   /* Test case action 0 check 0 code */
   /* Test case action 0 check 1 code; step 0 */
+}
 
+static void Tc5_Action_1( Tc5_Context *ctx )
+{
   /* Test case action 1 code */
   /* Test case action 1 check 0 code; step 1 */
   /* Test case action 1 check 1 code */
@@ -1309,8 +1383,19 @@ static T_fixture_node Tc5_Node;
 
 void Tc5_Run( int *a, int b, int *c )
 {
-  T_push_fixture( &Tc5_Node, &T_empty_fixture );
-  Tc5_Wrap( a, b, c );
+  Tc5_Context *ctx;
+
+  ctx = T_push_fixture( &Tc5_Node, &Tc5_Fixture );
+
+  ctx->a = a;
+  ctx->b = b;
+  ctx->c = c;
+
+  T_plan( 2 );
+
+  Tc5_Action_0( ctx );
+  Tc5_Action_1( ctx );
+
   T_pop_fixture();
 }
 
@@ -1326,6 +1411,41 @@ void Tc5_Run( int *a, int b, int *c )
 
 void Tc6_Run( void )
 {
+  void *ctx;
+}
+
+/** @} */
+
+/**
+ * @defgroup RTEMSTestCaseTc7 spec:/tc7
+ *
+ * @ingroup RTEMSTestSuiteTs
+ *
+ * This test case performs the following actions:
+ *
+ * - Action.
+ *
+ * @{
+ */
+
+static void Tc7_Action_0( void *ctx )
+{
+  /* 0 */
+}
+
+static T_fixture_node Tc7_Node;
+
+void Tc7_Run( void )
+{
+  void *ctx;
+
+  ctx = T_push_fixture( &Tc7_Node, &T_empty_fixture );
+
+  T_plan( 1 );
+
+  Tc7_Action_0( ctx );
+
+  T_pop_fixture();
 }
 
 /** @} */

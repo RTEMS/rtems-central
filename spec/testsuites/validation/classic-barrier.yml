@@ -6,8 +6,6 @@ links: []
 test-actions:
 - action: |
     rtems_status_code sc;
-    rtems_id          id;
-    TestsuitesValidationClassicBarrier_Context *ctx = T_fixture_context();
 
     ctx->id = 0xffffffff;
     sc = rtems_barrier_create(
@@ -27,6 +25,9 @@ test-actions:
     release barrier object for one task.
   links: []
 - action: |
+    rtems_status_code sc;
+    rtems_id          id;
+
     id = 0xffffffff;
     sc = rtems_barrier_ident(name, &id);
   checks:
@@ -46,7 +47,8 @@ test-actions:
     object by its name.
   links: []
 - action: |
-    uint32_t released;
+    rtems_status_code sc;
+    uint32_t          released;
 
     released = 1;
     sc = rtems_barrier_release(ctx->id, &released);
@@ -65,6 +67,8 @@ test-actions:
     Set the count of released tasks to one and release the barrier.
   links: []
 - action: |
+    rtems_status_code sc;
+
     sc = rtems_barrier_wait(ctx->id, RTEMS_NO_TIMEOUT);
   checks:
   - check: |

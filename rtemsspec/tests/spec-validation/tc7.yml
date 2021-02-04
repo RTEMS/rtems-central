@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-6.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action: |
+   /* ${step} */
+  checks: []
+  description: |
+    Action.
+  links: []
+test-brief: null
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  includes: []
+  local-includes: []
+  run-params: []
+  target: tc7.h
+test-includes: []
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: tc34.c
+test-teardown: null
+type: test-case

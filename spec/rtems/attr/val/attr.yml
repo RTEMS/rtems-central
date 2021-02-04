@@ -5,8 +5,6 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
-    rtems_attribute attributes;
-
     /* No action */
   checks:
   - check: |
@@ -202,6 +200,8 @@ test-actions:
     Validate the default attribute constants.
   links: []
 - action: |
+    rtems_attribute attributes;
+
     attributes = 0;
     attributes |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
     attributes |= RTEMS_BINARY_SEMAPHORE;
@@ -229,6 +229,8 @@ test-actions:
     Calculate the bitwise or of all non-default attribute constants.
   links: []
 - action: |
+    rtems_attribute attributes;
+
     attributes = 0;
     attributes |= RTEMS_BINARY_SEMAPHORE;
     attributes |= RTEMS_COUNTING_SEMAPHORE;

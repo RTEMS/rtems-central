@@ -5,8 +5,7 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
-    rtems_event_set all;
-    int             i;
+    int i;
 
     for ( i = 0; i < 32; ++i ) {
       ${event-constant:/test-run}( events[ i ], i );
@@ -17,6 +16,9 @@ test-actions:
     Run the event constant and number test for all 32 event constants.
   links: []
 - action: |
+    rtems_event_set all;
+    int             i;
+
     all = 0;
 
     for ( i = 0; i < 32; ++i ) {

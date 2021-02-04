@@ -6,8 +6,6 @@ links: []
 test-actions:
 - action: |
     void *p;
-    int s;
-    int d;
 
     p = aligned_alloc(128, 4);
   checks:
@@ -25,6 +23,8 @@ test-actions:
     Allocate four bytes with an alignment of 128 bytes with aligned_alloc().
   links: []
 - action: |
+    void *p;
+
     p = rtems_malloc(4);
   checks:
   - check: |
@@ -36,6 +36,8 @@ test-actions:
     Allocate four bytes with rtems_malloc().
   links: []
 - action: |
+    int d;
+
     d = 1;
     memset(&d, 0, sizeof(d));
   checks:
@@ -48,6 +50,9 @@ test-actions:
     Set an integer variable to one and then to zero with memset().
   links: []
 - action: |
+    int s;
+    int d;
+
     s = 1;
     d = 2;
     memcpy(&d, &s, sizeof(d));
