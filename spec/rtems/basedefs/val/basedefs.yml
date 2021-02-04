@@ -904,12 +904,9 @@ test-actions:
   description: |
     Use the ${../if/static-assert:/name}() macro.
   links: []
-- action: |
-    const char *string_var;
-    const char *string_empty_var;
-    /* strange spacing and tabs belong to the test */
-    string_var = RTEMS_STRING( \\ STRING_PREFIX 		cat""\n   );
-    string_empty_var = RTEMS_STRING();
+- action: "const char *string_var;\nconst char *string_empty_var;\n/* strange spacing\
+    \ and tabs belong to the test */\nstring_var = RTEMS_STRING( \\\\ STRING_PREFIX\
+    \ \t\tcat\"\"\\n   );\nstring_empty_var = RTEMS_STRING();\n"
   checks:
   - check: |
       T_step_eq_str( ${step}, string_var, "\\ STRING_PREFIX cat\"\"\n" );
@@ -1278,12 +1275,9 @@ test-actions:
   description: |
     Invoke the ${../if/xconcat:/name}() macro on examples.
   links: []
-- action: |
-    const char *xstring_var;
-    const char *xstring_empty_var;
-    /* strange spacing and tabs belong to the test */
-    xstring_var = RTEMS_XSTRING( \\ STRING_PREFIX 		cat""\n   );
-    xstring_empty_var = RTEMS_XSTRING();
+- action: "const char *xstring_var;\nconst char *xstring_empty_var;\n/* strange spacing\
+    \ and tabs belong to the test */\nxstring_var = RTEMS_XSTRING( \\\\ STRING_PREFIX\
+    \ \t\tcat\"\"\\n   );\nxstring_empty_var = RTEMS_XSTRING();\n"
   checks:
   - check: |
       T_step_eq_str( ${step}, xstring_var, "\\ str cat\"\"\n" );
