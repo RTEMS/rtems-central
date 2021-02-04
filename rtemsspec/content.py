@@ -732,8 +732,12 @@ class CContent(Content):
     def close_comment_block(self) -> None:
         """ Closes a comment block. """
         self.pop_indent()
-        self.append(" */")
-        self.gap = True
+        if self._lines[-1].lstrip().startswith("/*"):
+            # Discard empty comment blocks
+            self._lines = self._lines[:-2]
+        else:
+            self.append(" */")
+            self.gap = True
 
     @contextmanager
     def doxygen_block(self) -> Iterator[None]:
@@ -741,10 +745,6 @@ class CContent(Content):
         self.open_doxygen_block()
         yield
         self.close_comment_block()
-
-        # Discard empty Doxygen blocks
-        if self._lines[-2] == "/**":
-            self._lines = self._lines[:-3]
 
     @contextmanager
     def file_block(self) -> Iterator[None]:
