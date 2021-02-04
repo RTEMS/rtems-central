@@ -207,6 +207,8 @@ class _TestItem:
             with content.function("static void", method, params):
                 content.add(self.substitute_code(action["action-code"]))
                 for check in action["checks"]:
+                    with content.comment_block():
+                        content.add(self.substitute_text(check["brief"]))
                     content.append(self.substitute_text(check["code"]))
         return actions
 

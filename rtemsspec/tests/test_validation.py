@@ -864,7 +864,15 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 static void Tc_Action_0( void )
 {
   /* Test case action 0 code */
+
+  /*
+   * Test case action 0 check 0 description.
+   */
   /* Test case action 0 check 0 code: Accounts for 123 test plan steps */
+
+  /*
+   * Test case action 0 check 1 description.
+   */
   /* Test case action 0 check 1 code; step 123 */
 }
 
@@ -874,7 +882,15 @@ static void Tc_Action_0( void )
 static void Tc_Action_1( void )
 {
   /* Test case action 1 code */
+
+  /*
+   * Test case action 1 check 0 description.
+   */
   /* Test case action 1 check 0 code; step 124 */
+
+  /*
+   * Test case action 1 check 1 description.
+   */
   /* Test case action 1 check 1 code */
 }
 
@@ -960,7 +976,15 @@ static T_fixture Tc2_Fixture = {
 static void Tc2_Action_0( Tc2_Context *ctx )
 {
   /* Test case 2 action 0 code */
+
+  /*
+   * Test case 2 action 0 check 0 description.
+   */
   /* Test case 2 action 0 check 0 code */
+
+  /*
+   * Test case 2 action 0 check 1 description.
+   */
   /* Test case 2 action 0 check 1 code */
 }
 
@@ -1273,6 +1297,10 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
 static void Tc3_Action_0( void )
 {
   /* Test case 3 action 0 code */
+
+  /*
+   * Test case 3 action 0 check 0 description.
+   */
   /* Test case 3 action 0 check 0 code; step 0 */
 }
 
@@ -1375,7 +1403,15 @@ static T_fixture Tc5_Fixture = {
 static void Tc5_Action_0( Tc5_Context *ctx )
 {
   /* Test case action 0 code */
+
+  /*
+   * Test case action 0 check 0 description.
+   */
   /* Test case action 0 check 0 code */
+
+  /*
+   * Test case action 0 check 1 description.
+   */
   /* Test case action 0 check 1 code; step 0 */
 }
 
@@ -1385,7 +1421,15 @@ static void Tc5_Action_0( Tc5_Context *ctx )
 static void Tc5_Action_1( Tc5_Context *ctx )
 {
   /* Test case action 1 code */
+
+  /*
+   * Test case action 1 check 0 description.
+   */
   /* Test case action 1 check 0 code; step 1 */
+
+  /*
+   * Test case action 1 check 1 description.
+   */
   /* Test case action 1 check 1 code */
 }
 
