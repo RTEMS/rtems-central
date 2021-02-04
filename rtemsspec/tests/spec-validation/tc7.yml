@@ -4,11 +4,11 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-- action: |
-   /* ${step} */
-  checks: []
-  description: |
+- action-brief: |
     Action.
+  action-code: |
+    /* ${step} */
+  checks: []
   links: []
 test-brief: null
 test-context: []

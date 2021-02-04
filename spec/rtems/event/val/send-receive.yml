@@ -8,7 +8,10 @@ links:
 - role: validation
   uid: ../req/send
 test-actions:
-- action: |
+- action-brief: |
+    Run the event send and receive tests for the application event set defined
+    by ${../req/send-receive}.
+  action-code: |
     ${../req/send-receive:/test-run}(
       EventSend,
       EventReceive,
@@ -17,9 +20,6 @@ test-actions:
       STATES_WAITING_FOR_EVENT
     );
   checks: []
-  description: |
-    Run the event send and receive tests for the application event set defined
-    by ${../req/send-receive}.
   links: []
 test-brief: |
   Tests the ${../if/send:/name} and ${../if/receive:/name} directives.

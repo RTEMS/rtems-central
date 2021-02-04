@@ -8,7 +8,10 @@ links:
 - role: validation
   uid: ../req/system-send
 test-actions:
-- action: |
+- action-brief: |
+    Run the event send and receive tests for the system event set defined
+    by ${../req/send-receive}.
+  action-code: |
     ${../req/send-receive:/test-run}(
       EventSystemSend,
       EventSystemReceive,
@@ -17,9 +20,6 @@ test-actions:
       STATES_WAITING_FOR_SYSTEM_EVENT
     );
   checks: []
-  description: |
-    Run the event send and receive tests for the system event set defined
-    by ${../req/send-receive}.
   links: []
 test-brief: |
   Tests the ${../if/system-send:/name} and ${../if/system-receive:/name}

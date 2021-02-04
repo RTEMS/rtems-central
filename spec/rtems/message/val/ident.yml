@@ -6,7 +6,10 @@ links:
 - role: validation
   uid: ../req/ident
 test-actions:
-- action: |
+- action-brief: |
+    Run the generic object identification tests for Classic API message queue
+    class objects defined by ${../../req/ident}.
+  action-code: |
     rtems_status_code sc;
     rtems_id          id_local_object;
 
@@ -24,9 +27,6 @@ test-actions:
     sc = rtems_message_queue_delete( id_local_object );
     T_rsc_success( sc );
   checks: []
-  description: |
-    Run the generic object identification tests for Classic API message queue
-    class objects defined by ${../../req/ident}.
   links: []
 test-brief: Test the ${../if/ident:/name} directive.
 test-context: []

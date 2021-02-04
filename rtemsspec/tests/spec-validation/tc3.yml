@@ -4,16 +4,16 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-- action: |
+- action-brief: |
+    Test case 3 action 0 description.
+  action-code: |
     /* Test case 3 action 0 code */
   checks:
-  - check: |
-      /* Test case 3 action 0 check 0 code; step ${step} */
-    description: |
+  - brief: |
       Test case 3 action 0 check 0 description.
+    code: |
+      /* Test case 3 action 0 check 0 code; step ${step} */
     links: []
-  description: |
-    Test case 3 action 0 description.
   links: []
 test-brief: Test case 3 brief description.
 test-context: []

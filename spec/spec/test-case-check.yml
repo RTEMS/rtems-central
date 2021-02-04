@@ -10,14 +10,14 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      check:
+      brief:
+        description: |
+          It shall be the test case check brief description.
+        spec-type: optional-str
+      code:
         description: |
           It shall be the test case check code.
         spec-type: str
-      description:
-        description: |
-          It shall be the test case check description.
-        spec-type: optional-str
       links:
         description: null
         spec-type: links

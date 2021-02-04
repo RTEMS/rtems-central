@@ -4,27 +4,27 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-- action: |
+- action-brief: |
+    Test case 2 action 0 description.
+  action-code: |
     /* Test case 2 action 0 code */
   checks:
-  - check: |
-      /* Test case 2 action 0 check 0 code */
-    description: |
+  - brief: |
       Test case 2 action 0 check 0 description.
+    code: |
+      /* Test case 2 action 0 check 0 code */
     links: []
-  - check: |
-      /* Test case 2 action 0 check 1 code */
-    description: |
+  - brief: |
       Test case 2 action 0 check 1 description.
+    code: |
+      /* Test case 2 action 0 check 1 code */
     links: []
-  description: |
-    Test case 2 action 0 description.
   links: []
-- action: |
+- action-brief: |
+    Test case 2 action 1 description.
+  action-code: |
     /* Test case 2 action 1 code */
   checks: []
-  description: |
-    Test case 2 action 1 description.
   links: []
 test-brief: Test case 2 brief description.
 test-context:

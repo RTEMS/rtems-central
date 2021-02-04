@@ -4,7 +4,10 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-- action: |
+- action-brief: |
+    Set an object identifier to an invalid value and create an automatic
+    release barrier object for one task.
+  action-code: |
     rtems_status_code sc;
 
     ctx->id = 0xffffffff;
@@ -15,69 +18,66 @@ test-actions:
       &ctx->id
     );
   checks:
-  - check: |
-      T_step_rsc_success(${step}, sc);
-    description: |
+  - brief: |
       Check that the barrier creation was successful.
+    code: |
+      T_step_rsc_success(${step}, sc);
     links: []
-  description: |
-    Set an object identifier to an invalid value and create an automatic
-    release barrier object for one task.
   links: []
-- action: |
+- action-brief: |
+    Set a second object identifier to an invalid value and identify a barrier
+    object by its name.
+  action-code: |
     rtems_status_code sc;
     rtems_id          id;
 
     id = 0xffffffff;
     sc = rtems_barrier_ident(name, &id);
   checks:
-  - check: |
-      T_step_rsc_success(${step}, sc);
-    description: |
+  - brief: |
       Check that the barrier identification by name was successful.
+    code: |
+      T_step_rsc_success(${step}, sc);
     links: []
-  - check: |
-      T_step_eq_u32(${step}, id, ctx->id);
-    description: |
+  - brief: |
       Check that the second identifier is equal to the one returned by the
       barrier creation.
+    code: |
+      T_step_eq_u32(${step}, id, ctx->id);
     links: []
-  description: |
-    Set a second object identifier to an invalid value and identify a barrier
-    object by its name.
   links: []
-- action: |
+- action-brief: |
+    Set the count of released tasks to one and release the barrier.
+  action-code: |
     rtems_status_code sc;
     uint32_t          released;
 
     released = 1;
     sc = rtems_barrier_release(ctx->id, &released);
   checks:
-  - check: |
-      T_step_rsc_success(${step}, sc);
-    description: |
+  - brief: |
       Check that the barrier release was successful.
+    code: |
+      T_step_rsc_success(${step}, sc);
     links: []
-  - check: |
-      T_step_eq_u32(${step}, released, 0);
-    description: |
+  - brief: |
       Check that the count of released tasks is zero.
+    code: |
+      T_step_eq_u32(${step}, released, 0);
     links: []
-  description: |
-    Set the count of released tasks to one and release the barrier.
   links: []
-- action: |
+- action-brief: |
+    Wait with an infinite timeout for the barrier.
+  action-code: |
     rtems_status_code sc;
 
     sc = rtems_barrier_wait(ctx->id, RTEMS_NO_TIMEOUT);
   checks:
-  - check: |
-      T_step_rsc_success(${step}, sc);
-    description: |
+  - brief: |
       Check that the barrier wait was successful.
+    code: |
+      T_step_rsc_success(${step}, sc);
     links: []
-  description: |
-    Wait with an infinite timeout for the barrier.
   links: []
 test-brief: |
   This test case calls functions of the Barrier Manager which are included in

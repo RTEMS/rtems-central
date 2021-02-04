@@ -181,10 +181,10 @@ class _TestItem:
         if actions:
             content.add("This test case performs the following actions:")
             for action in actions:
-                content.wrap(self.substitute_text(action["description"]),
+                content.wrap(self.substitute_text(action["action-brief"]),
                              initial_indent="- ")
                 for check in action["checks"]:
-                    content.wrap(self.substitute_text(check["description"]),
+                    content.wrap(self.substitute_text(check["brief"]),
                                  initial_indent="  - ",
                                  subsequent_indent="    ")
 
@@ -201,9 +201,9 @@ class _TestItem:
             actions.gap = False
             actions.call_function(None, method, args)
             with content.function("static void", method, params):
-                content.add(self.substitute_code(action["action"]))
+                content.add(self.substitute_code(action["action-code"]))
                 for check in action["checks"]:
-                    content.append(self.substitute_text(check["check"]))
+                    content.append(self.substitute_text(check["code"]))
         return actions
 
     def _get_run_params(self, header: Optional[Dict[str, Any]]) -> List[str]:

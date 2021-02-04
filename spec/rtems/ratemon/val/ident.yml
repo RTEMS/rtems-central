@@ -6,7 +6,10 @@ links:
 - role: validation
   uid: ../req/ident
 test-actions:
-- action: |
+- action-brief: |
+    Run the generic object identification tests for Classic API rate monotonic
+    class objects defined by ${../../req/ident-local}.
+  action-code: |
     rtems_status_code sc;
     rtems_id          id_local_object;
 
@@ -24,9 +27,6 @@ test-actions:
     sc = rtems_rate_monotonic_delete( id_local_object );
     T_rsc_success( sc );
   checks: []
-  description: |
-    Run the generic object identification tests for Classic API rate monotonic
-    class objects defined by ${../../req/ident-local}.
   links: []
 test-brief: Test the ${../if/ident:/name} directive.
 test-context: []

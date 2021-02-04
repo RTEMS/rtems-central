@@ -10,17 +10,17 @@ spec-example: null
 spec-info:
   dict:
     attributes:
-      action:
+      action-brief:
+        description: |
+          It shall be the test case action brief description.
+        spec-type: optional-str
+      action-code:
         description: |
           It shall be the test case action code.
         spec-type: str
       checks:
         description: null
         spec-type: test-case-check-list
-      description:
-        description: |
-          It shall be the test case action description.
-        spec-type: optional-str
       links:
         description: null
         spec-type: links

@@ -4,37 +4,37 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-- action: |
+- action-brief: |
+    Test case action 0 description.
+  action-code: |
     /* Test case action 0 code */
   checks:
-  - check: |
-      /* Test case action 0 check 0 code: ${steps/123} */
-    description: |
+  - brief: |
       Test case action 0 check 0 description.
+    code: |
+      /* Test case action 0 check 0 code: ${steps/123} */
     links: []
-  - check: |
-      /* Test case action 0 check 1 code; step ${step} */
-    description: |
+  - brief: |
       Test case action 0 check 1 description.
+    code: |
+      /* Test case action 0 check 1 code; step ${step} */
     links: []
-  description: |
-    Test case action 0 description.
   links: []
-- action: |
+- action-brief: |
+    Test case action 1 description.
+  action-code: |
     /* Test case action 1 code */
   checks:
-  - check: |
-      /* Test case action 1 check 0 code; step ${step} */
-    description: |
+  - brief: |
       Test case action 1 check 0 description.
+    code: |
+      /* Test case action 1 check 0 code; step ${step} */
     links: []
-  - check: |
-      /* Test case action 1 check 1 code */
-    description: |
+  - brief: |
       Test case action 1 check 1 description.
+    code: |
+      /* Test case action 1 check 1 code */
     links: []
-  description: |
-    Test case action 1 description.
   links: []
 test-brief: Test case brief description.
 test-context: []

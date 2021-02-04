@@ -4,52 +4,55 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-- action: |
+- action-brief: |
+    Allocate four bytes with an alignment of 128 bytes with aligned_alloc().
+  action-code: |
     void *p;
 
     p = aligned_alloc(128, 4);
   checks:
-  - check: |
-      T_step_not_null(${step}, p);
-    description: |
+  - brief: |
       Check that the returned pointer is not NULL.
+    code: |
+      T_step_not_null(${step}, p);
     links: []
-  - check: |
-      T_step_eq_uptr(${step}, (uintptr_t) p % 128, 0);
-    description: |
+  - brief: |
       Check that the returned pointer is aligned by 128 bytes.
+    code: |
+      T_step_eq_uptr(${step}, (uintptr_t) p % 128, 0);
     links: []
-  description: |
-    Allocate four bytes with an alignment of 128 bytes with aligned_alloc().
   links: []
-- action: |
+- action-brief: |
+    Allocate four bytes with rtems_malloc().
+  action-code: |
     void *p;
 
     p = rtems_malloc(4);
   checks:
-  - check: |
-      T_step_not_null(${step}, p);
-    description: |
+  - brief: |
       Check that the returned pointer is not NULL.
+    code: |
+      T_step_not_null(${step}, p);
     links: []
-  description: |
-    Allocate four bytes with rtems_malloc().
   links: []
-- action: |
+- action-brief: |
+    Set an integer variable to one and then to zero with memset().
+  action-code: |
     int d;
 
     d = 1;
     memset(&d, 0, sizeof(d));
   checks:
-  - check: |
-      T_step_eq_int(${step}, d, 0);
-    description: |
+  - brief: |
       Check that the integer variable is equal to zero.
+    code: |
+      T_step_eq_int(${step}, d, 0);
     links: []
-  description: |
-    Set an integer variable to one and then to zero with memset().
   links: []
-- action: |
+- action-brief: |
+    Set a source integer variable to one, set a destination integer variable to
+    two, and copy the source to the destination variable through memcpy().
+  action-code: |
     int s;
     int d;
 
@@ -57,14 +60,11 @@ test-actions:
     d = 2;
     memcpy(&d, &s, sizeof(d));
   checks:
-  - check: |
-      T_step_eq_int(${step}, d, 1);
-    description: |
+  - brief: |
       Check that the destination integer variable is equal to one.
+    code: |
+      T_step_eq_int(${step}, d, 1);
     links: []
-  description: |
-    Set a source integer variable to one, set a destination integer variable to
-    two, and copy the source to the destination variable through memcpy().
   links: []
 test-brief: |
   This test case calls functions of the C Library which are included in the
