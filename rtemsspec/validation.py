@@ -200,6 +200,10 @@ class _TestItem:
                 params = [f"{self.context} *ctx"]
             actions.gap = False
             actions.call_function(None, method, args)
+            with content.doxygen_block():
+                content.add_brief_description(
+                    self.substitute_text(action["action-brief"]))
+            content.gap = False
             with content.function("static void", method, params):
                 content.add(self.substitute_code(action["action-code"]))
                 for check in action["checks"]:

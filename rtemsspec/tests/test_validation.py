@@ -858,6 +858,9 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 
 /* Test case support code */
 
+/**
+ * @brief Test case action 0 description.
+ */
 static void Tc_Action_0( void )
 {
   /* Test case action 0 code */
@@ -865,6 +868,9 @@ static void Tc_Action_0( void )
   /* Test case action 0 check 1 code; step 123 */
 }
 
+/**
+ * @brief Test case action 1 description.
+ */
 static void Tc_Action_1( void )
 {
   /* Test case action 1 code */
@@ -948,6 +954,9 @@ static T_fixture Tc2_Fixture = {
   .initial_context = &Tc2_Instance
 };
 
+/**
+ * @brief Test case 2 action 0 description.
+ */
 static void Tc2_Action_0( Tc2_Context *ctx )
 {
   /* Test case 2 action 0 code */
@@ -955,6 +964,9 @@ static void Tc2_Action_0( Tc2_Context *ctx )
   /* Test case 2 action 0 check 1 code */
 }
 
+/**
+ * @brief Test case 2 action 1 description.
+ */
 static void Tc2_Action_1( Tc2_Context *ctx )
 {
   /* Test case 2 action 1 code */
@@ -1255,6 +1267,9 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
  * @{
  */
 
+/**
+ * @brief Test case 3 action 0 description.
+ */
 static void Tc3_Action_0( void )
 {
   /* Test case 3 action 0 code */
@@ -1354,6 +1369,9 @@ static T_fixture Tc5_Fixture = {
   .initial_context = &Tc5_Instance
 };
 
+/**
+ * @brief Test case action 0 description.
+ */
 static void Tc5_Action_0( Tc5_Context *ctx )
 {
   /* Test case action 0 code */
@@ -1361,6 +1379,9 @@ static void Tc5_Action_0( Tc5_Context *ctx )
   /* Test case action 0 check 1 code; step 0 */
 }
 
+/**
+ * @brief Test case action 1 description.
+ */
 static void Tc5_Action_1( Tc5_Context *ctx )
 {
   /* Test case action 1 code */
@@ -1416,6 +1437,9 @@ void Tc6_Run( void )
  * @{
  */
 
+/**
+ * @brief Action.
+ */
 static void Tc7_Action_0( void )
 {
   /* 0 */
