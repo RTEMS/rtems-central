@@ -7,10 +7,24 @@ links:
   uid: ../req/ident
 test-actions:
 - action: |
+    rtems_status_code sc;
+    rtems_id          id_local_object;
+
+    sc = rtems_barrier_create(
+      ClassicObjectLocalIdentName,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      1,
+      &id_local_object
+    );
+    T_assert_rsc_success( sc );
+
     ${../../req/ident-local:/test-run}(
       id_local_object,
       ClassicBarrierIdentAction
     );
+
+    sc = rtems_barrier_delete( id_local_object );
+    T_rsc_success( sc );
   checks: []
   description: |
     Run the generic object identification tests for Classic API partition class
@@ -20,24 +34,12 @@ test-brief: Test the ${../if/ident:/name} directive.
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: |
-  sc = rtems_barrier_delete( id_local_object );
-  T_rsc_success( sc );
+test-epilogue: null
 test-header: null
 test-includes: []
 test-local-includes:
 - tr-object-ident-local.h
-test-prologue: |
-  rtems_status_code sc;
-  rtems_id id_local_object;
-
-  sc = rtems_barrier_create(
-    ClassicObjectLocalIdentName,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    1,
-    &id_local_object
-  );
-  T_assert_rsc_success( sc );
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

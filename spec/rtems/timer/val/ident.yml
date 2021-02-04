@@ -7,10 +7,22 @@ links:
   uid: ../req/ident
 test-actions:
 - action: |
+    rtems_status_code sc;
+    rtems_id          id_local_object;
+
+    sc = rtems_timer_create(
+      ClassicObjectLocalIdentName,
+      &id_local_object
+    );
+    T_assert_rsc_success( sc );
+
     ${../../req/ident-local:/test-run}(
       id_local_object,
       ClassicTimerIdentAction
     );
+
+    sc = rtems_timer_delete( id_local_object );
+    T_rsc_success( sc );
   checks: []
   description: |
     Run the generic object identification tests for Classic API timer class
@@ -20,22 +32,12 @@ test-brief: Test the ${../if/ident:/name} directive.
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: |
-  sc = rtems_timer_delete( id_local_object );
-  T_rsc_success( sc );
+test-epilogue: null
 test-header: null
 test-includes: []
 test-local-includes:
 - tr-object-ident-local.h
-test-prologue: |
-  rtems_status_code sc;
-  rtems_id id_local_object;
-
-  sc = rtems_timer_create(
-    ClassicObjectLocalIdentName,
-    &id_local_object
-  );
-  T_assert_rsc_success( sc );
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

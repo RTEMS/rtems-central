@@ -5,6 +5,9 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
+    rtems_event_set all;
+    int             i;
+
     for ( i = 0; i < 32; ++i ) {
       ${event-constant:/test-run}( events[ i ], i );
       T_step( (unsigned int) i ); /* ${steps/32} */
@@ -55,9 +58,7 @@ test-includes:
 - rtems.h
 test-local-includes:
 - tr-event-constant.h
-test-prologue: |
-  rtems_event_set all;
-  int             i;
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

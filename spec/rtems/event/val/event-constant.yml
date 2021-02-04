@@ -5,6 +5,9 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
+    rtems_status_code sc;
+    rtems_event_set   out;
+
     /* No action */
   checks:
   - check: |
@@ -384,9 +387,7 @@ test-includes:
 - rtems.h
 test-local-includes:
 - tr-event-constant.h
-test-prologue: |
-  rtems_status_code sc;
-  rtems_event_set   out;
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

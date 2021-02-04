@@ -5,6 +5,10 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
+    void *p;
+    int s;
+    int d;
+
     p = aligned_alloc(128, 4);
   checks:
   - check: |
@@ -70,10 +74,7 @@ test-includes:
 - stdlib.h
 - rtems/malloc.h
 test-local-includes: []
-test-prologue: |
-  void *p;
-  int s;
-  int d;
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

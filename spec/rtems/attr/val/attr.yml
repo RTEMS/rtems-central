@@ -5,6 +5,8 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
+    rtems_attribute attributes;
+
     /* No action */
   checks:
   - check: |
@@ -254,8 +256,7 @@ test-header: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-prologue: |
-  rtems_attribute attributes;
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

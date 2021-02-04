@@ -5,6 +5,8 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
+    rtems_mode modes;
+
     /* No action */
   checks:
   - check: |
@@ -218,8 +220,7 @@ test-header: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-prologue: |
-  rtems_mode modes;
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

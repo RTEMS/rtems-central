@@ -5,6 +5,13 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
+    RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
+      buffers[ 4 ][ 2 * sizeof( void * ) ];
+    void              *pointers[ RTEMS_ARRAY_SIZE( buffers ) ];
+    void              *pointer;
+    rtems_status_code  sc;
+    rtems_id           id;
+
     id = 0xffffffff;
     sc = rtems_partition_create(
       rtems_build_name( 'N', 'A', 'M', 'E' ),
@@ -98,13 +105,7 @@ test-header: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-prologue: |
-  RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-    buffers[ 4 ][ 2 * sizeof( void * ) ];
-  void              *pointers[ RTEMS_ARRAY_SIZE( buffers ) ];
-  void              *pointer;
-  rtems_status_code  sc;
-  rtems_id           id;
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

@@ -7,10 +7,27 @@ links:
   uid: ../req/ident
 test-actions:
 - action: |
+    static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) long area[32];
+    rtems_status_code                                      sc;
+    rtems_id                                               id_local_object;
+
+    sc = rtems_partition_create(
+      ClassicObjectIdentName,
+      area,
+      sizeof( area ),
+      sizeof( area ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &id_local_object
+    );
+    T_assert_rsc_success( sc );
+
     ${../../req/ident:/test-run}(
       id_local_object,
       ClassicPartIdentAction
     );
+
+    sc = rtems_partition_delete( id_local_object );
+    T_rsc_success( sc );
   checks: []
   description: |
     Run the generic object identification tests for Classic API partition class
@@ -20,27 +37,12 @@ test-brief: Test the ${../if/ident:/name} directive.
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: |
-  sc = rtems_partition_delete( id_local_object );
-  T_rsc_success( sc );
+test-epilogue: null
 test-header: null
 test-includes: []
 test-local-includes:
 - tr-object-ident.h
-test-prologue: |
-  static long area[32];
-  rtems_status_code sc;
-  rtems_id id_local_object;
-
-  sc = rtems_partition_create(
-    ClassicObjectIdentName,
-    area,
-    sizeof( area ),
-    sizeof( area ),
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &id_local_object
-  );
-  T_assert_rsc_success( sc );
+test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

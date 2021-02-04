@@ -5,8 +5,17 @@ enabled-by: true
 links: []
 test-actions:
 - action: |
-    id = 0xffffffff;
-    sc = rtems_barrier_create(name, RTEMS_BARRIER_AUTOMATIC_RELEASE, 1, &id);
+    rtems_status_code sc;
+    rtems_id          id;
+    TestsuitesValidationClassicBarrier_Context *ctx = T_fixture_context();
+
+    ctx->id = 0xffffffff;
+    sc = rtems_barrier_create(
+      name,
+      RTEMS_BARRIER_AUTOMATIC_RELEASE,
+      1,
+      &ctx->id
+    );
   checks:
   - check: |
       T_step_rsc_success(${step}, sc);
@@ -18,8 +27,8 @@ test-actions:
     release barrier object for one task.
   links: []
 - action: |
-    id2 = 0xffffffff;
-    sc = rtems_barrier_ident(name, &id2);
+    id = 0xffffffff;
+    sc = rtems_barrier_ident(name, &id);
   checks:
   - check: |
       T_step_rsc_success(${step}, sc);
@@ -27,7 +36,7 @@ test-actions:
       Check that the barrier identification by name was successful.
     links: []
   - check: |
-      T_step_eq_u32(${step}, id, id2);
+      T_step_eq_u32(${step}, id, ctx->id);
     description: |
       Check that the second identifier is equal to the one returned by the
       barrier creation.
@@ -37,8 +46,10 @@ test-actions:
     object by its name.
   links: []
 - action: |
+    uint32_t released;
+
     released = 1;
-    sc = rtems_barrier_release(id, &released);
+    sc = rtems_barrier_release(ctx->id, &released);
   checks:
   - check: |
       T_step_rsc_success(${step}, sc);
@@ -54,7 +65,7 @@ test-actions:
     Set the count of released tasks to one and release the barrier.
   links: []
 - action: |
-    sc = rtems_barrier_wait(id, RTEMS_NO_TIMEOUT);
+    sc = rtems_barrier_wait(ctx->id, RTEMS_NO_TIMEOUT);
   checks:
   - check: |
       T_step_rsc_success(${step}, sc);
@@ -67,24 +78,27 @@ test-actions:
 test-brief: |
   This test case calls functions of the Barrier Manager which are included in
   the space profile.
-test-context: []
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id id
 test-context-support: null
 test-description: null
-test-epilogue: |
-  T_check_rtems_barriers(T_EVENT_RUN_INITIALIZE_EARLY, T_case_name());
+test-epilogue: null
 test-header: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-prologue: |
-  static const rtems_name name = rtems_build_name('B', 'A', 'R', 'R');
-  rtems_status_code sc;
-  rtems_id id;
-  rtems_id id2;
-  uint32_t released;
+test-prologue: null
 test-setup: null
 test-stop: null
-test-support: null
+test-support: |
+  static const rtems_name name = rtems_build_name( 'B', 'A', 'R', 'R' );
 test-target: testsuites/validation/tc-space-profile.c
-test-teardown: null
+test-teardown:
+  brief: null
+  code: |
+    T_check_rtems_barriers(T_EVENT_RUN_INITIALIZE_EARLY, T_case_name());
+  description: null
 type: test-case
