@@ -1,0 +1,303 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/release
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/release:/name} shall be
+      ${../../status/if/success:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/release:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
+    text: |
+      The return status of ${../if/release:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Released
+  states:
+  - name: Valid
+    test-code: |
+      T_eq_u32( ctx->released_value, ctx->waiting_tasks );
+    text: |
+      The value of the variable for the number of released tasks shall equal
+      the number of tasks released by the ${../if/release} call.
+  - name: Unchanged
+    test-code: |
+      T_eq_u32( ctx->released_value, RELEASED_INVALID_VALUE );
+    text: |
+      The value of variable for the number of released tasks shall be unchanged
+      by the ${../if/release} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Barrier
+  states:
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      The ${../if/create:/params[0]/name} parameter shall be invalid.
+  - name: Manual
+    test-code: |
+      ctx->id = ctx->manual_release_id;
+    text: |
+      The ${../if/create:/params[0]/name} parameter shall be associated with a
+      manual release barrier.
+  - name: Auto
+    test-code: |
+      ctx->id = ctx->auto_release_id;
+    text: |
+      The ${../if/create:/params[0]/name} parameter shall be associated with an
+      automatic release barrier.
+  test-epilogue: null
+  test-prologue: null
+- name: Released
+  states:
+  - name: Valid
+    test-code: |
+      ctx->released = &ctx->released_value;
+    text: |
+      The ${../if/create:/params[1]/name} parameter shall reference an integer variable.
+  - name: 'Null'
+    test-code: |
+      ctx->released = NULL;
+    text: |
+      The ${../if/create:/params[1]/name} parameter shall be
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: |
+    ctx->released_value = RELEASED_INVALID_VALUE;
+- name: Waiting
+  states:
+  - name: Zero
+    test-code: |
+      ctx->waiting_tasks = 0;
+    text: |
+      The number of tasks waiting at the barrier shall be zero.
+  - name: Positive
+    test-code: |
+      ctx->waiting_tasks = 1;
+      SendEvents( ctx->worker_id, EVENT_WAIT );
+    text: |
+      The number of tasks waiting at the barrier shall be positive.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  ctx->status = rtems_barrier_release( ctx->id, ctx->released );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+  description: null
+  member: |
+    rtems_id manual_release_id
+- brief: null
+  description: null
+  member: |
+    rtems_id auto_release_id
+- brief: null
+  description: null
+  member: |
+    uint32_t waiting_tasks
+- brief: null
+  description: null
+  member: |
+    uint32_t released_value
+- brief: null
+  description: null
+  member: |
+    rtems_id id
+- brief: null
+  description: null
+  member: |
+    uint32_t *released
+- brief: null
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes: []
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code   sc;
+    rtems_task_priority prio;
+
+    memset( ctx, 0, sizeof( *ctx ) );
+
+    prio = 0;
+    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
+    T_rsc_success( sc );
+    T_eq_u32( prio, PRIO_HIGH );
+
+    sc = rtems_task_create(
+      rtems_build_name( 'W', 'O', 'R', 'K' ),
+      PRIO_HIGH,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &ctx->worker_id
+    );
+    T_assert_rsc_success( sc );
+
+    sc = rtems_task_start(
+      ctx->worker_id,
+      Worker,
+      (rtems_task_argument) ctx
+    );
+    T_assert_rsc_success( sc );
+
+    sc = rtems_barrier_create(
+      NAME,
+      RTEMS_BARRIER_MANUAL_RELEASE,
+      0,
+      &ctx->manual_release_id
+    );
+    T_assert_rsc_success( sc );
+
+    sc = rtems_barrier_create(
+      NAME,
+      RTEMS_BARRIER_AUTOMATIC_RELEASE,
+      2,
+      &ctx->auto_release_id
+    );
+    T_assert_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define EVENT_WAIT RTEMS_EVENT_0
+
+  #define RELEASED_INVALID_VALUE 0xffffffff
+
+  typedef RtemsBarrierReqRelease_Context Context;
+
+  typedef enum {
+    PRIO_HIGH = 1,
+    PRIO_NORMAL
+  } Priorities;
+
+  static void SendEvents( rtems_id id, rtems_event_set events )
+  {
+    rtems_status_code sc;
+
+    sc = rtems_event_send( id, events );
+    T_rsc_success( sc );
+  }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    while ( true ) {
+      rtems_status_code sc;
+      rtems_event_set   events;
+
+      events = 0;
+      sc = rtems_event_receive(
+        RTEMS_ALL_EVENTS,
+        RTEMS_EVENT_ANY | RTEMS_WAIT,
+        RTEMS_NO_TIMEOUT,
+        &events
+      );
+      T_rsc_success( sc );
+
+      if ( ( events & EVENT_WAIT ) != 0 ) {
+        sc = rtems_barrier_wait( ctx->id, RTEMS_NO_TIMEOUT );
+        T_rsc_success( sc );
+      }
+    }
+  }
+test-target: testsuites/validation/tc-barrier-release.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code   sc;
+    rtems_task_priority prio;
+
+    prio = 0;
+    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
+    T_rsc_success( sc );
+    T_eq_u32( prio, PRIO_NORMAL );
+
+    if ( ctx->worker_id != 0 ) {
+      sc = rtems_task_delete( ctx->worker_id );
+      T_rsc_success( sc );
+    }
+
+    if ( ctx->manual_release_id != 0 ) {
+      sc = rtems_barrier_delete( ctx->manual_release_id );
+      T_rsc_success( sc );
+    }
+
+    if ( ctx->auto_release_id != 0 ) {
+      sc = rtems_barrier_delete( ctx->auto_release_id );
+      T_rsc_success( sc );
+    }
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    Released: Unchanged
+  pre-conditions:
+    Barrier: all
+    Released:
+    - 'Null'
+    Waiting: N/A
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Released: Unchanged
+  pre-conditions:
+    Barrier:
+    - NoObj
+    Released:
+    - Valid
+    Waiting: N/A
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Released: Valid
+  pre-conditions:
+    Barrier:
+    - Manual
+    - Auto
+    Released:
+    - Valid
+    Waiting: all
+type: requirement
