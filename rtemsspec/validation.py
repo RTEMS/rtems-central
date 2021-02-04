@@ -280,9 +280,11 @@ class _TestItem:
     def add_default_context_members(self, content: CContent) -> None:
         """ Adds the default context members to the content """
 
-    def add_context(self, content: CContent) -> None:
+    def add_context(self, content: CContent) -> str:
         """ Adds the context to the content. """
         content.add(self.substitute_code(self["test-context-support"]))
+        if not self["test-context"]:
+            return "NULL"
         with content.doxygen_block():
             content.add_brief_description(
                 f"Test context for {self.name} test case.")
@@ -297,6 +299,7 @@ class _TestItem:
             f"}} {self.context};", "", f"static {self.context}",
             f"  {self.ident}_Instance;"
         ])
+        return f"&{self.ident}_Instance"
 
     def generate_header(self, base_directory: str, header: Dict[str,
                                                                 Any]) -> None:
@@ -772,7 +775,7 @@ class _ActionRequirementTestItem(_TestItem):
         else:
             _add_condition_enum(content, self._pre_index_to_enum)
             _add_condition_enum(content, self._post_index_to_enum)
-        self.add_context(content)
+        instance = self.add_context(content)
         self._add_pre_condition_descriptions(content)
         content.add(self.substitute_code(self["test-support"]))
         self._add_handler(content, self["pre-conditions"],
@@ -797,7 +800,7 @@ class _ActionRequirementTestItem(_TestItem):
             f"static T_fixture {self.ident}_Fixture = {{",
             f"  .setup = {setup},", f"  .stop = {stop},",
             f"  .teardown = {teardown},", f"  .scope = {self.ident}_Scope,",
-            f"  .initial_context = &{self.ident}_Instance", "};"
+            f"  .initial_context = {instance}", "};"
         ])
         self._add_transition_map(content)
         self.add_function(content, "test-prepare", "Prepare")
@@ -889,7 +892,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
         self.add_test_case_description(content, test_case_to_suites)
-        self.add_context(content)
+        instance = self.add_context(content)
         content.add(self.substitute_code(self["test-support"]))
         setup = f"{self.ident}_Setup_Context"
         with content.function("static void", setup, [f"{self.context} *ctx"]):
@@ -914,7 +917,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
             f"static T_fixture {self.ident}_Fixture = {{",
             f"  .setup = {setup},", f"  .stop = {stop},",
             f"  .teardown = {teardown},", "  .scope = NULL,",
-            f"  .initial_context = &{self.ident}_Instance", "};"
+            f"  .initial_context = {instance}", "};"
         ])
         requests = self._add_requests(content)
         with content.function_block(f"void T_case_body_{self.ident}( void )"):
