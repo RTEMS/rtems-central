@@ -89,6 +89,7 @@ class _TestItem:
     def __init__(self, item: Item):
         self._item = item
         self._ident = to_camel_case(item.uid[1:])
+        self._context = f"{self._ident}_Context"
         self._mapper = _Mapper(item)
 
     def __getitem__(self, key: str):
@@ -112,7 +113,7 @@ class _TestItem:
     @property
     def context(self) -> str:
         """ Returns the test case context type. """
-        return f"{self._ident}_Context"
+        return self._context
 
     @property
     def name(self) -> str:
@@ -320,13 +321,42 @@ class _TestItem:
                     self.add_header_body(content, header)
         content.write(os.path.join(base_directory, header["target"]))
 
+    def _add_context_and_fixture(self, content: CContent) -> Optional[str]:
+        instance = self.add_context(content)
+        if instance == "NULL":
+            self._context = "void"
+            do_wrap = False
+        else:
+            do_wrap = True
+        setup = self.add_support_method(content,
+                                        "test-setup",
+                                        "Setup",
+                                        do_wrap=do_wrap)
+        stop = self.add_support_method(content,
+                                       "test-stop",
+                                       "Stop",
+                                       do_wrap=do_wrap)
+        teardown = self.add_support_method(content,
+                                           "test-teardown",
+                                           "Teardown",
+                                           do_wrap=do_wrap)
+        if all(ptr == "NULL" for ptr in [instance, setup, stop, teardown]):
+            return None
+        content.add([
+            f"static T_fixture {self.ident}_Fixture = {{",
+            f"  .setup = {setup},", f"  .stop = {stop},",
+            f"  .teardown = {teardown},", "  .scope = NULL,",
+            f"  .initial_context = {instance}", "};"
+        ])
+        return f"&{self.ident}_Fixture"
+
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
+        fixture = self._add_context_and_fixture(content)
         self._mapper.reset()
         actions = self._generate_test_case_actions()
-        fixture = self["test-fixture"]
         header = self["test-header"]
         if header:
             self.generate_header(base_directory, header)
@@ -346,7 +376,7 @@ class _TestItem:
             ret = ""
             params = [f"{self.ident}"]
             if fixture:
-                params.append(f"&{fixture}")
+                params.append(fixture)
                 name = "T_TEST_CASE_FIXTURE"
             else:
                 name = "T_TEST_CASE"
@@ -815,10 +845,6 @@ class _RuntimeMeasurementRequestItem(_TestItem):
     def __init__(self, item: Item, context: str):
         super().__init__(item)
         self._context = context
-
-    @property
-    def context(self) -> str:
-        return self._context
 
 
 def _add_call_method(content: CContent, name: str) -> None:

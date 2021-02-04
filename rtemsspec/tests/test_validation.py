@@ -903,9 +903,50 @@ T_TEST_CASE( Tc )
  */
 
 /**
+ * @brief Test context for spec:/tc2 test case.
+ */
+typedef struct {
+  /**
+   * @brief Context member brief.
+   *
+   * Context member description.
+   */
+  int member;
+} Tc2_Context;
+
+static Tc2_Context
+  Tc2_Instance;
+
+/**
+ * @brief Setup brief.
+ *
+ * Setup description.
+ */
+static void Tc2_Setup( Tc2_Context *ctx )
+{
+  /* Setup code */
+}
+
+static void Tc2_Setup_Wrap( void *arg )
+{
+  Tc2_Context *ctx;
+
+  ctx = arg;
+  Tc2_Setup( ctx );
+}
+
+static T_fixture Tc2_Fixture = {
+  .setup = Tc2_Setup_Wrap,
+  .stop = NULL,
+  .teardown = NULL,
+  .scope = NULL,
+  .initial_context = &Tc2_Instance
+};
+
+/**
  * @fn void T_case_body_Tc2( void )
  */
-T_TEST_CASE_FIXTURE( Tc2, &test_case_2_fixture )
+T_TEST_CASE_FIXTURE( Tc2, &Tc2_Fixture )
 {
   /* Test case 2 action 0 code */
   /* Test case 2 action 0 check 0 code */

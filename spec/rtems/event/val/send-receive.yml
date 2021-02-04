@@ -23,9 +23,10 @@ test-actions:
   links: []
 test-brief: |
   Tests the ${../if/send:/name} and ${../if/receive:/name} directives.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - rtems/rtems/eventimpl.h
@@ -35,6 +36,8 @@ test-includes:
 test-local-includes:
 - tr-event-send-receive.h
 test-prologue: null
+test-setup: null
+test-stop: null
 test-support: |
   static rtems_status_code EventSend(
     rtems_id        id,
@@ -62,4 +65,5 @@ test-support: |
     return api->Event.pending_events;
   }
 test-target: testsuites/validation/tc-event-send-receive.c
+test-teardown: null
 type: test-case

@@ -359,9 +359,10 @@ test-actions:
 test-brief: |
   Tests an event constant and number of the Event Manager using the Classic and
   system event sets of the executing task.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header:
   code: null
   includes:
@@ -386,6 +387,9 @@ test-local-includes:
 test-prologue: |
   rtems_status_code sc;
   rtems_event_set   out;
+test-setup: null
+test-stop: null
 test-support: null
 test-target: testsuites/validation/tr-event-constant.c
+test-teardown: null
 type: test-case

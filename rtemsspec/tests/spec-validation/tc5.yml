@@ -37,10 +37,11 @@ test-actions:
     Test case action 1 description.
   links: []
 test-brief: Test case 5 brief description.
+test-context: []
+test-context-support: null
 test-description: Test case 5 description.
 test-epilogue: |
   /* Test case 5 epilogue code */
-test-fixture: null
 test-header:
   code: |
     /* Header code for ${.:/test-run}() */
@@ -68,6 +69,9 @@ test-header:
 test-includes: []
 test-local-includes: []
 test-prologue: null
+test-setup: null
+test-stop: null
 test-support: null
 test-target: tc34.c
+test-teardown: null
 type: test-case

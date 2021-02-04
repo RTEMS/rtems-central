@@ -46,9 +46,10 @@ test-actions:
     Validate the Event Manager directive options.
   links: []
 test-brief: Tests the Event Manager API.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - rtems.h
@@ -57,6 +58,8 @@ test-local-includes:
 test-prologue: |
   rtems_event_set all;
   int             i;
+test-setup: null
+test-stop: null
 test-support: |
   static const rtems_event_set events[] = {
     RTEMS_EVENT_0,
@@ -93,4 +96,5 @@ test-support: |
     RTEMS_EVENT_31,
   };
 test-target: testsuites/validation/tc-events.c
+test-teardown: null
 type: test-case

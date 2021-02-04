@@ -1486,9 +1486,10 @@ test-actions:
   links: []
 test-brief: |
   Tests the basedefs macros of the Classic API.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - stddef.h
@@ -1497,6 +1498,8 @@ test-includes:
 test-local-includes:
 - tc-basedefs-pendant.h
 test-prologue: null
+test-setup: null
+test-stop: null
 test-support: |
   #define WHITE_SPACE_STRING_MAX_LENGTH 80
   #define abccat concat
@@ -1685,4 +1688,5 @@ test-support: |
     return 64;
   }
 test-target: testsuites/validation/tc-basedefs.c
+test-teardown: null
 type: test-case

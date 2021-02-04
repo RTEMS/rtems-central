@@ -5,14 +5,18 @@ enabled-by: true
 links: []
 test-actions: []
 test-brief: Test case 4 brief description.
+test-context: []
+test-context-support: null
 test-description: Test case 4 description.
 test-epilogue: |
   /* Test case 4 epilogue code */
-test-fixture: null
 test-header: null
 test-includes: []
 test-local-includes: []
 test-prologue: null
+test-setup: null
+test-stop: null
 test-support: null
 test-target: tc34.c
+test-teardown: null
 type: test-case

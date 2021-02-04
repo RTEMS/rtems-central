@@ -27,15 +27,31 @@ test-actions:
     Test case 2 action 1 description.
   links: []
 test-brief: Test case 2 brief description.
+test-context:
+- brief: |
+    Context member brief.
+  description: |
+    Context member description.
+  member: |
+    int member
+test-context-support: null
 test-description: Test case 2 description.
 test-epilogue: null
-test-fixture: test_case_2_fixture
 test-header: null
 test-includes:
 - b.h
 test-local-includes:
 - y.h
 test-prologue: null
+test-setup:
+  brief: |
+    Setup brief.
+  code: |
+    /* Setup code */
+  description: |
+    Setup description.
+test-stop: null
 test-support: null
 test-target: tc12.c
+test-teardown: null
 type: test-case

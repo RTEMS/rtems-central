@@ -17,11 +17,12 @@ test-actions:
     objects defined by ${../../req/ident}.
   links: []
 test-brief: Test the ${../if/ident:/name} directive.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: |
   sc = rtems_semaphore_delete( id_local_object );
   T_rsc_success( sc );
-test-fixture: null
 test-header: null
 test-includes: []
 test-local-includes:
@@ -38,6 +39,8 @@ test-prologue: |
     &id_local_object
   );
   T_assert_rsc_success( sc );
+test-setup: null
+test-stop: null
 test-support: |
   static rtems_status_code ClassicSemIdentAction(
     rtems_name name,
@@ -48,4 +51,5 @@ test-support: |
     return rtems_semaphore_ident( name, node, id );
   }
 test-target: testsuites/validation/tc-sem-ident.c
+test-teardown: null
 type: test-case

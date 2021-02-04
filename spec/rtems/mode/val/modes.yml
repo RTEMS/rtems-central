@@ -210,15 +210,18 @@ test-actions:
   links: []
 test-brief: |
   Tests the task mode constants and function-like macros of the Classic API.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - rtems.h
 test-local-includes: []
 test-prologue: |
   rtems_mode modes;
+test-setup: null
+test-stop: null
 test-support: |
   static bool IsPowerOfTwo( rtems_mode mode )
   {
@@ -239,4 +242,5 @@ test-support: |
     return count;
   }
 test-target: testsuites/validation/tc-modes.c
+test-teardown: null
 type: test-case

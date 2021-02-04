@@ -67,10 +67,11 @@ test-actions:
 test-brief: |
   This test case calls functions of the Barrier Manager which are included in
   the space profile.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: |
   T_check_rtems_barriers(T_EVENT_RUN_INITIALIZE_EARLY, T_case_name());
-test-fixture: null
 test-header: null
 test-includes:
 - rtems.h
@@ -81,6 +82,9 @@ test-prologue: |
   rtems_id id;
   rtems_id id2;
   uint32_t released;
+test-setup: null
+test-stop: null
 test-support: null
 test-target: testsuites/validation/tc-space-profile.c
+test-teardown: null
 type: test-case

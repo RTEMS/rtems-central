@@ -5,9 +5,10 @@ enabled-by: true
 links: []
 test-actions: []
 test-brief: null
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header:
   code: null
   includes: []
@@ -17,6 +18,9 @@ test-header:
 test-includes: []
 test-local-includes: []
 test-prologue: null
+test-setup: null
+test-stop: null
 test-support: null
 test-target: tc34.c
+test-teardown: null
 type: test-case

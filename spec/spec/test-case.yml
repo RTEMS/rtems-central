@@ -21,6 +21,15 @@ spec-info:
         description: |
           It shall be the test case brief description.
         spec-type: str
+      test-context:
+        description: null
+        spec-type: test-context-list
+      test-context-support:
+        description: |
+          If the value is present, then it shall be the test context support
+          code.  The context support code is placed at file scope before the
+          test context definition.
+        spec-type: optional-str
       test-description:
         description: |
           It shall be the test case description.
@@ -30,12 +39,6 @@ spec-info:
           If the value is present, then it shall be the test case epilogue
           code.  The epilogue code is placed in the test case body after the
           test case actions.
-        spec-type: optional-str
-      test-fixture:
-        description: |
-          If the value is present, then it shall be a pointer to the test case
-          fixture.  The test case fixture pointer declaration may be provided
-          by the test case support code or via an included header file.
         spec-type: optional-str
       test-header:
         description: null
@@ -55,6 +58,12 @@ spec-info:
           test case actions.  A use case is the declaration of local variables
           used by the test case actions.
         spec-type: optional-str
+      test-setup:
+        description: null
+        spec-type: test-support-method
+      test-stop:
+        description: null
+        spec-type: test-support-method
       test-support:
         description: |
           If the value is present, then it shall be the test case support code.
@@ -64,6 +73,9 @@ spec-info:
         description: |
           It shall be the path to the generated target test case source file.
         spec-type: str
+      test-teardown:
+        description: null
+        spec-type: test-support-method
     description: |
       This set of attributes specifies a test case.
     mandatory-attributes: all

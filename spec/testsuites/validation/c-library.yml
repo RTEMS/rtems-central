@@ -60,9 +60,10 @@ test-actions:
 test-brief: |
   This test case calls functions of the C Library which are included in the
   space profile.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - rtems.h
@@ -73,6 +74,9 @@ test-prologue: |
   void *p;
   int s;
   int d;
+test-setup: null
+test-stop: null
 test-support: null
 test-target: testsuites/validation/tc-space-profile.c
+test-teardown: null
 type: test-case

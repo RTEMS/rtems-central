@@ -90,9 +90,10 @@ test-actions:
   links: []
 test-brief: |
   Validates some functional requirements of the Partition Manager.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - rtems.h
@@ -104,6 +105,9 @@ test-prologue: |
   void              *pointer;
   rtems_status_code  sc;
   rtems_id           id;
+test-setup: null
+test-stop: null
 test-support: null
 test-target: testsuites/validation/tc-part.c
+test-teardown: null
 type: test-case

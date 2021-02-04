@@ -85,15 +85,18 @@ test-actions:
   links: []
 test-brief: |
   Tests the option constants of the Classic API.
+test-context: []
+test-context-support: null
 test-description: null
 test-epilogue: null
-test-fixture: null
 test-header: null
 test-includes:
 - rtems.h
 test-local-includes: []
 test-prologue: |
   rtems_option options;
+test-setup: null
+test-stop: null
 test-support: |
   static bool IsPowerOfTwo( rtems_option option )
   {
@@ -114,4 +117,5 @@ test-support: |
     return count;
   }
 test-target: testsuites/validation/tc-options.c
+test-teardown: null
 type: test-case
