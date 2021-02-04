@@ -858,14 +858,14 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 
 /* Test case support code */
 
-static void Tc_Action_0( void *ctx )
+static void Tc_Action_0( void )
 {
   /* Test case action 0 code */
   /* Test case action 0 check 0 code: Accounts for 123 test plan steps */
   /* Test case action 0 check 1 code; step 123 */
 }
 
-static void Tc_Action_1( void *ctx )
+static void Tc_Action_1( void )
 {
   /* Test case action 1 code */
   /* Test case action 1 check 0 code; step 124 */
@@ -877,14 +877,10 @@ static void Tc_Action_1( void *ctx )
  */
 T_TEST_CASE( Tc )
 {
-  void *ctx;
-
-  ctx = T_fixture_context();
-
   T_plan( 125 );
 
-  Tc_Action_0( ctx );
-  Tc_Action_1( ctx );
+  Tc_Action_0();
+  Tc_Action_1();
 }
 
 /** @} */
@@ -1259,7 +1255,7 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
  * @{
  */
 
-static void Tc3_Action_0( void *ctx )
+static void Tc3_Action_0( void )
 {
   /* Test case 3 action 0 code */
   /* Test case 3 action 0 check 0 code; step 0 */
@@ -1270,13 +1266,9 @@ static void Tc3_Action_0( void *ctx )
  */
 T_TEST_CASE( Tc3 )
 {
-  void *ctx;
-
-  ctx = T_fixture_context();
-
   T_plan( 1 );
 
-  Tc3_Action_0( ctx );
+  Tc3_Action_0();
 }
 
 /** @} */
@@ -1298,9 +1290,6 @@ T_TEST_CASE( Tc3 )
  */
 T_TEST_CASE( Tc4 )
 {
-  void *ctx;
-
-  ctx = T_fixture_context();
 }
 
 /** @} */
@@ -1411,7 +1400,6 @@ void Tc5_Run( int *a, int b, int *c )
 
 void Tc6_Run( void )
 {
-  void *ctx;
 }
 
 /** @} */
@@ -1428,7 +1416,7 @@ void Tc6_Run( void )
  * @{
  */
 
-static void Tc7_Action_0( void *ctx )
+static void Tc7_Action_0( void )
 {
   /* 0 */
 }
@@ -1437,13 +1425,11 @@ static T_fixture_node Tc7_Node;
 
 void Tc7_Run( void )
 {
-  void *ctx;
-
-  ctx = T_push_fixture( &Tc7_Node, &T_empty_fixture );
+  T_push_fixture( &Tc7_Node, &T_empty_fixture );
 
   T_plan( 1 );
 
-  Tc7_Action_0( ctx );
+  Tc7_Action_0();
 
   T_pop_fixture();
 }

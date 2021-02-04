@@ -192,9 +192,14 @@ class _TestItem:
         actions = CContent()
         for index, action in enumerate(self["test-actions"]):
             method = f"{self._ident}_Action_{index}"
+            if self.context == "void":
+                args = []
+                params = []
+            else:
+                args = ["ctx"]
+                params = [f"{self.context} *ctx"]
             actions.gap = False
-            actions.call_function(None, method, ["ctx"])
-            params = [f"{self.context} *ctx"]
+            actions.call_function(None, method, args)
             with content.function("static void", method, params):
                 content.add(self.substitute_code(action["action"]))
                 for check in action["checks"]:
@@ -372,7 +377,6 @@ class _TestItem:
         actions = self._add_test_case_actions(content)
         header = self["test-header"]
         prologue = CContent()
-        prologue.add([f"{self.context} *ctx;"])
         epilogue = CContent()
         if header:
             self.generate_header(base_directory, header)
@@ -383,7 +387,12 @@ class _TestItem:
                 fixture = "&T_empty_fixture"
             if fixture:
                 content.add(f"static T_fixture_node {self.ident}_Node;")
-                prologue.call_function("ctx =", "T_push_fixture",
+                if self.context == "void":
+                    result = None
+                else:
+                    prologue.add(f"{self.context} *ctx;")
+                    result = "ctx ="
+                prologue.call_function(result, "T_push_fixture",
                                        [f"&{self.ident}_Node", fixture])
                 prologue.add([
                     f"ctx->{param['name']} = {param['name']};"
@@ -399,7 +408,10 @@ class _TestItem:
                 name = "T_TEST_CASE_FIXTURE"
             else:
                 name = "T_TEST_CASE"
-            prologue.add("ctx = T_fixture_context();")
+            if self.context != "void":
+                prologue.add([
+                    f"{self.context} *ctx;", "", "ctx = T_fixture_context();"
+                ])
             align = False
             with content.function_block(
                     f"void T_case_body_{self.ident}( void )"):
