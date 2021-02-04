@@ -865,7 +865,7 @@ T_TEST_CASE( Tc )
 {
   /* Test case prologue code */
 
-  T_plan(125);
+  T_plan( 125 );
 
   /* Test case action 0 code */
   /* Test case action 0 check 0 code: Accounts for 123 test plan steps */
@@ -1241,7 +1241,7 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
  */
 T_TEST_CASE( Tc3 )
 {
-  T_plan(1);
+  T_plan( 1 );
 
   /* Test case 3 action 0 code */
   /* Test case 3 action 0 check 0 code; step 0 */
@@ -1299,7 +1299,7 @@ T_TEST_CASE( Tc4 )
 
 static void Tc5_Wrap( int *a, int b, int *c )
 {
-  T_plan(2);
+  T_plan( 2 );
 
   /* Test case action 0 code */
   /* Test case action 0 check 0 code */
