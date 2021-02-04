@@ -4,9 +4,6 @@ copyrights:
 enabled-by: true
 links: []
 test-actions:
-
-# ---- RTEMS_ALIAS ----
-
 - action: |
     int alias_result;
     alias_result = ori_func( 3 ) + alias_func( 5 );
@@ -21,9 +18,6 @@ test-actions:
   description: |
     Use the ${../if/alias:/name}() macro.
   links: []
-
-# ---- RTEMS_ALIGN_DOWN ----
-
 - action: |
     int align_down0_result;
     int align_down1_result;
@@ -67,9 +61,6 @@ test-actions:
   description: |
     Use the ${../if/align-down:/name}() macro in various examples.
   links: []
-
-# ---- RTEMS_ALIGN_UP ----
-
 - action: |
     int align_up0_result;
     int align_up1_result;
@@ -113,9 +104,6 @@ test-actions:
   description: |
     Use the ${../if/align-up:/name}() macro in various examples.
   links: []
-
-# ---- RTEMS_ALIGNED ----
-
 - action: |
     char unaligned_var = 'c';
     char aligned_var RTEMS_ALIGNED( 8 ) = 'd';
@@ -135,9 +123,6 @@ test-actions:
   description: |
     Use the ${../if/aligned:/name}() macro.
   links: []
-
-# ---- RTEMS_ALLOC_ALIGN ----
-
 - action: |
     void *free_ptr;
     void *alloc_align_ptr;
@@ -162,9 +147,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/alloc-align:/name}() macro.
   links: []
-
-# ---- RTEMS_ALLOC_SIZE ----
-
 - action: |
     void *alloc_size_ptr;
     alloc_size_ptr = basedefs_alloc_size_func( 1024 );
@@ -183,9 +165,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/alloc-size:/name}() macro.
   links: []
-
-# ---- RTEMS_ALLOC_SIZE_2 ----
-
 - action: |
     void *alloc_size_2_ptr;
     alloc_size_2_ptr = basedefs_alloc_size_2_func( 8, 128 );
@@ -204,9 +183,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/alloc-size-2:/name}() macro.
   links: []
-
-# ---- RTEMS_ARRAY_SIZE ----
-
 - action: |
     int array[] = { 10, 20, 30, 40, 50 };
     unsigned char array2[12];
@@ -224,9 +200,6 @@ test-actions:
   description: |
     Use the ${../if/array-size:/name}() macro.
   links: []
-
-# ---- RTEMS_COMPILER_DEPRECATED_ATTRIBUTE ----
-
 - action: |
     int compiler_deprecated_attribute RTEMS_COMPILER_DEPRECATED_ATTRIBUTE = 42;
   checks:
@@ -255,9 +228,6 @@ test-actions:
   description: |
     Use the ${../if/compiler-deprecated-attribute:/name} macro.
   links: []
-
-# ---- RTEMS_COMPILER_MEMORY_BARRIER ----
-
 - action: |
     RTEMS_COMPILER_MEMORY_BARRIER();
   checks:
@@ -272,9 +242,6 @@ test-actions:
   description: |
     Use the ${../if/compiler-memory-barrier:/name} macro.
   links: []
-
-# ---- RTEMS_COMPILER_NO_RETURN_ATTRIBUTE ----
-
 - action: |
     (void) compiler_no_return_attribute_func;
   checks:
@@ -290,9 +257,6 @@ test-actions:
     Use of the ${../if/compiler-no-return-attribute:/name} macro at the
     beginning of this file.
   links: []
-
-# ---- RTEMS_COMPILER_PACKED_ATTRIBUTE ----
-
 - action: |
     typedef struct {
       uint8_t c;
@@ -312,9 +276,6 @@ test-actions:
   description: |
     Use the ${../if/compiler-packed-attribute:/name} macro.
   links: []
-
-# ---- RTEMS_COMPILER_PURE_ATTRIBUTE ----
-
 - action: |
     int compiler_pure_attribute_result;
     int compiler_pure_attribute_result_2;
@@ -335,9 +296,6 @@ test-actions:
     Use the ${../if/compiler-pure-attribute:/name} macro at the beginning
     of this file.
   links: []
-
-# ---- RTEMS_COMPILER_UNUSED_ATTRIBUTE ----
-
 - action: |
     int compiler_unused_attribute_var RTEMS_COMPILER_UNUSED_ATTRIBUTE;
   checks:
@@ -354,9 +312,6 @@ test-actions:
   description: |
     Use the ${../if/compiler-unused-attribute:/name} macro.
   links: []
-
-# ---- RTEMS_CONCAT ----
-
 - action: |
     int concat0_result;
     int concat1_result;
@@ -384,9 +339,6 @@ test-actions:
   description: |
     Invoke the  ${../if/concat:/name}() macro on examples.
   links: []
-
-# ---- RTEMS_CONST ----
-
 - action: |
     int const_result;
     int const_result_2;
@@ -405,9 +357,6 @@ test-actions:
   description: |
     Use the ${../if/const:/name} macro at the beginning of this file.
   links: []
-
-# ---- RTEMS_CONTAINER_OF ----
-
 - action: |
     typedef struct {
       int a;
@@ -432,9 +381,6 @@ test-actions:
   description: |
     Use the ${../if/container-of:/name} macro.
   links: []
-
-# ---- RTEMS_DECLARE_GLOBAL_SYMBOL ----
-
 - action: |
     /* No action */
   checks:
@@ -452,9 +398,6 @@ test-actions:
     Use the ${../if/declare-global-symbol:/name} macro in the
     file tc-basedefs-pendant.h.
   links: []
-
-# ---- RTEMS_DECONST ----
-
 - action: |
     const int deconst_array[] = { 52, 55 };
     int *deconst_pointer;
@@ -474,9 +417,6 @@ test-actions:
   description: |
     Use the ${../if/deconst:/name} macro.
   links: []
-
-# ---- RTEMS_DEFINE_GLOBAL_SYMBOL ----
-
 - action: |
     /* No action */
   checks:
@@ -494,9 +434,6 @@ test-actions:
     Use the ${../if/define-global-symbol:/name} macro at the
     beginning of this file.
   links: []
-
-# ---- RTEMS_DEPRECATED ----
-
 - action: |
     int deprecated_result;
     /*
@@ -525,9 +462,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/deprecated:/name}() macro.
   links: []
-
-# ---- RTEMS_DEQUALIFY_DEPTHX ----
-
 - action: |
     const volatile int dequalify_depthx_array[] = { 52, 55 };
     const char dequalify_depthx_var = 'a';
@@ -558,9 +492,6 @@ test-actions:
   description: |
     Use the ${../if/dequalify-depthx:/name} macro.
   links: []
-
-# ---- RTEMS_DEQUALIFY ----
-
 - action: |
     const volatile int dequalify_array[] = { 52, 55 };
     int *dequalify_pointer;
@@ -580,9 +511,6 @@ test-actions:
   description: |
     Use the ${../if/dequalify:/name} macro.
   links: []
-
-# ---- RTEMS_DEVOLATILE ----
-
 - action: |
     volatile int devolatile_array[] = { 52, 55 };
     int *devolatile_pointer;
@@ -602,9 +530,6 @@ test-actions:
   description: |
     Use the ${../if/devolatile:/name} macro.
   links: []
-
-# ---- RTEMS_EXPAND ----
-
 - action: |
     int expand_result;
     expand_result = RTEMS_EXPAND( EXPAND )();
@@ -620,9 +545,6 @@ test-actions:
   description: |
     Invoke the  ${../if/expand:/name}() macro on an example.
   links: []
-
-# ---- RTEMS_FALSE ----
-
 - action: |
     char *false_result;
     false_result = _TO_STR( FALSE );
@@ -637,9 +559,6 @@ test-actions:
   description: |
     Invoke the  ${../if/false:/name}() macro on an example.
   links: []
-
-# ---- RTEMS_HAVE_MEMBER_SAME_TYPE ----
-
 - action: |
     typedef union {
       short s;
@@ -696,9 +615,6 @@ test-actions:
   description: |
     Invoke the  ${../if/have-member-same-type:/name}() macro on examples.
   links: []
-
-# ---- RTEMS_INLINE_ROUTINE ----
-
 - action: |
     const int inline_routine_step = ${step};
     int inline_routine_result;
@@ -726,9 +642,6 @@ test-actions:
     inline_routine_func() at the beginning of this file. Obtain the text
     the macro ${../if/inline-routine:/name} produces.
   links: []
-
-# ---- RTEMS_MALLOCLIKE ----
-
 - action: |
     void *malloclike_ptr;
     /*
@@ -756,9 +669,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/malloclike:/name}() macro.
   links: []
-
-# ---- RTEMS_NO_INLINE ----
-
 - action: |
     int no_inline_result;
     /*
@@ -785,9 +695,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/no-inline:/name}() macro.
   links: []
-
-# ---- RTEMS_NO_RETURN ----
-
 - action: |
     (void) no_return_func;
   checks:
@@ -802,9 +709,6 @@ test-actions:
   description: |
     Use of the ${../if/no-return:/name} macro at the beginning of this file.
   links: []
-
-# ---- RTEMS_OBFUSCATE_VARIABLE ----
-
 - action: |
     short obfuscate_variable = 66;
     RTEMS_OBFUSCATE_VARIABLE( obfuscate_variable );
@@ -821,9 +725,6 @@ test-actions:
   description: |
     Use the ${../if/obfuscate-variable:/name}() macro.
   links: []
-
-# ---- RTEMS_PACKED ----
-
 - action: |
     int packed_offset;
     int packed_full_i_offset;
@@ -874,9 +775,6 @@ test-actions:
   description: |
     Use the ${../if/packed:/name} macro.
   links: []
-
-# ---- RTEMS_PREDICT_FALSE ----
-
 - action: |
     /* No action */
   checks:
@@ -892,9 +790,6 @@ test-actions:
   description: |
     Use the ${../if/predict-false:/name}() macro.
   links: []
-
-# ---- RTEMS_PREDICT_TRUE ----
-
 - action: |
     /* No action */
   checks:
@@ -910,9 +805,6 @@ test-actions:
   description: |
     Use the ${../if/predict-true:/name}() macro.
   links: []
-
-# ---- RTEMS_PRINTFLIKE ----
-
 - action: |
     int printflike_result;
     printflike_result = printflike_func(
@@ -938,9 +830,6 @@ test-actions:
   description: |
     Use a function declared with the ${../if/printflike:/name}() macro.
   links: []
-
-# ---- RTEMS_PURE ----
-
 - action: |
     int pure_result;
     int pure_result_2;
@@ -959,9 +848,6 @@ test-actions:
   description: |
     Use the ${../if/pure:/name} macro at the beginning of this file.
   links: []
-
-# ---- RTEMS_RETURN_ADDRESS ----
-
 - action: |
     /*
      * If this code is not compiled using GNU C, I still have to run a check
@@ -985,9 +871,6 @@ test-actions:
   description: |
     Get the code the ${../if/return-address:/name}() macro produces as string.
   links: []
-
-# ---- RTEMS_SECTION ----
-
 - action: |
     short section_result;
     section_result = section_func( 1234567 );
@@ -1006,9 +889,6 @@ test-actions:
     Use the ${../if/section:/name}() macro on ``section_variable`` and
     ``section_func`` at the beginning of this file.
   links: []
-
-# ---- RTEMS_STATIC_ASSERT ----
-
 - action: |
     RTEMS_STATIC_ASSERT( STATIC_ASSERT_COND 1, RTEMS_STATIC_ASSERT_test );
   checks:
@@ -1024,9 +904,6 @@ test-actions:
   description: |
     Use the ${../if/static-assert:/name}() macro.
   links: []
-
-# ---- RTEMS_STRING ----
-
 - action: |
     const char *string_var;
     const char *string_empty_var;
@@ -1047,9 +924,6 @@ test-actions:
   description: |
     Use the ${../if/string:/name}() macro.
   links: []
-
-# ---- RTEMS_SYMBOL_NAME ----
-
 - action: |
     const int symbol_name = 321;
     int symbol_name_0_var;
@@ -1128,9 +1002,6 @@ test-actions:
   description: |
     Use the ${../if/symbol-name:/name}() macro on examples.
   links: []
-
-# ---- RTEMS_TRUE ----
-
 - action: |
     char *true_result;
     true_result = _TO_STR( TRUE );
@@ -1145,9 +1016,6 @@ test-actions:
   description: |
     Invoke the  ${../if/true:/name}() macro on an example.
   links: []
-
-# ---- RTEMS_TYPEOF_REFX ----
-
 - action: |
     int type_refx_val = 7;
     char type_refx_chr = 'c';
@@ -1188,9 +1056,6 @@ test-actions:
     This use is already the test as the statements will not compile
     without error if the macro did not evaluate to the correct type.
   links: []
-
-# ---- RTEMS_UNUSED ----
-
 - action: |
     int unused_var RTEMS_UNUSED;
     typedef struct RTEMS_UNUSED {
@@ -1242,9 +1107,6 @@ test-actions:
     Use the ${../if/unused:/name} macro. See also unused_func() at the
     beginning of this file.
   links: []
-
-# ---- RTEMS_UNREACHABLE ----
-
 - action: |
     int unreachable_result;
     unreachable_result = unreachable_func(2101);
@@ -1262,9 +1124,6 @@ test-actions:
     Use of the ${../if/unreachable:/name} macro in function definition of
     unreachable_func() at the beginning of this file.
   links: []
-
-# ---- RTEMS_USED ----
-
 - action: |
     /* No action */
   checks:
@@ -1279,9 +1138,6 @@ test-actions:
     Use of the ${../if/used:/name} macro in function definition of
     used_func() at the beginning of this file and with used_var above.
   links: []
-
-# ---- RTEMS_WARN_UNUSED_RESULT ----
-
 - action: |
     int warn_unused_result;
     warn_unused_result = warn_unused_func( 33 );
@@ -1313,9 +1169,6 @@ test-actions:
     Use of the ${../if/warn-unused-result:/name} macro in function definition of
     warn_unused_func() at the beginning of this file.
   links: []
-
-# ---- RTEMS_WEAK_ALIAS ----
-
 - action: |
     int weak_alias_0_result;
     int weak_alias_1_result;
@@ -1345,9 +1198,6 @@ test-actions:
     Use of ``basedefs_weak_alias_0/1_func()`` which are defined with the
     ${../if/weak-alias:/name} macro at the beginning of this file.
   links: []
-
-# ---- RTEMS_WEAK ----
-
 - action: |
     int weak_0_result;
     int weak_1_result;
@@ -1380,9 +1230,6 @@ test-actions:
     which are defined with the ${../if/weak:/name} macro at the
     beginning of this file.
   links: []
-
-# ---- RTEMS_XCONCAT ----
-
 - action: |
     int xconcat0_result;
     int xconcat1_result;
@@ -1431,9 +1278,6 @@ test-actions:
   description: |
     Invoke the ${../if/xconcat:/name}() macro on examples.
   links: []
-
-# ---- RTEMS_XSTRING ----
-
 - action: |
     const char *xstring_var;
     const char *xstring_empty_var;
@@ -1454,9 +1298,6 @@ test-actions:
   description: |
     Use the ${../if/xstring:/name}() macro.
   links: []
-
-# ---- RTEMS_ZERO_LENGTH_ARRAY ----
-
 - action: |
     typedef struct {
       char chr;
