@@ -40,8 +40,6 @@ test-brief: Test case 5 brief description.
 test-context: []
 test-context-support: null
 test-description: Test case 5 description.
-test-epilogue: |
-  /* Test case 5 epilogue code */
 test-header:
   code: |
     /* Header code for ${.:/test-run}() */
@@ -68,7 +66,6 @@ test-header:
   target: tc5.h
 test-includes: []
 test-local-includes: []
-test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

@@ -36,13 +36,11 @@ test-context:
     int member
 test-context-support: null
 test-description: Test case 2 description.
-test-epilogue: null
 test-header: null
 test-includes:
 - b.h
 test-local-includes:
 - y.h
-test-prologue: null
 test-setup:
   brief: |
     Setup brief.

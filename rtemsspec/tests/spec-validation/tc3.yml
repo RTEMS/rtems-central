@@ -19,13 +19,11 @@ test-brief: Test case 3 brief description.
 test-context: []
 test-context-support: null
 test-description: Test case 3 description.
-test-epilogue: null
 test-header: null
 test-includes:
 - c.h
 test-local-includes:
 - z.h
-test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

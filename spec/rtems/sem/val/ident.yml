@@ -35,12 +35,10 @@ test-brief: Test the ${../if/ident:/name} directive.
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: null
 test-header: null
 test-includes: []
 test-local-includes:
 - tr-object-ident.h
-test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |

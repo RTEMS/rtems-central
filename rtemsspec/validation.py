@@ -386,11 +386,9 @@ class _TestItem:
                 pass
             content.gap = False
         with content.function(ret, name, params, align=align):
-            content.add(self.substitute_code(self["test-prologue"]))
             if self._mapper.steps > 0:
                 content.add(f"T_plan( {self._mapper.steps} );")
             content.add(actions)
-            content.add(self.substitute_code(self["test-epilogue"]))
         if header and fixture:
             run = f"{self.ident}_Run"
             content.add(f"static T_fixture_node {self.ident}_Node;")

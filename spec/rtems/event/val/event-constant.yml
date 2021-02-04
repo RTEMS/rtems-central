@@ -365,7 +365,6 @@ test-brief: |
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: null
 test-header:
   code: null
   includes:
@@ -387,7 +386,6 @@ test-includes:
 - rtems.h
 test-local-includes:
 - tr-event-constant.h
-test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

@@ -863,8 +863,6 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
  */
 T_TEST_CASE( Tc )
 {
-  /* Test case prologue code */
-
   T_plan( 125 );
 
   /* Test case action 0 code */
@@ -874,8 +872,6 @@ T_TEST_CASE( Tc )
   /* Test case action 1 code */
   /* Test case action 1 check 0 code; step 124 */
   /* Test case action 1 check 1 code */
-
-  /* Test case epilogue code */
 }
 
 /** @} */
@@ -1266,7 +1262,6 @@ T_TEST_CASE( Tc3 )
  */
 T_TEST_CASE( Tc4 )
 {
-  /* Test case 4 epilogue code */
 }
 
 /** @} */
@@ -1308,8 +1303,6 @@ static void Tc5_Wrap( int *a, int b, int *c )
   /* Test case action 1 code */
   /* Test case action 1 check 0 code; step 1 */
   /* Test case action 1 check 1 code */
-
-  /* Test case 5 epilogue code */
 }
 
 static T_fixture_node Tc5_Node;

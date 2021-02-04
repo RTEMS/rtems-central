@@ -8,7 +8,6 @@ test-brief: null
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: null
 test-header:
   code: null
   includes: []
@@ -17,7 +16,6 @@ test-header:
   target: tc6.h
 test-includes: []
 test-local-includes: []
-test-prologue: null
 test-setup: null
 test-stop: null
 test-support: null

@@ -34,12 +34,6 @@ spec-info:
         description: |
           It shall be the test case description.
         spec-type: optional-str
-      test-epilogue:
-        description: |
-          If the value is present, then it shall be the test case epilogue
-          code.  The epilogue code is placed in the test case body after the
-          test case actions.
-        spec-type: optional-str
       test-header:
         description: null
         spec-type: test-header
@@ -51,13 +45,6 @@ spec-info:
         description: |
           It shall be a list of header files included via ``#include "..."``.
         spec-type: list-str
-      test-prologue:
-        description: |
-          If the value is present, then it shall be the test case prologue
-          code.  The prologue code is placed in the test case body before the
-          test case actions.  A use case is the declaration of local variables
-          used by the test case actions.
-        spec-type: optional-str
       test-setup:
         description: null
         spec-type: test-support-method

@@ -1324,7 +1324,6 @@ test-brief: |
 test-context: []
 test-context-support: null
 test-description: null
-test-epilogue: null
 test-header: null
 test-includes:
 - stddef.h
@@ -1332,7 +1331,6 @@ test-includes:
 - rtems.h
 test-local-includes:
 - tc-basedefs-pendant.h
-test-prologue: null
 test-setup: null
 test-stop: null
 test-support: |
