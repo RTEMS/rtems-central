@@ -20,7 +20,7 @@ post-conditions:
     text: |
       The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
       referenced by the id parameter shall identify the constructed task.
-  - name: InvAddress
+  - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       T_null( ctx->id );
@@ -59,7 +59,7 @@ post-conditions:
       The status shall be RTEMS_TOO_MANY.  If the id parameter is not NULL,
       then the value of the object identifier referenced by the id parameter
       shall be unchanged.
-  - name: Unsatisfied
+  - name: Unsat
     test-code: |
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
       T_eq_u32( ctx->id_value, 0xffffffff );
@@ -73,7 +73,7 @@ post-conditions:
 pre-conditions:
 - name: Id
   states:
-  - name: Id
+  - name: Valid
     test-code: |
       ctx->id = &ctx->id_value;
     text: |
@@ -246,28 +246,36 @@ test-cleanup: |
 test-context:
 - brief: null
   description: null
-  member: rtems_status_code status
+  member: |
+    rtems_status_code status
 - brief: null
   description: null
-  member: rtems_task_config config
+  member: |
+    rtems_task_config config
 - brief: null
   description: null
-  member: rtems_id *id
+  member: |
+    rtems_id *id
 - brief: null
   description: null
-  member: rtems_id id_value
+  member: |
+    rtems_id id_value
 - brief: null
   description: null
-  member: bool create_extension_status
+  member: |
+    bool create_extension_status
 - brief: null
   description: null
-  member: size_t stack_size
+  member: |
+    size_t stack_size
 - brief: null
   description: null
-  member: rtems_id extension_id
+  member: |
+    rtems_id extension_id
 - brief: null
   description: null
-  member: Chain_Control tasks
+  member: |
+    Chain_Control tasks
 test-context-support: null
 test-description: null
 test-header: null
@@ -351,7 +359,7 @@ transition-map:
     Ext:
     - Ok
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt: all
@@ -378,7 +386,7 @@ transition-map:
     Tasks: all
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvAddr
   pre-conditions:
     Ext: all
     Id:
@@ -396,7 +404,7 @@ transition-map:
   pre-conditions:
     Ext: all
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt: all
@@ -412,7 +420,7 @@ transition-map:
   pre-conditions:
     Ext: all
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt: all
@@ -428,7 +436,7 @@ transition-map:
   pre-conditions:
     Ext: all
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt: all
@@ -445,7 +453,7 @@ transition-map:
   pre-conditions:
     Ext: all
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt: all
@@ -459,12 +467,12 @@ transition-map:
     - Avail
 - enabled-by: true
   post-conditions:
-    Status: Unsatisfied
+    Status: Unsat
   pre-conditions:
     Ext:
     - Err
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt: all
@@ -478,12 +486,12 @@ transition-map:
     - Avail
 - enabled-by: RTEMS_SMP
   post-conditions:
-    Status: Unsatisfied
+    Status: Unsat
   pre-conditions:
     Ext:
     - Ok
     Id:
-    - Id
+    - Valid
     Name:
     - Valid
     Preempt:

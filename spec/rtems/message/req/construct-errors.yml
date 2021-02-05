@@ -21,7 +21,7 @@ post-conditions:
       The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
       referenced by the id parameter shall identify the constructed message
       queue.
-  - name: InvAddress
+  - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
       T_null( ctx->id );
@@ -36,7 +36,7 @@ post-conditions:
       The status shall be RTEMS_INVALID_NAME.  If the id parameter is not NULL,
       then the value of the object identifier referenced by the id parameter
       shall be unchanged.
-  - name: InvNumber
+  - name: InvNum
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
       T_eq_u32( ctx->id_value, 0xffffffff );
@@ -60,7 +60,7 @@ post-conditions:
       The status shall be RTEMS_TOO_MANY.  If the id parameter is not NULL,
       then the value of the object identifier referenced by the id parameter
       shall be unchanged.
-  - name: Unsatisfied
+  - name: Unsat
     test-code: |
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
       T_eq_u32( ctx->id_value, 0xffffffff );
@@ -247,19 +247,24 @@ test-cleanup: |
 test-context:
 - brief: null
   description: null
-  member: rtems_status_code status
+  member: |
+    rtems_status_code status
 - brief: null
   description: null
-  member: rtems_message_queue_config config
+  member: |
+    rtems_message_queue_config config
 - brief: null
   description: null
-  member: rtems_id *id
+  member: |
+    rtems_id *id
 - brief: null
   description: null
-  member: rtems_id id_value
+  member: |
+    rtems_id id_value
 - brief: null
   description: null
-  member: Chain_Control message_queues
+  member: |
+    Chain_Control message_queues
 test-context-support: null
 test-description: null
 test-header: null
@@ -326,7 +331,7 @@ transition-map:
     Queues: all
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvAddr
   pre-conditions:
     Area: all
     AreaSize: all
@@ -339,7 +344,7 @@ transition-map:
     Queues: all
 - enabled-by: true
   post-conditions:
-    Status: InvNumber
+    Status: InvNum
   pre-conditions:
     Area: all
     AreaSize: all
@@ -387,7 +392,7 @@ transition-map:
     - None
 - enabled-by: true
   post-conditions:
-    Status: InvNumber
+    Status: InvNum
   pre-conditions:
     Area: all
     AreaSize: all
@@ -420,7 +425,7 @@ transition-map:
     - Avail
 - enabled-by: true
   post-conditions:
-    Status: Unsatisfied
+    Status: Unsat
   pre-conditions:
     Area:
     - 'Null'
@@ -437,7 +442,7 @@ transition-map:
     - Avail
 - enabled-by: true
   post-conditions:
-    Status: Unsatisfied
+    Status: Unsat
   pre-conditions:
     Area:
     - Valid
