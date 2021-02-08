@@ -14,7 +14,7 @@ post-conditions:
       T_rsc_success( ctx->status );
     text: |
       The return status of ${../if/create:/name} shall be
-      ${../../status/if/success:/name}.
+      ${../../status/if/successful:/name}.
   - name: InvName
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_NAME );
