@@ -78,6 +78,8 @@ links:
 - role: constraint
   uid: /constraint/object-allocator
 - role: constraint
+  uid: /constraint/mp-send
+- role: constraint
   uid: ../constraint/max
 - role: constraint
   uid: /constraint/obj-unlimited-alloc

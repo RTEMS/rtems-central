@@ -31,6 +31,8 @@ links:
 - role: constraint
   uid: /constraint/object-allocator
 - role: constraint
+  uid: /constraint/mp-send
+- role: constraint
   uid: ../../constraint/delete-by-any-task
 - role: constraint
   uid: /constraint/obj-unlimited-free

@@ -130,6 +130,8 @@ links:
 - role: constraint
   uid: /constraint/object-allocator
 - role: constraint
+  uid: /constraint/mp-send
+- role: constraint
   uid: ../constraint/create-mrsp-not-locked
 - role: constraint
   uid: ../constraint/max
