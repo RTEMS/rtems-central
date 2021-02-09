@@ -27,7 +27,7 @@ links:
 - role: constraint
   uid: /constraint/directive-ctx-task
 - role: constraint
-  uid: /constraint/directive-may-preempt
+  uid: /constraint/unblock-may-preempt
 name: rtems_event_system_send
 notes: null
 params:

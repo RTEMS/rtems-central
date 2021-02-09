@@ -6,5 +6,5 @@ links: []
 rationale: null
 scope: user
 text: |
-  The directive may be unblock another task which may preempt the calling task.
+  The directive may unblock another task which may preempt the calling task.
 type: constraint

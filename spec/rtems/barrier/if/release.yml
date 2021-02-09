@@ -31,7 +31,7 @@ links:
 - role: constraint
   uid: /constraint/directive-ctx-task
 - role: constraint
-  uid: /constraint/directive-may-preempt
+  uid: /constraint/unblock-may-preempt
 name: rtems_barrier_release
 notes: null
 params:

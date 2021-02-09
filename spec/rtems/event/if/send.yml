@@ -43,7 +43,7 @@ links:
 - role: constraint
   uid: /constraint/directive-ctx-task
 - role: constraint
-  uid: /constraint/directive-may-preempt
+  uid: /constraint/unblock-may-preempt
 name: rtems_event_send
 notes: |
   Events can be sent by tasks or an ${/glossary/isr:/term}.
