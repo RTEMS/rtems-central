@@ -6,6 +6,7 @@ links: []
 rationale: null
 scope: user
 text: |
-  When the ${../option/if/no-wait:/name} option is set, the directive may be
-  called from within interrupt context.
+  When a local, counting semaphore or a local, simple binary semaphore is
+  accessed and the ${../../option/if/no-wait:/name} option is set, the
+  directive may be called from within interrupt context.
 type: constraint

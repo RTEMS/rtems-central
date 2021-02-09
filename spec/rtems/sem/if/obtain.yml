@@ -72,9 +72,17 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: ../constraint/obtain-isr
+- role: constraint
+  uid: ../constraint/obtain-devinit
+- role: constraint
   uid: /constraint/directive-ctx-task
 - role: constraint
+  uid: ../../constraint/request-may-block
+- role: constraint
   uid: /constraint/clock-tick
+- role: constraint
+  uid: /constraint/directive-remote
 name: rtems_semaphore_obtain
 notes: |
   If a local, binary semaphore was created with the

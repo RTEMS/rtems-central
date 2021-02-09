@@ -31,6 +31,16 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: ../constraint/release-isr
+- role: constraint
+  uid: ../constraint/release-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/unblock-may-preempt
+- role: constraint
+  uid: /constraint/directive-remote
 name: rtems_semaphore_release
 notes: |
   The calling task may be preempted if it causes a higher priority task to be

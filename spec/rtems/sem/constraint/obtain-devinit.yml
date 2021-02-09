@@ -6,6 +6,7 @@ links: []
 rationale: null
 scope: user
 text: |
-  When the ${../option/if/no-wait:/name} option is set, the directive may be
-  called from within interrupt context.
+  When a local semaphore is accessed and the request can be immediately
+  satisfied, the directive may be called from within device driver
+  initialization context.
 type: constraint

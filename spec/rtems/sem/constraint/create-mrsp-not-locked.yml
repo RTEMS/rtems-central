@@ -6,6 +6,6 @@ links: []
 rationale: null
 scope: user
 text: |
-  When the ${../option/if/no-wait:/name} option is set, the directive may be
-  called from within interrupt context.
+  When a semaphore using the MrsP locking protocol is created, the initial
+  count shall be exactly one.
 type: constraint
