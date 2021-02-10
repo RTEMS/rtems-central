@@ -457,11 +457,11 @@ Function brief description.
 
 .. rubric:: DESCRIPTION:
 
-Function description.  References to :ref:`InterfaceVeryLongFunction`,
-:c:type:`Integer`, :c:type:`Enum`, :c:macro:`DEFINE`,
-:ref:`InterfaceVERYLONGMACRO`, Variable, :c:macro:`ENUMERATOR_0`,
-:c:type:`Struct`, :ref:`a`, interface, :ref:`GroupA`, and Group F.  Second
-parameter is ``Param1``.
+Function description.  References to :term:`xs <x>`,
+:ref:`InterfaceVeryLongFunction`, :c:type:`Integer`, :c:type:`Enum`,
+:c:macro:`DEFINE`, :ref:`InterfaceVERYLONGMACRO`, Variable,
+:c:macro:`ENUMERATOR_0`, :c:type:`Struct`, :ref:`a`, interface, :ref:`GroupA`,
+and Group F.  Second parameter is ``Param1``.
 
 .. code-block:
 

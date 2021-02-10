@@ -63,11 +63,19 @@ def _get_value_params(ctx: ItemGetValueContext) -> Any:
     return f"``{ctx.value[ctx.key]}``"
 
 
+def _get_value_plural(ctx: ItemGetValueContext) -> Any:
+    try:
+        return ctx.value[ctx.key]
+    except KeyError:
+        return f"{ctx.value['term']}s"
+
+
 class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
         self._node = node
         self._code_or_doc = "doc"
+        self.add_get_value("glossary/term/doc:/plural", _get_value_plural)
         self.add_get_value("interface/forward-declaration/code:/name",
                            _get_value_forward_declaration)
         self.add_get_value("interface/forward-declaration/doc:/name",
