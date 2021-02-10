@@ -55,7 +55,7 @@ definition:
 - default:
     brief: |
       This member contains the clock tick of the second with values from 0 to
-      ${../../clock/if/get-ticks-per-second-0:/name} minus one.
+      ${../../clock/if/get-ticks-per-second:/name} minus one.
     definition: ${/c/if/uint32_t:/name} ${.:name}
     description: null
     kind: member
