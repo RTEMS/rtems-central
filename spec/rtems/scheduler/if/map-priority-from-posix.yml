@@ -25,16 +25,16 @@ links:
 name: rtems_scheduler_map_priority_from_posix
 notes: null
 params:
-- description: is the scheduler instance identifier.
+- description: is the scheduler identifier.
   dir: null
   name: scheduler_id
 - description: is the POSIX thread priority to map.
   dir: null
   name: posix_priority
 - description: |
-    is the pointer to a Classic API task priority variable.  The Classic API
-    task priority value corresponding to the specified POSIX thread priority
-    value will be stored in this variable, in case of a successful operation.
+    is the pointer to a Classic API task priority variable.  When the directive
+    call is successful, the Classic API task priority value corresponding to
+    the specified POSIX thread priority value will be stored in this variable.
   dir: out
   name: priority
 return:

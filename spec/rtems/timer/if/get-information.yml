@@ -38,8 +38,9 @@ params:
   dir: null
   name: id
 - description: |
-    is the pointer to a timer information variable.  The information about the
-    timer will be stored in this variable, in case of a successful operation.
+    is the pointer to a timer information variable.  When the directive call is
+    successful, the information about the timer will be stored in this
+    variable.
   dir: out
   name: the_info
 return:

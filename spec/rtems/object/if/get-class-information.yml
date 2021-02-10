@@ -39,9 +39,9 @@ params:
   dir: null
   name: the_class
 - description: |
-    is the pointer to an object class information variable.  The object class
-    information of the class of the API will be stored in this variable, in
-    case of a successful operation.
+    is the pointer to an object class information variable.  When the directive
+    call is successful, the object class information of the class of the API
+    will be stored in this variable.
   dir: null
   name: info
 return:

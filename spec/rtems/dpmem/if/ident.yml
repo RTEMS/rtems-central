@@ -45,9 +45,9 @@ params:
   dir: null
   name: name
 - description: |
-    is the pointer to an object identifier variable.  The object identifier of
-    an object with the specified name will be stored in this variable, in case
-    of a successful operation.
+    is the pointer to an object identifier variable.  When the directive call
+    is successful, the object identifier of an object with the specified name
+    will be stored in this variable.
   dir: out
   name: id
 return:

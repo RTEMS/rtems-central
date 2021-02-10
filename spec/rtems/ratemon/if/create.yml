@@ -51,9 +51,9 @@ params:
   dir: null
   name: name
 - description: |
-    is the pointer to an object identifier variable.  The identifier of the
-    created period will be stored in this variable, in case of a successful
-    operation.
+    is the pointer to an object identifier variable.  When the directive call
+    is successful, the identifier of the created period will be stored in this
+    variable.
   dir: out
   name: id
 return:

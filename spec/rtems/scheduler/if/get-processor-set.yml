@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Gets the set of processors owned by the scheduler instance.
+  Gets the set of processors owned by the scheduler.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
@@ -26,7 +26,7 @@ links:
 name: rtems_scheduler_get_processor_set
 notes: null
 params:
-- description: is the scheduler instance identifier.
+- description: is the scheduler identifier.
   dir: null
   name: scheduler_id
 - description: |
@@ -35,10 +35,10 @@ params:
   dir: null
   name: cpusetsize
 - description: |
-    is the pointer to a processor set variable.  The processor set of the
-    scheduler instance will be stored in this variable, in case of a successful
-    operation.  A set bit in the processor set means that the corresponding
-    processor is owned by the scheduler instance, otherwise the bit is cleared.
+    is the pointer to a processor set variable.  When the directive call is
+    successful, the processor set of the scheduler will be stored in this
+    variable.  A set bit in the processor set means that the corresponding
+    processor is owned by the scheduler, otherwise the bit is cleared.
   dir: out
   name: cpuset
 return:
@@ -56,6 +56,6 @@ return:
     value: ${../../status/if/invalid-id:/name}
   - description: |
       The provided processor set was too small for the set of processors owned
-      by the scheduler instance.
+      by the scheduler.
     value: ${../../status/if/invalid-number:/name}
 type: interface
