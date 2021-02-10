@@ -60,6 +60,7 @@ params:
   dir: null
   name: name
 - description: |
+    is the table with the extensions to be used by the extension set.
   dir: null
   name: extension_table
 - description: |
