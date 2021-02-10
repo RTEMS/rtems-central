@@ -91,7 +91,7 @@ class _Mapper(SphinxMapper):
         return ctx.value[ctx.key]
 
 
-def _generate_introduction(target: str, group: Item,
+def _generate_introduction(target: str, group: Item, group_uids: List[str],
                            items: List[Item]) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
@@ -114,7 +114,8 @@ def _generate_introduction(target: str, group: Item,
         for item in items:
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
-            brief = item["brief"]
+            mapper = _Mapper(item, group_uids)
+            brief = mapper.substitute(item["brief"])
             if brief:
                 brief = f" - {brief}"
             else:
@@ -165,7 +166,7 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
 
 def _generate_directive(content: SphinxContent, mapper: _Mapper,
                         code_mapper: _CodeMapper, item: Item) -> None:
-    content.wrap(item["brief"])
+    content.wrap(mapper.substitute(item["brief"]))
     content.add(".. rubric:: CALLING SEQUENCE:")
     with content.directive("code-block", "c"):
         code = CContent()
@@ -265,6 +266,7 @@ def generate(config: list, item_cache: ItemCache) -> None:
                 items.append(child)
         items.sort(key=functools.partial(
             _directive_key, list(group.parents("placement-order"))))
-        _generate_introduction(doc_config["introduction-target"], group, items)
+        _generate_introduction(doc_config["introduction-target"], group,
+                               group_uids, items)
         _generate_directives(doc_config["directives-target"], group,
                              group_uids, items)
