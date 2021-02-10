@@ -1,8 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the ticks counter value at least delta microseconds in the future.
+  Gets a ${/glossary/clock-tick:/term} value which is at least delta
+  microseconds in the future.
 copyrights:
-- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -30,14 +31,22 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
 name: rtems_clock_tick_later_usec
 notes: null
 params:
-- description: is the delta value in microseconds.
+- description: |
+    is the delta value in microseconds.
   dir: null
   name: delta_in_usec
 return:
   return: |
-    The tick counter value delta ticks in the future is returned.
+    Returns a ${/glossary/clock-tick:/term} counter value which is at least
+    ${.:/params[0]/name} microseconds in the future.
   return-values: []
 type: interface

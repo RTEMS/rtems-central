@@ -30,13 +30,7 @@ links:
 - role: placement-order
   uid: get-ticks-since-boot
 - role: placement-order
-  uid: tick-before
-- role: placement-order
-  uid: tick-later-usec
-- role: placement-order
-  uid: tick-later
-- role: placement-order
-  uid: tick
+  uid: get-ticks-since-boot-macro
 - role: placement-order
   uid: get-uptime
 - role: placement-order
@@ -45,6 +39,14 @@ links:
   uid: get-uptime-seconds
 - role: placement-order
   uid: get-uptime-nanoseconds
+- role: placement-order
+  uid: tick-later
+- role: placement-order
+  uid: tick-later-usec
+- role: placement-order
+  uid: tick-before
+- role: placement-order
+  uid: tick
 name: Clock Manager
 text: |
   The Classic API shall provide an interface to the Clock Manager.

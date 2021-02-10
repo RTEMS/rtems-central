@@ -6,6 +6,5 @@ links: []
 rationale: null
 scope: user
 text: |
-  The timeout functionality of the directive requires a
-  ${/glossary/clock-tick:/term}.
+  The directive requires a ${/glossary/clock-driver:/term}.
 type: constraint

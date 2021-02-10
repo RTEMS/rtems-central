@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Sets the ${/glossary/clock-realtime:/term} to the time.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -20,13 +21,54 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/priority-may-preempt
+- role: constraint
+  uid: /constraint/unblock-may-preempt
 name: rtems_clock_set
-notes: null
+notes: |
+    The date, time, and ticks specified by ${.:/params[0]/name} are all
+    range-checked, and an error is returned if any one is out of its valid
+    range.
+
+    RTEMS can represent time points of this clock in nanoseconds ranging from
+    1988-01-01T00:00:00.000000000Z to 2514-05-31T01:53:03.999999999Z.  The
+    future uptime of the system shall be in this range, otherwise the system
+    behaviour is undefined.
+
+    The specified time is based on the configured ${/glossary/clock-tick:/term}
+    rate, see the ${/acfg/if/microseconds-per-tick:/name} application
+    configuration option.
+
+    Setting the time forward will fire all ${/glossary/clock-realtime:/term}
+    timers which are scheduled at a time point before or at the time set by the
+    directive.  This may unblock tasks, which may preempt the calling task.
+    User-provided timer routines will execute in the context of the caller.
+
+    It is allowed to call this directive from within interrupt context,
+    however, this is not recommended since an arbitrary number of timers may
+    fire.
+
+    The directive shall be called at least once to enable the service of
+    ${/glossary/clock-realtime:/term} related directives.  If the clock is not
+    set at least once, they may return an error status.
 params:
-- description: '%'
+- description: |
+    is the time to set the clock.
   dir: null
-  name: time_buffer
+  name: time
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[0]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The time point specified by ${.:/params[0]/name} was invalid.
+    value: ${../../status/if/invalid-clock:/name}
 type: interface

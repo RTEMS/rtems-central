@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Announces a ${/glossary/clock-tick:/term}.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -17,10 +18,10 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
-- role: interface-ingroup
-  uid: group
 name: rtems_clock_tick
-notes: null
+notes: |
+  The directive is a legacy interface.  It should not be called by applications
+  directly.  A ${/glossary/clock-driver:/term} may call this directive.
 params: []
 return:
   return: null

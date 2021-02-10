@@ -1,9 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns true if the current ticks counter value indicates a time before the
-  time specified by the tick value and false otherwise.
+  Indicates if the current ${/glossary/clock-tick:/term} counter is before the
+  ticks.
 copyrights:
-- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -22,21 +22,41 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/clock-driver
 name: rtems_clock_tick_before
 notes: |
   This directive can be used to write busy loops with a timeout.
+
+  .. code-block:: c
+      :linenos:
+
+      status busy( void )
+      {
+        rtems_interval timeout;
+
+        timeout = rtems_clock_tick_later_usec( 10000 );
+
+        do {
+          if ( ok() ) {
+            return success;
+          }
+        } while ( rtems_clock_tick_before( timeout ) );
+
+        return timeout;
+      }
 params:
-- description: is the tick value.
+- description: |
+    is the ticks value to check.
   dir: null
-  name: tick
+  name: ticks
 return:
-  return: null
-  return-values:
-  - description: |
-      The current ticks counter value indicates a time before the time
-      specified by the tick value.
-    value: 'true'
-  - description: |
-      Otherwise.
-    value: 'false'
+  return: |
+    Returns true, if current ${/glossary/clock-tick:/term} counter indicates a
+    time before the time in ticks, otherwise returns false.
+  return-values: []
 type: interface

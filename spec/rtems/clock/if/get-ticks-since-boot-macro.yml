@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/watchdog/if/ticks-since-boot:/name}
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: header
+name: rtems_clock_get_ticks_since_boot
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
+type: interface
