@@ -1,5 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  This type defines the return type of routines which are used to process
+  asynchronous signals.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
@@ -16,5 +18,7 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_asr
-notes: null
+notes: |
+  This type can be used to document asynchronous signal routines in the source
+  code.
 type: interface

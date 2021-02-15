@@ -123,6 +123,9 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/object-services/directives.rst
   group: /rtems/object/if/group
   introduction-target: modules/rtems-docs/c-user/object-services/introduction.rst
+- directives-target: modules/rtems-docs/c-user/signal/directives.rst
+  group: /rtems/signal/if/group
+  introduction-target: modules/rtems-docs/c-user/signal/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:
