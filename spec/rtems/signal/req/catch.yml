@@ -1,0 +1,982 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/catch
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->catch_status );
+    text: |
+      The return status of ${../if/catch:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: NotImplNoPreempt
+    test-code: |
+      #if defined(RTEMS_SMP)
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->catch_status );
+      }
+      #else
+      T_rsc_success( ctx->catch_status );
+      #endif
+    text: |
+      Where the system is configured with SMP support, if the scheduler does
+      not support the no-preempt mode, then the return status of
+      ${../if/catch:/name} shall be ${../../status/if/not-implemented:/name},
+      otherwise the return status shall be ${../../status/if/successful:/name}.
+  - name: NotImplIntLvl
+    test-code: |
+      #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+      T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+      #elif defined(RTEMS_SMP)
+      if ( rtems_configuration_get_maximum_processors() > 1 ) {
+        T_rsc( ctx->catch_status, RTEMS_NOT_IMPLEMENTED );
+      } else {
+        T_rsc_success( ctx->catch_status );
+      }
+      #else
+      T_rsc_success( ctx->catch_status );
+      #endif
+    text: |
+      Where the system is configured with SMP support and the configured
+      processor maximum is greater than one, or the CPU port enabled robust
+      thread dispatching, the return status of ${../if/catch:/name} shall be
+      ${../../status/if/not-implemented:/name}, otherwise the return status
+      shall be ${../../status/if/successful:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Send
+  states:
+  - name: New
+    test-code: |
+      T_rsc_success( ctx->send_status );
+
+      if ( ctx->catch_status == RTEMS_SUCCESSFUL ) {
+        T_eq_u32( ctx->default_handler_calls, 0 );
+        T_eq_u32( ctx->handler_calls, 1 );
+        T_ne_u32( ctx->handler_mode, 0xffffffff );
+      } else {
+        T_eq_u32( ctx->default_handler_calls, 1 );
+        T_eq_u32( ctx->handler_calls, 0 );
+        T_eq_u32( ctx->handler_mode, 0xffffffff );
+      }
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call was successful, the ASR processing shall be done with the specified
+      handler, otherwise the ASR information of the caller shall be unchanged.
+  - name: NotDef
+    test-code: |
+      if ( ctx->catch_status == RTEMS_SUCCESSFUL ) {
+        T_rsc( ctx->send_status, RTEMS_NOT_DEFINED );
+        T_eq_u32( ctx->default_handler_calls, 0 );
+        T_eq_u32( ctx->handler_calls, 0 );
+        T_eq_u32( ctx->handler_mode, 0xffffffff );
+      } else {
+        T_rsc_success( ctx->send_status );
+        T_eq_u32( ctx->default_handler_calls, 1 );
+        T_eq_u32( ctx->handler_calls, 0 );
+        T_eq_u32( ctx->handler_mode, 0xffffffff );
+      }
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call was successful, the ASR processing shall be deactivated and all
+      pending signals shall be cleared, otherwise the ASR information of the
+      caller shall be unchanged.
+  test-epilogue: null
+  test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_PREEMPT_MASK, RTEMS_PREEMPT );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with preemption enabled.
+  - name: 'No'
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_PREEMPT_MASK, RTEMS_NO_PREEMPT );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with preemption disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeslice
+  states:
+  - name: 'Yes'
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_TIMESLICE_MASK, RTEMS_TIMESLICE );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with timeslicing enabled.
+  - name: 'No'
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_TIMESLICE_MASK, RTEMS_NO_TIMESLICE );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with timeslicing disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_ASR_MASK, RTEMS_ASR );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with ASR processing enabled.
+  - name: 'No'
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_ASR_MASK, RTEMS_NO_ASR );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with ASR processing disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvl
+  states:
+  - name: Zero
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_INTERRUPT_MASK, RTEMS_INTERRUPT_LEVEL( 0 ) );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with interrupts enabled.
+  - name: Positive
+    test-code: |
+      CheckHandlerMode( ctx, RTEMS_INTERRUPT_MASK, RTEMS_INTERRUPT_LEVEL( 1 ) );
+    text: |
+      When a signal set is sent to the caller of ${../if/catch:/name} and the
+      call with a valid handler was successful, the ASR processing shall be
+      done with interrupts disabled according to the specified interrupt level.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Handler
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->handler = NULL;
+    text: |
+      The ${../if/catch:/params[0]/name} parameter shall be ${/c/if/null:/name}.
+  - name: Valid
+    test-code: |
+      ctx->handler = SignalHandler;
+    text: |
+      The ${../if/catch:/params[0]/name} parameter shall be a valid ASR handler.
+  test-epilogue: null
+  test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      #if defined(RTEMS_SMP)
+      if ( rtems_configuration_get_maximum_processors() == 1 ) {
+        ctx->normal_mode |= RTEMS_NO_PREEMPT;
+      }
+      #else
+      ctx->normal_mode |= RTEMS_NO_PREEMPT;
+      #endif
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify that
+      preemption is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode |= RTEMS_NO_PREEMPT;
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify that
+      preemption is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeslice
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->mode |= RTEMS_TIMESLICE;
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify that
+      timeslicing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->normal_mode |= RTEMS_TIMESLICE;
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify that
+      timeslicing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* We cannot disable ASR processing at normal task level for this test */
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify that
+      ASR processing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->mode |= RTEMS_NO_ASR;
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify that
+      ASR processing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvl
+  states:
+  - name: Zero
+    test-code: |
+      #if !defined(RTEMS_SMP) && CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
+      ctx->normal_mode |= RTEMS_INTERRUPT_LEVEL( 1 );
+      #endif
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify an interrupt
+      level of zero.
+  - name: Positive
+    test-code: |
+      ctx->mode |= RTEMS_INTERRUPT_LEVEL( 1 );
+    text: |
+      The ${../if/catch:/params[1]/name} parameter shall specify a positive
+      interrupt level.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_status_code sc;
+  rtems_mode        mode;
+
+  ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
+
+  sc = rtems_task_mode( ctx->normal_mode, RTEMS_ALL_MODE_MASKS, &mode );
+  T_rsc_success( sc );
+
+  ctx->send_status = rtems_signal_send( RTEMS_SELF, 0xdeadbeef );
+
+  sc = rtems_task_mode( mode, RTEMS_ALL_MODE_MASKS, &mode );
+  T_rsc_success( sc );
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: null
+  description: null
+  member: |
+    uint32_t default_handler_calls
+- brief: null
+  description: null
+  member: |
+    uint32_t handler_calls
+- brief: null
+  description: null
+  member: |
+    rtems_mode handler_mode
+- brief: null
+  description: null
+  member: |
+    rtems_mode normal_mode
+- brief: null
+  description: null
+  member: |
+    rtems_asr_entry handler
+- brief: null
+  description: null
+  member: |
+    rtems_mode mode
+- brief: null
+  description: null
+  member: |
+    rtems_status_code catch_status
+- brief: null
+  description: null
+  member: |
+    rtems_status_code send_status
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: |
+  rtems_status_code sc;
+
+  ctx->default_handler_calls = 0;
+  ctx->handler_calls = 0;
+  ctx->handler_mode = 0xffffffff;
+  ctx->normal_mode = RTEMS_DEFAULT_MODES;
+  ctx->handler = NULL;
+  ctx->mode = RTEMS_DEFAULT_MODES;
+
+  sc = rtems_signal_catch( DefaultHandler, RTEMS_NO_ASR );
+  T_rsc_success( sc );
+test-setup: null
+test-stop: null
+test-support: |
+  typedef RtemsSignalReqCatch_Context Context;
+
+  static void DefaultHandler( rtems_signal_set signal_set )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    ++ctx->default_handler_calls;
+
+    T_eq_u32( signal_set, 0xdeadbeef );
+  }
+
+  static void SignalHandler( rtems_signal_set signal_set )
+  {
+    Context          *ctx;
+    rtems_status_code sc;
+
+    ctx = T_fixture_context();
+    ++ctx->handler_calls;
+
+    sc = rtems_task_mode(
+      RTEMS_DEFAULT_MODES,
+      RTEMS_CURRENT_MODE,
+      &ctx->handler_mode
+    );
+    T_rsc_success( sc );
+
+    T_eq_u32( signal_set, 0xdeadbeef );
+  }
+
+  static void CheckHandlerMode( Context *ctx, rtems_mode mask, rtems_mode mode )
+  {
+    if ( ctx->catch_status == RTEMS_SUCCESSFUL && ctx->handler != NULL ) {
+      T_ne_u32( ctx->handler_mode, 0xffffffff );
+      T_eq_u32( ctx->handler_mode & mask, mode );
+    }
+  }
+test-target: testsuites/validation/tc-signal-catch.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_signal_catch( NULL, RTEMS_DEFAULT_MODES );
+    T_rsc_success( sc );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: NotDef
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Invalid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'Yes'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'Yes'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'Yes'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'Yes'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'Yes'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'Yes'
+    IntLvl:
+    - Positive
+- enabled-by: true
+  post-conditions:
+    Status: NotImplNoPreempt
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Zero
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Zero
+- enabled-by: true
+  post-conditions:
+    Status: NotImplIntLvl
+    Send: New
+    Preempt: 'No'
+    Timeslice: 'No'
+    ASR: 'No'
+    IntLvl: Positive
+  pre-conditions:
+    Handler:
+    - Valid
+    Preempt:
+    - 'No'
+    Timeslice:
+    - 'No'
+    ASR:
+    - 'No'
+    IntLvl:
+    - Positive
+type: requirement
