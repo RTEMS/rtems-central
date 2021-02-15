@@ -20,7 +20,7 @@ post-conditions:
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ID );
     text: |
-      The return status of ${../if/create:/name} shall be
+      The return status of ${../if/delete:/name} shall be
       ${../../status/if/invalid-id:/name}.
   test-epilogue: null
   test-prologue: null
@@ -66,13 +66,13 @@ pre-conditions:
     test-code: |
       ctx->id = ctx->barrier_id;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be associated with
+      The ${../if/delete:/params[0]/name} parameter shall be associated with
       the barrier.
   - name: Invalid
     test-code: |
       ctx->id = 0;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be invalid.
+      The ${../if/delete:/params[0]/name} parameter shall be invalid.
   test-epilogue: null
   test-prologue: null
 rationale: null

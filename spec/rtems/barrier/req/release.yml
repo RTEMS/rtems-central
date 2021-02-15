@@ -52,18 +52,18 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be invalid.
+      The ${../if/release:/params[0]/name} parameter shall be invalid.
   - name: Manual
     test-code: |
       ctx->id = ctx->manual_release_id;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be associated with a
+      The ${../if/release:/params[0]/name} parameter shall be associated with a
       manual release barrier.
   - name: Auto
     test-code: |
       ctx->id = ctx->auto_release_id;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be associated with an
+      The ${../if/release:/params[0]/name} parameter shall be associated with an
       automatic release barrier.
   test-epilogue: null
   test-prologue: null
@@ -73,12 +73,12 @@ pre-conditions:
     test-code: |
       ctx->released = &ctx->released_value;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall reference an integer variable.
+      The ${../if/release:/params[1]/name} parameter shall reference an integer variable.
   - name: 'Null'
     test-code: |
       ctx->released = NULL;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be
+      The ${../if/release:/params[1]/name} parameter shall be
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: |

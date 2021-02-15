@@ -47,18 +47,18 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be invalid.
+      The ${../if/release:/params[0]/name} parameter shall be invalid.
   - name: Manual
     test-code: |
       ctx->id = ctx->manual_release_id;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be associated with a
+      The ${../if/release:/params[0]/name} parameter shall be associated with a
       manual release barrier.
   - name: Auto
     test-code: |
       ctx->id = ctx->auto_release_id;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be associated with an
+      The ${../if/release:/params[0]/name} parameter shall be associated with an
       automatic release barrier.
   test-epilogue: null
   test-prologue: null
@@ -68,13 +68,13 @@ pre-conditions:
     test-code: |
       ctx->timeout = 2;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be a clock tick
+      The ${../if/release:/params[1]/name} parameter shall be a clock tick
       interval.
   - name: Forever
     test-code: |
       ctx->timeout = RTEMS_NO_TIMEOUT;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be
+      The ${../if/release:/params[1]/name} parameter shall be
       ${../../type/if/no-timeout:/name}.
   test-epilogue: null
   test-prologue: null
