@@ -10,12 +10,13 @@ test-brief: |
 test-code: |
   const char rtems_test_name[] = "Model0";
 
+  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+
   #include "ts-default.h"
 test-description: |
   In SMP configurations, up to three scheduler instances using the SMP EDF
   scheduler are provided using up to four processors.
-test-includes:
-- rtems/test-info.h
+test-includes: []
 test-local-includes: []
 test-target: testsuites/validation/ts-model-0.c
 type: test-suite
