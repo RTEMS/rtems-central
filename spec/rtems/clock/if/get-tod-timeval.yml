@@ -38,7 +38,7 @@ params:
     ${/glossary/unix-epoch:/term} and the ${/glossary/clock-realtime:/term} at
     some point during the directive call will be stored in this variable.
   dir: out
-  name: time
+  name: time_of_day
 return:
   return: null
   return-values:
