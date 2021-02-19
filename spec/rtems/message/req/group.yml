@@ -13,6 +13,6 @@ links:
   uid: ../../if/group
 name: Message Manager
 text: |
-  There shall be a software architecture component containing the Message
+  The software architecture shall have a component containing the Message
   Manager implementation.
 type: interface

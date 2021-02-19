@@ -13,6 +13,6 @@ links:
   uid: ../../if/group
 name: Semaphore Manager
 text: |
-  There shall be a software architecture component containing the Semaphore
+  The software architecture shall have a component containing the Semaphore
   Manager implementation.
 type: interface

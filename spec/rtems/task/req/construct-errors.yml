@@ -124,7 +124,7 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      There shall be at least one inactive task object available.
+      The system shall have at least one inactive task object available.
   - name: None
     test-code: |
       create_extension_status = ctx->create_extension_status;
@@ -153,7 +153,7 @@ pre-conditions:
 
       ctx->create_extension_status = create_extension_status;
     text: |
-      There shall be no inactive task object available.
+      The system shall have no inactive task object available.
   test-epilogue: null
   test-prologue: |
     bool create_extension_status;

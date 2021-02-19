@@ -152,7 +152,8 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      There shall be at least one inactive message queue object available.
+      The system shall have at least one inactive message queue object
+      available.
   - name: None
     test-code: |
       memset( &config, 0, sizeof( config ) );
@@ -189,7 +190,7 @@ pre-conditions:
         ++i;
       }
     text: |
-      There shall be no inactive message queue object available.
+      The system shall have no inactive message queue object available.
   test-epilogue: null
   test-prologue: |
     rtems_message_queue_config config;

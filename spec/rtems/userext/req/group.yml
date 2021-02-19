@@ -13,6 +13,6 @@ links:
   uid: ../../if/group
 name: User Extension Manager
 text: |
-  There shall be a software architecture component containing the User
+  The software architecture shall have a component containing the User
   Extension Manager implementation.
 type: interface

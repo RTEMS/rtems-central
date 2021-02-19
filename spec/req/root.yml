@@ -8,5 +8,5 @@ rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The software product shall shall be a real-time operating system.
+  The software product shall be a real-time operating system.
 type: requirement

@@ -178,7 +178,7 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      There shall be at least one inactive partition object available.
+      The system shall have at least one inactive partition object available.
   - name: None
     test-code: |
       i = 0;
@@ -213,7 +213,7 @@ pre-conditions:
         ++i;
       }
     text: |
-      There shall be no inactive partition object available.
+      The system shall have no inactive partition object available.
   test-epilogue: null
   test-prologue: |
     size_t i;

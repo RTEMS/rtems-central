@@ -23,8 +23,8 @@ spec-info:
         spec-type: appl-config-option-constraints
       default-value:
         description: |
-          It shall shall describe the default value of the application
-          configuration option.
+          It shall describe the default value of the application configuration
+          option.
         spec-type: int-or-str
     description: |
       This set of attributes specifies application configuration initializer or

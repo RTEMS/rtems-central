@@ -13,6 +13,6 @@ links:
   uid: ../../if/group
 name: Rate Monotonic Manager
 text: |
-  There shall be a software architecture component containing the Rate
+  The software architecture shall have a component containing the Rate
   Monotonic Manager implementation.
 type: interface

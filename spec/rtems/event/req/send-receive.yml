@@ -26,21 +26,21 @@ post-conditions:
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
       T_eq_u32( GetPendingEvents( ctx ), 0 );
     text: |
-      There shall be no pending events.
+      The receiver task shall have no pending events.
   - name: Pending
     test-code: |
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
       T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
     text: |
-      All events sent shall be pending.
+      The receiver task shall have all events sent pending.
   - name: Timeout
     test-code: |
       T_rsc( ctx->receive_status, RTEMS_TIMEOUT );
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
       T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
     text: |
-      The receive event status shall be RTEMS_TIMEOUT.  All events sent after
-      the timeout shall be pending.
+      The receive event status shall be ${../../status/if/timeout:/name}.  The
+      receiver task shall have all events sent after the timeout pending.
   - name: Satisfied
     test-code: |
       T_rsc( ctx->receive_status, RTEMS_SUCCESSFUL );
@@ -52,24 +52,25 @@ post-conditions:
       T_eq_u32( ctx->received_events, ctx->events_to_send & INPUT_EVENTS );
       T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send & ~INPUT_EVENTS );
     text: |
-      The receive event status shall be RTEMS_SUCCESSFUL.  The received events
-      shall be equal to the input events sent.  The pending events shall be
-      equal to the events sent which are not included in the input events.
+      The receive event status shall be ${../../status/if/successful:/name}.
+      The receiver task shall receive all events sent which are an element of
+      the input events.  The receiver task shall have all events sent which are
+      not an element of the input events pending.
   - name: Unsatisfied
     test-code: |
       T_rsc( ctx->receive_status, RTEMS_UNSATISFIED );
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
       T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
     text: |
-      The receive event status shall be RTEMS_UNSATISFIED.  All sent events
-      shall be pending.
+      The receive event status shall be ${../../status/if/unsatisfied:/name}.
+      The receiver task shall have all events sent pending.
   - name: Blocked
     test-code: |
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNSATISFIED );
       T_eq_u32( ctx->unsatisfied_pending, ctx->events_to_send );
     text: |
       The receiver task shall remain blocked waiting for events after the
-      directive call.  All sent events shall be pending.
+      directive call.  The receiver task shall have all events sent pending.
   test-epilogue: null
   test-prologue: null
 - name: SenderPreemption
@@ -88,14 +89,16 @@ post-conditions:
         T_eq_u32( log->events[ i ].heir, ctx->runner_id );
       }
     text: |
-      There shall be no sender preemption.
+      When the sender task calls the directive to send the events, the sender
+      task shall not be preempted as a result of the call.
   - name: 'Yes'
     test-code: |
       T_eq_sz( log->recorded, 2 );
       T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
       T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
     text: |
-      There shall be a sender preemption.
+      When the sender task calls the directive to send the events, the sender
+      task shall be preempted as a result of the call.
   test-epilogue: null
   test-prologue: |
     T_thread_switch_log *log;
@@ -334,13 +337,13 @@ test-context:
   description: null
   member: rtems_status_code receive_status
 - brief: |
-    This member contains the event conditon state of the receiver task after
+    This member contains the event condition state of the receiver task after
     the event send action.
   description: null
   member: ReceiveConditionStates receive_condition_state
 - brief: |
     This member contains the pending events after an event send action which
-    did not satsify the event condition of the receiver.
+    did not satisify the event condition of the receiver.
   description: null
   member: rtems_event_set unsatisfied_pending
 - brief: |
