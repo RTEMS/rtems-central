@@ -71,8 +71,9 @@ description: |
   * the ${/glossary/asr:/term} processing mode of the task:
     ${../../mode/if/asr:/name} (default) or ${../../mode/if/no-asr:/name},
 
-  * the interrupt level mode of the task:
-    ${../../mode/if/interrupt-level:/name}.
+  * the interrupt level of the task: ${../../mode/if/interrupt-level:/name}
+    with a default of ``RTEMS_INTERRUPT_LEVEL( 0 )`` which is associated with
+    enabled interrupts.
 
   The **initial preemption mode** of the task is enabled or disabled.
 
