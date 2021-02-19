@@ -45,18 +45,20 @@ post-conditions:
   states:
   - name: Valid
     test-code: |
-      id = 0;
+      id = INVALID_ID;
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc_success( sc );
       T_eq_u32( id, ctx->id_value );
     text: |
-      The unique object name shall identify the barrier.
+      The unique object name shall identify the barrier created by the
+      ${../if/create:/name} call.
   - name: Invalid
     test-code: |
       sc = rtems_barrier_ident( NAME, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );
     text: |
-      The unique object name shall not identify the barrier.
+      The unique object name shall not identify the barrier created by the
+      ${../if/create:/name} call.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
@@ -172,6 +174,44 @@ pre-conditions:
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
+- name: Free
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Nothing to do */
+    text: |
+      The system shall have at least one inactive barrier object available.
+  - name: 'No'
+    test-code: |
+      while ( true ) {
+        rtems_status_code sc;
+        rtems_id          id;
+
+        sc = rtems_barrier_create(
+          rtems_build_name( 'B', 'L', 'U', 'B' ),
+          RTEMS_DEFAULT_ATTRIBUTES,
+          0,
+          &id
+        );
+
+        if ( sc == RTEMS_SUCCESSFUL ) {
+          Objects_Control           *obj;
+          const Objects_Information *info;
+
+          info = _Objects_Get_information_id( id );
+          T_quiet_assert_not_null( info );
+          obj = _Objects_Get_no_protection( id, info );
+          T_quiet_assert_not_null( obj );
+          _Chain_Append_unprotected( &ctx->active_objects, &obj->Node );
+        } else {
+          T_quiet_rsc( sc, RTEMS_TOO_MANY );
+          break;
+        }
+      }
+    text: |
+      The system shall have no inactive partition object available.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
@@ -185,6 +225,8 @@ test-action: |
   );
 test-brief: null
 test-cleanup: |
+  Chain_Node *node;
+
   if ( ctx->id_value != INVALID_ID ) {
     rtems_status_code sc;
 
@@ -193,7 +235,19 @@ test-cleanup: |
 
     ctx->id_value = INVALID_ID;
   }
+
+  while ( ( node = _Chain_Get_unprotected( &ctx->active_objects ) ) ) {
+    Objects_Control   *obj;
+    rtems_status_code  sc;
+
+    obj = (Objects_Control *) node;
+    sc = rtems_barrier_delete( obj->id );
+    T_quiet_rsc_success( sc );
+  }
 test-context:
+- brief: null
+  description: null
+  member: Chain_Control active_objects
 - brief: null
   description: null
   member: |
@@ -235,6 +289,8 @@ test-description: null
 test-header: null
 test-includes:
 - rtems.h
+- rtems/score/chainimpl.h
+- rtems/score/objectimpl.h
 - string.h
 test-local-includes: []
 test-prepare: null
@@ -245,6 +301,7 @@ test-setup:
 
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->id_value = INVALID_ID;
+    _Chain_Initialize_empty( &ctx->active_objects );
 
     sc = rtems_task_create(
       rtems_build_name( 'W', 'O', 'R', 'K' ),
@@ -315,6 +372,7 @@ transition-map:
     Id: all
     Class: all
     MaxWait: all
+    Free: all
 - enabled-by: true
   post-conditions:
     Status: InvAddr
@@ -328,6 +386,7 @@ transition-map:
     - 'Null'
     Class: all
     MaxWait: all
+    Free: all
 - enabled-by: true
   post-conditions:
     Status: Ok
@@ -343,6 +402,8 @@ transition-map:
     - Default
     - Manual
     MaxWait: all
+    Free:
+    - 'Yes'
 - enabled-by: true
   post-conditions:
     Status: InvNum
@@ -358,6 +419,7 @@ transition-map:
     - Auto
     MaxWait:
     - Zero
+    Free: all
 - enabled-by: true
   post-conditions:
     Status: Ok
@@ -373,4 +435,40 @@ transition-map:
     - Auto
     MaxWait:
     - Positive
+    Free:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+    Name: Invalid
+    Class: NoObj
+    IdValue: Unchanged
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Default
+    - Manual
+    MaxWait: all
+    Free:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: TooMany
+    Name: Invalid
+    Class: NoObj
+    IdValue: Unchanged
+  pre-conditions:
+    Name:
+    - Valid
+    Id:
+    - Valid
+    Class:
+    - Auto
+    MaxWait:
+    - Positive
+    Free:
+    - 'No'
 type: requirement
