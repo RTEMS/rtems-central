@@ -71,7 +71,7 @@ return:
       the system configuration had no implementation for this mode.
     value: ${../../status/if/not-implemented:/name}
   - description: |
-      The ${../../mode/if/interrupt-level:/name} was set with a positive level
+      The ${../../mode/if/interrupt-level:/name} was set to a positive level
       in ${.:/params[1]/name} and the system configuration had no
       implementation for this mode.
     value: ${../../status/if/not-implemented:/name}
