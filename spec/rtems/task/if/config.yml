@@ -16,7 +16,7 @@ definition:
 - default:
     brief: |
       This member defines the initial priority of the task.
-    definition: ${priority:/name} ${.:name}
+    definition: ${../../type/if/priority:/name} ${.:name}
     description: null
     kind: member
     name: initial_priority

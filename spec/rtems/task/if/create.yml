@@ -10,7 +10,7 @@ definition:
     body: null
     params:
     - ${../../type/if/name:/name} ${.:/params[0]/name}
-    - ${priority:/name} ${.:/params[1]/name}
+    - ${../../type/if/priority:/name} ${.:/params[1]/name}
     - ${/c/if/size_t:/name} ${.:/params[2]/name}
     - ${../../mode/if/mode:/name} ${.:/params[3]/name}
     - ${../../attr/if/attribute:/name} ${.:/params[4]/name}

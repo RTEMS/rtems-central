@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: null
     params:
-    - ${../../task/if/priority:/name} ${.:/params[0]/name}
+    - ${../../type/if/priority:/name} ${.:/params[0]/name}
     - ${/c/if/size_t:/name} ${.:/params[1]/name}
     - ${../../attr/if/attribute:/name} ${.:/params[2]/name}
     return: ${../../status/if/code:/name}

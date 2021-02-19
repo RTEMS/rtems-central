@@ -6,7 +6,7 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
-  default: ( (${../../task/if/priority:/name}) -1 )
+  default: ( (${../../type/if/priority:/name}) -1 )
   variants: []
 description: |
   When given this priority, a special high priority not accessible via the

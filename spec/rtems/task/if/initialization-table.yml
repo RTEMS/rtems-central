@@ -20,7 +20,7 @@ definition:
   variants: []
 - default:
     brief: '%'
-    definition: ${priority:/name} ${.:name}
+    definition: ${../../type/if/priority:/name} ${.:name}
     description: '%'
     kind: member
     name: initial_priority

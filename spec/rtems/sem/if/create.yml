@@ -12,7 +12,7 @@ definition:
     - ${../../type/if/name:/name} ${.:/params[0]/name}
     - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
     - ${../../attr/if/attribute:/name} ${.:/params[2]/name}
-    - ${../../task/if/priority:/name} ${.:/params[3]/name}
+    - ${../../type/if/priority:/name} ${.:/params[3]/name}
     - ${../../type/if/id:/name} *${.:/params[4]/name}
     return: ${../../status/if/code:/name}
   variants: []

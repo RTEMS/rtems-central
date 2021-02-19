@@ -8,7 +8,7 @@ definition:
     attributes: null
     body: null
     params: []
-    return: ${/rtems/task/if/priority:/name}
+    return: ${/rtems/type/if/priority:/name}
   variants: []
 description: null
 enabled-by: true

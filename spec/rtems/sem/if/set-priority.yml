@@ -11,8 +11,8 @@ definition:
     params:
     - ${../../type/if/id:/name} ${.:/params[0]/name}
     - ${../../type/if/id:/name} ${.:/params[1]/name}
-    - ${../../task/if/priority:/name} ${.:/params[2]/name}
-    - ${../../task/if/priority:/name} *${.:/params[3]/name}
+    - ${../../type/if/priority:/name} ${.:/params[2]/name}
+    - ${../../type/if/priority:/name} *${.:/params[3]/name}
     return: ${../../status/if/code:/name}
   variants: []
 description: |
