@@ -52,7 +52,7 @@ post-conditions:
   - name: Valid
     test-code: |
       id = INVALID_ID;
-      sc = rtems_partition_ident( NAME, &id );
+      sc = rtems_partition_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc_success( sc );
       T_eq_u32( id, ctx->id_value );
     text: |
@@ -60,7 +60,7 @@ post-conditions:
       ${../if/create:/name} call.
   - name: Invalid
     test-code: |
-      sc = rtems_partition_ident( NAME, &id );
+      sc = rtems_partition_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc( sc, RTEMS_INVALID_NAME );
     text: |
       The unique object name shall not identify the partition created by the
@@ -106,7 +106,6 @@ post-conditions:
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
-    rtems_id          id;
     size_t            i;
     void             *buffers[ BUFFER_COUNT ];
     void             *no_buffer;
