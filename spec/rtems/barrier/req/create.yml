@@ -183,31 +183,7 @@ pre-conditions:
       The system shall have at least one inactive barrier object available.
   - name: 'No'
     test-code: |
-      while ( true ) {
-        rtems_status_code sc;
-        rtems_id          id;
-
-        sc = rtems_barrier_create(
-          rtems_build_name( 'B', 'L', 'U', 'B' ),
-          RTEMS_DEFAULT_ATTRIBUTES,
-          0,
-          &id
-        );
-
-        if ( sc == RTEMS_SUCCESSFUL ) {
-          Objects_Control           *obj;
-          const Objects_Information *info;
-
-          info = _Objects_Get_information_id( id );
-          T_quiet_assert_not_null( info );
-          obj = _Objects_Get_no_protection( id, info );
-          T_quiet_assert_not_null( obj );
-          _Chain_Append_unprotected( &ctx->active_objects, &obj->Node );
-        } else {
-          T_quiet_rsc( sc, RTEMS_TOO_MANY );
-          break;
-        }
-      }
+      ctx->seized_objects = T_seize_objects( Create, NULL );
     text: |
       The system shall have no inactive partition object available.
   test-epilogue: null
@@ -225,8 +201,6 @@ test-action: |
   );
 test-brief: null
 test-cleanup: |
-  Chain_Node *node;
-
   if ( ctx->id_value != INVALID_ID ) {
     rtems_status_code sc;
 
@@ -236,18 +210,12 @@ test-cleanup: |
     ctx->id_value = INVALID_ID;
   }
 
-  while ( ( node = _Chain_Get_unprotected( &ctx->active_objects ) ) ) {
-    Objects_Control   *obj;
-    rtems_status_code  sc;
-
-    obj = (Objects_Control *) node;
-    sc = rtems_barrier_delete( obj->id );
-    T_quiet_rsc_success( sc );
-  }
+  T_surrender_objects( &ctx->seized_objects, rtems_barrier_delete );
 test-context:
 - brief: null
   description: null
-  member: Chain_Control active_objects
+  member: |
+    void *seized_objects
 - brief: null
   description: null
   member: |
@@ -301,7 +269,6 @@ test-setup:
 
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->id_value = INVALID_ID;
-    _Chain_Initialize_empty( &ctx->active_objects );
 
     sc = rtems_task_create(
       rtems_build_name( 'W', 'O', 'R', 'K' ),
@@ -346,6 +313,16 @@ test-support: |
       T_rsc_success( sc );
       T_eq_u32( released, 1 );
     }
+  }
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    return rtems_barrier_create(
+      rtems_build_name( 'S', 'I', 'Z', 'E' ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      0,
+      id
+    );
   }
 test-target: testsuites/validation/tc-barrier-create.c
 test-teardown:
