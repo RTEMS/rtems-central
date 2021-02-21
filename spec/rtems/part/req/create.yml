@@ -205,36 +205,7 @@ pre-conditions:
   - name: 'No'
     test-code: |
       i = 0;
-
-      while ( i < MAX_PARTITIONS ) {
-        rtems_status_code sc;
-        rtems_id          id;
-
-        sc = rtems_partition_create(
-          rtems_build_name( 'B', 'L', 'U', 'B' ),
-          exhaust_buffers[ i ],
-          sizeof( exhaust_buffers[ i ] ),
-          sizeof( exhaust_buffers[ i ][ 0 ] ),
-          RTEMS_DEFAULT_ATTRIBUTES,
-          &id
-        );
-
-        if ( sc == RTEMS_SUCCESSFUL ) {
-          Objects_Control           *obj;
-          const Objects_Information *info;
-
-          info = _Objects_Get_information_id( id );
-          T_quiet_assert_not_null( info );
-          obj = _Objects_Get_no_protection( id, info );
-          T_quiet_assert_not_null( obj );
-          _Chain_Append_unprotected( &ctx->active_objects, &obj->Node );
-        } else {
-          T_quiet_rsc( sc, RTEMS_TOO_MANY );
-          break;
-        }
-
-        ++i;
-      }
+      ctx->seized_objects = T_seize_objects( Create, &i );
     text: |
       The system shall have no inactive partition object available.
   test-epilogue: null
@@ -255,44 +226,44 @@ test-action: |
   );
 test-brief: null
 test-cleanup: |
-  Chain_Node *node;
-
-  while ( ( node = _Chain_Get_unprotected( &ctx->active_objects ) ) ) {
-    Objects_Control   *obj;
-    rtems_status_code  sc;
-
-    obj = (Objects_Control *) node;
-    sc = rtems_partition_delete( obj->id );
-    T_quiet_rsc_success( sc );
-  }
+  T_surrender_objects( &ctx->seized_objects, rtems_partition_delete );
 test-context:
 - brief: null
   description: null
-  member: Chain_Control active_objects
+  member: |
+    void *seized_objects
 - brief: null
   description: null
-  member: rtems_status_code status
+  member: |
+    rtems_status_code status
 - brief: null
   description: null
-  member: rtems_name name
+  member: |
+    rtems_name name
 - brief: null
   description: null
-  member: void *starting_address
+  member: |
+    void *starting_address
 - brief: null
   description: null
-  member: uintptr_t length
+  member: |
+    uintptr_t length
 - brief: null
   description: null
-  member: size_t buffer_size
+  member: |
+    size_t buffer_size
 - brief: null
   description: null
-  member: rtems_attribute attribute_set
+  member: |
+    rtems_attribute attribute_set
 - brief: null
   description: null
-  member: rtems_id *id
+  member: |
+    rtems_id *id
 - brief: null
   description: null
-  member: rtems_id id_value
+  member: |
+    rtems_id id_value
 test-context-support: null
 test-description: null
 test-header: null
@@ -313,11 +284,7 @@ test-prepare: |
   sc = rtems_partition_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
   T_rsc( sc, RTEMS_INVALID_NAME );
   T_eq_u32( id, INVALID_ID );
-test-setup:
-  brief: null
-  code: |
-    _Chain_Initialize_empty( &ctx->active_objects );
-  description: null
+test-setup: null
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
@@ -331,10 +298,31 @@ test-support: |
   #define BUFFER_SIZE ( 2 * sizeof( void * ) )
 
   static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
-    exhaust_buffers[ MAX_PARTITIONS ][ BUFFER_COUNT ][ BUFFER_SIZE ];
+    buffers_to_seize[ MAX_PARTITIONS ][ BUFFER_COUNT ][ BUFFER_SIZE ];
 
   static RTEMS_ALIGNED( RTEMS_PARTITION_ALIGNMENT ) uint8_t
     buffers[ BUFFER_COUNT ][ BUFFER_SIZE ];
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    size_t *i;
+    size_t  j;
+
+    i = arg;
+    j = *i;
+    T_quiet_lt_sz( j, MAX_PARTITIONS );
+
+    *i = j + 1;
+
+    return rtems_partition_create(
+      rtems_build_name( 'S', 'I', 'Z', 'E' ),
+      buffers_to_seize[ j ],
+      sizeof( buffers_to_seize[ j ] ),
+      sizeof( buffers_to_seize[ j ][ 0 ] ),
+      RTEMS_DEFAULT_ATTRIBUTES,
+      id
+    );
+  }
 test-target: testsuites/validation/tc-part-create.c
 test-teardown: null
 text: ${.:text-template}
