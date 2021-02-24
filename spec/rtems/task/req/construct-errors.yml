@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 functional-type: action
 links:
@@ -12,64 +12,101 @@ post-conditions:
   - name: Ok
     test-code: |
       T_rsc_success( ctx->status );
-      T_eq_ptr( ctx->id, &ctx->id_value );
-      T_ne_u32( ctx->id_value, 0xffffffff );
-
-      sc = rtems_task_delete( ctx->id_value );
-      T_rsc_success( sc );
     text: |
-      The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
-      referenced by the id parameter shall identify the constructed task.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/successful:/name}.
   - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
-      T_null( ctx->id );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_ADDRESS.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-address:/name}.
   - name: InvName
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_NAME );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_NAME.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-name:/name}.
   - name: InvPrio
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_PRIORITY );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_PRIORITY.  If the id parameter is not
-      NULL, then the value of the object identifier referenced by the id
-      parameter shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-priority:/name}.
   - name: InvSize
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_SIZE );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_SIZE.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-size:/name}.
   - name: TooMany
     test-code: |
       T_rsc( ctx->status, RTEMS_TOO_MANY );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_TOO_MANY.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/too-many:/name}.
   - name: Unsat
     test-code: |
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_UNSATISFIED.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->id_value );
+    text: |
+      The unique object name shall identify the task constructed by
+      the ${../if/construct:/name} call.
+  - name: Invalid
+    test-code: |
+      sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a task.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
+    rtems_id          id;
+- name: IdValue
+  states:
+  - name: Assigned
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object identifier variable shall be equal to the object
+      identifier of the task constructed by the ${../if/construct:/name} call.
+  - name: Unchanged
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object identifier variable shall be unchanged by the
+      ${../if/construct:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Delete
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->delete_extension_calls, 1 );
+    text: |
+      The delete user extensions shall be invoked during the
+      ${../if/construct:/name} call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->delete_extension_calls, 0 );
+    text: |
+      The delete user extensions shall not be invoked during the
+      ${../if/construct:/name} call.
+  test-epilogue: null
+  test-prologue: null
 pre-conditions:
 - name: Id
   states:
@@ -89,7 +126,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config.name = rtems_build_name( 'N', 'A', 'M', 'E' );
+      ctx->config.name = NAME;
     text: |
       The name of the task configuration shall be valid.
   - name: Inv
@@ -118,45 +155,20 @@ pre-conditions:
       The initial priority of the task configuration shall be invalid.
   test-epilogue: null
   test-prologue: null
-- name: Tasks
+- name: Free
   states:
-  - name: Avail
+  - name: 'Yes'
     test-code: |
       /* Nothing to do */
     text: |
       The system shall have at least one inactive task object available.
-  - name: None
+  - name: 'No'
     test-code: |
-      create_extension_status = ctx->create_extension_status;
-      ctx->create_extension_status = true;
-
-      while ( true ) {
-        rtems_status_code sc;
-        rtems_id id;
-
-        sc = rtems_task_construct( &valid_task_config, &id );
-
-        if ( sc == RTEMS_SUCCESSFUL ) {
-          Objects_Control           *obj;
-          const Objects_Information *info;
-
-          info = _Objects_Get_information_id( id );
-          T_quiet_assert_not_null( info );
-          obj = _Objects_Get_no_protection( id, info );
-          T_quiet_assert_not_null( obj );
-          _Chain_Append_unprotected( &ctx->tasks, &obj->Node );
-        } else {
-          T_quiet_rsc( sc, RTEMS_TOO_MANY );
-          break;
-        }
-      }
-
-      ctx->create_extension_status = create_extension_status;
+      ctx->seized_objects = T_seize_objects( Create, ctx );
     text: |
       The system shall have no inactive task object available.
   test-epilogue: null
-  test-prologue: |
-    bool create_extension_status;
+  test-prologue: null
 - name: TLS
   states:
   - name: Enough
@@ -226,6 +238,7 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
+  ctx->delete_extension_calls = 0;
   ctx->config.storage_size = RTEMS_TASK_STORAGE_SIZE(
     ctx->config.maximum_thread_local_storage_size + ctx->stack_size,
     ctx->config.attributes
@@ -233,16 +246,16 @@ test-action: |
   ctx->status = rtems_task_construct( &ctx->config, ctx->id );
 test-brief: null
 test-cleanup: |
-  Chain_Node *node;
+  if ( ctx->id_value != INVALID_ID ) {
+    rtems_status_code sc;
 
-  while ( ( node = _Chain_Get_unprotected( &ctx->tasks ) ) ) {
-    Objects_Control   *obj;
-    rtems_status_code  sc;
+    sc = rtems_task_delete( ctx->id_value );
+    T_rsc_success( sc );
 
-    obj = (Objects_Control *) node;
-    sc = rtems_task_delete( obj->id );
-    T_quiet_rsc_success( sc );
+    ctx->id_value = INVALID_ID;
   }
+
+  T_surrender_objects( &ctx->seized_objects, rtems_task_delete );
 test-context:
 - brief: null
   description: null
@@ -267,6 +280,10 @@ test-context:
 - brief: null
   description: null
   member: |
+    uint32_t delete_extension_calls
+- brief: null
+  description: null
+  member: |
     size_t stack_size
 - brief: null
   description: null
@@ -275,18 +292,22 @@ test-context:
 - brief: null
   description: null
   member: |
-    Chain_Control tasks
+    void *seized_objects
 test-context-support: null
 test-description: null
 test-header: null
 test-includes:
 - rtems.h
-- rtems/score/chainimpl.h
-- rtems/score/objectimpl.h
 - string.h
+- rtems/score/apimutex.h
+- rtems/score/threadimpl.h
 test-local-includes: []
 test-prepare: |
-  ctx->id_value = 0xffffffff;
+  _RTEMS_Lock_allocator();
+  _Thread_Kill_zombies();
+  _RTEMS_Unlock_allocator();
+
+  ctx->id_value = INVALID_ID;
   memset( &ctx->config, 0, sizeof( ctx->config ) );
 test-setup:
   brief: null
@@ -304,11 +325,15 @@ test-setup:
       &ctx->extension_id
     );
     T_rsc_success( sc );
-
-    _Chain_Initialize_empty( &ctx->tasks );
   description: null
 test-stop: null
 test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define INVALID_ID 0xffffffff
+
+  typedef RtemsTaskReqConstructErrors_Context Context;
+
   static _Thread_local int tls_variable;
 
   #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 128, RTEMS_TASK_STORAGE_ALIGNMENT )
@@ -320,8 +345,8 @@ test-support: |
     )
   ];
 
-  static const rtems_task_config valid_task_config = {
-    .name = rtems_build_name( 'T', 'A', 'S', 'K' ),
+  static const rtems_task_config seize_task_config = {
+    .name = rtems_build_name( 'S', 'I', 'Z', 'E' ),
     .initial_priority = 1,
     .storage_area = task_storage,
     .storage_size = sizeof( task_storage ),
@@ -329,6 +354,21 @@ test-support: |
     .initial_modes = RTEMS_DEFAULT_MODES,
     .attributes = RTEMS_DEFAULT_MODES
   };
+
+  static rtems_status_code Create( void *arg, uint32_t *id )
+  {
+    Context          *ctx;
+    bool              create_extension_status;
+    rtems_status_code sc;
+
+    ctx = arg;
+    create_extension_status = ctx->create_extension_status;
+    ctx->create_extension_status = true;
+    sc = rtems_task_construct( &seize_task_config, id );
+    ctx->create_extension_status = create_extension_status;
+
+    return sc;
+  }
 
   static bool ThreadCreate( rtems_tcb *executing, rtems_tcb *created )
   {
@@ -338,8 +378,17 @@ test-support: |
     return RtemsTaskReqConstructErrors_Instance.create_extension_status;
   }
 
+  static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
+  {
+    (void) executing;
+    (void) deleted;
+
+    ++RtemsTaskReqConstructErrors_Instance.delete_extension_calls;
+  }
+
   static const rtems_extensions_table extensions = {
-    .thread_create = ThreadCreate
+    .thread_create = ThreadCreate,
+    .thread_delete = ThreadDelete
   };
 test-target: testsuites/validation/tc-task-construct-errors.c
 test-teardown:
@@ -355,6 +404,9 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
+    Name: Valid
+    IdValue: Assigned
+    Delete: 'No'
   pre-conditions:
     Ext:
     - Ok
@@ -369,11 +421,14 @@ transition-map:
     - Enough
     TLS:
     - Enough
-    Tasks:
-    - Avail
+    Free:
+    - 'Yes'
 - enabled-by: true
   post-conditions:
     Status: InvName
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'No'
   pre-conditions:
     Ext: all
     Id: all
@@ -383,10 +438,13 @@ transition-map:
     Prio: all
     Stack: all
     TLS: all
-    Tasks: all
+    Free: all
 - enabled-by: true
   post-conditions:
     Status: InvAddr
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -397,10 +455,13 @@ transition-map:
     Prio: all
     Stack: all
     TLS: all
-    Tasks: all
+    Free: all
 - enabled-by: true
   post-conditions:
     Status: InvPrio
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -413,10 +474,13 @@ transition-map:
     - Inv
     Stack: all
     TLS: all
-    Tasks: all
+    Free: all
 - enabled-by: true
   post-conditions:
     Status: TooMany
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -428,11 +492,14 @@ transition-map:
     - Valid
     Stack: all
     TLS: all
-    Tasks:
-    - None
+    Free:
+    - 'No'
 - enabled-by: true
   post-conditions:
     Status: InvSize
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -445,11 +512,14 @@ transition-map:
     Stack: all
     TLS:
     - Small
-    Tasks:
-    - Avail
+    Free:
+    - 'Yes'
 - enabled-by: true
   post-conditions:
     Status: InvSize
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -463,11 +533,14 @@ transition-map:
     - Small
     TLS:
     - Enough
-    Tasks:
-    - Avail
+    Free:
+    - 'Yes'
 - enabled-by: true
   post-conditions:
     Status: Unsat
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'Yes'
   pre-conditions:
     Ext:
     - Err
@@ -482,11 +555,14 @@ transition-map:
     - Enough
     TLS:
     - Enough
-    Tasks:
-    - Avail
+    Free:
+    - 'Yes'
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: Unsat
+    Name: Invalid
+    IdValue: Unchanged
+    Delete: 'Yes'
   pre-conditions:
     Ext:
     - Ok
@@ -502,6 +578,6 @@ transition-map:
     - Enough
     TLS:
     - Enough
-    Tasks:
-    - Avail
+    Free:
+    - 'Yes'
 type: requirement

@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 functional-type: action
 links:
@@ -12,65 +12,86 @@ post-conditions:
   - name: Ok
     test-code: |
       T_rsc_success( ctx->status );
-      T_eq_ptr( ctx->id, &ctx->id_value );
-      T_ne_u32( ctx->id_value, 0xffffffff );
-
-      sc = rtems_message_queue_delete( ctx->id_value );
-      T_rsc_success( sc );
     text: |
-      The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
-      referenced by the id parameter shall identify the constructed message
-      queue.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/successful:/name}.
   - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
-      T_null( ctx->id );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_ADDRESS.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-address:/name}.
   - name: InvName
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_NAME );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_NAME.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-name:/name}.
   - name: InvNum
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_NUMBER.  If the id parameter is not
-      NULL, then the value of the object identifier referenced by the id
-      parameter shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-number:/name}.
   - name: InvSize
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_SIZE );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_INVALID_SIZE.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/invalid-size:/name}.
   - name: TooMany
     test-code: |
       T_rsc( ctx->status, RTEMS_TOO_MANY );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_TOO_MANY.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/too-many:/name}.
   - name: Unsat
     test-code: |
       T_rsc( ctx->status, RTEMS_UNSATISFIED  );
-      T_eq_u32( ctx->id_value, 0xffffffff );
     text: |
-      The status shall be RTEMS_UNSATISFIED.  If the id parameter is not NULL,
-      then the value of the object identifier referenced by the id parameter
-      shall be unchanged.
+      The return status of ${../if/construct:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Name
+  states:
+  - name: Valid
+    test-code: |
+      id = 0;
+      sc = rtems_message_queue_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, ctx->id_value );
+    text: |
+      The unique object name shall identify the message queue constructed by
+      the ${../if/construct:/name} call.
+  - name: Invalid
+    test-code: |
+      sc = rtems_message_queue_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc( sc, RTEMS_INVALID_NAME );
+    text: |
+      The unique object name shall not identify a message queue.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
+    rtems_id          id;
+- name: IdValue
+  states:
+  - name: Assigned
+    test-code: |
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_ne_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object identifier variable shall be equal to the object
+      identifier of the message queue constructed by the
+      ${../if/construct:/name} call.
+  - name: Unchanged
+    test-code: |
+      T_eq_u32( ctx->id_value, INVALID_ID );
+    text: |
+      The value of the object identifier variable shall be unchanged by the
+      ${../if/construct:/name} call.
+  test-epilogue: null
+  test-prologue: null
 pre-conditions:
 - name: Id
   states:
@@ -90,7 +111,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config.name = rtems_build_name( 'N', 'A', 'M', 'E' );
+      ctx->config.name = NAME;
     text: |
       The name of the message queue configuration shall be valid.
   - name: Invalid
@@ -203,6 +224,15 @@ test-action: |
   ctx->status = rtems_message_queue_construct( &ctx->config, ctx->id );
 test-brief: null
 test-cleanup: |
+  if ( ctx->id_value != INVALID_ID ) {
+    rtems_status_code sc;
+
+    sc = rtems_message_queue_delete( ctx->id_value );
+    T_rsc_success( sc );
+
+    ctx->id_value = INVALID_ID;
+  }
+
   T_surrender_objects( &ctx->seized_objects, rtems_message_queue_delete );
 test-context:
 - brief: null
@@ -233,11 +263,15 @@ test-includes:
 - string.h
 test-local-includes: []
 test-prepare: |
-  ctx->id_value = 0xffffffff;
+  ctx->id_value = INVALID_ID;
   memset( &ctx->config, 0, sizeof( ctx->config ) );
 test-setup: null
 test-stop: null
 test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  #define INVALID_ID 0xffffffff
+
   #define MAX_MESSAGE_QUEUES 4
 
   #define MAX_PENDING_MESSAGES 1
@@ -277,6 +311,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
+    Name: Valid
+    IdValue: Assigned
   pre-conditions:
     Area:
     - Valid
@@ -295,6 +331,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvName
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -307,6 +345,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvAddr
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -320,6 +360,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvNum
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -334,6 +376,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvSize
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -350,6 +394,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: TooMany
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -368,6 +414,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvNum
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -384,6 +432,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvSize
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area: all
     AreaSize: all
@@ -401,6 +451,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Unsat
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area:
     - 'Null'
@@ -418,6 +470,8 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Unsat
+    Name: Invalid
+    IdValue: Unchanged
   pre-conditions:
     Area:
     - Valid
