@@ -27,12 +27,6 @@ post-conditions:
     text: |
       The return status of ${../if/create:/name} shall be
       ${../../status/if/invalid-name:/name}.
-  - name: InvNumber
-    test-code: |
-      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
-    text: |
-      The return status of ${../if/create:/name} shall be
-      ${../../status/if/invalid-number:/name}.
   - name: InvSize
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_SIZE );
