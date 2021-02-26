@@ -12,39 +12,58 @@ post-conditions:
   - name: Ok
     test-code: |
       T_rsc_success( ctx->status );
-
-      sc = rtems_partition_get_buffer( ctx->id_value, &ctx->buffer_in_use );
-      T_rsc_success( sc );
-      T_eq_ptr( ctx->buffer_in_use, buffers );
     text: |
-      The status shall be RTEMS_SUCCESSFUL.  The returned buffer shall be made
-      available for re-use.
+      The return status of ${../if/return-buffer:/name} shall be
+      ${../../status/if/successful:/name}.
   - name: InvId
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ID );
     text: |
-      The status shall be RTEMS_INVALID_ID.
+      The return status of ${../if/return-buffer:/name} shall be
+      ${../../status/if/invalid-id:/name}.
   - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
     text: |
-      The status shall be RTEMS_INVALID_ADDRESS.
+      The return status of ${../if/return-buffer:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Buf
+  states:
+  - name: Free
+    test-code: |
+      sc = rtems_partition_get_buffer( ctx->id_value, &ctx->buffer_in_use );
+      T_rsc_success( sc );
+      T_eq_ptr( ctx->buffer_in_use, buffers );
+    text: |
+      The buffer obtained from the partition shall be made available for re-use
+      by the ${../if/return-buffer:/name} call.
+  - name: InUse
+    test-code: |
+      sc = rtems_partition_get_buffer( ctx->id_value, &no_buffer );
+      T_rsc( sc, RTEMS_UNSATISFIED );
+    text: |
+      The buffer obtained from the partition shall be still in use after the
+      ${../if/return-buffer:/name} call.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
+    void             *no_buffer;
 pre-conditions:
 - name: Id
   states:
-  - name: Id
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      The ${../if/return-buffer:/params[0]/name} parameter shall be invalid.
+  - name: Part
     test-code: |
       ctx->id = ctx->id_value;
     text: |
-      The id parameter shall reference a partition object.
-  - name: Invalid
-    test-code: |
-      ctx->id = 0;
-    text: |
-      The id parameter shall not reference a partition object.
+      The ${../if/return-buffer:/params[0]/name} parameter shall be associated
+      with a partition.
   test-epilogue: null
   test-prologue: null
 - name: Buf
@@ -53,14 +72,21 @@ pre-conditions:
     test-code: |
       ctx->buffer = ctx->buffer_in_use;
     text: |
-      The buffer parameter shall reference a buffer previously returned by
-      ${../if/get-buffer:/name}.
-  - name: Invalid
+      The ${../if/return-buffer:/params[1]/name} parameter  shall reference a
+      buffer previously returned by ${../if/get-buffer:/name}.
+  - name: BadAlign
+    test-code: |
+      ctx->buffer = (void *) ( (uintptr_t) ctx->buffer_in_use + 1 );
+    text: |
+      The ${../if/return-buffer:/params[1]/name} parameter shall be an address
+      inside the buffer area of the partition and not on a valid buffer
+      boundary.
+  - name: OutOfArea
     test-code: |
       ctx->buffer = (void *) (uintptr_t) 1;
     text: |
-      The buffer parameter shall be an address outside the buffer area of the
-      partition.
+      The ${../if/return-buffer:/params[1]/name} parameter shall be an address
+      outside the buffer area of the partition.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -99,7 +125,7 @@ test-setup:
   code: |
     rtems_status_code sc;
 
-    ctx->buffer_in_use = 0;
+    ctx->buffer_in_use = NULL;
     ctx->id_value = 0;
 
     sc = rtems_partition_create(
@@ -145,24 +171,28 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
+    Buf: Free
   pre-conditions:
     Buf:
     - Valid
     Id:
-    - Id
+    - Part
 - enabled-by: true
   post-conditions:
     Status: InvId
+    Buf: InUse
   pre-conditions:
     Buf: all
     Id:
-    - Invalid
+    - NoObj
 - enabled-by: true
   post-conditions:
     Status: InvAddr
+    Buf: InUse
   pre-conditions:
     Buf:
-    - Invalid
+    - BadAlign
+    - OutOfArea
     Id:
-    - Id
+    - Part
 type: requirement
