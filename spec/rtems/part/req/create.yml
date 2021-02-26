@@ -181,11 +181,17 @@ pre-conditions:
       ctx->buffer_size = 0;
     text: |
       The buffer size shall be zero.
+  - name: Skew
+    test-code: |
+      ctx->buffer_size = 1;
+    text: |
+      The buffer size shall not an integral multiple of the pointer size.
   - name: Small
     test-code: |
-      ctx->buffer_size = sizeof( buffers[ 0 ] ) - 1;
+      ctx->buffer_size = sizeof( uintptr_t );
     text: |
-      The buffer size shall be less than the size of two pointers.
+      The buffer size shall greater than zero and an integral multiple of the
+      pointer size and less than the size of two pointers.
   test-epilogue: null
   test-prologue: null
 - name: Free
@@ -411,6 +417,7 @@ transition-map:
     Free: all
     Size:
     - Zero
+    - Skew
     - Small
     Start:
     - Valid
