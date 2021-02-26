@@ -91,7 +91,7 @@ post-conditions:
       ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
-- name: Delete
+- name: DelExt
   states:
   - name: 'Yes'
     test-code: |
@@ -406,7 +406,7 @@ transition-map:
     Status: Ok
     Name: Valid
     IdValue: Assigned
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext:
     - Ok
@@ -428,7 +428,7 @@ transition-map:
     Status: InvName
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext: all
     Id: all
@@ -444,7 +444,7 @@ transition-map:
     Status: InvAddr
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -461,7 +461,7 @@ transition-map:
     Status: InvPrio
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -480,7 +480,7 @@ transition-map:
     Status: TooMany
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -499,7 +499,7 @@ transition-map:
     Status: InvSize
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -519,7 +519,7 @@ transition-map:
     Status: InvSize
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'No'
+    DelExt: 'No'
   pre-conditions:
     Ext: all
     Id:
@@ -540,7 +540,7 @@ transition-map:
     Status: Unsat
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'Yes'
+    DelExt: 'Yes'
   pre-conditions:
     Ext:
     - Err
@@ -562,7 +562,7 @@ transition-map:
     Status: Unsat
     Name: Invalid
     IdValue: Unchanged
-    Delete: 'Yes'
+    DelExt: 'Yes'
   pre-conditions:
     Ext:
     - Ok
