@@ -32,7 +32,7 @@ notes: |
   target hash.
 
   The target hash can be used to distinguish test suite results obtained from
-  different target systems.
+  different target systems.  See also ${get-build-label:/name}.
 params: []
 return:
   return: |
