@@ -36,13 +36,13 @@ post-conditions:
       T_eq_u32( ctx->released_value, ctx->waiting_tasks );
     text: |
       The value of the variable for the number of released tasks shall equal
-      the number of tasks released by the ${../if/release} call.
+      the number of tasks released by the ${../if/release:/name} call.
   - name: Unchanged
     test-code: |
       T_eq_u32( ctx->released_value, RELEASED_INVALID_VALUE );
     text: |
       The value of variable for the number of released tasks shall be unchanged
-      by the ${../if/release} call.
+      by the ${../if/release:/name} call.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
