@@ -5,7 +5,7 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Use the ${../if/alias:/name}() macro.
+    Use the ${../if/alias:/name} macro.
   action-code: |
     int alias_result;
 
@@ -20,7 +20,7 @@ test-actions:
       uid: ../req/alias-0
   links: []
 - action-brief: |
-    Use the ${../if/align-down:/name}() macro in various examples.
+    Use the ${../if/align-down:/name} macro in various examples.
   action-code: |
     int align_down0_result;
     int align_down1_result;
@@ -45,7 +45,7 @@ test-actions:
     align_down9_result = RTEMS_ALIGN_DOWN( 257, 16 );
   checks:
   - brief: |
-      Check that ${../if/align-down:/name}() calculates the expected result
+      Check that ${../if/align-down:/name} calculates the expected result
       and is side-effect free.
     code: |
       T_step_eq_int( ${step}, align_down0_result, 0 );
@@ -63,7 +63,7 @@ test-actions:
       uid: ../req/align-down-0
   links: []
 - action-brief: |
-    Use the ${../if/align-up:/name}() macro in various examples.
+    Use the ${../if/align-up:/name} macro in various examples.
   action-code: |
     int align_up0_result;
     int align_up1_result;
@@ -88,7 +88,7 @@ test-actions:
     align_up9_result = RTEMS_ALIGN_UP( 257, 16 );
   checks:
   - brief: |
-      Check that ${../if/align-up:/name}() calculates the expected result
+      Check that ${../if/align-up:/name} calculates the expected result
       and is side-effect free.
     code: |
       T_step_eq_int( ${step}, align_up0_result, 0 );
@@ -106,7 +106,7 @@ test-actions:
       uid: ../req/align-up-0
   links: []
 - action-brief: |
-    Use the ${../if/aligned:/name}() macro.
+    Use the ${../if/aligned:/name} macro.
   action-code: |
     char unaligned_var = 'c';
     char aligned_var RTEMS_ALIGNED( 8 ) = 'd';
@@ -114,7 +114,7 @@ test-actions:
     (void) unaligned_var;
   checks:
   - brief: |
-      Check that ${../if/aligned:/name}() correctly aligns a variable on the stack
+      Check that ${../if/aligned:/name} correctly aligns a variable on the stack
       and a structure member.
     code: |
       T_step_eq_int( ${step}, ( ( uintptr_t ) &aligned_var ) % 8, 0 );
@@ -125,7 +125,7 @@ test-actions:
       uid: ../req/aligned-0
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/alloc-align:/name}() macro.
+    Use a function declared with the ${../if/alloc-align:/name} macro.
   action-code: |
     void *free_ptr;
     void *alloc_align_ptr;
@@ -133,7 +133,7 @@ test-actions:
     basedefs_free( free_ptr );
   checks:
   - brief: |
-      It cannot be checked that the ${../if/alloc-align:/name}() macro has
+      It cannot be checked that the ${../if/alloc-align:/name} macro has
       the desired effect. Yet, the check confirms that such a macro exists and
       that it can be used on such a memory function and that the
       argument counting starts at 1.
@@ -149,14 +149,14 @@ test-actions:
       uid: ../req/alloc-align-0
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/alloc-size:/name}() macro.
+    Use a function declared with the ${../if/alloc-size:/name} macro.
   action-code: |
     void *alloc_size_ptr;
     alloc_size_ptr = basedefs_alloc_size_func( 1024 );
     basedefs_free( alloc_size_ptr );
   checks:
   - brief: |
-      It cannot be checked that the ${../if/alloc-size:/name}() macro has
+      It cannot be checked that the ${../if/alloc-size:/name} macro has
       the desired effect. Yet, the check confirms that such a macro exists and
       that it can be used on such a memory function and that the
       argument counting starts at 1.
@@ -167,14 +167,14 @@ test-actions:
       uid: ../req/alloc-size-0
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/alloc-size-2:/name}() macro.
+    Use a function declared with the ${../if/alloc-size-2:/name} macro.
   action-code: |
     void *alloc_size_2_ptr;
     alloc_size_2_ptr = basedefs_alloc_size_2_func( 8, 128 );
     basedefs_free( alloc_size_2_ptr );
   checks:
   - brief: |
-      It cannot be checked that the ${../if/alloc-size-2:/name}() macro has
+      It cannot be checked that the ${../if/alloc-size-2:/name} macro has
       the desired effect. Yet, the check confirms that such a macro exists and
       that it can be used on such a memory function and that the
       argument counting starts at 1.
@@ -185,7 +185,7 @@ test-actions:
       uid: ../req/alloc-size-2-0
   links: []
 - action-brief: |
-    Use the ${../if/array-size:/name}() macro.
+    Use the ${../if/array-size:/name} macro.
   action-code: |
     int array[] = { 10, 20, 30, 40, 50 };
     unsigned char array2[12];
@@ -208,7 +208,7 @@ test-actions:
   checks:
   - brief: |
       It cannot automatically be checked that the
-      ${../if/compiler-deprecated-attribute:/name}() macro has the desired
+      ${../if/compiler-deprecated-attribute:/name} macro has the desired
       effect. The gcc compiler should issue a warning about the use of a
       deprecated variable on the above line
       where the ``compiler_deprecated_attribute`` is used.
@@ -269,7 +269,7 @@ test-actions:
       offsetof( compiler_packed_attribute_struct, i );
   checks:
   - brief: |
-      Check that ${../if/compiler-packed-attribute:/name}() correctly aligns
+      Check that ${../if/compiler-packed-attribute:/name} correctly aligns
       a structure member.
     code: |
       T_step_eq_int( ${step}, compiler_packed_attribute_offset, 1 );
@@ -314,7 +314,7 @@ test-actions:
       uid: ../req/compiler-unused-attribute-0
   links: []
 - action-brief: |
-    Invoke the  ${../if/concat:/name}() macro on examples.
+    Invoke the  ${../if/concat:/name} macro on examples.
   action-code: |
     int concat0_result;
     int concat1_result;
@@ -322,7 +322,7 @@ test-actions:
     concat1_result = RTEMS_CONCAT( abc, cat )();
   checks:
   - brief: |
-      Check that the two arguments of ${../if/concat:/name}() are concatenated to a
+      Check that the two arguments of ${../if/concat:/name} are concatenated to a
       new token.
     code: |
       T_step_eq_int( ${step}, concat0_result, 91 );
@@ -332,7 +332,7 @@ test-actions:
     - role: validation
       uid: ../req/concat-1
   - brief: |
-      Check that the result of the ${../if/concat:/name}() expansion is subject to
+      Check that the result of the ${../if/concat:/name} expansion is subject to
       a further pre-processor substitution.
     code: |
       T_step_eq_int( ${step}, concat1_result, 91 );
@@ -436,7 +436,7 @@ test-actions:
       uid: ../req/define-global-symbol-1
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/deprecated:/name}() macro.
+    Use a function declared with the ${../if/deprecated:/name} macro.
   action-code: |
     int deprecated_result;
     /*
@@ -532,13 +532,13 @@ test-actions:
       uid: ../req/devolatile-0
   links: []
 - action-brief: |
-    Invoke the  ${../if/expand:/name}() macro on an example.
+    Invoke the  ${../if/expand:/name} macro on an example.
   action-code: |
     int expand_result;
     expand_result = RTEMS_EXPAND( EXPAND )();
   checks:
   - brief: |
-      Check that the argument of ${../if/expand:/name}() is expanded and
+      Check that the argument of ${../if/expand:/name} is expanded and
       returned.
     code: |
       T_step_eq_int( ${step}, expand_result, 82 );
@@ -547,7 +547,7 @@ test-actions:
       uid: ../req/expand-0
   links: []
 - action-brief: |
-    Invoke the  ${../if/false:/name}() macro on an example.
+    Invoke the  ${../if/false:/name} macro on an example.
   action-code: |
     char *false_result;
     false_result = _TO_STR( FALSE );
@@ -561,7 +561,7 @@ test-actions:
       uid: ../req/false-0
   links: []
 - action-brief: |
-    Invoke the  ${../if/have-member-same-type:/name}() macro on examples.
+    Invoke the  ${../if/have-member-same-type:/name} macro on examples.
   action-code: |
     typedef union {
       short s;
@@ -644,7 +644,7 @@ test-actions:
       uid: ../req/inline-routine-0
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/malloclike:/name}() macro.
+    Use a function declared with the ${../if/malloclike:/name} macro.
   action-code: |
     void *malloclike_ptr;
     /*
@@ -671,7 +671,7 @@ test-actions:
       uid: ../req/malloclike-0
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/no-inline:/name}() macro.
+    Use a function declared with the ${../if/no-inline:/name} macro.
   action-code: |
     int no_inline_result;
     /*
@@ -711,7 +711,7 @@ test-actions:
       uid: ../req/no-return-0
   links: []
 - action-brief: |
-    Use the ${../if/obfuscate-variable:/name}() macro.
+    Use the ${../if/obfuscate-variable:/name} macro.
   action-code: |
     short obfuscate_variable = 66;
     RTEMS_OBFUSCATE_VARIABLE( obfuscate_variable );
@@ -754,14 +754,14 @@ test-actions:
     packed_enum_size = sizeof( packed_enum );
   checks:
   - brief: |
-      Check that ${../if/packed:/name}() correctly aligns a structure member.
+      Check that ${../if/packed:/name} correctly aligns a structure member.
     code: |
       T_step_eq_int( ${step}, packed_offset, 1 );
     links:
     - role: validation
       uid: ../req/packed-0
   - brief: |
-      Check that ${../if/packed:/name}() correctly aligns all structure members.
+      Check that ${../if/packed:/name} correctly aligns all structure members.
     code: |
       T_step_eq_int( ${step}, packed_full_i_offset, 1 );
       T_step_eq_int( ${step}, packed_full_j_offset, 5 );
@@ -769,7 +769,7 @@ test-actions:
     - role: validation
       uid: ../req/packed-1
   - brief: |
-      Check that ${../if/packed:/name}() correctly enforces a minimal enum type.
+      Check that ${../if/packed:/name} correctly enforces a minimal enum type.
     code: |
       T_step_eq_int( ${step}, packed_enum_size, 1 );
     links:
@@ -777,7 +777,7 @@ test-actions:
       uid: ../req/packed-2
   links: []
 - action-brief: |
-    Use the ${../if/predict-false:/name}() macro.
+    Use the ${../if/predict-false:/name} macro.
   action-code: |
     /* No action */
   checks:
@@ -792,7 +792,7 @@ test-actions:
       uid: ../req/predict-false-0
   links: []
 - action-brief: |
-    Use the ${../if/predict-true:/name}() macro.
+    Use the ${../if/predict-true:/name} macro.
   action-code: |
     /* No action */
   checks:
@@ -807,7 +807,7 @@ test-actions:
       uid: ../req/predict-true-0
   links: []
 - action-brief: |
-    Use a function declared with the ${../if/printflike:/name}() macro.
+    Use a function declared with the ${../if/printflike:/name} macro.
   action-code: |
     int printflike_result;
     printflike_result = printflike_func(
@@ -850,7 +850,7 @@ test-actions:
       uid: ../req/pure-0
   links: []
 - action-brief: |
-    Get the code the ${../if/return-address:/name}() macro produces as string.
+    Get the code the ${../if/return-address:/name} macro produces as string.
   action-code: |
     /*
      * If this code is not compiled using GNU C, I still have to run a check
@@ -863,7 +863,7 @@ test-actions:
     #endif
   checks:
   - brief: |
-      The check confirms that a ${../if/return-address:/name}() macro exists
+      The check confirms that a ${../if/return-address:/name} macro exists
       and that it produces the correct code.
     code: |
       T_step_eq_str( ${step},
@@ -873,14 +873,14 @@ test-actions:
       uid: ../req/return-address-0
   links: []
 - action-brief: |
-    Use the ${../if/section:/name}() macro on ``section_variable`` and
+    Use the ${../if/section:/name} macro on ``section_variable`` and
     ``section_func`` at the beginning of this file.
   action-code: |
     short section_result;
     section_result = section_func( 1234567 );
   checks:
   - brief: |
-      It cannot be checked that the ${../if/section:/name}()
+      It cannot be checked that the ${../if/section:/name}
       macro has the desired effect. Yet, the check confirms that such a
       macro exists and can be used.
     code: |
@@ -891,13 +891,13 @@ test-actions:
       uid: ../req/section-0
   links: []
 - action-brief: |
-    Use the ${../if/static-assert:/name}() macro.
+    Use the ${../if/static-assert:/name} macro.
   action-code: |
     RTEMS_STATIC_ASSERT( STATIC_ASSERT_COND 1, RTEMS_STATIC_ASSERT_test );
   checks:
   - brief: |
       It cannot be automatically check that
-      the ${../if/static-assert:/name}() macro has the desired effect.
+      the ${../if/static-assert:/name} macro has the desired effect.
       Yet, it can be checked that the macro exists and accepts the
       specified arguments.
     code: ''
@@ -906,13 +906,13 @@ test-actions:
       uid: ../req/static-assert-0
   links: []
 - action-brief: |
-    Use the ${../if/string:/name}() macro.
+    Use the ${../if/string:/name} macro.
   action-code: "const char *string_var;\nconst char *string_empty_var;\n/* strange\
     \ spacing and tabs belong to the test */\nstring_var = RTEMS_STRING( \\\\ STRING_PREFIX\
     \ \t\tcat\"\"\\n   );\nstring_empty_var = RTEMS_STRING();\n"
   checks:
   - brief: |
-      Check that the ${../if/string:/name}() macro
+      Check that the ${../if/string:/name} macro
       converts its argument into a string without applying
       pre-processor substitutions on its argument.
     code: |
@@ -923,7 +923,7 @@ test-actions:
       uid: ../req/string-0
   links: []
 - action-brief: |
-    Use the ${../if/symbol-name:/name}() macro on examples.
+    Use the ${../if/symbol-name:/name} macro on examples.
   action-code: |
     const int symbol_name = 321;
     int symbol_name_0_var;
@@ -939,7 +939,7 @@ test-actions:
   checks:
   - brief: |
       Case ``__USER_LABEL_PREFIX__`` undefined.
-      Check that the ${../if/symbol-name:/name}() macro
+      Check that the ${../if/symbol-name:/name} macro
       without any pre-processor substitutions applicable results
       in its literal argument.
     code: |
@@ -949,7 +949,7 @@ test-actions:
       uid: ../req/symbol-name-3
   - brief: |
       Case ``__USER_LABEL_PREFIX__`` undefined.
-      Check that the ${../if/symbol-name:/name}() macro
+      Check that the ${../if/symbol-name:/name} macro
       applies pre-processor substitutions to its argument
       and its result.
     code: |
@@ -963,7 +963,7 @@ test-actions:
       uid: ../req/symbol-name-5
   - brief: |
       Case ``__USER_LABEL_PREFIX__`` defined.
-      Check that the ${../if/symbol-name:/name}() macro
+      Check that the ${../if/symbol-name:/name} macro
       without any pre-processor substitutions applicable results
       in the literal prefix and argument.
     code: |
@@ -975,7 +975,7 @@ test-actions:
       uid: ../req/symbol-name-2
   - brief: |
       Case ``__USER_LABEL_PREFIX__`` defined.
-      Check that the ${../if/symbol-name:/name}() macro
+      Check that the ${../if/symbol-name:/name} macro
       applies pre-processor substitutions to its argument.
     code: |
       T_step_eq_int( ${step}, prefixed_upper_symbol_name_var, 125 );
@@ -988,7 +988,7 @@ test-actions:
       uid: ../req/symbol-name-6
   - brief: |
       Case ``__USER_LABEL_PREFIX__`` defined.
-      Check that the ${../if/symbol-name:/name}() macro
+      Check that the ${../if/symbol-name:/name} macro
       applies pre-processor substitutions to its result.
     code: |
       T_step_eq_int( ${step}, prefixed_symbol_id_var, 126 );
@@ -1001,7 +1001,7 @@ test-actions:
       uid: ../req/symbol-name-6
   links: []
 - action-brief: |
-    Invoke the  ${../if/true:/name}() macro on an example.
+    Invoke the  ${../if/true:/name} macro on an example.
   action-code: |
     char *true_result;
     true_result = _TO_STR( TRUE );
@@ -1015,7 +1015,7 @@ test-actions:
       uid: ../req/true-0
   links: []
 - action-brief: |
-    Use of the  ${../if/typeof-refx:/name}() macro on several examples.
+    Use of the  ${../if/typeof-refx:/name} macro on several examples.
     This use is already the test as the statements will not compile
     without error if the macro did not evaluate to the correct type.
   action-code: |
@@ -1229,7 +1229,7 @@ test-actions:
       uid: ../req/weak-1
   links: []
 - action-brief: |
-    Invoke the ${../if/xconcat:/name}() macro on examples.
+    Invoke the ${../if/xconcat:/name} macro on examples.
   action-code: |
     int xconcat0_result;
     int xconcat1_result;
@@ -1242,7 +1242,7 @@ test-actions:
     xconcat3_result = RTEMS_CONCAT( def, cat )();
   checks:
   - brief: |
-      Check that the two arguments of ${../if/xconcat:/name}() are
+      Check that the two arguments of ${../if/xconcat:/name} are
       concatenated without inserting new characters.
     code: |
       T_step_eq_int( ${step}, xconcat0_result, 91 );
@@ -1252,7 +1252,7 @@ test-actions:
     - role: validation
       uid: ../req/xconcat-1
   - brief: |
-      Check that the two arguments of ${../if/xconcat:/name}() are
+      Check that the two arguments of ${../if/xconcat:/name} are
       substituted before they are concatenated.
     code: |
       T_step_eq_int( ${step}, xconcat1_result, 91 );
@@ -1260,7 +1260,7 @@ test-actions:
     - role: validation
       uid: ../req/xconcat-2
   - brief: |
-      Check that the two arguments of ${../if/xconcat:/name}() are can
+      Check that the two arguments of ${../if/xconcat:/name} are can
       be the macro itself.
     code: |
       T_step_eq_int( ${step}, xconcat2_result, 91 );
@@ -1268,7 +1268,7 @@ test-actions:
     - role: validation
       uid: ../req/xconcat-3
   - brief: |
-      Check that the result of the ${../if/xconcat:/name}() expansion
+      Check that the result of the ${../if/xconcat:/name} expansion
       is subject to a further pre-processor substitution.
     code: |
       T_step_eq_int( ${step}, xconcat3_result, 91 );
@@ -1277,13 +1277,13 @@ test-actions:
       uid: ../req/xconcat-2
   links: []
 - action-brief: |
-    Use the ${../if/xstring:/name}() macro.
+    Use the ${../if/xstring:/name} macro.
   action-code: "const char *xstring_var;\nconst char *xstring_empty_var;\n/* strange\
     \ spacing and tabs belong to the test */\nxstring_var = RTEMS_XSTRING( \\\\ STRING_PREFIX\
     \ \t\tcat\"\"\\n   );\nxstring_empty_var = RTEMS_XSTRING();\n"
   checks:
   - brief: |
-      Check that the ${../if/xstring:/name}() macro applies
+      Check that the ${../if/xstring:/name} macro applies
       pre-processor substitutions on its argument and
       converts its argument into a string.
     code: |
