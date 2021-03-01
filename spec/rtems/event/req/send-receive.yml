@@ -71,6 +71,15 @@ post-conditions:
     text: |
       The receiver task shall remain blocked waiting for events after the
       directive call.  The receiver task shall have all events sent pending.
+  - name: InvAddr
+    test-code: |
+      T_rsc( ctx->receive_status, RTEMS_INVALID_ADDRESS );
+      T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send );
+    text: |
+      The receive event status shall be
+      ${../../status/if/invalid-address:/name}.  The receiver task shall have
+      all events sent pending.
   test-epilogue: null
   test-prologue: null
 - name: SenderPreemption
@@ -162,6 +171,14 @@ pre-conditions:
   test-prologue: null
 - name: ReceiverState
   states:
+  - name: InvAddr
+    test-code: |
+      ctx->sender_type = SENDER_SELF;
+      ctx->receive_type = RECEIVE_NORMAL;
+      ctx->received_events_parameter = NULL;
+    text: |
+      The receiver task shall use the ${/c/if/null:/name} pointer for the event
+      set to receive.
   - name: NotWaiting
     test-code: |
       ctx->sender_type = SENDER_SELF;
@@ -255,7 +272,7 @@ test-action: |
       INPUT_EVENTS,
       ctx->receive_option_set,
       ctx->receive_timeout,
-      &ctx->received_events
+      ctx->received_events_parameter
     );
   } else if ( ctx->receive_type == RECEIVE_INTERRUPT ) {
     T_interrupt_test_state state;
@@ -332,6 +349,11 @@ test-context:
     This member contains the events received by the event receive action.
   description: null
   member: rtems_event_set received_events
+- brief: |
+    This member references the event set received by the event receive action
+    or is NULL.
+  description: null
+  member: rtems_event_set *received_events_parameter
 - brief: |
     This member contains the status of the event receive action.
   description: null
@@ -451,6 +473,7 @@ test-prepare: |
   ctx->events_to_send = 0;
   ctx->send_status = RTEMS_INCORRECT_STATE;
   ctx->received_events = 0xffffffff;
+  ctx->received_events_parameter = &ctx->received_events;
   ctx->receive_option_set = 0;
   ctx->receive_timeout = RTEMS_NO_TIMEOUT;
   ctx->sender_type = SENDER_NONE;
@@ -808,6 +831,18 @@ transition-map:
     ReceiverState: N/A
     Satisfy: N/A
     Send: N/A
+- enabled-by: true
+  post-conditions:
+    ReceiveStatus: Pending
+    SendStatus: Ok
+    SenderPreemption: 'No'
+  pre-conditions:
+    Id:
+    - Task
+    ReceiverState:
+    - InvAddr
+    Satisfy: N/A
+    Send: all
 - enabled-by: true
   post-conditions:
     ReceiveStatus: Pending
