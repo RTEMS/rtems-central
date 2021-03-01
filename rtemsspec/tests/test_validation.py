@@ -318,16 +318,27 @@ static void Directive_Pre_Name_Prepare(
 
   switch ( state ) {
     case Directive_Pre_Name_Invalid: {
+      /*
+       * The name parameter shall not equal to a name of an active Classic API
+       * task object and not equal to RTEMS_SELF.
+       */
       ctx->name = 1;
       break;
     }
 
     case Directive_Pre_Name_Self: {
+      /*
+       * The name parameter shall be RTEMS_SELF.
+       */
       ctx->name = RTEMS_SELF;
       break;
     }
 
     case Directive_Pre_Name_Valid: {
+      /*
+       * The name parameter shall equal to a name of an active Classic API task
+       * object.
+       */
       ctx->name = rtems_build_name( 'T', 'A', 'S', 'K' );
       break;
     }
@@ -346,31 +357,49 @@ static void Directive_Pre_Node_Prepare(
 {
   switch ( state ) {
     case Directive_Pre_Node_Local: {
+      /*
+       * The node parameter shall be the local node number.
+       */
       ctx->node = 1;
       break;
     }
 
     case Directive_Pre_Node_Remote: {
+      /*
+       * The node parameter shall be a remote node number.
+       */
       ctx->node = 2;
       break;
     }
 
     case Directive_Pre_Node_Invalid: {
+      /*
+       * The node parameter shall be an invalid node number.
+       */
       ctx->node = 256;
       break;
     }
 
     case Directive_Pre_Node_SearchAll: {
+      /*
+       * The node parameter shall be RTEMS_SEARCH_ALL_NODES.
+       */
       ctx->node = RTEMS_SEARCH_ALL_NODES;
       break;
     }
 
     case Directive_Pre_Node_SearchOther: {
+      /*
+       * The node parameter shall be RTEMS_SEARCH_OTHER_NODES.
+       */
       ctx->node = RTEMS_SEARCH_OTHER_NODES;
       break;
     }
 
     case Directive_Pre_Node_SearchLocal: {
+      /*
+       * The node parameter shall be RTEMS_SEARCH_LOCAL_NODE.
+       */
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
       break;
     }
@@ -387,11 +416,17 @@ static void Directive_Pre_Id_Prepare(
 {
   switch ( state ) {
     case Directive_Pre_Id_NullPtr: {
+      /*
+       * The id parameter shall be NULL.
+       */
       ctx->id = NULL;
       break;
     }
 
     case Directive_Pre_Id_Valid: {
+      /*
+       * The id parameter shall point to an object identifier.
+       */
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
       break;
@@ -409,26 +444,41 @@ static void Directive_Post_Status_Check(
 {
   switch ( state ) {
     case Directive_Post_Status_Ok: {
+      /*
+       * The status shall be RTEMS_SUCCESSFUL.
+       */
       T_rsc(ctx->status, RTEMS_SUCCESSFUL);
       break;
     }
 
     case Directive_Post_Status_InvAddr: {
+      /*
+       * The status shall be RTEMS_INVALID_ADDRESS.
+       */
       T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
       break;
     }
 
     case Directive_Post_Status_InvName: {
+      /*
+       * The status shall be RTEMS_INVALID_NAME.
+       */
       T_rsc(ctx->status, RTEMS_INVALID_NAME);
       break;
     }
 
     case Directive_Post_Status_InvNode: {
+      /*
+       * The status shall be RTEMS_INVALID_NODE.
+       */
       T_rsc(ctx->status, RTEMS_INVALID_NODE);
       break;
     }
 
     case Directive_Post_Status_InvId: {
+      /*
+       * The status shall be RTEMS_INVALID_ID.
+       */
       T_rsc(ctx->status, RTEMS_INVALID_ID);
       break;
     }
@@ -445,29 +495,55 @@ static void Directive_Post_Id_Check(
 {
   switch ( state ) {
     case Directive_Post_Id_Nop: {
+      /*
+       * The value of the object identifier referenced by the id parameter shall
+       * be the value before the call to rtems_task_ident().
+       */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, 0xffffffff);
       break;
     }
 
     case Directive_Post_Id_NullPtr: {
+      /*
+       * The id parameter shall be NULL.
+       */
       T_null(ctx->id)
       break;
     }
 
     case Directive_Post_Id_Self: {
+      /*
+       * The value of the object identifier referenced by the id parameter shall
+       * be the identifier of the executing thread.
+       */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, rtems_task_self());
       break;
     }
 
     case Directive_Post_Id_LocalTask: {
+      /*
+       * The value of the object identifier referenced by the id parameter shall
+       * be the identifier of a local task with a name equal to the name
+       * parameter.  If more than one local task with such a name exists, then it
+       * shall be the identifier of the task with the lowest object index.
+       */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, ctx->id_local_task);
       break;
     }
 
     case Directive_Post_Id_RemoteTask: {
+      /*
+       * The value of the object identifier referenced by the id parameter shall
+       * be the identifier of a remote task on a eligible node defined by the node
+       * parameter with a name equal to the name parameter.  If more than one task
+       * with such a name exists on the same node, then it shall be the identifier
+       * of the task with the lowest object index.  If more than one task with
+       * such a name exists on different eligible nodes, then it shall be the
+       * identifier of the task with the lowest node index.
+       */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, ctx->id_remote_task);
       break;
@@ -1934,11 +2010,17 @@ static void Action2_Pre_A_Prepare( Action2_Context *ctx, Action2_Pre_A state )
 
   switch ( state ) {
     case Action2_Pre_A_X: {
+      /*
+       * Pre A X.
+       */
       /* Pre A X */
       break;
     }
 
     case Action2_Pre_A_Y: {
+      /*
+       * Pre A Y.
+       */
       /* Pre A Y */
       break;
     }
@@ -1956,16 +2038,25 @@ static void Action2_Pre_B_Prepare( Action2_Context *ctx, Action2_Pre_B state )
 
   switch ( state ) {
     case Action2_Pre_B_X: {
+      /*
+       * Pre B X.
+       */
       /* Pre B X */
       break;
     }
 
     case Action2_Pre_B_Y: {
+      /*
+       * Pre B Y.
+       */
       /* Pre B Y */
       break;
     }
 
     case Action2_Pre_B_Z: {
+      /*
+       * Pre B Z.
+       */
       /* Pre B Z */
       break;
     }
@@ -1983,11 +2074,17 @@ static void Action2_Post_A_Check( Action2_Context *ctx, Action2_Post_A state )
 
   switch ( state ) {
     case Action2_Post_A_X: {
+      /*
+       * Post A X.
+       */
       /* Post A X */
       break;
     }
 
     case Action2_Post_A_Y: {
+      /*
+       * Post A Y.
+       */
       /* Post A Y */
       break;
     }
@@ -2005,11 +2102,17 @@ static void Action2_Post_B_Check( Action2_Context *ctx, Action2_Post_B state )
 
   switch ( state ) {
     case Action2_Post_B_X: {
+      /*
+       * Post B X.
+       */
       /* Post B X */
       break;
     }
 
     case Action2_Post_B_Y: {
+      /*
+       * Post B Y.
+       */
       /* Post B Y */
       break;
     }

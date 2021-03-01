@@ -1029,6 +1029,19 @@ def get_value_hash(ctx: ItemGetValueContext) -> Any:
     return f"#{ctx.value[ctx.key]}"
 
 
+def get_value_params(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value formatted as a parameter. """
+    return f"``{ctx.value[ctx.key]}``"
+
+
+def get_value_plural(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value as a glossary term plural. """
+    try:
+        return ctx.value[ctx.key]
+    except KeyError:
+        return f"{ctx.value['term']}s"
+
+
 class ExpressionMapper:
     """ Maps symbols and operations to form a C expression. """
 

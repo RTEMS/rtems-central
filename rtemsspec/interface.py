@@ -30,7 +30,7 @@ from typing import Any, Callable, Dict, Iterator, List, Optional, Union, Set
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
-    get_value_doxygen_group, get_value_hash
+    get_value_doxygen_group, get_value_hash, get_value_params, get_value_plural
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, \
     ItemGetValueMap, ItemMapper
 
@@ -59,23 +59,12 @@ def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
     return _forward_declaration(ctx.item)
 
 
-def _get_value_params(ctx: ItemGetValueContext) -> Any:
-    return f"``{ctx.value[ctx.key]}``"
-
-
-def _get_value_plural(ctx: ItemGetValueContext) -> Any:
-    try:
-        return ctx.value[ctx.key]
-    except KeyError:
-        return f"{ctx.value['term']}s"
-
-
 class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
         self._node = node
         self._code_or_doc = "doc"
-        self.add_get_value("glossary/term/doc:/plural", _get_value_plural)
+        self.add_get_value("glossary/term/doc:/plural", get_value_plural)
         self.add_get_value("interface/forward-declaration/code:/name",
                            _get_value_forward_declaration)
         self.add_get_value("interface/forward-declaration/doc:/name",
@@ -83,7 +72,7 @@ class _InterfaceMapper(ItemMapper):
         self.add_get_value("interface/function/doc:/name",
                            get_value_doxygen_function)
         self.add_get_value("interface/function/doc:/params/name",
-                           _get_value_params)
+                           get_value_params)
         self.add_get_value("interface/enumerator/doc:/name",
                            get_value_double_colon)
         self.add_get_value("interface/typedef/doc:/name",
@@ -95,7 +84,7 @@ class _InterfaceMapper(ItemMapper):
         self.add_get_value("interface/macro/doc:/name",
                            get_value_doxygen_function)
         self.add_get_value("interface/macro/doc:/params/name",
-                           _get_value_params)
+                           get_value_params)
         self.add_get_value("interface/variable/doc:/name", get_value_hash)
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
             name = f"interface/appl-config-option/{opt}/doc:/name"

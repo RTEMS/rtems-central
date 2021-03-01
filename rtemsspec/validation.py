@@ -33,7 +33,8 @@ import re
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
-    ExpressionMapper, GenericContent, to_camel_case
+    ExpressionMapper, GenericContent, get_value_params, \
+    get_value_doxygen_group, get_value_doxygen_function, to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -49,6 +50,12 @@ class _Mapper(ItemMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self._step = 0
+        self.add_get_value("interface/function:/name",
+                           get_value_doxygen_function)
+        self.add_get_value("interface/function:/params/name", get_value_params)
+        self.add_get_value("interface/group:/name", get_value_doxygen_group)
+        self.add_get_value("interface/macro:/name", get_value_doxygen_function)
+        self.add_get_value("interface/macro:/params/name", get_value_params)
         self.add_get_value("requirement/functional/action:/test-run",
                            _get_test_run)
         self.add_get_value("test-case:/test-run", _get_test_run)
@@ -800,7 +807,10 @@ class _ActionRequirementTestItem(_TestItem):
                     for state_index, state in enumerate(condition["states"]):
                         content.add(f"case {enum[state_index + 1]}: {{")
                         with content.indent():
-                            content.add(
+                            with content.comment_block():
+                                content.append(
+                                    self.substitute_text(state["text"]))
+                            content.append(
                                 self.substitute_code(state["test-code"]))
                             content.append("break;")
                         content.add("}")
