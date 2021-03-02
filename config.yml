@@ -105,6 +105,9 @@ interface:
   domains:
     /if/domain: modules/rtems
 interface-documentation:
+- directives-target: modules/rtems-docs/c-user/barrier/directives.rst
+  group: /rtems/barrier/if/group
+  introduction-target: modules/rtems-docs/c-user/barrier/introduction.rst
 - directives-target: modules/rtems-docs/c-user/timer/directives.rst
   group: /rtems/timer/if/group
   introduction-target: modules/rtems-docs/c-user/timer/introduction.rst
@@ -126,6 +129,12 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/signal/directives.rst
   group: /rtems/signal/if/group
   introduction-target: modules/rtems-docs/c-user/signal/introduction.rst
+- directives-target: modules/rtems-docs/c-user/user-extensions/directives.rst
+  group: /rtems/userext/if/group
+  introduction-target: modules/rtems-docs/c-user/user-extensions/introduction.rst
+- directives-target: modules/rtems-docs/c-user/clock/directives.rst
+  group: /rtems/clock/if/group
+  introduction-target: modules/rtems-docs/c-user/clock/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:
