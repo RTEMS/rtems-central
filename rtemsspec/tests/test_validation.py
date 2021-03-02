@@ -496,8 +496,8 @@ static void Directive_Post_Id_Check(
   switch ( state ) {
     case Directive_Post_Id_Nop: {
       /*
-       * The value of the object identifier referenced by the id parameter shall
-       * be the value before the call to rtems_task_ident().
+       * The value of the object identifier referenced by the id parameter
+       * shall be the value before the call to rtems_task_ident().
        */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, 0xffffffff);
@@ -514,8 +514,8 @@ static void Directive_Post_Id_Check(
 
     case Directive_Post_Id_Self: {
       /*
-       * The value of the object identifier referenced by the id parameter shall
-       * be the identifier of the executing thread.
+       * The value of the object identifier referenced by the id parameter
+       * shall be the identifier of the executing thread.
        */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, rtems_task_self());
@@ -524,10 +524,10 @@ static void Directive_Post_Id_Check(
 
     case Directive_Post_Id_LocalTask: {
       /*
-       * The value of the object identifier referenced by the id parameter shall
-       * be the identifier of a local task with a name equal to the name
-       * parameter.  If more than one local task with such a name exists, then it
-       * shall be the identifier of the task with the lowest object index.
+       * The value of the object identifier referenced by the id parameter
+       * shall be the identifier of a local task with a name equal to the name
+       * parameter.  If more than one local task with such a name exists, then
+       * it shall be the identifier of the task with the lowest object index.
        */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, ctx->id_local_task);
@@ -536,13 +536,14 @@ static void Directive_Post_Id_Check(
 
     case Directive_Post_Id_RemoteTask: {
       /*
-       * The value of the object identifier referenced by the id parameter shall
-       * be the identifier of a remote task on a eligible node defined by the node
-       * parameter with a name equal to the name parameter.  If more than one task
-       * with such a name exists on the same node, then it shall be the identifier
-       * of the task with the lowest object index.  If more than one task with
-       * such a name exists on different eligible nodes, then it shall be the
-       * identifier of the task with the lowest node index.
+       * The value of the object identifier referenced by the id parameter
+       * shall be the identifier of a remote task on a eligible node defined by
+       * the node parameter with a name equal to the name parameter.  If more
+       * than one task with such a name exists on the same node, then it shall
+       * be the identifier of the task with the lowest object index.  If more
+       * than one task with such a name exists on different eligible nodes,
+       * then it shall be the identifier of the task with the lowest node
+       * index.
        */
       T_eq_ptr(ctx->id, &ctx->id_value);
       T_eq_u32(ctx->id_value, ctx->id_remote_task);

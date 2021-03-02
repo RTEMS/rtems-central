@@ -215,7 +215,7 @@ class _TestItem:
                 content.add(self.substitute_code(action["action-code"]))
                 for check in action["checks"]:
                     with content.comment_block():
-                        content.add(self.substitute_text(check["brief"]))
+                        content.wrap(self.substitute_text(check["brief"]))
                     content.append(self.substitute_text(check["code"]))
         return actions
 
@@ -808,7 +808,7 @@ class _ActionRequirementTestItem(_TestItem):
                         content.add(f"case {enum[state_index + 1]}: {{")
                         with content.indent():
                             with content.comment_block():
-                                content.append(
+                                content.wrap(
                                     self.substitute_text(state["text"]))
                             content.append(
                                 self.substitute_code(state["test-code"]))
