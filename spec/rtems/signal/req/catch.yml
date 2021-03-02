@@ -60,10 +60,10 @@ post-conditions:
 
       if ( ctx->catch_status == RTEMS_SUCCESSFUL ) {
         T_eq_u32( ctx->default_handler_calls, 0 );
-        T_eq_u32( ctx->handler_calls, 1 );
+        T_eq_u32( ctx->handler_calls, 1 + ctx->pending_signals );
         T_ne_u32( ctx->handler_mode, 0xffffffff );
       } else {
-        T_eq_u32( ctx->default_handler_calls, 1 );
+        T_eq_u32( ctx->default_handler_calls, 1 + ctx->pending_signals );
         T_eq_u32( ctx->handler_calls, 0 );
         T_eq_u32( ctx->handler_mode, 0xffffffff );
       }
@@ -80,7 +80,7 @@ post-conditions:
         T_eq_u32( ctx->handler_mode, 0xffffffff );
       } else {
         T_rsc_success( ctx->send_status );
-        T_eq_u32( ctx->default_handler_calls, 1 );
+        T_eq_u32( ctx->default_handler_calls, 1 + ctx->pending_signals );
         T_eq_u32( ctx->handler_calls, 0 );
         T_eq_u32( ctx->handler_mode, 0xffffffff );
       }
@@ -164,6 +164,22 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
+- name: Pending
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->pending_signals = ( rtems_scheduler_get_processor_maximum() > 1 ) ? 1 : 0;
+    text: |
+      Where the system has more than one processor, when ${../if/catch:/name}
+      is called, the calling task shall have pending signals.
+  - name: 'No'
+    test-code: |
+      ctx->pending_signals = 0;
+    text: |
+      When ${../if/catch:/name} is called, the calling task shall have no
+      pending signals.
+  test-epilogue: null
+  test-prologue: null
 - name: Handler
   states:
   - name: Invalid
@@ -258,7 +274,17 @@ test-action: |
   rtems_status_code sc;
   rtems_mode        mode;
 
-  ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
+  if ( ctx->pending_signals != 0 ) {
+    rtems_interrupt_level level;
+
+    rtems_interrupt_local_disable(level);
+    _SMP_barrier_Wait( &ctx->barrier, &ctx->runner_barrier_state, 2 );
+    _SMP_barrier_Wait( &ctx->barrier, &ctx->runner_barrier_state, 2 );
+    ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
+    rtems_interrupt_local_enable(level);
+  } else {
+    ctx->catch_status = rtems_signal_catch( ctx->handler, ctx->mode );
+  }
 
   sc = rtems_task_mode( ctx->normal_mode, RTEMS_ALL_MODE_MASKS, &mode );
   T_rsc_success( sc );
@@ -270,6 +296,26 @@ test-action: |
 test-brief: null
 test-cleanup: null
 test-context:
+- brief: null
+  description: null
+  member: |
+    rtems_id runner_id
+- brief: null
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: null
+  description: null
+  member: |
+    uint32_t pending_signals
+- brief: null
+  description: null
+  member: |
+    SMP_barrier_Control barrier
+- brief: null
+  description: null
+  member: |
+    SMP_barrier_State runner_barrier_state
 - brief: null
   description: null
   member: |
@@ -307,6 +353,8 @@ test-description: null
 test-header: null
 test-includes:
 - rtems.h
+- string.h
+- rtems/score/smpbarrier.h
 test-local-includes: []
 test-prepare: |
   rtems_status_code sc;
@@ -320,7 +368,42 @@ test-prepare: |
 
   sc = rtems_signal_catch( DefaultHandler, RTEMS_NO_ASR );
   T_rsc_success( sc );
-test-setup: null
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->runner_id = rtems_task_self();
+    _SMP_barrier_Control_initialize( &ctx->barrier );
+    _SMP_barrier_State_initialize( &ctx->runner_barrier_state );
+
+    if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+      rtems_status_code sc;
+      rtems_id          scheduler_id;
+
+      sc = rtems_task_create(
+        rtems_build_name( 'W', 'O', 'R', 'K' ),
+        1,
+        RTEMS_MINIMUM_STACK_SIZE,
+        RTEMS_DEFAULT_MODES,
+        RTEMS_DEFAULT_ATTRIBUTES,
+        &ctx->worker_id
+      );
+      T_assert_rsc_success( sc );
+
+      sc = rtems_scheduler_ident_by_processor( 1, &scheduler_id );
+      T_assert_rsc_success( sc );
+
+      sc = rtems_task_set_scheduler( ctx->worker_id, scheduler_id, 1 );
+      T_assert_rsc_success( sc );
+
+      sc = rtems_task_start(
+        ctx->worker_id,
+        Worker,
+        (rtems_task_argument) ctx
+      );
+      T_assert_rsc_success( sc );
+    }
+  description: null
 test-stop: null
 test-support: |
   typedef RtemsSignalReqCatch_Context Context;
@@ -332,7 +415,11 @@ test-support: |
     ctx = T_fixture_context();
     ++ctx->default_handler_calls;
 
-    T_eq_u32( signal_set, 0xdeadbeef );
+    if ( ctx->pending_signals != 0 && ctx->default_handler_calls == 1 ) {
+      T_eq_u32( signal_set, 0x600df00d );
+    } else {
+      T_eq_u32( signal_set, 0xdeadbeef );
+    }
   }
 
   static void SignalHandler( rtems_signal_set signal_set )
@@ -350,7 +437,11 @@ test-support: |
     );
     T_rsc_success( sc );
 
-    T_eq_u32( signal_set, 0xdeadbeef );
+    if ( ctx->pending_signals != 0 && ctx->handler_calls == 1 ) {
+      T_eq_u32( signal_set, 0x600df00d );
+    } else {
+      T_eq_u32( signal_set, 0xdeadbeef );
+    }
   }
 
   static void CheckHandlerMode( Context *ctx, rtems_mode mask, rtems_mode mode )
@@ -360,11 +451,36 @@ test-support: |
       T_eq_u32( ctx->handler_mode & mask, mode );
     }
   }
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context          *ctx;
+    SMP_barrier_State barrier_state;
+
+    ctx = (Context *) arg;
+    _SMP_barrier_State_initialize( &barrier_state );
+
+    while ( true ) {
+      rtems_status_code sc;
+
+      _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+
+      sc = rtems_signal_send( ctx->runner_id, 0x600df00d );
+      T_rsc_success( sc );
+
+      _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
+    }
+  }
 test-target: testsuites/validation/tc-signal-catch.c
 test-teardown:
   brief: null
   code: |
     rtems_status_code sc;
+
+    if ( ctx->worker_id != 0 ) {
+      sc = rtems_task_delete( ctx->worker_id );
+      T_rsc_success( sc );
+    }
 
     sc = rtems_signal_catch( NULL, RTEMS_DEFAULT_MODES );
     T_rsc_success( sc );
@@ -380,6 +496,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -399,6 +516,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -418,6 +536,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -437,6 +556,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -456,6 +576,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -475,6 +596,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -494,6 +616,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -513,6 +636,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -532,6 +656,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -551,6 +676,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -570,6 +696,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -589,6 +716,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -608,6 +736,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -627,6 +756,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -646,6 +776,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -665,6 +796,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Invalid
     Preempt:
@@ -684,6 +816,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -703,6 +836,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -722,6 +856,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -741,6 +876,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -760,6 +896,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -779,6 +916,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -798,6 +936,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -817,6 +956,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -836,6 +976,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -855,6 +996,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -874,6 +1016,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -893,6 +1036,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -912,6 +1056,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -931,6 +1076,7 @@ transition-map:
     ASR: 'Yes'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -950,6 +1096,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Zero
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
@@ -969,6 +1116,7 @@ transition-map:
     ASR: 'No'
     IntLvl: Positive
   pre-conditions:
+    Pending: all
     Handler:
     - Valid
     Preempt:
