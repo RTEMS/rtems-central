@@ -3,6 +3,8 @@ appl-config-option-type: integer
 constraints:
   max: ${/c/if/size_max:/name}
   min: 0
+  texts:
+  - It shall be an integral multiple of ${/rtems/task/if/storage-alignment:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: 0
