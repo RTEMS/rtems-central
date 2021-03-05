@@ -164,7 +164,7 @@ pre-conditions:
       ctx->id = &ctx->id_value;
     text: |
       The ${../if/create:/params[3]/name} parameter shall reference an object
-      identifier value.
+      of type ${../../type/if/id:/name}.
   - name: 'Null'
     test-code: |
       ctx->id = NULL;

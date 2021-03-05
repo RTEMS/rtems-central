@@ -72,7 +72,7 @@ pre-conditions:
     test-code: |
       ctx->buffer = ctx->buffer_in_use;
     text: |
-      The ${../if/return-buffer:/params[1]/name} parameter  shall reference a
+      The ${../if/return-buffer:/params[1]/name} parameter shall reference a
       buffer previously returned by ${../if/get-buffer:/name}.
   - name: BadAlign
     test-code: |

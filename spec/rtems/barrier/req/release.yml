@@ -73,7 +73,8 @@ pre-conditions:
     test-code: |
       ctx->released = &ctx->released_value;
     text: |
-      The ${../if/release:/params[1]/name} parameter shall reference an integer variable.
+      The ${../if/release:/params[1]/name} parameter shall reference an object
+      of type ${/c/if/uint32_t:/name}.
   - name: 'Null'
     test-code: |
       ctx->released = NULL;

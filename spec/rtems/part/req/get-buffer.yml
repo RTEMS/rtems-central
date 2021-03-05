@@ -42,16 +42,17 @@ post-conditions:
 pre-conditions:
 - name: Id
   states:
-  - name: Id
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      The ${../if/get-buffer:/params[0]/name} parameter shall be invalid.
+  - name: Part
     test-code: |
       ctx->id = ctx->id_value;
     text: |
-      The id parameter shall reference a partition object.
-  - name: Invalid
-    test-code: |
-      ctx->id = 0;
-    text: |
-      The id parameter shall not reference a partition object.
+      The ${../if/get-buffer:/params[0]/name} parameter shall be associated with a
+      partition.
   test-epilogue: null
   test-prologue: null
 - name: Buf
@@ -60,12 +61,14 @@ pre-conditions:
     test-code: |
       ctx->buffer = &ctx->buffer_pointer;
     text: |
-      The buffer parameter shall reference a buffer pointer variable.
+      The ${../if/get-buffer:/params[1]/name} parameter shall reference an
+      object of type ``void *``.
   - name: 'Null'
     test-code: |
       ctx->buffer = NULL;
     text: |
-      The buffer parameter shall be NULL.
+      The ${../if/get-buffer:/params[1]/name} parameter shall be
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Avail
@@ -177,7 +180,7 @@ transition-map:
     Buf:
     - Valid
     Id:
-    - Id
+    - Part
 - enabled-by: true
   post-conditions:
     Status: InvAddr
@@ -194,7 +197,7 @@ transition-map:
     Buf:
     - Valid
     Id:
-    - Invalid
+    - NoObj
 - enabled-by: true
   post-conditions:
     Status: Unsatisfied
@@ -204,5 +207,5 @@ transition-map:
     Buf:
     - Valid
     Id:
-    - Id
+    - Part
 type: requirement

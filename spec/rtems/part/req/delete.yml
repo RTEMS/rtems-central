@@ -48,16 +48,17 @@ post-conditions:
 pre-conditions:
 - name: Id
   states:
-  - name: Id
+  - name: NoObj
+    test-code: |
+      ctx->id = 0xffffffff;
+    text: |
+      The ${../if/delete:/params[0]/name} parameter shall be invalid.
+  - name: Part
     test-code: |
       ctx->id = ctx->id_value;
     text: |
-      The id parameter shall reference a partition object.
-  - name: Invalid
-    test-code: |
-      ctx->id = 0;
-    text: |
-      The id parameter shall not reference a partition object.
+      The ${../if/delete:/params[0]/name} parameter shall be associated with a
+      partition.
   test-epilogue: null
   test-prologue: null
 - name: InUse
@@ -148,7 +149,7 @@ transition-map:
     Status: Ok
   pre-conditions:
     Id:
-    - Id
+    - Part
     InUse:
     - 'No'
 - enabled-by: true
@@ -156,14 +157,14 @@ transition-map:
     Status: InvId
   pre-conditions:
     Id:
-    - Invalid
+    - NoObj
     InUse: all
 - enabled-by: true
   post-conditions:
     Status: InUse
   pre-conditions:
     Id:
-    - Id
+    - Part
     InUse:
     - 'Yes'
 type: requirement

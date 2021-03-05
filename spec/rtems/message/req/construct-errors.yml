@@ -99,12 +99,14 @@ pre-conditions:
     test-code: |
       ctx->id = &ctx->id_value;
     text: |
-      The id parameter shall reference an object identifier value.
+      The ${../if/construct:/params[1]/name} parameter shall reference an
+      object of type ${../../type/if/id:/name}.
   - name: 'Null'
     test-code: |
       ctx->id = NULL;
     text: |
-      The id parameter shall be NULL.
+      The ${../if/construct:/params[1]/name} parameter shall be
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Name
