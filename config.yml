@@ -7,6 +7,7 @@ build:
     RTEMS_QUAL = True
     RTEMS_QUAL_ONLY = True
     BUILD_TESTS = False
+    BUILD_MEMBENCH = True
     BUILD_VALIDATIONTESTS = True
   doxyfile-template: templates/Doxyfile
   enabled:
@@ -44,6 +45,7 @@ build:
   uids:
   - /build/cpukit/librtemscpu
   - /build/cpukit/librtemstest
+  - /build/testsuites/membench/grp
   - /build/testsuites/validation/grp
   workspace-directory: workspace/rtems
 spec:
