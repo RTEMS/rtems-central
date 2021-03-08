@@ -25,7 +25,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
-from typing import Any, Iterable, Iterator, List, Optional, Union
+from typing import Any, Iterable, Iterator, List, Optional, Sequence, Union
 
 from rtemsspec.content import Content, make_lines, to_camel_case
 from rtemsspec.items import Item, ItemGetValueContext, ItemMapper
@@ -47,6 +47,16 @@ def get_reference(label: str, name: Optional[str] = None) -> str:
 def get_label(name: str) -> str:
     """ Returns the label for the specified name. """
     return to_camel_case(name.strip())
+
+
+def _simple_sep(maxi: Iterable[int]) -> str:
+    return " ".join(f"{'=' * val}" for val in maxi)
+
+
+def _simple_row(row: Iterable[str], maxi: Iterable[int]) -> str:
+    line = " ".join("{0:{width}}".format(cell, width=val)
+                    for cell, val in zip(row, maxi))
+    return line.rstrip()
 
 
 class SphinxContent(Content):
@@ -167,6 +177,21 @@ class SphinxContent(Content):
     def open_comment_block(self) -> None:
         """ Opens a comment block. """
         self.push_indent(".. ", "..")
+
+    def add_simple_table(self, rows: Sequence[Iterable[str]]) -> None:
+        """ Adds a simple table. """
+        if not rows:
+            return
+        maxi = tuple(map(len, rows[0]))
+        for row in rows:
+            row_lengths = tuple(map(len, row))
+            maxi = tuple(map(max, zip(maxi, row_lengths)))
+        sep = _simple_sep(maxi)
+        lines = [sep, _simple_row(rows[0], maxi), sep]
+        lines.extend(_simple_row(row, maxi) for row in rows[1:])
+        lines.append(sep)
+        with self.directive("table", options=[":class: longtable"]):
+            self.add(lines)
 
 
 def _get_ref_term(ctx: ItemGetValueContext) -> Any:

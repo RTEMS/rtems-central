@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Unit tests for the rtemsspec.sphinxcontent module. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -267,6 +267,22 @@ def test_comment():
     assert str(content) == """.. abc
 ..
 .. def
+"""
+
+
+def test_simple_table():
+    content = SphinxContent()
+    content.add_simple_table([])
+    assert str(content) == ""
+    content.add_simple_table([["a", "b"], ["cc", "ddd"]])
+    assert str(content) == """.. table::
+    :class: longtable
+
+    == ===
+    a  b
+    == ===
+    cc ddd
+    == ===
 """
 
 
