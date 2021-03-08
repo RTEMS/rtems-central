@@ -9,6 +9,10 @@ links:
   spec-key: non-functional-type
   spec-value: performance-runtime
   uid: non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: quality
+  uid: non-functional
 spec-description: null
 spec-example: null
 spec-info:
