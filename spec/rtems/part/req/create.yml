@@ -125,12 +125,12 @@ pre-conditions:
     test-code: |
       ctx->name = NAME;
     text: |
-      The name of the partition shall be valid.
+      The ${../if/create:/params[0]/name} parameter shall be valid.
   - name: Invalid
     test-code: |
       ctx->name = 0;
     text: |
-      The name of the partition shall be invalid.
+      The ${../if/create:/params[0]/name} parameter shall be invalid.
   test-epilogue: null
   test-prologue: null
 - name: Start
@@ -139,17 +139,18 @@ pre-conditions:
     test-code: |
       ctx->starting_address = buffers;
     text: |
-      The starting address of the buffer area shall be valid.
+      The ${../if/create:/params[1]/name} parameter shall be valid.
   - name: 'Null'
     test-code: |
       ctx->starting_address = NULL;
     text: |
-      The starting address of the buffer area shall be NULL.
+      The ${../if/create:/params[1]/name} parameter shall be
+      ${/c/if/null:/name}.
   - name: BadAlign
     test-code: |
       ctx->starting_address = &buffers[ 0 ][ 1 ];
     text: |
-      The starting address of the buffer area shall be misaligned.
+      The ${../if/create:/params[1]/name} parameter shall be misaligned.
   test-epilogue: null
   test-prologue: null
 - name: Length
@@ -158,17 +159,18 @@ pre-conditions:
     test-code: |
       ctx->length = sizeof( buffers );
     text: |
-      The length of the buffer area shall be valid.
+      The ${../if/create:/params[2]/name} parameter shall be valid.
   - name: Zero
     test-code: |
       ctx->length = 0;
     text: |
-      The length of the buffer area shall be zero.
+      The ${../if/create:/params[2]/name} parameter shall be zero.
   - name: Invalid
     test-code: |
       ctx->length = sizeof( buffers[ 0 ] ) - 1;
     text: |
-      The length of the buffer area shall be less than the buffer size.
+      The ${../if/create:/params[2]/name} parameter shall be less than the
+      buffer size.
   test-epilogue: null
   test-prologue: null
 - name: Size
@@ -177,23 +179,25 @@ pre-conditions:
     test-code: |
       ctx->buffer_size = sizeof( buffers[ 0 ] );
     text: |
-      The buffer size shall be valid.
+      The ${../if/create:/params[3]/name} parameter shall be valid.
   - name: Zero
     test-code: |
       ctx->buffer_size = 0;
     text: |
-      The buffer size shall be zero.
+      The ${../if/create:/params[3]/name} parameter shall be zero.
   - name: Skew
     test-code: |
       ctx->buffer_size = 1;
     text: |
-      The buffer size shall not an integral multiple of the pointer size.
+      The ${../if/create:/params[3]/name} parameter shall not an integral
+      multiple of the pointer size.
   - name: Small
     test-code: |
       ctx->buffer_size = sizeof( uintptr_t );
     text: |
-      The buffer size shall greater than zero and an integral multiple of the
-      pointer size and less than the size of two pointers.
+      The ${../if/create:/params[3]/name} parameter shall greater than zero and
+      an integral multiple of the pointer size and less than the size of two
+      pointers.
   test-epilogue: null
   test-prologue: null
 - name: Free

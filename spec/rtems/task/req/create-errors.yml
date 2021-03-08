@@ -170,7 +170,8 @@ pre-conditions:
     test-code: |
       ctx->initial_priority = 254;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be valid.
+      The ${../if/create:/params[1]/name} parameter shall be valid and
+      non-zero.
   - name: Zero
     test-code: |
       ctx->initial_priority = 0;
@@ -204,7 +205,8 @@ pre-conditions:
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
     text: |
       The ${../if/create:/params[1]/name} parameter shall be greater than or
-      equal to the configured minimum size.
+      equal to the configured minimum size and less than or equal to the
+      maximum stack size which can be allocated by the system.
   - name: Small
     test-code: |
       ctx->stack_size = 0;

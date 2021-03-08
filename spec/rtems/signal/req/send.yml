@@ -113,7 +113,8 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/send:/params[0]/name} parameter shall be invalid.
+      The ${../if/send:/params[0]/name} parameter shall not be associated with
+      a task.
   - name: Self
     test-code: |
       ctx->id = RTEMS_SELF;

@@ -5,41 +5,46 @@ enabled-by: true
 functional-type: action
 links:
 - role: interface-function
-  uid: /rtems/task/if/ident
+  uid: ../if/ident
 post-conditions:
-- name: Post
+- name: Status
   states:
   - name: OkAndSelfId
     test-code: |
-      T_rsc(ctx->status, RTEMS_SUCCESSFUL);
-      T_eq_ptr(ctx->id, &ctx->id_value);
-      T_eq_u32(ctx->id_value, rtems_task_self());
+      T_rsc( ctx->status, RTEMS_SUCCESSFUL );
+      T_eq_ptr( ctx->id, &ctx->id_value );
+      T_eq_u32( ctx->id_value, rtems_task_self() );
     text: |
-      The status shall be RTEMS_SUCCESSFUL.  The value of the object identifier
-      referenced by the id parameter shall be the identifier of the executing
-      thread.
-  - name: Generic
+      The return status of ${../if/ident:/name} shall be
+      ${../../status/if/successful:/name}.  The value of the object identifier
+      referenced by the ${../if/ident:/params[0]/name} parameter shall be the
+      identifier of the executing thread.
+  - name: Skip
     test-code: |
       /* Checks performed by ${../../req/ident:/test-run}() */
     text: |
-      The post-condition status shall be specified by ${../../req/ident}.
+      There is no status to validate.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: Pre
+- name: Name
   states:
   - name: Self
     test-code: |
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
-      The name parameter shall be RTEMS_SELF.
-  - name: Generic
+      The ${../if/ident:/params[0]/name} parameter shall be
+      ${../if/self:/name}.
+  - name: NotSelf
     test-code: |
       ctx->id = NULL;
       /* Preparation performed by ${../../req/ident:/test-run}() */
     text: |
-      The pre-condition status shall be specified by ${../../req/ident}.
+      When the ${../if/ident:/params[0]/name} is not ${../if/self:/name} or
+      ${../if/ident:/params[2]/name} parameter is ${/c/if/null:/name}, the
+      behaviour of ${../if/ident:/name} shall be specified by
+      ${../../req/ident}.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -135,14 +140,14 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Post: OkAndSelfId
+    Status: OkAndSelfId
   pre-conditions:
-    Pre:
+    Name:
     - Self
 - enabled-by: true
   post-conditions:
-    Post: Generic
+    Status: Skip
   pre-conditions:
-    Pre:
-    - Generic
+    Name:
+    - NotSelf
 type: requirement

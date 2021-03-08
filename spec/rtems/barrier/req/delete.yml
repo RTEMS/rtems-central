@@ -24,7 +24,7 @@ post-conditions:
       ${../../status/if/invalid-id:/name}.
   test-epilogue: null
   test-prologue: null
-- name: Id
+- name: Name
   states:
   - name: Valid
     test-code: |
@@ -62,17 +62,18 @@ post-conditions:
 pre-conditions:
 - name: Id
   states:
-  - name: Valid
+  - name: NoObj
+    test-code: |
+      ctx->id = 0;
+    text: |
+      The ${../if/delete:/params[0]/name} parameter shall not be associated
+      with a barrier.
+  - name: Barrier
     test-code: |
       ctx->id = ctx->barrier_id;
     text: |
       The ${../if/delete:/params[0]/name} parameter shall be associated with
-      the barrier.
-  - name: Invalid
-    test-code: |
-      ctx->id = 0;
-    text: |
-      The ${../if/delete:/params[0]/name} parameter shall be invalid.
+      a barrier.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -88,6 +89,11 @@ test-cleanup: |
 
     sc = rtems_barrier_delete( ctx->barrier_id );
     T_rsc_success( sc );
+
+    ++ctx->wait_expected;
+    T_eq_u32( ctx->wait_done, ctx->wait_expected );
+
+    ctx->barrier_id = 0;
   }
 test-context:
 - brief: null
@@ -223,17 +229,17 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Id: Invalid
+    Name: Invalid
     Flush: 'Yes'
   pre-conditions:
     Id:
-    - Valid
+    - Barrier
 - enabled-by: true
   post-conditions:
     Status: InvId
-    Id: Valid
+    Name: Valid
     Flush: 'No'
   pre-conditions:
     Id:
-    - Invalid
+    - NoObj
 type: requirement

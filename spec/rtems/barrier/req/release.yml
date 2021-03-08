@@ -46,13 +46,14 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: Barrier
+- name: Id
   states:
   - name: NoObj
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall be invalid.
+      The ${../if/release:/params[0]/name} parameter shall not be associated
+      with a barrier.
   - name: Manual
     test-code: |
       ctx->id = ctx->manual_release_id;
@@ -276,7 +277,7 @@ transition-map:
     Status: InvAddr
     Released: Unchanged
   pre-conditions:
-    Barrier: all
+    Id: all
     Released:
     - 'Null'
     Waiting: N/A
@@ -285,7 +286,7 @@ transition-map:
     Status: InvId
     Released: Unchanged
   pre-conditions:
-    Barrier:
+    Id:
     - NoObj
     Released:
     - Valid
@@ -295,7 +296,7 @@ transition-map:
     Status: Ok
     Released: Valid
   pre-conditions:
-    Barrier:
+    Id:
     - Manual
     - Auto
     Released:

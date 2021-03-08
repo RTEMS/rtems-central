@@ -191,7 +191,8 @@ pre-conditions:
     test-code: |
       ctx->config.initial_priority = 254;
     text: |
-      The initial priority of the task configuration shall be valid.
+      The initial priority of the task configuration shall be valid and
+      non-zero.
   - name: Zero
     test-code: |
       ctx->config.initial_priority = 0;

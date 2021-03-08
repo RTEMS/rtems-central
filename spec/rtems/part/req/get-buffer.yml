@@ -14,29 +14,45 @@ post-conditions:
       T_rsc_success( ctx->status );
       T_eq_ptr( ctx->buffer_pointer, buffers );
     text: |
-      The status shall be RTEMS_SUCCESSFUL.  The buffer pointer variable shall
-      reference a buffer in the buffer area used to create the partition.
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/successful:/name}.
   - name: InvId
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ID );
       T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
     text: |
-      The status shall be RTEMS_INVALID_ID.  If the buffer parameter is not
-      NULL, then the value of the buffer pointer referenced by the buffer
-      parameter shall be unchanged.
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/invalid-id:/name}.
   - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
     text: |
-      The status shall be RTEMS_INVALID_ADDRESS.
-  - name: Unsatisfied
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/invalid-address:/name}.
+  - name: Unsat
     test-code: |
       T_rsc( ctx->status, RTEMS_UNSATISFIED );
       T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
     text: |
-      The status shall be RTEMS_UNSATISFIED.  If the buffer parameter is not
-      NULL, then the value of the buffer pointer referenced by the buffer
-      parameter shall be unchanged.
+      The return status of ${../if/get-buffer:/name} shall be
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: BufValue
+  states:
+  - name: Assigned
+    test-code: |
+      T_eq_ptr( ctx->buffer, &ctx->buffer_pointer );
+      T_eq_ptr( ctx->buffer_pointer, buffers );
+    text: |
+      The value of the buffer pointer variable shall be equal to the begin
+      address of the buffer returned by the ${../if/get-buffer:/name} call.
+  - name: Unchanged
+    test-code: |
+      T_eq_ptr( ctx->buffer_pointer, (void *) (uintptr_t) 1 );
+    text: |
+      The value of the buffer pointer variable shall be unchanged by the
+      ${../if/get-buffer:/name} call.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -174,6 +190,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
+    BufValue: Assigned
   pre-conditions:
     Avail:
     - 'Yes'
@@ -184,6 +201,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvAddr
+    BufValue: Unchanged
   pre-conditions:
     Avail: all
     Buf:
@@ -192,6 +210,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvId
+    BufValue: Unchanged
   pre-conditions:
     Avail: all
     Buf:
@@ -200,7 +219,8 @@ transition-map:
     - NoObj
 - enabled-by: true
   post-conditions:
-    Status: Unsatisfied
+    Status: Unsat
+    BufValue: Unchanged
   pre-conditions:
     Avail:
     - 'No'
