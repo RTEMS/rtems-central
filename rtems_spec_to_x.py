@@ -25,10 +25,9 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import logging
 import os
 import string
-import subprocess
-from typing import List
 
 import rtemsspec.applconfig
 import rtemsspec.build
@@ -37,21 +36,6 @@ import rtemsspec.glossary
 import rtemsspec.interface
 import rtemsspec.util
 import rtemsspec.validation
-
-
-def _run_command(args: List[str], cwd: str) -> int:
-    task = subprocess.Popen(args,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT,
-                            cwd=cwd)
-    assert task.stdout is not None
-    while True:
-        line = task.stdout.readline()
-        if line:
-            print(line.decode("utf-8").strip())
-        elif task.poll() is not None:
-            break
-    return task.wait()
 
 
 def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
@@ -63,11 +47,11 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
         content = string.Template(config["config-ini"]).substitute(config)
         config_ini.write(content)
     specs = os.path.relpath(os.path.join(source_dir, "spec"), workspace_dir)
-    _run_command([
+    rtemsspec.util.run_command([
         "./waf", "configure", "--rtems-specs", specs, "--rtems-top-group",
         "/build/grp"
     ], workspace_dir)
-    _run_command(["./waf"], workspace_dir)
+    rtemsspec.util.run_command(["./waf"], workspace_dir)
 
 
 def _run_pre_qualified_doxygen(config: dict) -> None:
@@ -84,11 +68,12 @@ def _run_pre_qualified_doxygen(config: dict) -> None:
         content = Template(doxyfile_template.read()).substitute(doxyfile_vars)
         with open(os.path.join(workspace_dir, "Doxyfile"), "w") as doxyfile:
             doxyfile.write(content)
-    _run_command(["doxygen"], workspace_dir)
+    rtemsspec.util.run_command(["doxygen"], workspace_dir)
 
 
 def main() -> None:
     """ Generates glossaries of terms according to the configuration. """
+    logging.basicConfig(level="DEBUG")
     config = rtemsspec.util.load_config("config.yml")
     item_cache = ItemCache(config["spec"])
     rtemsspec.glossary.generate(config["glossary"], item_cache)

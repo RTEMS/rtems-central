@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Unit tests for the rtemsspec.util module. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -25,8 +25,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
+import logging
 
-from rtemsspec.util import copy_files, load_config
+from rtemsspec.util import copy_files, load_config, run_command
+from rtemsspec.tests.util import get_and_clear_log
 
 
 def test_copy_files(tmpdir):
@@ -43,3 +45,17 @@ def test_load_config():
     config = load_config(filename)
     assert config["a"] == "b"
     assert config["c"] == "d"
+
+
+def test_run(caplog):
+    caplog.set_level(logging.DEBUG)
+    status = run_command(["echo", "A"])
+    assert status == 0
+    assert get_and_clear_log(caplog) == """INFO run in '.': 'echo' 'A'
+DEBUG A"""
+    stdout = []
+    status = run_command(["echo", "A"], stdout=stdout)
+    assert status == 0
+    assert stdout[0].strip() == "A"
+    status = run_command(["sleep", "0.1"])
+    assert status == 0

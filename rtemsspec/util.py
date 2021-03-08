@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides utility functions. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -24,9 +24,11 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import logging
 import os
 import shutil
-from typing import Any, List
+import subprocess
+from typing import Any, List, Optional
 import yaml
 
 
@@ -63,3 +65,34 @@ def load_config(config_filename: str) -> Any:
     IncludeLoader.add_constructor("!include", IncludeLoader.include)
     with open(config_filename, "r") as config_file:
         return yaml.load(config_file.read(), Loader=IncludeLoader)
+
+
+def run_command(args: List[str],
+                cwd: str = ".",
+                stdout: Optional[List[str]] = None,
+                env=None) -> int:
+    """
+    Runs the command in a subprocess in the working directory and environment.
+
+    Optionally, the standard output of the subprocess is returned.  Returns the
+    exit status of the subprocess.
+    """
+    logging.info("run in '%s': %s", cwd, " ".join(f"'{arg}'" for arg in args))
+    task = subprocess.Popen(args,
+                            stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT,
+                            cwd=cwd,
+                            env=env)
+    assert task.stdout is not None
+    while True:
+        raw_line = task.stdout.readline()
+        if raw_line:
+            line = raw_line.decode("utf-8").rstrip()
+            if stdout is None:
+                logging.debug("%s", line)
+            else:
+                stdout.append(line)
+        elif task.poll() is not None:
+            break
+    return task.wait()
