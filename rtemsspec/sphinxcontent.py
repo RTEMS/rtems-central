@@ -209,6 +209,10 @@ def _get_appl_config_option(ctx: ItemGetValueContext) -> Any:
     return f":ref:`{ctx.value[ctx.key]}`"
 
 
+def _get_value_sphinx_data(ctx: ItemGetValueContext) -> Any:
+    return f":c:data:`{ctx.value[ctx.key]}`"
+
+
 def _get_value_sphinx_macro(ctx: ItemGetValueContext) -> Any:
     return f":c:macro:`{ctx.value[ctx.key]}`"
 
@@ -244,13 +248,13 @@ class SphinxMapper(ItemMapper):
         self.add_get_value("glossary/term:/term", _get_ref_term)
         self.add_get_value("glossary/term:/plural", _get_ref_term_plural)
         self.add_get_value("interface/appl-config-option/feature-enable:/name",
-                           _get_appl_config_option)
+                           _get_value_sphinx_data)
         self.add_get_value("interface/appl-config-option/feature:/name",
-                           _get_appl_config_option)
+                           _get_value_sphinx_data)
         self.add_get_value("interface/appl-config-option/initializer:/name",
-                           _get_appl_config_option)
+                           _get_value_sphinx_data)
         self.add_get_value("interface/appl-config-option/integer:/name",
-                           _get_appl_config_option)
+                           _get_value_sphinx_data)
         self.add_get_value("interface/define:/name", _get_value_sphinx_macro)
         self.add_get_value("interface/enum:/name", _get_value_sphinx_type)
         self.add_get_value("interface/enumerator:/name",
@@ -267,3 +271,17 @@ class SphinxMapper(ItemMapper):
                            _get_value_sphinx_function)
         self.add_get_value("interface/unspecified-type:/name",
                            _get_value_sphinx_unspecified_type)
+
+
+class SphinxInterfaceMapper(SphinxMapper):
+    """ Sphinx item mapper for the interface documentation. """
+    def __init__(self, item: Item, recursive: bool = False):
+        super().__init__(item, recursive)
+        self.add_get_value("interface/appl-config-option/feature-enable:/name",
+                           _get_appl_config_option)
+        self.add_get_value("interface/appl-config-option/feature:/name",
+                           _get_appl_config_option)
+        self.add_get_value("interface/appl-config-option/initializer:/name",
+                           _get_appl_config_option)
+        self.add_get_value("interface/appl-config-option/integer:/name",
+                           _get_appl_config_option)

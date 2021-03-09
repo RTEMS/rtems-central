@@ -29,7 +29,7 @@ from typing import Any, Dict, List, Optional
 
 from rtemsspec.content import CContent, get_value_double_colon, \
     get_value_doxygen_function, get_value_doxygen_group, get_value_hash
-from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
+from rtemsspec.sphinxcontent import SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
     ItemMapper
 
@@ -471,7 +471,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the application
                        configuration groups and options.
     """
-    sphinx_mapper = SphinxMapper(EmptyItem())
+    sphinx_mapper = SphinxInterfaceMapper(EmptyItem())
     _add_sphinx_get_values(sphinx_mapper)
     doxygen_mapper = ItemMapper(EmptyItem())
     _add_doxygen_get_values(doxygen_mapper)

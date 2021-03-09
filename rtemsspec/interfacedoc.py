@@ -32,7 +32,7 @@ from typing import Any, Dict, List, Tuple
 
 from rtemsspec.content import CContent
 from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
-     SphinxMapper
+     SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -68,7 +68,7 @@ def _get_param(ctx: ItemGetValueContext) -> Any:
     return f"``{_sanitize_name(ctx.value[ctx.key])}``"
 
 
-class _Mapper(SphinxMapper):
+class _Mapper(SphinxInterfaceMapper):
     def __init__(self, item: Item, group_uids: List[str]):
         super().__init__(item)
         self._group_uids = set(group_uids)

@@ -28,7 +28,7 @@ import glob
 import re
 from typing import Any, Dict, NamedTuple
 
-from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
+from rtemsspec.sphinxcontent import SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -59,7 +59,7 @@ def _generate_glossary_content(terms: ItemMap, header: str,
         content.add(":sorted:")
         for item in sorted(terms.values(), key=lambda x: x["term"].lower()):
             content.register_license_and_copyrights_of_item(item)
-            text = SphinxMapper(item).substitute(item["text"])
+            text = SphinxInterfaceMapper(item).substitute(item["text"])
             content.add_definition_item(item["term"], text)
     content.add_licence_and_copyrights()
     content.write(target)
