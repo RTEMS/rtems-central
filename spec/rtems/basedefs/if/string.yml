@@ -24,6 +24,7 @@ params:
   name: ...
 return:
   return: |
-    Returns the stringification of the arguments.
+    Returns the stringification of the arguments.  In case of several arguments
+    a single string is returned not several.
   return-values: []
 type: interface

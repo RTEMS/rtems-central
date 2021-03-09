@@ -125,6 +125,50 @@ test-actions:
       uid: ../req/aligned-0
   links: []
 - action-brief: |
+    Use the ${../if/alignof:/name} macro.
+  action-code: |
+    size_t alignof_char = RTEMS_ALIGNOF( char );
+    size_t alignof_long = RTEMS_ALIGNOF( long );
+    size_t alignof_long_array = RTEMS_ALIGNOF( long[3] );
+    size_t alignof_not_eval_array = RTEMS_ALIGNOF( long[7 / 0] );
+  checks:
+  - brief: |
+      Check that the ${../if/alignof:/name} macro results in the alignment
+      of the type.
+    code: |
+      T_step_eq_sz( ${step}, alignof_char, 1 );
+      T_step_eq_sz( ${step}, alignof_long, alignof_long_array );
+    links:
+    - role: validation
+      uid: ../req/alignof-0
+  - brief: |
+      If the ${../if/alignof:/name} macro would evaluate its argument,
+      it could not figure out how much menory to reserve for it.
+    code: |
+      T_step_eq_sz( ${step}, alignof_long, alignof_not_eval_array );
+    links:
+    - role: validation
+      uid: ../req/alignof-1
+  - brief: |
+      If the ${../if/alignof:/name} macro would evaluate the size expression,
+      the division by zero would cause an error.
+    code: |
+      T_step_eq_sz( ${step}, alignof_long, alignof_not_eval_array );
+    links:
+    - role: validation
+      uid: ../req/alignof-2
+  - brief: |
+      Ensure the constant value of the ${../if/alignof:/name} macro is
+      of type size_t.
+    code: |
+      T_step_true( ${step},
+        __builtin_types_compatible_p( __typeof__( RTEMS_ALIGNOF( char ) ),
+        size_t ) );
+    links:
+    - role: validation
+      uid: ../req/alignof-3
+  links: []
+- action-brief: |
     Use a function declared with the ${../if/alloc-align:/name} macro.
   action-code: |
     void *free_ptr;
@@ -907,17 +951,24 @@ test-actions:
   links: []
 - action-brief: |
     Use the ${../if/string:/name} macro.
-  action-code: "const char *string_var;\nconst char *string_empty_var;\n/* strange\
-    \ spacing and tabs belong to the test */\nstring_var = RTEMS_STRING( \\\\ STRING_PREFIX\
-    \ \t\tcat\"\"\\n   );\nstring_empty_var = RTEMS_STRING();\n"
+  action-code: |
+    const char *string_var;
+    const char *string_empty_var;
+    const char *string_multi_args_var;
+    /* strange spacing and tabs belong to the test */
+    string_var = RTEMS_STRING( \\ STRING_PREFIX 		cat""\n   );
+    string_empty_var = RTEMS_STRING();
+    string_multi_args_var = RTEMS_STRING( STRING_PREFIX, "abc", DEF );
   checks:
   - brief: |
       Check that the ${../if/string:/name} macro
-      converts its argument into a string without applying
-      pre-processor substitutions on its argument.
+      converts its arguments into a single string without applying
+      pre-processor substitutions on its arguments.
     code: |
       T_step_eq_str( ${step}, string_var, "\\ STRING_PREFIX cat\"\"\n" );
       T_step_eq_str( ${step}, string_empty_var, "" );
+      T_step_eq_str( ${step}, string_multi_args_var,
+        "STRING_PREFIX, \"abc\", DEF" );
     links:
     - role: validation
       uid: ../req/string-0
@@ -1278,17 +1329,24 @@ test-actions:
   links: []
 - action-brief: |
     Use the ${../if/xstring:/name} macro.
-  action-code: "const char *xstring_var;\nconst char *xstring_empty_var;\n/* strange\
-    \ spacing and tabs belong to the test */\nxstring_var = RTEMS_XSTRING( \\\\ STRING_PREFIX\
-    \ \t\tcat\"\"\\n   );\nxstring_empty_var = RTEMS_XSTRING();\n"
+  action-code: |
+    const char *xstring_var;
+    const char *xstring_empty_var;
+    const char *string_multi_args_var;
+    /* strange spacing and tabs belong to the test */
+    xstring_var = RTEMS_XSTRING( \\ STRING_PREFIX 		cat""\n   );
+    xstring_empty_var = RTEMS_XSTRING();
+    string_multi_args_var = RTEMS_XSTRING( STRING_PREFIX, abc, "abc", DEF );
   checks:
   - brief: |
       Check that the ${../if/xstring:/name} macro applies
-      pre-processor substitutions on its argument and
-      converts its argument into a string.
+      pre-processor substitutions on its arguments and
+      converts its arguments into a single string.
     code: |
       T_step_eq_str( ${step}, xstring_var, "\\ str cat\"\"\n" );
       T_step_eq_str( ${step}, xstring_empty_var, "" );
+      T_step_eq_str( ${step}, string_multi_args_var,
+        "str, ABC, \"abc\", DEF" );
     links:
     - role: validation
       uid: ../req/xstring-0
