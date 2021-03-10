@@ -56,6 +56,7 @@ _SECTION_MAP = {
     ".eh_frame": ".rodata",
     ".fini": ".text",
     ".fini_array": ".rodata",
+    ".gnu.attributes": None,
     ".init": ".text",
     ".init_array": ".rodata",
     ".nocachenoload": None,
