@@ -79,11 +79,13 @@ class SphinxContent(Content):
     def add_header_with_label(self,
                               name: str,
                               level: int = 2,
-                              label_prefix: Optional[str] = None) -> str:
+                              label_prefix: Optional[str] = None,
+                              label: Optional[str] = None) -> str:
         """ Adds a header with label. """
-        if label_prefix is None:
-            label_prefix = self.section_label_prefix
-        label = label_prefix + get_label(name)
+        if label is None:
+            if label_prefix is None:
+                label_prefix = self.section_label_prefix
+            label = label_prefix + get_label(name)
         self.add_label(label)
         self.add_header(name, level)
         return label
@@ -144,10 +146,11 @@ class SphinxContent(Content):
 
     def open_section(self,
                      name: str,
-                     label_prefix: Optional[str] = None) -> str:
+                     label_prefix: Optional[str] = None,
+                     label: Optional[str] = None) -> str:
         """ Opens a section. """
         label = self.add_header_with_label(name, self._section_level,
-                                           label_prefix)
+                                           label_prefix, label)
         self._section_level += 1
         return label
 
@@ -158,9 +161,10 @@ class SphinxContent(Content):
     @contextmanager
     def section(self,
                 name: str,
-                label_prefix: Optional[str] = None) -> Iterator[str]:
+                label_prefix: Optional[str] = None,
+                label: Optional[str] = None) -> Iterator[str]:
         """ Opens a section context. """
-        yield self.open_section(name, label_prefix)
+        yield self.open_section(name, label_prefix, label)
         self.close_section()
 
     def add_licence_and_copyrights(self) -> None:
