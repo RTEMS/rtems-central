@@ -74,21 +74,23 @@ post-conditions:
   test-prologue: |
     rtems_status_code sc;
     rtems_id          id;
-- name: IdValue
+- name: IdVar
   states:
-  - name: Assigned
+  - name: Set
     test-code: |
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be equal to the object
-      identifier of the message queue constructed by the
+      The value of the object referenced by the
+      ${../if/construct:/params[1]/name} parameter shall be set to the object
+      identifier of the constructed message queue after the return of the
       ${../if/construct:/name} call.
-  - name: Unchanged
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be unchanged by the
+      Objects referenced by the ${../if/construct:/params[1]/name} parameter in
+      past calls to ${../if/construct:/name} shall not be accessed by the
       ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
@@ -325,7 +327,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Name: Valid
-    IdValue: Assigned
+    IdVar: Set
   pre-conditions:
     Area:
     - Valid
@@ -345,7 +347,7 @@ transition-map:
   post-conditions:
     Status: InvName
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -359,7 +361,7 @@ transition-map:
   post-conditions:
     Status: InvAddr
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -374,7 +376,7 @@ transition-map:
   post-conditions:
     Status: InvNum
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -390,7 +392,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -408,7 +410,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -428,7 +430,7 @@ transition-map:
   post-conditions:
     Status: InvNum
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -446,7 +448,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
@@ -465,7 +467,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area:
     - 'Null'
@@ -484,7 +486,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Area:
     - Valid

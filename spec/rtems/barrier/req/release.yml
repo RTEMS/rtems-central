@@ -29,20 +29,22 @@ post-conditions:
       ${../../status/if/invalid-address:/name}.
   test-epilogue: null
   test-prologue: null
-- name: Released
+- name: ReleasedVar
   states:
-  - name: Valid
+  - name: Set
     test-code: |
       T_eq_u32( ctx->released_value, ctx->waiting_tasks );
     text: |
-      The value of the variable for the number of released tasks shall equal
-      the number of tasks released by the ${../if/release:/name} call.
-  - name: Unchanged
+      The value of the object referenced by the
+      ${../if/release:/params[1]/name} parameter shall be set to the number of
+      released tasks after the return of the ${../if/release:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->released_value, RELEASED_INVALID_VALUE );
     text: |
-      The value of variable for the number of released tasks shall be unchanged
-      by the ${../if/release:/name} call.
+      Objects referenced by the ${../if/release:/params[1]/name} parameter in
+      past calls to ${../if/release:/name} shall not be accessed by the
+      ${../if/release:/name} call.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -275,7 +277,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    Released: Unchanged
+    ReleasedVar: Nop
   pre-conditions:
     Id: all
     Released:
@@ -284,7 +286,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvId
-    Released: Unchanged
+    ReleasedVar: Nop
   pre-conditions:
     Id:
     - NoObj
@@ -294,7 +296,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Released: Valid
+    ReleasedVar: Set
   pre-conditions:
     Id:
     - Manual

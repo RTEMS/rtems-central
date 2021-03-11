@@ -89,20 +89,22 @@ post-conditions:
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
-- name: IdValue
+- name: IdVar
   states:
-  - name: Assigned
+  - name: Set
     test-code: |
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be equal to the object
-      identifier of the barrier created by the ${../if/create:/name} call.
-  - name: Unchanged
+      The value of the object referenced by the ${../if/create:/params[3]/name}
+      parameter shall be set to the object identifier of the created barrier
+      after the return of the ${../if/create:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be unchanged by the
+      Objects referenced by the ${../if/create:/params[3]/name} parameter in
+      past calls to ${../if/create:/name} shall not be accessed by the
       ${../if/create:/name} call.
   test-epilogue: null
   test-prologue: null
@@ -339,7 +341,7 @@ transition-map:
     Status: InvName
     Name: Invalid
     Class: NoObj
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Name:
     - Invalid
@@ -352,7 +354,7 @@ transition-map:
     Status: InvAddr
     Name: Invalid
     Class: NoObj
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Name:
     - Valid
@@ -366,7 +368,7 @@ transition-map:
     Status: Ok
     Name: Valid
     Class: Manual
-    IdValue: Assigned
+    IdVar: Set
   pre-conditions:
     Name:
     - Valid
@@ -383,7 +385,7 @@ transition-map:
     Status: InvNum
     Name: Invalid
     Class: NoObj
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Name:
     - Valid
@@ -399,7 +401,7 @@ transition-map:
     Status: Ok
     Name: Valid
     Class: Auto
-    IdValue: Assigned
+    IdVar: Set
   pre-conditions:
     Name:
     - Valid
@@ -416,7 +418,7 @@ transition-map:
     Status: TooMany
     Name: Invalid
     Class: NoObj
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Name:
     - Valid
@@ -433,7 +435,7 @@ transition-map:
     Status: TooMany
     Name: Invalid
     Class: NoObj
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Name:
     - Valid

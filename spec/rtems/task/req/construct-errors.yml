@@ -74,20 +74,23 @@ post-conditions:
   test-prologue: |
     rtems_status_code sc;
     rtems_id          id;
-- name: IdValue
+- name: IdVar
   states:
-  - name: Assigned
+  - name: Set
     test-code: |
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be equal to the object
-      identifier of the task constructed by the ${../if/construct:/name} call.
-  - name: Unchanged
+      The value of the object referenced by the
+      ${../if/construct:/params[1]/name} parameter shall be set to the object
+      identifier of the constructed task after the return of the
+      ${../if/construct:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be unchanged by the
+      Objects referenced by the ${../if/construct:/params[1]/name} parameter in
+      past calls to ${../if/construct:/name} shall not be accessed by the
       ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
@@ -456,7 +459,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Name: Valid
-    IdValue: Assigned
+    IdVar: Set
     CreateExt: 'Yes'
     DelExt: 'No'
     StoFree: 'No'
@@ -480,7 +483,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Name: Valid
-    IdValue: Assigned
+    IdVar: Set
     CreateExt: 'Yes'
     DelExt: 'No'
     StoFree: 'No'
@@ -505,7 +508,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -529,7 +532,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -553,7 +556,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -577,7 +580,7 @@ transition-map:
   post-conditions:
     Status: InvName
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -595,7 +598,7 @@ transition-map:
   post-conditions:
     Status: InvAddr
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -614,7 +617,7 @@ transition-map:
   post-conditions:
     Status: InvPrio
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -635,7 +638,7 @@ transition-map:
   post-conditions:
     Status: InvPrio
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -657,7 +660,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -678,7 +681,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -700,7 +703,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -722,7 +725,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
     StoFree: 'No'
@@ -745,7 +748,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'Yes'
     DelExt: 'Yes'
     StoFree: 'Yes'
@@ -769,7 +772,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'Yes'
     DelExt: 'Yes'
     StoFree: 'Yes'

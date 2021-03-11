@@ -68,20 +68,22 @@ post-conditions:
   test-prologue: |
     rtems_status_code sc;
     rtems_id          id;
-- name: IdValue
+- name: IdVar
   states:
-  - name: Assigned
+  - name: Set
     test-code: |
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be equal to the object
-      identifier of the task created by the ${../if/create:/name} call.
-  - name: Unchanged
+      The value of the object referenced by the ${../if/create:/params[5]/name}
+      parameter shall be set to the object identifier of the created task after
+      the return of the ${../if/create:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be unchanged by the
+      Objects referenced by the ${../if/create:/params[5]/name} parameter in
+      past calls to ${../if/create:/name} shall not be accessed by the
       ${../if/create:/name} call.
   test-epilogue: null
   test-prologue: null
@@ -404,7 +406,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Name: Valid
-    IdValue: Assigned
+    IdVar: Set
     CreateExt: 'Yes'
     DelExt: 'No'
   pre-conditions:
@@ -426,7 +428,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Name: Valid
-    IdValue: Assigned
+    IdVar: Set
     CreateExt: 'Yes'
     DelExt: 'No'
   pre-conditions:
@@ -449,7 +451,7 @@ transition-map:
   post-conditions:
     Status: InvName
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -465,7 +467,7 @@ transition-map:
   post-conditions:
     Status: InvAddr
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -482,7 +484,7 @@ transition-map:
   post-conditions:
     Status: InvPrio
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -500,7 +502,7 @@ transition-map:
   post-conditions:
     Status: InvPrio
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -519,7 +521,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -538,7 +540,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -558,7 +560,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -578,7 +580,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'No'
     DelExt: 'No'
   pre-conditions:
@@ -599,7 +601,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'Yes'
     DelExt: 'Yes'
   pre-conditions:
@@ -621,7 +623,7 @@ transition-map:
   post-conditions:
     Status: Unsat
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
     CreateExt: 'Yes'
     DelExt: 'Yes'
   pre-conditions:

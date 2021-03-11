@@ -62,9 +62,9 @@ post-conditions:
   test-prologue: |
     rtems_status_code sc;
     rtems_id          id;
-- name: IdValue
+- name: IdVar
   states:
-  - name: Assigned
+  - name: Set
     test-code: |
       T_eq_ptr( ctx->id, &ctx->id_value );
       T_ne_u32( ctx->id_value, INVALID_ID );
@@ -88,13 +88,15 @@ post-conditions:
       sc = rtems_partition_delete( ctx->id_value );
       T_rsc_success( sc );
     text: |
-      The value of the object identifier variable shall be equal to the object
-      identifier of the partition created by the ${../if/create:/name} call.
-  - name: Unchanged
+      The value of the object referenced by the ${../if/create:/params[5]/name}
+      parameter shall be set to the object identifier of the created partition
+      after the return of the ${../if/create:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->id_value, INVALID_ID );
     text: |
-      The value of the object identifier variable shall be unchanged by the
+      Objects referenced by the ${../if/create:/params[5]/name} parameter in
+      past calls to ${../if/create:/name} shall not be accessed by the
       ${../if/create:/name} call.
   test-epilogue: null
   test-prologue: |
@@ -334,7 +336,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Name: Valid
-    IdValue: Assigned
+    IdVar: Set
   pre-conditions:
     Id:
     - Id
@@ -352,7 +354,7 @@ transition-map:
   post-conditions:
     Status: InvName
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id: all
     Length: all
@@ -365,7 +367,7 @@ transition-map:
   post-conditions:
     Status: InvAddress
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id:
     - 'Null'
@@ -379,7 +381,7 @@ transition-map:
   post-conditions:
     Status: InvAddress
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id:
     - Id
@@ -394,7 +396,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id:
     - Id
@@ -412,7 +414,7 @@ transition-map:
   post-conditions:
     Status: InvSize
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id:
     - Id
@@ -432,7 +434,7 @@ transition-map:
   post-conditions:
     Status: InvAddress
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id:
     - Id
@@ -449,7 +451,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    IdValue: Unchanged
+    IdVar: Nop
   pre-conditions:
     Id:
     - Id
