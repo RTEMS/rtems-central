@@ -26,7 +26,7 @@ post-conditions:
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );
       T_eq_u32( GetPendingEvents( ctx ), 0 );
     text: |
-      The receiver task shall have no pending events.
+      The receiver task shall not have pending events.
   - name: Pending
     test-code: |
       T_eq_int( ctx->receive_condition_state, RECEIVE_COND_UNKNOWN );

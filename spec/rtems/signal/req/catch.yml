@@ -170,14 +170,16 @@ pre-conditions:
     test-code: |
       ctx->pending_signals = ( rtems_scheduler_get_processor_maximum() > 1 ) ? 1 : 0;
     text: |
-      Where the system has more than one processor, when ${../if/catch:/name}
-      is called, the calling task shall have pending signals.
+      Where the system has more than one processor, while the calling task has
+      pending signals, the ${../if/catch:/name} directive shall be called.
+      Where the system has exactly one processor, while the calling task has no
+      pending signals, the ${../if/catch:/name} directive shall be called.
   - name: 'No'
     test-code: |
       ctx->pending_signals = 0;
     text: |
-      When ${../if/catch:/name} is called, the calling task shall have no
-      pending signals.
+      While the calling task has no pending signals, the ${../if/catch:/name}
+      directive shall be called.
   test-epilogue: null
   test-prologue: null
 - name: Handler

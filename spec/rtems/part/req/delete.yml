@@ -52,7 +52,8 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall be invalid.
+      The ${../if/delete:/params[0]/name} parameter shall not be associated
+      with a partition.
   - name: Part
     test-code: |
       ctx->id = ctx->id_value;
@@ -75,7 +76,7 @@ pre-conditions:
     test-code: |
       ctx->buffer = NULL;
     text: |
-      The partition shall have no buffer in use.
+      The partition shall not have a buffer in use.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;

@@ -197,7 +197,7 @@ pre-conditions:
     test-code: |
       ctx->seized_objects = T_seize_objects( Create, ctx );
     text: |
-      The system shall have no inactive task object available.
+      The system shall not have an inactive task object available.
   test-epilogue: null
   test-prologue: null
 - name: Stack

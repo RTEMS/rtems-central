@@ -214,7 +214,7 @@ pre-conditions:
       i = 0;
       ctx->seized_objects = T_seize_objects( Create, &i );
     text: |
-      The system shall have no inactive partition object available.
+      The system shall not have an inactive partition object available.
   test-epilogue: null
   test-prologue: |
     size_t i;

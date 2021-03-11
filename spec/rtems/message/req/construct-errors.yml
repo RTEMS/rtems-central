@@ -195,7 +195,7 @@ pre-conditions:
       i = 0;
       ctx->seized_objects = T_seize_objects( Create, &i );
     text: |
-      The system shall have no inactive message queue object available.
+      The system shall not have an inactive message queue object available.
   test-epilogue: null
   test-prologue: |
     size_t i;

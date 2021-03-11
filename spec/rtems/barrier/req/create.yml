@@ -186,7 +186,7 @@ pre-conditions:
     test-code: |
       ctx->seized_objects = T_seize_objects( Create, NULL );
     text: |
-      The system shall have no inactive partition object available.
+      The system shall not have an inactive barrier object available.
   test-epilogue: null
   test-prologue: null
 rationale: null

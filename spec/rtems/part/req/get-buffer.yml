@@ -101,7 +101,7 @@ pre-conditions:
       sc = rtems_partition_get_buffer( ctx->id_value, &ctx->stolen_buffer );
       T_rsc_success( sc );
     text: |
-      The partition shall have no buffer available.
+      The partition shall not have a buffer available.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
