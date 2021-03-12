@@ -64,12 +64,13 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/get-buffer:/params[0]/name} parameter shall be invalid.
+      While the ${../if/get-buffer:/params[0]/name} parameter is not associated
+      with a partition.
   - name: Part
     test-code: |
       ctx->id = ctx->id_value;
     text: |
-      The ${../if/get-buffer:/params[0]/name} parameter shall be associated with a
+      While the ${../if/get-buffer:/params[0]/name} parameter is associated with a
       partition.
   test-epilogue: null
   test-prologue: null
@@ -79,13 +80,13 @@ pre-conditions:
     test-code: |
       ctx->buffer = &ctx->buffer_pointer;
     text: |
-      The ${../if/get-buffer:/params[1]/name} parameter shall reference an
+      While the ${../if/get-buffer:/params[1]/name} parameter references an
       object of type ``void *``.
   - name: 'Null'
     test-code: |
       ctx->buffer = NULL;
     text: |
-      The ${../if/get-buffer:/params[1]/name} parameter shall be
+      While the ${../if/get-buffer:/params[1]/name} parameter is
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
@@ -95,13 +96,13 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The partition shall have at least one free buffer available.
+      While the partition has at least one free buffer available.
   - name: 'No'
     test-code: |
       sc = rtems_partition_get_buffer( ctx->id_value, &ctx->stolen_buffer );
       T_rsc_success( sc );
     text: |
-      The partition shall not have a buffer available.
+      While the partition does not have a buffer available.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;

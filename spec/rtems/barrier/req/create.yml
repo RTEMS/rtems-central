@@ -64,11 +64,6 @@ post-conditions:
     rtems_id          id;
 - name: Class
   states:
-  - name: NoObj
-    test-code: |
-      /* Not applicable */
-    text: |
-      The barrier class is not applicable since there was no barrier created.
   - name: Manual
     test-code: |
       sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
@@ -77,7 +72,8 @@ post-conditions:
       ++ctx->release_expected;
       T_eq_u32( ctx->release_done, ctx->release_expected );
     text: |
-      The class of the barrier shall be manual release.
+      The class of the barrier created by the ${../if/create:/name} call shall
+      be manual release.
   - name: Auto
     test-code: |
       sc = rtems_barrier_wait( ctx->id_value, RTEMS_NO_TIMEOUT );
@@ -85,7 +81,8 @@ post-conditions:
 
       T_eq_u32( ctx->release_done, ctx->release_expected );
     text: |
-      The class of the barrier shall be automatic release.
+      The class of the barrier created by the ${../if/create:/name} call shall
+      be automatic release.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
@@ -115,12 +112,28 @@ pre-conditions:
     test-code: |
       ctx->name = NAME;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be valid.
+      While the ${../if/create:/params[0]/name} parameter is valid.
   - name: Invalid
     test-code: |
       ctx->name = 0;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be invalid.
+      While the ${../if/create:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/create:/params[3]/name} parameter references an object
+      of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/create:/params[3]/name} parameter is
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Class
@@ -129,19 +142,19 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The ${../if/create:/params[1]/name} parameter shall specify the default
+      While the ${../if/create:/params[1]/name} parameter specifies the default
       class.
   - name: Manual
     test-code: |
       ctx->attribute_set |= RTEMS_BARRIER_MANUAL_RELEASE;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall specify the manual
+      While the ${../if/create:/params[1]/name} parameter specifies the manual
       release class.
   - name: Auto
     test-code: |
       ctx->attribute_set |= RTEMS_BARRIER_AUTOMATIC_RELEASE;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall specify the
+      While the ${../if/create:/params[1]/name} parameter specifies the
       automatic release class.
   test-epilogue: null
   test-prologue: null
@@ -151,28 +164,12 @@ pre-conditions:
     test-code: |
       ctx->maximum_waiters = 0;
     text: |
-      The ${../if/create:/params[2]/name} parameter shall be zero.
+      While the ${../if/create:/params[2]/name} parameter is zero.
   - name: Positive
     test-code: |
       ctx->maximum_waiters = 1;
     text: |
-      The ${../if/create:/params[2]/name} parameter shall be positive.
-  test-epilogue: null
-  test-prologue: null
-- name: Id
-  states:
-  - name: Valid
-    test-code: |
-      ctx->id = &ctx->id_value;
-    text: |
-      The ${../if/create:/params[3]/name} parameter shall reference an object
-      of type ${../../type/if/id:/name}.
-  - name: 'Null'
-    test-code: |
-      ctx->id = NULL;
-    text: |
-      The ${../if/create:/params[3]/name} parameter shall be
-      ${/c/if/null:/name}.
+      While the ${../if/create:/params[2]/name} parameter is positive.
   test-epilogue: null
   test-prologue: null
 - name: Free
@@ -181,12 +178,12 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The system shall have at least one inactive barrier object available.
+      While the system has at least one inactive barrier object available.
   - name: 'No'
     test-code: |
       ctx->seized_objects = T_seize_objects( Create, NULL );
     text: |
-      The system shall not have an inactive barrier object available.
+      While the system has no inactive barrier object available.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -340,7 +337,7 @@ transition-map:
   post-conditions:
     Status: InvName
     Name: Invalid
-    Class: NoObj
+    Class: N/A
     IdVar: Nop
   pre-conditions:
     Name:
@@ -353,7 +350,7 @@ transition-map:
   post-conditions:
     Status: InvAddr
     Name: Invalid
-    Class: NoObj
+    Class: N/A
     IdVar: Nop
   pre-conditions:
     Name:
@@ -384,7 +381,7 @@ transition-map:
   post-conditions:
     Status: InvNum
     Name: Invalid
-    Class: NoObj
+    Class: N/A
     IdVar: Nop
   pre-conditions:
     Name:
@@ -417,7 +414,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    Class: NoObj
+    Class: N/A
     IdVar: Nop
   pre-conditions:
     Name:
@@ -434,7 +431,7 @@ transition-map:
   post-conditions:
     Status: TooMany
     Name: Invalid
-    Class: NoObj
+    Class: N/A
     IdVar: Nop
   pre-conditions:
     Name:

@@ -52,13 +52,13 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall not be associated
+      While the ${../if/delete:/params[0]/name} parameter is not associated
       with a partition.
   - name: Part
     test-code: |
       ctx->id = ctx->id_value;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall be associated with a
+      While the ${../if/delete:/params[0]/name} parameter is associated with a
       partition.
   test-epilogue: null
   test-prologue: null
@@ -71,12 +71,12 @@ pre-conditions:
       T_rsc_success( sc );
       T_not_null( ctx->buffer );
     text: |
-      The partition shall have at least one buffer in use.
+      While the partition has at least one buffer in use.
   - name: 'No'
     test-code: |
       ctx->buffer = NULL;
     text: |
-      The partition shall not have a buffer in use.
+      While the partition does not have a buffer in use.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;

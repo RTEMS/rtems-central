@@ -57,12 +57,12 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/return-buffer:/params[0]/name} parameter shall be invalid.
+      While the ${../if/return-buffer:/params[0]/name} parameter is invalid.
   - name: Part
     test-code: |
       ctx->id = ctx->id_value;
     text: |
-      The ${../if/return-buffer:/params[0]/name} parameter shall be associated
+      While the ${../if/return-buffer:/params[0]/name} parameter is associated
       with a partition.
   test-epilogue: null
   test-prologue: null
@@ -72,20 +72,20 @@ pre-conditions:
     test-code: |
       ctx->buffer = ctx->buffer_in_use;
     text: |
-      The ${../if/return-buffer:/params[1]/name} parameter shall reference a
+      While the ${../if/return-buffer:/params[1]/name} parameter references a
       buffer previously returned by ${../if/get-buffer:/name}.
   - name: BadAlign
     test-code: |
       ctx->buffer = (void *) ( (uintptr_t) ctx->buffer_in_use + 1 );
     text: |
-      The ${../if/return-buffer:/params[1]/name} parameter shall be an address
+      While the ${../if/return-buffer:/params[1]/name} parameter is an address
       inside the buffer area of the partition and not on a valid buffer
       boundary.
   - name: OutOfArea
     test-code: |
       ctx->buffer = (void *) (uintptr_t) 1;
     text: |
-      The ${../if/return-buffer:/params[1]/name} parameter shall be an address
+      While the ${../if/return-buffer:/params[1]/name} parameter is an address
       outside the buffer area of the partition.
   test-epilogue: null
   test-prologue: null

@@ -54,19 +54,19 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall not be associated
+      While the ${../if/release:/params[0]/name} parameter is not associated
       with a barrier.
   - name: Manual
     test-code: |
       ctx->id = ctx->manual_release_id;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall be associated with a
+      While the ${../if/release:/params[0]/name} parameter is associated with a
       manual release barrier.
   - name: Auto
     test-code: |
       ctx->id = ctx->auto_release_id;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall be associated with an
+      While the ${../if/release:/params[0]/name} parameter is associated with an
       automatic release barrier.
   test-epilogue: null
   test-prologue: null
@@ -76,13 +76,13 @@ pre-conditions:
     test-code: |
       ctx->released = &ctx->released_value;
     text: |
-      The ${../if/release:/params[1]/name} parameter shall reference an object
+      While the ${../if/release:/params[1]/name} parameter references an object
       of type ${/c/if/uint32_t:/name}.
   - name: 'Null'
     test-code: |
       ctx->released = NULL;
     text: |
-      The ${../if/release:/params[1]/name} parameter shall be
+      While the ${../if/release:/params[1]/name} parameter is
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: |
@@ -93,13 +93,13 @@ pre-conditions:
     test-code: |
       ctx->waiting_tasks = 0;
     text: |
-      The number of tasks waiting at the barrier shall be zero.
+      While the number of tasks waiting at the barrier is zero.
   - name: Positive
     test-code: |
       ctx->waiting_tasks = 1;
       SendEvents( ctx->worker_id, EVENT_WAIT );
     text: |
-      The number of tasks waiting at the barrier shall be positive.
+      While the number of tasks waiting at the barrier is positive.
   test-epilogue: null
   test-prologue: null
 rationale: null

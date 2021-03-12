@@ -66,13 +66,13 @@ pre-conditions:
     test-code: |
       ctx->id = 0;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall not be associated
+      While the ${../if/delete:/params[0]/name} parameter is not associated
       with a barrier.
   - name: Barrier
     test-code: |
       ctx->id = ctx->barrier_id;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall be associated with
+      While the ${../if/delete:/params[0]/name} parameter is associated with
       a barrier.
   test-epilogue: null
   test-prologue: null

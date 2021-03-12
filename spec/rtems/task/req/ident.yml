@@ -34,14 +34,14 @@ pre-conditions:
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
-      The ${../if/ident:/params[0]/name} parameter shall be
+      While the ${../if/ident:/params[0]/name} parameter is
       ${../if/self:/name}.
   - name: NotSelf
     test-code: |
       ctx->id = NULL;
       /* Preparation performed by ${../../req/ident:/test-run}() */
     text: |
-      When the ${../if/ident:/params[0]/name} is not ${../if/self:/name} or
+      While the ${../if/ident:/params[0]/name} is not ${../if/self:/name} or
       ${../if/ident:/params[2]/name} parameter is ${/c/if/null:/name}, the
       behaviour of ${../if/ident:/name} shall be specified by
       ${../../req/ident}.

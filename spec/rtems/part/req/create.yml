@@ -15,7 +15,7 @@ post-conditions:
     text: |
       The return status of ${../if/create:/name} shall be
       ${../../status/if/successful:/name}.
-  - name: InvAddress
+  - name: InvAddr
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ADDRESS );
     text: |
@@ -105,34 +105,34 @@ post-conditions:
     void             *buffers[ BUFFER_COUNT ];
     void             *no_buffer;
 pre-conditions:
-- name: Id
-  states:
-  - name: Id
-    test-code: |
-      ctx->id = &ctx->id_value;
-    text: |
-      The ${../if/create:/params[5]/name} parameter shall reference an object
-      of type ${../../type/if/id:/name}.
-  - name: 'Null'
-    test-code: |
-      ctx->id = NULL;
-    text: |
-      The ${../if/create:/params[5]/name} parameter shall be
-      ${/c/if/null:/name}.
-  test-epilogue: null
-  test-prologue: null
 - name: Name
   states:
   - name: Valid
     test-code: |
       ctx->name = NAME;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be valid.
+      While the ${../if/create:/params[0]/name} parameter is valid.
   - name: Invalid
     test-code: |
       ctx->name = 0;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be invalid.
+      While the ${../if/create:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/create:/params[5]/name} parameter references an object
+      of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/create:/params[5]/name} parameter is
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Start
@@ -141,18 +141,18 @@ pre-conditions:
     test-code: |
       ctx->starting_address = buffers;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be valid.
+      While the ${../if/create:/params[1]/name} parameter is valid.
   - name: 'Null'
     test-code: |
       ctx->starting_address = NULL;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be
+      While the ${../if/create:/params[1]/name} parameter is
       ${/c/if/null:/name}.
   - name: BadAlign
     test-code: |
       ctx->starting_address = &buffers[ 0 ][ 1 ];
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be misaligned.
+      While the ${../if/create:/params[1]/name} parameter is misaligned.
   test-epilogue: null
   test-prologue: null
 - name: Length
@@ -161,17 +161,17 @@ pre-conditions:
     test-code: |
       ctx->length = sizeof( buffers );
     text: |
-      The ${../if/create:/params[2]/name} parameter shall be valid.
+      While the ${../if/create:/params[2]/name} parameter is valid.
   - name: Zero
     test-code: |
       ctx->length = 0;
     text: |
-      The ${../if/create:/params[2]/name} parameter shall be zero.
+      While the ${../if/create:/params[2]/name} parameter is zero.
   - name: Invalid
     test-code: |
       ctx->length = sizeof( buffers[ 0 ] ) - 1;
     text: |
-      The ${../if/create:/params[2]/name} parameter shall be less than the
+      While the ${../if/create:/params[2]/name} parameter is less than the
       buffer size.
   test-epilogue: null
   test-prologue: null
@@ -181,12 +181,12 @@ pre-conditions:
     test-code: |
       ctx->buffer_size = sizeof( buffers[ 0 ] );
     text: |
-      The ${../if/create:/params[3]/name} parameter shall be valid.
+      While the ${../if/create:/params[3]/name} parameter is valid.
   - name: Zero
     test-code: |
       ctx->buffer_size = 0;
     text: |
-      The ${../if/create:/params[3]/name} parameter shall be zero.
+      While the ${../if/create:/params[3]/name} parameter is zero.
   - name: Skew
     test-code: |
       ctx->buffer_size = 1;
@@ -208,13 +208,13 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The system shall have at least one inactive partition object available.
+      While the system has at least one inactive partition object available.
   - name: 'No'
     test-code: |
       i = 0;
       ctx->seized_objects = T_seize_objects( Create, &i );
     text: |
-      The system shall not have an inactive partition object available.
+      While the system has no inactive partition object available.
   test-epilogue: null
   test-prologue: |
     size_t i;
@@ -339,7 +339,7 @@ transition-map:
     IdVar: Set
   pre-conditions:
     Id:
-    - Id
+    - Valid
     Length:
     - Valid
     Name:
@@ -365,7 +365,7 @@ transition-map:
     Start: all
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvAddr
     Name: Invalid
     IdVar: Nop
   pre-conditions:
@@ -379,12 +379,12 @@ transition-map:
     Start: all
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvAddr
     Name: Invalid
     IdVar: Nop
   pre-conditions:
     Id:
-    - Id
+    - Valid
     Length: all
     Name:
     - Valid
@@ -399,7 +399,7 @@ transition-map:
     IdVar: Nop
   pre-conditions:
     Id:
-    - Id
+    - Valid
     Length:
     - Zero
     - Invalid
@@ -417,7 +417,7 @@ transition-map:
     IdVar: Nop
   pre-conditions:
     Id:
-    - Id
+    - Valid
     Length:
     - Valid
     Name:
@@ -432,12 +432,12 @@ transition-map:
     - BadAlign
 - enabled-by: true
   post-conditions:
-    Status: InvAddress
+    Status: InvAddr
     Name: Invalid
     IdVar: Nop
   pre-conditions:
     Id:
-    - Id
+    - Valid
     Length:
     - Valid
     Name:
@@ -454,7 +454,7 @@ transition-map:
     IdVar: Nop
   pre-conditions:
     Id:
-    - Id
+    - Valid
     Length:
     - Valid
     Name:

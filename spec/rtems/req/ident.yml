@@ -11,22 +11,22 @@ post-conditions:
     test-code: |
       T_rsc(ctx->status, RTEMS_SUCCESSFUL);
     text: |
-      The status shall be RTEMS_SUCCESSFUL.
+      The return status shall be ${../status/if/successful:/name}.
   - name: InvAddr
     test-code: |
       T_rsc(ctx->status, RTEMS_INVALID_ADDRESS);
     text: |
-      The status shall be RTEMS_INVALID_ADDRESS.
+      The return status shall be ${../status/if/invalid-address:/name}.
   - name: InvName
     test-code: |
       T_rsc(ctx->status, RTEMS_INVALID_NAME);
     text: |
-      The status shall be RTEMS_INVALID_NAME.
+      The return status shall be ${../status/if/invalid-name:/name}.
   - name: InvNode
     test-code: |
       T_rsc(ctx->status, RTEMS_INVALID_NODE);
     text: |
-      The status shall be RTEMS_INVALID_NODE.
+      The return status shall be ${../status/if/invalid-node:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Id
@@ -38,11 +38,11 @@ post-conditions:
     text: |
       The value of the object identifier referenced by the id parameter shall
       be the value before the action.
-  - name: NullPtr
+  - name: 'Null'
     test-code: |
       T_null(ctx->id)
     text: |
-      The id parameter shall be NULL.
+      While the id is NULL.
   - name: LocalObj
     test-code: |
       T_eq_ptr(ctx->id, &ctx->id_value);
@@ -76,14 +76,14 @@ pre-conditions:
     test-code: |
       ctx->name = 1;
     text: |
-      The name parameter shall not equal to a name of an active Classic API
-      object of the specified class.
+      While the ``name`` parameter is not associated with an active object of
+      the specified class .
   - name: Valid
     test-code: |
       ctx->name = ClassicObjectIdentName;
     text: |
-      The name parameter shall equal to a name of an active Classic API object
-      of the specified class.
+      While the ``name`` parameter is associated with an active object of the
+      specified class .
   test-epilogue: null
   test-prologue: null
 - name: Node
@@ -92,47 +92,48 @@ pre-conditions:
     test-code: |
       ctx->node = 1;
     text: |
-      The node parameter shall be the local node number.
+      While the ``node`` parameter is the local node number.
   - name: Remote
     test-code: |
       ctx->node = 2;
     text: |
-      The node parameter shall be a remote node number.
+      While the ``node`` parameter is a remote node number.
   - name: Invalid
     test-code: |
       ctx->node = 256;
     text: |
-      The node parameter shall be an invalid node number.
+      While the ``node`` parameter is an invalid node number.
   - name: SearchAll
     test-code: |
       ctx->node = RTEMS_SEARCH_ALL_NODES;
     text: |
-      The node parameter shall be RTEMS_SEARCH_ALL_NODES.
+      While the ``node`` parameter is RTEMS_SEARCH_ALL_NODES.
   - name: SearchOther
     test-code: |
       ctx->node = RTEMS_SEARCH_OTHER_NODES;
     text: |
-      The node parameter shall be RTEMS_SEARCH_OTHER_NODES.
+      While the ``node`` parameter is RTEMS_SEARCH_OTHER_NODES.
   - name: SearchLocal
     test-code: |
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
     text: |
-      The node parameter shall be RTEMS_SEARCH_LOCAL_NODE.
+      While the ``node`` parameter is RTEMS_SEARCH_LOCAL_NODE.
   test-epilogue: null
   test-prologue: null
 - name: Id
   states:
-  - name: NullPtr
-    test-code: |
-      ctx->id = NULL;
-    text: |
-      The id parameter shall be NULL.
   - name: Valid
     test-code: |
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
-      The id parameter shall point to an object identifier.
+      While the ``id`` parameter references an object of type
+      ${../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ``id`` parameter is ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -235,11 +236,11 @@ transition-map:
     Node: all
 - enabled-by: true
   post-conditions:
-    Id: NullPtr
+    Id: 'Null'
     Status: InvAddr
   pre-conditions:
     Id:
-    - NullPtr
+    - 'Null'
     Name: all
     Node: all
 - enabled-by: RTEMS_MULTIPROCESSING

@@ -143,34 +143,34 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: Id
-  states:
-  - name: Valid
-    test-code: |
-      ctx->id = &ctx->id_value;
-    text: |
-      The ${../if/construct:/params[1]/name} parameter shall reference an
-      object of type ${../../type/if/id:/name}.
-  - name: 'Null'
-    test-code: |
-      ctx->id = NULL;
-    text: |
-      The ${../if/construct:/params[1]/name} parameter shall be
-      ${/c/if/null:/name}.
-  test-epilogue: null
-  test-prologue: null
 - name: Name
   states:
   - name: Valid
     test-code: |
       ctx->config.name = NAME;
     text: |
-      The name of the task configuration shall be valid.
+      While the name of the task configuration is valid.
   - name: Inv
     test-code: |
       ctx->config.name = 0;
     text: |
-      The name of the task configuration shall be invalid.
+      While the name of the task configuration is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/construct:/params[1]/name} parameter references an
+      object of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/construct:/params[1]/name} parameter is
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: SysTsk
@@ -179,12 +179,12 @@ pre-conditions:
     test-code: |
       ctx->config.attributes |= RTEMS_SYSTEM_TASK;
     text: |
-      The attributes of the task configuration shall specify a system task.
+      While the attributes of the task configuration specifies a system task.
   - name: 'No'
     test-code: |
       /* Nothing to do */
     text: |
-      The attributes of the task configuration shall specify an application
+      While the attributes of the task configuration specifies an application
       task.
   test-epilogue: null
   test-prologue: null
@@ -194,18 +194,18 @@ pre-conditions:
     test-code: |
       ctx->config.initial_priority = 254;
     text: |
-      The initial priority of the task configuration shall be valid and
+      While the initial priority of the task configuration is valid and
       non-zero.
   - name: Zero
     test-code: |
       ctx->config.initial_priority = 0;
     text: |
-      The initial priority of the task configuration shall be zero.
+      While the initial priority of the task configuration is zero.
   - name: Inv
     test-code: |
       ctx->config.initial_priority = 0xffffffff;
     text: |
-      The initial priority of the task configuration shall be invalid.
+      While the initial priority of the task configuration is invalid.
   test-epilogue: null
   test-prologue: null
 - name: Free
@@ -214,12 +214,12 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The system shall have at least one inactive task object available.
+      While the system has at least one inactive task object available.
   - name: 'No'
     test-code: |
       ctx->seized_objects = T_seize_objects( Create, ctx );
     text: |
-      The system shall not have an inactive task object available.
+      While the system has no inactive task object available.
   test-epilogue: null
   test-prologue: null
 - name: TLS
@@ -228,13 +228,13 @@ pre-conditions:
     test-code: |
       ctx->config.maximum_thread_local_storage_size = MAX_TLS_SIZE;
     text: |
-      The maximum thread-local storage size of the task configuration shall be
+      While the maximum thread-local storage size of the task configuration is
       greater than or equal to the thread-local storage size.
   - name: Small
     test-code: |
       ctx->config.maximum_thread_local_storage_size = 0;
     text: |
-      The maximum thread-local storage size of the task configuration shall be
+      While the maximum thread-local storage size of the task configuration is
       less than the thread-local storage size.
   test-epilogue: null
   test-prologue: null
@@ -244,13 +244,13 @@ pre-conditions:
     test-code: |
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
     text: |
-      The task stack size of the task configuration shall be greater than or
+      While the task stack size of the task configuration is greater than or
       equal to the configured minimum size.
   - name: Small
     test-code: |
       ctx->stack_size = 0;
     text: |
-      The task stack size of the task configuration shall be less than the
+      While the task stack size of the task configuration is less than the
       configured minimum size.
   test-epilogue: null
   test-prologue: null
@@ -260,12 +260,12 @@ pre-conditions:
     test-code: |
       ctx->create_extension_status = true;
     text: |
-      None of the task create extensions shall fail.
+      While none of the task create extensions fails.
   - name: Err
     test-code: |
       ctx->create_extension_status = false;
     text: |
-      At least one of the task create extensions shall fail.
+      While at least one of the task create extensions fails.
   test-epilogue: null
   test-prologue: null
 rationale: null

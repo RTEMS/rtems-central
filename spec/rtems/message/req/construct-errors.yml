@@ -95,34 +95,34 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: Id
-  states:
-  - name: Id
-    test-code: |
-      ctx->id = &ctx->id_value;
-    text: |
-      The ${../if/construct:/params[1]/name} parameter shall reference an
-      object of type ${../../type/if/id:/name}.
-  - name: 'Null'
-    test-code: |
-      ctx->id = NULL;
-    text: |
-      The ${../if/construct:/params[1]/name} parameter shall be
-      ${/c/if/null:/name}.
-  test-epilogue: null
-  test-prologue: null
 - name: Name
   states:
   - name: Valid
     test-code: |
       ctx->config.name = NAME;
     text: |
-      The name of the message queue configuration shall be valid.
+      While the name of the message queue configuration is valid.
   - name: Invalid
     test-code: |
       ctx->config.name = 0;
     text: |
-      The name of the message queue configuration shall be invalid.
+      While the name of the message queue configuration is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Id
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/construct:/params[1]/name} parameter references an
+      object of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/construct:/params[1]/name} parameter is
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: MaxPending
@@ -131,21 +131,21 @@ pre-conditions:
     test-code: |
       ctx->config.maximum_pending_messages = MAX_PENDING_MESSAGES;
     text: |
-      The maximum number of pending messages of the message queue configuration
-      shall be valid.
+      While the maximum number of pending messages of the message queue
+      configuration is valid.
   - name: Zero
     test-code: |
       ctx->config.maximum_pending_messages = 0;
     text: |
-      The maximum number of pending messages of the message queue configuration
-      shall be zero.
+      While the maximum number of pending messages of the message queue
+      configuration is zero.
   - name: Big
     test-code: |
       ctx->config.maximum_pending_messages = UINT32_MAX;
     text: |
-      The maximum number of pending messages of the message queue configuration
-      shall be big enough so that a calculation to get the message buffer
-      storage area size overflows.
+      While the maximum number of pending messages of the message queue
+      configuration is big enough so that a calculation to get the message
+      buffer storage area size overflows.
   test-epilogue: null
   test-prologue: null
 - name: MaxSize
@@ -165,21 +165,21 @@ pre-conditions:
         ctx->config.maximum_message_size = MAX_MESSAGE_SIZE;
       }
     text: |
-      The maximum message size of the message queue configuration shall be
+      While the maximum message size of the message queue configuration is
       valid.
   - name: Zero
     test-code: |
       ctx->config.maximum_message_size = 0;
     text: |
-      The maximum message size of the message queue configuration shall be
+      While the maximum message size of the message queue configuration is
       zero.
   - name: Big
     test-code: |
       ctx->config.maximum_message_size = SIZE_MAX;
     text: |
-      The maximum message size of the message queue configuration
-      shall be big enough so that a calculation to get the message buffer
-      storage area size overflows.
+      While the maximum message size of the message queue configuration is big
+      enough so that a calculation to get the message buffer storage area size
+      overflows.
   test-epilogue: null
   test-prologue: null
 - name: Free
@@ -188,14 +188,14 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The system shall have at least one inactive message queue object
+      While the system has at least one inactive message queue object
       available.
   - name: 'No'
     test-code: |
       i = 0;
       ctx->seized_objects = T_seize_objects( Create, &i );
     text: |
-      The system shall not have an inactive message queue object available.
+      While the system has no inactive message queue object available.
   test-epilogue: null
   test-prologue: |
     size_t i;
@@ -205,14 +205,14 @@ pre-conditions:
     test-code: |
       ctx->config.storage_area = buffers;
     text: |
-      The message buffer storage area begin pointer of the message queue
-      configuration shall be valid.
+      While the message buffer storage area begin pointer of the message queue
+      configuration is valid.
   - name: 'Null'
     test-code: |
       ctx->config.storage_area = NULL;
     text: |
-      The message buffer storage area begin pointer of the message queue
-      configuration shall be NULL.
+      While the message buffer storage area begin pointer of the message queue
+      configuration is ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: AreaSize
@@ -221,14 +221,14 @@ pre-conditions:
     test-code: |
       ctx->config.storage_size = sizeof( buffers );
     text: |
-      The message buffer storage area size of the message queue configuration
-      shall be valid.
+      While the message buffer storage area size of the message queue
+      configuration is valid.
   - name: Invalid
     test-code: |
       ctx->config.storage_size = SIZE_MAX;
     text: |
-      The message buffer storage area size of the message queue configuration
-      shall be invalid.
+      While the message buffer storage area size of the message queue
+      configuration is invalid.
   test-epilogue: null
   test-prologue: null
 rationale: null

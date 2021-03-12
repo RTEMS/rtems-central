@@ -113,19 +113,19 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/send:/params[0]/name} parameter shall not be associated with
+      While the ${../if/send:/params[0]/name} parameter is not associated with
       a task.
   - name: Self
     test-code: |
       ctx->id = RTEMS_SELF;
     text: |
-      The ${../if/send:/params[0]/name} parameter shall be associated with
+      While the ${../if/send:/params[0]/name} parameter is associated with
       the calling task.
   - name: Other
     test-code: |
       ctx->id = ctx->worker_id;
     text: |
-      The ${../if/send:/params[0]/name} parameter shall be associated with a
+      While the ${../if/send:/params[0]/name} parameter is associated with a
       task other than the calling task.
   test-epilogue: null
   test-prologue: null
@@ -135,12 +135,12 @@ pre-conditions:
     test-code: |
       ctx->signal_set = 0;
     text: |
-      The ${../if/send:/params[1]/name} parameter shall be zero.
+      While the ${../if/send:/params[1]/name} parameter is zero.
   - name: NonZero
     test-code: |
       ctx->signal_set = 0xdeadbeef;
     text: |
-      The ${../if/send:/params[1]/name} parameter shall be non-zero.
+      While the ${../if/send:/params[1]/name} parameter is non-zero.
   test-epilogue: null
   test-prologue: null
 - name: Handler
@@ -149,14 +149,12 @@ pre-conditions:
     test-code: |
       ctx->handler = NULL;
     text: |
-      When the target task has no valid ASR handler installed, the
-      ${../if/send:/name} directive shall be called.
+      While the target task has no valid ASR handler installed.
   - name: Valid
     test-code: |
       ctx->handler = SignalHandler;
     text: |
-      When the target task has a valid ASR handler installed, the
-      ${../if/send:/name} directive shall be called.
+      While the target task has a valid ASR handler installed.
   test-epilogue: null
   test-prologue: null
 - name: ASR
@@ -165,14 +163,12 @@ pre-conditions:
     test-code: |
       ctx->mode = RTEMS_DEFAULT_MODES;
     text: |
-      When the target task has ASR processing enabled, the ${../if/send:/name}
-      directive shall be called.
+      While the target task has ASR processing enabled.
   - name: Disabled
     test-code: |
       ctx->mode = RTEMS_NO_ASR;
     text: |
-      When the target task has ASR processing disabled, the ${../if/send:/name}
-      directive shall be called.
+      While the target task has ASR processing disabled.
   test-epilogue: null
   test-prologue: null
 - name: Nested
@@ -181,14 +177,12 @@ pre-conditions:
     test-code: |
       ctx->nested = 1;
     text: |
-      When the target task processes an asynchronous signal set, the
-      ${../if/send:/name} directive shall be called.
+      While the target task processes an asynchronous signal.
   - name: 'No'
     test-code: |
       ctx->nested = 0;
     text: |
-      When the target task does not process an asynchronous signal set, the
-      ${../if/send:/name} directive shall be called.
+      While the target task does not process an asynchronous signal.
   test-epilogue: null
   test-prologue: null
 rationale: null

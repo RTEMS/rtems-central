@@ -82,12 +82,28 @@ pre-conditions:
     test-code: |
       ctx->name = NAME;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be valid.
+      While the ${../if/create:/params[0]/name} parameter is valid.
   - name: Invalid
     test-code: |
       ctx->name = 0;
     text: |
-      The ${../if/create:/params[0]/name} parameter shall be invalid.
+      While the ${../if/create:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      ctx->id = &ctx->id_value;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter references an object
+      of type ${../../type/if/id:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->id = NULL;
+    text: |
+      While the ${../if/create:/params[2]/name} parameter is
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Table
@@ -97,44 +113,27 @@ pre-conditions:
       ctx->table = &ctx->table_variable;
       ctx->table_variable.thread_switch = ThreadSwitch;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall reference an object
-      of type ${../if/table:/name}.  All extensions except the thread switch
-      extension of the referenced object shall be set to ${/c/if/null:/name} or
-      the address of a corresponding extension.  The thread switch extension of
-      the referenced object shall be set to the address of a thread switch
-      extension.
+      While the ${../if/create:/params[1]/name} parameter references an object
+      of type ${../if/table:/name}, while all extensions except the thread
+      switch extension of the referenced object are set to ${/c/if/null:/name}
+      or the address of a corresponding extension, while the thread switch
+      extension of the referenced object is set to the address of a thread
+      switch extension.
   - name: NoTdSw
     test-code: |
       ctx->table = &ctx->table_variable;
       ctx->table_variable.thread_switch = NULL;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall reference an object
-      of type ${../../type/if/id:/name}.  All extensions except the thread
-      switch extension of the referenced object shall be set to
-      ${/c/if/null:/name} or the address of a corresponding extension.  The
-      thread switch extension of the referenced object shall be set to
-      ${/c/if/null:/name}.
+      While the ${../if/create:/params[1]/name} parameter references an object
+      of type ${../../type/if/id:/name}, while all extensions except the thread
+      switch extension of the referenced object are set to ${/c/if/null:/name}
+      or the address of a corresponding extension, while the thread switch
+      extension of the referenced object is set to ${/c/if/null:/name}.
   - name: 'Null'
     test-code: |
       ctx->table = NULL;
     text: |
-      The ${../if/create:/params[1]/name} parameter shall be
-      ${/c/if/null:/name}.
-  test-epilogue: null
-  test-prologue: null
-- name: Id
-  states:
-  - name: Valid
-    test-code: |
-      ctx->id = &ctx->id_value;
-    text: |
-      The ${../if/create:/params[2]/name} parameter shall reference an object
-      of type ${../../type/if/id:/name}.
-  - name: 'Null'
-    test-code: |
-      ctx->id = NULL;
-    text: |
-      The ${../if/create:/params[2]/name} parameter shall be
+      While the ${../if/create:/params[1]/name} parameter is
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
@@ -144,13 +143,13 @@ pre-conditions:
     test-code: |
       /* Nothing to do */
     text: |
-      The system shall have at least one inactive extension set object
+      While the system has at least one inactive extension set object
       available.
   - name: 'No'
     test-code: |
       ctx->seized_objects = T_seize_objects( Create, NULL );
     text: |
-      The system shall not have an inactive extension set object available.
+      While the system has no inactive extension set object available.
   test-epilogue: null
   test-prologue: null
 rationale: null

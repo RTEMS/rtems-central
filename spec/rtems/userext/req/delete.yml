@@ -51,21 +51,21 @@ pre-conditions:
     test-code: |
       /* Already set by prologue */
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall not be associated
+      While the ${../if/delete:/params[0]/name} parameter is not associated
       with an extension set.
   - name: ExtTdSw
     test-code: |
       valid_id = true;
       ctx->table.thread_switch = ThreadSwitch;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall be associated with
+      While the ${../if/delete:/params[0]/name} parameter is associated with
       an extension set with a thread switch extension.
   - name: ExtNoTdSw
     test-code: |
       valid_id = true;
       ctx->table.thread_switch = NULL;
     text: |
-      The ${../if/delete:/params[0]/name} parameter shall be associated with
+      While the ${../if/delete:/params[0]/name} parameter is associated with
       an extension set without a thread switch extension.
   test-epilogue: |
     sc = rtems_extension_create(

@@ -47,19 +47,19 @@ pre-conditions:
     test-code: |
       ctx->id = 0xffffffff;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall not be associated
+      While the ${../if/release:/params[0]/name} parameter is not associated
       with a barrier.
   - name: Manual
     test-code: |
       ctx->id = ctx->manual_release_id;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall be associated with a
+      While the ${../if/release:/params[0]/name} parameter is associated with a
       manual release barrier.
   - name: Auto
     test-code: |
       ctx->id = ctx->auto_release_id;
     text: |
-      The ${../if/release:/params[0]/name} parameter shall be associated with an
+      While the ${../if/release:/params[0]/name} parameter is associated with an
       automatic release barrier.
   test-epilogue: null
   test-prologue: null
@@ -69,13 +69,13 @@ pre-conditions:
     test-code: |
       ctx->timeout = 2;
     text: |
-      The ${../if/release:/params[1]/name} parameter shall be a clock tick
+      While the ${../if/release:/params[1]/name} parameter is a clock tick
       interval.
   - name: Forever
     test-code: |
       ctx->timeout = RTEMS_NO_TIMEOUT;
     text: |
-      The ${../if/release:/params[1]/name} parameter shall be
+      While the ${../if/release:/params[1]/name} parameter is
       ${../../type/if/no-timeout:/name}.
   test-epilogue: null
   test-prologue: null
@@ -87,24 +87,24 @@ pre-conditions:
         SendEvents( ctx->low_worker_id, EVENT_CHECK_TIMER | EVENT_RELEASE );
       }
     text: |
-      While the calling task waits at the barrier, the barrier shall not be
+      While the calling task waits at the barrier, while the barrier is not
       released or deleted.
   - name: Wait
     test-code: |
       SendEvents( ctx->high_worker_id, EVENT_WAIT );
     text: |
-      Calling the directive shall release the barrier.
+      While calling the directive releases the barrier.
   - name: Release
     test-code: |
       SendEvents( ctx->low_worker_id, EVENT_RELEASE );
     text: |
-      While the calling task waits at the barrier, the barrier shall be
+      While the calling task waits at the barrier, while the barrier is
       released.
   - name: Delete
     test-code: |
       SendEvents( ctx->low_worker_id, EVENT_DELETE );
     text: |
-      While the calling task waits at the barrier, the barrier shall be
+      While the calling task waits at the barrier, while the barrier is
       deleted.
   test-epilogue: null
   test-prologue: null

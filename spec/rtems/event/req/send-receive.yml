@@ -122,14 +122,14 @@ pre-conditions:
       ctx->receiver_id = 0xffffffff;
       ctx->sender_type = SENDER_SELF;
     text: |
-      The id parameter of the send directive shall be an invalid task object
-      identifier.
+      While the id parameter of the send directive is not associated with a
+      task.
   - name: Task
     test-code: |
       ctx->receiver_id = ctx->runner_id;
     text: |
-      The id parameter of the send directive shall be a valid task object
-      identifier.
+      While the id parameter of the send directive is is associated with a
+      task.
   test-epilogue: null
   test-prologue: null
 - name: Send
@@ -138,34 +138,35 @@ pre-conditions:
     test-code: |
       ctx->events_to_send = 0;
     text: |
-      The event set sent shall be the empty.
+      While the event set sent is the empty.
   - name: Unrelated
     test-code: |
       ctx->events_to_send = RTEMS_EVENT_7;
     text: |
-      The event set sent shall be unrelated to the event receive condition.
+      While the event set sent is unrelated to the event receive condition.
   - name: Any
     test-code: |
       ctx->events_to_send = RTEMS_EVENT_5;
     text: |
-      The event set sent shall be contain at least one but not all events of
+      While the event set sent is contain at least one but not all events of
       the event receive condition.
   - name: All
     test-code: |
       ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_23;
     text: |
-      The event set sent shall be contain all events of the event receive condition.
+      While the event set sent is contain all events of the event receive
+      condition.
   - name: MixedAny
     test-code: |
       ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_7;
     text: |
-      The event set sent shall be contain at least one but not all events of
+      While the event set sent is contain at least one but not all events of
       the event receive condition and at least one unrelated event.
   - name: MixedAll
     test-code: |
       ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_7 | RTEMS_EVENT_23;
     text: |
-      The event set sent shall be contain all events of the event receive
+      While the event set sent is contain all events of the event receive
       condition and at least one unrelated event.
   test-epilogue: null
   test-prologue: null
@@ -177,28 +178,28 @@ pre-conditions:
       ctx->receive_type = RECEIVE_NORMAL;
       ctx->received_events_parameter = NULL;
     text: |
-      The receiver task shall use the ${/c/if/null:/name} pointer for the event
-      set to receive.
+      While the receiver task calls the receive directive with the event set to
+      receive parameter set to ${/c/if/null:/name}.
   - name: NotWaiting
     test-code: |
       ctx->sender_type = SENDER_SELF;
       ctx->receive_type = RECEIVE_SKIP;
     text: |
-      The receiver task shall not be waiting for events.
+      While the receiver task is not waiting for events.
   - name: Poll
     test-code: |
       ctx->sender_type = SENDER_SELF;
       ctx->receive_type = RECEIVE_NORMAL;
       ctx->receive_option_set |= RTEMS_NO_WAIT;
     text: |
-      The receiver task shall poll for events.
+      While the receiver task polls for events.
   - name: Timeout
     test-code: |
       ctx->sender_type = SENDER_SELF_2;
       ctx->receive_type = RECEIVE_NORMAL;
       ctx->receive_timeout = 1;
     text: |
-      The receiver task shall have waited for events with a timeout which
+      While the receiver task waited for events with a timeout which
       occurred.
   - name: Lower
     test-code: |
@@ -206,7 +207,7 @@ pre-conditions:
       ctx->sender_prio = PRIO_HIGH;
       ctx->receive_type = RECEIVE_NORMAL;
     text: |
-      The receiver task shall be blocked waiting for events and the receiver
+      While the receiver task is blocked waiting for events and the receiver
       task shall have a lower priority than the sender task.
   - name: Equal
     test-code: |
@@ -214,7 +215,7 @@ pre-conditions:
       ctx->sender_prio = PRIO_NORMAL;
       ctx->receive_type = RECEIVE_NORMAL;
     text: |
-      The receiver task shall be blocked waiting for events and the receiver
+      While the receiver task is blocked waiting for events and the receiver
       task shall have a priority equal to the sender task.
   - name: Higher
     test-code: |
@@ -222,7 +223,7 @@ pre-conditions:
       ctx->sender_prio = PRIO_LOW;
       ctx->receive_type = RECEIVE_NORMAL;
     text: |
-      The receiver task shall be blocked waiting for events and the receiver
+      While the receiver task is blocked waiting for events and the receiver
       task shall have a higher priority than the sender task.
   - name: Other
     test-code: |
@@ -230,14 +231,14 @@ pre-conditions:
       ctx->sender_prio = PRIO_OTHER;
       ctx->receive_type = RECEIVE_NORMAL;
     text: |
-      The receiver task shall be blocked waiting for events and the receiver
+      While the receiver task is blocked waiting for events and the receiver
       task shall be on another scheduler instance than the sender task.
   - name: Intend
     test-code: |
       ctx->sender_type = SENDER_INTERRUPT;
       ctx->receive_type = RECEIVE_INTERRUPT;
     text: |
-      The receiver task shall intend to block for waiting for events.
+      While the receiver task intends to block for waiting for events.
   test-epilogue: null
   test-prologue: null
 - name: Satisfy
@@ -246,12 +247,12 @@ pre-conditions:
     test-code: |
       ctx->receive_option_set |= RTEMS_EVENT_ALL;
     text: |
-      The receiver task shall be interested in all input events.
+      While the receiver task is interested in all input events.
   - name: Any
     test-code: |
       ctx->receive_option_set |= RTEMS_EVENT_ANY;
     text: |
-      The receiver task shall be interested in any input event.
+      While the receiver task is interested in any input event.
   test-epilogue: null
   test-prologue: null
 rationale: null
