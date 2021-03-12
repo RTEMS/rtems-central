@@ -569,8 +569,7 @@ class _ActionRequirementTestItem(_TestItem):
 
     def _add_transitions(self, trans_index: int, condition_index: int,
                          map_index: int, transition: Dict[str, Any],
-                         transition_map: _TransitionMap,
-                         pre_cond_not_applicables: List[str],
+                         transition_map: _TransitionMap, info: List[str],
                          post_cond: Tuple[int, ...]) -> None:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
@@ -582,11 +581,11 @@ class _ActionRequirementTestItem(_TestItem):
             if isinstance(states, str):
                 assert states in ["all", "N/A"]
                 for index in range(state_count):
-                    self._add_transitions(
-                        trans_index, condition_index + 1, map_index + index,
-                        transition, transition_map,
-                        pre_cond_not_applicables + [str(int(states == "N/A"))],
-                        post_cond)
+                    self._add_transitions(trans_index, condition_index + 1,
+                                          map_index + index, transition,
+                                          transition_map,
+                                          info + [str(int(states == "N/A"))],
+                                          post_cond)
             else:
                 for state in states:
                     try:
@@ -600,8 +599,7 @@ class _ActionRequirementTestItem(_TestItem):
                         raise ValueError(msg) from err
                     self._add_transitions(trans_index, condition_index + 1,
                                           map_index + index, transition,
-                                          transition_map,
-                                          pre_cond_not_applicables + ["0"],
+                                          transition_map, info + ["0"],
                                           post_cond)
         else:
             enabled_by = enabled_by_to_exp(transition["enabled-by"],
@@ -614,20 +612,17 @@ class _ActionRequirementTestItem(_TestItem):
                     "defined by transition map entry "
                     f"{transition_map[map_index][0].map_entry_index}")
             transition_map[map_index].append(
-                _Transition(enabled_by, post_cond,
-                            "    " + ", ".join(pre_cond_not_applicables),
+                _Transition(enabled_by, post_cond, "    " + ", ".join(info),
                             trans_index))
 
     def _add_default(self, trans_index: int, transition_map: _TransitionMap,
-                     pre_cond_not_applicables: List[str],
-                     post_cond: Tuple[int, ...]) -> None:
+                     info: List[str], post_cond: Tuple[int, ...]) -> None:
         for transition in transition_map:
             if not transition:
                 transition.append(
                     _Transition(
-                        "1", post_cond,
-                        "    " + ", ".join(pre_cond_not_applicables +
-                                           ["0"] * self._pre_condition_count),
+                        "1", post_cond, "    " +
+                        ", ".join(info + ["0"] * self._pre_condition_count),
                         trans_index))
 
     def _get_transition_map(self) -> _TransitionMap:
