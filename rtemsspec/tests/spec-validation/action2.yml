@@ -162,7 +162,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     A: Y
-    B: X
+    B: N/A
   pre-conditions:
     A: N/A
     B:

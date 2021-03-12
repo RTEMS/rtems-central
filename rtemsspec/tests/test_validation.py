@@ -2190,7 +2190,7 @@ static const uint8_t Action2_TransitionMap[][ 2 ] = {
     Action2_Post_B_Y
   }, {
     Action2_Post_A_Y,
-    Action2_Post_B_X
+    Action2_Post_B_NA
   }, {
     Action2_Post_A_X,
     Action2_Post_B_X
@@ -2199,7 +2199,7 @@ static const uint8_t Action2_TransitionMap[][ 2 ] = {
     Action2_Post_B_Y
   }, {
     Action2_Post_A_Y,
-    Action2_Post_B_X
+    Action2_Post_B_NA
   }, {
     Action2_Post_A_NA,
     Action2_Post_B_NA

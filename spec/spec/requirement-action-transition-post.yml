@@ -18,9 +18,9 @@ spec-info:
         There shall be exactly one generic attribute key for each
         post-condition.  The key name shall be the post-condition name.  The
         value of each generic attribute shall be the state of the
-        post-condition.
+        post-condition or ``N/A`` if the post-condition is not applicable.
       key-spec-type: requirement-action-name
-      value-spec-type: requirement-action-name
+      value-spec-type: requirement-action-transition-post-state
     mandatory-attributes: all
   str:
     assert:

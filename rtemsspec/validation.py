@@ -473,8 +473,9 @@ _TransitionMap = List[List[_Transition]]
 def _state_to_index(conditions: List[Any]) -> Tuple[Dict[str, int], ...]:
     return tuple(
         dict((state["name"], index)
-             for index, state in enumerate(condition["states"]))
-        for condition in conditions)
+             for index, state in enumerate(condition["states"] + [{
+                 "name": "N/A"
+             }])) for condition in conditions)
 
 
 def _condition_index_to_enum(prefix: str,
@@ -652,7 +653,7 @@ class _ActionRequirementTestItem(_TestItem):
             else:
                 info = ["1"]
                 post_cond = tuple(
-                    len(self._post_state_to_index[index])
+                    len(self._post_state_to_index[index]) - 1
                     for index in range(self._post_condition_count))
             if isinstance(transition["pre-conditions"], dict):
                 self._add_transitions(trans_index, 0, 0, transition,

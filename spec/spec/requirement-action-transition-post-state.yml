@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+      or:
+      - re: ^[A-Z][a-zA-Z0-9]+$
+      - eq: N/A
+    description: |
+      It shall be the name of a state of the corresponding post-condition or
+      ``N/A`` if the post-condition is not applicable.
+spec-name: Action Requirement Transition Post-Condition State
+spec-type: requirement-action-transition-post-state
+type: spec
