@@ -618,6 +618,18 @@ class _ActionRequirementTestItem(_TestItem):
                             "    " + ", ".join(pre_cond_not_applicables),
                             trans_index))
 
+    def _add_default(self, trans_index: int, transition_map: _TransitionMap,
+                     pre_cond_not_applicables: List[str],
+                     post_cond: Tuple[int, ...]) -> None:
+        for transition in transition_map:
+            if not transition:
+                transition.append(
+                    _Transition(
+                        "1", post_cond,
+                        "    " + ", ".join(pre_cond_not_applicables +
+                                           ["0"] * self._pre_condition_count),
+                        trans_index))
+
     def _get_transition_map(self) -> _TransitionMap:
         transition_count = 1
         for condition in self["pre-conditions"]:
@@ -647,8 +659,12 @@ class _ActionRequirementTestItem(_TestItem):
                 post_cond = tuple(
                     len(self._post_state_to_index[index])
                     for index in range(self._post_condition_count))
-            self._add_transitions(trans_index, 0, 0, transition,
-                                  transition_map, info, post_cond)
+            if isinstance(transition["pre-conditions"], dict):
+                self._add_transitions(trans_index, 0, 0, transition,
+                                      transition_map, info, post_cond)
+            else:
+                assert transition["pre-conditions"] == "default"
+                self._add_default(trans_index, transition_map, info, post_cond)
         return transition_map
 
     def _post_condition_enumerators(self, conditions: Any) -> str:

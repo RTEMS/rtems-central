@@ -168,19 +168,15 @@ transition-map:
     B:
     - Y
 - enabled-by: true
-  post-conditions:
-    A: X
-    B: X
-  pre-conditions:
-    A:
-    - X
-    B:
-    - Z
-- enabled-by: true
   post-conditions: SkipReason
   pre-conditions:
     A:
     - Y
     B:
     - Z
+- enabled-by: true
+  post-conditions:
+    A: X
+    B: X
+  pre-conditions: default
 type: requirement
