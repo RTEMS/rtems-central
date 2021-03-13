@@ -624,216 +624,67 @@ static T_fixture Directive_Fixture = {
   .initial_context = &Directive_Instance
 };
 
-static const uint8_t Directive_TransitionMap[][ 2 ] = {
-  {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_Self
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_Self
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_Self
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_Self
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_Self
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_Self
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_LocalTask
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Name_NA : 1;
+  uint16_t Pre_Node_NA : 1;
+  uint16_t Pre_Id_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Id : 3;
+} Directive_Entry;
+
+#define E( x0, x1, x2, x3, x4, x5) { x0, x1, x2, x3, \\
+  Directive_Post_Status_##x4, Directive_Post_Id_##x5 }
+
+static const Directive_Entry
+Directive_Map[] = {
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, Self ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, Self ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, Self ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, Self ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, Self ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, Self ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, LocalTask ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
 #if defined(RTEMS_MULTIPROCESSING)
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_RemoteTask
+  E( 0, 0, 0, 0, Ok, RemoteTask ),
 #else
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
+  E( 0, 0, 0, 0, InvName, Nop ),
 #endif
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_LocalTask
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, InvName, Nop ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, LocalTask ),
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
 #if defined(RTEMS_MULTIPROCESSING)
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_RemoteTask
+  E( 0, 0, 0, 0, Ok, RemoteTask ),
 #else
-    Directive_Post_Status_InvName,
-    Directive_Post_Id_Nop
+  E( 0, 0, 0, 0, InvName, Nop ),
 #endif
-  }, {
-    Directive_Post_Status_InvAddr,
-    Directive_Post_Id_NullPtr
-  }, {
-    Directive_Post_Status_Ok,
-    Directive_Post_Id_LocalTask
-  }
+  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  E( 0, 0, 0, 0, Ok, LocalTask )
 };
 
-static const struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_Name_NA : 1;
-  uint8_t Pre_Node_NA : 1;
-  uint8_t Pre_Id_NA : 1;
-} Directive_TransitionInfo[] = {
-  {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-#if defined(RTEMS_MULTIPROCESSING)
-    0, 0, 0, 0
-#else
-    0, 0, 0, 0
-#endif
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }, {
-#if defined(RTEMS_MULTIPROCESSING)
-    0, 0, 0, 0
-#else
-    0, 0, 0, 0
-#endif
-  }, {
-    0, 0, 0, 0
-  }, {
-    0, 0, 0, 0
-  }
-};
+#undef E
 
 static void Directive_Action( Directive_Context *ctx )
 {
@@ -857,7 +708,7 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
     ctx->pcs[ 0 ] < Directive_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( Directive_TransitionInfo[ index ].Pre_Name_NA ) {
+    if ( Directive_Map[ index ].Pre_Name_NA ) {
       ctx->pcs[ 0 ] = Directive_Pre_Name_NA;
       index += ( Directive_Pre_Name_NA - 1 )
         * Directive_Pre_Node_NA
@@ -869,7 +720,7 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
       ctx->pcs[ 1 ] < Directive_Pre_Node_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( Directive_TransitionInfo[ index ].Pre_Node_NA ) {
+      if ( Directive_Map[ index ].Pre_Node_NA ) {
         ctx->pcs[ 1 ] = Directive_Pre_Node_NA;
         index += ( Directive_Pre_Node_NA - 1 )
           * Directive_Pre_Id_NA;
@@ -880,12 +731,14 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
         ctx->pcs[ 2 ] < Directive_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        if ( Directive_TransitionInfo[ index ].Pre_Id_NA ) {
+        Directive_Entry entry;
+
+        if ( Directive_Map[ index ].Pre_Id_NA ) {
           ctx->pcs[ 2 ] = Directive_Pre_Id_NA;
           index += ( Directive_Pre_Id_NA - 1 );
         }
 
-        if ( Directive_TransitionInfo[ index ].Skip ) {
+        if ( Directive_Map[ index ].Skip ) {
           ++index;
           continue;
         }
@@ -894,11 +747,9 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
         Directive_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
         Directive_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
         Directive_Action( ctx );
-        Directive_Post_Status_Check(
-          ctx,
-          Directive_TransitionMap[ index ][ 0 ]
-        );
-        Directive_Post_Id_Check( ctx, Directive_TransitionMap[ index ][ 1 ] );
+        entry = Directive_Map[ index ];
+        Directive_Post_Status_Check( ctx, entry.Post_Status );
+        Directive_Post_Id_Check( ctx, entry.Post_Id );
         ++index;
       }
     }
@@ -2184,47 +2035,28 @@ static T_fixture Action2_Fixture = {
   .initial_context = &Action2_Instance
 };
 
-static const uint8_t Action2_TransitionMap[][ 2 ] = {
-  {
-    Action2_Post_A_X,
-    Action2_Post_B_Y
-  }, {
-    Action2_Post_A_Y,
-    Action2_Post_B_NA
-  }, {
-    Action2_Post_A_X,
-    Action2_Post_B_X
-  }, {
-    Action2_Post_A_X,
-    Action2_Post_B_Y
-  }, {
-    Action2_Post_A_Y,
-    Action2_Post_B_NA
-  }, {
-    Action2_Post_A_NA,
-    Action2_Post_B_NA
-  }
-};
-
-static const struct {
+typedef struct {
   uint8_t Skip : 1;
   uint8_t Pre_A_NA : 1;
   uint8_t Pre_B_NA : 1;
-} Action2_TransitionInfo[] = {
-  {
-    0, 0, 0
-  }, {
-    0, 1, 0
-  }, {
-    0, 0, 0
-  }, {
-    0, 0, 0
-  }, {
-    0, 1, 0
-  }, {
-    1, 0, 0
-  }
+  uint8_t Post_A : 2;
+  uint8_t Post_B : 2;
+} Action2_Entry;
+
+#define E( x0, x1, x2, x3, x4) { x0, x1, x2, Action2_Post_A_##x3, \\
+  Action2_Post_B_##x4 }
+
+static const Action2_Entry
+Action2_Map[] = {
+  E( 0, 0, 0, X, Y ),
+  E( 0, 1, 0, Y, NA ),
+  E( 0, 0, 0, X, X ),
+  E( 0, 0, 0, X, Y ),
+  E( 0, 1, 0, Y, NA ),
+  E( 1, 0, 0, NA, NA )
 };
+
+#undef E
 
 static void Action2_Prepare( Action2_Context *ctx )
 {
@@ -2261,7 +2093,7 @@ void Action2_Run( int *a, int b, int *c )
     ctx->pcs[ 0 ] < Action2_Pre_A_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( Action2_TransitionInfo[ index ].Pre_A_NA ) {
+    if ( Action2_Map[ index ].Pre_A_NA ) {
       ctx->pcs[ 0 ] = Action2_Pre_A_NA;
       index += ( Action2_Pre_A_NA - 1 )
         * Action2_Pre_B_NA;
@@ -2272,12 +2104,14 @@ void Action2_Run( int *a, int b, int *c )
       ctx->pcs[ 1 ] < Action2_Pre_B_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( Action2_TransitionInfo[ index ].Pre_B_NA ) {
+      Action2_Entry entry;
+
+      if ( Action2_Map[ index ].Pre_B_NA ) {
         ctx->pcs[ 1 ] = Action2_Pre_B_NA;
         index += ( Action2_Pre_B_NA - 1 );
       }
 
-      if ( Action2_TransitionInfo[ index ].Skip ) {
+      if ( Action2_Map[ index ].Skip ) {
         ++index;
         continue;
       }
@@ -2286,8 +2120,9 @@ void Action2_Run( int *a, int b, int *c )
       Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
       Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
       Action2_Action( ctx );
-      Action2_Post_A_Check( ctx, Action2_TransitionMap[ index ][ 0 ] );
-      Action2_Post_B_Check( ctx, Action2_TransitionMap[ index ][ 1 ] );
+      entry = Action2_Map[ index ];
+      Action2_Post_A_Check( ctx, entry.Post_A );
+      Action2_Post_B_Check( ctx, entry.Post_B );
       Action2_Cleanup( ctx );
       ++index;
     }

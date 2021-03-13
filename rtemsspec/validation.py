@@ -30,6 +30,7 @@ import itertools
 import math
 import os
 import re
+import textwrap
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
@@ -484,8 +485,15 @@ def _condition_index_to_enum(prefix: str,
         tuple([f"{prefix}_{condition['name']}"] + [
             f"{prefix}_{condition['name']}_{state['name']}"
             for state in condition["states"]
-        ] + [f"{prefix}_{condition['name']}_NA"])
-        for index, condition in enumerate(conditions))
+        ] + [f"{prefix}_{condition['name']}_NA"]) for condition in conditions)
+
+
+def _condition_index_to_name(conditions: List[Any]) -> _ConditionIndexToEnum:
+    return tuple(
+        tuple(
+            itertools.chain((state["name"]
+                             for state in condition["states"]), ["NA"]))
+        for condition in conditions)
 
 
 def _add_condition_enum(content: CContent,
@@ -509,6 +517,8 @@ class _ActionRequirementTestItem(_TestItem):
             f"{self.ident}_Pre", item["pre-conditions"])
         self._post_index_to_enum = _condition_index_to_enum(
             f"{self.ident}_Post", item["post-conditions"])
+        self._post_index_to_state = _condition_index_to_name(
+            item["post-conditions"])
         self._pre_state_to_index = _state_to_index(item["pre-conditions"])
         self._post_state_to_index = _state_to_index(item["post-conditions"])
         self._pre_index_to_condition = dict(
@@ -613,7 +623,7 @@ class _ActionRequirementTestItem(_TestItem):
                     "defined by transition map entry "
                     f"{transition_map[map_index][0].map_entry_index}")
             transition_map[map_index].append(
-                _Transition(enabled_by, post_cond, "    " + ", ".join(info),
+                _Transition(enabled_by, post_cond, ", ".join(info),
                             trans_index))
 
     def _add_default(self, trans_index: int, transition_map: _TransitionMap,
@@ -622,7 +632,7 @@ class _ActionRequirementTestItem(_TestItem):
             if not transition:
                 transition.append(
                     _Transition(
-                        "1", post_cond, "    " +
+                        "1", post_cond,
                         ", ".join(info + ["0"] * self._pre_condition_count),
                         trans_index))
 
@@ -663,20 +673,26 @@ class _ActionRequirementTestItem(_TestItem):
                 self._add_default(trans_index, transition_map, info, post_cond)
         return transition_map
 
-    def _post_condition_enumerators(self, conditions: Any) -> str:
-        return ",\n".join(
-            f"    {self._post_index_to_enum[index][condition + 1]}"
-            for index, condition in enumerate(conditions))
+    def _get_entry(self, variant: _Transition) -> str:
+        entry = f"E( {variant.info}, " + ", ".join(
+            self._post_index_to_state[cond_index][state_index]
+            for cond_index, state_index in enumerate(
+                variant.post_conditions)) + " ),"
+        wrapper = textwrap.TextWrapper()
+        wrapper.initial_indent = "  "
+        wrapper.subsequent_indent = "     "
+        wrapper.width = 75
+        return "\n".join(wrapper.wrap(entry))
+
+    def _get_entry_bits(self) -> int:
+        bits = self._pre_condition_count + 1
+        for enum in self._post_index_to_enum:
+            bits += math.ceil(math.log2(len(enum)))
+        return 2**max(math.ceil(math.log2(bits)), 3)
 
     def _add_transition_map(self, content: CContent) -> None:
         transition_map = self._get_transition_map()
-        content.add([
-            "static const uint8_t "
-            f"{self.ident}_TransitionMap[][ {self._post_condition_count} ]"
-            " = {", "  {"
-        ])
-        map_elements = []
-        info_elements = []
+        entries = []
         for map_index, transistions in enumerate(transition_map):
             if not transistions or transistions[0].enabled_by != "1":
                 raise ValueError(
@@ -684,43 +700,48 @@ class _ActionRequirementTestItem(_TestItem):
                     "entry for pre-condition set "
                     f"{{{self._map_index_to_pre_conditions(map_index)}}}")
             if len(transistions) == 1:
-                map_elements.append(
-                    self._post_condition_enumerators(
-                        transistions[0].post_conditions))
-                info_elements.append(transistions[0].info)
+                entries.append(self._get_entry(transistions[0]))
             else:
                 ifelse = "#if "
-                map_enumerators = []  # type: List[str]
-                info_enumerators = []  # type: List[str]
+                enumerators = []  # type: List[str]
                 for variant in transistions[1:]:
-                    map_enumerators.append(ifelse + variant.enabled_by)
-                    info_enumerators.append(ifelse + variant.enabled_by)
-                    map_enumerators.append(
-                        self._post_condition_enumerators(
-                            variant.post_conditions))
-                    info_enumerators.append(variant.info)
+                    enumerators.append(ifelse + variant.enabled_by)
+                    enumerators.append(self._get_entry(variant))
                     ifelse = "#elif "
-                map_enumerators.append("#else")
-                info_enumerators.append("#else")
-                map_enumerators.append(
-                    self._post_condition_enumerators(
-                        transistions[0].post_conditions))
-                info_enumerators.append(transistions[0].info)
-                map_enumerators.append("#endif")
-                info_enumerators.append("#endif")
-                map_elements.append("\n".join(map_enumerators))
-                info_elements.append("\n".join(info_enumerators))
-        content.append(["\n  }, {\n".join(map_elements), "  }", "};"])
-        pre_bits = 2**max(math.ceil(math.log2(self._pre_condition_count + 1)),
-                          3)
-        content.add("static const struct {")
+                enumerators.append("#else")
+                enumerators.append(self._get_entry(transistions[0]))
+                enumerators.append("#endif")
+                entries.append("\n".join(enumerators))
+        bits = self._get_entry_bits()
+        content.add("typedef struct {")
         with content.indent():
-            content.append(f"uint{pre_bits}_t Skip : 1;")
+            content.append(f"uint{bits}_t Skip : 1;")
             for condition in self["pre-conditions"]:
+                content.append(f"uint{bits}_t Pre_{condition['name']}_NA : 1;")
+            for condition in self["post-conditions"]:
+                state_bits = math.ceil(math.log2(len(condition["states"]) + 1))
                 content.append(
-                    f"uint{pre_bits}_t Pre_{condition['name']}_NA : 1;")
-        content.add([f"}} {self.ident}_TransitionInfo[] = {{", "  {"])
-        content.append(["\n  }, {\n".join(info_elements), "  }", "};"])
+                    f"uint{bits}_t Post_{condition['name']} : {state_bits};")
+        content.add(f"}} {self.ident}_Entry;")
+        pre_count = 1 + self._pre_condition_count
+        entry = ("#define E( " + ", ".join(
+            f"x{index}"
+            for index in range(pre_count + self._post_condition_count)
+        ) + ") { " + ", ".join(
+            itertools.chain((f"x{index}" for index in range(pre_count)), (
+                f"{self.ident}_Post_{condition['name']}_##x{pre_count + index}"
+                for index, condition in enumerate(self["post-conditions"])))) +
+                 " }")
+        wrapper = textwrap.TextWrapper()
+        wrapper.initial_indent = ""
+        wrapper.subsequent_indent = "  "
+        wrapper.width = 77
+        content.add(" \\\n".join(wrapper.wrap(entry)))
+        content.add(
+            [f"static const {self.ident}_Entry", f"{self.ident}_Map[] = {{"])
+        entries[-1] = entries[-1].replace("),", ")")
+        content.append(entries)
+        content.append(["};", "", "#undef E"])
 
     def _add_call(self, content: CContent, key: str, name: str) -> None:
         if self[key] is not None:
@@ -728,7 +749,7 @@ class _ActionRequirementTestItem(_TestItem):
             content.call_function(None, f"{self.ident}_{name}", ["ctx"])
 
     def _add_loop_body(self, content: CContent) -> None:
-        with content.condition(f"{self.ident}_TransitionInfo[ index ].Skip"):
+        with content.condition(f"{self.ident}_Map[ index ].Skip"):
             content.append(["++index;", "continue;"])
         content.add_blank_line()
         self._add_call(content, "test-prepare", "Prepare")
@@ -737,12 +758,12 @@ class _ActionRequirementTestItem(_TestItem):
             content.call_function(None, f"{enum[0]}_Prepare",
                                   ["ctx", f"ctx->pcs[ {index} ]"])
         self._add_call(content, "test-action", "Action")
-        transition_map = f"{self.ident}_TransitionMap"
+        content.append(f"entry = {self.ident}_Map[ index ];")
         for index, enum in enumerate(self._post_index_to_enum):
             content.gap = False
             content.call_function(
                 None, f"{enum[0]}_Check",
-                ["ctx", f"{transition_map}[ index ][ {index} ]"])
+                ["ctx", f"entry.Post_{self._post_index_to_name[index]}"])
         self._add_call(content, "test-cleanup", "Cleanup")
         content.append("++index;")
 
@@ -753,8 +774,10 @@ class _ActionRequirementTestItem(_TestItem):
             end = self._pre_index_to_enum[index][-1]
             with content.for_loop(f"{var} = {begin}", f"{var} < {end}",
                                   f"++{var}"):
+                if index + 1 == self._pre_cond_count:
+                    content.add(f"{self.ident}_Entry entry;")
                 name = self._item['pre-conditions'][index]["name"]
-                pre_na = f"{self.ident}_TransitionInfo[ index ].Pre_{name}_NA"
+                pre_na = f"{self.ident}_Map[ index ].Pre_{name}_NA"
                 with content.condition(pre_na):
                     content.append(f"{var} = {end};")
                     content.append(f"index += ( {end} - 1 )")
