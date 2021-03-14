@@ -603,26 +603,10 @@ static void Directive_Teardown_Wrap( void *arg )
   Directive_Teardown( ctx );
 }
 
-static size_t Directive_Scope( void *arg, char *buf, size_t n )
+static void Directive_Action( Directive_Context *ctx )
 {
-  Directive_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( Directive_PreDesc, buf, n, ctx->pcs );
-  }
-
-  return 0;
+  ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
 }
-
-static T_fixture Directive_Fixture = {
-  .setup = Directive_Setup_Wrap,
-  .stop = NULL,
-  .teardown = Directive_Teardown_Wrap,
-  .scope = Directive_Scope,
-  .initial_context = &Directive_Instance
-};
 
 typedef struct {
   uint16_t Skip : 1;
@@ -686,10 +670,26 @@ Directive_Map[] = {
 
 #undef E
 
-static void Directive_Action( Directive_Context *ctx )
+static size_t Directive_Scope( void *arg, char *buf, size_t n )
 {
-  ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
+  Directive_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope( Directive_PreDesc, buf, n, ctx->pcs );
+  }
+
+  return 0;
 }
+
+static T_fixture Directive_Fixture = {
+  .setup = Directive_Setup_Wrap,
+  .stop = NULL,
+  .teardown = Directive_Teardown_Wrap,
+  .scope = Directive_Scope,
+  .initial_context = &Directive_Instance
+};
 
 /**
  * @fn void T_case_body_Directive( void )
@@ -2014,26 +2014,20 @@ static void Action2_Teardown_Wrap( void *arg )
   Action2_Teardown( ctx );
 }
 
-static size_t Action2_Scope( void *arg, char *buf, size_t n )
+static void Action2_Prepare( Action2_Context *ctx )
 {
-  Action2_Context *ctx;
-
-  ctx = arg;
-
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( Action2_PreDesc, buf, n, ctx->pcs );
-  }
-
-  return 0;
+  /* Prepare */
 }
 
-static T_fixture Action2_Fixture = {
-  .setup = Action2_Setup_Wrap,
-  .stop = NULL,
-  .teardown = Action2_Teardown_Wrap,
-  .scope = Action2_Scope,
-  .initial_context = &Action2_Instance
-};
+static void Action2_Action( Action2_Context *ctx )
+{
+  /* Action */
+}
+
+static void Action2_Cleanup( Action2_Context *ctx )
+{
+  /* Cleanup */
+}
 
 typedef struct {
   uint8_t Skip : 1;
@@ -2058,20 +2052,26 @@ Action2_Map[] = {
 
 #undef E
 
-static void Action2_Prepare( Action2_Context *ctx )
+static size_t Action2_Scope( void *arg, char *buf, size_t n )
 {
-  /* Prepare */
+  Action2_Context *ctx;
+
+  ctx = arg;
+
+  if ( ctx->in_action_loop ) {
+    return T_get_scope( Action2_PreDesc, buf, n, ctx->pcs );
+  }
+
+  return 0;
 }
 
-static void Action2_Action( Action2_Context *ctx )
-{
-  /* Action */
-}
-
-static void Action2_Cleanup( Action2_Context *ctx )
-{
-  /* Cleanup */
-}
+static T_fixture Action2_Fixture = {
+  .setup = Action2_Setup_Wrap,
+  .stop = NULL,
+  .teardown = Action2_Teardown_Wrap,
+  .scope = Action2_Scope,
+  .initial_context = &Action2_Instance
+};
 
 static T_fixture_node Action2_Node;
 

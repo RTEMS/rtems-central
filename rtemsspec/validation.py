@@ -914,6 +914,11 @@ class _ActionRequirementTestItem(_TestItem):
                                            "test-teardown",
                                            "Teardown",
                                            optional_code=optional_code)
+        self.add_function(content, "test-prepare", "Prepare")
+        self.add_function(content, "test-action", "Action")
+        self.add_function(content, "test-cleanup", "Cleanup")
+        transition_map = TransitionMap(self.item)
+        transition_map.add_map(content, self.ident)
         self._add_fixture_scope(content)
         content.add([
             f"static T_fixture {self.ident}_Fixture = {{",
@@ -921,11 +926,6 @@ class _ActionRequirementTestItem(_TestItem):
             f"  .teardown = {teardown},", f"  .scope = {self.ident}_Scope,",
             f"  .initial_context = {instance}", "};"
         ])
-        transition_map = TransitionMap(self.item)
-        transition_map.add_map(content, self.ident)
-        self.add_function(content, "test-prepare", "Prepare")
-        self.add_function(content, "test-action", "Action")
-        self.add_function(content, "test-cleanup", "Cleanup")
         self._add_test_case(content, transition_map, header)
         content.add("/** @} */")
 
