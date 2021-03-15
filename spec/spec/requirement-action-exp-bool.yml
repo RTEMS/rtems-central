@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: |
+  A value of this type is a boolean expression.
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      and:
+        description: |
+          The *and* operator evaluates to the *logical and* of the evaluation
+          results of the expressions in the list.
+        spec-type: requirement-action-exp-bool-list
+      not:
+        description: |
+          The *not* operator evaluates to the *logical not* of the evaluation
+          results of the expression.
+        spec-type: requirement-action-exp-bool
+      or:
+        description: |
+          The *or* operator evaluates to the *logical or* of the evaluation
+          results of the expressions in the list.
+        spec-type: requirement-action-exp-bool-list
+      post-conditions:
+        description: |
+          The *post-conditions* operator evaluates to true, if the
+          post-condition states of the associated transition are contained in
+          the specified post-condition set, otherwise to false.
+        spec-type: requirement-action-exp-conditions
+      pre-conditions:
+        description: |
+          The *pre-conditions* operator evaluates to true, if the pre-condition
+          states of the associated transition are contained in the specified
+          pre-condition set, otherwise to false.
+        spec-type: requirement-action-exp-conditions
+    description: |
+      Each attribute defines an operator.
+    mandatory-attributes: exactly-one
+  list:
+    description: |
+      This list of expressions evaluates to the *logical or* of the evaluation
+      results of the expressions in the list.
+    spec-type: requirement-action-exp-bool
+spec-name: Action Requirement Boolean Expression
+spec-type: requirement-action-exp-bool
+type: spec

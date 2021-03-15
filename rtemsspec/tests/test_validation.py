@@ -1670,27 +1670,37 @@ extern "C" {
  */
 
 typedef enum {
-  Action2_Pre_A_X,
-  Action2_Pre_A_Y,
+  Action2_Pre_A_A0,
+  Action2_Pre_A_A1,
   Action2_Pre_A_NA
 } Action2_Pre_A;
 
 typedef enum {
-  Action2_Pre_B_X,
-  Action2_Pre_B_Y,
-  Action2_Pre_B_Z,
+  Action2_Pre_B_B0,
+  Action2_Pre_B_B1,
+  Action2_Pre_B_B2,
   Action2_Pre_B_NA
 } Action2_Pre_B;
 
 typedef enum {
-  Action2_Post_A_X,
-  Action2_Post_A_Y,
+  Action2_Pre_C_C0,
+  Action2_Pre_C_C1,
+  Action2_Pre_C_C2,
+  Action2_Pre_C_NA
+} Action2_Pre_C;
+
+typedef enum {
+  Action2_Post_A_A0,
+  Action2_Post_A_A1,
+  Action2_Post_A_A2,
+  Action2_Post_A_A3,
   Action2_Post_A_NA
 } Action2_Post_A;
 
 typedef enum {
-  Action2_Post_B_X,
-  Action2_Post_B_Y,
+  Action2_Post_B_B0,
+  Action2_Post_B_B1,
+  Action2_Post_B_B2,
   Action2_Post_B_NA
 } Action2_Post_B;
 
@@ -1823,7 +1833,7 @@ typedef struct {
   /**
    * @brief This member defines the pre-condition states for the next action.
    */
-  size_t pcs[ 2 ];
+  size_t pcs[ 3 ];
 
   /**
    * @brief This member indicates if the test action loop is currently
@@ -1836,21 +1846,29 @@ static Action2_Context
   Action2_Instance;
 
 static const char * const Action2_PreDesc_A[] = {
-  "X",
-  "Y",
+  "A0",
+  "A1",
   "NA"
 };
 
 static const char * const Action2_PreDesc_B[] = {
-  "X",
-  "Y",
-  "Z",
+  "B0",
+  "B1",
+  "B2",
+  "NA"
+};
+
+static const char * const Action2_PreDesc_C[] = {
+  "C0",
+  "C1",
+  "C2",
   "NA"
 };
 
 static const char * const * const Action2_PreDesc[] = {
   Action2_PreDesc_A,
   Action2_PreDesc_B,
+  Action2_PreDesc_C,
   NULL
 };
 
@@ -1861,19 +1879,19 @@ static void Action2_Pre_A_Prepare( Action2_Context *ctx, Action2_Pre_A state )
   /* Pre A prologue. */
 
   switch ( state ) {
-    case Action2_Pre_A_X: {
+    case Action2_Pre_A_A0: {
       /*
-       * Pre A X.
+       * Pre A 0.
        */
-      /* Pre A X */
+      /* Pre A 0 */
       break;
     }
 
-    case Action2_Pre_A_Y: {
+    case Action2_Pre_A_A1: {
       /*
-       * Pre A Y.
+       * Pre A 1.
        */
-      /* Pre A Y */
+      /* Pre A 1 */
       break;
     }
 
@@ -1889,27 +1907,27 @@ static void Action2_Pre_B_Prepare( Action2_Context *ctx, Action2_Pre_B state )
   /* Pre B prologue. */
 
   switch ( state ) {
-    case Action2_Pre_B_X: {
+    case Action2_Pre_B_B0: {
       /*
-       * Pre B X.
+       * Pre B 0.
        */
-      /* Pre B X */
+      /* Pre B 0 */
       break;
     }
 
-    case Action2_Pre_B_Y: {
+    case Action2_Pre_B_B1: {
       /*
-       * Pre B Y.
+       * Pre B 1.
        */
-      /* Pre B Y */
+      /* Pre B 1 */
       break;
     }
 
-    case Action2_Pre_B_Z: {
+    case Action2_Pre_B_B2: {
       /*
-       * Pre B Z.
+       * Pre B 1.
        */
-      /* Pre B Z */
+      /* Pre B 1 */
       break;
     }
 
@@ -1920,24 +1938,76 @@ static void Action2_Pre_B_Prepare( Action2_Context *ctx, Action2_Pre_B state )
   /* Pre B epilogue. */
 }
 
+static void Action2_Pre_C_Prepare( Action2_Context *ctx, Action2_Pre_C state )
+{
+  /* Pre C prologue. */
+
+  switch ( state ) {
+    case Action2_Pre_C_C0: {
+      /*
+       * Pre C 0.
+       */
+      /* Pre C 0 */
+      break;
+    }
+
+    case Action2_Pre_C_C1: {
+      /*
+       * Pre C 1.
+       */
+      /* Pre B 1 */
+      break;
+    }
+
+    case Action2_Pre_C_C2: {
+      /*
+       * Pre C 2.
+       */
+      /* Pre C 2 */
+      break;
+    }
+
+    case Action2_Pre_C_NA:
+      break;
+  }
+
+  /* Pre C epilogue. */
+}
+
 static void Action2_Post_A_Check( Action2_Context *ctx, Action2_Post_A state )
 {
   /* Post A prologue. */
 
   switch ( state ) {
-    case Action2_Post_A_X: {
+    case Action2_Post_A_A0: {
       /*
-       * Post A X.
+       * Post A 0.
        */
-      /* Post A X */
+      /* Post A 0 */
       break;
     }
 
-    case Action2_Post_A_Y: {
+    case Action2_Post_A_A1: {
       /*
-       * Post A Y.
+       * Post A 1.
        */
-      /* Post A Y */
+      /* Post A 1 */
+      break;
+    }
+
+    case Action2_Post_A_A2: {
+      /*
+       * Post A 2.
+       */
+      /* Post A 2 */
+      break;
+    }
+
+    case Action2_Post_A_A3: {
+      /*
+       * Post A 3.
+       */
+      /* Post A 3 */
       break;
     }
 
@@ -1953,19 +2023,27 @@ static void Action2_Post_B_Check( Action2_Context *ctx, Action2_Post_B state )
   /* Post B prologue. */
 
   switch ( state ) {
-    case Action2_Post_B_X: {
+    case Action2_Post_B_B0: {
       /*
-       * Post B X.
+       * Post B 0.
        */
-      /* Post B X */
+      /* Post B 0 */
       break;
     }
 
-    case Action2_Post_B_Y: {
+    case Action2_Post_B_B1: {
       /*
-       * Post B Y.
+       * Post B 1.
        */
-      /* Post B Y */
+      /* Post B 1 */
+      break;
+    }
+
+    case Action2_Post_B_B2: {
+      /*
+       * Post B 2.
+       */
+      /* Post B 2 */
       break;
     }
 
@@ -2030,24 +2108,37 @@ static void Action2_Cleanup( Action2_Context *ctx )
 }
 
 typedef struct {
-  uint8_t Skip : 1;
-  uint8_t Pre_A_NA : 1;
-  uint8_t Pre_B_NA : 1;
-  uint8_t Post_A : 2;
-  uint8_t Post_B : 2;
+  uint16_t Skip : 1;
+  uint16_t Pre_A_NA : 1;
+  uint16_t Pre_B_NA : 1;
+  uint16_t Pre_C_NA : 1;
+  uint16_t Post_A : 3;
+  uint16_t Post_B : 2;
 } Action2_Entry;
 
-#define E( x0, x1, x2, x3, x4) { x0, x1, x2, Action2_Post_A_##x3, \\
-  Action2_Post_B_##x4 }
+#define E( x0, x1, x2, x3, x4, x5) { x0, x1, x2, x3, Action2_Post_A_##x4, \\
+  Action2_Post_B_##x5 }
 
 static const Action2_Entry
 Action2_Map[] = {
-  E( 0, 0, 0, X, Y ),
-  E( 0, 1, 0, Y, NA ),
-  E( 0, 0, 0, X, X ),
-  E( 0, 0, 0, X, Y ),
-  E( 0, 1, 0, Y, NA ),
-  E( 1, 0, 0, NA, NA )
+  E( 0, 0, 0, 0, A1, B0 ),
+  E( 0, 0, 0, 0, A1, B0 ),
+  E( 0, 0, 0, 0, A1, B0 ),
+  E( 0, 1, 0, 0, A1, NA ),
+  E( 0, 1, 0, 0, A1, NA ),
+  E( 0, 1, 0, 0, A1, NA ),
+  E( 0, 0, 0, 0, A2, B0 ),
+  E( 0, 0, 0, 0, A2, B0 ),
+  E( 0, 0, 0, 0, A2, B0 ),
+  E( 0, 0, 0, 0, A2, B0 ),
+  E( 0, 0, 0, 0, A2, B0 ),
+  E( 0, 0, 0, 0, A3, B0 ),
+  E( 0, 1, 0, 0, A1, NA ),
+  E( 0, 1, 0, 0, A1, NA ),
+  E( 0, 1, 0, 0, A1, NA ),
+  E( 1, 0, 0, 0, NA, NA ),
+  E( 1, 0, 0, 0, NA, NA ),
+  E( 1, 0, 0, 0, NA, NA )
 };
 
 #undef E
@@ -2089,42 +2180,56 @@ void Action2_Run( int *a, int b, int *c )
   index = 0;
 
   for (
-    ctx->pcs[ 0 ] = Action2_Pre_A_X;
+    ctx->pcs[ 0 ] = Action2_Pre_A_A0;
     ctx->pcs[ 0 ] < Action2_Pre_A_NA;
     ++ctx->pcs[ 0 ]
   ) {
     if ( Action2_Map[ index ].Pre_A_NA ) {
       ctx->pcs[ 0 ] = Action2_Pre_A_NA;
       index += ( Action2_Pre_A_NA - 1 )
-        * Action2_Pre_B_NA;
+        * Action2_Pre_B_NA
+        * Action2_Pre_C_NA;
     }
 
     for (
-      ctx->pcs[ 1 ] = Action2_Pre_B_X;
+      ctx->pcs[ 1 ] = Action2_Pre_B_B0;
       ctx->pcs[ 1 ] < Action2_Pre_B_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      Action2_Entry entry;
-
       if ( Action2_Map[ index ].Pre_B_NA ) {
         ctx->pcs[ 1 ] = Action2_Pre_B_NA;
-        index += ( Action2_Pre_B_NA - 1 );
+        index += ( Action2_Pre_B_NA - 1 )
+          * Action2_Pre_C_NA;
       }
 
-      if ( Action2_Map[ index ].Skip ) {
+      for (
+        ctx->pcs[ 2 ] = Action2_Pre_C_C0;
+        ctx->pcs[ 2 ] < Action2_Pre_C_NA;
+        ++ctx->pcs[ 2 ]
+      ) {
+        Action2_Entry entry;
+
+        if ( Action2_Map[ index ].Pre_C_NA ) {
+          ctx->pcs[ 2 ] = Action2_Pre_C_NA;
+          index += ( Action2_Pre_C_NA - 1 );
+        }
+
+        if ( Action2_Map[ index ].Skip ) {
+          ++index;
+          continue;
+        }
+
+        Action2_Prepare( ctx );
+        Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
+        Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
+        Action2_Pre_C_Prepare( ctx, ctx->pcs[ 2 ] );
+        Action2_Action( ctx );
+        entry = Action2_Map[ index ];
+        Action2_Post_A_Check( ctx, entry.Post_A );
+        Action2_Post_B_Check( ctx, entry.Post_B );
+        Action2_Cleanup( ctx );
         ++index;
-        continue;
       }
-
-      Action2_Prepare( ctx );
-      Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
-      Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
-      Action2_Action( ctx );
-      entry = Action2_Map[ index ];
-      Action2_Post_A_Check( ctx, entry.Post_A );
-      Action2_Post_B_Check( ctx, entry.Post_B );
-      Action2_Cleanup( ctx );
-      ++index;
     }
   }
 
@@ -2282,5 +2387,10 @@ def test_validation_invalid_actions():
     })
     match = ("transition map of spec:/a contains no default entry "
              "for pre-condition set {A=A2}")
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)
+    action_data["transition-map"][-1]["post-conditions"]["X"] = []
+    match = ("cannot determine state for post-condition 'X' of transition map "
+             "descriptor 1 of spec:/a for pre-condition set {A=A1}")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)

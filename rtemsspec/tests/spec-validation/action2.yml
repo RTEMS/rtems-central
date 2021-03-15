@@ -7,32 +7,47 @@ links: []
 post-conditions:
 - name: A
   states:
-  - name: X
+  - name: A0
     test-code: |
-      /* Post A X */
+      /* Post A 0 */
     text: |
-      Post A X.
-  - name: Y
+      Post A 0.
+  - name: A1
     test-code: |
-      /* Post A Y */
+      /* Post A 1 */
     text: |
-      Post A Y.
+      Post A 1.
+  - name: A2
+    test-code: |
+      /* Post A 2 */
+    text: |
+      Post A 2.
+  - name: A3
+    test-code: |
+      /* Post A 3 */
+    text: |
+      Post A 3.
   test-epilogue: |
     /* Post A epilogue. */
   test-prologue: |
     /* Post A prologue. */
 - name: B
   states:
-  - name: X
+  - name: B0
     test-code: |
-      /* Post B X */
+      /* Post B 0 */
     text: |
-      Post B X.
-  - name: Y
+      Post B 0.
+  - name: B1
     test-code: |
-      /* Post B Y */
+      /* Post B 1 */
     text: |
-      Post B Y.
+      Post B 1.
+  - name: B2
+    test-code: |
+      /* Post B 2 */
+    text: |
+      Post B 2.
   test-epilogue: |
     /* Post B epilogue. */
   test-prologue: |
@@ -40,41 +55,62 @@ post-conditions:
 pre-conditions:
 - name: A
   states:
-  - name: X
+  - name: A0
     test-code: |
-      /* Pre A X */
+      /* Pre A 0 */
     text: |
-      Pre A X.
-  - name: Y
+      Pre A 0.
+  - name: A1
     test-code: |
-      /* Pre A Y */
+      /* Pre A 1 */
     text: |
-      Pre A Y.
+      Pre A 1.
   test-epilogue: |
     /* Pre A epilogue. */
   test-prologue: |
     /* Pre A prologue. */
 - name: B
   states:
-  - name: X
+  - name: B0
     test-code: |
-      /* Pre B X */
+      /* Pre B 0 */
     text: |
-      Pre B X.
-  - name: Y
+      Pre B 0.
+  - name: B1
     test-code: |
-      /* Pre B Y */
+      /* Pre B 1 */
     text: |
-      Pre B Y.
-  - name: Z
+      Pre B 1.
+  - name: B2
     test-code: |
-      /* Pre B Z */
+      /* Pre B 1 */
     text: |
-      Pre B Z.
+      Pre B 1.
   test-epilogue: |
     /* Pre B epilogue. */
   test-prologue: |
     /* Pre B prologue. */
+- name: C
+  states:
+  - name: C0
+    test-code: |
+      /* Pre C 0 */
+    text: |
+      Pre C 0.
+  - name: C1
+    test-code: |
+      /* Pre B 1 */
+    text: |
+      Pre C 1.
+  - name: C2
+    test-code: |
+      /* Pre C 2 */
+    text: |
+      Pre C 2.
+  test-epilogue: |
+    /* Pre C epilogue. */
+  test-prologue: |
+    /* Pre C prologue. */
 rationale: null
 references: []
 requirement-type: functional
@@ -153,30 +189,76 @@ text: |
 transition-map:
 - enabled-by: true
   post-conditions:
-    A: X
-    B: Y
+    A:
+    - if:
+        not:
+          pre-conditions:
+            B: B0
+      then: A0
+    - if:
+        and:
+        - pre-conditions:
+            A: A0
+        - pre-conditions:
+            B: B0
+      then: A1
+    - if:
+        or:
+        - pre-conditions:
+            C: C0
+        - pre-conditions:
+            A: A1
+            C: C1
+      then: A2
+    - else: A3
+    B:
+    - if:
+        pre-conditions:
+          A: A0
+      then-specified-by: B
+    - specified-by: B
   pre-conditions:
     A: all
     B:
-    - X
+    - B0
+    C: all
 - enabled-by: true
   post-conditions:
-    A: Y
-    B: N/A
+    A: A1
+    B:
+    - if:
+        post-conditions:
+          A: A2
+      then: B0
+    - if:
+        post-conditions:
+          A:
+          - A0
+          - A1
+      then: N/A
   pre-conditions:
     A: N/A
     B:
-    - Y
+    - B1
+    C: all
 - enabled-by: true
   post-conditions: SkipReason
   pre-conditions:
     A:
-    - Y
+    - A1
     B:
-    - Z
+    - B2
+    C: all
 - enabled-by: true
   post-conditions:
-    A: X
-    B: X
+    A:
+    - if:
+      - pre-conditions:
+          A:
+          - A0
+          - A1
+      then: A2
+    - else: A0
+    B: B0
   pre-conditions: default
 type: requirement

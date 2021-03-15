@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes defines for the specified conditions a set of
+      states.
+    generic-attributes:
+      description: |
+        There shall be at most one generic attribute key for each condition.
+        The key name shall be the condition name.  The value of each generic
+        attribute shall be a set of states of the condition.
+      key-spec-type: requirement-action-name
+      value-spec-type: requirement-action-exp-states
+    mandatory-attributes: all
+spec-name: Action Requirement Expression Condition Set
+spec-type: requirement-action-exp-conditions
+type: spec

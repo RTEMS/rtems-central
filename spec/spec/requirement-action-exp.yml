@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      else:
+        description: |
+          It shall be the name of the state of the post-condition.
+        spec-type: requirement-action-exp-state-name
+      if:
+        description: |
+          If the boolean expression evaluates to true, then the state is
+          defined according to the ``then`` attribute value.
+        spec-type: requirement-action-exp-bool
+      then:
+        description: |
+          It shall be the name of the state of the post-condition.
+        spec-type: requirement-action-exp-state-name
+      then-specified-by:
+        description: |
+          It shall be the name of a pre-condition.  The name of the state of
+          the pre-condition in the associated transition defines the name of
+          the state of the post-condition.
+        spec-type: requirement-action-name
+      specified-by:
+        description: |
+          It shall be the name of a pre-condition.  The name of the state of
+          the pre-condition in the associated transition defines the name of
+          the state of the post-condition.
+        spec-type: requirement-action-name
+    description: |
+      This set of attributes defines an expression which may define the state
+      of a post-condition.  The ``else`` and ``specified-by`` shall be used
+      individually.   The ``if`` and ``then`` or ``then-specified-by``
+      expressions shall be used together.
+    mandatory-attributes: at-least-one
+spec-name: Action Requirement Expression
+spec-type: requirement-action-exp
+type: spec

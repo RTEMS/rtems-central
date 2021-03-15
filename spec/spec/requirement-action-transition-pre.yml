@@ -12,7 +12,7 @@ spec-info:
     attributes: {}
     description: |
       This set of attributes defines for each pre-condition the set of states
-      before the action for a transition in an actin requirement.
+      before the action for a transition in an action requirement.
     generic-attributes:
       description: |
         There shall be exactly one generic attribute key for each

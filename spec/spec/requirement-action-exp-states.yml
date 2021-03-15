@@ -10,17 +10,16 @@ spec-example: null
 spec-info:
   list:
     description: |
-      The list contains expressions to define the state of the corresponding
-      post-condition.
-    spec-type: requirement-action-exp
+      The list defines a set of states of the condition.
+    spec-type: requirement-action-exp-state-name
   str:
     assert:
       or:
       - re: ^[A-Z][a-zA-Z0-9]+$
       - eq: N/A
     description: |
-      It shall be the name of a state of the corresponding post-condition or
-      ``N/A`` if the post-condition is not applicable.
-spec-name: Action Requirement Transition Post-Condition State
-spec-type: requirement-action-transition-post-state
+      It shall be the name of a state of the condition or ``N/A`` if the
+      condition is not applicable.
+spec-name: Action Requirement Expression State Set
+spec-type: requirement-action-exp-states
 type: spec
