@@ -2241,7 +2241,7 @@ def test_validation_invalid_actions():
         "test-code": None,
         "text": None
     }]
-    match = ("transition map entry 0 of spec:/a refers to non-existent "
+    match = ("transition map descriptor 0 of spec:/a refers to non-existent "
              "post-condition state 'X0'")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
@@ -2251,7 +2251,7 @@ def test_validation_invalid_actions():
         "text": None
     }]
     action_data["transition-map"][0]["pre-conditions"]["A"] = ["a"]
-    match = ("transition map entry 0 of spec:/a refers to non-existent "
+    match = ("transition map descriptor 0 of spec:/a refers to non-existent "
              "state 'a' of pre-condition 'A'")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
@@ -2265,8 +2265,8 @@ def test_validation_invalid_actions():
             "A": "all"
         },
     })
-    match = ("transition map entry 1 of spec:/a duplicates pre-condition "
-             "set {A=A0} defined by transition map entry 0")
+    match = ("transition map descriptor 1 of spec:/a duplicates pre-condition "
+             "set {A=A0} defined by transition map descriptor 0")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
     action_data["transition-map"][1]["pre-conditions"]["A"] = ["A1"]

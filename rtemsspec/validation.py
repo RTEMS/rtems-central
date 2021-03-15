@@ -464,7 +464,7 @@ class _Transition(NamedTuple):
     enabled_by: str
     post_conditions: Tuple[int, ...]
     info: str
-    map_entry_index: int
+    descriptor_index: int
 
 
 _IdxToX = Tuple[Tuple[str, ...], ...]
@@ -533,9 +533,8 @@ class TransitionMap:
             map_idx //= count
         return ", ".join(reversed(conditions))
 
-    def _add_transitions(self, trans_idx: int, co_idx: int, map_idx: int,
-                         transition: Dict[str,
-                                          Any], transition_map: _TransitionMap,
+    def _add_transitions(self, desc_idx: int, co_idx: int, map_idx: int,
+                         desc: Dict[str, Any], transition_map: _TransitionMap,
                          info: List[str], post_cond: Tuple[int, ...]) -> None:
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
@@ -543,12 +542,12 @@ class TransitionMap:
             condition = self._pre_co_idx_to_cond[co_idx]
             state_count = len(condition["states"])
             map_idx *= state_count
-            states = transition["pre-conditions"][condition["name"]]
+            states = desc["pre-conditions"][condition["name"]]
             if isinstance(states, str):
                 assert states in ["all", "N/A"]
                 for st_idx in range(state_count):
-                    self._add_transitions(trans_idx, co_idx + 1,
-                                          map_idx + st_idx, transition,
+                    self._add_transitions(desc_idx, co_idx + 1,
+                                          map_idx + st_idx, desc,
                                           transition_map,
                                           info + [str(int(states == "N/A"))],
                                           post_cond)
@@ -558,36 +557,36 @@ class TransitionMap:
                         st_idx = self._pre_co_idx_st_name_to_st_idx[co_idx][
                             st_name]
                     except KeyError as err:
-                        msg = (f"transition map entry {trans_idx} of "
+                        msg = (f"transition map descriptor {desc_idx} of "
                                f"{self._item.spec} refers to non-existent "
                                f"state {err} of pre-condition "
                                f"'{condition['name']}'")
                         raise ValueError(msg) from err
-                    self._add_transitions(trans_idx, co_idx + 1,
-                                          map_idx + st_idx, transition,
+                    self._add_transitions(desc_idx, co_idx + 1,
+                                          map_idx + st_idx, desc,
                                           transition_map, info + ["0"],
                                           post_cond)
         else:
-            enabled_by = enabled_by_to_exp(transition["enabled-by"],
+            enabled_by = enabled_by_to_exp(desc["enabled-by"],
                                            ExpressionMapper())
             if enabled_by == "1" and transition_map[map_idx]:
                 raise ValueError(
-                    f"transition map entry {trans_idx} of "
+                    f"transition map descriptor {desc_idx} of "
                     f"{self._item.spec} duplicates pre-condition set "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
-                    "defined by transition map entry "
-                    f"{transition_map[map_idx][0].map_entry_index}")
+                    "defined by transition map descriptor "
+                    f"{transition_map[map_idx][0].descriptor_index}")
             transition_map[map_idx].append(
-                _Transition(enabled_by, post_cond, ", ".join(info), trans_idx))
+                _Transition(enabled_by, post_cond, ", ".join(info), desc_idx))
 
-    def _add_default(self, trans_idx: int, transition_map: _TransitionMap,
+    def _add_default(self, desc_idx: int, transition_map: _TransitionMap,
                      info: List[str], post_cond: Tuple[int, ...]) -> None:
         for transition in transition_map:
             if not transition:
                 transition.append(
                     _Transition("1", post_cond,
                                 ", ".join(info + ["0"] * self._pre_co_count),
-                                trans_idx))
+                                desc_idx))
 
     def _build_map(self) -> _TransitionMap:
         transition_count = 1
@@ -599,17 +598,17 @@ class TransitionMap:
             transition_count *= state_count
         transition_map = [list() for _ in range(transition_count)
                           ]  # type: _TransitionMap
-        for trans_idx, transition in enumerate(self["transition-map"]):
-            if isinstance(transition["post-conditions"], dict):
+        for desc_idx, desc in enumerate(self["transition-map"]):
+            if isinstance(desc["post-conditions"], dict):
                 try:
                     info = ["0"]
                     post_cond = tuple(
                         self._post_co_idx_st_name_to_st_idx[co_idx][
-                            transition["post-conditions"][
+                            desc["post-conditions"][
                                 self._post_co_idx_to_co_name[co_idx]]]
                         for co_idx in range(self._post_co_count))
                 except KeyError as err:
-                    msg = (f"transition map entry {trans_idx} of "
+                    msg = (f"transition map descriptor {desc_idx} of "
                            f"{self._item.spec} refers to non-existent "
                            f"post-condition state {err}")
                     raise ValueError(msg) from err
@@ -618,12 +617,12 @@ class TransitionMap:
                 post_cond = tuple(
                     self._post_co_idx_st_name_to_st_idx[co_idx]["N/A"]
                     for co_idx in range(self._post_co_count))
-            if isinstance(transition["pre-conditions"], dict):
-                self._add_transitions(trans_idx, 0, 0, transition,
-                                      transition_map, info, post_cond)
+            if isinstance(desc["pre-conditions"], dict):
+                self._add_transitions(desc_idx, 0, 0, desc, transition_map,
+                                      info, post_cond)
             else:
-                assert transition["pre-conditions"] == "default"
-                self._add_default(trans_idx, transition_map, info, post_cond)
+                assert desc["pre-conditions"] == "default"
+                self._add_default(desc_idx, transition_map, info, post_cond)
         return transition_map
 
     def _get_entry(self, variant: _Transition) -> str:
