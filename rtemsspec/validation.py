@@ -813,22 +813,49 @@ class TransitionMap:
         return transition_map
 
     def _get_entry(self, variant: Transition) -> str:
-        args = ", ".join(
-            itertools.chain(
-                [str(variant.skip)], map(str, variant.pre_cond_na),
-                (self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]
-                 for co_idx, st_idx in enumerate(variant.post_cond))))
+        skip_pre_cond_na = (variant.skip, ) + variant.pre_cond_na
+        for value in skip_pre_cond_na:
+            if value != 0:
+                text = "E( " + ", ".join(
+                    itertools.chain(
+                        map(str, skip_pre_cond_na),
+                        (self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]
+                         for co_idx, st_idx in enumerate(variant.post_cond))))
+                break
+        else:
+            text = "EZ( " + ", ".join(
+                self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]
+                for co_idx, st_idx in enumerate(variant.post_cond))
         wrapper = textwrap.TextWrapper()
         wrapper.initial_indent = "  "
         wrapper.subsequent_indent = "     "
         wrapper.width = 75
-        return "\n".join(wrapper.wrap("E( " + args)) + " ),"
+        return "\n".join(wrapper.wrap(text)) + " ),"
 
     def _get_entry_bits(self) -> int:
         bits = self._pre_co_count + 1
         for st_idx_to_st_name in self._post_co_idx_st_idx_to_st_name:
             bits += math.ceil(math.log2(len(st_idx_to_st_name)))
         return 2**max(math.ceil(math.log2(bits)), 3)
+
+    def _add_entry_macro(self, content: CContent, ident: str, name: str,
+                         pre_count_0: int, pre_count_1: int) -> None:
+        # pylint: disable=too-many-arguments
+        entry = f"#define {name}( "
+        entry += ", ".join(
+            f"x{index}" for index in range(pre_count_0 + self._post_co_count))
+        entry += ") { "
+        entry += ", ".join(
+            itertools.chain(
+                (f"x{index}" for index in range(pre_count_0)),
+                ("0" for index in range(pre_count_1)),
+                (f"{ident}_Post_{condition['name']}_##x{pre_count_0 + co_idx}"
+                 for co_idx, condition in enumerate(self["post-conditions"]))))
+        wrapper = textwrap.TextWrapper()
+        wrapper.initial_indent = ""
+        wrapper.subsequent_indent = "  "
+        wrapper.width = 77
+        content.add(" \\\n".join(wrapper.wrap(entry)) + " }")
 
     def add_map(self, content: CContent, ident: str) -> None:
         """ Adds the transition map definitions to the content. """
@@ -859,24 +886,12 @@ class TransitionMap:
                     f"uint{bits}_t Post_{condition['name']} : {state_bits};")
         content.add(f"}} {ident}_Entry;")
         pre_count = 1 + self._pre_co_count
-        entry = "#define E( "
-        entry += ", ".join(f"x{index}"
-                           for index in range(pre_count + self._post_co_count))
-        entry += ") { "
-        entry += ", ".join(
-            itertools.chain(
-                (f"x{index}" for index in range(pre_count)),
-                (f"{ident}_Post_{condition['name']}_##x{pre_count + co_idx}"
-                 for co_idx, condition in enumerate(self["post-conditions"]))))
-        wrapper = textwrap.TextWrapper()
-        wrapper.initial_indent = ""
-        wrapper.subsequent_indent = "  "
-        wrapper.width = 77
-        content.add(" \\\n".join(wrapper.wrap(entry)) + " }")
+        self._add_entry_macro(content, ident, "E", pre_count, 0)
+        self._add_entry_macro(content, ident, "EZ", 0, pre_count)
         content.add([f"static const {ident}_Entry", f"{ident}_Map[] = {{"])
         entries[-1] = entries[-1].replace("),", ")")
         content.append(entries)
-        content.append(["};", "", "#undef E"])
+        content.append(["};", "", "#undef E", "#undef EZ"])
 
     def get_post_entry_member(self, co_idx: int) -> str:
         """

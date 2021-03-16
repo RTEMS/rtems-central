@@ -620,55 +620,59 @@ typedef struct {
 #define E( x0, x1, x2, x3, x4, x5) { x0, x1, x2, x3, \\
   Directive_Post_Status_##x4, Directive_Post_Id_##x5 }
 
+#define EZ( x0, x1) { 0, 0, 0, 0, Directive_Post_Status_##x0, \\
+  Directive_Post_Id_##x1 }
+
 static const Directive_Entry
 Directive_Map[] = {
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, Self ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, Self ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, Self ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, Self ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, Self ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, Self ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, LocalTask ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, Self ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, Self ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, Self ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, Self ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, Self ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, Self ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, LocalTask ),
+  EZ( InvAddr, NullPtr ),
 #if defined(RTEMS_MULTIPROCESSING)
-  E( 0, 0, 0, 0, Ok, RemoteTask ),
+  EZ( Ok, RemoteTask ),
 #else
-  E( 0, 0, 0, 0, InvName, Nop ),
+  EZ( InvName, Nop ),
 #endif
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, InvName, Nop ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, LocalTask ),
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
+  EZ( InvAddr, NullPtr ),
+  EZ( InvName, Nop ),
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, LocalTask ),
+  EZ( InvAddr, NullPtr ),
 #if defined(RTEMS_MULTIPROCESSING)
-  E( 0, 0, 0, 0, Ok, RemoteTask ),
+  EZ( Ok, RemoteTask ),
 #else
-  E( 0, 0, 0, 0, InvName, Nop ),
+  EZ( InvName, Nop ),
 #endif
-  E( 0, 0, 0, 0, InvAddr, NullPtr ),
-  E( 0, 0, 0, 0, Ok, LocalTask )
+  EZ( InvAddr, NullPtr ),
+  EZ( Ok, LocalTask )
 };
 
 #undef E
+#undef EZ
 
 static size_t Directive_Scope( void *arg, char *buf, size_t n )
 {
@@ -2119,20 +2123,22 @@ typedef struct {
 #define E( x0, x1, x2, x3, x4, x5) { x0, x1, x2, x3, Action2_Post_A_##x4, \\
   Action2_Post_B_##x5 }
 
+#define EZ( x0, x1) { 0, 0, 0, 0, Action2_Post_A_##x0, Action2_Post_B_##x1 }
+
 static const Action2_Entry
 Action2_Map[] = {
-  E( 0, 0, 0, 0, A1, B0 ),
-  E( 0, 0, 0, 0, A1, B0 ),
-  E( 0, 0, 0, 0, A1, B0 ),
+  EZ( A1, B0 ),
+  EZ( A1, B0 ),
+  EZ( A1, B0 ),
   E( 0, 1, 0, 0, A1, NA ),
   E( 0, 1, 0, 0, A1, NA ),
   E( 0, 1, 0, 0, A1, NA ),
-  E( 0, 0, 0, 0, A2, B0 ),
-  E( 0, 0, 0, 0, A2, B0 ),
-  E( 0, 0, 0, 0, A2, B0 ),
-  E( 0, 0, 0, 0, A2, B0 ),
-  E( 0, 0, 0, 0, A2, B0 ),
-  E( 0, 0, 0, 0, A3, B0 ),
+  EZ( A2, B0 ),
+  EZ( A2, B0 ),
+  EZ( A2, B0 ),
+  EZ( A2, B0 ),
+  EZ( A2, B0 ),
+  EZ( A3, B0 ),
   E( 0, 1, 0, 0, A1, NA ),
   E( 0, 1, 0, 0, A1, NA ),
   E( 0, 1, 0, 0, A1, NA ),
@@ -2142,6 +2148,7 @@ Action2_Map[] = {
 };
 
 #undef E
+#undef EZ
 
 static size_t Action2_Scope( void *arg, char *buf, size_t n )
 {
