@@ -759,18 +759,26 @@ class TransitionMap:
                                           pre_cond_na + (0, ))
         else:
             enabled_by = desc["enabled-by"]
-            if transition_map[map_idx] and isinstance(enabled_by,
-                                                      bool) and enabled_by:
+            post_cond = self._make_post_cond(desc_idx, map_idx, skip_post_cond)
+            if transition_map[map_idx]:
+                if isinstance(enabled_by, bool) and enabled_by:
+                    raise ValueError(
+                        f"transition map descriptor {desc_idx} of "
+                        f"{self._item.spec} duplicates pre-condition set "
+                        f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
+                        "defined by transition map descriptor "
+                        f"{transition_map[map_idx][0].desc_idx}")
+                if transition_map[map_idx][0].post_cond == post_cond:
+                    return
+            elif not isinstance(enabled_by, bool) or not enabled_by:
                 raise ValueError(
                     f"transition map descriptor {desc_idx} of "
-                    f"{self._item.spec} duplicates pre-condition set "
+                    f"{self._item.spec} is the first variant for "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
-                    "defined by transition map descriptor "
-                    f"{transition_map[map_idx][0].desc_idx}")
+                    "and it is not enabled by default")
             transition_map[map_idx].append(
-                Transition(
-                    desc_idx, enabled_by, skip_post_cond[0], pre_cond_na,
-                    self._make_post_cond(desc_idx, map_idx, skip_post_cond)))
+                Transition(desc_idx, enabled_by, skip_post_cond[0],
+                           pre_cond_na, post_cond))
 
     def _add_default(self, transition_map: _TransitionMap, desc: Dict[str,
                                                                       Any],

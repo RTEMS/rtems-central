@@ -261,4 +261,15 @@ transition-map:
     - else: A0
     B: B0
   pre-conditions: default
+- enabled-by: FOOBAR
+  post-conditions:
+    A: A1
+    B: B0
+  pre-conditions:
+    A:
+    - A0
+    B:
+    - B0
+    C:
+    - C0
 type: requirement

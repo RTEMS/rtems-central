@@ -2401,6 +2401,12 @@ def test_validation_invalid_actions():
              "for pre-condition set {A=A2}")
     with pytest.raises(ValueError, match=match):
         generate(validation_config, item_cache)
+    action_data["transition-map"][0]["enabled-by"] = False
+    match = ("transition map descriptor 0 of spec:/a is the first "
+             "variant for {A=A0} and it is not enabled by default")
+    with pytest.raises(ValueError, match=match):
+        generate(validation_config, item_cache)
+    action_data["transition-map"][0]["enabled-by"] = True
     action_data["transition-map"][-1]["post-conditions"]["X"] = []
     match = ("cannot determine state for post-condition 'X' of transition map "
              "descriptor 1 of spec:/a for pre-condition set {A=A1}")
