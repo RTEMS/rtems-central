@@ -258,6 +258,11 @@ def test_enabled_by_to_exp():
     assert to_c_exp(True) == "1"
     assert to_c_exp(False) == "0"
     assert to_c_exp([]) == ""
+    assert to_c_exp(["CPU_A"]) == "CPU_A == TRUE"
+    assert to_c_exp({"not": "CPU_A"}) == "!( CPU_A == TRUE )"
+    assert to_c_exp(["CPU_B", {
+        "not": "CPU_A"
+    }, "A"]) == "( CPU_B == TRUE ) || !( CPU_A == TRUE ) || defined(A)"
     assert to_c_exp(["A"]) == "defined(A)"
     assert to_c_exp(["B"]) == "defined(B)"
     assert to_c_exp(["A", "B"]) == "defined(A) || defined(B)"

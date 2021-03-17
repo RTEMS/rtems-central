@@ -1053,6 +1053,8 @@ class ExpressionMapper:
     # pylint: disable=no-self-use
     def map_symbol(self, symbol: str) -> str:
         """ Maps a symbol to build an expression. """
+        if symbol.startswith("CPU_"):
+            return f"( {symbol} == TRUE )"
         return f"defined({symbol})"
 
     def op_and(self) -> str:
@@ -1138,7 +1140,7 @@ def enabled_by_to_exp(enabled_by: Any, mapper: ExpressionMapper) -> str:
     """
     exp = _to_expression(enabled_by, mapper)
     if exp.startswith("("):
-        return exp[1:-1]
+        return exp[1:-1].strip()
     return exp
 
 
