@@ -460,7 +460,7 @@ class _TestSuiteItem(_TestItem):
 class Transition(NamedTuple):
     """ Represents a action requirement transition map entry.  """
     desc_idx: int
-    enabled_by: str
+    enabled_by: Any
     skip: int
     pre_cond_na: Tuple[int, ...]
     post_cond: Tuple[int, ...]
@@ -628,8 +628,10 @@ class TransitionMap:
         yield from self._map
 
     def _check_completeness(self) -> None:
-        for map_idx, transistions in enumerate(self):
-            if not transistions or transistions[0].enabled_by != "1":
+        for map_idx, transitions in enumerate(self):
+            if not transitions or not isinstance(
+                    transitions[0].enabled_by,
+                    bool) or not transitions[0].enabled_by:
                 raise ValueError(
                     f"transition map of {self._item.spec} contains no default "
                     "entry for pre-condition set "
@@ -748,9 +750,9 @@ class TransitionMap:
                                           map_idx + st_idx,
                                           pre_cond_na + (0, ))
         else:
-            enabled_by = enabled_by_to_exp(desc["enabled-by"],
-                                           ExpressionMapper())
-            if enabled_by == "1" and transition_map[map_idx]:
+            enabled_by = desc["enabled-by"]
+            if transition_map[map_idx] and isinstance(enabled_by,
+                                                      bool) and enabled_by:
                 raise ValueError(
                     f"transition map descriptor {desc_idx} of "
                     f"{self._item.spec} duplicates pre-condition set "
@@ -762,13 +764,15 @@ class TransitionMap:
                     desc_idx, enabled_by, skip_post_cond[0], pre_cond_na,
                     self._make_post_cond(desc_idx, map_idx, skip_post_cond)))
 
-    def _add_default(self, transition_map: _TransitionMap, desc_idx: int,
-                     skip_post_cond: Tuple[int, ...]) -> None:
+    def _add_default(self, transition_map: _TransitionMap, desc: Dict[str,
+                                                                      Any],
+                     desc_idx: int, skip_post_cond: Tuple[int, ...]) -> None:
+        enabled_by = desc["enabled-by"]
         for map_idx, transition in enumerate(transition_map):
             if not transition:
                 transition.append(
                     Transition(
-                        desc_idx, "1", skip_post_cond[0],
+                        desc_idx, enabled_by, skip_post_cond[0],
                         (0, ) * self._pre_co_count,
                         self._make_post_cond(desc_idx, map_idx,
                                              skip_post_cond)))
@@ -809,7 +813,8 @@ class TransitionMap:
                                       skip_post_cond, 0, 0, ())
             else:
                 assert desc["pre-conditions"] == "default"
-                self._add_default(transition_map, desc_idx, skip_post_cond)
+                self._add_default(transition_map, desc, desc_idx,
+                                  skip_post_cond)
         return transition_map
 
     def _get_entry(self, variant: Transition) -> str:
@@ -860,6 +865,7 @@ class TransitionMap:
     def add_map(self, content: CContent, ident: str) -> None:
         """ Adds the transition map definitions to the content. """
         entries = []
+        mapper = ExpressionMapper()
         for transistions in self._map:
             if len(transistions) == 1:
                 entries.append(self._get_entry(transistions[0]))
@@ -867,7 +873,8 @@ class TransitionMap:
                 ifelse = "#if "
                 enumerators = []  # type: List[str]
                 for variant in transistions[1:]:
-                    enumerators.append(ifelse + variant.enabled_by)
+                    enumerators.append(
+                        ifelse + enabled_by_to_exp(variant.enabled_by, mapper))
                     enumerators.append(self._get_entry(variant))
                     ifelse = "#elif "
                 enumerators.append("#else")
