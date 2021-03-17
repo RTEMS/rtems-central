@@ -26,11 +26,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import argparse
+import itertools
 import sys
-from typing import List, Set
+from typing import List, Set, Tuple
 
-from rtemsspec.items import Item, ItemCache, Link
+from rtemsspec.items import is_enabled, Item, ItemCache, Link
+from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.util import load_config
+from rtemsspec.validation import Transition, TransitionMap
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-function",
@@ -86,14 +89,34 @@ def _process_test_cases(item_cache: ItemCache) -> None:
                     _add_link(item_cache, item, link)
 
 
+def _make_row(transition_map: TransitionMap, map_idx: int,
+              variant: Transition) -> Tuple[str, ...]:
+    return tuple(
+        itertools.chain(
+            [str(map_idx), str(variant.desc_idx)],
+            (transition_map.pre_co_idx_st_idx_to_st_name(co_idx, st_idx)
+             for co_idx, st_idx in enumerate(
+                 transition_map.map_idx_to_pre_co_states(map_idx))),
+            (transition_map.post_co_idx_st_idx_to_st_name(co_idx, st_idx)
+             for co_idx, st_idx in enumerate(variant.post_cond))))
+
+
 def main() -> None:
     """ Views the specification. """
     parser = argparse.ArgumentParser()
     parser.add_argument('--filter',
-                        choices=["none", "orphan", "no-validation"],
+                        choices=["none", "orphan", "no-validation", "action"],
                         type=str.lower,
                         default="none",
                         help="filter the items")
+    parser.add_argument(
+        "--enabled",
+        help=("a comma separated list of enabled options used to evaluate "
+              "enabled-by expressions"))
+    parser.add_argument("UIDs",
+                        metavar="UID",
+                        nargs="*",
+                        help="an UID of a specification item")
     args = parser.parse_args(sys.argv[1:])
     config = load_config("config.yml")
     item_cache = ItemCache(config["spec"])
@@ -102,6 +125,32 @@ def main() -> None:
 
     if args.filter == "none":
         _view(root, 0)
+    elif args.filter == "action":
+        enabled = args.enabled.split(",") if args.enabled else []
+        for uid in args.UIDs:
+            item = item_cache[uid]
+            rows = [
+                tuple(
+                    itertools.chain(
+                        ["Entry", "Descriptor"],
+                        (condition["name"]
+                         for condition in item["pre-conditions"]),
+                        (condition["name"]
+                         for condition in item["post-conditions"])))
+            ]
+            transition_map = TransitionMap(item)
+            for map_idx, transitions in enumerate(transition_map):
+                for variant in transitions[1:]:
+                    if is_enabled(enabled, variant.enabled_by):
+                        rows.append(_make_row(transition_map, map_idx,
+                                              variant))
+                        break
+                else:
+                    rows.append(
+                        _make_row(transition_map, map_idx, transitions[0]))
+        content = SphinxContent()
+        content.add_simple_table(rows)
+        print(str(content))
     elif args.filter == "orphan":
         spec = set()  # type: Set[Item]
         _gather(root, spec)

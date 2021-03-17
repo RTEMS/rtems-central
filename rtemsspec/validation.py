@@ -679,6 +679,13 @@ class TransitionMap:
         """
         return self._pre_co_idx_st_idx_to_st_name[co_idx][st_idx]
 
+    def post_co_idx_st_idx_to_st_name(self, co_idx: int, st_idx: int) -> str:
+        """
+        Maps the post-condition name and state index to the associated state
+        name.
+        """
+        return self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]
+
     def pre_co_idx_st_name_to_st_idx(self, co_idx: int, st_name: str) -> int:
         """
         Maps the pre-condition index and state name to the associated state

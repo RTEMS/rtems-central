@@ -27,7 +27,7 @@
 import os
 import pytest
 
-from rtemsspec.validation import generate
+from rtemsspec.validation import generate, TransitionMap
 from rtemsspec.items import EmptyItemCache, Item, ItemCache
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
@@ -40,7 +40,12 @@ def test_validation(tmpdir):
 
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-validation", with_spec_types=True)
-    generate(validation_config, ItemCache(item_cache_config))
+    item_cache = ItemCache(item_cache_config)
+
+    transition_map = TransitionMap(item_cache["/action2"])
+    assert transition_map.post_co_idx_st_idx_to_st_name(0, 0) == "A0"
+
+    generate(validation_config, item_cache)
 
     with open(os.path.join(base_directory, "ts.c"), "r") as src:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */
