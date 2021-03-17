@@ -323,8 +323,9 @@ class _TestItem:
         content.append("typedef struct {")
         with content.indent():
             for info in self["test-context"]:
-                content.add_description_block(info["brief"],
-                                              info["description"])
+                content.add_description_block(
+                    self.substitute_text(info["brief"]),
+                    self.substitute_text(info["description"]))
                 content.add(f"{info['member'].strip()};")
             self.add_default_context_members(content)
         content.add([
