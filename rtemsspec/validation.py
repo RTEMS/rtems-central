@@ -467,8 +467,31 @@ class Transition(NamedTuple):
     post_cond: Tuple[int, ...]
 
 
+class _TransitionEntry:
+    def __init__(self):
+        self.key = ""
+        self.variants = []  # type: List[Transition]
+
+    def __bool__(self):
+        return bool(self.variants)
+
+    def __getitem__(self, key):
+        return self.variants[key]
+
+    def __len__(self):
+        return len(self.variants)
+
+    def add(self, variant: Transition) -> None:
+        """ Adds the variant to the transitions of the entry. """
+        self.key += "".join(
+            (enabled_by_to_exp(variant.enabled_by,
+                               ExpressionMapper()), str(variant.skip),
+             str(variant.pre_cond_na), str(variant.post_cond)))
+        self.variants.append(variant)
+
+
 _IdxToX = Tuple[Tuple[str, ...], ...]
-_TransitionMap = List[List[Transition]]
+_TransitionMap = List[_TransitionEntry]
 
 
 def _to_st_idx(conditions: List[Any]) -> Tuple[Dict[str, int], ...]:
@@ -619,8 +642,9 @@ class TransitionMap:
         self._post_co_idx_to_co_name = dict(
             (co_idx, condition["name"])
             for co_idx, condition in enumerate(item["post-conditions"]))
+        self._entries = {}  # type: Dict[str, List[Any]]
         self._map = self._build_map()
-        self._check_completeness()
+        self._post_process()
 
     def __getitem__(self, key: str):
         return self._item[key]
@@ -628,7 +652,7 @@ class TransitionMap:
     def __iter__(self):
         yield from self._map
 
-    def _check_completeness(self) -> None:
+    def _post_process(self) -> None:
         for map_idx, transitions in enumerate(self):
             if not transitions or not isinstance(
                     transitions[0].enabled_by,
@@ -637,6 +661,14 @@ class TransitionMap:
                     f"transition map of {self._item.spec} contains no default "
                     "entry for pre-condition set "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}}")
+            entry = self._entries.get(transitions.key, [0, 0, transitions])
+            entry[0] += 1
+            self._entries[transitions.key] = entry
+        for index, entry in enumerate(
+                sorted(self._entries.values(),
+                       key=lambda x: x[0],
+                       reverse=True)):
+            entry[1] = index
 
     def _map_index_to_pre_conditions(self, map_idx: int) -> str:
         conditions = []
@@ -776,7 +808,7 @@ class TransitionMap:
                     f"{self._item.spec} is the first variant for "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
                     "and it is not enabled by default")
-            transition_map[map_idx].append(
+            transition_map[map_idx].add(
                 Transition(desc_idx, enabled_by, skip_post_cond[0],
                            pre_cond_na, post_cond))
 
@@ -786,7 +818,7 @@ class TransitionMap:
         enabled_by = desc["enabled-by"]
         for map_idx, transition in enumerate(transition_map):
             if not transition:
-                transition.append(
+                transition.add(
                     Transition(
                         desc_idx, enabled_by, skip_post_cond[0],
                         (0, ) * self._pre_co_count,
@@ -807,8 +839,7 @@ class TransitionMap:
                 raise ValueError(f"pre-condition '{condition['name']}' of "
                                  f"{self._item.spec} has no states")
             transition_count *= state_count
-        transition_map = [list() for _ in range(transition_count)
-                          ]  # type: _TransitionMap
+        transition_map = [_TransitionEntry() for _ in range(transition_count)]
         for desc_idx, desc in enumerate(self["transition-map"]):
             if isinstance(desc["post-conditions"], dict):
                 try:
@@ -833,25 +864,17 @@ class TransitionMap:
                                   skip_post_cond)
         return transition_map
 
-    def _get_entry(self, variant: Transition) -> str:
-        skip_pre_cond_na = (variant.skip, ) + variant.pre_cond_na
-        for value in skip_pre_cond_na:
-            if value != 0:
-                text = "E( " + ", ".join(
-                    itertools.chain(
-                        map(str, skip_pre_cond_na),
-                        (self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]
-                         for co_idx, st_idx in enumerate(variant.post_cond))))
-                break
-        else:
-            text = "EZ( " + ", ".join(
-                self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]
-                for co_idx, st_idx in enumerate(variant.post_cond))
+    def _get_entry(self, ident: str, variant: Transition) -> str:
+        text = "{ " + ", ".join(
+            itertools.chain(map(str, (variant.skip, ) + variant.pre_cond_na), (
+                (f"{ident}_Post_{self._post_co_idx_to_co_name[co_idx]}"
+                 f"_{self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]}")
+                for co_idx, st_idx in enumerate(variant.post_cond))))
         wrapper = textwrap.TextWrapper()
         wrapper.initial_indent = "  "
-        wrapper.subsequent_indent = "     "
-        wrapper.width = 75
-        return "\n".join(wrapper.wrap(text)) + " ),"
+        wrapper.subsequent_indent = "    "
+        wrapper.width = 79
+        return "\n".join(wrapper.wrap(text)) + " },"
 
     def _get_entry_bits(self) -> int:
         bits = self._pre_co_count + 1
@@ -859,42 +882,24 @@ class TransitionMap:
             bits += math.ceil(math.log2(len(st_idx_to_st_name)))
         return 2**max(math.ceil(math.log2(bits)), 3)
 
-    def _add_entry_macro(self, content: CContent, ident: str, name: str,
-                         pre_count_0: int, pre_count_1: int) -> None:
-        # pylint: disable=too-many-arguments
-        entry = f"#define {name}( "
-        entry += ", ".join(
-            f"x{index}" for index in range(pre_count_0 + self._post_co_count))
-        entry += ") { "
-        entry += ", ".join(
-            itertools.chain(
-                (f"x{index}" for index in range(pre_count_0)),
-                ("0" for index in range(pre_count_1)),
-                (f"{ident}_Post_{condition['name']}_##x{pre_count_0 + co_idx}"
-                 for co_idx, condition in enumerate(self["post-conditions"]))))
-        wrapper = textwrap.TextWrapper()
-        wrapper.initial_indent = ""
-        wrapper.subsequent_indent = "  "
-        wrapper.width = 77
-        content.add(" \\\n".join(wrapper.wrap(entry)) + " }")
-
     def add_map(self, content: CContent, ident: str) -> None:
         """ Adds the transition map definitions to the content. """
         entries = []
         mapper = ExpressionMapper()
-        for transistions in self._map:
-            if len(transistions) == 1:
-                entries.append(self._get_entry(transistions[0]))
+        for entry in sorted(self._entries.values(), key=lambda x: x[1]):
+            transitions = entry[2]
+            if len(transitions) == 1:
+                entries.append(self._get_entry(ident, transitions[0]))
             else:
                 ifelse = "#if "
                 enumerators = []  # type: List[str]
-                for variant in transistions[1:]:
+                for variant in transitions[1:]:
                     enumerators.append(
                         ifelse + enabled_by_to_exp(variant.enabled_by, mapper))
-                    enumerators.append(self._get_entry(variant))
+                    enumerators.append(self._get_entry(ident, variant))
                     ifelse = "#elif "
                 enumerators.append("#else")
-                enumerators.append(self._get_entry(transistions[0]))
+                enumerators.append(self._get_entry(ident, transitions[0]))
                 enumerators.append("#endif")
                 entries.append("\n".join(enumerators))
         bits = self._get_entry_bits()
@@ -908,13 +913,21 @@ class TransitionMap:
                 content.append(
                     f"uint{bits}_t Post_{condition['name']} : {state_bits};")
         content.add(f"}} {ident}_Entry;")
-        pre_count = 1 + self._pre_co_count
-        self._add_entry_macro(content, ident, "E", pre_count, 0)
-        self._add_entry_macro(content, ident, "EZ", 0, pre_count)
-        content.add([f"static const {ident}_Entry", f"{ident}_Map[] = {{"])
-        entries[-1] = entries[-1].replace("),", ")")
+        content.add([f"static const {ident}_Entry", f"{ident}_Entries[] = {{"])
+        entries[-1] = entries[-1].replace("},", "}")
         content.append(entries)
-        content.append(["};", "", "#undef E", "#undef EZ"])
+        bits = math.ceil(math.log2(len(self._entries)) / 8) * 8
+        content.append(
+            ["};", "", f"static const uint{bits}_t", f"{ident}_Map[] = {{"])
+        text = ", ".join(
+            str(self._entries[transitions.key][1])
+            for transitions in self._map)
+        wrapper = textwrap.TextWrapper()
+        wrapper.initial_indent = "  "
+        wrapper.subsequent_indent = "  "
+        wrapper.width = 79
+        content.append(wrapper.wrap(text))
+        content.append("};")
 
     def get_post_entry_member(self, co_idx: int) -> str:
         """
@@ -996,7 +1009,7 @@ class _ActionRequirementTestItem(_TestItem):
 
     def _add_loop_body(self, content: CContent,
                        transition_map: TransitionMap) -> None:
-        with content.condition(f"{self.ident}_Map[ index ].Skip"):
+        with content.condition("entry.Skip"):
             content.append(["++index;", "continue;"])
         content.add_blank_line()
         self._add_call(content, "test-prepare", "Prepare")
@@ -1005,7 +1018,6 @@ class _ActionRequirementTestItem(_TestItem):
             content.call_function(None, f"{enum[0]}_Prepare",
                                   ["ctx", f"ctx->pcs[ {index} ]"])
         self._add_call(content, "test-action", "Action")
-        content.append(f"entry = {self.ident}_Map[ index ];")
         for index, enum in enumerate(self._post_co_idx_to_enum):
             content.gap = False
             content.call_function(None, f"{enum[0]}_Check", [
@@ -1022,11 +1034,10 @@ class _ActionRequirementTestItem(_TestItem):
             end = self._pre_co_idx_to_enum[index][-1]
             with content.for_loop(f"{var} = {begin}", f"{var} < {end}",
                                   f"++{var}"):
-                if index + 1 == self._pre_co_count:
-                    content.add(f"{self.ident}_Entry entry;")
                 name = self._item['pre-conditions'][index]["name"]
-                pre_na = f"{self.ident}_Map[ index ].Pre_{name}_NA"
-                with content.condition(pre_na):
+                content.call_function("entry =", f"{self.ident}_GetEntry",
+                                      ["index"])
+                with content.condition(f"entry.Pre_{name}_NA"):
                     content.append(f"{var} = {end};")
                     content.append(f"index += ( {end} - 1 )")
                     for index_2 in range(index + 1, self._pre_co_count):
@@ -1040,6 +1051,15 @@ class _ActionRequirementTestItem(_TestItem):
 
     def _add_test_case(self, content: CContent, transition_map: TransitionMap,
                        header: Dict[str, Any]) -> None:
+        ret = f"static inline {self.ident}_Entry"
+        name = f"{self.ident}_GetEntry"
+        params = ["size_t index"]
+        with content.function(ret, name, params, align=True):
+            content.add([
+                f"return {self.ident}_Entries[",
+                f"  {self.ident}_Map[ index ]", "];"
+            ])
+        entry = f"{self.ident}_Entry entry;"
         fixture = f"{self.ident}_Fixture"
         prologue = CContent()
         epilogue = CContent()
@@ -1048,7 +1068,7 @@ class _ActionRequirementTestItem(_TestItem):
             ret = "void"
             name = f"{self.ident}_Run"
             params = self._get_run_params(header)
-            prologue.add([f"{self.context} *ctx;", "size_t index;"])
+            prologue.add([f"{self.context} *ctx;", entry, "size_t index;"])
             prologue.call_function("ctx =", "T_push_fixture",
                                    [f"&{self.ident}_Node", f"&{fixture}"])
             prologue.add([
@@ -1066,7 +1086,7 @@ class _ActionRequirementTestItem(_TestItem):
             name = "T_TEST_CASE_FIXTURE"
             params = [f"{self.ident}", f"&{fixture}"]
             prologue.add([
-                f"{self.context} *ctx;", "size_t index;", "",
+                f"{self.context} *ctx;", entry, "size_t index;", "",
                 "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
                 "index = 0;"
             ])

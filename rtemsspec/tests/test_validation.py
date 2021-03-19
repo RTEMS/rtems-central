@@ -622,62 +622,24 @@ typedef struct {
   uint16_t Post_Id : 3;
 } Directive_Entry;
 
-#define E( x0, x1, x2, x3, x4, x5) { x0, x1, x2, x3, \\
-  Directive_Post_Status_##x4, Directive_Post_Id_##x5 }
-
-#define EZ( x0, x1) { 0, 0, 0, 0, Directive_Post_Status_##x0, \\
-  Directive_Post_Id_##x1 }
-
 static const Directive_Entry
-Directive_Map[] = {
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, Self ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, Self ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, Self ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, Self ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, Self ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, Self ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, LocalTask ),
-  EZ( InvAddr, NullPtr ),
+Directive_Entries[] = {
+  { 0, 0, 0, 0, Directive_Post_Status_InvAddr, Directive_Post_Id_NullPtr },
+  { 0, 0, 0, 0, Directive_Post_Status_InvName, Directive_Post_Id_Nop },
+  { 0, 0, 0, 0, Directive_Post_Status_Ok, Directive_Post_Id_Self },
+  { 0, 0, 0, 0, Directive_Post_Status_Ok, Directive_Post_Id_LocalTask },
 #if defined(RTEMS_MULTIPROCESSING)
-  EZ( Ok, RemoteTask ),
+  { 0, 0, 0, 0, Directive_Post_Status_Ok, Directive_Post_Id_RemoteTask }
 #else
-  EZ( InvName, Nop ),
+  { 0, 0, 0, 0, Directive_Post_Status_InvName, Directive_Post_Id_Nop }
 #endif
-  EZ( InvAddr, NullPtr ),
-  EZ( InvName, Nop ),
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, LocalTask ),
-  EZ( InvAddr, NullPtr ),
-#if defined(RTEMS_MULTIPROCESSING)
-  EZ( Ok, RemoteTask ),
-#else
-  EZ( InvName, Nop ),
-#endif
-  EZ( InvAddr, NullPtr ),
-  EZ( Ok, LocalTask )
 };
 
-#undef E
-#undef EZ
+static const uint8_t
+Directive_Map[] = {
+  0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 3,
+  0, 4, 0, 1, 0, 3, 0, 4, 0, 3
+};
 
 static size_t Directive_Scope( void *arg, char *buf, size_t n )
 {
@@ -700,12 +662,20 @@ static T_fixture Directive_Fixture = {
   .initial_context = &Directive_Instance
 };
 
+static inline Directive_Entry Directive_GetEntry( size_t index )
+{
+  return Directive_Entries[
+    Directive_Map[ index ]
+  ];
+}
+
 /**
  * @fn void T_case_body_Directive( void )
  */
 T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 {
   Directive_Context *ctx;
+  Directive_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -717,7 +687,9 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
     ctx->pcs[ 0 ] < Directive_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( Directive_Map[ index ].Pre_Name_NA ) {
+    entry = Directive_GetEntry( index );
+
+    if ( entry.Pre_Name_NA ) {
       ctx->pcs[ 0 ] = Directive_Pre_Name_NA;
       index += ( Directive_Pre_Name_NA - 1 )
         * Directive_Pre_Node_NA
@@ -729,7 +701,9 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
       ctx->pcs[ 1 ] < Directive_Pre_Node_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( Directive_Map[ index ].Pre_Node_NA ) {
+      entry = Directive_GetEntry( index );
+
+      if ( entry.Pre_Node_NA ) {
         ctx->pcs[ 1 ] = Directive_Pre_Node_NA;
         index += ( Directive_Pre_Node_NA - 1 )
           * Directive_Pre_Id_NA;
@@ -740,14 +714,14 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
         ctx->pcs[ 2 ] < Directive_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        Directive_Entry entry;
+        entry = Directive_GetEntry( index );
 
-        if ( Directive_Map[ index ].Pre_Id_NA ) {
+        if ( entry.Pre_Id_NA ) {
           ctx->pcs[ 2 ] = Directive_Pre_Id_NA;
           index += ( Directive_Pre_Id_NA - 1 );
         }
 
-        if ( Directive_Map[ index ].Skip ) {
+        if ( entry.Skip ) {
           ++index;
           continue;
         }
@@ -756,7 +730,6 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
         Directive_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
         Directive_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
         Directive_Action( ctx );
-        entry = Directive_Map[ index ];
         Directive_Post_Status_Check( ctx, entry.Post_Status );
         Directive_Post_Id_Check( ctx, entry.Post_Id );
         ++index;
@@ -2125,35 +2098,19 @@ typedef struct {
   uint16_t Post_B : 2;
 } Action2_Entry;
 
-#define E( x0, x1, x2, x3, x4, x5) { x0, x1, x2, x3, Action2_Post_A_##x4, \\
-  Action2_Post_B_##x5 }
-
-#define EZ( x0, x1) { 0, 0, 0, 0, Action2_Post_A_##x0, Action2_Post_B_##x1 }
-
 static const Action2_Entry
-Action2_Map[] = {
-  EZ( A1, B0 ),
-  EZ( A1, B0 ),
-  EZ( A1, B0 ),
-  E( 0, 1, 0, 0, A1, NA ),
-  E( 0, 1, 0, 0, A1, NA ),
-  E( 0, 1, 0, 0, A1, NA ),
-  EZ( A2, B0 ),
-  EZ( A2, B0 ),
-  EZ( A2, B0 ),
-  EZ( A2, B0 ),
-  EZ( A2, B0 ),
-  EZ( A3, B0 ),
-  E( 0, 1, 0, 0, A1, NA ),
-  E( 0, 1, 0, 0, A1, NA ),
-  E( 0, 1, 0, 0, A1, NA ),
-  E( 1, 0, 0, 0, NA, NA ),
-  E( 1, 0, 0, 0, NA, NA ),
-  E( 1, 0, 0, 0, NA, NA )
+Action2_Entries[] = {
+  { 0, 1, 0, 0, Action2_Post_A_A1, Action2_Post_B_NA },
+  { 0, 0, 0, 0, Action2_Post_A_A2, Action2_Post_B_B0 },
+  { 0, 0, 0, 0, Action2_Post_A_A1, Action2_Post_B_B0 },
+  { 1, 0, 0, 0, Action2_Post_A_NA, Action2_Post_B_NA },
+  { 0, 0, 0, 0, Action2_Post_A_A3, Action2_Post_B_B0 }
 };
 
-#undef E
-#undef EZ
+static const uint8_t
+Action2_Map[] = {
+  2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 4, 0, 0, 0, 3, 3, 3
+};
 
 static size_t Action2_Scope( void *arg, char *buf, size_t n )
 {
@@ -2176,11 +2133,19 @@ static T_fixture Action2_Fixture = {
   .initial_context = &Action2_Instance
 };
 
+static inline Action2_Entry Action2_GetEntry( size_t index )
+{
+  return Action2_Entries[
+    Action2_Map[ index ]
+  ];
+}
+
 static T_fixture_node Action2_Node;
 
 void Action2_Run( int *a, int b, int *c )
 {
   Action2_Context *ctx;
+  Action2_Entry entry;
   size_t index;
 
   ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
@@ -2196,7 +2161,9 @@ void Action2_Run( int *a, int b, int *c )
     ctx->pcs[ 0 ] < Action2_Pre_A_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    if ( Action2_Map[ index ].Pre_A_NA ) {
+    entry = Action2_GetEntry( index );
+
+    if ( entry.Pre_A_NA ) {
       ctx->pcs[ 0 ] = Action2_Pre_A_NA;
       index += ( Action2_Pre_A_NA - 1 )
         * Action2_Pre_B_NA
@@ -2208,7 +2175,9 @@ void Action2_Run( int *a, int b, int *c )
       ctx->pcs[ 1 ] < Action2_Pre_B_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      if ( Action2_Map[ index ].Pre_B_NA ) {
+      entry = Action2_GetEntry( index );
+
+      if ( entry.Pre_B_NA ) {
         ctx->pcs[ 1 ] = Action2_Pre_B_NA;
         index += ( Action2_Pre_B_NA - 1 )
           * Action2_Pre_C_NA;
@@ -2219,14 +2188,14 @@ void Action2_Run( int *a, int b, int *c )
         ctx->pcs[ 2 ] < Action2_Pre_C_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        Action2_Entry entry;
+        entry = Action2_GetEntry( index );
 
-        if ( Action2_Map[ index ].Pre_C_NA ) {
+        if ( entry.Pre_C_NA ) {
           ctx->pcs[ 2 ] = Action2_Pre_C_NA;
           index += ( Action2_Pre_C_NA - 1 );
         }
 
-        if ( Action2_Map[ index ].Skip ) {
+        if ( entry.Skip ) {
           ++index;
           continue;
         }
@@ -2236,7 +2205,6 @@ void Action2_Run( int *a, int b, int *c )
         Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
         Action2_Pre_C_Prepare( ctx, ctx->pcs[ 2 ] );
         Action2_Action( ctx );
-        entry = Action2_Map[ index ];
         Action2_Post_A_Check( ctx, entry.Post_A );
         Action2_Post_B_Check( ctx, entry.Post_B );
         Action2_Cleanup( ctx );
