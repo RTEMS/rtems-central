@@ -28,9 +28,9 @@
 import argparse
 import itertools
 import sys
-from typing import List, Set, Tuple
+from typing import Dict, Iterator, List, Set, Tuple
 
-from rtemsspec.items import is_enabled, Item, ItemCache, Link
+from rtemsspec.items import Item, ItemCache, Link
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.util import load_config
 from rtemsspec.validation import Transition, TransitionMap
@@ -101,11 +101,101 @@ def _make_row(transition_map: TransitionMap, map_idx: int,
              for co_idx, st_idx in enumerate(variant.post_cond))))
 
 
+def _action_table(enabled: List[str], item: Item) -> None:
+    rows = [
+        tuple(
+            itertools.chain(["Entry", "Descriptor"],
+                            (condition["name"]
+                             for condition in item["pre-conditions"]),
+                            (condition["name"]
+                             for condition in item["post-conditions"])))
+    ]
+    transition_map = TransitionMap(item)
+    for map_idx, variant in transition_map.get_variants(enabled):
+        rows.append(_make_row(transition_map, map_idx, variant))
+    content = SphinxContent()
+    content.add_simple_table(rows)
+    print(str(content))
+
+
+def _to_name(transition_map, co_idx: int, st_idx: int) -> str:
+    return (f"{transition_map.post_co_idx_to_co_name(co_idx)} = "
+            f"{transition_map.post_co_idx_st_idx_to_st_name(co_idx, st_idx)}")
+
+
+_PostCond = Tuple[int, ...]
+_Entries = List[Tuple[List[int], ...]]
+
+
+def _get_entries(transition_map: TransitionMap,
+                 enabled: List[str]) -> Iterator[Tuple[_PostCond, _Entries]]:
+    entries = {}  # type: Dict[_PostCond, _Entries]
+    for map_idx, variant in transition_map.get_variants(enabled):
+        key = (variant.skip, ) + variant.post_cond
+        entry = entries.setdefault(key, [])
+        entry.append(
+            tuple(
+                [state]
+                for state in transition_map.map_idx_to_pre_co_states(map_idx)))
+    for post_cond, entry in sorted(entries.items(), key=lambda x: (x[0][0], len(x[1]))):
+        while True:
+            last = entry[0]
+            combined_entry = [last]
+            combined_count = 0
+            for row in entry[1:]:
+                diff = [
+                    index for index, states in enumerate(last)
+                    if states != row[index]
+                ]
+                if len(diff) == 1:
+                    index = diff[0]
+                    combined_count += 1
+                    last[index].extend(row[index])
+                else:
+                    combined_entry.append(row)
+                    last = row
+            entry = combined_entry
+            if combined_count == 0:
+                break
+        yield post_cond, entry
+
+
+def _action_list(enabled: List[str], item: Item) -> None:
+    transition_map = TransitionMap(item)
+    for post_cond, entry in _get_entries(transition_map, enabled):
+        print("")
+        if post_cond[0]:
+            print(transition_map.skip_idx_to_name(post_cond[0]))
+        else:
+            print(
+                ", ".join(
+                    _to_name(transition_map, co_idx, st_idx)
+                    for co_idx, st_idx in enumerate(post_cond[1:])))
+        for row in entry:
+            entries = []
+            for co_idx, co_states in enumerate(row):
+                co_name = transition_map.pre_co_idx_to_co_name(co_idx)
+                states = [
+                    transition_map.pre_co_idx_st_idx_to_st_name(
+                        co_idx, st_idx) for st_idx in co_states
+                ]
+                if len(states) == 1:
+                    entries.append(f"{co_name} = {states[0]}")
+                else:
+                    entries.append(f"{co_name} = {{ " + ", ".join(states) +
+                                   " }")
+            print("")
+            print("    * " + ", ".join(entries))
+
+
 def main() -> None:
     """ Views the specification. """
     parser = argparse.ArgumentParser()
     parser.add_argument('--filter',
-                        choices=["none", "orphan", "no-validation", "action"],
+                        choices=[
+                            "none", "orphan", "no-validation", "action-table",
+                            "action-list"
+                        ],
                         type=str.lower,
                         default="none",
                         help="filter the items")
@@ -125,32 +215,14 @@ def main() -> None:
 
     if args.filter == "none":
         _view(root, 0)
-    elif args.filter == "action":
+    elif args.filter == "action-table":
         enabled = args.enabled.split(",") if args.enabled else []
         for uid in args.UIDs:
-            item = item_cache[uid]
-            rows = [
-                tuple(
-                    itertools.chain(
-                        ["Entry", "Descriptor"],
-                        (condition["name"]
-                         for condition in item["pre-conditions"]),
-                        (condition["name"]
-                         for condition in item["post-conditions"])))
-            ]
-            transition_map = TransitionMap(item)
-            for map_idx, transitions in enumerate(transition_map):
-                for variant in transitions[1:]:
-                    if is_enabled(enabled, variant.enabled_by):
-                        rows.append(_make_row(transition_map, map_idx,
-                                              variant))
-                        break
-                else:
-                    rows.append(
-                        _make_row(transition_map, map_idx, transitions[0]))
-        content = SphinxContent()
-        content.add_simple_table(rows)
-        print(str(content))
+            _action_table(enabled, item_cache[uid])
+    elif args.filter == "action-list":
+        enabled = args.enabled.split(",") if args.enabled else []
+        for uid in args.UIDs:
+            _action_list(enabled, item_cache[uid])
     elif args.filter == "orphan":
         spec = set()  # type: Set[Item]
         _gather(root, spec)
