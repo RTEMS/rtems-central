@@ -31,7 +31,7 @@ import math
 import os
 import re
 import textwrap
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple
+from typing import Any, Dict, Iterator, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, GenericContent, get_value_params, \
@@ -652,6 +652,10 @@ class TransitionMap:
     def __iter__(self):
         yield from self._map
 
+    def entries(self) -> Iterator[List[Any]]:
+        """ Yields the transition map entry variants sorted by frequency. """
+        yield from sorted(self._entries.values(), key=lambda x: x[1])
+
     def _post_process(self) -> None:
         for map_idx, transitions in enumerate(self):
             if not transitions or not isinstance(
@@ -661,8 +665,9 @@ class TransitionMap:
                     f"transition map of {self._item.spec} contains no default "
                     "entry for pre-condition set "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}}")
-            entry = self._entries.get(transitions.key, [0, 0, transitions])
+            entry = self._entries.get(transitions.key, [0, 0, transitions, []])
             entry[0] += 1
+            entry[3].append(map_idx)
             self._entries[transitions.key] = entry
         for index, entry in enumerate(
                 sorted(self._entries.values(),
@@ -886,7 +891,7 @@ class TransitionMap:
         """ Adds the transition map definitions to the content. """
         entries = []
         mapper = ExpressionMapper()
-        for entry in sorted(self._entries.values(), key=lambda x: x[1]):
+        for entry in self.entries():
             transitions = entry[2]
             if len(transitions) == 1:
                 entries.append(self._get_entry(ident, transitions[0]))
