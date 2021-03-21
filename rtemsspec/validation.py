@@ -665,10 +665,10 @@ class TransitionMap:
                     f"transition map of {self._item.spec} contains no default "
                     "entry for pre-condition set "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}}")
-            entry = self._entries.get(transitions.key, [0, 0, transitions, []])
+            entry = self._entries.setdefault(transitions.key,
+                                             [0, 0, transitions, []])
             entry[0] += 1
             entry[3].append(map_idx)
-            self._entries[transitions.key] = entry
         for index, entry in enumerate(
                 sorted(self._entries.values(),
                        key=lambda x: x[0],
