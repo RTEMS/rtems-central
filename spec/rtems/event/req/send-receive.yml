@@ -285,20 +285,16 @@ test-action: |
   if ( ctx->sender_type == SENDER_SELF_2 ) {
     SendAction( ctx );
   } else if ( ctx->sender_type == SENDER_WORKER ) {
-    rtems_status_code   sc;
     rtems_task_priority prio;
 
     Wait( ctx->runner_wakeup );
-
-    prio = 0;
-    sc = rtems_task_set_priority( ctx->worker_id, PRIO_LOW, &prio );
-    T_rsc_success( sc );
+    prio = SetPriority( ctx->worker_id, PRIO_LOW );
     T_eq_u32( prio, PRIO_HIGH );
   }
 test-brief: null
 test-cleanup: |
   rtems_status_code sc;
-  rtems_event_set events;
+  rtems_event_set   events;
 
   events = 0;
   sc = ( *ctx->receive )(
@@ -321,7 +317,7 @@ test-context:
 - brief: |
     This member defines the sender task priority.
   description: null
-  member: Priorities sender_prio
+  member: rtems_task_priority sender_prio
 - brief: |
     This member defines the receiver ID used for the event send action.
   description: null
@@ -405,12 +401,7 @@ test-context:
   description: null
   member: T_thread_switch_log_4 thread_switch_log
 test-context-support: |
-  typedef enum {
-    PRIO_HIGH = 1,
-    PRIO_NORMAL,
-    PRIO_LOW,
-    PRIO_OTHER
-  } Priorities;
+  #define PRIO_OTHER UINT32_MAX
 
   typedef enum {
     SENDER_NONE,
@@ -469,6 +460,7 @@ test-header:
 test-includes:
 - rtems/score/threadimpl.h
 test-local-includes:
+- tc-support.h
 - tr-event-send-receive.h
 test-prepare: |
   ctx->events_to_send = 0;
@@ -488,8 +480,7 @@ test-prepare: |
 test-setup:
   brief: null
   code: |
-    rtems_status_code   sc;
-    rtems_task_priority prio;
+    rtems_status_code sc;
 
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->runner_thread = _Thread_Get_executing();
@@ -506,48 +497,20 @@ test-setup:
     T_ne_u32( ctx->runner_sched, ctx->other_sched );
     #endif
 
-    prio = 0;
-    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
-    T_rsc_success( sc );
-    T_eq_u32( prio, PRIO_HIGH );
-
-    sc = rtems_task_construct( &WorkerConfig, &ctx->worker_id );
-    T_assert_rsc_success( sc );
-
-    sc = rtems_task_start( ctx->worker_id, Worker, (rtems_task_argument) ctx );
-    T_assert_rsc_success( sc );
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
   description: null
 test-stop: null
 test-support: |
   #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
 
-  #define WORKER_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
-
-  #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 64, RTEMS_TASK_STORAGE_ALIGNMENT )
-
   typedef RtemsEventReqSendReceive_Context Context;
-
-  RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char WorkerStorage[
-    RTEMS_TASK_STORAGE_SIZE(
-      MAX_TLS_SIZE + RTEMS_MINIMUM_STACK_SIZE,
-      WORKER_ATTRIBUTES
-    )
-  ];
-
-  static const rtems_task_config WorkerConfig = {
-    .name = rtems_build_name( 'W', 'O', 'R', 'K' ),
-    .initial_priority = PRIO_LOW,
-    .storage_area = WorkerStorage,
-    .storage_size = sizeof( WorkerStorage ),
-    .maximum_thread_local_storage_size = MAX_TLS_SIZE,
-    .initial_modes = RTEMS_DEFAULT_MODES,
-    .attributes = WORKER_ATTRIBUTES
-  };
 
   static rtems_id CreateWakeupSema( void )
   {
     rtems_status_code sc;
-    rtems_id id;
+    rtems_id          id;
 
     sc = rtems_semaphore_create(
       rtems_build_name( 'W', 'K', 'U', 'P' ),
@@ -670,9 +633,7 @@ test-support: |
       switch ( ctx->sender_prio ) {
         case PRIO_NORMAL:
         case PRIO_HIGH:
-          prio = 0;
-          sc = rtems_task_set_priority( RTEMS_SELF, ctx->sender_prio, &prio );
-          T_rsc_success( sc );
+          prio = SetSelfPriority( ctx->sender_prio );
           T_eq_u32( prio, PRIO_LOW );
           break;
         case PRIO_OTHER:
@@ -803,21 +764,10 @@ test-target: testsuites/validation/tr-event-send-receive.c
 test-teardown:
   brief: null
   code: |
-    rtems_status_code   sc;
-    rtems_task_priority prio;
-
-    prio = 0;
-    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-    T_rsc_success( sc );
-    T_eq_u32( prio, PRIO_NORMAL );
-
-    if ( ctx->worker_id != 0 ) {
-      sc = rtems_task_delete( ctx->worker_id );
-      T_rsc_success( sc );
-    }
-
+    DeleteTask( ctx->worker_id );
     DeleteWakeupSema( ctx->worker_wakeup );
     DeleteWakeupSema( ctx->runner_wakeup );
+    RestoreRunnerPriority();
   description: null
 text: ${.:text-template}
 transition-map:

@@ -419,7 +419,7 @@ test-action: |
   sc = rtems_task_mode( ctx->current_mode, RTEMS_ALL_MODE_MASKS, &mode );
   T_rsc_success( sc );
 
-  SendEvent( ctx, EVENT_MAKE_READY );
+  SendEvents( ctx->worker_id, EVENT_MAKE_READY );
 
   sc = rtems_signal_catch( SignalHandler, ctx->current_mode | RTEMS_NO_ASR );
   T_rsc_success( sc );
@@ -532,7 +532,8 @@ test-includes:
 - rtems/score/percpu.h
 - rtems/score/threaddispatch.h
 - rtems/score/watchdogimpl.h
-test-local-includes: []
+test-local-includes:
+- tc-support.h
 test-prepare: |
   ctx->current_mode = RTEMS_DEFAULT_MODES;
   ctx->mode_set = RTEMS_DEFAULT_MODES;
@@ -552,24 +553,9 @@ test-setup:
     );
     T_rsc_success( sc );
 
-    SetPriority( PRIO_NORMAL );
-
-    sc = rtems_task_create(
-      rtems_build_name( 'W', 'O', 'R', 'K' ),
-      PRIO_HIGH,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &ctx->worker_id
-    );
-    T_assert_rsc_success( sc );
-
-    sc = rtems_task_start(
-      ctx->worker_id,
-      Worker,
-      (rtems_task_argument) ctx
-    );
-    T_assert_rsc_success( sc );
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
   description: null
 test-stop: null
 test-support: |
@@ -581,28 +567,6 @@ test-support: |
 
   typedef RtemsTaskReqMode_Context Context;
 
-  typedef enum {
-    PRIO_HIGH = 1,
-    PRIO_NORMAL
-  } Priority;
-
-  static void SendEvent( Context *ctx, rtems_event_set event )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_event_send( ctx->worker_id, event );
-    T_rsc_success( sc );
-  }
-
-  static void SetPriority( Priority priority )
-  {
-    rtems_status_code   sc;
-    rtems_task_priority previous;
-
-    sc = rtems_task_set_priority( RTEMS_SELF, priority, &previous );
-    T_rsc_success( sc );
-  }
-
   static void Worker( rtems_task_argument arg )
   {
     Context *ctx;
@@ -610,21 +574,13 @@ test-support: |
     ctx = (Context *) arg;
 
     while ( true ) {
-      rtems_status_code sc;
-      rtems_event_set   events;
+      rtems_event_set events;
 
-      events = 0;
-      sc = rtems_event_receive(
-        RTEMS_ALL_EVENTS,
-        RTEMS_EVENT_ANY | RTEMS_WAIT,
-        RTEMS_NO_TIMEOUT,
-        &events
-      );
-      T_rsc_success( sc );
+      events = ReceiveAnyEvents();
 
       if ( ( events & EVENT_TIMESLICE ) != 0 ) {
-        SetPriority( PRIO_NORMAL );
-        SetPriority( PRIO_HIGH );
+        SetSelfPriority( PRIO_NORMAL );
+        SetSelfPriority( PRIO_HIGH );
       }
 
       ++ctx->worker_counter;
@@ -680,7 +636,7 @@ test-support: |
     mode |= set & mask;
 
     counter = ctx->worker_counter;
-    SendEvent( ctx, EVENT_MAKE_READY );
+    SendEvents( ctx->worker_id, EVENT_MAKE_READY );
 
     if ( ( mode & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT ) {
       T_eq_u32( ctx->worker_counter, counter + 1 );
@@ -689,7 +645,7 @@ test-support: |
     }
 
     counter = ctx->worker_counter;
-    SendEvent( ctx, EVENT_TIMESLICE );
+    SendEvents( ctx->worker_id, EVENT_TIMESLICE );
     ExhaustTimeslice();
 
     if ( ( mode & RTEMS_PREEMPT_MASK ) == RTEMS_PREEMPT ) {
@@ -718,21 +674,9 @@ test-target: testsuites/validation/tc-task-mode.c
 test-teardown:
   brief: null
   code: |
-    rtems_status_code sc;
-
-    if ( ctx->worker_id != 0 ) {
-      sc = rtems_task_delete( ctx->worker_id );
-      T_rsc_success( sc );
-    }
-
-    sc = rtems_task_mode(
-      ctx->runner_mode,
-      RTEMS_ALL_MODE_MASKS,
-      &ctx->runner_mode
-    );
-    T_rsc_success( sc );
-
-    SetPriority( PRIO_HIGH );
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerMode();
+    RestoreRunnerPriority();
   description: null
 text: ${.:text-template}
 transition-map:

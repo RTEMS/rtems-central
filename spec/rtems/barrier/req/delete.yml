@@ -126,52 +126,26 @@ test-header: null
 test-includes:
 - rtems.h
 - string.h
-test-local-includes: []
+test-local-includes:
+- tc-support.h
 test-prepare: |
-  rtems_status_code   sc;
   rtems_task_priority prio;
 
-  prio = 0;
-  sc = rtems_task_set_priority( ctx->worker_id, PRIO_HIGH, &prio );
-  T_rsc_success( sc );
+  prio = SetPriority( ctx->worker_id, PRIO_HIGH );
   T_true( prio == PRIO_LOW || prio == PRIO_HIGH );
 test-setup:
   brief: null
   code: |
-    rtems_status_code   sc;
-    rtems_task_priority prio;
-
     memset( ctx, 0, sizeof( *ctx ) );
-
-    prio = 0;
-    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
-    T_rsc_success( sc );
-    T_eq_u32( prio, PRIO_HIGH );
-
-    sc = rtems_task_create(
-      rtems_build_name( 'W', 'O', 'R', 'K' ),
-      PRIO_LOW,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &ctx->worker_id
-    );
-    T_assert_rsc_success( sc );
-
-    sc = rtems_task_start( ctx->worker_id, Worker, (rtems_task_argument) ctx );
-    T_assert_rsc_success( sc );
+    SetSelfPriority( PRIO_NORMAL );
+    ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
+    StartTask( ctx->worker_id, Worker, ctx );
   description: null
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
   typedef RtemsBarrierReqDelete_Context Context;
-
-  typedef enum {
-    PRIO_HIGH = 1,
-    PRIO_NORMAL,
-    PRIO_LOW
-  } Priorities;
 
   static void Worker( rtems_task_argument arg )
   {
@@ -201,9 +175,7 @@ test-support: |
 
       ++ctx->wait_done;
 
-      prio = 0;
-      sc = rtems_task_set_priority( RTEMS_SELF, PRIO_LOW, &prio );
-      T_rsc_success( sc );
+      prio = SetSelfPriority( PRIO_LOW );
       T_eq_u32( prio, PRIO_HIGH );
     }
   }
@@ -211,18 +183,8 @@ test-target: testsuites/validation/tc-barrier-delete.c
 test-teardown:
   brief: null
   code: |
-    rtems_status_code   sc;
-    rtems_task_priority prio;
-
-    prio = 0;
-    sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
-    T_rsc_success( sc );
-    T_eq_u32( prio, PRIO_NORMAL );
-
-    if ( ctx->worker_id != 0 ) {
-      sc = rtems_task_delete( ctx->worker_id );
-      T_rsc_success( sc );
-    }
+    DeleteTask( ctx->worker_id );
+    RestoreRunnerPriority();
   description: null
 text: ${.:text-template}
 transition-map:
