@@ -137,7 +137,8 @@ def _get_entries(transition_map: TransitionMap,
             tuple(
                 [state]
                 for state in transition_map.map_idx_to_pre_co_states(map_idx)))
-    for post_cond, entry in sorted(entries.items(), key=lambda x: (x[0][0], len(x[1]))):
+    for post_cond, entry in sorted(entries.items(),
+                                   key=lambda x: (x[0][0], len(x[1]))):
         while True:
             last = entry[0]
             combined_entry = [last]
@@ -167,10 +168,9 @@ def _action_list(enabled: List[str], item: Item) -> None:
         if post_cond[0]:
             print(transition_map.skip_idx_to_name(post_cond[0]))
         else:
-            print(
-                ", ".join(
-                    _to_name(transition_map, co_idx, st_idx)
-                    for co_idx, st_idx in enumerate(post_cond[1:])))
+            print(", ".join(
+                _to_name(transition_map, co_idx, st_idx)
+                for co_idx, st_idx in enumerate(post_cond[1:])))
         for row in entry:
             entries = []
             for co_idx, co_states in enumerate(row):
