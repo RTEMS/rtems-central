@@ -42,8 +42,13 @@ def test_validation(tmpdir):
         tmpdir, "spec-validation", with_spec_types=True)
     item_cache = ItemCache(item_cache_config)
 
-    transition_map = TransitionMap(item_cache["/action2"])
-    assert transition_map.post_co_idx_st_idx_to_st_name(0, 0) == "A0"
+    transition_map = TransitionMap(item_cache["/directive"])
+    assert transition_map.pre_co_idx_to_co_name(0) == "Name"
+    assert transition_map.post_co_idx_st_idx_to_st_name(0, 0) == "Ok"
+    assert transition_map.post_co_idx_to_co_name(0) == "Status"
+    assert len(list(transition_map.get_variants([]))) == 36
+    assert len(list(transition_map.get_variants(["RTEMS_MULTIPROCESSING"
+                                                 ]))) == 36
 
     generate(validation_config, item_cache)
 

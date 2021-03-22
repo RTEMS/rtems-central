@@ -36,7 +36,8 @@ from typing import Any, Dict, Iterator, List, NamedTuple, Optional, Tuple
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, GenericContent, get_value_params, \
     get_value_doxygen_group, get_value_doxygen_function, to_camel_case
-from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
+from rtemsspec.items import is_enabled, Item, ItemCache, \
+    ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 
@@ -656,6 +657,20 @@ class TransitionMap:
         """ Yields the transition map entry variants sorted by frequency. """
         yield from sorted(self._entries.values(), key=lambda x: x[1])
 
+    def get_variants(self,
+                     enabled: List[str]) -> Iterator[Tuple[int, Transition]]:
+        """
+        Yields the map index and the transition variants enabled by the enabled
+        list.
+        """
+        for map_idx, transitions in enumerate(self._map):
+            for variant in transitions[1:]:
+                if is_enabled(enabled, variant.enabled_by):
+                    break
+            else:
+                variant = transitions[0]
+            yield map_idx, variant
+
     def _post_process(self) -> None:
         for map_idx, transitions in enumerate(self):
             if not transitions or not isinstance(
@@ -703,11 +718,23 @@ class TransitionMap:
         """
         return self._pre_co_name_to_co_idx[co_name]
 
+    def pre_co_idx_to_co_name(self, co_idx: int) -> str:
+        """
+        Maps the pre-condition index to the associated pre-condition name.
+        """
+        return self._pre_co_idx_to_cond[co_idx]["name"]
+
     def post_co_name_to_co_idx(self, co_name: str) -> int:
         """
         Maps the post-condition name to the associated post-condition index.
         """
         return self._post_co_name_to_co_idx[co_name]
+
+    def post_co_idx_to_co_name(self, co_idx: int) -> str:
+        """
+        Maps the post-condition index to the associated post-condition name.
+        """
+        return self._post_co_idx_to_co_name[co_idx]
 
     def pre_co_idx_st_idx_to_st_name(self, co_idx: int, st_idx: int) -> str:
         """
