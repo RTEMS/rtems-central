@@ -49,6 +49,8 @@ def test_validation(tmpdir):
     assert len(list(transition_map.get_variants([]))) == 36
     assert len(list(transition_map.get_variants(["RTEMS_MULTIPROCESSING"
                                                  ]))) == 36
+    transition_map = TransitionMap(item_cache["/action2"])
+    assert transition_map.skip_idx_to_name(1) == "SkipReason"
 
     generate(validation_config, item_cache)
 

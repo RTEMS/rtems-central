@@ -643,6 +643,12 @@ class TransitionMap:
         self._post_co_idx_to_co_name = dict(
             (co_idx, condition["name"])
             for co_idx, condition in enumerate(item["post-conditions"]))
+        self._skip_idx_to_name = dict(
+            (skip_idx + 1, key)
+            for skip_idx, key in enumerate(item["skip-reasons"].keys()))
+        self._skip_name_to_idx = dict(
+            (key, skip_idx + 1)
+            for skip_idx, key in enumerate(item["skip-reasons"].keys()))
         self._entries = {}  # type: Dict[str, List[Any]]
         self._map = self._build_map()
         self._post_process()
@@ -764,6 +770,12 @@ class TransitionMap:
         """
         return self._post_co_idx_st_name_to_st_idx[co_idx][st_name]
 
+    def skip_idx_to_name(self, skip_idx: int) -> str:
+        """
+        Maps the skip index the associated skip name index.
+        """
+        return self._skip_idx_to_name[skip_idx]
+
     def _map_post_cond(self, desc_idx: int, map_idx: int, co_idx: int,
                        post_cond: Tuple[Any, ...]) -> Tuple[Any, ...]:
         if isinstance(post_cond[co_idx], int):
@@ -884,9 +896,10 @@ class TransitionMap:
                            f"post-condition state {err}")
                     raise ValueError(msg) from err
             else:
-                skip_post_cond = (1, ) + tuple(
-                    self._post_co_idx_st_name_to_st_idx[co_idx]["N/A"]
-                    for co_idx in range(self._post_co_count))
+                skip_post_cond = (
+                    self._skip_name_to_idx[desc["post-conditions"]], ) + tuple(
+                        self._post_co_idx_st_name_to_st_idx[co_idx]["N/A"]
+                        for co_idx in range(self._post_co_count))
             if isinstance(desc["pre-conditions"], dict):
                 self._add_transitions(transition_map, desc, desc_idx,
                                       skip_post_cond, 0, 0, ())
