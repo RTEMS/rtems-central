@@ -184,23 +184,18 @@ post-conditions:
   states:
   - name: Ceiling
     test-code: |
-      T_eq_u32( prio, ctx->priority_ceiling );
+      T_eq_u32( GetSelfPriority(), ctx->priority_ceiling );
     text: |
       The current priority of the task which called ${../if/create:/name} shall
       be equal to the value of the ${../if/create:/params[3]/name} parameter.
   - name: Nop
     test-code: |
-      T_eq_u32( prio, 1 );
+      T_eq_u32( GetSelfPriority(), 1 );
     text: |
       The current priority of the task which called ${../if/create:/name} shall
       not be modified by the ${../if/create:/name} call.
   test-epilogue: null
-  test-prologue:
-    rtems_status_code   sc;
-    rtems_task_priority prio;
-
-    sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
-    T_rsc_success( sc );
+  test-prologue: null
 pre-conditions:
 - name: Name
   states:
@@ -481,7 +476,8 @@ test-includes:
 - limits.h
 - string.h
 - rtems/rtems/semimpl.h
-test-local-includes: []
+test-local-includes:
+- tc-support.h
 test-prepare: |
   rtems_status_code sc;
   rtems_id          id;
