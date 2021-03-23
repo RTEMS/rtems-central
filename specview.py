@@ -96,7 +96,8 @@ def _make_row(transition_map: TransitionMap, map_idx: int,
             [str(map_idx), str(variant.desc_idx)],
             (transition_map.pre_co_idx_st_idx_to_st_name(co_idx, st_idx)
              for co_idx, st_idx in enumerate(
-                 transition_map.map_idx_to_pre_co_states(map_idx))),
+                 transition_map.map_idx_to_pre_co_states(
+                     map_idx, variant.pre_cond_na))),
             (transition_map.post_co_idx_st_idx_to_st_name(co_idx, st_idx)
              for co_idx, st_idx in enumerate(variant.post_cond))))
 
@@ -134,9 +135,8 @@ def _get_entries(transition_map: TransitionMap,
         key = (variant.skip, ) + variant.post_cond
         entry = entries.setdefault(key, [])
         entry.append(
-            tuple(
-                [state]
-                for state in transition_map.map_idx_to_pre_co_states(map_idx)))
+            tuple([state] for state in transition_map.map_idx_to_pre_co_states(
+                map_idx, variant.pre_cond_na)))
     for post_cond, entry in sorted(entries.items(),
                                    key=lambda x: (x[0][0], len(x[1]))):
         while True:
@@ -177,7 +177,7 @@ def _action_list(enabled: List[str], item: Item) -> None:
                 co_name = transition_map.pre_co_idx_to_co_name(co_idx)
                 states = [
                     transition_map.pre_co_idx_st_idx_to_st_name(
-                        co_idx, st_idx) for st_idx in co_states
+                        co_idx, st_idx) for st_idx in set(co_states)
                 ]
                 if len(states) == 1:
                     entries.append(f"{co_name} = {states[0]}")

@@ -465,7 +465,7 @@ class Transition(NamedTuple):
     enabled_by: Any
     skip: int
     pre_cond_na: Tuple[int, ...]
-    post_cond: Tuple[int, ...]
+    post_cond: Tuple[Any, ...]
 
 
 class _TransitionEntry:
@@ -706,7 +706,9 @@ class TransitionMap:
             map_idx //= count
         return ", ".join(reversed(conditions))
 
-    def map_idx_to_pre_co_states(self, map_idx: int) -> Tuple[int, ...]:
+    def map_idx_to_pre_co_states(
+            self, map_idx: int, pre_cond_na: Tuple[int,
+                                                   ...]) -> Tuple[int, ...]:
         """
         Maps the transition map index and the associated pre-condition state
         indices.
@@ -714,7 +716,8 @@ class TransitionMap:
         co_states = []
         for condition in reversed(self._item["pre-conditions"]):
             count = len(condition["states"])
-            co_states.append(int(map_idx % count))
+            co_states.append(count if pre_cond_na[self._pre_co_name_to_co_idx[
+                condition["name"]]] else int(map_idx % count))
             map_idx //= count
         return tuple(reversed(co_states))
 
@@ -776,29 +779,31 @@ class TransitionMap:
         """
         return self._skip_idx_to_name[skip_idx]
 
-    def _map_post_cond(self, desc_idx: int, map_idx: int, co_idx: int,
-                       post_cond: Tuple[Any, ...]) -> Tuple[Any, ...]:
-        if isinstance(post_cond[co_idx], int):
-            return post_cond
-        pre_co_states = self.map_idx_to_pre_co_states(map_idx)
-        for ops in post_cond[co_idx]:
+    def _map_post_cond(self, map_idx: int, co_idx: int,
+                       variant: Transition) -> Transition:
+        if isinstance(variant.post_cond[co_idx], int):
+            return variant
+        pre_co_states = self.map_idx_to_pre_co_states(map_idx,
+                                                      variant.pre_cond_na)
+        for ops in variant.post_cond[co_idx]:
             idx = _POST_COND_OP[next(iter(ops))](_PostCondContext(
-                self, map_idx, pre_co_states, post_cond, co_idx, ops))
+                self, map_idx, pre_co_states, variant.post_cond, co_idx, ops))
             if idx is not None:
-                return post_cond[0:co_idx] + (idx, ) + post_cond[co_idx + 1:]
+                return Transition(
+                    variant.desc_idx, variant.enabled_by, variant.skip,
+                    variant.pre_cond_na, variant.post_cond[0:co_idx] +
+                    (idx, ) + variant.post_cond[co_idx + 1:])
         raise ValueError(
             "cannot determine state for post-condition "
             f"'{self._post_co_idx_to_co_name[co_idx]}' of transition map "
-            f"descriptor {desc_idx} of {self._item.spec} for pre-condition "
-            f"set {{{self._map_index_to_pre_conditions(map_idx)}}}")
+            f"descriptor {variant.desc_idx} of {self._item.spec} for "
+            "pre-condition set "
+            f"{{{self._map_index_to_pre_conditions(map_idx)}}}")
 
-    def _make_post_cond(self, desc_idx: int, map_idx: int,
-                        skip_post_cond: Tuple[Any, ...]) -> Tuple[int, ...]:
-        post_cond = skip_post_cond[1:]
-        for co_idx in range(len(post_cond)):
-            post_cond = self._map_post_cond(desc_idx, map_idx, co_idx,
-                                            post_cond)
-        return post_cond
+    def _make_post_cond(self, map_idx: int, variant: Transition) -> Transition:
+        for co_idx in range(len(variant.post_cond)):
+            variant = self._map_post_cond(map_idx, co_idx, variant)
+        return variant
 
     def _add_transitions(self, transition_map: _TransitionMap,
                          desc: Dict[str, Any], desc_idx: int,
@@ -835,7 +840,10 @@ class TransitionMap:
                                           pre_cond_na + (0, ))
         else:
             enabled_by = desc["enabled-by"]
-            post_cond = self._make_post_cond(desc_idx, map_idx, skip_post_cond)
+            variant = self._make_post_cond(
+                map_idx,
+                Transition(desc_idx, enabled_by, skip_post_cond[0],
+                           pre_cond_na, skip_post_cond[1:]))
             if transition_map[map_idx]:
                 if isinstance(enabled_by, bool) and enabled_by:
                     raise ValueError(
@@ -844,7 +852,7 @@ class TransitionMap:
                         f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
                         "defined by transition map descriptor "
                         f"{transition_map[map_idx][0].desc_idx}")
-                if transition_map[map_idx][0].post_cond == post_cond:
+                if transition_map[map_idx][0].post_cond == variant.post_cond:
                     return
             elif not isinstance(enabled_by, bool) or not enabled_by:
                 raise ValueError(
@@ -852,9 +860,7 @@ class TransitionMap:
                     f"{self._item.spec} is the first variant for "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
                     "and it is not enabled by default")
-            transition_map[map_idx].add(
-                Transition(desc_idx, enabled_by, skip_post_cond[0],
-                           pre_cond_na, post_cond))
+            transition_map[map_idx].add(variant)
 
     def _add_default(self, transition_map: _TransitionMap, desc: Dict[str,
                                                                       Any],
@@ -863,11 +869,11 @@ class TransitionMap:
         for map_idx, transition in enumerate(transition_map):
             if not transition:
                 transition.add(
-                    Transition(
-                        desc_idx, enabled_by, skip_post_cond[0],
-                        (0, ) * self._pre_co_count,
-                        self._make_post_cond(desc_idx, map_idx,
-                                             skip_post_cond)))
+                    self._make_post_cond(
+                        map_idx,
+                        Transition(desc_idx, enabled_by, skip_post_cond[0],
+                                   (0, ) * self._pre_co_count,
+                                   skip_post_cond[1:])))
 
     def _get_post_cond(self, desc: Dict[str, Any], co_idx: int) -> Any:
         info = desc["post-conditions"][self._post_co_idx_to_co_name[co_idx]]
