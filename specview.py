@@ -144,6 +144,8 @@ def _get_entries(transition_map: TransitionMap,
             combined_entry = [last]
             combined_count = 0
             for row in entry[1:]:
+                if row == last:
+                    continue
                 diff = [
                     index for index, states in enumerate(last)
                     if states != row[index]
