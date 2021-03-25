@@ -845,13 +845,14 @@ class TransitionMap:
                 Transition(desc_idx, enabled_by, skip_post_cond[0],
                            pre_cond_na, skip_post_cond[1:]))
             if transition_map[map_idx]:
-                if isinstance(enabled_by, bool) and enabled_by:
-                    raise ValueError(
-                        f"transition map descriptor {desc_idx} of "
-                        f"{self._item.spec} duplicates pre-condition set "
-                        f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
-                        "defined by transition map descriptor "
-                        f"{transition_map[map_idx][0].desc_idx}")
+                for existing in transition_map[map_idx].variants:
+                    if existing.enabled_by == variant.enabled_by:
+                        raise ValueError(
+                            f"transition map descriptor {desc_idx} of "
+                            f"{self._item.spec} duplicates pre-condition set "
+                            f"{{{self._map_index_to_pre_conditions(map_idx)}}}"
+                            " defined by transition map descriptor "
+                            f"{existing.desc_idx}")
                 default = transition_map[map_idx][0]
                 if (default.post_cond, default.skip,
                         default.pre_cond_na) == (variant.post_cond,
