@@ -852,7 +852,11 @@ class TransitionMap:
                         f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
                         "defined by transition map descriptor "
                         f"{transition_map[map_idx][0].desc_idx}")
-                if transition_map[map_idx][0].post_cond == variant.post_cond:
+                default = transition_map[map_idx][0]
+                if (default.post_cond, default.skip,
+                        default.pre_cond_na) == (variant.post_cond,
+                                                 variant.skip,
+                                                 variant.pre_cond_na):
                     return
             elif not isinstance(enabled_by, bool) or not enabled_by:
                 raise ValueError(
