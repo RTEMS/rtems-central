@@ -921,10 +921,11 @@ class TransitionMap:
 
     def _get_entry(self, ident: str, variant: Transition) -> str:
         text = "{ " + ", ".join(
-            itertools.chain(map(str, (variant.skip, ) + variant.pre_cond_na), (
-                (f"{ident}_Post_{self._post_co_idx_to_co_name[co_idx]}"
-                 f"_{self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]}")
-                for co_idx, st_idx in enumerate(variant.post_cond))))
+            itertools.chain(
+                map(str, (int(variant.skip != 0), ) + variant.pre_cond_na),
+                ((f"{ident}_Post_{self._post_co_idx_to_co_name[co_idx]}"
+                  f"_{self._post_co_idx_st_idx_to_st_name[co_idx][st_idx]}")
+                 for co_idx, st_idx in enumerate(variant.post_cond))))
         wrapper = textwrap.TextWrapper()
         wrapper.initial_indent = "  "
         wrapper.subsequent_indent = "    "
