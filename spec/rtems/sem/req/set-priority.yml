@@ -320,7 +320,8 @@ test-context:
     rtems_id the_semaphore_id
 - brief: |
     If this member is true, then the ${../if/set-priority:/params[0]/name}
-    parameter shall be valid, otherwise it shall be ${/c/if/null:/name}.
+    parameter value shall be associated with the semaphore, otherwise it shall
+    be not associated with a semaphore.
   description: null
   member: |
     bool valid_id
