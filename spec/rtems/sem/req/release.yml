@@ -27,7 +27,7 @@ post-conditions:
     text: |
       The return status of ${../if/release:/name} shall be
       ${../../status/if/not-owner-of-resource:/name}.
-  - name: IntErr
+  - name: Unsat
     test-code: |
       T_rsc( ctx->status, RTEMS_UNSATISFIED );
     text: |
@@ -243,7 +243,7 @@ pre-conditions:
         ctx->count = UINT32_MAX - 1;
       }
     text: |
-      While the semaphore has a count less the maximum count.
+      While the count of the semaphore is less than the maximum count.
   - name: Max
     test-code: |
       if ( ( ctx->attribute_set & RTEMS_SIMPLE_BINARY_SEMAPHORE ) != 0 ) {
@@ -252,7 +252,7 @@ pre-conditions:
         ctx->count = UINT32_MAX;
       }
     text: |
-      While the semaphore has a count equal to the maximum count.
+      While the count of the semaphore is equal to the maximum count.
   - name: Blocked
     test-code: |
       ctx->blocked = true;
@@ -1161,7 +1161,7 @@ transition-map:
     - BlockedNested
 - enabled-by: true
   post-conditions:
-    Status: IntErr
+    Status: Unsat
     Count: Max
     Owner: N/A
     Next: N/A
