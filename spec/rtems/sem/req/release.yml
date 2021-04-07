@@ -190,39 +190,33 @@ pre-conditions:
     test-code: |
       ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
     text: |
-      While the ${../if/release:/params[0]/name} parameter is associated with
-      a counting semaphore.
+      While the semaphore object is a counting semaphore.
   - name: Simple
     test-code: |
       ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
     text: |
-      While the ${../if/release:/params[0]/name} parameter is associated with
-      a simple binary semaphore.
+      While the semaphore object is a simple binary semaphore.
   - name: Binary
     test-code: |
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
     text: |
-      While the ${../if/release:/params[0]/name} parameter is associated with
-      a binary semaphore.
+      While the semaphore object is a binary semaphore.
   - name: PrioCeiling
     test-code: |
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
     text: |
-      While the ${../if/release:/params[0]/name} parameter is associated with
-      a priority ceiling semaphore.
+      While the semaphore object is a priority ceiling semaphore.
   - name: PrioInherit
     test-code: |
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
     text: |
-      While the ${../if/release:/params[0]/name} parameter is associated with
-      a priority inheritance semaphore.
+      While the semaphore object is a priority inheritance semaphore.
   - name: MrsP
     test-code: |
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
         RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
     text: |
-      While the ${../if/release:/params[0]/name} parameter is associated with
-      a MrsP semaphore.
+      While the semaphore object is a MrsP semaphore.
   test-epilogue: null
   test-prologue: null
 - name: Discipline
