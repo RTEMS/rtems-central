@@ -41,27 +41,25 @@ post-conditions:
       ${../../status/if/not-defined:/name}.
   test-epilogue: null
   test-prologue: null
-- name: CallerPrio
+- name: OwnerPrio
   states:
   - name: Nop
     test-code: |
-      if ( ctx->count == 0 ) {
-        T_eq_u32( GetSelfPriority(), PRIO_HIGH );
-        ReleaseSemaphore( ctx );
-      } else {
-        T_eq_u32( GetSelfPriority(), PRIO_NORMAL );
-      }
+      T_eq_u32( GetSelfPriority(), PRIO_HIGH );
+      ReleaseSemaphore( ctx );
     text: |
-      The current priority of the task which called ${../if/set-priority:/name}
-      shall not be modified by the ${../if/set-priority:/name} call.
+      The current priority of the owner task of the semaphore for the scheduler
+      specified by the ${../if/set-priority:/params[1]/name} parameter shall
+      not be modified by the ${../if/set-priority:/name} call.
   - name: New
     test-code: |
       T_eq_u32( GetSelfPriority(), PRIO_VERY_HIGH );
       ReleaseSemaphore( ctx );
     text: |
-      The current priority of the task which called ${../if/set-priority:/name}
-      shall be equal to the value of the ${../if/set-priority:/params[2]/name}
-      parameter.
+      The current priority of the owner task of the semaphore for the scheduler
+      specified by the ${../if/set-priority:/params[1]/name} parameter shall be
+      less than or equal to the value of the
+      ${../if/set-priority:/params[2]/name} parameter.
   test-epilogue: null
   test-prologue: null
 - name: SemPrio
@@ -130,20 +128,63 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: OldPrio
+- name: Class
+  states:
+  - name: Counting
+    test-code: |
+      ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
+    text: |
+      While the semaphore object is a counting semaphore.
+  - name: Simple
+    test-code: |
+      ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
+    text: |
+      While the semaphore object is a simple binary semaphore.
+  - name: Binary
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
+    text: |
+      While the semaphore object is a binary semaphore.
+  - name: PrioCeilingNoOwner
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
+    text: |
+      While the semaphore object is a priority ceiling semaphore, while the
+      semaphore has no owner.
+  - name: PrioCeilingOwner
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
+      ctx->count = 0;
+    text: |
+      While the semaphore object is a priority ceiling semaphore, while the
+      semaphore has an owner.
+  - name: PrioInherit
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
+    text: |
+      While the semaphore object is a priority inheritance semaphore.
+  - name: MrsP
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the semaphore object is a MrsP semaphore.
+  test-epilogue: null
+  test-prologue: null
+- name: SemId
   states:
   - name: Valid
     test-code: |
-      ctx->old_priority = &ctx->old_priority_value;
+      ctx->valid_id = true;
     text: |
-      While the ${../if/set-priority:/params[3]/name} parameter references an
-      object of type ${../../type/if/priority:/name}.
-  - name: 'Null'
+      While the ${../if/set-priority:/params[0]/name} parameter is associated
+      with the semaphore.
+  - name: Invalid
     test-code: |
-      ctx->old_priority = NULL;
+      ctx->valid_id = false;
     text: |
-      While the ${../if/set-priority:/params[3]/name} parameter is
-      ${/c/if/null:/name}.
+      While the ${../if/set-priority:/params[0]/name} parameter is not
+      associated with a semaphore.
   test-epilogue: null
   test-prologue: null
 - name: SchedId
@@ -159,70 +200,15 @@ pre-conditions:
       ctx->scheduler_id = ctx->runner_scheduler_id;
     text: |
     text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
+      While the ${../if/set-priority:/params[1]/name} parameter is associated with
       the scheduler used to create the semaphore.
   - name: Other
     test-code: |
       ctx->scheduler_id = ctx->other_scheduler_id;
     text: |
     text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated
+      While the ${../if/set-priority:/params[1]/name} parameter is associated
       with a scheduler other than the one used to create the semaphore.
-  test-epilogue: null
-  test-prologue: null
-- name: SemId
-  states:
-  - name: NoObj
-    test-code: |
-      ctx->valid_id = false;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is not associated
-      with a semaphore.
-  - name: Counting
-    test-code: |
-      ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
-    text: |
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a counting semaphore.
-  - name: Simple
-    test-code: |
-      ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a simple binary semaphore.
-  - name: Binary
-    test-code: |
-      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a binary semaphore.
-  - name: PrioCeilingNoOwner
-    test-code: |
-      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a priority ceiling semaphore, while the semaphore is has no owner.
-  - name: PrioCeilingOwner
-    test-code: |
-      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
-      ctx->count = 0;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a priority ceiling semaphore, while the semaphore has an owner.
-  - name: PrioInherit
-    test-code: |
-      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a priority inheritance semaphore.
-  - name: MrsP
-    test-code: |
-      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
-    text: |
-      While the ${../if/set-priority:/params[0]/name} parameter is associated with
-      a MrsP semaphore.
   test-epilogue: null
   test-prologue: null
 - name: NewPrio
@@ -248,6 +234,22 @@ pre-conditions:
       While the ${../if/set-priority:/params[2]/name} parameter is invalid with
       respect to the scheduler specified by the
       ${../if/set-priority:/params[1]/name} parameter.
+  test-epilogue: null
+  test-prologue: null
+- name: OldPrio
+  states:
+  - name: Valid
+    test-code: |
+      ctx->old_priority = &ctx->old_priority_value;
+    text: |
+      While the ${../if/set-priority:/params[3]/name} parameter references an
+      object of type ${../../type/if/priority:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->old_priority = NULL;
+    text: |
+      While the ${../if/set-priority:/params[3]/name} parameter is
+      ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -284,6 +286,8 @@ test-action: |
 test-brief: null
 test-cleanup: |
   rtems_status_code sc;
+
+  T_eq_u32( GetSelfPriority(), PRIO_NORMAL );
 
   sc = rtems_semaphore_delete( ctx->the_semaphore_id );
   T_rsc_success( sc );
@@ -477,10 +481,16 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
+    Class: all
     OldPrio:
     - 'Null'
     SchedId:
@@ -492,10 +502,16 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvId
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
+    Class: all
     OldPrio:
     - Valid
     SchedId:
@@ -505,29 +521,36 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvId
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
+    Class: all
     OldPrio:
     - Valid
     SchedId:
     - Create
     SemId:
-    - NoObj
+    - Invalid
     NewPrio: all
 - enabled-by: true
   post-conditions:
     Status: InvPrio
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
-    OldPrio:
-    - Valid
-    SchedId:
-    - Create
-    SemId:
+    Class:
     - Counting
     - Simple
     - Binary
@@ -535,37 +558,55 @@ transition-map:
     - PrioCeilingOwner
     - PrioInherit
     - MrsP
-    NewPrio:
-    - Invalid
-- enabled-by: true
-  post-conditions:
-    Status: NotDef
-    CallerPrio: Nop
-    SemPrio: Nop
-    OldPrioVar: Nop
-  pre-conditions:
     OldPrio:
     - Valid
     SchedId:
     - Create
     SemId:
+    - Valid
+    NewPrio:
+    - Invalid
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
+    SemPrio: Nop
+    OldPrioVar: Nop
+  pre-conditions:
+    Class:
     - Counting
     - Simple
     - Binary
     - PrioInherit
+    OldPrio:
+    - Valid
+    SchedId:
+    - Create
+    SemId:
+    - Valid
     NewPrio:
     - Current
     - Valid
 - enabled-by: true
   post-conditions:
     Status: Ok
-    CallerPrio:
+    OwnerPrio:
     - if:
         pre-conditions:
-          SemId: PrioCeilingOwner
+          Class: PrioCeilingOwner
           NewPrio: Valid
       then: New
-    - else: Nop
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+          NewPrio: Current
+      then: Nop
+    - else: N/A
     SemPrio:
     - if:
         pre-conditions:
@@ -574,20 +615,23 @@ transition-map:
     - else: Set
     OldPrioVar: Set
   pre-conditions:
+    Class:
+    - PrioCeilingNoOwner
+    - PrioCeilingOwner
+    - MrsP
     OldPrio:
     - Valid
     SchedId:
     - Create
     SemId:
-    - PrioCeilingNoOwner
-    - PrioCeilingOwner
-    - MrsP
+    - Valid
     NewPrio:
     - Current
     - Valid
 - enabled-by: true
   post-conditions: NoOtherScheduler
   pre-conditions:
+    Class: all
     OldPrio: all
     SchedId:
     - Other
@@ -596,13 +640,18 @@ transition-map:
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: InvAddr
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
+    Class: all
     OldPrio:
     - 'Null'
-    SchedId:
     SchedId:
     - Other
     SemId: all
@@ -610,30 +659,36 @@ transition-map:
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: InvId
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
+    Class: all
     OldPrio:
     - Valid
     SchedId:
-    - Create
     - Other
     SemId:
-    - NoObj
+    - Invalid
     NewPrio: all
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: InvPrio
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
-    OldPrio:
-    - Valid
-    SchedId:
-    - Other
-    SemId:
+    Class:
     - Counting
     - Simple
     - Binary
@@ -641,48 +696,68 @@ transition-map:
     - PrioCeilingOwner
     - PrioInherit
     - MrsP
-    NewPrio:
-    - Invalid
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Status: NotDef
-    CallerPrio: Nop
-    SemPrio: Nop
-    OldPrioVar: Nop
-  pre-conditions:
     OldPrio:
     - Valid
     SchedId:
     - Other
     SemId:
+    - Valid
+    NewPrio:
+    - Invalid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: NotDef
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
+    SemPrio: Nop
+    OldPrioVar: Nop
+  pre-conditions:
+    Class:
     - Counting
     - Simple
     - Binary
     - PrioInherit
+    OldPrio:
+    - Valid
+    SchedId:
+    - Other
+    SemId:
+    - Valid
     NewPrio:
     - Current
     - Valid
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: NotDef
-    CallerPrio: Nop
+    OwnerPrio:
+    - if:
+        pre-conditions:
+          Class: PrioCeilingOwner
+      then: Nop
+    - else: N/A
     SemPrio: Nop
     OldPrioVar: Nop
   pre-conditions:
+    Class:
+    - PrioCeilingNoOwner
+    - PrioCeilingOwner
     OldPrio:
     - Valid
     SchedId:
     - Other
     SemId:
-    - PrioCeilingNoOwner
-    - PrioCeilingOwner
+    - Valid
     NewPrio:
     - Current
     - Valid
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: Ok
-    CallerPrio: Nop
+    OwnerPrio: N/A
     SemPrio:
     - if:
         pre-conditions:
@@ -691,12 +766,14 @@ transition-map:
     - else: Set
     OldPrioVar: Set
   pre-conditions:
+    Class:
+    - MrsP
     OldPrio:
     - Valid
     SchedId:
     - Other
     SemId:
-    - MrsP
+    - Valid
     NewPrio:
     - Current
     - Valid
