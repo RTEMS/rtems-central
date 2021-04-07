@@ -1,0 +1,159 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/obtain
+post-conditions:
+- name: Action
+  states:
+  - name: InvId
+    test-code: |
+      sc = rtems_semaphore_obtain( 0xffffffff, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+      T_rsc( sc, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/obtain:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: SemSeizeTry
+    test-code: |
+      ${/score/sem/req/seize-try:/test-run}(
+        &ctx->tq_ctx,
+        TQClassicSemGetCount,
+        TQClassicSemSetCount
+      );
+    text: |
+      The calling task shall try to seize the semaphore as specified by
+      ${/score/sem/req/seize-try}.
+  test-epilogue: null
+  test-prologue: |
+    rtems_status_code sc;
+pre-conditions:
+- name: Class
+  states:
+  - name: Counting
+    test-code: |
+      ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
+    text: |
+      While the semaphore object is a counting semaphore.
+  - name: Simple
+    test-code: |
+      ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
+    text: |
+      While the semaphore object is a simple binary semaphore.
+  test-epilogue: null
+  test-prologue: null
+- name: Discipline
+  states:
+  - name: FIFO
+    test-code: |
+      ctx->attribute_set |= RTEMS_FIFO;
+    text: |
+      While the semaphore uses the FIFO task wait queue discipline.
+  - name: Priority
+    test-code: |
+      ctx->attribute_set |= RTEMS_PRIORITY;
+    text: |
+      While the semaphore uses the priority task wait queue discipline.
+  test-epilogue: null
+  test-prologue: null
+- name: Id
+  states:
+  - name: Valid
+    test-code: |
+      /* Nothing to prepare */
+    text: |
+      While the ${../if/obtain:/params[0]/name} parameter is associated with
+      the semaphore.
+  - name: Invalid
+    test-code: |
+      /* Nothing to prepare */
+    text: |
+      While the ${../if/obtain:/params[0]/name} parameter is not associated
+      with a semaphore.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_create(
+    NAME,
+    1,
+    ctx->attribute_set,
+    PRIO_ULTRA_HIGH,
+    &ctx->tq_ctx.thread_queue_id
+  );
+  T_rsc_success( sc );
+test-brief: null
+test-cleanup:
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+  T_rsc_success( sc );
+test-context:
+- brief: |
+    This member contains the thread queue test context.
+  description: null
+  member: |
+    TQContext tq_ctx
+- brief: |
+    This member specifies if the attribute set of the semaphore.
+  description: null
+  member: |
+    rtems_attribute attribute_set
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- string.h
+test-local-includes:
+- tc-support.h
+- tr-sem-seize-try.h
+- tx-thread-queue.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->tq_ctx.enqueue = TQClassicSemEnqueue;
+    ctx->tq_ctx.dequeue_one = TQClassicSemDequeue;
+    ctx->tq_ctx.dequeue_all = TQClassicSemDequeue;
+    ctx->tq_ctx.convert_status = TQClassicConvertStatus;
+    TQInitialize( &ctx->tq_ctx );
+  description: null
+test-stop: null
+test-support: |
+  #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
+
+  typedef RtemsSemReqObtain_Context Context;
+test-target: testsuites/validation/tc-sem-obtain.c
+test-teardown:
+  brief: null
+  code: |
+    TQDestory( &ctx->tq_ctx );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Action: InvId
+  pre-conditions:
+    Class: all
+    Discipline: all
+    Id:
+    - Invalid
+- enabled-by: true
+  post-conditions:
+    Action: SemSeizeTry
+  pre-conditions:
+    Class: all
+    Discipline: all
+    Id:
+    - Valid
+type: requirement

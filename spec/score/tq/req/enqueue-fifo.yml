@@ -1,0 +1,105 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links: []
+post-conditions:
+- name: Position
+  states:
+  - name: First
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread shall be the first thread in the queue.
+  - name: Last
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread shall be the last thread in the queue.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+pre-conditions:
+- name: Empty
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* This is the default */
+    text: |
+      While the queue is empty.
+  - name: 'No'
+    test-code: |
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE );
+    text: |
+      While the queue is non-empty.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  TQPrepare( ctx->tq_ctx );
+  TQSchedulerRecordStart( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+  TQDequeueAll( ctx->tq_ctx );
+  TQSchedulerRecordStop( ctx->tq_ctx );
+  TQCleanup( ctx->tq_ctx );
+test-brief: null
+test-cleanup: null
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-enqueue-fifo.h
+test-includes: []
+test-local-includes:
+- tr-tq-enqueue-fifo.h
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ScoreTqReqEnqueueFifo_Context Context;
+
+  static const T_scheduler_event *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index );
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ];
+  }
+test-target: testsuites/validation/tr-tq-enqueue-fifo.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Position: First
+  pre-conditions:
+    Empty:
+    - 'Yes'
+- enabled-by: true
+  post-conditions:
+    Position: Last
+  pre-conditions:
+    Empty:
+    - 'No'
+type: requirement
