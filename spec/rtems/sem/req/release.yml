@@ -29,10 +29,10 @@ post-conditions:
       ${../../status/if/not-owner-of-resource:/name}.
   - name: IntErr
     test-code: |
-      T_rsc( ctx->status, RTEMS_INTERNAL_ERROR );
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
     text: |
       The return status of ${../if/release:/name} shall be
-      ${../../status/if/internal-error:/name}.
+      ${../../status/if/unsatisfied:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Count

@@ -82,5 +82,5 @@ return:
   - description: |
       The semaphore's count already had the maximum value of
       ${/c/if/uint32_max:/name}.
-    value: ${../../status/if/internal-error:/name}
+    value: ${../../status/if/unsatisfied:/name}
 type: interface
