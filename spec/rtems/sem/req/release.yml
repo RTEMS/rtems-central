@@ -505,7 +505,6 @@ test-includes:
 - rtems.h
 - string.h
 - rtems/rtems/semimpl.h
-- rtems/score/threadimpl.h
 test-local-includes:
 - tc-support.h
 - ts-config.h
@@ -663,17 +662,6 @@ test-support: |
     T_rsc_success( sc );
   }
 
-  static Thread_Control *GetThread( rtems_id id )
-  {
-    Thread_Control  *the_thread;
-    ISR_lock_Context lock_context;
-
-    the_thread = _Thread_Get( id, &lock_context );
-    T_assert_not_null( the_thread );
-    _ISR_lock_ISR_enable( &lock_context);
-    return the_thread;
-  }
-
   static void SendAndWaitForIntendToBlock(
     const Context  *ctx,
     WorkerKind      worker,
@@ -685,6 +673,7 @@ test-support: |
 
     Send( ctx, worker, events );
     the_thread = GetThread( ctx->worker_id[ worker ] );
+    T_assert_not_null( the_thread );
     intend_to_block = THREAD_WAIT_CLASS_OBJECT |
       THREAD_WAIT_STATE_INTEND_TO_BLOCK;
 
