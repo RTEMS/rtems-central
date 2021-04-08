@@ -91,9 +91,9 @@ post-conditions:
        * was on another scheduler instance.
        */
 
-      T_le_sz( log->recorded, 1 );
+      T_le_sz( log->header.recorded, 1 );
 
-      for ( i = 0; i < log->recorded; ++i ) {
+      for ( i = 0; i < log->header.recorded; ++i ) {
         T_ne_u32( log->events[ i ].executing, ctx->worker_id );
         T_eq_u32( log->events[ i ].heir, ctx->runner_id );
       }
@@ -102,7 +102,7 @@ post-conditions:
       task shall not be preempted as a result of the call.
   - name: 'Yes'
     test-code: |
-      T_eq_sz( log->recorded, 2 );
+      T_eq_sz( log->header.recorded, 2 );
       T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
       T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
     text: |
@@ -110,10 +110,10 @@ post-conditions:
       task shall be preempted as a result of the call.
   test-epilogue: null
   test-prologue: |
-    T_thread_switch_log *log;
-    size_t               i;
+    const T_thread_switch_log_4 *log;
+    size_t                       i;
 
-    log = &ctx->thread_switch_log.log;
+    log = &ctx->thread_switch_log;
 pre-conditions:
 - name: Id
   states:
@@ -586,7 +586,7 @@ test-support: |
     T_quiet_null( log );
     ctx->send_status = ( *ctx->send )( ctx->receiver_id, ctx->events_to_send );
     log = T_thread_switch_record( NULL );
-    T_quiet_eq_ptr( log, &ctx->thread_switch_log.log );
+    T_quiet_eq_ptr( &log->header, &ctx->thread_switch_log.header );
   }
 
   static void Send(
@@ -651,12 +651,12 @@ test-support: |
            * CPU is recorded, otherwise the preemption check may sporadically
            * fail on some targets.
            */
-          while (ctx->thread_switch_log.log.recorded < 2) {
+          while (ctx->thread_switch_log.header.recorded < 2) {
             RTEMS_COMPILER_MEMORY_BARRIER();
           }
 
           log = T_thread_switch_record( NULL );
-          T_eq_ptr( log, &ctx->thread_switch_log.log );
+          T_eq_ptr( &log->header, &ctx->thread_switch_log.header );
           break;
         case PRIO_LOW:
           break;
