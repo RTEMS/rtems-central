@@ -387,7 +387,7 @@ test-setup:
 
     #if defined(RTEMS_SMP)
     sc = rtems_scheduler_ident(
-      CONFIG_SCHEDULER_B_NAME,
+      TEST_SCHEDULER_B_NAME,
       &ctx->other_scheduler_id
     );
     T_rsc_success( sc );

@@ -548,13 +548,13 @@ test-setup:
     StartTask( ctx->worker_id[ HELPER_OTHER ], HelperOther, ctx );
 
     sc = rtems_scheduler_ident(
-      CONFIG_SCHEDULER_B_NAME,
+      TEST_SCHEDULER_B_NAME,
       &ctx->other_scheduler_id
     );
     T_rsc_success( sc );
 
     sc = rtems_scheduler_ident(
-      CONFIG_SCHEDULER_C_NAME,
+      TEST_SCHEDULER_C_NAME,
       &ctx->third_scheduler_id
     );
     T_rsc_success( sc );
