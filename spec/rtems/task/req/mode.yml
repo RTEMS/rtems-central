@@ -529,9 +529,6 @@ test-header: null
 test-includes:
 - rtems.h
 - string.h
-- rtems/score/percpu.h
-- rtems/score/threaddispatch.h
-- rtems/score/watchdogimpl.h
 test-local-includes:
 - tx-support.h
 test-prepare: |
@@ -598,28 +595,15 @@ test-support: |
 
   static void ExhaustTimeslice( void )
   {
-    Per_CPU_Control *cpu_self;
-    uint32_t         ticks;
-
-    cpu_self = _Thread_Dispatch_disable();
+    uint32_t ticks;
 
     for (
       ticks = 0;
       ticks < rtems_configuration_get_ticks_per_timeslice();
       ++ticks
     ) {
-      uint32_t cpu_index;
-
-      for (
-        cpu_index = 0;
-        cpu_index < rtems_scheduler_get_processor_maximum();
-        ++cpu_index
-      ) {
-        _Watchdog_Tick( _Per_CPU_Get_by_index( cpu_index ) );
-      }
+      ClockTick();
     }
-
-    _Thread_Dispatch_enable( cpu_self );
   }
 
   static void CheckMode(
