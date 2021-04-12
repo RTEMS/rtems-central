@@ -113,7 +113,7 @@ test-includes:
 - rtems.h
 - string.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 - tr-sem-seize-try.h
 - tx-thread-queue.h
 test-prepare: null

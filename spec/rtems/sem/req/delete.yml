@@ -271,7 +271,7 @@ test-includes:
 - rtems.h
 - string.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 test-prepare: |
   ctx->counter = 0;
   ctx->worker_counter[ 0 ] = 0;

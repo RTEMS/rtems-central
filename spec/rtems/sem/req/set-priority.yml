@@ -367,7 +367,7 @@ test-includes:
 - rtems.h
 - string.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 - ts-config.h
 test-prepare: |
   ctx->old_priority_value = INVALID_PRIO;

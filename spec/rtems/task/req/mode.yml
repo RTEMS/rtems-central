@@ -533,7 +533,7 @@ test-includes:
 - rtems/score/threaddispatch.h
 - rtems/score/watchdogimpl.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 test-prepare: |
   ctx->current_mode = RTEMS_DEFAULT_MODES;
   ctx->mode_set = RTEMS_DEFAULT_MODES;

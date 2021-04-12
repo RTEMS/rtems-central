@@ -150,7 +150,7 @@ test-includes:
 - rtems.h
 - string.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 test-prepare: null
 test-setup:
   brief: null

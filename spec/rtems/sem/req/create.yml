@@ -477,7 +477,7 @@ test-includes:
 - string.h
 - rtems/rtems/semimpl.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 test-prepare: |
   rtems_status_code sc;
   rtems_id          id;

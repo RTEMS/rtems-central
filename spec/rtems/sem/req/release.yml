@@ -506,7 +506,7 @@ test-includes:
 - string.h
 - rtems/rtems/semimpl.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 - ts-config.h
 test-prepare: |
   size_t i;

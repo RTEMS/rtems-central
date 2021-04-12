@@ -325,7 +325,7 @@ test-includes:
 - string.h
 - rtems/score/smpbarrier.h
 test-local-includes:
-- tc-support.h
+- tx-support.h
 test-prepare: |
   rtems_status_code sc;
 
