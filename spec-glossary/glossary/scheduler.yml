@@ -14,4 +14,9 @@ text: |
   out of the set of ready tasks.  One method is to assign each task a
   priority number and assign the tasks with the lowest priority number to
   one processor of the set of processors owned by a scheduler instance.
+
+  A scheduler is either an ${scheduler-eligible:/term} or a
+  ${scheduler-ineligible:/term} for a task.  An ${scheduler-eligible:/term} is
+  either the ${scheduler-home:/term} or a ${scheduler-helping:/term} for a
+  task.
 type: glossary
