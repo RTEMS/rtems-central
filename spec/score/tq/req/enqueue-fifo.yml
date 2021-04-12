@@ -25,17 +25,27 @@ post-conditions:
     size_t i;
 
     i = 0;
+
+    /* Event receive */
+    T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+
+    /* Enqueue */
+    T_eq_ptr( GetBlock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
 pre-conditions:
-- name: Empty
+- name: Queue
   states:
-  - name: 'Yes'
+  - name: Empty
     test-code: |
       /* This is the default */
     text: |
       While the queue is empty.
-  - name: 'No'
+  - name: NonEmpty
     test-code: |
-      TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE );
+      TQSend(
+        ctx->tq_ctx,
+        TQ_BLOCKER_B,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_DEQUEUE_ONE
+      );
     text: |
       While the queue is non-empty.
   test-epilogue: null
@@ -45,14 +55,13 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
-  TQPrepare( ctx->tq_ctx );
   TQSchedulerRecordStart( ctx->tq_ctx );
-  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE | TQ_EVENT_DEQUEUE_ONE );
   TQDequeueAll( ctx->tq_ctx );
   TQSchedulerRecordStop( ctx->tq_ctx );
-  TQCleanup( ctx->tq_ctx );
 test-brief: null
-test-cleanup: null
+test-cleanup: |
+  TQCleanup( ctx->tq_ctx );
 test-context: []
 test-context-support: null
 test-description: null
@@ -71,20 +80,26 @@ test-header:
 test-includes: []
 test-local-includes:
 - tr-tq-enqueue-fifo.h
-test-prepare: null
+test-prepare: |
+  TQPrepare( ctx->tq_ctx );
 test-setup: null
 test-stop: null
 test-support: |
   typedef ScoreTqReqEnqueueFifo_Context Context;
 
-  static const T_scheduler_event *GetUnblock( Context *ctx, size_t *index )
+  static const rtems_tcb *GetBlock( Context *ctx, size_t *index )
   {
-    return TQGetNextUnblock( ctx->tq_ctx, index );
+    return TQGetNextBlock( ctx->tq_ctx, index )->thread;
+  }
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
   }
 
   static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
   {
-    return ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ];
+    return ctx->tq_ctx->worker_tcb[ worker ];
   }
 test-target: testsuites/validation/tr-tq-enqueue-fifo.c
 test-teardown: null
@@ -94,12 +109,12 @@ transition-map:
   post-conditions:
     Position: First
   pre-conditions:
-    Empty:
-    - 'Yes'
+    Queue:
+    - Empty
 - enabled-by: true
   post-conditions:
     Position: Last
   pre-conditions:
-    Empty:
-    - 'No'
+    Queue:
+    - NonEmpty
 type: requirement

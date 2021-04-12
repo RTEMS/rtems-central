@@ -18,14 +18,20 @@ post-conditions:
       ${../../status/if/invalid-id:/name}.
   - name: SemSeizeTry
     test-code: |
-      ${/score/sem/req/seize-try:/test-run}(
-        &ctx->tq_ctx,
-        TQClassicSemGetCount,
-        TQClassicSemSetCount
-      );
+      ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
+      ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
+      ${/score/sem/req/seize-try:/test-run}( &ctx->tq_sem_ctx );
     text: |
       The calling task shall try to seize the semaphore as specified by
       ${/score/sem/req/seize-try}.
+  - name: SemSeizeWait
+    test-code: |
+      ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
+      ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
+      ${/score/sem/req/seize-wait:/test-run}( &ctx->tq_sem_ctx );
+    text: |
+      The calling task shall wait to seize the semaphore as specified by
+      ${/score/sem/req/seize-wait}.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
@@ -49,11 +55,13 @@ pre-conditions:
   - name: FIFO
     test-code: |
       ctx->attribute_set |= RTEMS_FIFO;
+      ctx->tq_ctx.discipline = TQ_FIFO;
     text: |
       While the semaphore uses the FIFO task wait queue discipline.
   - name: Priority
     test-code: |
       ctx->attribute_set |= RTEMS_PRIORITY;
+      ctx->tq_ctx.discipline = TQ_PRIORITY;
     text: |
       While the semaphore uses the priority task wait queue discipline.
   test-epilogue: null
@@ -72,6 +80,32 @@ pre-conditions:
     text: |
       While the ${../if/obtain:/params[0]/name} parameter is not associated
       with a semaphore.
+  test-epilogue: null
+  test-prologue: null
+- name: Wait
+  states:
+  - name: 'No'
+    test-code: |
+      ctx->tq_ctx.wait = TQ_NO_WAIT;
+    text: |
+      While the ${../if/obtain:/params[1]/name} parameter indicates the
+      ${../../option/if/no-wait} option.
+  - name: Timeout
+    test-code: |
+      ctx->tq_ctx.wait = TQ_WAIT_TICKS;
+    text: |
+      While the ${../if/obtain:/params[1]/name} parameter indicates the
+      ${../../option/if/wait:/name} option, while the
+      ${../if/obtain:/params[2]/name} parameter is not equal to
+      ${../../type/if/no-timeout:/name}.
+  - name: Forever
+    test-code: |
+      ctx->tq_ctx.wait = TQ_WAIT_FOREVER;
+    text: |
+      While the ${../if/obtain:/params[1]/name} parameter indicates the
+      ${../../option/if/wait:/name} option, while the
+      ${../if/obtain:/params[2]/name} parameter is equal to
+      ${../../type/if/no-timeout:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -100,7 +134,10 @@ test-context:
     This member contains the thread queue test context.
   description: null
   member: |
-    TQContext tq_ctx
+    union {
+      TQContext tq_ctx;
+      TQSemContext tq_sem_ctx;
+    }
 - brief: |
     This member specifies if the attribute set of the semaphore.
   description: null
@@ -115,16 +152,17 @@ test-includes:
 test-local-includes:
 - tx-support.h
 - tr-sem-seize-try.h
+- tr-sem-seize-wait.h
 - tx-thread-queue.h
 test-prepare: null
 test-setup:
   brief: null
   code: |
     memset( ctx, 0, sizeof( *ctx ) );
-    ctx->tq_ctx.enqueue = TQClassicSemEnqueue;
-    ctx->tq_ctx.dequeue_one = TQClassicSemDequeue;
-    ctx->tq_ctx.dequeue_all = TQClassicSemDequeue;
-    ctx->tq_ctx.convert_status = TQClassicConvertStatus;
+    ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
+    ctx->tq_ctx.dequeue_one = TQDequeueClassicSem;
+    ctx->tq_ctx.dequeue_all = TQDequeueClassicSem;
+    ctx->tq_ctx.convert_status = TQConvertStatusClassic;
     TQInitialize( &ctx->tq_ctx );
   description: null
 test-stop: null
@@ -136,7 +174,7 @@ test-target: testsuites/validation/tc-sem-obtain.c
 test-teardown:
   brief: null
   code: |
-    TQDestory( &ctx->tq_ctx );
+    TQDestroy( &ctx->tq_ctx );
   description: null
 text: ${.:text-template}
 transition-map:
@@ -148,6 +186,7 @@ transition-map:
     Discipline: all
     Id:
     - Invalid
+    Wait: all
 - enabled-by: true
   post-conditions:
     Action: SemSeizeTry
@@ -156,4 +195,17 @@ transition-map:
     Discipline: all
     Id:
     - Valid
+    Wait:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Action: SemSeizeWait
+  pre-conditions:
+    Class: all
+    Discipline: all
+    Id:
+    - Valid
+    Wait:
+    - Timeout
+    - Forever
 type: requirement

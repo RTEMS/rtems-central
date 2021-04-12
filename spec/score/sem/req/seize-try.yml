@@ -55,9 +55,9 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
-  ( *ctx->set_count )( ctx->tq_ctx, ctx->count_before );
-  ctx->status = TQEnqueue( ctx->tq_ctx, TQ_NO_WAIT );
-  ctx->count_after = ( *ctx->get_count )( ctx->tq_ctx );
+  TQSemSetCount( ctx->tq_ctx, ctx->count_before );
+  ctx->status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+  ctx->count_after = TQSemGetCount( ctx->tq_ctx );
 test-brief: null
 test-cleanup: null
 test-context:
@@ -88,17 +88,7 @@ test-header:
       is the thread queue context.
     dir: inout
     name: tq_ctx
-    specifier: TQContext *${.:name}
-  - description: |
-      is the semaphore get count handler.
-    dir: null
-    name: get_count
-    specifier: uint32_t ( *${.:name} )( TQContext * )
-  - description: |
-      is the semaphore set count handler.
-    dir: null
-    name: set_count
-    specifier: void ( *${.:name} )( TQContext *, uint32_t )
+    specifier: TQSemContext *${.:name}
   target: testsuites/validation/tr-sem-seize-try.h
 test-includes: []
 test-local-includes:
@@ -111,7 +101,7 @@ test-support: |
 
   static Status_Control Status( const Context *ctx, Status_Control status )
   {
-    return TQConvertStatus( ctx->tq_ctx, status );
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
   }
 test-target: testsuites/validation/tr-sem-seize-try.c
 test-teardown: null
