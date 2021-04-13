@@ -296,7 +296,8 @@ test-support: |
   }
 test-target: testsuites/validation/tr-tq-enqueue-priority.c
 test-teardown: null
-text: ${.:text-template}
+text: |
+  When the calling task is enqueued on the thread queue.
 transition-map:
 - enabled-by: true
   post-conditions:

@@ -161,7 +161,8 @@ test-support: |
   }
 test-target: testsuites/validation/tr-sem-seize-wait.c
 test-teardown: null
-text: ${.:text-template}
+text: |
+  When the calling task tries to seize the semaphore.
 transition-map:
 - enabled-by: true
   post-conditions:
