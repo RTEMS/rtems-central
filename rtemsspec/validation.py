@@ -615,6 +615,10 @@ _POST_COND_OP = {
     "specified-by": _post_cond_specified_by,
 }
 
+PostCond = Tuple[int, ...]
+
+PreCondsOfPostCond = List[Tuple[List[int], ...]]
+
 
 class TransitionMap:
     """ Representation of an action requirement transition map. """
@@ -676,6 +680,51 @@ class TransitionMap:
             else:
                 variant = transitions[0]
             yield map_idx, variant
+
+    def get_post_conditions(
+            self, enabled: List[str]
+    ) -> Iterator[Tuple[PostCond, PreCondsOfPostCond]]:
+        """
+        Yields tuples of post-condition variants and the corresponding
+        pre-condition variants which are enabled by the enabled list.
+
+        The first entry of the post-condition variant is the skip index.  The
+        remaining entries are post-condition indices.  The pre-condition
+        variants are a list of tuples.  Each tuple entry corresponds to a
+        pre-condition and provides a list of corresponding pre-condition state
+        indices.
+        """
+        entries = {}  # type: Dict[PostCond, PreCondsOfPostCond]
+        for map_idx, variant in self.get_variants(enabled):
+            key = (variant.skip, ) + variant.post_cond
+            entry = entries.setdefault(key, [])
+            entry.append(
+                tuple([state] for state in self.map_idx_to_pre_co_states(
+                    map_idx, variant.pre_cond_na)))
+        for post_cond, pre_conds in sorted(entries.items(),
+                                           key=lambda x: (x[0][0], len(x[1]))):
+            while True:
+                last = pre_conds[0]
+                combined_pre_conds = [last]
+                combined_count = 0
+                for row in pre_conds[1:]:
+                    if row == last:
+                        continue
+                    diff = [
+                        index for index, states in enumerate(last)
+                        if states != row[index]
+                    ]
+                    if len(diff) == 1:
+                        index = diff[0]
+                        combined_count += 1
+                        last[index].extend(row[index])
+                    else:
+                        combined_pre_conds.append(row)
+                        last = row
+                pre_conds = combined_pre_conds
+                if combined_count == 0:
+                    break
+            yield post_cond, pre_conds
 
     def _post_process(self) -> None:
         for map_idx, transitions in enumerate(self):

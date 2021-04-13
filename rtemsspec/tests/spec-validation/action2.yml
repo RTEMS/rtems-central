@@ -272,4 +272,14 @@ transition-map:
     - B0
     C:
     - C0
+- enabled-by: BOOM
+  post-conditions:
+    A: N/A
+    B: B0
+  pre-conditions:
+    A: N/A
+    B:
+    - B0
+    C:
+    - C0
 type: requirement

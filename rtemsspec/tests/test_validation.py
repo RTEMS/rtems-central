@@ -49,8 +49,13 @@ def test_validation(tmpdir):
     assert len(list(transition_map.get_variants([]))) == 36
     assert len(list(transition_map.get_variants(["RTEMS_MULTIPROCESSING"
                                                  ]))) == 36
+    assert len(list(transition_map.get_post_conditions([]))) == 4
+    assert len(
+        list(transition_map.get_post_conditions(["RTEMS_MULTIPROCESSING"
+                                                 ]))) == 5
     transition_map = TransitionMap(item_cache["/action2"])
     assert transition_map.skip_idx_to_name(1) == "SkipReason"
+    assert len(list(transition_map.get_post_conditions(["BOOM"]))) == 6
 
     generate(validation_config, item_cache)
 
@@ -2109,14 +2114,24 @@ static const Action2_Entry
 Action2_Entries[] = {
   { 0, 1, 0, 0, Action2_Post_A_A1, Action2_Post_B_NA },
   { 0, 0, 0, 0, Action2_Post_A_A2, Action2_Post_B_B0 },
-  { 0, 0, 0, 0, Action2_Post_A_A1, Action2_Post_B_B0 },
   { 1, 0, 0, 0, Action2_Post_A_NA, Action2_Post_B_NA },
+  { 0, 0, 0, 0, Action2_Post_A_A1, Action2_Post_B_B0 },
+#if defined(BOOM)
+  { 0, 1, 0, 0, Action2_Post_A_NA, Action2_Post_B_B0 },
+#else
+  { 0, 0, 0, 0, Action2_Post_A_A1, Action2_Post_B_B0 },
+#endif
+#if defined(BOOM)
+  { 0, 1, 0, 0, Action2_Post_A_NA, Action2_Post_B_B0 },
+#else
+  { 0, 0, 0, 0, Action2_Post_A_A2, Action2_Post_B_B0 },
+#endif
   { 0, 0, 0, 0, Action2_Post_A_A3, Action2_Post_B_B0 }
 };
 
 static const uint8_t
 Action2_Map[] = {
-  2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 4, 0, 0, 0, 3, 3, 3
+  4, 3, 3, 0, 0, 0, 1, 1, 1, 5, 1, 6, 0, 0, 0, 2, 2, 2
 };
 
 static size_t Action2_Scope( void *arg, char *buf, size_t n )

@@ -28,7 +28,7 @@
 import argparse
 import itertools
 import sys
-from typing import Dict, Iterator, List, Set, Tuple
+from typing import List, Set, Tuple
 
 from rtemsspec.items import Item, ItemCache, Link
 from rtemsspec.sphinxcontent import SphinxContent
@@ -124,48 +124,9 @@ def _to_name(transition_map, co_idx: int, st_idx: int) -> str:
             f"{transition_map.post_co_idx_st_idx_to_st_name(co_idx, st_idx)}")
 
 
-_PostCond = Tuple[int, ...]
-_Entries = List[Tuple[List[int], ...]]
-
-
-def _get_entries(transition_map: TransitionMap,
-                 enabled: List[str]) -> Iterator[Tuple[_PostCond, _Entries]]:
-    entries = {}  # type: Dict[_PostCond, _Entries]
-    for map_idx, variant in transition_map.get_variants(enabled):
-        key = (variant.skip, ) + variant.post_cond
-        entry = entries.setdefault(key, [])
-        entry.append(
-            tuple([state] for state in transition_map.map_idx_to_pre_co_states(
-                map_idx, variant.pre_cond_na)))
-    for post_cond, entry in sorted(entries.items(),
-                                   key=lambda x: (x[0][0], len(x[1]))):
-        while True:
-            last = entry[0]
-            combined_entry = [last]
-            combined_count = 0
-            for row in entry[1:]:
-                if row == last:
-                    continue
-                diff = [
-                    index for index, states in enumerate(last)
-                    if states != row[index]
-                ]
-                if len(diff) == 1:
-                    index = diff[0]
-                    combined_count += 1
-                    last[index].extend(row[index])
-                else:
-                    combined_entry.append(row)
-                    last = row
-            entry = combined_entry
-            if combined_count == 0:
-                break
-        yield post_cond, entry
-
-
 def _action_list(enabled: List[str], item: Item) -> None:
     transition_map = TransitionMap(item)
-    for post_cond, entry in _get_entries(transition_map, enabled):
+    for post_cond, pre_conds in transition_map.get_post_conditions(enabled):
         print("")
         if post_cond[0]:
             print(transition_map.skip_idx_to_name(post_cond[0]))
@@ -173,7 +134,7 @@ def _action_list(enabled: List[str], item: Item) -> None:
             print(", ".join(
                 _to_name(transition_map, co_idx, st_idx)
                 for co_idx, st_idx in enumerate(post_cond[1:])))
-        for row in entry:
+        for row in pre_conds:
             entries = []
             for co_idx, co_states in enumerate(row):
                 co_name = transition_map.pre_co_idx_to_co_name(co_idx)
