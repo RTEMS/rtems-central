@@ -32,12 +32,84 @@ post-conditions:
     text: |
       The calling task shall wait to seize the semaphore as specified by
       ${/score/sem/req/seize-wait}.
+  - name: MtxSeizeTry
+    test-code: |
+      ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
+      ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall try to seize the mutex as specified by
+      ${/score/mtx/req/seize-try} where an enqueue blocks and a recursive seize
+      is allowed.
+  - name: MtxSeizeWait
+    test-code: |
+      ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall wait to seize the mutex as specified by
+      ${/score/mtx/req/seize-wait} where an enqueue blocks and a recursive
+      seize is allowed.
+  - name: CeilingMtxSeizeTry
+    test-code: |
+      ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
+      ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall try to seize the mutex as specified by
+      ${/score/mtx/req/seize-try} where an enqueue blocks, a recursive seize is
+      allowed, and a priority ceiling is used.
+  - name: CeilingMtxSeizeWait
+    test-code: |
+      ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall wait to seize the mutex as specified by
+      ${/score/mtx/req/seize-wait} where an enqueue blocks, a recursive seize
+      is allowed, and a priority ceiling is used.
+  - name: MrsPMtxSeizeTry
+    test-code: |
+      ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_NO_STATUS;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
+      ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall try to seize the mutex as specified by
+      ${/score/mtx/req/seize-try} where an enqueue is sticky, a recursive seize
+      returns an error status, and a priority ceiling is used.
+  - name: MrsPMtxSeizeWait
+    test-code: |
+      ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_NO_STATUS;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
+      ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall wait to seize the mutex as specified by
+      ${/score/mtx/req/seize-wait} where an enqueue is sticky, a recursive
+      seize returns an error status, and a priority ceiling is used.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;
 pre-conditions:
 - name: Class
   states:
+  - name: MrsP
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the semaphore object is a MrsP semaphore.
   - name: Counting
     test-code: |
       ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
@@ -48,6 +120,21 @@ pre-conditions:
       ctx->attribute_set |= RTEMS_SIMPLE_BINARY_SEMAPHORE;
     text: |
       While the semaphore object is a simple binary semaphore.
+  - name: Binary
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
+    text: |
+      While the semaphore object is a binary semaphore.
+  - name: PrioCeiling
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
+    text: |
+      While the semaphore object is a priority ceiling semaphore.
+  - name: PrioInherit
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
+    text: |
+      While the semaphore object is a priority inheritance semaphore.
   test-epilogue: null
   test-prologue: null
 - name: Discipline
@@ -111,7 +198,13 @@ pre-conditions:
 rationale: null
 references: []
 requirement-type: functional
-skip-reasons: {}
+skip-reasons:
+  NeedsPriorityDiscipline: |
+    Binary semaphores with a locking protocol are required to use the priority
+    task wait queue discipline.
+  NoMrsP: |
+    Where the system is build with SMP support disabled, the MrsP locking
+    protocol is not available.
 test-action: |
   rtems_status_code sc;
 
@@ -119,7 +212,7 @@ test-action: |
     NAME,
     1,
     ctx->attribute_set,
-    PRIO_ULTRA_HIGH,
+    PRIO_VERY_HIGH,
     &ctx->tq_ctx.thread_queue_id
   );
   T_rsc_success( sc );
@@ -136,6 +229,7 @@ test-context:
   member: |
     union {
       TQContext tq_ctx;
+      TQMtxContext tq_mtx_ctx;
       TQSemContext tq_sem_ctx;
     }
 - brief: |
@@ -151,17 +245,19 @@ test-includes:
 - string.h
 test-local-includes:
 - tx-support.h
+- tr-mtx-seize-try.h
+- tr-mtx-seize-wait.h
 - tr-sem-seize-try.h
 - tr-sem-seize-wait.h
 - tx-thread-queue.h
-test-prepare: null
+test-prepare: |
+  ctx->attribute_set = RTEMS_DEFAULT_ATTRIBUTES;
 test-setup:
   brief: null
   code: |
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
-    ctx->tq_ctx.dequeue_one = TQDequeueClassicSem;
-    ctx->tq_ctx.dequeue_all = TQDequeueClassicSem;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
     ctx->tq_ctx.convert_status = TQConvertStatusClassic;
     TQInitialize( &ctx->tq_ctx );
   description: null
@@ -182,8 +278,23 @@ transition-map:
   post-conditions:
     Action: InvId
   pre-conditions:
-    Class: all
+    Class:
+    - Counting
+    - Simple
+    - Binary
     Discipline: all
+    Id:
+    - Invalid
+    Wait: all
+- enabled-by: true
+  post-conditions:
+    Action: InvId
+  pre-conditions:
+    Class:
+    - PrioCeiling
+    - PrioInherit
+    Discipline:
+    - Priority
     Id:
     - Invalid
     Wait: all
@@ -191,7 +302,9 @@ transition-map:
   post-conditions:
     Action: SemSeizeTry
   pre-conditions:
-    Class: all
+    Class:
+    - Counting
+    - Simple
     Discipline: all
     Id:
     - Valid
@@ -201,8 +314,139 @@ transition-map:
   post-conditions:
     Action: SemSeizeWait
   pre-conditions:
-    Class: all
+    Class:
+    - Counting
+    - Simple
     Discipline: all
+    Id:
+    - Valid
+    Wait:
+    - Timeout
+    - Forever
+- enabled-by: true
+  post-conditions:
+    Action: MtxSeizeTry
+  pre-conditions:
+    Class:
+    - Binary
+    Discipline: all
+    Id:
+    - Valid
+    Wait:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Action: MtxSeizeWait
+  pre-conditions:
+    Class:
+    - Binary
+    Discipline: all
+    Id:
+    - Valid
+    Wait:
+    - Timeout
+    - Forever
+- enabled-by: true
+  post-conditions:
+    Action: CeilingMtxSeizeTry
+  pre-conditions:
+    Class:
+    - PrioCeiling
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+    Wait:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Action: CeilingMtxSeizeWait
+  pre-conditions:
+    Class:
+    - PrioCeiling
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+    Wait:
+    - Timeout
+    - Forever
+- enabled-by: true
+  post-conditions:
+    Action: MtxSeizeTry
+  pre-conditions:
+    Class:
+    - PrioInherit
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+    Wait:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Action: MtxSeizeWait
+  pre-conditions:
+    Class:
+    - PrioInherit
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+    Wait:
+    - Timeout
+    - Forever
+- enabled-by: true
+  post-conditions: NoMrsP
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
+    Id: all
+    Wait: all
+- enabled-by: true
+  post-conditions: NeedsPriorityDiscipline
+  pre-conditions:
+    Class:
+    - PrioCeiling
+    - PrioInherit
+    - MrsP
+    Discipline:
+    - FIFO
+    Id: all
+    Wait: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: InvId
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
+    Id:
+    - Invalid
+    Wait: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: MrsPMtxSeizeTry
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+    Wait:
+    - 'No'
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: MrsPMtxSeizeWait
+  pre-conditions:
+    Class:
+    - MrsP
+    Discipline:
+    - Priority
     Id:
     - Valid
     Wait:

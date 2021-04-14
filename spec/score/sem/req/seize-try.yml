@@ -42,12 +42,12 @@ pre-conditions:
     test-code: |
       ctx->count_before = 0;
     text: |
-      The count of the semaphore shall be zero.
+      While the count of the semaphore is zero.
   - name: Positive
     test-code: |
       ctx->count_before = 1;
     text: |
-      The count of the semaphore shall be greater than zero.
+      While the count of the semaphore is greater than zero.
   test-epilogue: null
   test-prologue: null
 rationale: null

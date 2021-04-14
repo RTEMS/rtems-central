@@ -9,14 +9,14 @@ post-conditions:
   states:
   - name: First
     test-code: |
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
       The thread shall be the first thread in the queue.
   - name: Last
     test-code: |
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
       The thread shall be the last thread in the queue.
@@ -26,26 +26,20 @@ post-conditions:
 
     i = 0;
 
-    /* Event receive */
+    /* Event receives */
+    T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
     T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
-
-    /* Enqueue */
-    T_eq_ptr( GetBlock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
 pre-conditions:
 - name: Queue
   states:
   - name: Empty
     test-code: |
-      /* This is the default */
+      ctx->tq_ctx->how_many = 1;
     text: |
       While the queue is empty.
   - name: NonEmpty
     test-code: |
-      TQSend(
-        ctx->tq_ctx,
-        TQ_BLOCKER_B,
-        TQ_EVENT_ENQUEUE | TQ_EVENT_DEQUEUE_ONE
-      );
+      ctx->tq_ctx->how_many = 2;
     text: |
       While the queue is non-empty.
   test-epilogue: null
@@ -55,13 +49,18 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_PREPARE );
+
+  if ( ctx->tq_ctx->how_many >= 2 ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
+  }
+
   TQSchedulerRecordStart( ctx->tq_ctx );
-  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE | TQ_EVENT_DEQUEUE_ONE );
-  TQDequeueAll( ctx->tq_ctx );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
   TQSchedulerRecordStop( ctx->tq_ctx );
 test-brief: null
-test-cleanup: |
-  TQCleanup( ctx->tq_ctx );
+test-cleanup: null
 test-context: []
 test-context-support: null
 test-description: null
@@ -72,7 +71,7 @@ test-header:
   - tx-thread-queue.h
   run-params:
   - description: |
-      is the thread queue context.
+      is the thread queue test context.
     dir: inout
     name: tq_ctx
     specifier: TQContext *${.:name}
@@ -80,17 +79,17 @@ test-header:
 test-includes: []
 test-local-includes:
 - tr-tq-enqueue-fifo.h
-test-prepare: |
-  TQPrepare( ctx->tq_ctx );
-test-setup: null
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_ULTRA_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_C, PRIO_HIGH );
+  description: null
 test-stop: null
 test-support: |
   typedef ScoreTqReqEnqueueFifo_Context Context;
-
-  static const rtems_tcb *GetBlock( Context *ctx, size_t *index )
-  {
-    return TQGetNextBlock( ctx->tq_ctx, index )->thread;
-  }
 
   static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
   {
@@ -102,9 +101,13 @@ test-support: |
     return ctx->tq_ctx->worker_tcb[ worker ];
   }
 test-target: testsuites/validation/tr-tq-enqueue-fifo.c
-test-teardown: null
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
 text: |
-  When the calling task is enqueued on the thread queue.
+  When the calling thread is enqueued on the thread queue.
 transition-map:
 - enabled-by: true
   post-conditions:

@@ -15,15 +15,6 @@ post-conditions:
       A priority queue associated with the scheduler which contains exactly the
       enqueueing thread shall be created as the first priority queue of the
       thread queue.
-  - name: InitialLast
-    test-code: |
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_D ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
-    text: |
-      A priority queue associated with the scheduler which contains exactly the
-      enqueueing thread shall be created as the last priority queue of the
-      thread queue.
   - name: First
     test-code: |
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
@@ -43,7 +34,6 @@ post-conditions:
   - name: FirstFirst
     test-code: |
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_D ) );
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
@@ -54,7 +44,6 @@ post-conditions:
   - name: SecondFirst
     test-code: |
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_D ) );
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
@@ -62,20 +51,8 @@ post-conditions:
       with the scheduler.
 
       The position of the priority queue in the thread queue shall not change.
-  - name: FirstLast
+  - name: SecondQueue
     test-code: |
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_D ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
-      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
-    text: |
-      The enqueueing thread shall be enqueued in the priority queue associated
-      with the scheduler.
-
-      The position of the priority queue in the thread queue shall not change.
-  - name: SecondLast
-    test-code: |
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_D ) );
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_C ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
@@ -112,22 +89,12 @@ pre-conditions:
   states:
   - name: None
     test-code: |
-      ctx->priority = PRIO_PSEUDO_ISR;
+      /* This is the default */
     text: |
       While the priority queue of the thread queue associated with an eligible
       scheduler of the enqueueing thread is empty.
-  - name: LT
-    test-code: |
-      ++ctx->tq_ctx->how_many;
-      ctx->priority = PRIO_ULTRA_HIGH;
-    text: |
-      While the priority queue of the thread queue associated with an eligible
-      scheduler of the enqueueing thread is non-empty, while at least one
-      thread of this priority queue has a priority less than the priority of
-      the enqueueing thread with respect to this scheduler.
   - name: EQ
     test-code: |
-      ++ctx->tq_ctx->how_many;
       ctx->priority = PRIO_VERY_HIGH;
     text: |
       While the priority queue of the thread queue associated with an eligible
@@ -136,7 +103,6 @@ pre-conditions:
       enqueueing thread with respect to this scheduler.
   - name: GT
     test-code: |
-      ++ctx->tq_ctx->how_many;
       ctx->priority = PRIO_HIGH;
     text: |
       While the priority queue of the thread queue associated with an eligible
@@ -149,24 +115,13 @@ pre-conditions:
   states:
   - name: None
     test-code: |
-      ctx->other_before = false;
-      ctx->other_after = false;
+      /* This is the default */
     text: |
       While no priority queue of the thread queue exists which is not
       associated with an eligible scheduler of the enqueueing thread.
-  - name: Only
-    test-code: |
-      ++ctx->tq_ctx->how_many;
-      ctx->other_before = true;
-      ctx->other_after = false;
-    text: |
-      While exactly one priority queue of the thread queue exists which is not
-      associated with an eligible scheduler of the enqueueing thread.
   - name: Before
     test-code: |
-      ++ctx->tq_ctx->how_many;
       ctx->other_before = true;
-      ctx->other_after = false;
     text: |
       While a priority queue of the thread queue exists which is not
       associated with an eligible scheduler of the enqueueing thread, while
@@ -174,8 +129,6 @@ pre-conditions:
       associated with eligible schedulers of the enqueueing thread.
   - name: After
     test-code: |
-      ++ctx->tq_ctx->how_many;
-      ctx->other_before = false;
       ctx->other_after = true;
     text: |
       While a priority queue of the thread queue exists which is not associated
@@ -189,38 +142,49 @@ references: []
 requirement-type: functional
 skip-reasons:
   Invalid: |
-    These variants are invalid due to three independent reasons.  Firstly,
+    These variants are invalid due to two independent reasons.  Firstly,
     where the system was built with SMP support disabled, no other scheduler
     can exist.  Secondly, a priority queue must be present to have another
-    priority queue positioned before or after the priority queue.  Thirdly, if
-    only one priority queue shall be present, then on other priority queue can
-    exist.
+    priority queue positioned before or after the priority queue.
 test-action: |
-  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_PREPARE );
+  Status_Control status;
 
-  if ( ctx->other_before ) {
-    TQSendAndWaitForExecutionStop(
-      ctx->tq_ctx,
-      TQ_BLOCKER_D,
-      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC_2
-    );
-  }
-
-  if ( ctx->priority != PRIO_PSEUDO_ISR ) {
+  if ( ctx->priority == PRIO_PSEUDO_ISR ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+  } else {
     TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B , ctx->priority );
-    TQSend(
-      ctx->tq_ctx,
-      TQ_BLOCKER_B,
-      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
-    );
-  }
 
-  if ( ctx->other_after ) {
-    TQSendAndWaitForExecutionStop(
-      ctx->tq_ctx,
-      TQ_BLOCKER_D,
-      TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC_2
-    );
+    if ( ctx->other_before || ctx->other_after ) {
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_B_OBTAIN );
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        TQ_BLOCKER_D,
+        TQ_EVENT_MUTEX_B_OBTAIN | TQ_EVENT_MUTEX_B_RELEASE |
+          TQ_EVENT_RUNNER_SYNC
+      );
+
+      if ( ctx->other_before ) {
+        TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE );
+      }
+
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      TQSend(
+        ctx->tq_ctx,
+        TQ_BLOCKER_B,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+      );
+
+      if ( ctx->other_before ) {
+        TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_SURRENDER );
+      }
+    } else {
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      TQSend(
+        ctx->tq_ctx,
+        TQ_BLOCKER_B,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER
+      );
+    }
   }
 
   if ( ctx->helping ) {
@@ -234,20 +198,17 @@ test-action: |
   }
 
   TQSchedulerRecordStart( ctx->tq_ctx );
-  TQSend(
-    ctx->tq_ctx,
-    TQ_BLOCKER_C,
-    TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC
-  );
-  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE_DONE );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_ENQUEUE | TQ_EVENT_SURRENDER );
+  TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+  status = TQEnqueue( ctx->tq_ctx, TQ_WAIT_FOREVER );
+  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
+  TQSchedulerRecordStop( ctx->tq_ctx );
+  TQSurrender( ctx->tq_ctx );
 
   if ( ctx->other_before || ctx->other_after ) {
-    TQSynchronizeRunner2();
-  } else {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_B_RELEASE );
     TQSynchronizeRunner();
   }
-
-  TQSchedulerRecordStop( ctx->tq_ctx );
 
   if ( ctx->helping ) {
     if ( ctx->other_before || ctx->other_after ) {
@@ -302,19 +263,23 @@ test-header:
     dir: inout
     name: tq_ctx
     specifier: TQContext *${.:name}
-  target: testsuites/validation/tr-tq-enqueue-priority.h
+  target: testsuites/validation/tr-tq-enqueue-ceiling.h
 test-includes: []
 test-local-includes:
-- tr-tq-enqueue-priority.h
+- tr-tq-enqueue-ceiling.h
 test-prepare:
-  ctx->tq_ctx->how_many = 1;
+  ctx->priority = PRIO_PSEUDO_ISR;
+  ctx->other_before = false;
+  ctx->other_after = false;
 test-setup:
   brief: null
   code: |
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_ULTRA_HIGH );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_LOW );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_C, PRIO_VERY_HIGH );
+    rtems_id scheduler_id;
 
+    scheduler_id = ctx->tq_ctx->runner_scheduler_id;
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, scheduler_id, PRIO_VERY_HIGH );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, scheduler_id, PRIO_VERY_HIGH );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, scheduler_id, PRIO_VERY_HIGH );
     #if defined( RTEMS_SMP )
     TQSetScheduler(
       ctx->tq_ctx,
@@ -326,7 +291,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef ScoreTqReqEnqueuePriority_Context Context;
+  typedef ScoreTqReqEnqueueCeiling_Context Context;
 
   static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
   {
@@ -361,14 +326,14 @@ test-support: |
     TQMutexObtain( tq_ctx, TQ_MUTEX_A );
     TQMutexRelease( tq_ctx, TQ_MUTEX_A );
   }
-test-target: testsuites/validation/tr-tq-enqueue-priority.c
+test-target: testsuites/validation/tr-tq-enqueue-ceiling.c
 test-teardown:
   brief: null
   code: |
     TQReset( ctx->tq_ctx );
   description: null
 text: |
-  When the calling task is enqueued on the thread queue.
+  When the calling thread is enqueued on the thread queue.
 transition-map:
 - enabled-by: true
   post-conditions:
@@ -397,7 +362,6 @@ transition-map:
     EligibleScheduler:
     - Home
     QueueEligible:
-    - LT
     - EQ
     QueueIneligible:
     - None
@@ -431,36 +395,17 @@ transition-map:
     EligibleScheduler:
     - Helping
     QueueEligible:
-    - LT
     - EQ
     QueueIneligible:
     - None
 - enabled-by: RTEMS_SMP
   post-conditions:
-    Position: InitialLast
+    Position: SecondQueue
   pre-conditions:
     EligibleScheduler: all
     QueueEligible:
-    - None
-    QueueIneligible:
-    - Only
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Position: FirstLast
-  pre-conditions:
-    EligibleScheduler: all
-    QueueEligible:
+    - EQ
     - GT
-    QueueIneligible:
-    - Before
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Position: SecondLast
-  pre-conditions:
-    EligibleScheduler: all
-    QueueEligible:
-    - LT
-    - EQ
     QueueIneligible:
     - Before
 - enabled-by: RTEMS_SMP
@@ -478,7 +423,6 @@ transition-map:
   pre-conditions:
     EligibleScheduler: all
     QueueEligible:
-    - LT
     - EQ
     QueueIneligible:
     - After

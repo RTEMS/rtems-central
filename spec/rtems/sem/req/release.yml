@@ -583,14 +583,6 @@ test-support: |
     EVENT_BUSY_WAIT = RTEMS_EVENT_6
   } Event;
 
-  static void Yield( void )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-    T_rsc_success( sc );
-  }
-
   static void SynchronizeRunner( void )
   {
     rtems_event_set events;

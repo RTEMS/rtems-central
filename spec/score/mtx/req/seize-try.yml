@@ -1,0 +1,268 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links: []
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
+      TQSurrender( &ctx->tq_ctx->base );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: Recursive
+    test-code: |
+      switch ( ctx->tq_ctx->recursive ) {
+        case TQ_MTX_RECURSIVE_YES:
+          T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
+          TQSurrender( &ctx->tq_ctx->base );
+          break;
+        case TQ_MTX_RECURSIVE_NO_STATUS:
+          T_eq_int( ctx->status, Status( ctx, STATUS_DEADLOCK ) );
+          break;
+        case TQ_MTX_RECURSIVE_NO_FATAL:
+          /* TODO */
+          T_unreachable();
+          break;
+        default:
+          T_unreachable();
+          break;
+      }
+    text: |
+      Where the mutex supports a recursive seize, the return status of the
+      directive call shall be derived from ${../../status/if/successful:/name}.
+
+      Where the mutex does not support a recursive seize, where a deadlock is
+      indicated by a status code, the return status of the directive call shall
+      be derived from ${../../status/if/deadlock:/name}.
+
+      Where the mutex does not support a recursive seize, where a deadlock is
+      indicated by a fatal error, the thread queue deadlock internal error
+      shall occur.
+  - name: Unsat
+    test-code: |
+      T_eq_int( ctx->status, Status( ctx, STATUS_UNSATISFIED ) );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/unsatisfied:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Owner
+  states:
+  - name: Nop
+    test-code: |
+      if ( ctx->owner_self ) {
+        T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
+      } else if ( ctx->owner_other ) {
+        T_eq_ptr(
+          ctx->owner_after,
+          ctx->tq_ctx->base.worker_tcb[ TQ_BLOCKER_A ]
+        );
+      } else {
+        T_null( ctx->owner_after );
+      }
+    text: |
+      The owner of the semaphore shall not be modified.
+  - name: New
+    test-code: |
+      T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
+    text: |
+      The owner of the semaphore shall be the calling thread.
+  test-epilogue: null
+  test-prologue: null
+- name: Priority
+  states:
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->priority_after, ctx->priority_before );
+    text: |
+      The current priority of the calling thread shall not be modified.
+  - name: Ceiling
+    test-code: |
+      if ( ctx->tq_ctx->priority_ceiling != PRIO_INVALID ) {
+        T_eq_u32( ctx->priority_after, ctx->tq_ctx->priority_ceiling );
+      } else {
+        T_eq_u32( ctx->priority_after, ctx->priority_before );
+      }
+    text: |
+      Where the mutex provides a priority ceiling, the calling thread shall use
+      the priority ceiling of the mutex.
+
+      Where the mutex does not provide a priority ceiling, the current priority
+      of the calling thread shall not be modified.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Owner
+  states:
+  - name: 'No'
+    test-code: |
+      /* This is the default */
+    text: |
+      While the mutex has no owner.
+  - name: Self
+    test-code: |
+      ctx->owner_self = true;
+    text: |
+      While the owner of the mutex is the calling thread.
+  - name: Other
+    test-code: |
+      ctx->owner_other = true;
+    text: |
+      While the owner of the mutex is a thread other than the calling thread.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  if ( ctx->owner_self ) {
+    Status_Control status;
+
+    status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+    T_eq_int( status, Status( ctx, STATUS_SUCCESSFUL ) );
+  } else if ( ctx->owner_other ) {
+    if ( ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY ) {
+      TQSetScheduler(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        ctx->tq_ctx->base.other_scheduler_id,
+        PRIO_HIGH
+      );
+      TQSend(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_ENQUEUE | TQ_EVENT_RUNNER_SYNC
+      );
+      TQSynchronizeRunner();
+    } else {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+    }
+  }
+
+  ctx->priority_before = GetSelfPriority();
+  ctx->status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
+  ctx->owner_after = TQMtxGetOwner( ctx->tq_ctx );
+  ctx->priority_after = GetSelfPriority();
+
+  if ( ctx->owner_self ) {
+    TQSurrender( &ctx->tq_ctx->base );
+  } else if ( ctx->owner_other ) {
+    if ( ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY ) {
+      TQSend(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC
+      );
+      TQSynchronizeRunner();
+      TQSetScheduler(
+        &ctx->tq_ctx->base,
+        TQ_BLOCKER_A,
+        ctx->tq_ctx->base.runner_scheduler_id,
+        PRIO_HIGH
+      );
+    } else {
+      TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
+    }
+  }
+test-brief: null
+test-cleanup: null
+test-context:
+- brief: |
+    If this member is true, then the calling thread shall be the owner of the
+    mutex.
+  description: null
+  member: |
+    bool owner_self;
+- brief: |
+    If this member is true, then a thread other than the calling thread shall
+    be the owner of the mutex.
+  description: null
+  member: |
+    bool owner_other;
+- brief: |
+    This member contains the current priority of the calling thread before the
+    directive call.
+  description: null
+  member: |
+    rtems_task_priority priority_before;
+- brief: |
+    This member contains the return status of the directive call.
+  description: null
+  member: |
+    Status_Control status
+- brief: |
+    This member contains the owner of the mutex after the directive call.
+  description: null
+  member: |
+    const rtems_tcb *owner_after
+- brief: |
+    This member contains the current priority of the calling thread after the
+    directive call.
+  description: null
+  member: |
+    rtems_task_priority priority_after;
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQMtxContext *${.:name}
+  target: testsuites/validation/tr-mtx-seize-try.h
+test-includes: []
+test-local-includes:
+- tr-mtx-seize-try.h
+test-prepare: |
+  ctx->owner_self = false;
+  ctx->owner_other = false;
+test-setup: null
+test-stop: null
+test-support: |
+  typedef ScoreMtxReqSeizeTry_Context Context;
+
+  static Status_Control Status( const Context *ctx, Status_Control status )
+  {
+    return TQConvertStatus( &ctx->tq_ctx->base, status );
+  }
+test-target: testsuites/validation/tr-mtx-seize-try.c
+test-teardown: null
+text: |
+  When the calling thread tries to seize the mutex.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Owner: New
+    Priority: Ceiling
+  pre-conditions:
+    Owner:
+    - 'No'
+- enabled-by: true
+  post-conditions:
+    Status: Recursive
+    Owner: Nop
+    Priority: Nop
+  pre-conditions:
+    Owner:
+    - Self
+- enabled-by: true
+  post-conditions:
+    Status: Unsat
+    Owner: Nop
+    Priority: Nop
+  pre-conditions:
+    Owner:
+    - Other
+type: requirement
