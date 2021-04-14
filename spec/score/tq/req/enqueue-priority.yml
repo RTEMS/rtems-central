@@ -96,6 +96,20 @@ post-conditions:
     /* Enqueue */
     T_eq_ptr( GetBlock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_B ) );
 pre-conditions:
+- name: EligibleScheduler
+  states:
+  - name: Home
+    test-code: |
+      ctx->helping = false;
+    text: |
+      While the enqueueing thread has no helping scheduler.
+  - name: Helping
+    test-code: |
+      ctx->helping = true;
+    text: |
+      While the enqueueing thread has at least one helping scheduler.
+  test-epilogue: null
+  test-prologue: null
 - name: QueueEligible
   states:
   - name: None
@@ -213,6 +227,24 @@ test-action: |
     TQSynchronizeRunner();
   }
 
+  if ( ctx->helping ) {
+    if ( ctx->other_before || ctx->other_after ) {
+      if ( rtems_scheduler_get_processor_maximum() > 2 ) {
+        AddHelper(
+          ctx->tq_ctx,
+          ctx->tq_ctx->third_scheduler_id,
+          TQ_EVENT_HELPER_THIRD_SYNC
+        );
+      }
+    } else {
+      AddHelper(
+        ctx->tq_ctx,
+        ctx->tq_ctx->other_scheduler_id,
+        TQ_EVENT_HELPER_OTHER_SYNC
+      );
+    }
+  }
+
   TQSchedulerRecordStart( ctx->tq_ctx );
   TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_ENQUEUE | TQ_EVENT_DEQUEUE_ONE );
   TQDequeueAll( ctx->tq_ctx );
@@ -222,11 +254,27 @@ test-action: |
   }
 
   TQSchedulerRecordStop( ctx->tq_ctx );
+
+  if ( ctx->helping ) {
+    if ( ctx->other_before || ctx->other_after ) {
+      if ( rtems_scheduler_get_processor_maximum() > 2 ) {
+        RemoveHelper( ctx->tq_ctx );
+      }
+    } else {
+      RemoveHelper( ctx->tq_ctx );
+    }
+  }
 test-brief: null
 test-cleanup: |
   TQCleanup( ctx->tq_ctx );
   TQReset( ctx->tq_ctx );
 test-context:
+- brief: |
+    This this member is true, then the enqueueing thread shall have at least
+    one helping scheduler.
+  description: null
+  member: |
+    bool helping
 - brief: |
     This member specifies the priority of a thread with an eligible scheduler
     equal to an eligible scheduler of the enqueueing thread.
@@ -271,14 +319,33 @@ test-prepare:
   ctx->other_before = false;
   ctx->other_after = false;
   TQPrepare( ctx->tq_ctx );
-test-setup: null
+test-setup:
+  brief: null
+  code: |
+    if ( rtems_scheduler_get_processor_maximum() > 3 ) {
+      rtems_status_code sc;
+      rtems_id          scheduler_id;
+
+      sc = rtems_scheduler_ident_by_processor( 3, &scheduler_id );
+      T_rsc_success( sc );
+
+      sc = rtems_scheduler_remove_processor( scheduler_id, 3 );
+      T_rsc_success( sc );
+    }
+  description: null
 test-stop: null
 test-support: |
   typedef ScoreTqReqEnqueuePriority_Context Context;
 
   static const rtems_tcb *GetBlock( Context *ctx, size_t *index )
   {
-    return TQGetNextBlock( ctx->tq_ctx, index )->thread;
+    const rtems_tcb *thread;
+
+    do {
+      thread = TQGetNextBlock( ctx->tq_ctx, index )->thread;
+    } while ( thread == ctx->tq_ctx->worker_tcb[ TQ_HELPER_THIRD ] );
+
+    return thread;
   }
 
   static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
@@ -296,8 +363,44 @@ test-support: |
   {
     return ctx->tq_ctx->worker_tcb[ worker ];
   }
+
+  static void AddHelper(
+    TQContext *tq_ctx,
+    rtems_id   scheduler_id,
+    TQEvent    sync
+  )
+  {
+    TQSend( tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_OBTAIN );
+    TQSetScheduler( tq_ctx, TQ_BLOCKER_D, scheduler_id, PRIO_LOW );
+    TQSend(
+      tq_ctx,
+      TQ_BLOCKER_D,
+      sync | TQ_EVENT_MUTEX_OBTAIN | TQ_EVENT_MUTEX_RELEASE
+    );
+    TQSynchronizeRunner();
+  }
+
+  static void RemoveHelper( TQContext *tq_ctx )
+  {
+    TQSend( tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_RELEASE );
+    TQMutexObtain( tq_ctx );
+    TQMutexRelease( tq_ctx );
+  }
 test-target: testsuites/validation/tr-tq-enqueue-priority.c
-test-teardown: null
+test-teardown:
+  brief: null
+  code: |
+    if ( rtems_scheduler_get_processor_maximum() > 3 ) {
+      rtems_status_code sc;
+      rtems_id          scheduler_id;
+
+      sc = rtems_scheduler_ident_by_processor( 2, &scheduler_id );
+      T_rsc_success( sc );
+
+      sc = rtems_scheduler_add_processor( scheduler_id, 3 );
+      T_rsc_success( sc );
+    }
+  description: null
 text: |
   When the calling task is enqueued on the thread queue.
 transition-map:
@@ -305,6 +408,8 @@ transition-map:
   post-conditions:
     Position: InitialFirst
   pre-conditions:
+    EligibleScheduler:
+    - Home
     QueueEligible:
     - None
     QueueIneligible:
@@ -313,6 +418,8 @@ transition-map:
   post-conditions:
     Position: First
   pre-conditions:
+    EligibleScheduler:
+    - Home
     QueueEligible:
     - GT
     QueueIneligible:
@@ -321,6 +428,8 @@ transition-map:
   post-conditions:
     Position: Second
   pre-conditions:
+    EligibleScheduler:
+    - Home
     QueueEligible:
     - LT
     - EQ
@@ -331,8 +440,40 @@ transition-map:
   pre-conditions: default
 - enabled-by: RTEMS_SMP
   post-conditions:
+    Position: InitialFirst
+  pre-conditions:
+    EligibleScheduler:
+    - Helping
+    QueueEligible:
+    - None
+    QueueIneligible:
+    - None
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Position: First
+  pre-conditions:
+    EligibleScheduler:
+    - Helping
+    QueueEligible:
+    - GT
+    QueueIneligible:
+    - None
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Position: Second
+  pre-conditions:
+    EligibleScheduler:
+    - Helping
+    QueueEligible:
+    - LT
+    - EQ
+    QueueIneligible:
+    - None
+- enabled-by: RTEMS_SMP
+  post-conditions:
     Position: InitialLast
   pre-conditions:
+    EligibleScheduler: all
     QueueEligible:
     - None
     QueueIneligible:
@@ -341,6 +482,7 @@ transition-map:
   post-conditions:
     Position: FirstLast
   pre-conditions:
+    EligibleScheduler: all
     QueueEligible:
     - GT
     QueueIneligible:
@@ -349,6 +491,7 @@ transition-map:
   post-conditions:
     Position: SecondLast
   pre-conditions:
+    EligibleScheduler: all
     QueueEligible:
     - LT
     - EQ
@@ -358,6 +501,7 @@ transition-map:
   post-conditions:
     Position: FirstFirst
   pre-conditions:
+    EligibleScheduler: all
     QueueEligible:
     - GT
     QueueIneligible:
@@ -366,6 +510,7 @@ transition-map:
   post-conditions:
     Position: SecondFirst
   pre-conditions:
+    EligibleScheduler: all
     QueueEligible:
     - LT
     - EQ
