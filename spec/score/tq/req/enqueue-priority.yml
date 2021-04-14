@@ -130,7 +130,7 @@ pre-conditions:
       the enqueueing thread with respect to this scheduler.
   test-epilogue: null
   test-prologue: null
-- name: QueueForeign
+- name: QueueIneligible
   states:
   - name: None
     test-code: |
@@ -234,16 +234,18 @@ test-context:
   member: |
     rtems_task_priority priority;
 - brief: |
-    If this member is true, then a thread those eligible schedulers are foreign
-    scheduler to the enqueueing task should be enqueued before a thread with an
-    eligible scheduler equal to an eligible scheduler of the enqueueing thread.
+    If this member is true, then a thread those eligible schedulers are
+    ineligible scheduler to the enqueueing task should be enqueued before a
+    thread with an eligible scheduler equal to an eligible scheduler of the
+    enqueueing thread.
   description: null
   member: |
     size_t other_before;
 - brief: |
-    If this member is true, then a thread those eligible schedulers are foreign
-    scheduler to the enqueueing task should be enqueued after a thread with an
-    eligible scheduler equal to an eligible scheduler of the enqueueing thread.
+    If this member is true, then a thread those eligible schedulers are
+    ineligible scheduler to the enqueueing task should be enqueued after a
+    thread with an eligible scheduler equal to an eligible scheduler of the
+    enqueueing thread.
   description: null
   member: |
     size_t other_after;
@@ -305,7 +307,7 @@ transition-map:
   pre-conditions:
     QueueEligible:
     - None
-    QueueForeign:
+    QueueIneligible:
     - None
 - enabled-by: true
   post-conditions:
@@ -313,7 +315,7 @@ transition-map:
   pre-conditions:
     QueueEligible:
     - GT
-    QueueForeign:
+    QueueIneligible:
     - None
 - enabled-by: true
   post-conditions:
@@ -322,7 +324,7 @@ transition-map:
     QueueEligible:
     - LT
     - EQ
-    QueueForeign:
+    QueueIneligible:
     - None
 - enabled-by: true
   post-conditions: Invalid
@@ -333,7 +335,7 @@ transition-map:
   pre-conditions:
     QueueEligible:
     - None
-    QueueForeign:
+    QueueIneligible:
     - Only
 - enabled-by: RTEMS_SMP
   post-conditions:
@@ -341,7 +343,7 @@ transition-map:
   pre-conditions:
     QueueEligible:
     - GT
-    QueueForeign:
+    QueueIneligible:
     - Before
 - enabled-by: RTEMS_SMP
   post-conditions:
@@ -350,7 +352,7 @@ transition-map:
     QueueEligible:
     - LT
     - EQ
-    QueueForeign:
+    QueueIneligible:
     - Before
 - enabled-by: RTEMS_SMP
   post-conditions:
@@ -358,7 +360,7 @@ transition-map:
   pre-conditions:
     QueueEligible:
     - GT
-    QueueForeign:
+    QueueIneligible:
     - After
 - enabled-by: RTEMS_SMP
   post-conditions:
@@ -367,6 +369,6 @@ transition-map:
     QueueEligible:
     - LT
     - EQ
-    QueueForeign:
+    QueueIneligible:
     - After
 type: requirement
