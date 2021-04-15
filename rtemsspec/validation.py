@@ -1022,7 +1022,7 @@ class TransitionMap:
         content.add([f"static const {ident}_Entry", f"{ident}_Entries[] = {{"])
         entries[-1] = entries[-1].replace("},", "}")
         content.append(entries)
-        bits = math.ceil(math.log2(len(self._entries)) / 8) * 8
+        bits = max(8, math.ceil(math.log2(len(self._entries)) / 8) * 8)
         content.append(
             ["};", "", f"static const uint{bits}_t", f"{ident}_Map[] = {{"])
         text = ", ".join(
