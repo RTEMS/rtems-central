@@ -2,7 +2,7 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Obtains the semaphore.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -139,8 +139,16 @@ return:
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
+      The semaphore uses a priority ceiling and there was no priority ceiling
+      defined for the ${/glossary/scheduler-home:/term} of the calling task.
+    value: ${../../status/if/not-defined:/name}
+  - description: |
       The semaphore could not be obtained immediately.
     value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The semaphore uses a priority ceiling and the calling task had a current
+      priority less than the priority ceiling.
+    value: ${../../status/if/invalid-priority:/name}
   - description: |
       Acquiring of the local, binary semaphore by the calling task would have
       cased a deadlock.
