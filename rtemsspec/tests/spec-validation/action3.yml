@@ -1,0 +1,212 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links: []
+post-conditions:
+- name: Position
+  states:
+  - name: InitialFirst
+    test-code: |
+      /* Code */
+    text: |
+      A priority queue associated with the scheduler which contains exactly the
+      enqueueing thread shall be created as the first priority queue of the
+      thread queue.
+  - name: InitialLast
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: First
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: Second
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: FirstFirst
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: SecondFirst
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: FirstLast
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: SecondLast
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: EligibleScheduler
+  states:
+  - name: Home
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: Helping
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueEligible
+  states:
+  - name: None
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: EQ
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: GT
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  test-epilogue: null
+  test-prologue: null
+- name: QueueIneligible
+  states:
+  - name: None
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: Only
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: Before
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  - name: After
+    test-code: |
+      /* Code */
+    text: |
+      Text.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  Invalid: |
+    Text.
+test-action: |
+  /* Code */
+test-brief: null
+test-cleanup: null
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes: []
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: action3.c
+test-teardown: null
+text: |
+  Text.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Position: InitialFirst
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - None
+    QueueIneligible:
+    - None
+- enabled-by: true
+  post-conditions:
+    Position: InitialLast
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - None
+    QueueIneligible:
+    - Only
+- enabled-by: true
+  post-conditions:
+    Position: First
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - GT
+    QueueIneligible:
+    - None
+- enabled-by: true
+  post-conditions:
+    Position: Second
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - EQ
+    QueueIneligible:
+    - None
+- enabled-by: true
+  post-conditions:
+    Position: FirstLast
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - GT
+    QueueIneligible:
+    - Before
+- enabled-by: true
+  post-conditions:
+    Position: SecondLast
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - EQ
+    QueueIneligible:
+    - Before
+- enabled-by: true
+  post-conditions:
+    Position: FirstFirst
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - GT
+    QueueIneligible:
+    - After
+- enabled-by: true
+  post-conditions:
+    Position: SecondFirst
+  pre-conditions:
+    EligibleScheduler: all
+    QueueEligible:
+    - EQ
+    QueueIneligible:
+    - After
+- enabled-by: true
+  post-conditions: Invalid
+  pre-conditions: default
+type: requirement

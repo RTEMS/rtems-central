@@ -626,6 +626,54 @@ PostCond = Tuple[int, ...]
 PreCondsOfPostCond = List[Tuple[List[int], ...]]
 
 
+def _compact(pre_conds: PreCondsOfPostCond) -> PreCondsOfPostCond:
+    while True:
+        last = pre_conds[0]
+        combined_pre_conds = [last]
+        combined_count = 0
+        for row in pre_conds[1:]:
+            if row == last:
+                continue
+            diff = [
+                index for index, states in enumerate(last)
+                if states != row[index]
+            ]
+            if len(diff) == 1:
+                index = diff[0]
+                combined_count += 1
+                last[index].extend(row[index])
+            else:
+                combined_pre_conds.append(row)
+                last = row
+        pre_conds = combined_pre_conds
+        if combined_count == 0:
+            break
+    return pre_conds
+
+
+def _compact_more(pre_conds: PreCondsOfPostCond) -> PreCondsOfPostCond:
+    while True:
+        combined_count = 0
+        next_pre_conds = []
+        while pre_conds:
+            first = pre_conds.pop(0)
+            next_pre_conds.append(first)
+            for row in pre_conds:
+                diff = [
+                    index for index, states in enumerate(first)
+                    if states != row[index]
+                ]
+                if len(diff) == 1:
+                    index = diff[0]
+                    combined_count += 1
+                    first[index].extend(row[index])
+                    pre_conds.remove(row)
+        pre_conds = next_pre_conds
+        if combined_count == 0:
+            break
+    return pre_conds
+
+
 class TransitionMap:
     """ Representation of an action requirement transition map. """
 
@@ -709,27 +757,7 @@ class TransitionMap:
                     map_idx, variant.pre_cond_na)))
         for post_cond, pre_conds in sorted(entries.items(),
                                            key=lambda x: (x[0][0], len(x[1]))):
-            while True:
-                last = pre_conds[0]
-                combined_pre_conds = [last]
-                combined_count = 0
-                for row in pre_conds[1:]:
-                    if row == last:
-                        continue
-                    diff = [
-                        index for index, states in enumerate(last)
-                        if states != row[index]
-                    ]
-                    if len(diff) == 1:
-                        index = diff[0]
-                        combined_count += 1
-                        last[index].extend(row[index])
-                    else:
-                        combined_pre_conds.append(row)
-                        last = row
-                pre_conds = combined_pre_conds
-                if combined_count == 0:
-                    break
+            pre_conds = _compact_more(_compact(pre_conds))
             yield post_cond, pre_conds
 
     def _post_process(self) -> None:

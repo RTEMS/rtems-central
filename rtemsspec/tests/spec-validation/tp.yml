@@ -6,5 +6,6 @@ source:
 - tc34.c
 - ts.c
 - action2.c
+- action3.c
 - other.c
 type: build

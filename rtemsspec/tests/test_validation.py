@@ -56,6 +56,8 @@ def test_validation(tmpdir):
     transition_map = TransitionMap(item_cache["/action2"])
     assert transition_map.skip_idx_to_name(1) == "SkipReason"
     assert len(list(transition_map.get_post_conditions(["BOOM"]))) == 6
+    transition_map = TransitionMap(item_cache["/action3"])
+    assert len(list(transition_map.get_post_conditions(["RTEMS_SMP"]))) == 9
 
     generate(validation_config, item_cache)
 
