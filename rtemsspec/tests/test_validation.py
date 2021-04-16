@@ -946,6 +946,7 @@ T_TEST_CASE_FIXTURE( Tc2, &Tc2_Fixture )
  * @ingroup RTEMSTestCaseTc5
  * @ingroup RTEMSTestCaseTc6
  * @ingroup RTEMSTestCaseTc7
+ * @ingroup RTEMSTestCaseTc8
  */
 
 /*
@@ -1361,11 +1362,12 @@ void Tc5_Run( int *a, int b, int *c )
 {
   Tc5_Context *ctx;
 
-  ctx = T_push_fixture( &Tc5_Node, &Tc5_Fixture );
-
+  ctx = &Tc5_Instance;
   ctx->a = a;
   ctx->b = b;
   ctx->c = c;
+
+  ctx = T_push_fixture( &Tc5_Node, &Tc5_Fixture );
 
   T_plan( 2 );
 
@@ -1420,6 +1422,61 @@ void Tc7_Run( void )
   T_plan( 1 );
 
   Tc7_Action_0();
+
+  T_pop_fixture();
+}
+
+/** @} */
+
+/**
+ * @defgroup RTEMSTestCaseTc8 spec:/tc8
+ *
+ * @ingroup RTEMSTestSuiteTs
+ *
+ * This test case performs the following actions:
+ *
+ * - Action.
+ *
+ * @{
+ */
+
+/**
+ * @brief Test context for spec:/tc8 test case.
+ */
+typedef struct {
+  int member;
+} Tc8_Context;
+
+static Tc8_Context
+  Tc8_Instance;
+
+static T_fixture Tc8_Fixture = {
+  .setup = NULL,
+  .stop = NULL,
+  .teardown = NULL,
+  .scope = NULL,
+  .initial_context = &Tc8_Instance
+};
+
+/**
+ * @brief Action.
+ */
+static void Tc8_Action_0( Tc8_Context *ctx )
+{
+  /* 0 */
+}
+
+static T_fixture_node Tc8_Node;
+
+void Tc8_Run( void )
+{
+  Tc8_Context *ctx;
+
+  ctx = T_push_fixture( &Tc8_Node, &Tc8_Fixture );
+
+  T_plan( 1 );
+
+  Tc8_Action_0( ctx );
 
   T_pop_fixture();
 }
@@ -2170,11 +2227,12 @@ void Action2_Run( int *a, int b, int *c )
   Action2_Entry entry;
   size_t index;
 
-  ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
-
+  ctx = &Action2_Instance;
   ctx->a = a;
   ctx->b = b;
   ctx->c = c;
+
+  ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
   ctx->in_action_loop = true;
   index = 0;
 

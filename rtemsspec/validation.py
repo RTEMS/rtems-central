@@ -383,6 +383,15 @@ class _TestItem:
         ])
         return f"&{self.ident}_Fixture"
 
+    def assign_run_params(self, content: CContent, header: Dict[str,
+                                                                Any]) -> None:
+        """ Assigns the run parameters to the context.  """
+        if header["run-params"]:
+            content.add([f"ctx = &{self.ident}_Instance;"] + [
+                f"ctx->{param['name']} = {param['name']};"
+                for param in header["run-params"]
+            ])
+
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
@@ -407,13 +416,10 @@ class _TestItem:
                     result = None
                 else:
                     prologue.add(f"{self.context} *ctx;")
+                    self.assign_run_params(prologue, header)
                     result = "ctx ="
                 prologue.call_function(result, "T_push_fixture",
                                        [f"&{self.ident}_Node", fixture])
-                prologue.add([
-                    f"ctx->{param['name']} = {param['name']};"
-                    for param in header["run-params"]
-                ])
                 epilogue.add("T_pop_fixture();")
             align = True
         else:
@@ -1175,12 +1181,10 @@ class _ActionRequirementTestItem(_TestItem):
             name = f"{self.ident}_Run"
             params = self._get_run_params(header)
             prologue.add([f"{self.context} *ctx;", entry, "size_t index;"])
+            self.assign_run_params(prologue, header)
             prologue.call_function("ctx =", "T_push_fixture",
                                    [f"&{self.ident}_Node", f"&{fixture}"])
-            prologue.add([
-                f"ctx->{param['name']} = {param['name']};"
-                for param in header["run-params"]
-            ] + ["ctx->in_action_loop = true;", "index = 0;"])
+            prologue.append(["ctx->in_action_loop = true;", "index = 0;"])
             epilogue.add("T_pop_fixture();")
             align = True
         else:

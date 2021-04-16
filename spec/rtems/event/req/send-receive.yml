@@ -482,7 +482,6 @@ test-setup:
   code: |
     rtems_status_code sc;
 
-    memset( ctx, 0, sizeof( *ctx ) );
     ctx->runner_thread = _Thread_Get_executing();
     ctx->runner_id = ctx->runner_thread->Object.id;
     ctx->worker_wakeup = CreateWakeupSema();
