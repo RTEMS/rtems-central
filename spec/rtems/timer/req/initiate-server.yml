@@ -60,7 +60,7 @@ post-conditions:
   states:
   - name: Set
     test-code: |
-      if ( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY == ctx->priority ) {
+      if ( ctx->priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ) {
         T_eq_u32( GetTimerServerPriority(), 0 );
       } else {
         T_eq_u32( GetTimerServerPriority(), ctx->priority );
@@ -81,14 +81,14 @@ post-conditions:
   states:
   - name: Set
     test-code: |
-      T_ge_sz( GetTimerServertackSize(), ctx->stack_size );
+      T_ge_sz( GetTimerServerStackSize(), ctx->stack_size );
     text: |
       The Timer Server task shall have the same or larger stack size
       than specified by the ${../if/initiate-server:/params[1]/name}
       parameter in the ${../if/initiate-server:/name} call.
   - name: Unchanged
     test-code: |
-      T_ge_sz( GetTimerServertackSize(), ctx->before_stack_size );
+      T_ge_sz( GetTimerServerStackSize(), ctx->before_stack_size );
     text: |
       The stack size of the Timer Server task shall be unchanged
       by the ${../if/initiate-server:/name} call.
@@ -99,14 +99,14 @@ post-conditions:
   - name: NoFloat
     test-code: |
       T_true( HasTimerServerFloatingPoint() ==
-        ( 0 != ( ctx->attribute_set & RTEMS_FLOATING_POINT ) ) );
+        ( ( ctx->attribute_set & RTEMS_FLOATING_POINT ) != 0 ) );
     text: |
       The task attribute ${../../attr/if/floating-point:/name}
       shall be unset for the Timer Server task.
   - name: Float
     test-code: |
       T_true( HasTimerServerFloatingPoint() ==
-        ( 0 != ( ctx->attribute_set & RTEMS_FLOATING_POINT ) ) );
+        ( ( ctx->attribute_set & RTEMS_FLOATING_POINT ) != 0 ) );
     text: |
       The task attribute ${../../attr/if/floating-point:/name}
       shall be set for the Timer Server task.
@@ -220,7 +220,7 @@ skip-reasons: {}
 test-action: |
   if ( ExistTimerServer() ) {
     ctx->before_priority = GetTimerServerPriority();
-    ctx->before_stack_size = GetTimerServertackSize();
+    ctx->before_stack_size = GetTimerServerStackSize();
     ctx->before_has_floating_point = HasTimerServerFloatingPoint();
   }
 
@@ -231,7 +231,7 @@ test-action: |
   );
 test-brief: null
 test-cleanup: |
-  T_surrender_objects( &ctx->task_objects, FreeTaskObject );
+  T_surrender_objects( &ctx->task_objects, rtems_task_delete );
 test-context:
 - brief: |
     If the Timer Server task exists before the action,
@@ -296,8 +296,9 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  static bool ExistTimerServer( void ) {
-    return NULL != _Timer_server;
+  static bool ExistTimerServer( void )
+  {
+    return _Timer_server != NULL;
   }
 
   static rtems_task_priority GetTimerServerPriority( void )
@@ -305,7 +306,8 @@ test-support: |
     return GetPriority( _Timer_server->server_id );
   }
 
-  static size_t GetTimerServertackSize( void ) {
+  static size_t GetTimerServerStackSize( void )
+  {
     rtems_tcb *tcb;
     T_true( ExistTimerServer() );
     tcb = GetThread( _Timer_server->server_id );
@@ -313,7 +315,8 @@ test-support: |
     return tcb->Start.Initial_stack.size;
   }
 
-  static bool HasTimerServerFloatingPoint( void ) {
+  static bool HasTimerServerFloatingPoint( void )
+  {
     rtems_tcb *tcb;
     T_true( ExistTimerServer() );
     tcb = GetThread( _Timer_server->server_id );
@@ -321,22 +324,18 @@ test-support: |
     return tcb->is_fp;
   }
 
-  static rtems_status_code AllocateTaskObject( void *arg, rtems_id *task_id ) {
-    static rtems_name task_name = rtems_build_name( 'T', 'A', ' ', 'N' );
+  static rtems_status_code AllocateTaskObject( void *arg, rtems_id *task_id )
+  {
     (void) arg;
 
     return rtems_task_create(
-      task_name,
+      rtems_build_name( 'T', 'A', ' ', 'N' ),
       PRIO_LOW,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
       task_id
     );
-  }
-
-  static rtems_status_code FreeTaskObject( rtems_id task_id ) {
-    return rtems_task_delete( task_id );
   }
 
 test-target: testsuites/validation/tc-timer-initiate-server.c
