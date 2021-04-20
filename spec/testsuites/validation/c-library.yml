@@ -5,12 +5,19 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Allocate four bytes with an alignment of 128 bytes with aligned_alloc().
+    Allocate four bytes with an alignment of 128 bytes with posix_memalign().
   action-code: |
     void *p;
+    int   eno;
 
-    p = aligned_alloc(128, 4);
+    p = (void *)(uintptr_t) 1;
+    eno = posix_memalign(&p, 128, 4);
   checks:
+  - brief: |
+      Check that the returned status is zero.
+    code: |
+      T_step_eq_int(${step}, eno, 0);
+    links: []
   - brief: |
       Check that the returned pointer is not NULL.
     code: |
