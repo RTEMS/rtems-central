@@ -118,12 +118,24 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/barrier/directives.rst
   group: /rtems/barrier/if/group
   introduction-target: modules/rtems-docs/c-user/barrier/introduction.rst
+- directives-target: modules/rtems-docs/c-user/dual-ported-memory/directives.rst
+  group: /rtems/dpmem/if/group
+  introduction-target: modules/rtems-docs/c-user/dual-ported-memory/introduction.rst
+- directives-target: modules/rtems-docs/c-user/fatal-error/directives.rst
+  group: /rtems/fatal/if/group
+  introduction-target: modules/rtems-docs/c-user/fatal-error/introduction.rst
 - directives-target: modules/rtems-docs/c-user/timer/directives.rst
   group: /rtems/timer/if/group
   introduction-target: modules/rtems-docs/c-user/timer/introduction.rst
+- directives-target: modules/rtems-docs/c-user/initialization/directives.rst
+  group: /rtems/init/if/group
+  introduction-target: modules/rtems-docs/c-user/initialization/introduction.rst
 - directives-target: modules/rtems-docs/c-user/io/directives.rst
   group: /rtems/io/if/group
   introduction-target: modules/rtems-docs/c-user/io/introduction.rst
+- directives-target: modules/rtems-docs/c-user/multiprocessing/directives.rst
+  group: /rtems/mp/if/group
+  introduction-target: modules/rtems-docs/c-user/multiprocessing/introduction.rst
 - directives-target: modules/rtems-docs/c-user/semaphore/directives.rst
   group: /rtems/sem/if/group
   introduction-target: modules/rtems-docs/c-user/semaphore/introduction.rst
