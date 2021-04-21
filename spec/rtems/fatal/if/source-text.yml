@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Returns a descriptive text for the fatal source.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -13,20 +14,29 @@ definition:
   variants: []
 description: null
 enabled-by: true
-index-entries: []
+index-entries:
+- fatal error
 interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
 name: rtems_fatal_source_text
 notes: null
 params:
-- description: '%'
+- description: |
+    is the fatal source.
   dir: null
-  name: source
+  name: fatal_source
 return:
-  return: null
-  return-values: []
+  return: |
+    Returns a descriptive text for the fatal source.  The text for the fatal
+    source is the enumerator constant name.
+  return-values:
+  - description: |
+      The ${.:/params[0]/name} parameter value was not a fatal source.
+    value: '"?"'
 type: interface

@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Invokes the fatal error handler.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -11,7 +12,10 @@ definition:
     - ${/c/if/uint32_t:/name} ${.:/params[0]/name}
     return: void
   variants: []
-description: null
+description: |
+  This directive processes fatal errors.  The fatal source is set to
+  ${/score/interr/if/internal-error-rtems-api:/name}.  The fatal code is set to
+  the value of the ${.:/params[0]/name} parameter.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -20,12 +24,26 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-return
+- role: constraint
+  uid: /constraint/extensions-fatal
+- role: constraint
+  uid: /constraint/no-atexit
+- role: constraint
+  uid: /constraint/terminate
 name: rtems_fatal_error_occurred
-notes: null
+notes: |
+  This directive is deprecated and should not be used in new code.  It is
+  recommended to not use this directive since error locations cannot be
+  uniquely identified.  A recommended alternative directive is ${fatal:/name}.
 params:
-- description: '%'
+- description: |
+    is the fatal code.
   dir: null
-  name: the_error
+  name: fatal_code
 return:
   return: null
   return-values: []

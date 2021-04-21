@@ -1,0 +1,11 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  This interface domain contains interfaces used by ${/glossary/bsp:/plural}.
+enabled-by: true
+index-entries: []
+interface-type: domain
+links: []
+name: BSP
+type: interface
