@@ -107,8 +107,9 @@ def _generate_introduction(target: str, group: Item, group_uids: List[str],
 
         content.append("")
         content.gap = False
-        content.wrap(group["brief"])
-        content.wrap(group["description"])
+        mapper = _Mapper(group, group_uids)
+        content.wrap(mapper.substitute(group["brief"]))
+        content.wrap(mapper.substitute(group["description"]))
         content.paste(f"The directives provided by the {group_name} are:")
 
         for item in items:
