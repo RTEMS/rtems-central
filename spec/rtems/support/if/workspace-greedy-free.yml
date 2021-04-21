@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Frees space of a greedy allocation to the RTEMS Workspace.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -20,10 +21,19 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_workspace_greedy_free
-notes: null
+notes: |
+  This directive is intended to be used by tests of the RTEMS test suites.
 params:
-- description: '%'
+- description: |
+    is the pointer value returned by ${workspace-greedy-allocate:/name} or
+    ${workspace-greedy-allocate-all-except-largest:/name}.
   dir: null
   name: opaque
 return:

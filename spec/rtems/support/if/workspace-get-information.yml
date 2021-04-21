@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets information about the RTEMS Workspace.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -20,13 +21,22 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_workspace_get_information
 notes: null
 params:
-- description: '%'
+- description: |
+    is the pointer to a heap information variable.  When the directive call is
+    successful, the heap information will be stored in this variable.
   dir: null
   name: the_info
 return:
-  return: null
+  return: |
+    Returns true, if getting the information was successful, otherwise false.
   return-values: []
 type: interface

@@ -8,10 +8,10 @@ definition:
   default:
     attributes: null
     body: |
-      *${.:/params[1]/name} = (char) ( ${.:/params[0]/name} >> 24 );
-      *${.:/params[2]/name} = (char) ( ${.:/params[0]/name} >> 16 );
-      *${.:/params[3]/name} = (char) ( ${.:/params[0]/name} >> 8 );
-      *${.:/params[4]/name} = (char) ${.:/params[0]/name};
+      *${.:/params[1]/name} = (char) ( ( ( ${.:/params[0]/name} ) >> 24 ) & 0xff );
+      *${.:/params[2]/name} = (char) ( ( ( ${.:/params[0]/name} ) >> 16 ) & 0xff );
+      *${.:/params[3]/name} = (char) ( ( ( ${.:/params[0]/name} ) >> 8 ) & 0xff );
+      *${.:/params[4]/name} = (char) ( ( ${.:/params[0]/name} ) & 0xff );
     params:
     - ${../../type/if/name:/name} ${.:/params[0]/name}
     - char *${.:/params[1]/name}
@@ -29,6 +29,10 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_name_to_characters
 notes: null
 params:

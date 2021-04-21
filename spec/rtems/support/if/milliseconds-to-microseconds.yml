@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the number of microseconds for the specified milliseconds value.
+  Gets the number of microseconds for the milliseconds value.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: |
@@ -17,14 +17,19 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-const
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: RTEMS_MILLISECONDS_TO_MICROSECONDS
 notes: null
 params:
-- description: is the milliseconds value to convert to microseconds.
+- description: |
+    is the milliseconds value to convert to microseconds.
   dir: null
   name: _ms
 return:
   return: |
-    The number of microseconds for the specified milliseconds value is returned.
+    Returns the number of microseconds for the milliseconds value.
   return-values: []
 type: interface

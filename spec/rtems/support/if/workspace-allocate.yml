@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+ Allocates a memory area from the RTEMS Workspace.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -21,16 +22,28 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_workspace_allocate
-notes: null
+notes: |
+  This directive is intended to be used by tests of the RTEMS test suites.
 params:
-- description: '%'
+- description: |
+    is the number of bytes to allocated.
   dir: null
   name: bytes
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to a pointer variable.  When the directive call is
+    successful, the begin address of the allocated memory area will be stored
+    in this variable.
+  dir: out
   name: pointer
 return:
-  return: null
+  return: |
+    Returns true, if the allocation was successful, otherwise false.
   return-values: []
 type: interface
