@@ -1,12 +1,16 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+ This constant defines the count of ${/c/if/uint32_t:/name} numbers in a packet
+ which must be converted to native format in a heterogeneous system.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/score/mpci/if/packet-minimum-hetero-conversion:/name}
   variants: []
-description: null
+description: |
+  In packets longer than this value, some of the extra data may be a user
+  message buffer which is not automatically endian swapped.
 enabled-by: true
 index-entries: []
 interface-type: define
