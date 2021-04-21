@@ -81,7 +81,7 @@ return:
       The ${.:/params[0]/name} parameter was invalid.
     value: ${../../status/if/invalid-name:/name}
   - description: |
-      The ${.:/params[3]/name} parameter was ${/c/if/null:/name}.
+      The ${.:/params[4]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
       The ${.:/params[1]/name} parameter was not properly aligned.

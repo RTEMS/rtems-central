@@ -16,6 +16,18 @@ links:
   uid: header
 - role: interface-ingroup
   uid: ../../if/group
+- role: interface-ingroup
+  uid: ../../if/group
+- role: placement-order
+  uid: create
+- role: placement-order
+  uid: ident
+- role: placement-order
+  uid: delete
+- role: placement-order
+  uid: external-to-internal
+- role: placement-order
+  uid: internal-to-external
 name: Dual-Ported Memory Manager
 text: |
   The Classic API shall provide an interface to the Dual-Ported Memory Manager.
