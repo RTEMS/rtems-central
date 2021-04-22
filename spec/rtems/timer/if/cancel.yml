@@ -15,7 +15,8 @@ definition:
 description: |
   This directive cancels the timer specified by ${.:/params[0]/name}.  This
   timer will be reinitiated by the next invocation of ${reset:/name},
-  ${fire-after:/name}, or ${fire-when:/name} with the same timer identifier.
+  ${fire-after:/name}, ${fire-when:/name}, ${server-fire-after:/name}, or
+  ${server-fire-when:/name} with the same timer identifier.
 enabled-by: true
 index-entries:
 - cancel a timer
