@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the number of messages pending on the queue.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -12,25 +13,49 @@ definition:
     - ${/c/if/uint32_t:/name} *${.:/params[1]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive returns the number of messages pending on the queue specified
+  by ${.:/params[0]/name} in ${.:/params[1]/name}.  If no messages are present
+  on the queue, count is set to zero.
 enabled-by: true
-index-entries: []
+index-entries:
+- get number of pending messages
 interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-remote
 name: rtems_message_queue_get_number_pending
 notes: null
 params:
-- description: '%'
+- description: |
+    is the queue identifier.
   dir: null
   name: id
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to an ${/c/if/uint32_t:/name} variable.  When the directive
+    call is successful, the number of pending messages will be stored in this
+    variable.
+  dir: out
   name: count
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no queue associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
 type: interface
