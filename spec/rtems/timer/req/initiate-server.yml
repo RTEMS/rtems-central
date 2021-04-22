@@ -298,19 +298,21 @@ test-stop: null
 test-support: |
   static bool ExistTimerServer( void )
   {
-    return _Timer_server != NULL;
+    return GetTimerServerTaskId() != RTEMS_INVALID_ID;
   }
 
   static rtems_task_priority GetTimerServerPriority( void )
   {
-    return GetPriority( _Timer_server->server_id );
+    return GetPriority( GetTimerServerTaskId() );
   }
 
   static size_t GetTimerServerStackSize( void )
   {
     rtems_tcb *tcb;
-    T_true( ExistTimerServer() );
-    tcb = GetThread( _Timer_server->server_id );
+    rtems_id server_task_id;
+    server_task_id = GetTimerServerTaskId();
+    T_ne_u32( server_task_id, RTEMS_INVALID_ID );
+    tcb = GetThread( server_task_id );
     T_not_null( tcb );
     return tcb->Start.Initial_stack.size;
   }
@@ -318,8 +320,10 @@ test-support: |
   static bool HasTimerServerFloatingPoint( void )
   {
     rtems_tcb *tcb;
-    T_true( ExistTimerServer() );
-    tcb = GetThread( _Timer_server->server_id );
+    rtems_id server_task_id;
+    server_task_id = GetTimerServerTaskId();
+    T_ne_u32( server_task_id, RTEMS_INVALID_ID );
+    tcb = GetThread( server_task_id );
     T_not_null( tcb );
     return tcb->is_fp;
   }
