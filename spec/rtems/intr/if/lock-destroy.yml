@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Destroys the ISR lock.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: ${/score/isr/if/lock-destroy:/name}( ${.:/params[0]/name} )
@@ -15,11 +16,22 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_interrupt_lock_destroy
-notes: null
+notes: |
+  The lock must have been dynamically initialized by ${lock-initialize:/name},
+  statically defined by ${lock-define:/name}, or statically initialized by
+  ${lock-initializer:/name}.
+
+  Concurrent lock use during the destruction or concurrent destruction leads to
+  unpredictable results.
 params:
-- description: '%'
-  dir: null
+- description: |
+    is the ISR lock to destroy.
+  dir: inout
   name: _lock
 return:
   return: null

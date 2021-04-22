@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Defines an ISR lock object reference.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: |
@@ -17,12 +18,15 @@ links:
 - role: interface-ingroup
   uid: group
 name: RTEMS_INTERRUPT_LOCK_REFERENCE
-notes: null
+notes: |
+  Do not add a ";" after this macro.
 params:
-- description: '%'
+- description: |
+    is the ISR lock reference designator.
   dir: null
   name: _designator
-- description: '%'
+- description: |
+    is the target object to reference.
   dir: null
   name: _target
 return:

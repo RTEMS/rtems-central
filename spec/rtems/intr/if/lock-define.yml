@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Defines an ISR lock object.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default: |
@@ -17,15 +18,24 @@ links:
 - role: interface-ingroup
   uid: group
 name: RTEMS_INTERRUPT_LOCK_DEFINE
-notes: null
+notes: |
+  Do not add a ";" after this macro.
+
+  ISR locks may also be dynamically initialized by ${lock-initialize:/name} or
+  statically by ${lock-initializer:/name}.
 params:
-- description: '%'
+- description: |
+    is the storage-class specifier for the ISR lock to declare, for example ``extern``
+    or ``static``.
   dir: null
-  name: _qualifier
-- description: '%'
+  name: _specifier
+- description: |
+    is the ISR lock object designator.
   dir: null
   name: _designator
-- description: '%'
+- description: |
+    is the ISR lock name.  It shall be a string.  The name is only used where
+    the system was built with profiling support enabled.
   dir: null
   name: _name
 return:
