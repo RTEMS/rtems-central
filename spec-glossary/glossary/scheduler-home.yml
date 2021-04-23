@@ -8,8 +8,8 @@ links:
   uid: ../glossary-general
 term: home scheduler
 text: |
-  The home scheduler of a ${task:/term} is a ${scheduler:/term} which is a
-  ${scheduler-eligible:/term} and which is assigned to the task during the
+  The home scheduler of a ${task:/term} is a ${scheduler:/term} which is an
+  ${scheduler-eligible:/term} and which is assigned to the task during its
   initialization or explicitly via a directive call such as
   ${/rtems/task/if/set-scheduler:/name}.
 type: glossary
