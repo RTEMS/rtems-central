@@ -25,6 +25,32 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: ../../if/group
+- role: placement-order
+  uid: ident
+- role: placement-order
+  uid: ident-by-processor
+- role: placement-order
+  uid: ident-by-processor-set
+- role: placement-order
+  uid: get-maximum-priority
+- role: placement-order
+  uid: map-priority-to-posix
+- role: placement-order
+  uid: map-priority-from-posix
+- role: placement-order
+  uid: get-processor
+- role: placement-order
+  uid: get-processor-macro
+- role: placement-order
+  uid: get-processor-maximum
+- role: placement-order
+  uid: get-processor-maximum-macro
+- role: placement-order
+  uid: get-processor-set
+- role: placement-order
+  uid: add-processor
+- role: placement-order
+  uid: remove-processor
 name: Scheduler Manager
 text: |
   The Classic API shall provide an interface to the Scheduler Manager.

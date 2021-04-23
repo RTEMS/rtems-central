@@ -1,0 +1,21 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
+copyrights:
+- Copyright (C) 2013, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: ${/score/smp/if/get-processor-maximum:/name}()
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: macro
+links:
+- role: interface-placement
+  uid: ../../task/if/header
+name: rtems_scheduler_get_processor_maximum
+notes: null
+params: []
+return:
+  return: null
+  return-values: []
+type: interface

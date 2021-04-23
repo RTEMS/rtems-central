@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Removes a processor from set of processors owned by the scheduler instance.
+  Removes the processor from the set of processors owned by the scheduler.
 copyrights:
-- Copyright (C) 2016, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -12,7 +12,9 @@ definition:
     - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive removes the processor specified by the ${.:/params[1]/name}
+  from the scheduler specified by ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -21,16 +23,23 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_scheduler_remove_processor
 notes: |
-  This directive shall be called from task context.  It obtains and releases
-  the objects allocator lock.  Removing a processor from a scheduler instance
-  is a complex operation that involves all tasks of the system.
+  Removing a processor from a scheduler is a complex operation that involves
+  all tasks of the system.
 params:
-- description: is the scheduler instance identifier.
+- description: |
+    is the scheduler identifier.
   dir: null
   name: scheduler_id
-- description: is the index of the processor to remove.
+- description: |
+    is the index of the processor to remove.
   dir: null
   name: cpu_index
 return:
@@ -44,12 +53,11 @@ return:
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
-      The processor was not owned by the specified scheduler instance.
+      The processor was not owned by the scheduler.
     value: ${../../status/if/invalid-number:/name}
   - description: |
-      The set of processors owned by the specified scheduler instance would
-      have been empty after the processor removal and there was at least one
-      non-idle task that used this scheduler instance as its home scheduler
-      instance.
+      The set of processors owned by the scheduler would have been empty after
+      the processor removal and there was at least one non-idle task that used
+      this scheduler as its ${/glossary/scheduler-home:/term}.
     value: ${../../status/if/resource-in-use:/name}
 type: interface

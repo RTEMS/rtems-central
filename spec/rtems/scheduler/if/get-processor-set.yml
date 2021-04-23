@@ -23,15 +23,19 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_scheduler_get_processor_set
 notes: null
 params:
-- description: is the scheduler identifier.
+- description: |
+    is the scheduler identifier.
   dir: null
   name: scheduler_id
 - description: |
-    is the size of the referenced processor set variable in bytes.  This value
-    shall be positive.
+    is the size of the referenced processor set variable in bytes.
   dir: null
   name: cpusetsize
 - description: |

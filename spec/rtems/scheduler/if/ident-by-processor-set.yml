@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Identifies a scheduler by a processor set.
+  Identifies a scheduler by the processor set.
 copyrights:
 - Copyright (C) 2017, 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -24,6 +24,10 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_scheduler_ident_by_processor_set
 notes: null
 params:
@@ -50,16 +54,16 @@ return:
       The requested operation was successful.
     value: ${../../status/if/successful:/name}
   - description: |
-      The processor set was valid, however, the highest numbered online
-      processor in the processor set was not owned by a scheduler.
-    value: ${../../status/if/incorrect-state:/name}
-  - description: |
       The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The processor set size was invalid.
+    value: ${../../status/if/invalid-size:/name}
   - description: |
       The processor set contained no online processor.
     value: ${../../status/if/invalid-name:/name}
   - description: |
-      The processor set size was invalid.
-    value: ${../../status/if/invalid-size:/name}
+      The processor set was valid, however, the highest numbered online
+      processor in the processor set was not owned by a scheduler.
+    value: ${../../status/if/incorrect-state:/name}
 type: interface

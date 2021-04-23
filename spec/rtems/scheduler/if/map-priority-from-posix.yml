@@ -22,13 +22,19 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_scheduler_map_priority_from_posix
 notes: null
 params:
-- description: is the scheduler identifier.
+- description: |
+    is the scheduler identifier.
   dir: null
   name: scheduler_id
-- description: is the POSIX thread priority to map.
+- description: |
+    is the POSIX thread priority to map.
   dir: null
   name: posix_priority
 - description: |

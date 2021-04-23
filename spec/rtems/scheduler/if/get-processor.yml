@@ -2,26 +2,34 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Returns the index of the current processor.
 copyrights:
-- Copyright (C) 2014, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: ${/score/smp/if/get-current-processor:/name}()
+  default:
+    attributes: null
+    body: null
+    params: []
+    return: ${/c/if/uint32_t:/name}
   variants: []
 description: |
-  In uniprocessor configurations, this macro evaluates to a compile time
-  constant of zero.
+  Where the system was built with SMP support disabled, this directive
+  evaluates to a compile time constant of zero.
 
-  In SMP configurations, an architecture-specific method is used to obtain the
-  index of the current processor in the system.  The set of processor indices
-  is the range of integers starting with zero up to
-  ${get-processor-maximum:/name} minus one.
+  Where the system was built with SMP support enabled, this directive returns
+  the index of the current processor.  The set of processor indices is the
+  range of integers starting with zero up to ${get-processor-maximum:/name}
+  minus one.
 enabled-by: true
 index-entries: []
-interface-type: macro
+interface-type: function
 links:
 - role: interface-placement
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_scheduler_get_processor
 notes: |
   Outside of sections with disabled thread dispatching the current processor
@@ -31,6 +39,6 @@ notes: |
 params: []
 return:
   return: |
-    The index of the current processor is returned.
+    Returns the index of the current processor.
   return-values: []
 type: interface

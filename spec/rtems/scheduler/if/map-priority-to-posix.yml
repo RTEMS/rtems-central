@@ -22,13 +22,19 @@ links:
   uid: ../../task/if/header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-any
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_scheduler_map_priority_to_posix
 notes: null
 params:
-- description: is the scheduler instance identifier.
+- description: |
+    is the scheduler identifier.
   dir: null
   name: scheduler_id
-- description: is the Classic API task priority to map.
+- description: |
+    is the Classic API task priority to map.
   dir: null
   name: priority
 - description: |
