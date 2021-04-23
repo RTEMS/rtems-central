@@ -112,6 +112,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: ../constraint/preempt-enable
+- role: constraint
+  uid: /constraint/fatal-bad-thread-dispatch-disable-level
 name: rtems_task_mode
 notes: null
 params:

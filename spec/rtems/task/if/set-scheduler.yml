@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Sets the home scheduler for the task.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2017 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -13,7 +14,10 @@ definition:
     - ${../../type/if/priority:/name} ${.:/params[2]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive sets the ${/glossary/scheduler-home:/term} to the scheduler
+  specified by ${.:/params[1]/name} for the task specified by
+  ${.:/params[0]/name}.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -22,19 +26,51 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-isr
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/priority-may-preempt
 name: rtems_task_set_scheduler
 notes: null
 params:
-- description: '%'
+- description: |
+    is the task identifier.  The constant ${self-define:/name} may be used to
+    specify the calling task.
   dir: null
   name: task_id
-- description: '%'
+- description: |
+    is the scheduler identifier of the new ${/glossary/scheduler-home:/term} for
+    the task specified by ${.:/params[0]/name}.
   dir: null
   name: scheduler_id
-- description: '%'
+- description: |
+    is the new real priority for the task with respect to the scheduler
+    specified by ${.:/params[1]/name}.
   dir: null
   name: priority
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      There was no scheduler associated with the identifier specified by
+      ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      There task priority specified in ${.:/params[2]/name} was invalid with
+      respect to the scheduler specified by ${.:/params[1]/name}.
+    value: ${../../status/if/invalid-priority:/name}
+  - description: |
+      There was no task associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The task resided on a remote node.
+    value: ${../../status/if/illegal-on-remote-object:/name}
 type: interface

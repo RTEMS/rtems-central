@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This constant defines the recommended alignment of a task storage area in
-  bytes.
+  This compile time constant defines the recommended alignment of a task
+  storage area in bytes.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:

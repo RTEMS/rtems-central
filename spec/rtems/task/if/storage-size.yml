@@ -1,7 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Returns the recommended task storage area size for the specified size and task
-  attributes.
+  Gets the recommended task storage area size for the size and task attributes.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -36,7 +35,7 @@ params:
   name: _attributes
 return:
   return: |
-    The recommended task storage area size calculated from the input parameters
-    is returned.
+    Returns the recommended task storage area size calculated from the input
+    parameters.
   return-values: []
 type: interface
