@@ -95,16 +95,32 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
+- name: Config
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config = &ctx->config_value;
+    text: |
+      While the ${../if/construct:/params[0]/name} parameter references an
+      object of type ${../if/config:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->config = NULL;
+    text: |
+      While the ${../if/construct:/params[0]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
 - name: Name
   states:
   - name: Valid
     test-code: |
-      ctx->config.name = NAME;
+      ctx->config_value.name = NAME;
     text: |
       While the name of the message queue configuration is valid.
   - name: Invalid
     test-code: |
-      ctx->config.name = 0;
+      ctx->config_value.name = 0;
     text: |
       While the name of the message queue configuration is invalid.
   test-epilogue: null
@@ -129,19 +145,19 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+      ctx->config_value.maximum_pending_messages = MAX_PENDING_MESSAGES;
     text: |
       While the maximum number of pending messages of the message queue
       configuration is valid.
   - name: Zero
     test-code: |
-      ctx->config.maximum_pending_messages = 0;
+      ctx->config_value.maximum_pending_messages = 0;
     text: |
       While the maximum number of pending messages of the message queue
       configuration is zero.
   - name: Big
     test-code: |
-      ctx->config.maximum_pending_messages = UINT32_MAX;
+      ctx->config_value.maximum_pending_messages = UINT32_MAX;
     text: |
       While the maximum number of pending messages of the message queue
       configuration is big enough so that a calculation to get the message
@@ -152,30 +168,30 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      if ( ctx->config.maximum_pending_messages == UINT32_MAX ) {
+      if ( ctx->config_value.maximum_pending_messages == UINT32_MAX ) {
         /*
          * At least on 64-bit systems we need a bit of help to ensure that we
          * meet the Big state of the MaxPending pre-condition.  The following
          * message size is valid with respect to calculations involving only
          * the message size.
          */
-        ctx->config.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
+        ctx->config_value.maximum_message_size = SIZE_MAX - sizeof( uintptr_t ) +
           1 - sizeof( CORE_message_queue_Buffer );
       } else {
-        ctx->config.maximum_message_size = MAX_MESSAGE_SIZE;
+        ctx->config_value.maximum_message_size = MAX_MESSAGE_SIZE;
       }
     text: |
       While the maximum message size of the message queue configuration is
       valid.
   - name: Zero
     test-code: |
-      ctx->config.maximum_message_size = 0;
+      ctx->config_value.maximum_message_size = 0;
     text: |
       While the maximum message size of the message queue configuration is
       zero.
   - name: Big
     test-code: |
-      ctx->config.maximum_message_size = SIZE_MAX;
+      ctx->config_value.maximum_message_size = SIZE_MAX;
     text: |
       While the maximum message size of the message queue configuration is big
       enough so that a calculation to get the message buffer storage area size
@@ -203,13 +219,13 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config.storage_area = buffers;
+      ctx->config_value.storage_area = buffers;
     text: |
       While the message buffer storage area begin pointer of the message queue
       configuration is valid.
   - name: 'Null'
     test-code: |
-      ctx->config.storage_area = NULL;
+      ctx->config_value.storage_area = NULL;
     text: |
       While the message buffer storage area begin pointer of the message queue
       configuration is ${/c/if/null:/name}.
@@ -219,13 +235,13 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config.storage_size = sizeof( buffers );
+      ctx->config_value.storage_size = sizeof( buffers );
     text: |
       While the message buffer storage area size of the message queue
       configuration is valid.
   - name: Invalid
     test-code: |
-      ctx->config.storage_size = SIZE_MAX;
+      ctx->config_value.storage_size = SIZE_MAX;
     text: |
       While the message buffer storage area size of the message queue
       configuration is invalid.
@@ -236,7 +252,7 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
-  ctx->status = rtems_message_queue_construct( &ctx->config, ctx->id );
+  ctx->status = rtems_message_queue_construct( ctx->config, ctx->id );
 test-brief: null
 test-cleanup: |
   if ( ctx->id_value != INVALID_ID ) {
@@ -257,7 +273,11 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_message_queue_config config
+    const rtems_message_queue_config *config
+- brief: null
+  description: null
+  member: |
+    rtems_message_queue_config config_value
 - brief: null
   description: null
   member: |
@@ -279,7 +299,7 @@ test-includes:
 test-local-includes: []
 test-prepare: |
   ctx->id_value = INVALID_ID;
-  memset( &ctx->config, 0, sizeof( ctx->config ) );
+  memset( &ctx->config_value, 0, sizeof( ctx->config_value ) );
 test-setup: null
 test-stop: null
 test-support: |
@@ -333,6 +353,8 @@ transition-map:
     - Valid
     AreaSize:
     - Valid
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -345,12 +367,29 @@ transition-map:
     - 'Yes'
 - enabled-by: true
   post-conditions:
+    Status: InvAddr
+    Name: Invalid
+    IdVar: Nop
+  pre-conditions:
+    Area: all
+    AreaSize: all
+    Config:
+    - 'Null'
+    Id: all
+    MaxPending: all
+    MaxSize: all
+    Name: all
+    Free: all
+- enabled-by: true
+  post-conditions:
     Status: InvName
     Name: Invalid
     IdVar: Nop
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id: all
     MaxPending: all
     MaxSize: all
@@ -365,6 +404,8 @@ transition-map:
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - 'Null'
     MaxPending: all
@@ -380,6 +421,8 @@ transition-map:
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -396,6 +439,8 @@ transition-map:
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -414,6 +459,8 @@ transition-map:
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -434,6 +481,8 @@ transition-map:
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -452,6 +501,8 @@ transition-map:
   pre-conditions:
     Area: all
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -472,6 +523,8 @@ transition-map:
     Area:
     - 'Null'
     AreaSize: all
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:
@@ -492,6 +545,8 @@ transition-map:
     - Valid
     AreaSize:
     - Invalid
+    Config:
+    - Valid
     Id:
     - Id
     MaxPending:

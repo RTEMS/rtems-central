@@ -3,7 +3,7 @@ brief: |
   Constructs a message queue from the specified the message queue
   configuration.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -67,11 +67,14 @@ return:
       The requested operation was successful.
     value: ${../../status/if/successful:/name}
   - description: |
-      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+      The ${.:/params[0]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
       The message queue name in the configuration was invalid.
     value: ${../../status/if/invalid-name:/name}
+  - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
   - description: |
       The maximum number of pending messages in the configuration was zero.
     value: ${../../status/if/invalid-number:/name}

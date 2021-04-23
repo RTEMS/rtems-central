@@ -143,16 +143,32 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
+- name: Config
+  states:
+  - name: Valid
+    test-code: |
+      ctx->config = &ctx->config_value;
+    text: |
+      While the ${../if/construct:/params[0]/name} parameter references an
+      object of type ${../if/config:/name}.
+  - name: 'Null'
+    test-code: |
+      ctx->config = NULL;
+    text: |
+      While the ${../if/construct:/params[0]/name} parameter is
+      ${/c/if/null:/name}.
+  test-epilogue: null
+  test-prologue: null
 - name: Name
   states:
   - name: Valid
     test-code: |
-      ctx->config.name = NAME;
+      ctx->config_value.name = NAME;
     text: |
       While the name of the task configuration is valid.
   - name: Inv
     test-code: |
-      ctx->config.name = 0;
+      ctx->config_value.name = 0;
     text: |
       While the name of the task configuration is invalid.
   test-epilogue: null
@@ -177,7 +193,7 @@ pre-conditions:
   states:
   - name: 'Yes'
     test-code: |
-      ctx->config.attributes |= RTEMS_SYSTEM_TASK;
+      ctx->config_value.attributes |= RTEMS_SYSTEM_TASK;
     text: |
       While the attributes of the task configuration specifies a system task.
   - name: 'No'
@@ -192,18 +208,18 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config.initial_priority = 254;
+      ctx->config_value.initial_priority = 254;
     text: |
       While the initial priority of the task configuration is valid and
       non-zero.
   - name: Zero
     test-code: |
-      ctx->config.initial_priority = 0;
+      ctx->config_value.initial_priority = 0;
     text: |
       While the initial priority of the task configuration is zero.
   - name: Inv
     test-code: |
-      ctx->config.initial_priority = 0xffffffff;
+      ctx->config_value.initial_priority = 0xffffffff;
     text: |
       While the initial priority of the task configuration is invalid.
   test-epilogue: null
@@ -226,13 +242,13 @@ pre-conditions:
   states:
   - name: Enough
     test-code: |
-      ctx->config.maximum_thread_local_storage_size = MAX_TLS_SIZE;
+      ctx->config_value.maximum_thread_local_storage_size = MAX_TLS_SIZE;
     text: |
       While the maximum thread-local storage size of the task configuration is
       greater than or equal to the thread-local storage size.
   - name: Small
     test-code: |
-      ctx->config.maximum_thread_local_storage_size = 0;
+      ctx->config_value.maximum_thread_local_storage_size = 0;
     text: |
       While the maximum thread-local storage size of the task configuration is
       less than the thread-local storage size.
@@ -276,11 +292,11 @@ test-action: |
   ctx->create_extension_calls = 0;
   ctx->delete_extension_calls = 0;
   ctx->storage_free_calls = 0;
-  ctx->config.storage_size = RTEMS_TASK_STORAGE_SIZE(
-    ctx->config.maximum_thread_local_storage_size + ctx->stack_size,
-    ctx->config.attributes
+  ctx->config_value.storage_size = RTEMS_TASK_STORAGE_SIZE(
+    ctx->config_value.maximum_thread_local_storage_size + ctx->stack_size,
+    ctx->config_value.attributes
   );
-  ctx->status = rtems_task_construct( &ctx->config, ctx->id );
+  ctx->status = rtems_task_construct( ctx->config, ctx->id );
 test-brief: null
 test-cleanup: |
   if ( ctx->id_value != INVALID_ID ) {
@@ -301,7 +317,11 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_task_config config
+    const rtems_task_config *config
+- brief: null
+  description: null
+  member: |
+    rtems_task_config config_value
 - brief: null
   description: null
   member: |
@@ -353,9 +373,9 @@ test-prepare: |
   _RTEMS_Unlock_allocator();
 
   ctx->id_value = INVALID_ID;
-  memset( &ctx->config, 0, sizeof( ctx->config ) );
-  ctx->config.storage_area = task_storage,
-  ctx->config.storage_free = StorageFree;
+  memset( &ctx->config_value, 0, sizeof( ctx->config_value ) );
+  ctx->config_value.storage_area = task_storage,
+  ctx->config_value.storage_free = StorageFree;
 test-setup:
   brief: null
   code: |
@@ -464,6 +484,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext:
     - Ok
     Id:
@@ -488,6 +510,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext:
     - Ok
     Id:
@@ -506,6 +530,25 @@ transition-map:
     - 'Yes'
 - enabled-by: true
   post-conditions:
+    Status: InvAddr
+    Name: Invalid
+    IdVar: Nop
+    CreateExt: 'No'
+    DelExt: 'No'
+    StoFree: 'No'
+  pre-conditions:
+    Config:
+    - 'Null'
+    Ext: all
+    Id: all
+    Name: all
+    SysTsk: all
+    Prio: all
+    Stack: all
+    TLS: all
+    Free: all
+- enabled-by: true
+  post-conditions:
     Status: InvSize
     Name: Invalid
     IdVar: Nop
@@ -513,6 +556,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -537,6 +582,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -561,6 +608,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -585,6 +634,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id: all
     Name:
@@ -603,6 +654,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - 'Null'
@@ -622,6 +675,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -643,6 +698,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -665,6 +722,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -686,6 +745,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -708,6 +769,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -730,6 +793,8 @@ transition-map:
     DelExt: 'No'
     StoFree: 'No'
   pre-conditions:
+    Config:
+    - Valid
     Ext: all
     Id:
     - Valid
@@ -753,6 +818,8 @@ transition-map:
     DelExt: 'Yes'
     StoFree: 'Yes'
   pre-conditions:
+    Config:
+    - Valid
     Ext:
     - Err
     Id:
@@ -777,6 +844,8 @@ transition-map:
     DelExt: 'Yes'
     StoFree: 'Yes'
   pre-conditions:
+    Config:
+    - Valid
     Ext:
     - Err
     Id:
