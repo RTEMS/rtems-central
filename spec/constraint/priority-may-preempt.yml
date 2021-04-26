@@ -6,6 +6,6 @@ links: []
 rationale: null
 scope: user
 text: |
-  The directive may change the priority of another task which may preempt the
-  calling task.
+  The directive may change the priority of a task.  This may cause the calling
+  task to be preempted.
 type: constraint
