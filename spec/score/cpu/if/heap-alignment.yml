@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_HEAP_ALIGNMENT
-reference: null
+references: {}
 type: interface

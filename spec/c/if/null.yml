@@ -8,5 +8,6 @@ links:
 - role: interface-placement
   uid: stddef
 name: 'NULL'
-reference: https://en.cppreference.com/w/c/types/NULL
+references:
+  url: https://en.cppreference.com/w/c/types/NULL
 type: interface

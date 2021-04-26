@@ -107,7 +107,7 @@ NOTES:
 
     * :c:macro:`DEFINE`
 
-    * :c:macro:`UNSPEC_DEFINE`
+    * :ref:`UNSPEC_DEFINE <SphinxRefTarget>`
 
     * `UNSPEC_DEFINE_2 <https://foo>`_
 

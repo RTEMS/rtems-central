@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: Heap_Information_block
-reference: null
+references: {}
 type: interface

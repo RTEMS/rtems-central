@@ -28,7 +28,7 @@ from contextlib import contextmanager
 from typing import Any, Iterable, Iterator, List, Optional, Sequence, Union
 
 from rtemsspec.content import Content, make_lines, to_camel_case
-from rtemsspec.items import Item, ItemGetValueContext, ItemMapper
+from rtemsspec.items import Item, ItemGetValue, ItemGetValueContext, ItemMapper
 
 GenericContent = Union[str, List[str], "Content"]
 GenericContentIterable = Union[Iterable[str], Iterable[List[str]],
@@ -229,20 +229,22 @@ def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
     return f":c:type:`{ctx.value[ctx.key]}`"
 
 
-def _get_value_sphinx_url(ctx: ItemGetValueContext) -> Any:
-    return f"`{ctx.value[ctx.key]} <{ctx.item['reference']}>`_"
+def _get_value_sphinx_ref(ctx: ItemGetValueContext,
+                          get_value: ItemGetValue) -> Any:
+    if "c-user" in ctx.item["references"]:
+        sphinx_ref = ctx.item["references"]["c-user"]
+        return f":ref:`{ctx.value[ctx.key]} <{sphinx_ref}>`"
+    if "url" in ctx.item["references"]:
+        return f"`{ctx.value[ctx.key]} <{ctx.item['references']['url']}>`_"
+    return get_value(ctx)
 
 
 def _get_value_sphinx_unspecified_define(ctx: ItemGetValueContext) -> Any:
-    if ctx.item["reference"]:
-        return _get_value_sphinx_url(ctx)
-    return _get_value_sphinx_macro(ctx)
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_macro)
 
 
 def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
-    if ctx.item["reference"]:
-        return _get_value_sphinx_url(ctx)
-    return _get_value_sphinx_type(ctx)
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_type)
 
 
 class SphinxMapper(ItemMapper):

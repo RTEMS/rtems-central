@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: MPCI_receive_entry
-reference: null
+references: {}
 type: interface

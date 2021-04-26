@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: OBJECTS_ID_OF_SELF
-reference: null
+references: {}
 type: interface

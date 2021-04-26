@@ -425,17 +425,18 @@ def _get_value_doxygen_reference(_ctx: ItemGetValueContext) -> Any:
 
 
 def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Any:
-    return f"<a href=\"{ctx.item['reference']}\">{ctx.value[ctx.key]}</a>"
+    url = ctx.item["references"]["url"]
+    return f"<a href=\"{url}\">{ctx.value[ctx.key]}</a>"
 
 
 def _get_value_doxygen_unspecfied_define(ctx: ItemGetValueContext) -> Any:
-    if ctx.item["reference"]:
+    if "url" in ctx.item["references"]:
         return _get_value_doxygen_url(ctx)
     return get_value_hash(ctx)
 
 
 def _get_value_doxygen_unspecfied_type(ctx: ItemGetValueContext) -> Any:
-    if ctx.item["reference"]:
+    if "url" in ctx.item["references"]:
         return _get_value_doxygen_url(ctx)
     return get_value_double_colon(ctx)
 

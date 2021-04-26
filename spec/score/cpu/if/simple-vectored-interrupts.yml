@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_SIMPLE_VECTORED_INTERRUPTS
-reference: null
+references: {}
 type: interface

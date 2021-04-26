@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Objects_Is_unlimited
-reference: null
+references: {}
 type: interface

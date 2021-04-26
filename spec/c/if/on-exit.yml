@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: stdlib
 name: on_exit
-reference: null
+references: {}
 type: interface

@@ -8,5 +8,6 @@ links:
 - role: interface-placement
   uid: container
 name: __STDC_VERSION__
-reference: https://en.cppreference.com/w/c/preprocessor/replace
+references:
+  url: https://en.cppreference.com/w/c/preprocessor/replace
 type: interface

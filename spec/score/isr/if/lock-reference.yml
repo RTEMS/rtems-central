@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-3
 name: ISR_LOCK_REFERENCE
-reference: null
+references: {}
 type: interface

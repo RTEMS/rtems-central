@@ -8,5 +8,6 @@ links:
 - role: interface-placement
   uid: stddef
 name: size_t
-reference: https://en.cppreference.com/w/c/types/size_t
+references:
+  url: https://en.cppreference.com/w/c/types/size_t
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-2
 name: _ISR_Local_enable
-reference: null
+references: {}
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CONTEXT_FP_SIZE
-reference: null
+references: {}
 type: interface

@@ -8,5 +8,6 @@ links:
 - role: interface-placement
   uid: stdint
 name: intmax_t
-reference: https://en.cppreference.com/w/c/types/integer
+references:
+  url: https://en.cppreference.com/w/c/types/integer
 type: interface

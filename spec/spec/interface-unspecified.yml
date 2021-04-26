@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
 - role: spec-member
@@ -30,11 +30,9 @@ spec-info:
         description: |
           It shall be the name of the unspecified interface.
         spec-type: str
-      reference:
-        description: |
-          If the value is present, then it shall be an URL to the standard or
-          specification of the interface.
-        spec-type: optional-str
+      references:
+        description: null
+        spec-type: interface-references
     description: |
       This set of attributes specifies an unspecified interface.
     mandatory-attributes: all

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-3
 name: _ISR_lock_Release_and_ISR_enable
-reference: null
+references: {}
 type: interface

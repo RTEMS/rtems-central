@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: _ISR_Stack_size
-reference: null
+references: {}
 type: interface

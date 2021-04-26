@@ -5,5 +5,5 @@ enabled-by: true
 interface-type: unspecified-type
 links: []
 name: unspec_type
-reference: null
+references: {}
 type: interface

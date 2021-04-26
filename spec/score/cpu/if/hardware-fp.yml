@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_HARDWARE_FP
-reference: null
+references: {}
 type: interface

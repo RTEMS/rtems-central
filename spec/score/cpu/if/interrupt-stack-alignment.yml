@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_INTERRUPT_STACK_ALIGNMENT
-reference: null
+references: {}
 type: interface

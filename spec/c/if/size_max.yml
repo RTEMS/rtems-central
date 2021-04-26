@@ -8,5 +8,6 @@ links:
 - role: interface-placement
   uid: stdint
 name: SIZE_MAX
-reference: https://en.cppreference.com/w/c/types/limits
+references:
+  url: https://en.cppreference.com/w/c/types/limits
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Stack_Allocator_initialize
-reference: null
+references: {}
 type: interface

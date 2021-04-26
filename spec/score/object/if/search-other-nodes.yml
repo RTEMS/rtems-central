@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: OBJECTS_SEARCH_OTHER_NODES
-reference: null
+references: {}
 type: interface

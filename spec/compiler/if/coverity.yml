@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: container
 name: __COVERITY__
-reference: null
+references: {}
 type: interface
