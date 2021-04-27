@@ -10,7 +10,7 @@ definition:
     body: null
     params:
     - ${../../type/if/id:/name} ${.:/params[0]/name}
-    - ${../../type/if/time-of-day:/name} *${.:/params[1]/name}
+    - const ${../../type/if/time-of-day:/name} *${.:/params[1]/name}
     - ${service-routine-entry:/name} ${.:/params[2]/name}
     - void *${.:/params[3]/name}
     return: ${../../status/if/code:/name}
