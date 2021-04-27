@@ -1,7 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Changes the size of the segment.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
@@ -14,31 +15,69 @@ definition:
     - ${/c/if/uintptr_t:/name} *${.:/params[3]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  This directive is used to increase or decrease the size of the
+  ${.:/params[1]/name} of the region specified by ${.:/params[0]/name}.  When
+  increasing the size of a segment, it is possible that there is no memory
+  available contiguous to the segment.  In this case, the request is
+  unsatisfied.
 enabled-by: true
-index-entries: []
+index-entries:
+- resize segment
 interface-type: function
 links:
 - role: interface-placement
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_region_resize_segment
-notes: null
+notes: |
+  If an attempt to increase the size of a segment fails, then the application
+  may want to allocate a new segment of the desired size, copy the contents of
+  the original segment to the new, larger segment and then return the original
+  segment.
 params:
-- description: '%'
+- description: |
+    is the region identifier.
   dir: null
   name: id
-- description: '%'
+- description: |
+    is the begin address of the segment to resize.
   dir: null
   name: segment
-- description: '%'
+- description: |
+    is the requested new size of the segment.
   dir: null
   name: size
-- description: '%'
-  dir: null
+- description: |
+    is the pointer to an ${/c/if/uintptr_t:/name} variable.  When the directive
+    call is successful, the old size of the segment will be stored in this
+    variable.
+  dir: out
   name: old_size
 return:
   return: null
-  return-values: []
+  return-values:
+  - description: |
+      The requested operation was successful.
+    value: ${../../status/if/successful:/name}
+  - description: |
+      The ${.:/params[3]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      There was no region associated with the identifier specified by
+      ${.:/params[0]/name}.
+    value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The segment was not within the region.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
+      The region was unable to resize the segment.
+    value: ${../../status/if/unsatisfied:/name}
 type: interface

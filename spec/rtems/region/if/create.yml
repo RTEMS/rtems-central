@@ -27,7 +27,7 @@ description: |
   ${.:/params[1]/name} and is ${.:/params[2]/name} bytes long.  The memory area
   shall be large enough to contain some internal region administration data.
 
-  The **starting address and length of segments** allocated from the region
+  The **starting address** and **length of segments** allocated from the region
   will be an integral multiple of ${.:/params[3]/name}.  The specified page
   size will be aligned to an implementation-dependent minimum alignment if
   necessary.
