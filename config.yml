@@ -133,6 +133,9 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/io/directives.rst
   group: /rtems/io/if/group
   introduction-target: modules/rtems-docs/c-user/io/introduction.rst
+- directives-target: modules/rtems-docs/c-user/region/directives.rst
+  group: /rtems/region/if/group
+  introduction-target: modules/rtems-docs/c-user/region/introduction.rst
 - directives-target: modules/rtems-docs/c-user/multiprocessing/directives.rst
   group: /rtems/mp/if/group
   introduction-target: modules/rtems-docs/c-user/multiprocessing/introduction.rst
