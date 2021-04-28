@@ -1,10 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  max: ${/c/if/size_max:/name}
-  min: 0
-  texts:
-  - It shall be an integral multiple of ${/rtems/task/if/storage-alignment:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: 0
@@ -19,6 +14,12 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-classic
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-size
+- role: constraint
+  uid: ../constraint/multiple-of-task-storage-alignment
 name: CONFIGURE_MAXIMUM_THREAD_LOCAL_STORAGE_SIZE
 notes: |
   This configuration option can be used to reserve space for the dynamic linking

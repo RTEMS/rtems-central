@@ -1,10 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
-constraints:
-  texts:
-  - |
-    The value of this configuration option shall be defined to a valid function
-    pointer of the type ``void *( *allocate )( size_t )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -20,6 +15,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-stackalloc
+- role: constraint
+  uid: ../constraint/init-task-stack-allocator
 name: CONFIGURE_TASK_STACK_ALLOCATOR
 notes: |
   A correctly configured system shall configure the following to be consistent:

@@ -1,8 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  max: 65535
-  min: 0
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 0
@@ -16,9 +13,13 @@ links:
 - role: appl-config-group-member
   uid: group-classic
 - role: constraint
-  uid: constraint-unlimited
+  uid: ../constraint/min-zero
 - role: constraint
-  uid: constraint-memsz
+  uid: ../constraint/max-obj
+- role: constraint
+  uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/unlimited
 name: CONFIGURE_MAXIMUM_REGIONS
 notes: |
   This object class can be configured in unlimited allocation mode, see

@@ -19,9 +19,7 @@ spec-info:
           It shall be the application configuration option type.
         spec-type: name
       description:
-        description: |
-          The ${appl-config-option-value:/spec-name} items have an
-          attribute for constraints.
+        description: null
         spec-type: interface-description
       name:
         description: null

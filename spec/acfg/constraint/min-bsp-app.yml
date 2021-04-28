@@ -6,7 +6,6 @@ links: []
 rationale: null
 scope: user
 text: |
-  The value of this configuration option shall be small enough so that the
-  interrupt stack area calculation carried out by ``<rtems/confdefs.h>`` does
-  not overflow an integer of type ${/c/if/size_t:/name}.
+  The value of the application configuration option shall be greater than or
+  equal to a BSP-specific and application-specific minimum value.
 type: constraint

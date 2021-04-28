@@ -1,6 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -17,9 +16,9 @@ links:
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
-  uid: constraint-bspappmin
+  uid: ../constraint/stack-space
 - role: constraint
-  uid: constraint-stackspace
+  uid: ../constraint/min-bsp-app
 name: CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
 notes: null
 text: ''

@@ -6,6 +6,7 @@ links: []
 rationale: null
 scope: user
 text: |
-  The value of this configuration option shall be aligned according to
-  ${/score/cpu/if/interrupt-stack-alignment:/name}.
+  The value of the application configuration option shall be less than or equal
+  to a BSP-specific and application-specific value which depends on the size of
+  the memory available to the application.
 type: constraint

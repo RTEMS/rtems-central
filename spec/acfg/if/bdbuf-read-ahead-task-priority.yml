@@ -1,6 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints: {}
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 15
@@ -13,7 +12,7 @@ links:
 - role: appl-config-group-member
   uid: group-bdbuf
 - role: constraint
-  uid: constraint-prioclassic
+  uid: ../constraint/valid-task-priority
 name: CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
 notes: null
 text: ''

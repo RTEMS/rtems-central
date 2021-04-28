@@ -1,7 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  min: 0
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 0
@@ -17,7 +15,9 @@ links:
 - role: appl-config-group-member
   uid: group-general
 - role: constraint
-  uid: constraint-stackspace
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/stack-space
 name: CONFIGURE_EXTRA_TASK_STACKS
 notes: |
   This parameter is very important.  If the application creates tasks with

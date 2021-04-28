@@ -46,7 +46,7 @@ def test_applconfig(tmpdir):
     with open(g_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 
 .. This file is part of the RTEMS quality process and was automatically
 .. generated.  If you find something that needs to be fixed or
@@ -131,8 +131,7 @@ OPTION TYPE:
     This configuration option is a boolean feature define.
 
 DEFAULT CONFIGURATION:
-    If this configuration option is undefined, then the described feature is \
-not
+    If this configuration option is undefined, then the described feature is not
     enabled.
 
 DESCRIPTION:
@@ -160,18 +159,7 @@ DEFAULT VALUE:
     The default value is 13.
 
 VALUE CONSTRAINTS:
-    The value of this configuration option shall satisfy all of the following
-    constraints:
-
-    * It shall be greater than or equal to -1.
-
-    * It shall be less than or equal to 99.
-
-    * custom c 1
-
-    * custom c 2
-
-    * constraint d
+    constraint d
 
 DESCRIPTION:
     description c
@@ -197,10 +185,6 @@ OPTION TYPE:
 DEFAULT VALUE:
     The default value is 7.
 
-VALUE CONSTRAINTS:
-    The value of this configuration option shall be greater than or equal to \
--2.
-
 DESCRIPTION:
     description e
 
@@ -224,9 +208,6 @@ OPTION TYPE:
 
 DEFAULT VALUE:
     The default value is 1.
-
-VALUE CONSTRAINTS:
-    The value of this configuration option shall be less than or equal to 2.
 
 DESCRIPTION:
     description f
@@ -252,9 +233,6 @@ OPTION TYPE:
 DEFAULT VALUE:
     The default value is 1.
 
-VALUE CONSTRAINTS:
-    custom h
-
 DESCRIPTION:
     description h
 
@@ -278,10 +256,6 @@ OPTION TYPE:
 
 DEFAULT VALUE:
     The default value is 1.
-
-VALUE CONSTRAINTS:
-    The value of this configuration option shall be
-    an element of {1, 2, 3}.
 
 DESCRIPTION:
     description i
@@ -308,12 +282,7 @@ DEFAULT VALUE:
     Foo bar.
 
 VALUE CONSTRAINTS:
-    The value of this configuration option shall satisfy all of the following
-    constraints:
-
-    * It shall be an element of [1, 2].
-
-    * constraint d
+    constraint d
 
 DESCRIPTION:
     description j
@@ -338,14 +307,6 @@ OPTION TYPE:
 
 DEFAULT VALUE:
     The default value is 1.
-
-VALUE CONSTRAINTS:
-    The value of this configuration option shall satisfy all of the following
-    constraints:
-
-    * custom k 1
-
-    * custom k 2
 
 DESCRIPTION:
     description k
@@ -372,8 +333,12 @@ DEFAULT VALUE:
     The default value is 1.
 
 VALUE CONSTRAINTS:
-    The value of this configuration option shall be greater than or equal to 0
-    and less than or equal to 2.
+    The value of this configuration option shall satisfy all of the following
+    constraints:
+
+    * It shall be greater than or equal to zero.
+
+    * It shall be less than or equal to two.
 
 DESCRIPTION:
     description l
@@ -410,7 +375,7 @@ NOTES:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -532,20 +497,7 @@ NOTES:
  * The default value is 13.
  *
  * @par Value Constraints
- * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
- *
- * * It shall be greater than or equal to -1.
- *
- * * It shall be less than or equal to 99.
- *
- * * custom c 1
- *
- * * custom c 2
- *
- * * constraint d
- * @endparblock
+ * constraint d
  *
  * @par Notes
  * notes c
@@ -561,9 +513,6 @@ NOTES:
  *
  * @par Default Value
  * The default value is 7.
- *
- * @par Value Constraints
- * The value of this configuration option shall be greater than or equal to -2.
  */
 #define e
 
@@ -576,9 +525,6 @@ NOTES:
  *
  * @par Default Value
  * The default value is 1.
- *
- * @par Value Constraints
- * The value of this configuration option shall be less than or equal to 2.
  */
 #define f
 
@@ -591,9 +537,6 @@ NOTES:
  *
  * @par Default Value
  * The default value is 1.
- *
- * @par Value Constraints
- * custom h
  */
 #define h
 
@@ -606,9 +549,6 @@ NOTES:
  *
  * @par Default Value
  * The default value is 1.
- *
- * @par Value Constraints
- * The value of this configuration option shall be an element of {1, 2, 3}.
  */
 #define i
 
@@ -623,14 +563,7 @@ NOTES:
  * Foo bar.
  *
  * @par Value Constraints
- * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
- *
- * * It shall be an element of [1, 2].
- *
- * * constraint d
- * @endparblock
+ * constraint d
  */
 #define j
 
@@ -643,16 +576,6 @@ NOTES:
  *
  * @par Default Value
  * The default value is 1.
- *
- * @par Value Constraints
- * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
- *
- * * custom k 1
- *
- * * custom k 2
- * @endparblock
  */
 #define k
 
@@ -667,8 +590,14 @@ NOTES:
  * The default value is 1.
  *
  * @par Value Constraints
- * The value of this configuration option shall be greater than or equal to 0
- * and less than or equal to 2.
+ * @parblock
+ * The value of this configuration option shall satisfy all of the following
+ * constraints:
+ *
+ * * It shall be greater than or equal to zero.
+ *
+ * * It shall be less than or equal to two.
+ * @endparblock
  */
 #define l
 

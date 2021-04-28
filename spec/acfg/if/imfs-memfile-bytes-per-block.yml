@@ -1,13 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  set:
-  - 16
-  - 32
-  - 64
-  - 128
-  - 256
-  - 512
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 128
@@ -20,6 +12,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-filesystem
+- role: constraint
+  uid: ../constraint/imfs-memfile-bytes-per-block
 name: CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
 notes: |
   The configured block size has two impacts. The first is the average amount of

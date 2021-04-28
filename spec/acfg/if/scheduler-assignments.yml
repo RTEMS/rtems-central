@@ -1,17 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
-constraints:
-  texts:
-  - |
-    The value of this configuration option shall be a list of the following
-    macros:
-
-    * ``RTEMS_SCHEDULER_ASSIGN( processor_index, attributes )``
-
-    * ``RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER``
-  - |
-    The value of this configuration option shall be a list of exactly
-    ${max-processors:/name} elements.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: |
@@ -26,6 +14,10 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/scheduler-assignments-macros
+- role: constraint
+  uid: ../constraint/scheduler-assignments-count
 name: CONFIGURE_SCHEDULER_ASSIGNMENTS
 notes: |
   This configuration option is only evaluated in SMP configurations.

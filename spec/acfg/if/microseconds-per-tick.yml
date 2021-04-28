@@ -1,10 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  texts:
-  - It shall be greater than or equal to a Clock Driver specific value.
-  - It shall be less than or equal to a Clock Driver specific value.
-  - The resulting clock ticks per second should be an integer.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 10000
@@ -34,6 +29,12 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-general
+- role: constraint
+  uid: ../constraint/min-clock-ticks
+- role: constraint
+  uid: ../constraint/max-clock-ticks
+- role: constraint
+  uid: ../constraint/clock-ticks-per-second
 name: CONFIGURE_MICROSECONDS_PER_TICK
 notes: |
   This configuration option has no impact if the Clock Driver is not

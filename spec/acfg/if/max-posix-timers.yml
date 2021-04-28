@@ -1,8 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  max: 65535
-  min: 0
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 0
@@ -16,11 +13,15 @@ links:
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
-  uid: constraint-posix
+  uid: ../constraint/min-zero
 - role: constraint
-  uid: constraint-unlimited
+  uid: ../constraint/max-obj
 - role: constraint
-  uid: constraint-memsz
+  uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/unlimited
+- role: constraint
+  uid: ../constraint/posix-api
 name: CONFIGURE_MAXIMUM_POSIX_TIMERS
 notes: |
   This object class can be configured in unlimited allocation mode, see

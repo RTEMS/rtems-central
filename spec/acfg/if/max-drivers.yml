@@ -1,11 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  max: ${/c/if/size_max:/name}
-  texts:
-  - |
-    It shall be greater than or equal than the number of statically configured
-    device drivers.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -55,7 +49,11 @@ links:
 - role: appl-config-group-member
   uid: group-devdrv
 - role: constraint
-  uid: constraint-memsz
+  uid: ../constraint/max-size
+- role: constraint
+  uid: ../constraint/max-drivers
+- role: constraint
+  uid: ../constraint/memory-size
 name: CONFIGURE_MAXIMUM_DRIVERS
 notes: |
   If the application will dynamically install device drivers, then the

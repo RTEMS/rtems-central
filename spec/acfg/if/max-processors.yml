@@ -1,8 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  max: ${/score/cpu/if/maximum-processors:/name}
-  min: 1
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: 1
@@ -18,6 +15,10 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-general
+- role: constraint
+  uid: ../constraint/min-one
+- role: constraint
+  uid: ../constraint/max-processors
 name: CONFIGURE_MAXIMUM_PROCESSORS
 notes: |
   If there are more processors available than configured, the rest will be

@@ -1,10 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
-constraints:
-  texts:
-  - |
-    The value of this configuration option shall be defined to a valid function
-    pointer of the type ``void *( *idle_body )( uintptr_t )``.
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
@@ -18,6 +13,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-idle
+- role: constraint
+  uid: ../constraint/init-idle-task-body
 name: CONFIGURE_IDLE_TASK_BODY
 notes: |
   IDLE threads shall not block.  A blocking IDLE thread results in undefined

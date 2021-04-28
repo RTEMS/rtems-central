@@ -1,14 +1,5 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
-constraints:
-  max: ${/c/if/uint32_max:/name}
-  min: 0
-  texts:
-  - |
-    The value of this configuration option shall be small enough so that the
-    MPCI receive server stack area calculation carried out by
-    ``<rtems/confdefs.h>`` does not overflow an integer of type
-    ${/c/if/size_t:/name}.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 default-value: 0
@@ -22,6 +13,12 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-mpci
+- role: constraint
+  uid: ../constraint/min-zero
+- role: constraint
+  uid: ../constraint/max-uint32
+- role: constraint
+  uid: ../constraint/mpci-receive-server-stack
 name: CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK
 notes: |
   This configuration option is only evaluated if

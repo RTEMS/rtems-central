@@ -24,10 +24,9 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import copy
 from typing import Any, Dict, List, Optional
 
-from rtemsspec.content import CContent, get_value_double_colon, \
+from rtemsspec.content import Content, CContent, get_value_double_colon, \
     get_value_doxygen_function, get_value_doxygen_group, get_value_hash
 from rtemsspec.sphinxcontent import SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
@@ -98,7 +97,9 @@ class _ContentAdaptor:
 
     def add_option_value_constraints(self, lines: List[str]) -> None:
         """ Adds a option value constraints. """
-        self.content.add_definition_item("VALUE CONSTRAINTS:", lines)
+        self.content.add_definition_item("VALUE CONSTRAINTS:",
+                                         lines,
+                                         wrap=True)
 
     def add_option_description(self, description: str) -> None:
         """ Adds a option description. """
@@ -195,96 +196,31 @@ def _generate_feature(content: _ContentAdaptor, item: Item,
         content.substitute(_OPTION_DEFAULT_CONFIG[option_type](item)))
 
 
-def _generate_min_max(lines: List[str], value: str, word: str) -> None:
-    lines.append("The value of this configuration option shall be "
-                 f"{word} than or equal to {value}.")
-
-
-def _generate_set(lines: List[str], values: List[Any]) -> None:
-    value_set = "{" + ", ".join([str(x) for x in values]) + "}"
-    lines.append("The value of this configuration option shall be")
-    lines.append(f"an element of {value_set}.")
-
-
-def _start_constraint_list(lines: List[str]) -> None:
-    lines.append("The value of this configuration option shall "
-                 "satisfy all of the following")
-    lines.append("constraints:")
-
-
-def _generate_item_min(lines: List[str], constraints: Dict[str, Any]) -> None:
-    if "min" in constraints:
-        value = constraints["min"]
-        lines.append("")
-        lines.append(f"* It shall be greater than or equal to {value}.")
-
-
-def _generate_item_max(lines: List[str], constraints: Dict[str, Any]) -> None:
-    if "max" in constraints:
-        value = constraints["max"]
-        lines.append("")
-        lines.append(f"* It shall be less than or equal to {value}.")
-
-
-def _generate_item_set(lines: List[str], constraints: Dict[str, Any]) -> None:
-    if "set" in constraints:
-        value_set = constraints["set"]
-        lines.append("")
-        lines.append(f"* It shall be an element of {value_set}.")
-
-
-def _generate_item_texts(lines: List[str], constraints: Dict[str,
-                                                             Any]) -> None:
-    for text in constraints.get("texts", []):
-        lines.append("")
-        text = text.replace("The value of this configuration option", "It")
-        text = text.strip().split("\n")
-        lines.append(f"* {text[0]}")
-        lines.extend([f"  {x}" if x else "" for x in text[1:]])
-
-
-def _resolve_constraint_links(content: _ContentAdaptor, item: Item,
-                              constraints: Dict[str, Any]) -> None:
-    texts = []  # type: List[str]
+def _get_constraints(content: _ContentAdaptor, item: Item) -> List[str]:
+    constraints = []  # type: List[str]
     for parent in item.parents("constraint"):
         content.register_license_and_copyrights_of_item(parent)
-        texts.append(parent["text"])
-    if texts:
-        constraints.setdefault("texts", []).extend(reversed(texts))
+        constraints.append(content.substitute(parent["text"]))
+    return constraints
+
+
+_THE_VALUE = "The value of the application configuration option"
 
 
 def _generate_constraint(content: _ContentAdaptor, item: Item) -> None:
-    constraints = copy.deepcopy(item["constraints"])
-    _resolve_constraint_links(content, item, constraints)
-    lines = []  # type: List[str]
-    count = len(constraints)
-    if count == 1:
-        if "min" in constraints:
-            _generate_min_max(lines, constraints["min"], "greater")
-        elif "max" in constraints:
-            _generate_min_max(lines, constraints["max"], "less")
-        elif "set" in constraints:
-            _generate_set(lines, constraints["set"])
-        elif "texts" in constraints:
-            if len(constraints["texts"]) == 1:
-                lines.extend(constraints["texts"][0].strip().split("\n"))
-            else:
-                _start_constraint_list(lines)
-                _generate_item_texts(lines, constraints)
-    elif count == 2 and "min" in constraints and "max" in constraints:
-        minimum = constraints["min"]
-        maximum = constraints["max"]
-        lines.append("The value of this configuration option shall be "
-                     f"greater than or equal to {minimum}")
-        lines.append(f"and less than or equal to {maximum}.")
-    else:
-        _start_constraint_list(lines)
-        _generate_item_min(lines, constraints)
-        _generate_item_max(lines, constraints)
-        _generate_item_set(lines, constraints)
-        _generate_item_texts(lines, constraints)
-    content.add_option_value_constraints(
-        [content.substitute(line) for line in lines])
+    constraints = _get_constraints(content, item)
+    if len(constraints) > 1:
+        constraint_list = Content("BSD-2-Clause", False)
+        prologue = """The value of this configuration option shall satisfy all
+of the following constraints:"""
+        constraint_list.add_list([
+            constraint.replace(_THE_VALUE, "It") for constraint in constraints
+        ], prologue)
+        constraints = constraint_list.lines
+    elif constraints:
+        constraints[0] = constraints[0].replace(
+            _THE_VALUE, "The value of this configuration option")
+    content.add_option_value_constraints(constraints)
 
 
 def _generate_initializer_or_integer(content: _ContentAdaptor, item: Item,

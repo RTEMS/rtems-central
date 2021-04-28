@@ -6,7 +6,7 @@ links: []
 rationale: null
 scope: user
 text: |
-  The value of this configuration option shall be small enough so that the
-  RTEMS Workspace size calculation carried out by ``<rtems/confdefs.h>`` does
-  not overflow an integer of type ${/c/if/uintptr_t:/name}.
+  The value of the application configuration option shall be a valid Classic
+  API task priority.  The set of valid task priorities depends on the scheduler
+  configuration.
 type: constraint
