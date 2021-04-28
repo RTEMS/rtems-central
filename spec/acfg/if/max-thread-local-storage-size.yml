@@ -12,6 +12,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-thread-local-storage-size
 - role: appl-config-group-member
   uid: group-classic
 - role: constraint
@@ -38,5 +40,4 @@ notes: |
   executable is linked.  The ``rtems-exeinfo`` command line tool included in
   the RTEMS Tools can be used to obtain the thread-local storage size and
   alignment of an application executable.
-text: ''
 type: interface

@@ -27,6 +27,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-name
 - role: appl-config-group-member
   uid: group-schedgeneral
 - role: constraint
@@ -39,5 +41,4 @@ notes: |
   Schedulers can be identified via ${/rtems/scheduler/if/ident:/name}.
 
   Use ${/rtems/object/if/build-name:/name} to define the scheduler name.
-text: ''
 type: interface

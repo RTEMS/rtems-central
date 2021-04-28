@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/posix-init-thread-stack-size
 - role: appl-config-group-member
   uid: group-posixinit
 - role: constraint
@@ -18,5 +20,4 @@ links:
   uid: ../constraint/stack-space
 name: CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
 notes: null
-text: ''
 type: interface

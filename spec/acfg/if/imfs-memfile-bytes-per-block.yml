@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/imfs-memfile-bytes-per-block
 - role: appl-config-group-member
   uid: group-filesystem
 - role: constraint
@@ -41,5 +43,4 @@ notes: |
 
   * when the block size is 512 bytes, the maximum file size is 1,082,195,456
     bytes.
-text: ''
 type: interface

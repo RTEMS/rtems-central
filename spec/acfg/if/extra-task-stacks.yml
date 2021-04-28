@@ -12,6 +12,8 @@ index-entries:
 - memory for task tasks
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/extra-task-stacks
 - role: appl-config-group-member
   uid: group-general
 - role: constraint
@@ -23,5 +25,4 @@ notes: |
   This parameter is very important.  If the application creates tasks with
   stacks larger then the minimum, then that memory is **not** accounted for by
   ``<rtems/confdefs.h>``.
-text: ''
 type: interface

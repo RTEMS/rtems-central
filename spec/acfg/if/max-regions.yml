@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-regions
 - role: appl-config-group-member
   uid: group-classic
 - role: constraint
@@ -24,5 +26,4 @@ name: CONFIGURE_MAXIMUM_REGIONS
 notes: |
   This object class can be configured in unlimited allocation mode, see
   ${.:/document-reference/config-unlimited-objects}.
-text: ''
 type: interface

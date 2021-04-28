@@ -13,6 +13,8 @@ index-entries:
 - minimum POSIX thread stack size
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/min-posix-thread-stack-size
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
@@ -21,5 +23,4 @@ links:
   uid: ../constraint/min-bsp-app
 name: CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
 notes: null
-text: ''
 type: interface

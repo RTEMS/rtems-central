@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-timer-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
@@ -25,5 +27,4 @@ notes: |
   * ``CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER``,
 
   otherwise a compile time error will occur.
-text: ''
 type: interface

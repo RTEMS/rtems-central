@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/idle-task-stack-size
 - role: appl-config-group-member
   uid: group-idle
 - role: constraint
@@ -20,5 +22,4 @@ name: CONFIGURE_IDLE_TASK_STACK_SIZE
 notes: |
   In SMP configurations, there is one IDLE task per configured processor, see
   ${max-processors:/name}.
-text: ''
 type: interface

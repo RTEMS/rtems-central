@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/applconfig
+non-functional-type: interface-requirement
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The system shall provide an application configuration option which indicates
+  that the user has configured **no** user initialization tasks or threads and
+  that the user provided IDLE task will perform application initialization and
+  then transform itself into an IDLE task.
+type: requirement

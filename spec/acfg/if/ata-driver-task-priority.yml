@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/ata-driver-task-priority
 - role: appl-config-group-member
   uid: group-devdrv
 - role: constraint
@@ -17,5 +19,4 @@ name: CONFIGURE_ATA_DRIVER_TASK_PRIORITY
 notes: |
   This configuration option is only evaluated if the configuration option
   ${appl-needs-ata-driver:/name} is defined.
-text: ''
 type: interface

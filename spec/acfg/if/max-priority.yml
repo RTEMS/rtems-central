@@ -26,6 +26,8 @@ index-entries:
 - number of priority levels
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-priority
 - role: appl-config-group-member
   uid: group-schedgeneral
 - role: constraint
@@ -48,5 +50,4 @@ notes: |
 
   The default value is 255, because RTEMS shall support 256 priority levels to
   be compliant with various standards.  These priorities range from 0 to 255.
-text: ''
 type: interface

@@ -10,10 +10,11 @@ index-entries:
 - /dev/null
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-null-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_NULL_DRIVER
 notes: |
   This device driver is supported by all BSPs.
-text: ''
 type: interface

@@ -9,11 +9,12 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-stub-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
 notes: |
   This device driver simply provides entry points that return successful and
   is primarily a test fixture. It is supported by all BSPs.
-text: ''
 type: interface

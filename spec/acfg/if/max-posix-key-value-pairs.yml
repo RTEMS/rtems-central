@@ -14,6 +14,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-posix-key-value-pairs
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
@@ -31,5 +33,4 @@ notes: |
 
   A key value pair is created by ${/c/if/pthread_setspecific:/name} if the value
   is not ${/c/if/null:/name}, otherwise it is deleted.
-text: ''
 type: interface

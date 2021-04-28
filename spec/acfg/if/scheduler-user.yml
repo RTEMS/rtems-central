@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-user
 - role: appl-config-group-member
   uid: group-schedgeneral
 name: CONFIGURE_SCHEDULER_USER
@@ -38,5 +40,4 @@ notes: |
   ``cpukit/score/src/schedulerpriority*.c`` for guidance.  For guidance on
   the configuration macros, please examine ``cpukit/sapi/include/confdefs.h``
   for how these are defined for the Deterministic Priority Scheduler.
-text: ''
 type: interface

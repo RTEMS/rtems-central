@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/posix-init-thread-entry-point
 - role: appl-config-group-member
   uid: group-posixinit
 - role: constraint
@@ -18,5 +20,4 @@ name: CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
 notes: |
   The application shall provide the function referenced by this configuration
   option.
-text: ''
 type: interface

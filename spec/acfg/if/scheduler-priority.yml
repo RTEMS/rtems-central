@@ -11,6 +11,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-priority
 - role: appl-config-group-member
   uid: group-schedgeneral
 name: CONFIGURE_SCHEDULER_PRIORITY
@@ -27,5 +29,4 @@ notes: |
 
   The memory allocated for this scheduler depends on the
   ${max-priority:/name} configuration option.
-text: ''
 type: interface

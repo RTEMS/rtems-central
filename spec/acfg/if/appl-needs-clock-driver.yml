@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-clock-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -25,5 +27,4 @@ notes: |
   * ${appl-needs-timer-driver:/name},
 
   otherwise a compile time error in the configuration file will occur.
-text: ''
 type: interface

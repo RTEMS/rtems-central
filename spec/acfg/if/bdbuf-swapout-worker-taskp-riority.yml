@@ -10,11 +10,12 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/bdbuf-swapout-worker-taskp-riority
 - role: appl-config-group-member
   uid: group-bdbuf
 - role: constraint
   uid: ../constraint/valid-task-priority
 name: CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
 notes: null
-text: ''
 type: interface

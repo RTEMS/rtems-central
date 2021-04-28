@@ -11,6 +11,8 @@ index-entries:
 - maximum file descriptors
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-file-descriptors
 - role: appl-config-group-member
   uid: group-general
 - role: constraint
@@ -23,5 +25,4 @@ name: CONFIGURE_MAXIMUM_FILE_DESCRIPTORS
 notes: |
   The default value of three file descriptors allows RTEMS to support standard
   input, output, and error I/O streams on :file:`/dev/console`.
-text: ''
 type: interface

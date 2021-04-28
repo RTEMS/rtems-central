@@ -13,6 +13,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-processors
 - role: appl-config-group-member
   uid: group-general
 - role: constraint
@@ -27,5 +29,4 @@ notes: |
   This configuration option is only evaluated in SMP configurations (e.g. RTEMS
   was built with the ``--enable-smp`` build configuration option).  In all
   other configurations it has no effect.
-text: ''
 type: interface

@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-posix-semaphores
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
@@ -31,5 +33,4 @@ notes: |
   initialized with ${/c/if/sem_init:/name} are not affected by this
   configuration option since the storage space for these semaphores is
   user-provided.
-text: ''
 type: interface

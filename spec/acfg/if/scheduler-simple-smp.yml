@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-simple-smp
 - role: appl-config-group-member
   uid: group-schedgeneral
 name: CONFIGURE_SCHEDULER_SIMPLE_SMP
@@ -22,5 +24,4 @@ notes: |
 
   In case no explicit ${.:/document-reference/config-scheduler-clustered}
   is present, then it is used as the scheduler for up to 32 processors.
-text: ''
 type: interface

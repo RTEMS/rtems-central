@@ -46,6 +46,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-drivers
 - role: appl-config-group-member
   uid: group-devdrv
 - role: constraint
@@ -59,5 +61,4 @@ notes: |
   If the application will dynamically install device drivers, then the
   configuration option value shall be larger than the number of statically
   configured device drivers.
-text: ''
 type: interface

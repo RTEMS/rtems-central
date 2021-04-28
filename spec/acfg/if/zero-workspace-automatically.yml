@@ -14,6 +14,8 @@ index-entries:
 - zero RTEMS Workspace
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/zero-workspace-automatically
 - role: appl-config-group-member
   uid: group-general
 name: CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
@@ -22,5 +24,4 @@ notes: |
   not necessary for RTEMS but is often assumed by support libraries.  In case
   ${dirty-memory:/name} is also defined, then the memory is first
   dirtied and then zeroed.
-text: ''
 type: interface

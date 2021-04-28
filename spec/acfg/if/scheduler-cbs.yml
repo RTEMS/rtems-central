@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-cbs
 - role: appl-config-group-member
   uid: group-schedgeneral
 name: CONFIGURE_SCHEDULER_CBS
@@ -19,5 +21,4 @@ notes: |
 
   In case no explicit ${.:/document-reference/config-scheduler-clustered}
   is present, then it is used as the scheduler for exactly one processor.
-text: ''
 type: interface

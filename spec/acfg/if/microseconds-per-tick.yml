@@ -27,6 +27,8 @@ index-entries:
 - tick quantum
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/microseconds-per-tick
 - role: appl-config-group-member
   uid: group-general
 - role: constraint
@@ -42,5 +44,4 @@ notes: |
 
   There may be Clock Driver specific limits on the resolution or maximum value
   of a clock tick quantum.
-text: ''
 type: interface

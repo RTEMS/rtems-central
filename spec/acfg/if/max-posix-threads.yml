@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-posix-threads
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
@@ -34,5 +36,4 @@ notes: |
   ${max-tasks:/name}.
 
   All POSIX threads have floating point enabled.
-text: ''
 type: interface

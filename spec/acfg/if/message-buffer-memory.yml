@@ -13,6 +13,8 @@ index-entries:
 - memory for a single message queue's buffers
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/message-buffer-memory
 - role: appl-config-group-member
   uid: group-general
 - role: constraint
@@ -68,5 +70,4 @@ notes: |
             sizeof( other_message_type ) \
           ) \
         )
-text: ''
 type: interface

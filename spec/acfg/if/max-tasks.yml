@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-tasks
 - role: appl-config-group-member
   uid: group-classic
 - role: constraint
@@ -39,5 +41,4 @@ notes: |
   assumption that all tasks have floating point enabled. This would require
   the addition of a new configuration parameter to specify the number of
   tasks which enable floating point support.
-text: ''
 type: interface

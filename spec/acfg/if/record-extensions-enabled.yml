@@ -14,11 +14,12 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/record-extensions-enabled
 - role: appl-config-group-member
   uid: group-eventrecord
 name: CONFIGURE_RECORD_EXTENSIONS_ENABLED
 notes: |
   The record extensions capture thread create, start, restart, delete, switch,
   begin, exitted and terminate events.
-text: ''
 type: interface

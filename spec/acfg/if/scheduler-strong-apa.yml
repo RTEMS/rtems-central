@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-strong-apa
 - role: appl-config-group-member
   uid: group-schedgeneral
 name: CONFIGURE_SCHEDULER_STRONG_APA
@@ -20,5 +22,4 @@ notes: |
   support enabled.
 
   This scheduler algorithm is not correctly implemented.  Do not use it.
-text: ''
 type: interface

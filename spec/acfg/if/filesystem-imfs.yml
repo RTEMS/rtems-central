@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/filesystem-imfs
 - role: appl-config-group-member
   uid: group-filesystem
 name: CONFIGURE_FILESYSTEM_IMFS
@@ -17,5 +19,4 @@ notes: |
   Applications will rarely need this configuration option.  This configuration
   option is intended for test programs.  You do not need to define this
   configuration option for the base filesystem (also known as root filesystem).
-text: ''
 type: interface

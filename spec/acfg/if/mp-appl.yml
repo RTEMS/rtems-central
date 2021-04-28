@@ -13,6 +13,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/mp-appl
 - role: appl-config-group-member
   uid: group-mpci
 name: CONFIGURE_MP_APPLICATION
@@ -21,5 +23,4 @@ notes: |
   is not enabled (e.g. RTEMS was built without the ``--enable-multiprocessing``
   build configuration option).  Otherwise a compile time error in the
   configuration file will occur.
-text: ''
 type: interface

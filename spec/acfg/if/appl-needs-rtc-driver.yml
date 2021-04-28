@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-rtc-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_RTC_DRIVER
@@ -18,5 +20,4 @@ notes: |
 
   If this is defined and the BSP does not have this device driver, then the
   user will get a link time error for an undefined symbol.
-text: ''
 type: interface

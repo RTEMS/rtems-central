@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/stack-checker-enabled
 - role: appl-config-group-member
   uid: group-general
 name: CONFIGURE_STACK_CHECKER_ENABLED
@@ -18,5 +20,4 @@ notes: |
   switch.
 
   In 4.9 and older, this configuration option was named ``STACK_CHECKER_ON``.
-text: ''
 type: interface

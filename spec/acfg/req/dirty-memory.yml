@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: /req/applconfig
+non-functional-type: interface-requirement
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The system shall provide an application configuration option which enables
+  that the memory areas used for the RTEMS Workspace and the C Program Heap are
+  dirtied with a ``0xCF`` byte pattern during system initialization.
+type: requirement

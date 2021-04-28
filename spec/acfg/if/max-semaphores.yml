@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-semaphores
 - role: appl-config-group-member
   uid: group-classic
 - role: constraint
@@ -28,5 +30,4 @@ notes: |
   In SMP configurations, the size of a Semaphore Control Block depends on the
   scheduler count (see ${.:/document-reference/config-scheduler-table}).  The semaphores
   using the ${.:/document-reference/mrsp} need a ceiling priority per scheduler.
-text: ''
 type: interface

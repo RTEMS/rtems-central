@@ -14,6 +14,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/idle-task-init-appl
 - role: appl-config-group-member
   uid: group-idle
 name: CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
@@ -39,5 +41,4 @@ notes: |
   * ``CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION``
 
   otherwise a compile time error in the configuration file will occur.
-text: ''
 type: interface

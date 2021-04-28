@@ -27,11 +27,6 @@ spec-info:
       notes:
         description: null
         spec-type: interface-notes
-      text:
-        description: |
-          It shall state the requirement for the application configuration
-          option.
-        spec-type: requirement-text
     description: |
       This set of attributes specifies an application configuration option.
     mandatory-attributes: all

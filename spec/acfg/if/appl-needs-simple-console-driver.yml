@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-simple-console-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -33,5 +35,4 @@ notes: |
   * ${appl-needs-simple-task-console-driver:/name}
 
   configuration options are mutually exclusive.
-text: ''
 type: interface

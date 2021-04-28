@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/max-posix-timers
 - role: appl-config-group-member
   uid: group-posix
 - role: constraint
@@ -29,5 +31,4 @@ notes: |
 
   Timers are only available if RTEMS was built with the
   ``--enable-posix`` build configuration option.
-text: ''
 type: interface

@@ -9,6 +9,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-libblock
 - role: appl-config-group-member
   uid: group-bdbuf
 name: CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
@@ -16,5 +18,4 @@ notes: |
   Each option of the Block Device Cache (bdbuf) configuration can be explicitly
   set by the user with the configuration options below.  The Block Device Cache
   is used for example by the RFS and DOSFS filesystems.
-text: ''
 type: interface

@@ -10,10 +10,11 @@ index-entries:
 - /dev/zero
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/appl-needs-zero-driver
 - role: appl-config-group-member
   uid: group-devdrv
 name: CONFIGURE_APPLICATION_NEEDS_ZERO_DRIVER
 notes: |
   This device driver is supported by all BSPs.
-text: ''
 type: interface

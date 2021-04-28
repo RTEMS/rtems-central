@@ -10,6 +10,8 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/scheduler-edf-smp
 - role: appl-config-group-member
   uid: group-schedgeneral
 name: CONFIGURE_SCHEDULER_EDF_SMP
@@ -26,5 +28,4 @@ notes: |
   This scheduler algorithm is the default in SMP configurations if
   ${max-processors:/name} is
   greater than one.
-text: ''
 type: interface

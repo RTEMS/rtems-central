@@ -10,9 +10,10 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/filesystem-jffs2
 - role: appl-config-group-member
   uid: group-filesystem
 name: CONFIGURE_FILESYSTEM_JFFS2
 notes: null
-text: ''
 type: interface

@@ -23,9 +23,10 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
+- role: requirement-refinement
+  uid: ../req/filesystem-all
 - role: appl-config-group-member
   uid: group-filesystem
 name: CONFIGURE_FILESYSTEM_ALL
 notes: null
-text: ''
 type: interface
