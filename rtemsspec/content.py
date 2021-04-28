@@ -260,7 +260,6 @@ class Content:
             wrapper = textwrap.TextWrapper()
             wrapper.break_long_words = False
             wrapper.break_on_hyphens = False
-            wrapper.initial_indent = initial_indent
             wrapper.width = 79 - len(self._indent)
             gap = []  # type: List[str]
             blocks = collections.deque(text.split("\n\n"))
@@ -279,6 +278,10 @@ class Content:
                     continue
                 else:
                     wrapper.subsequent_indent = subsequent_indent
+                if gap:
+                    wrapper.initial_indent = subsequent_indent
+                else:
+                    wrapper.initial_indent = initial_indent
                 self._lines.extend(gap)
                 self._lines.extend(
                     _indent(wrapper.wrap(block), self._indent,
