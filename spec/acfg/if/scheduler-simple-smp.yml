@@ -6,7 +6,6 @@ description: |
   In case this configuration option is defined, then
   ${.:/document-reference/scheduler-smp-priority-simple}
   algorithm is made available to the application.
-  application.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option
