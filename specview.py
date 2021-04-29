@@ -43,8 +43,15 @@ _CHILD_ROLES = [
 _PARENT_ROLES = ["interface-enumerator", "interface-placement"]
 
 
+def _view_interface_placment(item: Item, level: int) -> None:
+    for child in item.children("interface-placement"):
+        print(f"{'  ' * level}{child.uid}")
+        _view_interface_placment(child, level + 1)
+
+
 def _view(item: Item, level: int) -> None:
     print(f"{'  ' * level}{item.uid}")
+    _view_interface_placment(item, level + 1)
     for child in item.children(_CHILD_ROLES):
         _view(child, level + 1)
 
@@ -65,8 +72,15 @@ def _no_validation(item: Item, path: List[str]) -> List[str]:
     return path_2[:-1]
 
 
+def _gather_interface_placement(item: Item, spec: Set) -> None:
+    for child in item.children("interface-placement"):
+        spec.add(child)
+        _gather_interface_placement(child, spec)
+
+
 def _gather(item: Item, spec: Set) -> None:
     spec.add(item)
+    _gather_interface_placement(item, spec)
     for child in item.children(_CHILD_ROLES):
         _gather(child, spec)
     for parent in item.parents(_PARENT_ROLES):
