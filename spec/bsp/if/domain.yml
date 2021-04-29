@@ -6,6 +6,8 @@ description: |
 enabled-by: true
 index-entries: []
 interface-type: domain
-links: []
+links:
+- role: requirement-refinement
+  uid: /req/domains
 name: BSP
 type: interface
