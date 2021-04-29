@@ -3,7 +3,7 @@ appl-config-option-type: feature-enable
 copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
-  In case this configuration option is defined, then
+  In case this configuration option is defined, then the
   ${.:/document-reference/scheduler-smp-edf}
   algorithm is made available to the application.
 enabled-by: true

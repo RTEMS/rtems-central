@@ -3,8 +3,8 @@ appl-config-option-type: feature-enable
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: |
-  In case this configuration option is defined, then Strong APA algorithm is
-  made available to the application.
+  In case this configuration option is defined, then the Strong APA algorithm
+  is made available to the application.
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option
