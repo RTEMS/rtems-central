@@ -2,9 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-links: []
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
 rationale: null
-scope: user
 text: |
   When a local semaphore is accessed and the request can be immediately
   satisfied, the directive may be called from within device driver

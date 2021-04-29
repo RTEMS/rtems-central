@@ -2,9 +2,10 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-links: []
+links:
+- role: requirement-refinement
+  uid: /req/usage-constraints
 rationale: null
-scope: user
 text: |
   Where the ${/glossary/target-arch:/term} enabled robust thread dispatching,
   or the system was built with SMP support enabled and inter-processor

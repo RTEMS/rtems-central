@@ -19,10 +19,6 @@ spec-info:
           If the value is present, then it shall state the rationale or
           justification of the constraint.
         spec-type: optional-str
-      scope:
-        description: |
-          It shall be the scope of the constraint.
-        spec-type: str
       text:
         description: |
           It shall state the constraint.
