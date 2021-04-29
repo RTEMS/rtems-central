@@ -7,7 +7,7 @@ test-brief: |
   This general purpose performance test suite provides enough resources to run
   basic performance tests for all specified managers and functions.
 test-code: |
-  const char rtems_test_name[] = "Performance0";
+  const char rtems_test_name[] = "${.:/test-suite-name}";
 
   #include "ts-default.h"
 test-description: |
@@ -16,5 +16,6 @@ test-description: |
 test-includes:
 - rtems/test-info.h
 test-local-includes: []
+test-suite-name: Performance0
 test-target: testsuites/validation/ts-performance-0.c
 type: test-suite

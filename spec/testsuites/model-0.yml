@@ -8,7 +8,7 @@ test-brief: |
   for all specified managers and functions.  It is intended for model based
   testing.
 test-code: |
-  const char rtems_test_name[] = "Model0";
+  const char rtems_test_name[] = "${.:/test-suite-name}";
 
   #define CONFIGURE_MAXIMUM_PROCESSORS 4
 
@@ -18,5 +18,6 @@ test-description: |
   scheduler are provided using up to four processors.
 test-includes: []
 test-local-includes: []
+test-suite-name: Model0
 test-target: testsuites/validation/ts-model-0.c
 type: test-suite

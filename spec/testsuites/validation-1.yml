@@ -8,7 +8,7 @@ test-brief: |
   basic tests for all specified managers and functions in a configuration with
   exactly one processor.
 test-code: |
-  const char rtems_test_name[] = "Validation1";
+  const char rtems_test_name[] = "${.:/test-suite-name}";
 
   #define CONFIGURE_MAXIMUM_PROCESSORS 1
 
@@ -16,5 +16,6 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes: []
+test-suite-name: Validation1
 test-target: testsuites/validation/ts-validation-1.c
 type: test-suite

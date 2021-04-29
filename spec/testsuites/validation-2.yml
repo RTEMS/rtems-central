@@ -8,7 +8,7 @@ test-brief: |
   basic tests without a ${/glossary/clock-driver:/term} for all specified
   managers and functions.
 test-code: |
-  const char rtems_test_name[] = "Validation2";
+  const char rtems_test_name[] = "${.:/test-suite-name}";
 
   #define CONFIGURE_MAXIMUM_PROCESSORS 4
 
@@ -20,5 +20,6 @@ test-description: |
   scheduler are provided using up to four processors.
 test-includes: []
 test-local-includes: []
+test-suite-name: Validation2
 test-target: testsuites/validation/ts-validation-2.c
 type: test-suite

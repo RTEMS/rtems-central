@@ -32,6 +32,7 @@ import sys
 import textwrap
 from typing import NamedTuple, List, Optional
 
+from rtemsspec.content import to_camel_case
 from rtemsspec.items import ItemCache
 from rtemsspec.membench import generate
 from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
@@ -487,6 +488,7 @@ type: requirement
 """)
         val_spec = f"spec/{test.path}/val/mem-{test.name}.yml"
         brief = _text(f"{_TEST} {test.topic}.")
+        test_suite_name = to_camel_case(f"Mem {test.name}")
         with open(val_spec, "w") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
@@ -514,6 +516,7 @@ test-description: {_block(test.desc)}
 test-includes:
 - rtems.h
 test-local-includes: []
+test-suite-name: {test_suite_name}
 test-target: {source}
 type: test-suite
 """)
