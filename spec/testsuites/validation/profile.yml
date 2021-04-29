@@ -2,7 +2,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-links: []
+links:
+- role: requirement-refinement
+  uid: /req/test-suites
 test-brief: |
   This test suite contains test cases which call in combination all functions
   included in the space profile.
