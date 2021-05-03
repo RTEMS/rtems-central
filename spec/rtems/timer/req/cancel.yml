@@ -29,19 +29,18 @@ post-conditions:
     test-code: |
       T_eq_int( class, TIMER_DORMANT );
     text: |
-      The timer shall have never been scheduled.
+      The timer shall have never been ${../glossary/scheduled:/term}.
+      See also ${../glossary/none:/term}.
   - name: Interrupt
     test-code: |
       T_eq_int( class & TIMER_CLASS_BIT_ON_TASK, 0 );
     text: |
-      The timer context shall be: "at the last time scheduled
-      in interrupt context".
+      The timer shall be in ${../glossary/interruptcontext:/term}.
   - name: Server
     test-code: |
       T_eq_int( class & TIMER_CLASS_BIT_ON_TASK, TIMER_CLASS_BIT_ON_TASK );
     text: |
-      The timer context shall be: "at the last time scheduled
-      in timer server task context".
+      The timer shall be in ${../glossary/servercontext:/term}.
   - name: Nop
     test-code: |
       T_eq_int( class, ctx->pre_class );
@@ -49,6 +48,7 @@ post-conditions:
       Objects referenced by the ${../if/cancel:/params[0]/name}
       parameter in past call to ${../if/cancel:/name} shall not be
       accessed by the ${../if/cancel:/name} call.
+      See also ${../glossary/nop:/term}.
   test-epilogue: null
   test-prologue: |
       Timer_Classes class;
@@ -59,13 +59,12 @@ post-conditions:
     test-code: |
       T_eq_int( class, TIMER_DORMANT );
     text: |
-      The timer shall have never been scheduled.
+      The timer shall have never been ${../glossary/scheduled:/term}.
   - name: Ticks
     test-code: |
       T_eq_int( class & TIMER_CLASS_BIT_TIME_OF_DAY, 0 );
     text: |
-      The timer clock-state shall be: "at the last time scheduled using the
-      ${/glossary/clock-tick:/term} based clock".
+      The timer shall use the ${../glossary/ticksbasedclock:/term}.
   - name: Realtime
     test-code: |
       T_eq_int(
@@ -73,8 +72,7 @@ post-conditions:
         TIMER_CLASS_BIT_TIME_OF_DAY
       );
     text: |
-      The timer clock-state shall be: "at the last time scheduled using the
-      ${/glossary/clock-realtime:/term}".
+      The timer shall use the ${../glossary/realtimeclock:/term}.
   - name: Nop
     test-code: |
       T_eq_int( class, ctx->pre_class );
@@ -94,8 +92,8 @@ post-conditions:
       TriggerTimer();
       T_eq_int( ctx->invocations, 0 );
     text: |
-      The timer service routine shall neither be executed by
-      ${../if/cancel:/name} nor be executed until the timer is scheduled again.
+      The timer shall be in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
   - name: Nop
     test-code: |
       T_eq_int( ctx->post_state, ctx->pre_state );
@@ -126,20 +124,19 @@ pre-conditions:
     test-code: |
       ctx->pre_cond_contex = PRE_NONE;
     text: |
-      While the timer service routine has never been
-      scheduled since creation.
+      While the ${../glossary/timerserviceroutine:/term} has never been
+      ${../glossary/scheduled:/term} since creation of the timer.
+      See also ${../glossary/none:/term}.
   - name: Interrupt
     test-code: |
       ctx->pre_cond_contex = PRE_INTERRUPT;
     text: |
-      While the timer service routine was at the last time executed or is
-      scheduled to be executed in interrupt context.
+      While the timer is in ${../glossary/interruptcontext:/term}.
   - name: Server
     test-code: |
       ctx->pre_cond_contex = PRE_SERVER;
     text: |
-      While the timer service routine was at the last time executed or is
-      scheduled to be executed in timer server task context.
+      While the timer is in ${../glossary/servercontext:/term}.
   test-epilogue: null
   test-prologue: null
 - name: Clock
@@ -148,7 +145,8 @@ pre-conditions:
     test-code: |
       T_eq_int( ctx->pre_cond_contex, PRE_NONE );
     text: |
-      While the timer has never been scheduled since creation.
+      While the timer has never been ${../glossary/scheduled:/term}
+      since creation of the timer.
   - name: Ticks
     test-code: |
       rtems_status_code status;
@@ -170,32 +168,32 @@ pre-conditions:
       }
       T_rsc_success( status );
     text: |
-      While the timer has at the last time been scheduled before using the
-      ${/glossary/clock-tick:/term} based clock.
+      While the ${../glossary/clock:/term} used to determine when the timer
+      will ${../glossary/fire:/term} is the
+      ${../glossary/ticksbasedclock:/term}.
   - name: Realtime
     test-code: |
       rtems_status_code status;
-      rtems_time_of_day tod_schedule_not_const = tod_schedule;
 
       if ( ctx->pre_cond_contex == PRE_INTERRUPT ) {
         status = rtems_timer_fire_when(
           ctx->timer_id,
-          &tod_schedule_not_const,
+          &tod_schedule,
           TimerServiceRoutine,
           ctx
         );
       } else {
         status = rtems_timer_server_fire_when(
           ctx->timer_id,
-          &tod_schedule_not_const,
+          &tod_schedule,
           TimerServiceRoutine,
           ctx
         );
       }
       T_rsc_success( status );
     text: |
-      While the timer has at the last time been scheduled before using the
-      ${/glossary/clock-realtime:/term}.
+      While the ${../glossary/clock:/term} used to determine when the timer
+      will ${../glossary/fire:/term} is the ${../glossary/realtimeclock:/term}.
   test-epilogue: null
   test-prologue: null
 - name: State
@@ -210,13 +208,15 @@ pre-conditions:
       ctx->invocations = 0;
       ctx->pre_state = TIMER_INACTIVE;
     text: |
-      While the timer is not scheduled.
+      While the timer is in ${../glossary/inactive:/term}
+      ${../glossary/state:/term}.
   - name: Scheduled
     test-code: |
       /* The timer was already scheduled in the "Clock" pre-conditions. */
       ctx->pre_state = TIMER_SCHEDULED;
     text: |
-      While the timer is scheduled.
+      While the timer is in ${../glossary/scheduled:/term}
+      ${../glossary/state:/term}.
   - name: Pending
     test-code: |
       T_rsc_success( rtems_task_suspend( GetTimerServerTaskId() ) );
@@ -224,41 +224,17 @@ pre-conditions:
       T_eq_int( ctx->invocations, 0 );
       ctx->pre_state = TIMER_PENDING;
     text: |
-      While the timer is scheduled and the specified point in time
-      has been reached without the timer service routine execution
-      has been started yet.
+      While the timer is in ${../glossary/pending:/term}
+      ${../glossary/state:/term}.
   test-epilogue: null
   test-prologue: null
-rationale: |
-  Pending
-    The timers using the server directives have a third state *Pending*.
-    Timer in state Pending have reached the time at which they are scheduled
-    but the timer service routine has not been invoked yet (for example
-    because other tasks with higher priority are active).
-
-  None
-    Newly created timers have no context or clock associated until they are
-    used in one of the directives ${../if/fire-after:/name},
-    ${../if/fire-when:/name}, ${../if/server-fire-after:/name} or
-    ${../if/server-fire-when:/name}.
-
-  The table below lists the directives which schedule a single timer service
-  routine.  The table states the context in which the timer service routine
-  will be invoked and the clock which is used to trigger the execution.
-
-  ================================ ================= =================================
-  Directive                        Execution Context Clock Used
-  ================================ ================= =================================
-  ${../if/fire-after:/name}        Interrupt         ${/glossary/clock-tick:/term}
-  ${../if/fire-when:/name}         Interrupt         ${/glossary/clock-realtime:/term}
-  ${../if/server-fire-after:/name} Server task       ${/glossary/clock-tick:/term}
-  ${../if/server-fire-when:/name}  Server task       ${/glossary/clock-realtime:/term}
-  ================================ ================= =================================
+rationale: null
 references: []
 requirement-type: functional
 skip-reasons:
   NotExist: |
-    The pre-condition combination of Context, Clock and State cannot be
+    The pre-condition combination of ${../glossary/context:/term},
+    ${../glossary/clock:/term} and ${../glossary/state:/term} cannot be
     produced and does therefore not exist.
 test-action: |
   ctx->pre_class = GetTimerClass( ctx->timer_id );
@@ -288,30 +264,34 @@ test-context:
     rtems_status_code status
 - brief: |
     This member contains the counter for invocations of the
-    timer service routine.
+    ${../glossary/timerserviceroutine:/term}.
   description: null
   member: |
     int invocations
 - brief: |
-    This member specifies which pre-condition context
-    (none, interrupt, server) must be created before the cancel action
-    gets executed.
+    This member specifies which pre-condition ${../glossary/context:/term}
+    (${../glossary/none:/term}, ${../glossary/interruptcontext:/term},
+    ${../glossary/servercontext:/term}) must be created before the cancel
+    action gets executed.
   description: null
   member: |
     PreConditionContext pre_cond_contex
 - brief: |
-    This member stores internal clock and context settings of the timer before
-    the execution of the action.
+    This member stores ${/glossary/rtems:/term} internal
+    ${../glossary/clock:/term} and ${../glossary/context:/term} settings
+    of the timer before the execution of the test action.
   description: null
   member: |
     Timer_Classes pre_class
 - brief: |
-    This member stores the state of the timer before the execution of the action.
+    This member stores the ${../glossary/state:/term} of the timer before
+    the execution of the test action.
   description: null
   member: |
     Timer_States pre_state
 - brief: |
-    This member stores the state of the timer after the execution of the action.
+    This member stores the ${../glossary/state:/term} of the timer after
+    the execution of the test action.
   description: null
   member: |
     Timer_States post_state
