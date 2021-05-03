@@ -1,0 +1,72 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This structure defines the ${.:/register-block-group} register block memory
+  map.
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: Irqamp
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-placement
+  uid: h
+- name: ITSTMP
+  role: register-block-include
+  uid: irqamp-timestamp
+definition:
+- default:
+    count: 1
+    name: ILEVEL:FOOBAR
+  offset: 0x0
+  variants: []
+- default:
+    count: 1
+    name: ILEVEL:FOOBAR
+  offset: 0x4
+  variants:
+  - definition:
+      count: 4
+      name: IPEND8
+    enabled-by: defined(RTEMS_SMP)
+- default:
+    count: 4
+    name: IPEND8
+  offset: 0x9
+  variants: []
+- default:
+    count: 16
+    name: ITSTMP
+  offset: 0x100
+  variants: []
+register-prefix: null
+register-block-group: IRQ(A)MP
+register-block-size: 1024
+register-block-type: memory
+registers:
+- bits:
+  - default:
+    - access: [r, w]
+      brief: null
+      description: null
+      name: 'IL_15_1'
+      start: 1
+      width: 15
+    variants: []
+  brief: |
+    Interrupt level register
+  description: null
+  name: ILEVEL
+  width: 32
+- bits:
+  - default: []
+    variants: []
+  brief: |
+    Interrupt pending register
+  description: null
+  name: IPEND8
+  width: 8
+name: irqamp
+notes: null
+type: interface

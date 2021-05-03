@@ -61,7 +61,7 @@ def test_interface(tmpdir):
  */
 
 /*
- * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -241,6 +241,196 @@ void Function(
 
 /* Generated from spec:/func6 */
 void Function6( int Param0 );
+
+/* Generated from spec:/irqamp-timestamp */
+
+/**
+ * @defgroup IrqampTimestamp IRQ(A)MP Timestamp
+ *
+ * @brief This group contains the IRQ(A)MP Timestamp interfaces.
+ *
+ * @{
+ */
+
+/**
+ * @defgroup IrqampTimestampITCNT ITCNT
+ *
+ * @brief Interrupt timestamp counter n register
+ *
+ * @{
+ */
+
+#define IRQAMP_ITCNT_TCNT_SHIFT 0
+#define IRQAMP_ITCNT_TCNT_MASK 0xffffffffU
+#define IRQAMP_ITCNT_TCNT_GET( _reg ) \\
+  ( ( ( _reg ) >> 0 ) & 0xffffffffU )
+#define IRQAMP_ITCNT_TCNT( _val ) ( ( _val ) << 0 )
+
+/** @} */
+
+/**
+ * @defgroup IrqampTimestampITSTMPC ITSTMPC
+ *
+ * @brief Interrupt timestamp n control register
+ *
+ * @{
+ */
+
+#define IRQAMP_ITSTMPC_TSTAMP_SHIFT 27
+#define IRQAMP_ITSTMPC_TSTAMP_MASK 0xf8000000U
+#define IRQAMP_ITSTMPC_TSTAMP_GET( _reg ) \\
+  ( ( ( _reg ) >> 27 ) & 0x1fU )
+#define IRQAMP_ITSTMPC_TSTAMP( _val ) ( ( _val ) << 27 )
+
+#define IRQAMP_ITSTMPC_S1 0x4000000U
+
+#define IRQAMP_ITSTMPC_S2 0x2000000U
+
+#define IRQAMP_ITSTMPC_KS 0x20U
+
+#define IRQAMP_ITSTMPC_TSISEL_SHIFT 0
+#define IRQAMP_ITSTMPC_TSISEL_MASK 0x1fU
+#define IRQAMP_ITSTMPC_TSISEL_GET( _reg ) \\
+  ( ( ( _reg ) >> 0 ) & 0x1fU )
+#define IRQAMP_ITSTMPC_TSISEL( _val ) ( ( _val ) << 0 )
+
+/** @} */
+
+/**
+ * @defgroup IrqampTimestampITSTMPAS ITSTMPAS
+ *
+ * @brief Interrupt Assertion Timestamp n register
+ *
+ * @{
+ */
+
+#define IRQAMP_ITSTMPAS_TASSERTION_SHIFT 0
+#define IRQAMP_ITSTMPAS_TASSERTION_MASK 0xffffffffU
+#define IRQAMP_ITSTMPAS_TASSERTION_GET( _reg ) \\
+  ( ( ( _reg ) >> 0 ) & 0xffffffffU )
+#define IRQAMP_ITSTMPAS_TASSERTION( _val ) ( ( _val ) << 0 )
+
+/** @} */
+
+/**
+ * @defgroup IrqampTimestampITSTMPAC ITSTMPAC
+ *
+ * @brief Interrupt Acknowledge Timestamp n register
+ *
+ * @{
+ */
+
+#define IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT 0
+#define IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK 0xffffffffU
+#define IRQAMP_ITSTMPAC_TACKNOWLEDGE_GET( _reg ) \\
+  ( ( ( _reg ) >> 0 ) & 0xffffffffU )
+#define IRQAMP_ITSTMPAC_TACKNOWLEDGE( _val ) ( ( _val ) << 0 )
+
+/** @} */
+
+/**
+ * @brief This structure defines the IRQ(A)MP Timestamp register block memory
+ *   map.
+ */
+typedef struct irqamp_timestamp {
+  /**
+   * @brief See @ref IrqampTimestampITCNT.
+   */
+  uint32_t itcnt;
+
+  /**
+   * @brief See @ref IrqampTimestampITSTMPC.
+   */
+  uint32_t itstmpc;
+
+  /**
+   * @brief See @ref IrqampTimestampITSTMPAS.
+   */
+  uint32_t itstmpas;
+
+  /**
+   * @brief See @ref IrqampTimestampITSTMPAC.
+   */
+  uint32_t itstmpac;
+} irqamp_timestamp;
+
+/** @} */
+
+/* Generated from spec:/irqamp */
+
+/**
+ * @defgroup Irqamp IRQ(A)MP
+ *
+ * @brief This group contains the IRQ(A)MP interfaces.
+ *
+ * @{
+ */
+
+/**
+ * @defgroup IrqampILEVEL ILEVEL
+ *
+ * @brief Interrupt level register
+ *
+ * @{
+ */
+
+#define IRQAMP_ILEVEL_IL_15_1_SHIFT 1
+#define IRQAMP_ILEVEL_IL_15_1_MASK 0xfffeU
+#define IRQAMP_ILEVEL_IL_15_1_GET( _reg ) \\
+  ( ( ( _reg ) >> 1 ) & 0x7fffU )
+#define IRQAMP_ILEVEL_IL_15_1( _val ) ( ( _val ) << 1 )
+
+/** @} */
+
+/**
+ * @defgroup IrqampIPEND8 IPEND8
+ *
+ * @brief Interrupt pending register
+ *
+ * @{
+ */
+
+/** @} */
+
+/**
+ * @brief This structure defines the IRQ(A)MP register block memory map.
+ */
+typedef struct irqamp {
+  /**
+   * @brief See @ref IrqampILEVEL.
+   */
+  uint32_t foobar_0;
+
+  #if defined(RTEMS_SMP)
+    /**
+     * @brief See @ref IrqampIPEND8.
+     */
+    uint8_t ipend8_0[ 4 ];
+  #else
+    /**
+     * @brief See @ref IrqampILEVEL.
+     */
+    uint32_t foobar_1;
+  #endif
+
+  uint8_t reserved_8_9;
+
+  /**
+   * @brief See @ref IrqampIPEND8.
+   */
+  uint8_t ipend8_1[ 4 ];
+
+  uint8_t reserved_d_100[ 243 ];
+
+  /**
+   * @brief See @ref IrqampTimestamp.
+   */
+  irqamp_timestamp itstmp[ 16 ];
+
+  uint32_t reserved_200_400[ 128 ];
+} irqamp;
+
+/** @} */
 
 /* Generated from spec:/macro */
 

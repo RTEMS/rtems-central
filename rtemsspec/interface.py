@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides functions for the generation of interfaces. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -24,13 +24,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import collections
 from contextlib import contextmanager
+import functools
+import itertools
 import os
-from typing import Any, Callable, Dict, Iterator, List, Optional, Union, Set
+from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Optional, \
+    Union, Set, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
-    get_value_doxygen_group, get_value_hash, get_value_params, get_value_plural
+    get_value_doxygen_group, get_value_hash, get_value_params, \
+    get_value_plural, to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, \
     ItemGetValueMap, ItemMapper
 
@@ -182,6 +187,35 @@ def _add_definition(node: "Node", item: Item, prefix: str,
     return content
 
 
+class _RegisterMemberContext(NamedTuple):
+    sizes: Dict[int, int]
+    regs: Dict[str, Any]
+    reg_counts: Dict[str, int]
+    reg_indices: Dict[str, int]
+
+
+def _add_register_padding(content: CContent, new_offset: int, old_offset: int,
+                          default_padding: int) -> None:
+    delta = new_offset - old_offset
+    if delta > 0:
+        padding = default_padding
+        while delta % padding != 0:
+            padding //= 2
+        count = delta // padding
+        array = f"[ {count} ]" if count > 1 else ""
+        content.add(f"uint{padding * 8}_t "
+                    f"reserved_{old_offset:x}_{new_offset:x}{array};")
+
+
+def _get_register_name(definition: Dict[str, Any]) -> Tuple[str, str]:
+    name = definition["name"]
+    try:
+        name, alias = name.split(":")
+    except ValueError:
+        alias = name
+    return name, alias
+
+
 class Node:
     """ Nodes of a header file. """
 
@@ -297,6 +331,105 @@ class Node:
         """ Generates a macro. """
         self._add_generic_definition(Node._get_macro_definition)
 
+    def _add_register_bits(self, group: str) -> _RegisterMemberContext:
+        ctx = _RegisterMemberContext({}, {}, collections.defaultdict(int),
+                                     collections.defaultdict(int))
+        for index, register in enumerate(self.item["registers"]):
+            name = register["name"]
+            group_ident = group + to_camel_case(name)
+            ctx.regs[name] = {}
+            width = register["width"]
+            assert width in [8, 16, 32, 64]
+            ctx.regs[name]["size"] = width // 8
+            ctx.regs[name]["type"] = f"uint{width}_t"
+            ctx.regs[name]["group"] = group_ident
+            with self.content.defgroup_block(group_ident, name):
+                self.content.add_brief_description(
+                    self.substitute_text(register["brief"]))
+                self.content.doxyfy(
+                    self.substitute_text(register["description"]))
+                self.content.add("@{")
+            for index_2, bits in enumerate(register["bits"]):
+                self.content.add(
+                    _add_definition(
+                        self, self.item, f"registers[{index}]/bits[{index_2}]",
+                        bits,
+                        functools.partial(Node._get_register_bits_definition,
+                                          reg_name=name)))
+            self.content.close_add_to_group()
+        return ctx
+
+    def _add_register_block_includes(self,
+                                     ctx: _RegisterMemberContext) -> None:
+        for link in self.item.links_to_parents("register-block-include"):
+            name = link["name"]
+            ctx.regs[name] = {}
+            ctx.regs[name]["size"] = link.item["register-block-size"]
+            ctx.regs[name]["type"] = link.item["name"]
+            ctx.regs[name]["group"] = link.item["identifier"]
+
+    def _get_register_member_info(self, ctx: _RegisterMemberContext) -> None:
+        offset = -1
+        for index, member in enumerate(self.item["definition"]):
+            assert member["offset"] > offset
+            offset = member["offset"]
+            default = [member["default"]] if member["default"] else []
+            for index_2, definition in enumerate(
+                    itertools.chain(default,
+                                    (variant["definition"]
+                                     for variant in member["variants"]))):
+                name, alias = _get_register_name(definition)
+                assert name.lower() != "reserved"
+                count = definition["count"]
+                if index_2 == 0:
+                    ctx.sizes[index] = ctx.regs[name]["size"] * count
+                else:
+                    assert ctx.sizes[index] == ctx.regs[name]["size"] * count
+                ctx.reg_counts[alias] += 1
+
+    def _add_register_members(self, ctx: _RegisterMemberContext) -> None:
+        default_padding = min(ctx.sizes.values())
+        with self.content.doxygen_block():
+            self.content.add_brief_description(
+                self.substitute_text(self.item["brief"]))
+            self.content.doxyfy(self.substitute_text(self.item["description"]))
+        self.content.append(f"typedef struct {self.item['name']} {{")
+        offset = 0
+        with self.content.indent():
+            for index, member in enumerate(self.item["definition"]):
+                member_offset = member["offset"]
+                _add_register_padding(self.content, member_offset, offset,
+                                      default_padding)
+                self.content.add(
+                    _add_definition(
+                        self, self.item, f"definition[{index}]", member,
+                        functools.partial(Node._get_register_member_definition,
+                                          ctx=ctx)))
+                offset = member_offset + ctx.sizes[index]
+            size = self.item["register-block-size"]
+            assert offset <= size
+            _add_register_padding(self.content, size, offset, default_padding)
+        self.content.add(f"}} {self.item['name']};")
+
+    def generate_register_block(self) -> None:
+        """ Generates a register block. """
+        self.header_file.add_includes(self.item.map("/c/if/uint32_t"))
+        for parent in self.item.parents("register-block-include"):
+            self.header_file.add_includes(parent)
+            self.header_file.add_dependency(self, parent)
+        group = self.item["identifier"]
+        name = self.item["register-block-group"]
+        with self.content.defgroup_block(group, name):
+            self.content.add_ingroup(_get_group_identifiers(self.ingroups))
+            self.content.add_brief_description(
+                f"This group contains the {name} interfaces.")
+            self.content.add("@{")
+        ctx = self._add_register_bits(group)
+        self._add_register_block_includes(ctx)
+        self._get_register_member_info(ctx)
+        self._add_register_members(ctx)
+        self.content.close_add_to_group()
+
     def generate_typedef(self) -> None:
         """ Generates a typedef. """
         self._add_generic_definition(Node._get_typedef_definition)
@@ -400,6 +533,54 @@ class Node:
         body += " \\\n  ".join(body_lines)
         return line + body
 
+    def _get_register_bits_definition(self, _item: Item, definition: Any,
+                                      reg_name: str) -> Lines:
+        lines = []  # List[str]
+        prefix = self.item["register-prefix"]
+        if prefix is None:
+            prefix = self.item["name"]
+        prefix = f"{prefix}_{reg_name}_" if prefix else f"{reg_name}_"
+        for index, bit in enumerate(definition):
+            start = bit["start"]
+            width = bit["width"]
+            end = start + width
+            sfx = "ULL" if end > 32 else "U"
+            define = f"#define {prefix.upper()}{bit['name'].upper()}"
+            if index != 0:
+                lines.append("")
+            if width == 1:
+                val = 1 << start
+                lines.append(f"{define} {val:#x}{sfx}")
+            else:
+                mask = ((1 << width) - 1) << start
+                get = (1 << width) - 1
+                lines.extend([
+                    f"{define}_SHIFT {start}", f"{define}_MASK {mask:#x}{sfx}",
+                    f"{define}_GET( _reg ) \\",
+                    f"  ( ( ( _reg ) >> {start} ) & {get:#x}{sfx} )",
+                    f"{define}( _val ) ( ( _val ) << {start} )"
+                ])
+        return lines
+
+    def _get_register_member_definition(self, _item: Item, definition: Any,
+                                        ctx: _RegisterMemberContext) -> Lines:
+        # pylint: disable=no-self-use
+        name, alias = _get_register_name(definition)
+        count = definition["count"]
+        array = f"[ {count} ]" if count > 1 else ""
+        if ctx.reg_counts[alias] > 1:
+            index = ctx.reg_indices[alias]
+            ctx.reg_indices[alias] = index + 1
+            idx = f"_{index}"
+        else:
+            idx = ""
+        content = CContent()
+        with content.doxygen_block():
+            content.add(f"@brief See @ref {ctx.regs[name]['group']}.")
+        content.append(
+            f"{ctx.regs[name]['type']} {alias.lower()}{idx}{array};")
+        return content.lines
+
     def _get_typedef_definition(self, _item: Item, definition: Any) -> Lines:
         return f"typedef {self.substitute_code(definition)};"
 
@@ -450,6 +631,7 @@ _NODE_GENERATORS = {
     "function": Node.generate_function,
     "group": Node.generate_group,
     "macro": Node.generate_macro,
+    "register-block": Node.generate_register_block,
     "struct": Node.generate_compound,
     "typedef": Node.generate_typedef,
     "union": Node.generate_compound,
@@ -585,8 +767,7 @@ class _HeaderFile:
             includes.extend([
                 CInclude(link.item["path"],
                          enabled_by_to_exp(link["enabled-by"], exp_mapper))
-                for link in self._item.links_to_parents()
-                if link.role == "interface-include"
+                for link in self._item.links_to_parents("interface-include")
             ])
             self._content.add_includes(includes)
             with self._content.extern_c():
