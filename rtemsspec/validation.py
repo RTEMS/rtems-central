@@ -664,8 +664,8 @@ def _compact_more(pre_conds: PreCondsOfPostCond) -> PreCondsOfPostCond:
                 if len(diff) <= 1:
                     if diff:
                         index = diff[0]
-                        combined_count += 1
                         first[index].extend(row[index])
+                    combined_count += 1
                     pre_conds.remove(row)
         pre_conds = next_pre_conds
         if combined_count == 0:
