@@ -11,7 +11,7 @@ test-brief: |
 test-code: |
   const char rtems_test_name[] = "${.:/test-suite-name}";
 
-  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+  #define CONFIGURE_MAXIMUM_PROCESSORS 5
 
   #include "ts-default.h"
 test-description: |

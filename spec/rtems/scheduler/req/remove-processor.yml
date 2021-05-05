@@ -1,0 +1,303 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/remove-processor
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: InvNum
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_NUMBER );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/invalid-number:/name}.
+  - name: InUse
+    test-code: |
+      T_rsc( ctx->status, RTEMS_RESOURCE_IN_USE );
+    text: |
+      The return status of ${../if/remove-processor:/name} shall be
+      ${../../status/if/resource-in-use:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Removed
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+      T_eq_int(
+        ctx->scheduler_log.events[ 0 ].operation,
+        T_SCHEDULER_REMOVE_PROCESSOR
+      );
+    text: |
+      The processor specified by the ${../if/remove-processor:/params[1]/name}
+      parameter shall be removed from the scheduler specified by the
+      ${../if/remove-processor:/params[0]/name} by the
+      ${../if/remove-processor:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      No processor shall be removed from a scheduler by the
+      ${../if/remove-processor:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: CPUState
+  states:
+  - name: Idle
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_b_id;
+      ctx->cpu_to_remove = 1;
+    text: |
+      While the processor associated with the
+      ${../if/remove-processor:/params[1]/name} parameter is owned by the
+      scheduler specified by the ${../if/remove-processor:/params[0]/name}
+      parameter, while no task exists which uses the scheduler as its
+      ${/glossary/scheduler-home:/term} and the affinity set of this task would
+      require the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter.
+  - name: InUse
+    test-code: |
+      /* Set by prologue */
+    text: |
+      While the processor associated with the
+      ${../if/remove-processor:/params[1]/name} parameter is owned by the
+      scheduler specified by the ${../if/remove-processor:/params[0]/name}
+      parameter, while the scheduler is used by at least one task as its
+      ${/glossary/scheduler-home:/term} and the affinity set of this task
+      requires the processor specified by the
+      ${../if/remove-processor:/params[1]/name} parameter.
+  - name: NotOwned
+    test-code: |
+      ctx->scheduler_id = ctx->scheduler_a_id;
+      ctx->cpu_to_remove = 1;
+    text: |
+      While the processor associated with the
+      ${../if/remove-processor:/params[1]/name} parameter is not owned by the
+      scheduler specified by the ${../if/remove-processor:/params[0]/name}
+      parameter.
+  test-epilogue: null
+  test-prologue: |
+    ctx->scheduler_id = ctx->scheduler_a_id;
+    ctx->cpu_to_remove = 0;
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/remove-processor:/params[0]/name} parameter is not
+      associated with a scheduler.
+  - name: Scheduler
+    test-code: |
+      ctx->id = ctx->scheduler_id;
+    text: |
+      While the ${../if/remove-processor:/params[0]/name} parameter is
+      associated with a scheduler.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUIndex
+  states:
+  - name: Valid
+    test-code: |
+      ctx->cpu_index = ctx->cpu_to_remove;
+    text: |
+      While the ${../if/remove-processor:/params[1]/name} parameter is less than
+      the configured processor maximum.
+  - name: Invalid
+    test-code: |
+      ctx->cpu_index = rtems_configuration_get_maximum_processors();
+    text: |
+      While the ${../if/remove-processor:/params[1]/name} parameter is greater
+      than or equal to the configured processor maximum.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  OnlyOneCPU: |
+    Where the system is build with SMP support disabled, the system has exactly
+    one processor and there is no processor available to remove from a
+    scheduler.
+test-action: |
+  T_scheduler_log *log;
+
+  log = T_scheduler_record_2( &ctx->scheduler_log );
+  T_null( log );
+
+  ctx->status = rtems_scheduler_remove_processor( ctx->id, ctx->cpu_index );
+
+  log = T_scheduler_record( NULL );
+  T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+test-brief: null
+test-cleanup: |
+  #if defined(RTEMS_SMP)
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_add_processor(
+      ctx->scheduler_id,
+      ctx->cpu_to_remove
+    );
+    T_rsc_success( sc );
+  }
+  #endif
+test-context:
+- brief: |
+    This member specifies the scheduler used to add the processor.
+  description: null
+  member: |
+    rtems_id scheduler_id
+- brief: |
+    This member contains the identifier of scheduler A.
+  description: null
+  member: |
+    rtems_id scheduler_a_id
+- brief: |
+    This member contains the identifier of scheduler B.
+  description: null
+  member: |
+    rtems_id scheduler_b_id
+- brief: |
+    This member specifies the processor to remove.
+  description: null
+  member: |
+    uint32_t cpu_to_remove
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_2 scheduler_log;
+- brief: |
+    This member contains the return value of the
+    ${../if/remove-processor:/name} call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/remove-processor:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/remove-processor:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    uint32_t cpu_index
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-prepare: null
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_scheduler_ident(
+      TEST_SCHEDULER_A_NAME,
+      &ctx->scheduler_a_id
+    );
+    T_rsc_success( sc );
+
+    #if defined(RTEMS_SMP)
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &ctx->scheduler_b_id );
+    T_rsc_success( sc );
+    #else
+    ctx->scheduler_b_id = INVALID_ID;
+    #endif
+  description: null
+test-stop: null
+test-support: |
+  #define INVALID_ID 0xffffffff
+test-target: testsuites/validation/tc-scheduler-remove-processor.c
+test-teardown: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Removed: Nop
+  pre-conditions:
+    CPUState: N/A
+    Id:
+    - Invalid
+    CPUIndex: all
+- enabled-by: true
+  post-conditions:
+    Status: InvNum
+    Removed: Nop
+  pre-conditions:
+    CPUState: N/A
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Invalid
+- enabled-by: true
+  post-conditions:
+    Status: InUse
+    Removed: Nop
+  pre-conditions:
+    CPUState:
+    - InUse
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+- enabled-by: true
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    CPUState:
+    - Idle
+    - NotOwned
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: Ok
+    Removed: 'Yes'
+  pre-conditions:
+    CPUState:
+    - Idle
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status: InvNum
+    Removed: Nop
+  pre-conditions:
+    CPUState:
+    - NotOwned
+    Id:
+    - Scheduler
+    CPUIndex:
+    - Valid
+type: requirement
