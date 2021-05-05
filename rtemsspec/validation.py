@@ -632,8 +632,6 @@ def _compact(pre_conds: PreCondsOfPostCond) -> PreCondsOfPostCond:
         combined_pre_conds = [last]
         combined_count = 0
         for row in pre_conds[1:]:
-            if row == last:
-                continue
             diff = [
                 index for index, states in enumerate(last)
                 if states != row[index]
@@ -663,10 +661,11 @@ def _compact_more(pre_conds: PreCondsOfPostCond) -> PreCondsOfPostCond:
                     index for index, states in enumerate(first)
                     if states != row[index]
                 ]
-                if len(diff) == 1:
-                    index = diff[0]
-                    combined_count += 1
-                    first[index].extend(row[index])
+                if len(diff) <= 1:
+                    if diff:
+                        index = diff[0]
+                        combined_count += 1
+                        first[index].extend(row[index])
                     pre_conds.remove(row)
         pre_conds = next_pre_conds
         if combined_count == 0:
