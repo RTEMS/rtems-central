@@ -689,7 +689,6 @@ static inline Directive_Entry Directive_GetEntry( size_t index )
 T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 {
   Directive_Context *ctx;
-  Directive_Entry entry;
   size_t index;
 
   ctx = T_fixture_context();
@@ -701,44 +700,20 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
     ctx->pcs[ 0 ] < Directive_Pre_Name_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = Directive_GetEntry( index );
-
-    if ( entry.Pre_Name_NA ) {
-      ctx->pcs[ 0 ] = Directive_Pre_Name_NA;
-      index += ( Directive_Pre_Name_NA - 1 )
-        * Directive_Pre_Node_NA
-        * Directive_Pre_Id_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = Directive_Pre_Node_Local;
       ctx->pcs[ 1 ] < Directive_Pre_Node_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = Directive_GetEntry( index );
-
-      if ( entry.Pre_Node_NA ) {
-        ctx->pcs[ 1 ] = Directive_Pre_Node_NA;
-        index += ( Directive_Pre_Node_NA - 1 )
-          * Directive_Pre_Id_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = Directive_Pre_Id_NullPtr;
         ctx->pcs[ 2 ] < Directive_Pre_Id_NA;
         ++ctx->pcs[ 2 ]
       ) {
+        Directive_Entry entry;
+
         entry = Directive_GetEntry( index );
-
-        if ( entry.Pre_Id_NA ) {
-          ctx->pcs[ 2 ] = Directive_Pre_Id_NA;
-          index += ( Directive_Pre_Id_NA - 1 );
-        }
-
-        if ( entry.Skip ) {
-          ++index;
-          continue;
-        }
+        ++index;
 
         Directive_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
         Directive_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
@@ -746,7 +721,6 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
         Directive_Action( ctx );
         Directive_Post_Status_Check( ctx, entry.Post_Status );
         Directive_Post_Id_Check( ctx, entry.Post_Id );
-        ++index;
       }
     }
   }
@@ -2226,7 +2200,6 @@ static T_fixture_node Action2_Node;
 void Action2_Run( int *a, int b, int *c )
 {
   Action2_Context *ctx;
-  Action2_Entry entry;
   size_t index;
 
   ctx = &Action2_Instance;
@@ -2243,43 +2216,30 @@ void Action2_Run( int *a, int b, int *c )
     ctx->pcs[ 0 ] < Action2_Pre_A_NA;
     ++ctx->pcs[ 0 ]
   ) {
-    entry = Action2_GetEntry( index );
-
-    if ( entry.Pre_A_NA ) {
-      ctx->pcs[ 0 ] = Action2_Pre_A_NA;
-      index += ( Action2_Pre_A_NA - 1 )
-        * Action2_Pre_B_NA
-        * Action2_Pre_C_NA;
-    }
-
     for (
       ctx->pcs[ 1 ] = Action2_Pre_B_B0;
       ctx->pcs[ 1 ] < Action2_Pre_B_NA;
       ++ctx->pcs[ 1 ]
     ) {
-      entry = Action2_GetEntry( index );
-
-      if ( entry.Pre_B_NA ) {
-        ctx->pcs[ 1 ] = Action2_Pre_B_NA;
-        index += ( Action2_Pre_B_NA - 1 )
-          * Action2_Pre_C_NA;
-      }
-
       for (
         ctx->pcs[ 2 ] = Action2_Pre_C_C0;
         ctx->pcs[ 2 ] < Action2_Pre_C_NA;
         ++ctx->pcs[ 2 ]
       ) {
-        entry = Action2_GetEntry( index );
+        Action2_Entry entry;
+        size_t pcs[ 3 ];
 
-        if ( entry.Pre_C_NA ) {
-          ctx->pcs[ 2 ] = Action2_Pre_C_NA;
-          index += ( Action2_Pre_C_NA - 1 );
-        }
+        entry = Action2_GetEntry( index );
+        ++index;
 
         if ( entry.Skip ) {
-          ++index;
           continue;
+        }
+
+        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
+
+        if ( entry.Pre_A_NA ) {
+          ctx->pcs[ 0 ] = Action2_Pre_A_NA;
         }
 
         Action2_Prepare( ctx );
@@ -2290,7 +2250,7 @@ void Action2_Run( int *a, int b, int *c )
         Action2_Post_A_Check( ctx, entry.Post_A );
         Action2_Post_B_Check( ctx, entry.Post_B );
         Action2_Cleanup( ctx );
-        ++index;
+        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
       }
     }
   }

@@ -681,6 +681,7 @@ class TransitionMap:
         self._item = item
         self._pre_co_count = len(item["pre-conditions"])
         self._post_co_count = len(item["post-conditions"])
+        self.pre_co_summary = tuple(0 for _ in range(self._pre_co_count + 1))
         self._pre_co_idx_st_idx_to_st_name = _to_st_name(
             item["pre-conditions"])
         self._post_co_idx_st_idx_to_st_name = _to_st_name(
@@ -947,6 +948,9 @@ class TransitionMap:
                     f"{self._item.spec} is the first variant for "
                     f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
                     "and it is not enabled by default")
+            self.pre_co_summary = tuple(
+                a + b for a, b in zip(self.pre_co_summary, (variant.skip, ) +
+                                      variant.pre_cond_na))
             transition_map[map_idx].add(variant)
 
     def _add_default(self, transition_map: _TransitionMap, desc: Dict[str,
@@ -1148,8 +1152,24 @@ class _ActionRequirementTestItem(_TestItem):
 
     def _add_loop_body(self, content: CContent,
                        transition_map: TransitionMap) -> None:
-        with content.condition("entry.Skip"):
-            content.append(["++index;", "continue;"])
+        has_pre_co_na = max(transition_map.pre_co_summary[1:])
+        content.add(f"{self.ident}_Entry entry;")
+        if has_pre_co_na:
+            content.append(f"size_t pcs[ {self._pre_co_count} ];")
+        content.call_function("entry =", f"{self.ident}_GetEntry", ["index"])
+        content.append("++index;")
+        if transition_map.pre_co_summary[0]:
+            with content.condition("entry.Skip"):
+                content.append("continue;")
+        if has_pre_co_na:
+            content.call_function(None, "memcpy",
+                                  ["pcs", "ctx->pcs", "sizeof( pcs )"])
+            for index, pre_co in enumerate(self._item["pre-conditions"]):
+                if transition_map.pre_co_summary[index + 1]:
+                    name = pre_co["name"]
+                    with content.condition(f"entry.Pre_{name}_NA"):
+                        enum_na = self._pre_co_idx_to_enum[index][-1]
+                        content.append(f"ctx->pcs[ {index} ] = {enum_na};")
         content.add_blank_line()
         self._add_call(content, "test-prepare", "Prepare")
         for index, enum in enumerate(self._pre_co_idx_to_enum):
@@ -1163,7 +1183,10 @@ class _ActionRequirementTestItem(_TestItem):
                 "ctx", f"entry.{transition_map.get_post_entry_member(index)}"
             ])
         self._add_call(content, "test-cleanup", "Cleanup")
-        content.append("++index;")
+        if has_pre_co_na:
+            content.gap = False
+            content.call_function(None, "memcpy",
+                                  ["ctx->pcs", "pcs", "sizeof( ctx->pcs )"])
 
     def _add_for_loops(self, content: CContent, transition_map: TransitionMap,
                        index: int) -> None:
@@ -1173,17 +1196,6 @@ class _ActionRequirementTestItem(_TestItem):
             end = self._pre_co_idx_to_enum[index][-1]
             with content.for_loop(f"{var} = {begin}", f"{var} < {end}",
                                   f"++{var}"):
-                name = self._item['pre-conditions'][index]["name"]
-                content.call_function("entry =", f"{self.ident}_GetEntry",
-                                      ["index"])
-                with content.condition(f"entry.Pre_{name}_NA"):
-                    content.append(f"{var} = {end};")
-                    content.append(f"index += ( {end} - 1 )")
-                    for index_2 in range(index + 1, self._pre_co_count):
-                        with content.indent():
-                            content.append(
-                                f"* {self._pre_co_idx_to_enum[index_2][-1]}")
-                    content.lines[-1] += ";"
                 self._add_for_loops(content, transition_map, index + 1)
         else:
             self._add_loop_body(content, transition_map)
@@ -1198,7 +1210,6 @@ class _ActionRequirementTestItem(_TestItem):
                 f"return {self.ident}_Entries[",
                 f"  {self.ident}_Map[ index ]", "];"
             ])
-        entry = f"{self.ident}_Entry entry;"
         fixture = f"{self.ident}_Fixture"
         prologue = CContent()
         epilogue = CContent()
@@ -1207,7 +1218,7 @@ class _ActionRequirementTestItem(_TestItem):
             ret = "void"
             name = f"{self.ident}_Run"
             params = self._get_run_params(header)
-            prologue.add([f"{self.context} *ctx;", entry, "size_t index;"])
+            prologue.add([f"{self.context} *ctx;", "size_t index;"])
             self.assign_run_params(prologue, header)
             prologue.call_function("ctx =", "T_push_fixture",
                                    [f"&{self.ident}_Node", f"&{fixture}"])
@@ -1223,7 +1234,7 @@ class _ActionRequirementTestItem(_TestItem):
             name = "T_TEST_CASE_FIXTURE"
             params = [f"{self.ident}", f"&{fixture}"]
             prologue.add([
-                f"{self.context} *ctx;", entry, "size_t index;", "",
+                f"{self.context} *ctx;", "size_t index;", "",
                 "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
                 "index = 0;"
             ])
