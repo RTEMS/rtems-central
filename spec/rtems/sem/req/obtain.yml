@@ -104,12 +104,6 @@ post-conditions:
 pre-conditions:
 - name: Class
   states:
-  - name: MrsP
-    test-code: |
-      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
-        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
-    text: |
-      While the semaphore object is a MrsP semaphore.
   - name: Counting
     test-code: |
       ctx->attribute_set |= RTEMS_COUNTING_SEMAPHORE;
@@ -135,6 +129,12 @@ pre-conditions:
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
     text: |
       While the semaphore object is a priority inheritance semaphore.
+  - name: MrsP
+    test-code: |
+      ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
+    text: |
+      While the semaphore object is a MrsP semaphore.
   test-epilogue: null
   test-prologue: null
 - name: Discipline

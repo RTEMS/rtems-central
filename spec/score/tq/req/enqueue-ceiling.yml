@@ -205,7 +205,10 @@ test-action: |
   TQSchedulerRecordStop( ctx->tq_ctx );
   TQSurrender( ctx->tq_ctx );
 
-  if ( ctx->other_before || ctx->other_after ) {
+  if (
+    ctx->priority != PRIO_PSEUDO_ISR &&
+    ( ctx->other_before || ctx->other_after )
+  ) {
     TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_B_RELEASE );
     TQSynchronizeRunner();
   }
