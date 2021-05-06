@@ -559,7 +559,7 @@ test-setup:
     );
     T_rsc_success( sc );
 
-    SetScheduler(
+    SetWorkerScheduler(
       ctx,
       HELPER_OTHER,
       ctx->other_scheduler_id,
@@ -637,7 +637,7 @@ test-support: |
   }
 
   #if defined(RTEMS_SMP)
-  static void SetScheduler(
+  static void SetWorkerScheduler(
     const Context *ctx,
     WorkerKind     worker,
     rtems_id       scheduler_id,
@@ -677,13 +677,13 @@ test-support: |
   static void BlockMrsP( Context *ctx )
   {
     if ( CanUseThirdScheduler() ) {
-      SetScheduler(
+      SetWorkerScheduler(
         ctx,
         BLOCKER_A,
         ctx->third_scheduler_id,
         PRIO_HIGH
       );
-      SetScheduler(
+      SetWorkerScheduler(
         ctx,
         BLOCKER_C,
         ctx->third_scheduler_id,
@@ -805,7 +805,7 @@ test-support: |
 
   #if defined(RTEMS_SMP)
     if ( !IsPrioCeiling( ctx ) ) {
-      SetScheduler(
+      SetWorkerScheduler(
         ctx,
         BLOCKER_B,
         ctx->other_scheduler_id,
@@ -911,13 +911,13 @@ test-support: |
 
   #if defined(RTEMS_SMP)
       if ( IsMrsP( ctx ) ) {
-        SetScheduler(
+        SetWorkerScheduler(
           ctx,
           BLOCKER_A,
           ctx->runner_scheduler_id,
           PRIO_HIGH
         );
-        SetScheduler(
+        SetWorkerScheduler(
           ctx,
           BLOCKER_C,
           ctx->runner_scheduler_id,
@@ -932,7 +932,7 @@ test-support: |
 
   #if defined(RTEMS_SMP)
     if ( !IsPrioCeiling( ctx ) ) {
-      SetScheduler(
+      SetWorkerScheduler(
         ctx,
         BLOCKER_B,
         ctx->runner_scheduler_id,

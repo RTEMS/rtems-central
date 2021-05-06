@@ -413,7 +413,7 @@ test-support: |
     T_rsc_success( sc );
   }
 
-  static void SetScheduler( rtems_id scheduler_id )
+  static void ChangeScheduler( rtems_id scheduler_id )
   {
   #if defined(RTEMS_SMP)
     rtems_status_code sc;
@@ -433,7 +433,7 @@ test-support: |
   {
     rtems_status_code sc;
 
-    SetScheduler( scheduler_id );
+    ChangeScheduler( scheduler_id );
 
     sc = rtems_semaphore_obtain(
       ctx->the_semaphore_id,
@@ -445,7 +445,7 @@ test-support: |
     T_eq_u32( GetSelfPriority(), priority );
 
     ReleaseSemaphore( ctx );
-    SetScheduler( ctx->runner_scheduler_id );
+    ChangeScheduler( ctx->runner_scheduler_id );
   }
 
   static void CheckNotDefined(
@@ -456,7 +456,7 @@ test-support: |
   #if defined(RTEMS_SMP)
     rtems_status_code sc;
 
-    SetScheduler( scheduler_id );
+    ChangeScheduler( scheduler_id );
 
     sc = rtems_semaphore_obtain(
       ctx->the_semaphore_id,
@@ -465,7 +465,7 @@ test-support: |
     );
     T_rsc( sc, RTEMS_NOT_DEFINED );
 
-    SetScheduler( ctx->runner_scheduler_id );
+    ChangeScheduler( ctx->runner_scheduler_id );
   #else
     (void) ctx;
     (void) scheduler_id;
