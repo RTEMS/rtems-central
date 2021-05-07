@@ -261,9 +261,6 @@ def _sphinx_ref(ref: str) -> str:
     return f":ref:`{ref}`"
 
 
-_PTHREAD_NAME_NP = "http://man7.org/linux/man-pages/man3/" \
-    "pthread_setname_np.3.html"
-
 _SPHINX_DOC_REFS = {
     "config-scheduler-clustered":
     _sphinx_ref("ConfigurationSchedulersClustered"),
@@ -271,7 +268,6 @@ _SPHINX_DOC_REFS = {
     "config-unlimited-objects": _sphinx_ref("ConfigUnlimitedObjects"),
     "mp-proxies": _sphinx_ref("MPCIProxies"),
     "mrsp": _sphinx_ref("MrsP"),
-    "pthread-setname-np": f"`PTHREAD_SETNAME_NP(3) <{_PTHREAD_NAME_NP}>`_",
     "scheduler-cbs": _sphinx_ref("SchedulerCBS"),
     "scheduler-concepts": _sphinx_ref("RTEMSAPIClassicScheduler"),
     "scheduler-edf": _sphinx_ref("SchedulerEDF"),
@@ -317,8 +313,6 @@ _DOXYGEN_DOC_REFS = {
     _c_user_ref(
         "key_concepts.html#multiprocessor-resource-sharing-protocol-mrsp",
         "Multiprocessor Resource Sharing Protocol (MrsP)"),
-    "pthread-setname-np":
-    f"<a href={_PTHREAD_NAME_NP}>PTHREAD_SETNAME_NP(3)</a>",
     "scheduler-cbs":
     _c_user_ref(
         "scheduling_concepts.html#constant-bandwidth-server-scheduling-cbs",

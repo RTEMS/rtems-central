@@ -229,22 +229,27 @@ def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
     return f":c:type:`{ctx.value[ctx.key]}`"
 
 
-def _get_value_sphinx_ref(ctx: ItemGetValueContext,
-                          get_value: ItemGetValue) -> Any:
+def _get_value_sphinx_ref(ctx: ItemGetValueContext, get_value: ItemGetValue,
+                          postfix: str) -> Any:
     if "c-user" in ctx.item["references"]:
         sphinx_ref = ctx.item["references"]["c-user"]
-        return f":ref:`{ctx.value[ctx.key]} <{sphinx_ref}>`"
+        return f":ref:`{ctx.value[ctx.key]}{postfix} <{sphinx_ref}>`"
     if "url" in ctx.item["references"]:
-        return f"`{ctx.value[ctx.key]} <{ctx.item['references']['url']}>`_"
+        url = ctx.item["references"]["url"]
+        return f"`{ctx.value[ctx.key]}{postfix} <{url}>`_"
     return get_value(ctx)
 
 
 def _get_value_sphinx_unspecified_define(ctx: ItemGetValueContext) -> Any:
-    return _get_value_sphinx_ref(ctx, _get_value_sphinx_macro)
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_macro, "")
+
+
+def _get_value_sphinx_unspecified_function(ctx: ItemGetValueContext) -> Any:
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_function, "()")
 
 
 def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
-    return _get_value_sphinx_ref(ctx, _get_value_sphinx_type)
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_type, "")
 
 
 class SphinxMapper(ItemMapper):
@@ -274,7 +279,7 @@ class SphinxMapper(ItemMapper):
         self.add_get_value("interface/unspecified-define:/name",
                            _get_value_sphinx_unspecified_define)
         self.add_get_value("interface/unspecified-function:/name",
-                           _get_value_sphinx_function)
+                           _get_value_sphinx_unspecified_function)
         self.add_get_value("interface/unspecified-type:/name",
                            _get_value_sphinx_unspecified_type)
 
