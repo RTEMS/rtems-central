@@ -75,6 +75,10 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
+  spec-value: unspecified-group
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
   spec-value: unspecified-type
   uid: interface
 - role: spec-refinement

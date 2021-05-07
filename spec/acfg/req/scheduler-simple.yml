@@ -11,6 +11,6 @@ references: []
 requirement-type: non-functional
 text: |
   The system shall provide an application configuration option which enables
-  that the ${.:/document-reference/scheduler-priority-simple} algorithm is made
+  that the ${/doc/if/scheduler-priority-simple:/name} algorithm is made
   available to the application.
 type: requirement

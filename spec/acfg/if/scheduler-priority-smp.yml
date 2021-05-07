@@ -4,7 +4,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In case this configuration option is defined, then the
-  ${.:/document-reference/scheduler-smp-priority}
+  ${/doc/if/scheduler-smp-priority:/name}
   algorithm is made available to the application.
 enabled-by: true
 index-entries: []

@@ -25,5 +25,5 @@ links:
 name: CONFIGURE_MAXIMUM_PARTITIONS
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  ${.:/document-reference/config-unlimited-objects}.
+  ${/doc/if/config-unlimited-objects:/name}.
 type: interface

@@ -8,15 +8,15 @@ description: |
   configuration does not need any of the configuration options described in this
   section.
 
-  By default, the ${.:/document-reference/scheduler-priority}
+  By default, the ${/doc/if/scheduler-priority:/name}
   algorithm is used in uniprocessor configurations.  In case SMP is enabled and
   the configured maximum processors
   (${max-processors:/name}) is greater
   than one, then the
-  ${.:/document-reference/scheduler-smp-edf}
+  ${/doc/if/scheduler-smp-edf:/name}
   is selected as the default scheduler algorithm.
 
-  For the schedulers provided by RTEMS (see ${.:/document-reference/scheduler-concepts}), the
+  For the schedulers provided by RTEMS (see ${/doc/if/scheduler-concepts:/name}), the
   configuration is straightforward.  All that is required is to define the
   configuration option which specifies which scheduler you want for in your
   application.

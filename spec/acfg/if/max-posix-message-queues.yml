@@ -27,7 +27,7 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  ${.:/document-reference/config-unlimited-objects}.  You have to account for the memory used to
+  ${/doc/if/config-unlimited-objects:/name}.  You have to account for the memory used to
   store the messages of each message queue, see
   ${message-buffer-memory:/name}.
 type: interface

@@ -25,9 +25,9 @@ links:
 name: CONFIGURE_MAXIMUM_SEMAPHORES
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  ${.:/document-reference/config-unlimited-objects}.
+  ${/doc/if/config-unlimited-objects:/name}.
 
   In SMP configurations, the size of a Semaphore Control Block depends on the
-  scheduler count (see ${.:/document-reference/config-scheduler-table}).  The semaphores
-  using the ${.:/document-reference/mrsp} need a ceiling priority per scheduler.
+  scheduler count (see ${/doc/if/config-scheduler-table:/name}).  The semaphores
+  using the ${/doc/if/mrsp:/name} need a ceiling priority per scheduler.
 type: interface

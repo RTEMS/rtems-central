@@ -27,7 +27,7 @@ links:
 name: CONFIGURE_MAXIMUM_TASKS
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  ${.:/document-reference/config-unlimited-objects}.
+  ${/doc/if/config-unlimited-objects:/name}.
 
   The calculations for the required memory in the RTEMS Workspace for tasks
   assume that each task has a minimum stack size and has floating point

@@ -11,7 +11,13 @@ notes: |
 
   * ${b:/name}
 
-  * ${.:/document-reference/terminate}
+  * ${unspec-group:/name}
+
+  * ${unspec-group-2:/name}
+
+  * ${unspec-group-3:/name}
+
+  * ${unspec-func:/name}
 
   * ${func:/name}
 

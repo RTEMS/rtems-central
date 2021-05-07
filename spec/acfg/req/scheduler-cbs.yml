@@ -11,6 +11,6 @@ references: []
 requirement-type: non-functional
 text: |
   The system shall provide an application configuration option which enables
-  that the ${.:/document-reference/scheduler-cbs} algorithm is made available
+  that the ${/doc/if/scheduler-cbs:/name} algorithm is made available
   to the application.
 type: requirement

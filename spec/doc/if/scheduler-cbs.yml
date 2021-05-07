@@ -1,0 +1,12 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+index-entries: []
+interface-type: unspecified-group
+links: []
+name: Constant Bandwidth Server Scheduling (CBS)
+references:
+  c-user: SchedulerCBS
+  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#constant-bandwidth-server-scheduling-cbs
+type: interface

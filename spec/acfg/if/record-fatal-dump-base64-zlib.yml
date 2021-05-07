@@ -10,7 +10,7 @@ description: |
   * and ${record-per-processor-items:/name} is properly defined,
 
   then the event records are compressed by zlib and dumped in Base64 encoding
-  in a fatal error extension (see ${.:/document-reference/terminate}).
+  in a fatal error extension (see ${/doc/if/terminate:/name}).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

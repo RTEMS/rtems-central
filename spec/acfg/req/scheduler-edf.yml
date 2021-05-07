@@ -11,6 +11,6 @@ references: []
 requirement-type: non-functional
 text: |
   The system shall provide an application configuration option which enables
-  that the ${.:/document-reference/scheduler-edf} algorithm is made available
+  that the ${/doc/if/scheduler-edf:/name} algorithm is made available
   to the application.
 type: requirement

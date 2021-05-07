@@ -25,7 +25,7 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_THREADS
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  ${.:/document-reference/config-unlimited-objects}.
+  ${/doc/if/config-unlimited-objects:/name}.
 
   This calculations for the required memory in the RTEMS Workspace for threads
   assume that each thread has a minimum stack size and has floating point

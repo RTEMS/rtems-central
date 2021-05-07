@@ -257,107 +257,21 @@ def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
     content.add_licence_and_copyrights()
 
 
-def _sphinx_ref(ref: str) -> str:
-    return f":ref:`{ref}`"
-
-
-_SPHINX_DOC_REFS = {
-    "config-scheduler-table": _sphinx_ref("ConfigurationSchedulerTable"),
-    "config-unlimited-objects": _sphinx_ref("ConfigUnlimitedObjects"),
-    "mp-proxies": _sphinx_ref("MPCIProxies"),
-    "mrsp": _sphinx_ref("MrsP"),
-    "scheduler-cbs": _sphinx_ref("SchedulerCBS"),
-    "scheduler-concepts": _sphinx_ref("RTEMSAPIClassicScheduler"),
-    "scheduler-edf": _sphinx_ref("SchedulerEDF"),
-    "scheduler-priority": _sphinx_ref("SchedulerPriority"),
-    "scheduler-priority-simple": _sphinx_ref("SchedulerPrioritySimple"),
-    "scheduler-smp-edf": _sphinx_ref("SchedulerSMPEDF"),
-    "scheduler-smp-priority-affinity":
-    _sphinx_ref("SchedulerSMPPriorityAffinity"),
-    "scheduler-smp-priority": _sphinx_ref("SchedulerSMPPriority"),
-    "scheduler-smp-priority-simple": _sphinx_ref("SchedulerSMPPrioritySimple"),
-    "terminate": _sphinx_ref("Terminate"),
-}
-
-
-def _get_value_sphinx_reference(_ctx: ItemGetValueContext) -> Any:
-    return _SPHINX_DOC_REFS
-
-
-def _add_sphinx_get_values(mapper: ItemMapper) -> None:
-    for opt in ["feature-enable", "feature", "initializer", "integer"]:
-        doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
-        mapper.add_get_value(doc_ref, _get_value_sphinx_reference)
-
-
-def _c_user_ref(ref: str, name: str) -> str:
-    c_user = "https://docs.rtems.org/branches/master/c-user/"
-    return f"<a href={c_user}{ref}>{name}</a>"
-
-
-_DOXYGEN_DOC_REFS = {
-    "config-scheduler-table":
-    _c_user_ref(
-        "config/scheduler-clustered.html#configuration-step-3-scheduler-table",
-        "Configuration Step 3 - Scheduler Table"),
-    "config-unlimited-objects":
-    _c_user_ref("config/intro.html#unlimited-objects", "Unlimited Objects"),
-    "mp-proxies":
-    _c_user_ref("multiprocessing.html#proxies", "Proxies"),
-    "mrsp":
-    _c_user_ref(
-        "key_concepts.html#multiprocessor-resource-sharing-protocol-mrsp",
-        "Multiprocessor Resource Sharing Protocol (MrsP)"),
-    "scheduler-cbs":
-    _c_user_ref(
-        "scheduling_concepts.html#constant-bandwidth-server-scheduling-cbs",
-        "Constant Bandwidth Server Scheduling (CBS)"),
-    "scheduler-concepts":
-    _c_user_ref("scheduling_concepts.html", "Scheduling Concepts"),
-    "scheduler-edf":
-    _c_user_ref("scheduling_concepts.html#earliest-deadline-first-scheduler",
-                "Earliest Deadline First Scheduler"),
-    "scheduler-priority":
-    _c_user_ref("scheduling_concepts.html#deterministic-priority-scheduler",
-                "Deterministic Priority Scheduler"),
-    "scheduler-priority-simple":
-    _c_user_ref("scheduling_concepts.html#simple-priority-scheduler",
-                "Simple Priority Scheduler"),
-    "scheduler-smp-edf":
-    _c_user_ref(
-        "scheduling_concepts.html#earliest-deadline-first-smp-scheduler",
-        "Earliest Deadline First SMP Scheduler"),
-    "scheduler-smp-priority-affinity":
-    _c_user_ref(
-        "scheduling_concepts.html"
-        "#arbitrary-processor-affinity-priority-smp-scheduler",
-        "Arbitrary Processor Affinity Priority SMP Scheduler"),
-    "scheduler-smp-priority":
-    _c_user_ref(
-        "scheduling_concepts.html#deterministic-priority-smp-scheduler",
-        "Deterministic Priority SMP Scheduler"),
-    "scheduler-smp-priority-simple":
-    _c_user_ref("scheduling_concepts.html#simple-priority-smp-scheduler",
-                "Simple Priority SMP Scheduler"),
-    "terminate":
-    _c_user_ref("fatal_error.html#announcing-a-fatal-error",
-                "Announcing a Fatal Error"),
-}
-
-
-def _get_value_doxygen_reference(_ctx: ItemGetValueContext) -> Any:
-    return _DOXYGEN_DOC_REFS
-
-
 def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Any:
     url = ctx.item["references"]["url"]
     return f"<a href=\"{url}\">{ctx.value[ctx.key]}</a>"
 
 
-def _get_value_doxygen_unspecfied_define(ctx: ItemGetValueContext) -> Any:
+def _get_value_doxygen_unspecified_define(ctx: ItemGetValueContext) -> Any:
     if "url" in ctx.item["references"]:
         return _get_value_doxygen_url(ctx)
     return get_value_hash(ctx)
+
+
+def _get_value_doxygen_unspecified_group(ctx: ItemGetValueContext) -> Any:
+    if "url" in ctx.item["references"]:
+        return _get_value_doxygen_url(ctx)
+    return ctx.value[ctx.key]
 
 
 def _get_value_doxygen_unspecfied_type(ctx: ItemGetValueContext) -> Any:
@@ -368,8 +282,6 @@ def _get_value_doxygen_unspecfied_type(ctx: ItemGetValueContext) -> Any:
 
 def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     for opt in ["feature-enable", "feature", "initializer", "integer"]:
-        doc_ref = f"interface/appl-config-option/{opt}:/document-reference"
-        mapper.add_get_value(doc_ref, _get_value_doxygen_reference)
         name = f"interface/appl-config-option/{opt}:/name"
         mapper.add_get_value(name, get_value_hash)
     mapper.add_get_value("interface/define:/name", get_value_hash)
@@ -381,9 +293,11 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     mapper.add_get_value("interface/typedef:/name", get_value_double_colon)
     mapper.add_get_value("interface/union:/name", get_value_double_colon)
     mapper.add_get_value("interface/unspecified-define:/name",
-                         _get_value_doxygen_unspecfied_define)
+                         _get_value_doxygen_unspecified_define)
     mapper.add_get_value("interface/unspecified-function:/name",
                          get_value_doxygen_function)
+    mapper.add_get_value("interface/unspecified-group:/name",
+                         _get_value_doxygen_unspecified_group)
     mapper.add_get_value("interface/unspecified-type:/name",
                          _get_value_doxygen_unspecfied_type)
 
@@ -398,7 +312,6 @@ def generate(config: dict, item_cache: ItemCache) -> None:
                        configuration groups and options.
     """
     sphinx_mapper = SphinxInterfaceMapper(EmptyItem())
-    _add_sphinx_get_values(sphinx_mapper)
     doxygen_mapper = ItemMapper(EmptyItem())
     _add_doxygen_get_values(doxygen_mapper)
     doxygen_content = _DoxygenContentAdaptor(doxygen_mapper)

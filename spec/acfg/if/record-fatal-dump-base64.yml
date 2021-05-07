@@ -12,7 +12,7 @@ description: |
   * and ${record-fatal-dump-base64-zlib:/name} is undefined,
 
   then the event records are dumped in Base64 encoding in a fatal error
-  extension (see ${.:/document-reference/terminate}).
+  extension (see ${/doc/if/terminate:/name}).
 enabled-by: true
 index-entries: []
 interface-type: appl-config-option

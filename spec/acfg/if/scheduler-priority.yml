@@ -5,7 +5,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: |
   In case this configuration option is defined, then the
-  ${.:/document-reference/scheduler-priority}
+  ${/doc/if/scheduler-priority:/name}
   algorithm is made available to the application.
 enabled-by: true
 index-entries: []

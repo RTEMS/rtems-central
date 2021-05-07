@@ -253,7 +253,7 @@ def _get_value_sphinx_unspecified_group(ctx: ItemGetValueContext) -> Any:
         return f":ref:`{ctx.item['references']['c-user']}`"
     if "url" in ctx.item["references"]:
         url = ctx.item["references"]["url"]
-        return f"`{ctx.value[ctx.key]}{postfix} <{url}>`_"
+        return f"`{ctx.value[ctx.key]} <{url}>`_"
     return ctx.value[ctx.key]
 
 

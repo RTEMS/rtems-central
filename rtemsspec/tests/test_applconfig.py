@@ -99,7 +99,13 @@ NOTES:
 
     * :ref:`b`
 
-    * :ref:`Terminate`
+    * :ref:`SphinxRefUnspecGroup`
+
+    * Unspec Group 2
+
+    * `Unspec Group 3 <unspec-group-3.html>`_
+
+    * :ref:`unspec_func() <SphinxRefUnspecFunc>`
 
     * :c:func:`func`
 
@@ -452,9 +458,13 @@ NOTES:
  *
  * * #b
  *
- * * <a
- *   href=https://docs.rtems.org/branches/master/c-user/fatal_error.html#announcing-a-fatal-error>Announcing
- *   a Fatal Error</a>
+ * * <a href="unspec-group.html">Unspec Group</a>
+ *
+ * * Unspec Group 2
+ *
+ * * <a href="unspec-group-3.html">Unspec Group 3</a>
+ *
+ * * unspec_func()
  *
  * * func()
  *

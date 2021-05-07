@@ -27,7 +27,7 @@ links:
 name: CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
 notes: |
   This object class can be configured in unlimited allocation mode, see
-  ${.:/document-reference/config-unlimited-objects}.
+  ${/doc/if/config-unlimited-objects:/name}.
 
   Named semaphores are created with ${/c/if/sem_open:/name}.  Semaphores
   initialized with ${/c/if/sem_init:/name} are not affected by this
