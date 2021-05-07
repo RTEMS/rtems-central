@@ -57,6 +57,9 @@ return:
       The ${.:/params[2]/name} parameter was ${/c/if/null:/name}.
     value: ${../../status/if/invalid-address:/name}
   - description: |
+      The ${.:/params[1]/name} parameter was ${/c/if/null:/name}.
+    value: ${../../status/if/invalid-address:/name}
+  - description: |
       The processor set size was invalid.
     value: ${../../status/if/invalid-size:/name}
   - description: |

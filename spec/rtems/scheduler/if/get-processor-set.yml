@@ -61,5 +61,5 @@ return:
   - description: |
       The provided processor set was too small for the set of processors owned
       by the scheduler.
-    value: ${../../status/if/invalid-number:/name}
+    value: ${../../status/if/invalid-size:/name}
 type: interface
