@@ -29,10 +29,11 @@ test-actions:
       SetSelfAffinityOne( cpu_index );
 
       T_quiet_eq_u32( rtems_scheduler_get_processor(), cpu_index );
+
+      SetSelfAffinityAll();
     }
 
     SetSelfScheduler( scheduler_id, priority );
-    SetSelfAffinityAll();
   checks: []
   links:
   - role: validation
