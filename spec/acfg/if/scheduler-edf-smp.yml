@@ -22,7 +22,7 @@ notes: |
   This scheduler algorithm is only available when RTEMS is built with SMP
   support enabled.
 
-  In case no explicit ${.:/document-reference/config-scheduler-clustered}
+  In case no explicit ${/doc/if/config-scheduler-clustered:/name}
   is present, then it is used as the scheduler for up to 32 processors.
 
   This scheduler algorithm is the default in SMP configurations if

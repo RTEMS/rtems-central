@@ -248,6 +248,15 @@ def _get_value_sphinx_unspecified_function(ctx: ItemGetValueContext) -> Any:
     return _get_value_sphinx_ref(ctx, _get_value_sphinx_function, "()")
 
 
+def _get_value_sphinx_unspecified_group(ctx: ItemGetValueContext) -> Any:
+    if "c-user" in ctx.item["references"]:
+        return f":ref:`{ctx.item['references']['c-user']}`"
+    if "url" in ctx.item["references"]:
+        url = ctx.item["references"]["url"]
+        return f"`{ctx.value[ctx.key]}{postfix} <{url}>`_"
+    return ctx.value[ctx.key]
+
+
 def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
     return _get_value_sphinx_ref(ctx, _get_value_sphinx_type, "")
 
@@ -280,6 +289,8 @@ class SphinxMapper(ItemMapper):
                            _get_value_sphinx_unspecified_define)
         self.add_get_value("interface/unspecified-function:/name",
                            _get_value_sphinx_unspecified_function)
+        self.add_get_value("interface/unspecified-group:/name",
+                           _get_value_sphinx_unspecified_group)
         self.add_get_value("interface/unspecified-type:/name",
                            _get_value_sphinx_unspecified_type)
 

@@ -262,8 +262,6 @@ def _sphinx_ref(ref: str) -> str:
 
 
 _SPHINX_DOC_REFS = {
-    "config-scheduler-clustered":
-    _sphinx_ref("ConfigurationSchedulersClustered"),
     "config-scheduler-table": _sphinx_ref("ConfigurationSchedulerTable"),
     "config-unlimited-objects": _sphinx_ref("ConfigUnlimitedObjects"),
     "mp-proxies": _sphinx_ref("MPCIProxies"),
@@ -298,9 +296,6 @@ def _c_user_ref(ref: str, name: str) -> str:
 
 
 _DOXYGEN_DOC_REFS = {
-    "config-scheduler-clustered":
-    _c_user_ref("config/scheduler-clustered.html",
-                "Clustered Scheduler Configuration"),
     "config-scheduler-table":
     _c_user_ref(
         "config/scheduler-clustered.html#configuration-step-3-scheduler-table",

@@ -25,5 +25,5 @@ notes: |
   This configuration option is only evaluated in SMP configurations.
 
   This is an advanced configuration option, see
-  ${.:/document-reference/config-scheduler-clustered}.
+  ${/doc/if/config-scheduler-clustered:/name}.
 type: interface

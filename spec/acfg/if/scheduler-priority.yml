@@ -20,7 +20,7 @@ notes: |
   This scheduler configuration option is an advanced configuration option.
   Think twice before you use it.
 
-  In case no explicit ${.:/document-reference/config-scheduler-clustered}
+  In case no explicit ${/doc/if/config-scheduler-clustered:/name}
   is present, then it is used as the scheduler for exactly one processor.
 
   This scheduler algorithm is the default when
