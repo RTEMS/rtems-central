@@ -8,5 +8,5 @@ links:
 rationale: null
 text: |
   The value of the application configuration option shall be an integral
-  multiple of ${bdbuf-buffer-min-size:/name}.
+  multiple of ${../if/bdbuf-buffer-min-size:/name}.
 type: constraint
