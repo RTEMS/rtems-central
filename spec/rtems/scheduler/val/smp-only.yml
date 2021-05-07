@@ -37,7 +37,7 @@ test-actions:
   checks: []
   links:
   - role: validation
-    uid: ../req/get-processor
+    uid: ../req/get-processor-smp-only
 - action-brief: |
     Call ${../if/get-processor-maximum:/name} and check the returned value.
   action-code: |
@@ -62,7 +62,7 @@ test-actions:
     links: []
   links:
   - role: validation
-    uid: ../req/get-processor-maximum
+    uid: ../req/get-processor-maximum-smp-only
 test-brief: |
   This test case collection provides validation test cases for SMP-only
   requirements of the ${../if/group:/name}.

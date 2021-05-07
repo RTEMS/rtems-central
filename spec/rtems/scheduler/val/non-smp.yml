@@ -13,7 +13,7 @@ test-actions:
   checks: []
   links:
   - role: validation
-    uid: ../req/get-processor
+    uid: ../req/get-processor-non-smp
 - action-brief: |
     Check that calling ${../if/get-processor-maximum:/name} is a constant
     expression which evaluates to zero.
@@ -25,7 +25,7 @@ test-actions:
   checks: []
   links:
   - role: validation
-    uid: ../req/get-processor-maximum
+    uid: ../req/get-processor-maximum-non-smp
 test-brief: |
   This test case collection provides validation test cases for non-SMP
   requirements of the ${../if/group:/name}.
