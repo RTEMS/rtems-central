@@ -544,9 +544,11 @@ test-support: |
   }
 test-target: testsuites/validation/tc-timer-reset.c
 test-teardown:
-  brief: null
+  brief: Make sure the timer server is not running and the realtime clock
+    is not set after this test.
   code: |
     DeleteTimerServer();
+    UnsetClock();
   description: null
 text: ${.:text-template}
 transition-map:

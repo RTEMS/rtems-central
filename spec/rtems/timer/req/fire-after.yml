@@ -199,7 +199,7 @@ pre-conditions:
     test-code: |
       ctx->ticks_param = 0;
     text: |
-      While the ${../if/fire-after:/params[0]/name} parameter is 0.
+      While the ${../if/fire-after:/params[1]/name} parameter is 0.
   test-epilogue: null
   test-prologue: null
 - name: Routine
@@ -214,7 +214,7 @@ pre-conditions:
     test-code: |
       ctx->routine_param = NULL;
     text: |
-      While the ${../if/fire-after:/params[0]/name} parameter is
+      While the ${../if/fire-after:/params[2]/name} parameter is
       ${/c/if/null:/name}..
   test-epilogue: null
   test-prologue: null
@@ -535,9 +535,11 @@ test-support: |
   }
 test-target: testsuites/validation/tc-timer-fire-after.c
 test-teardown:
-  brief: null
+  brief: Make sure the timer server is not running and the realtime clock
+    is not set after this test.
   code: |
     DeleteTimerServer();
+    UnsetClock();
   description: null
 text: ${.:text-template}
 transition-map:
