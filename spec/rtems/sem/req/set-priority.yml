@@ -72,7 +72,9 @@ post-conditions:
           CheckPriority( ctx, ctx->other_scheduler_id, PRIO_VERY_HIGH );
         } else {
           CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_VERY_HIGH );
+      #if defined(RTEMS_SMP)
           CheckPriority( ctx, ctx->other_scheduler_id, 0 );
+      #endif
         }
       } else if ( ( ctx->attribute_set & RTEMS_PRIORITY_CEILING ) != 0 ) {
         CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_VERY_HIGH );
@@ -89,7 +91,9 @@ post-conditions:
     test-code: |
       if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
         CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_HIGH );
+      #if defined(RTEMS_SMP)
         CheckPriority( ctx, ctx->other_scheduler_id, 0 );
+      #endif
       } else if ( ( ctx->attribute_set & RTEMS_PRIORITY_CEILING ) != 0 ) {
         CheckPriority( ctx, ctx->runner_scheduler_id, PRIO_HIGH );
         CheckNotDefined( ctx, ctx->other_scheduler_id );
