@@ -1,0 +1,361 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: interface-function
+  uid: ../if/restart
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_rsc_success( ctx->status );
+    text: |
+      The return status of ${../if/restart:/name} shall be
+      ${../../status/if/successful:/name}.
+  - name: InvId
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INVALID_ID );
+    text: |
+      The return status of ${../if/restart:/name} shall be
+      ${../../status/if/invalid-id:/name}.
+  - name: IncStat
+    test-code: |
+      T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
+    text: |
+      The return status of ${../if/restart:/name} shall be
+      ${../../status/if/incorrect-state:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Argument
+  states:
+  - name: Set
+    test-code: |
+      T_eq_u32( ctx->actual_argument, ctx->argument );
+      T_eq_u32( ctx->counter, 2 );
+    text: |
+      The entry point argument of the task specified by the
+      ${../if/restart:/params[0]/name} parameter shall be set to the value
+      specified by the ${../if/restart:/params[1]/name} parameter before the task
+      is unblocked by the ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->actual_argument, 0 );
+
+      if ( ctx->start ) {
+        T_eq_u32( ctx->counter, 1 );
+      } else {
+        T_eq_u32( ctx->counter, 0 );
+      }
+    text: |
+      No entry point argument of a task shall be modified by the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'Yes'
+    test-code: |
+      if ( ctx->suspend ) {
+        T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
+        T_eq_int(
+          ctx->scheduler_log.events[ 0 ].operation,
+          T_SCHEDULER_UNBLOCK
+        );
+      } else {
+        T_eq_sz( ctx->scheduler_log.header.recorded, 2 );
+        T_eq_int(
+          ctx->scheduler_log.events[ 0 ].operation,
+          T_SCHEDULER_BLOCK
+        );
+        T_eq_int(
+          ctx->scheduler_log.events[ 1 ].operation,
+          T_SCHEDULER_UNBLOCK
+        );
+      }
+    text: |
+      The task specified by the ${../if/restart:/params[0]/name} parameter shall
+      be unblocked by the ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      No task shall be unblocked by the ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: RestartExtensions
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->restart_extension_calls, 1 );
+    text: |
+      The thread restart user extensions shall be invoked by the
+      ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->restart_extension_calls, 0 );
+    text: |
+      The thread restart user extensions shall not be invoked by the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
+pre-conditions:
+- name: Id
+  states:
+  - name: Invalid
+    test-code: |
+      ctx->id = INVALID_ID;
+    text: |
+      While the ${../if/restart:/params[0]/name} parameter is not associated with
+      a task.
+  - name: Task
+    test-code: |
+      ctx->id = ctx->worker_id;
+    text: |
+      While the ${../if/restart:/params[0]/name} parameter is associated with a
+      task.
+  test-epilogue: null
+  test-prologue: null
+- name: Argument
+  states:
+  - name: Pointer
+    test-code: |
+      ctx->argument = (rtems_task_argument) ctx;
+    text: |
+      While the entry point argument specified by the
+      ${../if/restart:/params[1]/name} parameter is a pointer.
+  - name: Number
+    test-code: |
+      ctx->argument = UINT32_C( 0x87654321 );
+    text: |
+      While the entry point argument specified by the
+      ${../if/restart:/params[1]/name} parameter is a 32-bit number.
+  test-epilogue: null
+  test-prologue: null
+- name: Dormant
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->start = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is dormant.
+  - name: 'No'
+    test-code: |
+      ctx->start = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is not dormant.
+  test-epilogue: null
+  test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspend = true;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspend = false;
+    text: |
+      While the task specified by the ${../if/restart:/params[0]/name} parameter
+      is not suspended.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons: {}
+test-action: |
+  T_scheduler_log *log;
+
+  if ( ctx->start ) {
+    StartTask( ctx->worker_id, Worker, 0 );
+    Yield();
+  }
+
+  if ( ctx->suspend ) {
+    SuspendTask( ctx->worker_id );
+  }
+
+  ctx->restart_extension_calls = 0;
+
+  log = T_scheduler_record_2( &ctx->scheduler_log );
+  T_null( log );
+
+  ctx->status = rtems_task_restart( ctx->id, ctx->argument );
+
+  log = T_scheduler_record( NULL );
+  T_eq_ptr( &log->header, &ctx->scheduler_log.header );
+
+  Yield();
+test-brief: null
+test-cleanup: |
+  DeleteTask( ctx->worker_id );
+test-context:
+- brief: |
+    This member provides the scheduler operation records.
+  description: null
+  member: |
+    T_scheduler_log_2 scheduler_log
+- brief: |
+    This member contains the identifier of a task.
+  description: null
+  member: |
+    rtems_id worker_id
+- brief: |
+    This member contains the identifier of the test user extensions.
+  description: null
+  member: |
+    rtems_id extension_id
+- brief: |
+    This member contains the count of thread restart extension calls.
+  description: null
+  member: |
+    uint32_t restart_extension_calls
+- brief: |
+    This member contains the actual argument passed to the entry point.
+  description: null
+  member: |
+    rtems_task_argument actual_argument
+- brief: |
+    This member contains the entry point counter.
+  description: null
+  member: |
+    uint32_t counter
+- brief: |
+    If this member is true, then the worker is started before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool start
+- brief: |
+    If this member is true, then the worker is suspended before the
+    ${../if/restart:/name} call.
+  description: null
+  member: |
+    bool suspend
+- brief: |
+    This member contains the return value of the ${../if/restart:/name}
+    call.
+  description: null
+  member: |
+    rtems_status_code status
+- brief: |
+    This member specifies if the ${../if/restart:/params[0]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_id id
+- brief: |
+    This member specifies if the ${../if/restart:/params[1]/name}
+    parameter value.
+  description: null
+  member: |
+    rtems_task_argument argument
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/test-scheduler.h
+test-local-includes:
+- tx-support.h
+test-prepare: |
+  ctx->actual_argument = 0;
+  ctx->counter = 0;
+  ctx->worker_id = CreateTask( "WORK", PRIO_DEFAULT );
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'T', 'E', 'S', 'T' ),
+      &extensions,
+      &ctx->extension_id
+    );
+    T_rsc_success( sc );
+  description: null
+test-stop: null
+test-support: |
+  typedef RtemsTaskReqRestart_Context Context;
+
+  static void Worker( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = &RtemsTaskReqRestart_Instance;
+
+    while ( true ) {
+      ctx->actual_argument += arg;
+      ++ctx->counter;
+      Yield();
+    }
+  }
+
+  static void ThreadRestart( rtems_tcb *executing, rtems_tcb *restarted )
+  {
+    (void) executing;
+    (void) restarted;
+
+    ++RtemsTaskReqRestart_Instance.restart_extension_calls;
+  }
+
+  static const rtems_extensions_table extensions = {
+    .thread_restart = ThreadRestart
+  };
+test-target: testsuites/validation/tc-task-restart.c
+test-teardown:
+  brief: null
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_extension_delete( ctx->extension_id );
+    T_rsc_success( sc );
+  description: null
+text: ${.:text-template}
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Argument: Set
+    Unblock: 'Yes'
+    RestartExtensions: 'Yes'
+  pre-conditions:
+    Id:
+    - Task
+    Argument: all
+    Dormant:
+    - 'No'
+    Suspended: all
+- enabled-by: true
+  post-conditions:
+    Status: InvId
+    Argument: Nop
+    Unblock: Nop
+    RestartExtensions: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    Argument: all
+    Dormant: N/A
+    Suspended: N/A
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Argument: Nop
+    Unblock: Nop
+    RestartExtensions: Nop
+  pre-conditions:
+    Id:
+    - Task
+    Argument: all
+    Dormant:
+    - 'Yes'
+    Suspended: all
+type: requirement
