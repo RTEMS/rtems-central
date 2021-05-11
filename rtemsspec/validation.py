@@ -475,6 +475,12 @@ class Transition(NamedTuple):
     post_cond: Tuple[Any, ...]
 
 
+def _variant_to_key(variant: Transition) -> str:
+    return "".join((enabled_by_to_exp(variant.enabled_by,
+                                      ExpressionMapper()), str(variant.skip),
+                    str(variant.pre_cond_na), str(variant.post_cond)))
+
+
 class _TransitionEntry:
     def __init__(self):
         self.key = ""
@@ -491,11 +497,14 @@ class _TransitionEntry:
 
     def add(self, variant: Transition) -> None:
         """ Adds the variant to the transitions of the entry. """
-        self.key += "".join(
-            (enabled_by_to_exp(variant.enabled_by,
-                               ExpressionMapper()), str(variant.skip),
-             str(variant.pre_cond_na), str(variant.post_cond)))
+        self.key += _variant_to_key(variant)
         self.variants.append(variant)
+
+    def replace(self, index: int, variant: Transition) -> None:
+        """ Replace the variant at transition variant index. """
+        self.key = self.key.replace(_variant_to_key(self.variants[index]),
+                                    _variant_to_key(variant))
+        self.variants[index] = variant
 
 
 _IdxToX = Tuple[Tuple[str, ...], ...]
@@ -889,6 +898,43 @@ class TransitionMap:
             variant = self._map_post_cond(map_idx, co_idx, variant)
         return variant
 
+    def _add_variant(self, transition_map: _TransitionMap, map_idx: int,
+                     variant: Transition) -> None:
+        if transition_map[map_idx]:
+            for index, existing in enumerate(transition_map[map_idx].variants):
+                if existing.enabled_by == variant.enabled_by:
+                    if variant.skip:
+                        # Allow transition map variants with a skip reason to
+                        # overwrite existing variants with the same enabled-by
+                        # attribute.  This is important if variants use N/A for
+                        # some pre-conditions.  It makes it also easier to skip
+                        # pre-conditon states which are controlled by build
+                        # options.
+                        transition_map[map_idx].replace(index, variant)
+                        return
+                    raise ValueError(
+                        f"transition map descriptor {variant.desc_idx} of "
+                        f"{self._item.spec} duplicates pre-condition set "
+                        f"{{{self._map_index_to_pre_conditions(map_idx)}}}"
+                        " defined by transition map descriptor "
+                        f"{existing.desc_idx}")
+            default = transition_map[map_idx][0]
+            if (default.post_cond, default.skip,
+                    default.pre_cond_na) == (variant.post_cond, variant.skip,
+                                             variant.pre_cond_na):
+                return
+        elif not isinstance(variant.enabled_by,
+                            bool) or not variant.enabled_by:
+            raise ValueError(
+                f"transition map descriptor {variant.desc_idx} of "
+                f"{self._item.spec} is the first variant for "
+                f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
+                "and it is not enabled by default")
+        self.pre_co_summary = tuple(
+            a + b for a, b in zip(self.pre_co_summary, (variant.skip, ) +
+                                  variant.pre_cond_na))
+        transition_map[map_idx].add(variant)
+
     def _add_transitions(self, transition_map: _TransitionMap,
                          desc: Dict[str, Any], desc_idx: int,
                          skip_post_cond: Tuple[Any, ...], co_idx: int,
@@ -923,36 +969,11 @@ class TransitionMap:
                                           map_idx + st_idx,
                                           pre_cond_na + (0, ))
         else:
-            enabled_by = desc["enabled-by"]
             variant = self._make_post_cond(
                 map_idx,
-                Transition(desc_idx, enabled_by, skip_post_cond[0],
+                Transition(desc_idx, desc["enabled-by"], skip_post_cond[0],
                            pre_cond_na, skip_post_cond[1:]))
-            if transition_map[map_idx]:
-                for existing in transition_map[map_idx].variants:
-                    if existing.enabled_by == variant.enabled_by:
-                        raise ValueError(
-                            f"transition map descriptor {desc_idx} of "
-                            f"{self._item.spec} duplicates pre-condition set "
-                            f"{{{self._map_index_to_pre_conditions(map_idx)}}}"
-                            " defined by transition map descriptor "
-                            f"{existing.desc_idx}")
-                default = transition_map[map_idx][0]
-                if (default.post_cond, default.skip,
-                        default.pre_cond_na) == (variant.post_cond,
-                                                 variant.skip,
-                                                 variant.pre_cond_na):
-                    return
-            elif not isinstance(enabled_by, bool) or not enabled_by:
-                raise ValueError(
-                    f"transition map descriptor {desc_idx} of "
-                    f"{self._item.spec} is the first variant for "
-                    f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
-                    "and it is not enabled by default")
-            self.pre_co_summary = tuple(
-                a + b for a, b in zip(self.pre_co_summary, (variant.skip, ) +
-                                      variant.pre_cond_na))
-            transition_map[map_idx].add(variant)
+            self._add_variant(transition_map, map_idx, variant)
 
     def _add_default(self, transition_map: _TransitionMap, desc: Dict[str,
                                                                       Any],

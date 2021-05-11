@@ -115,6 +115,8 @@ rationale: null
 references: []
 requirement-type: functional
 skip-reasons:
+  Overwritten: |
+    Overwritten.
   SkipReason: |
     Skip it due to some reason.
 test-action: |
@@ -240,6 +242,14 @@ transition-map:
     A: N/A
     B:
     - B1
+    C: all
+- enabled-by: true
+  post-conditions: Overwritten
+  pre-conditions:
+    A:
+    - A1
+    B:
+    - B2
     C: all
 - enabled-by: true
   post-conditions: SkipReason
