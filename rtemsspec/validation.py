@@ -34,7 +34,7 @@ import textwrap
 from typing import Any, Dict, Iterator, List, NamedTuple, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
-    ExpressionMapper, GenericContent, get_value_params, \
+    ExpressionMapper, GenericContent, get_value_params, get_value_plural, \
     get_value_doxygen_group, get_value_doxygen_function, to_camel_case
 from rtemsspec.items import is_enabled, Item, ItemCache, \
     ItemGetValueContext, ItemMapper
@@ -52,6 +52,7 @@ class _Mapper(ItemMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self._step = 0
+        self.add_get_value("glossary/term:/plural", get_value_plural)
         self.add_get_value("interface/function:/name",
                            get_value_doxygen_function)
         self.add_get_value("interface/function:/params/name", get_value_params)
