@@ -9,7 +9,7 @@ definition:
     attributes: null
     body: null
     params:
-    - ${../../type/if/time-of-day:/name} *${.:/params[0]/name}
+    - const ${../../type/if/time-of-day:/name} *${.:/params[0]/name}
     return: ${../../status/if/code:/name}
   variants: []
 description: |
