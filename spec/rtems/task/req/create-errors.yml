@@ -321,7 +321,8 @@ test-includes:
 - string.h
 - rtems/score/apimutex.h
 - rtems/score/threadimpl.h
-test-local-includes: []
+test-local-includes:
+- tx-support.h
 test-prepare: |
   _RTEMS_Lock_allocator();
   _Thread_Kill_zombies();
@@ -343,8 +344,6 @@ test-setup:
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
-
-  #define INVALID_ID 0xffffffff
 
   typedef RtemsTaskReqCreateErrors_Context Context;
 

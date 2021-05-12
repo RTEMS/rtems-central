@@ -147,8 +147,7 @@ test-setup:
     T_rsc_success( sc );
   description: null
 test-stop: null
-test-support: |
-  #define INVALID_ID 0xffffffff
+test-support: null
 test-target: testsuites/validation/tc-scheduler-get-maximum-priority.c
 test-teardown: null
 text: ${.:text-template}

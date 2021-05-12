@@ -277,7 +277,8 @@ test-header: null
 test-includes:
 - rtems.h
 - string.h
-test-local-includes: []
+test-local-includes:
+- tx-support.h
 test-prepare: |
   rtems_status_code sc;
   rtems_id          id;
@@ -293,8 +294,6 @@ test-setup: null
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
-
-  #define INVALID_ID 0xffffffff
 
   #define MAX_PARTITIONS 4
 

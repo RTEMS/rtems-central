@@ -175,6 +175,7 @@ test-includes:
 - rtems.h
 test-local-includes:
 - ts-config.h
+- tx-support.h
 test-prepare: |
   CPU_FILL( &ctx->cpuset_value );
 test-setup:
@@ -189,8 +190,7 @@ test-setup:
     T_rsc_success( sc );
   description: null
 test-stop: null
-test-support: |
-  #define INVALID_ID 0xffffffff
+test-support: null
 test-target: testsuites/validation/tc-scheduler-get-processor-set.c
 test-teardown: null
 text: ${.:text-template}

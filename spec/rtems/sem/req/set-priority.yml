@@ -124,7 +124,7 @@ post-conditions:
       is set by the ${../if/set-priority:/name} call.
   - name: Nop
     test-code: |
-      T_eq_u32( ctx->old_priority_value, INVALID_PRIO );
+      T_eq_u32( ctx->old_priority_value, PRIO_INVALID );
     text: |
       Objects referenced by the ${../if/set-priority:/params[3]/name} parameter in
       past calls to ${../if/set-priority:/name} shall not be accessed by the
@@ -233,7 +233,7 @@ pre-conditions:
       parameter.
   - name: Invalid
     test-code: |
-      ctx->new_priority = INVALID_PRIO;
+      ctx->new_priority = PRIO_INVALID;
     text: |
       While the ${../if/set-priority:/params[2]/name} parameter is invalid with
       respect to the scheduler specified by the
@@ -371,10 +371,10 @@ test-includes:
 - rtems.h
 - string.h
 test-local-includes:
-- tx-support.h
 - ts-config.h
+- tx-support.h
 test-prepare: |
-  ctx->old_priority_value = INVALID_PRIO;
+  ctx->old_priority_value = PRIO_INVALID;
   ctx->count = 1;
   ctx->attribute_set = RTEMS_PRIORITY;
   ctx->valid_id = true;
@@ -402,10 +402,6 @@ test-setup:
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
-
-  #define INVALID_ID 0xffffffff
-
-  #define INVALID_PRIO 0xffffffff
 
   typedef RtemsSemReqSetPriority_Context Context;
 

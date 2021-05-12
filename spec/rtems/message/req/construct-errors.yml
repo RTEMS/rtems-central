@@ -296,7 +296,8 @@ test-header: null
 test-includes:
 - rtems.h
 - string.h
-test-local-includes: []
+test-local-includes:
+- tx-support.h
 test-prepare: |
   ctx->id_value = INVALID_ID;
   memset( &ctx->config_value, 0, sizeof( ctx->config_value ) );
@@ -304,8 +305,6 @@ test-setup: null
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
-
-  #define INVALID_ID 0xffffffff
 
   #define MAX_MESSAGE_QUEUES 4
 

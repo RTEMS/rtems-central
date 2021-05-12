@@ -183,6 +183,7 @@ test-includes:
 - rtems.h
 test-local-includes:
 - ts-config.h
+- tx-support.h
 test-prepare: |
   ctx->id_value = INVALID_ID;
 test-setup:
@@ -201,8 +202,7 @@ test-setup:
     #endif
   description: null
 test-stop: null
-test-support: |
-  #define INVALID_ID 0xffffffff
+test-support: null
 test-target: testsuites/validation/tc-scheduler-ident-by-processor.c
 test-teardown: null
 text: ${.:text-template}

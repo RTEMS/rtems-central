@@ -232,8 +232,7 @@ test-setup:
     #endif
   description: null
 test-stop: null
-test-support: |
-  #define INVALID_ID 0xffffffff
+test-support: null
 test-target: testsuites/validation/tc-scheduler-remove-processor.c
 test-teardown: null
 text: ${.:text-template}

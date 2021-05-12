@@ -328,8 +328,6 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  #define INVALID_ID 0xffffffff
-
   #define CPU_TO_ADD 1
 test-target: testsuites/validation/tc-scheduler-add-processor.c
 test-teardown: null
