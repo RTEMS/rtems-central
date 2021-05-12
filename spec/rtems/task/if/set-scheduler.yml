@@ -63,13 +63,37 @@ return:
       ${.:/params[1]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
-      There task priority specified in ${.:/params[2]/name} was invalid with
-      respect to the scheduler specified by ${.:/params[1]/name}.
+      The ${/glossary/priority-task:/term} specified by ${.:/params[2]/name}
+      was invalid with respect to the scheduler specified by
+      ${.:/params[1]/name}.
     value: ${../../status/if/invalid-priority:/name}
   - description: |
       There was no task associated with the identifier specified by
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} was enqueued on a
+      ${/glossary/waitqueue:/term}.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} had a
+      ${/glossary/priority-current:/term} which consisted of more than the
+      ${/glossary/priority-real:/term}.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} had a
+      ${/glossary/scheduler-helping:/term}.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The task specified by ${.:/params[0]/name} was pinned.
+    value: ${../../status/if/resource-in-use:/name}
+  - description: |
+      The scheduler specified by ${.:/params[1]/name} owned no processor.
+    value: ${../../status/if/unsatisfied:/name}
+  - description: |
+      The scheduler specified by ${.:/params[1]/name} did not support the
+      affinity set of the task specified by ${.:/params[0]/name}.
+    value: ${../../status/if/unsatisfied:/name}
   - description: |
       The task resided on a remote node.
     value: ${../../status/if/illegal-on-remote-object:/name}
