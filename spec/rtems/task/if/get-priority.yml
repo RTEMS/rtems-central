@@ -40,8 +40,8 @@ links:
 name: rtems_task_get_priority
 notes: |
   The current priority reflects temporary priority adjustments due to locking
-  protocols, the rate-monotonic period objects on some schedulers, and other
-  mechanisms.
+  protocols, the rate-monotonic period objects on some schedulers such as EDF,
+  and the POSIX sporadic server.
 params:
 - description: |
     is the task identifier.  The constant ${self-define:/name} may be used to
