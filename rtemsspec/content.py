@@ -1042,7 +1042,10 @@ def get_value_plural(ctx: ItemGetValueContext) -> Any:
     try:
         return ctx.value[ctx.key]
     except KeyError:
-        return f"{ctx.value['term']}s"
+        term = ctx.value["term"]
+        if term.endswith("y"):
+            return f"{term[:-1]}ies"
+        return f"{term}s"
 
 
 class ExpressionMapper:

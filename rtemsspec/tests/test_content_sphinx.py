@@ -296,7 +296,8 @@ def test_substitute(tmpdir):
     with pytest.raises(ValueError, match=match):
         mapper.substitute("${x:/y}")
     assert mapper.substitute("${x:/term}") == ":term:`y`"
-    assert mapper.substitute("${x:/plural}") == ":term:`ys <y>`"
+    assert mapper.substitute("${x:/plural}") == ":term:`ies <y>`"
+    assert mapper.substitute("${z:/plural}") == ":term:`zs <z>`"
     mapper.add_get_value("other:/name", lambda ctx: ctx.value[ctx.key])
     assert mapper.substitute("${y:/name}") == "foobar"
     assert mapper.substitute("${a:/name}") == ":c:data:`a`"

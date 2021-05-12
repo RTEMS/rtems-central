@@ -27,7 +27,8 @@
 from contextlib import contextmanager
 from typing import Any, Iterable, Iterator, List, Optional, Sequence, Union
 
-from rtemsspec.content import Content, make_lines, to_camel_case
+from rtemsspec.content import Content, get_value_plural, make_lines, \
+     to_camel_case
 from rtemsspec.items import Item, ItemGetValue, ItemGetValueContext, ItemMapper
 
 GenericContent = Union[str, List[str], "Content"]
@@ -203,10 +204,7 @@ def _get_ref_term(ctx: ItemGetValueContext) -> Any:
 
 
 def _get_ref_term_plural(ctx: ItemGetValueContext) -> Any:
-    try:
-        return f":term:`{ctx.value[ctx.key]} <{ctx.value['term']}>`"
-    except KeyError:
-        return f":term:`{ctx.value['term']}s <{ctx.value['term']}>`"
+    return f":term:`{get_value_plural(ctx)} <{ctx.value['term']}>`"
 
 
 def _get_appl_config_option(ctx: ItemGetValueContext) -> Any:
