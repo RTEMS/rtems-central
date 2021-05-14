@@ -70,7 +70,6 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
       While the ${../if/ident:/params[1]/name} parameter references an object
