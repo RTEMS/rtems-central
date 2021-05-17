@@ -12,5 +12,5 @@ requirement-type: functional
 text: |
   The ${../if/storage-alignment:/name} define shall expand to a constant
   expression which evaluates to the value of
-  ${/score/stack/if/alignment:/name}.
+  ${/score/cpu/if/stack-alignment:/name}.
 type: requirement
