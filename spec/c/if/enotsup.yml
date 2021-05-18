@@ -3,11 +3,10 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-function
+interface-type: unspecified-define
 links:
 - role: interface-placement
-  uid: stdlib
-name: posix_memalign
-references:
-  url: https://pubs.opengroup.org/onlinepubs/9699919799/functions/posix_memalign.html
+  uid: errno-header
+name: ENOTSUP
+references: {}
 type: interface

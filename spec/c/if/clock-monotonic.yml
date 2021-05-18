@@ -3,11 +3,11 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-function
+interface-type: unspecified-define
 links:
 - role: interface-placement
-  uid: stdlib
-name: posix_memalign
+  uid: time
+name: CLOCK_MONOTONIC
 references:
-  url: https://pubs.opengroup.org/onlinepubs/9699919799/functions/posix_memalign.html
+  url: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html
 type: interface

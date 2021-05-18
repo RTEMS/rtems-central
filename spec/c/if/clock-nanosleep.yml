@@ -6,8 +6,8 @@ index-entries: []
 interface-type: unspecified-function
 links:
 - role: interface-placement
-  uid: stdlib
-name: posix_memalign
+  uid: time
+name: clock_nanosleep
 references:
-  url: https://pubs.opengroup.org/onlinepubs/9699919799/functions/posix_memalign.html
+  url: https://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_nanosleep.html
 type: interface
