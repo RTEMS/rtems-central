@@ -364,7 +364,7 @@ test-setup:
     StartTask( ctx->worker_id, Worker, ctx );
   description: null
 test-stop: null
-test-support:
+test-support: |
   typedef CReqClockNanosleep_Context Context;
 
   static void Worker( rtems_task_argument arg )
