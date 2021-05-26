@@ -66,13 +66,13 @@ post-conditions:
       } else {
         #if CPU_SIZEOF_POINTER > 4
         T_eq_u64(
-          ctx->worker_thread->Start.Entry.Kinds.Numeric.argument,
+          ctx->worker_tcb->Start.Entry.Kinds.Numeric.argument,
           RESTART_ARGUMENT
         );
         T_eq_u64( ctx->actual_argument, UNSET_ARGUMENT );
         #else
         T_eq_u32(
-          ctx->worker_thread->Start.Entry.Kinds.Numeric.argument,
+          ctx->worker_tcb->Start.Entry.Kinds.Numeric.argument,
           RESTART_ARGUMENT
         );
         T_eq_u32( ctx->actual_argument, UNSET_ARGUMENT );
@@ -121,13 +121,13 @@ post-conditions:
       if ( ctx->suspended && !ctx->blocked ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-        T_eq_u32( event->thread->Object.id, ctx->worker_id );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
       }
 
       if ( !ctx->real_priority_is_initial ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
-        T_eq_u32( event->thread->Object.id, ctx->worker_id );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
       }
 
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
@@ -143,28 +143,28 @@ post-conditions:
         if ( ctx->suspended ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
         }
       } else {
         if ( ctx->suspended || ctx->blocked ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
         } else {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_BLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
 
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
         }
       }
 
       if ( !ctx->real_priority_is_initial ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
-        T_eq_u32( event->thread->Object.id, ctx->worker_id );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
       }
 
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
@@ -180,39 +180,39 @@ post-conditions:
         if ( ctx->suspended ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
         }
       } else {
         if ( ctx->suspended ) {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
         } else {
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_BLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
 
           event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
           T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-          T_eq_u32( event->thread->Object.id, ctx->worker_id );
+          T_eq_ptr( event->thread, ctx->worker_tcb );
         }
       }
 
       if ( !ctx->real_priority_is_initial ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
-        T_eq_u32( event->thread->Object.id, ctx->worker_id );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
       }
 
       /* Set zombie state */
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
       T_eq_int( event->operation, T_SCHEDULER_BLOCK );
-      T_eq_u32( event->thread->Object.id, ctx->worker_id );
+      T_eq_ptr( event->thread, ctx->worker_tcb );
 
       /* Wake up deleter */
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
       T_eq_int( event->operation, T_SCHEDULER_UNBLOCK );
-      T_eq_u32( event->thread->Object.id, ctx->deleter_id );
+      T_eq_ptr( event->thread, ctx->deleter_tcb );
 
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
       T_eq_int( event->operation, T_SCHEDULER_NOP );
@@ -227,7 +227,7 @@ post-conditions:
       if ( !ctx->real_priority_is_initial ) {
         event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
         T_eq_int( event->operation, T_SCHEDULER_UPDATE_PRIORITY );
-        T_eq_u32( event->thread->Object.id, ctx->worker_id );
+        T_eq_ptr( event->thread, ctx->worker_tcb );
       }
 
       event = T_scheduler_next_any( &ctx->scheduler_log.header, &index );
@@ -245,14 +245,14 @@ post-conditions:
   states:
   - name: 'Yes'
     test-code: |
-      T_not_null( ctx->worker_thread->Wait.queue );
+      T_not_null( ctx->worker_tcb->Wait.queue );
     text: |
       The task specified by the ${../if/restart:/params[0]/name} parameter
       shall be enqueued on a ${/glossary/waitqueue:/term}
       after the ${../if/restart:/name} call.
   - name: 'No'
     test-code: |
-      T_null( ctx->worker_thread->Wait.queue );
+      T_null( ctx->worker_tcb->Wait.queue );
     text: |
       The task specified by the ${../if/restart:/params[0]/name} parameter
       shall not be enqueued on a ${/glossary/waitqueue:/term} after the
@@ -263,14 +263,14 @@ post-conditions:
   states:
   - name: Active
     test-code: |
-      GetTaskTimerInfoByThread( ctx->worker_thread, &info);
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &info);
       T_eq_int( info.state, TASK_TIMER_TICKS );
     text: |
       The timer of the task specified by the ${../if/restart:/params[0]/name}
       parameter shall be active after the ${../if/restart:/name} call.
   - name: Inactive
     test-code: |
-      GetTaskTimerInfoByThread( ctx->worker_thread, &info);
+      GetTaskTimerInfoByThread( ctx->worker_tcb, &info);
       T_eq_int( info.state, TASK_TIMER_INACTIVE );
     text: |
       The timer of the task specified by the ${../if/restart:/params[0]/name}
@@ -694,7 +694,7 @@ test-context:
     This member references the TCB of the worker task.
   description: null
   member: |
-    rtems_tcb *worker_thread
+    rtems_tcb *worker_tcb
 - brief: |
     This member contains the worker state at the end of the
     ${../if/restart:/name} call.
@@ -712,6 +712,11 @@ test-context:
   description: null
   member: |
     rtems_id deleter_id
+- brief: |
+    This member references the TCB of the deleter task.
+  description: null
+  member: |
+    rtems_tcb *deleter_tcb
 - brief: |
     This member contains the identifier of the test user extensions.
   description: null
@@ -850,7 +855,7 @@ test-prepare: |
   ctx->worker_id = CreateTask( "WORK", PRIO_NORMAL );
   ctx->delete_worker_expected = true;
 
-  ctx->worker_thread = GetThread( ctx->worker_id );
+  ctx->worker_tcb = GetThread( ctx->worker_id );
   ctx->worker_state = UINT32_MAX;
   ctx->worker_life_state = INT_MAX;
 
@@ -881,6 +886,7 @@ test-setup:
     SetSelfPriority( PRIO_NORMAL );
 
     ctx->deleter_id = CreateTask( "DELE", PRIO_HIGH );
+    ctx->deleter_tcb = GetThread( ctx->deleter_id );
     StartTask( ctx->deleter_id, Deleter, NULL );
   description: null
 test-stop: null
@@ -912,8 +918,8 @@ test-support: |
     if ( log != NULL ) {
       T_eq_ptr( &log->header, &ctx->scheduler_log.header );
 
-      ctx->worker_state = ctx->worker_thread->current_state;
-      ctx->worker_life_state = ctx->worker_thread->Life.state;
+      ctx->worker_state = ctx->worker_tcb->current_state;
+      ctx->worker_life_state = ctx->worker_tcb->Life.state;
       CopyExtensionCalls( &ctx->calls, &ctx->calls_after_restart );
     }
   }
@@ -925,7 +931,7 @@ test-support: |
       Thread_Life_state life_state;
 
       state = STATES_READY;
-      life_state = ctx->worker_thread->Life.state;
+      life_state = ctx->worker_tcb->Life.state;
 
       if ( ctx->suspended ) {
         state |= STATES_SUSPENDED;
@@ -952,7 +958,7 @@ test-support: |
         }
       }
 
-      T_eq_u32( ctx->worker_thread->current_state, state );
+      T_eq_u32( ctx->worker_tcb->current_state, state );
     }
   }
 
@@ -1097,7 +1103,7 @@ test-support: |
   {
     Thread_Control *thread;
 
-    thread = ctx->worker_thread;
+    thread = ctx->worker_tcb;
 
     if ( thread->Wait.queue != NULL ) {
       ctx->wrapped_operations = thread->Wait.operations;
