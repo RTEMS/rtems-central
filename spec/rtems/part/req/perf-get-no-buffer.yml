@@ -47,8 +47,8 @@ test-teardown:
     return tic == toc;
   description: null
 text: |
-  When a partition has no free buffers, the ${.:limit-kind} runtime of exactly
-  ${../val/performance:/params/sample-count} unsatisfied calls to
+  When a partition has no free buffers, the ${.:/limit-kind} runtime of exactly
+  ${../val/perf:/params/sample-count} unsatisfied calls to
   ${../if/get-buffer:/name} in the ${.:/environment} shall be
-  ${.:limit-condition}.
+  ${.:/limit-condition}.
 type: requirement

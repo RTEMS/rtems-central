@@ -39,9 +39,9 @@ test-teardown:
     return tic == toc;
   description: null
 text: |
-  When a partition has exactly ${../val/performance:/params/buffer-count} minus
-  one free buffers, the ${.:limit-kind} runtime of exactly
-  ${../val/performance:/params/sample-count} successful calls to
+  When a partition has exactly ${../val/perf:/params/buffer-count} minus one
+  free buffers, the ${.:/limit-kind} runtime of exactly
+  ${../val/perf:/params/sample-count} successful calls to
   ${../if/return-buffer:/name} in the ${.:/environment} shall be
-  ${.:limit-condition}.
+  ${.:/limit-condition}.
 type: requirement

@@ -52,7 +52,7 @@ spec-example: |
   enabled-by: true
   links:
   - role: runtime-measurement-request
-    uid: ../val/performance
+    uid: ../val/perf
   limits:
     sparc/leon3:
       DirtyCache:
@@ -102,11 +102,11 @@ spec-example: |
       return tic == toc;
     description: null
   text: |
-    When a partition has exactly ${../val/performance:/params/buffer-count} free
-    buffers, the ${.:limit-kind} runtime of exactly
-    ${../val/performance:/params/sample-count} successful calls to
+    When a partition has exactly ${../val/perf:/params/buffer-count} free
+    buffers, the ${.:/limit-kind} runtime of exactly
+    ${../val/perf:/params/sample-count} successful calls to
     ${../if/get-buffer:/name} in the ${.:/environment} shall be
-    ${.:limit-condition}.
+    ${.:/limit-condition}.
   non-functional-type: performance-runtime
   requirement-type: non-functional
   type: requirement
