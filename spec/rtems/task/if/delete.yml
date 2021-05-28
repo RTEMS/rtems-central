@@ -80,6 +80,9 @@ return:
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
+      The directive was called from within interrupt context.
+    value: ${../../status/if/called-from-isr:/name}
+  - description: |
       The task resided on a remote node.
     value: ${../../status/if/illegal-on-remote-object:/name}
 type: interface
