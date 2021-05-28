@@ -11,5 +11,5 @@ references: []
 requirement-type: non-functional
 text: |
   Each non-default directive attribute constant shall be a power of two
-  representable as an integer of type ${../if/attribute}.
+  representable as an integer of type ${../if/attribute:/name}.
 type: requirement

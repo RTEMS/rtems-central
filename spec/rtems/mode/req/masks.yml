@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  Each task mode mask constant except ${../if/interrupt-mask} shall be a power
-  of two representable as an integer of type ${../if/mode:/name}.
+  Each task mode mask constant except ${../if/interrupt-mask:/name} shall be a
+  power of two representable as an integer of type ${../if/mode:/name}.
 type: requirement

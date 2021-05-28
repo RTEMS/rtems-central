@@ -12,5 +12,6 @@ requirement-type: functional
 text: |
   The return value of the ${../if/get-processor-maximum:/name} directive shall
   be the minimum of the processors available at the ${/glossary/target:/term}
-  and the ${/acfg/if/max-processors} application configuration option value.
+  and the ${/acfg/if/max-processors:/name} application configuration option
+  value.
 type: requirement

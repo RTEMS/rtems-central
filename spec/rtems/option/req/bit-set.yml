@@ -11,5 +11,5 @@ references: []
 requirement-type: non-functional
 text: |
   Each non-default directive option constant shall be a power of two
-  representable as an integer of type ${../if/option}.
+  representable as an integer of type ${../if/option:/name}.
 type: requirement

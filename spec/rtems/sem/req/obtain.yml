@@ -176,7 +176,7 @@ pre-conditions:
       ctx->tq_ctx.wait = TQ_NO_WAIT;
     text: |
       While the ${../if/obtain:/params[1]/name} parameter indicates the
-      ${../../option/if/no-wait} option.
+      ${../../option/if/no-wait:/name} option.
   - name: Timeout
     test-code: |
       ctx->tq_ctx.wait = TQ_WAIT_TICKS;
