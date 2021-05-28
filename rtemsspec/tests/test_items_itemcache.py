@@ -45,6 +45,8 @@ def test_load(tmpdir):
         item_count = len(items)
 
     item_cache = ItemCache(config, post_process_load)
+    assert len(item_cache.types) == 1
+    assert list(item_cache.types)[0] == ""
     assert item_count == len(item_cache.all)
     assert item_cache.updates
     cache_dir = config["cache-directory"]

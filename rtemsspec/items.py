@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides specification items and an item cache. """
 
-# Copyright (C) 2019, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2019, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@ import pickle
 import string
 import stat
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, \
-    Optional, Tuple, Union
+    Optional, Set, Tuple, Union
 import yaml
 
 
@@ -592,6 +592,7 @@ class ItemCache:
                  post_process_load: Optional[Callable[[ItemMap],
                                                       None]] = None):
         self._items = {}  # type: ItemMap
+        self._types = set()  # type: Set[str]
         self._updates = 0
         cache_dir = os.path.abspath(config["cache-directory"])
         for index, path in enumerate(config["paths"]):
@@ -623,6 +624,11 @@ class ItemCache:
     def all(self) -> ItemMap:
         """ Returns the map of all specification items. """
         return self._items
+
+    @property
+    def types(self) -> Set[str]:
+        """ Returns the types of the items. """
+        return self._types
 
     def add_volatile_item(self, path: str, uid: str) -> Item:
         """
@@ -700,7 +706,9 @@ class ItemCache:
             type_name = value[spec_type.key]
             path.append(type_name)
             spec_type = spec_type.refinements[type_name]
-        item["_type"] = "/".join(path)
+        the_type = "/".join(path)
+        item["_type"] = the_type
+        self._types.add(the_type)
 
 
 class EmptyItemCache(ItemCache):
