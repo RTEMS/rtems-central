@@ -3,7 +3,9 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 functional-type: action
-links: []
+links:
+- role: requirement-refinement
+  uid: group
 post-conditions:
 - name: SendStatus
   states:
