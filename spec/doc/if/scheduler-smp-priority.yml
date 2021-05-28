@@ -4,7 +4,9 @@ copyrights:
 enabled-by: true
 index-entries: []
 interface-type: unspecified-group
-links: []
+links:
+- role: interface-placement
+  uid: domain
 name: Deterministic Priority SMP Scheduler
 references:
   c-user: SchedulerSMPPriority
