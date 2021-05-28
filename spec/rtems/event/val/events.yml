@@ -16,6 +16,15 @@ test-actions:
   checks: []
   links: []
 - action-brief: |
+    Check that ${../if/pending-events:/name} is a constant expression which
+    evaluates to a value of zero.
+  action-code: |
+    RTEMS_STATIC_ASSERT( RTEMS_PENDING_EVENTS == 0, PENDING_EVENTS );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/pending-events
+- action-brief: |
     Calculate the value of a bitwise or of all 32 event constants.
   action-code: |
     rtems_event_set all;
@@ -31,7 +40,9 @@ test-actions:
       Check that the value is equal to RTEMS_ALL_EVENTS.
     code: |
       T_step_eq_u32( ${step}, all, RTEMS_ALL_EVENTS );
-    links: []
+    links:
+    - role: validation
+      uid: ../req/all-events
   links: []
 - action-brief: |
     Validate the Event Manager directive options.

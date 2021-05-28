@@ -18,7 +18,9 @@ test-actions:
         ctx->event,
         ( (rtems_event_set) 1 ) << ctx->number
       );
-    links: []
+    links:
+    - role: validation
+      uid: ../req/event-constant
   - brief: |
       Check that the event number bit of the event constant is not set in
       RTEMS_PENDING_EVENTS.
