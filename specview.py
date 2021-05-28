@@ -36,8 +36,8 @@ from rtemsspec.util import load_config
 from rtemsspec.validation import Transition, TransitionMap
 
 _CHILD_ROLES = [
-    "requirement-refinement", "interface-ingroup", "interface-function",
-    "validation", "appl-config-group-member"
+    "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
+    "interface-function", "validation", "appl-config-group-member"
 ]
 
 _PARENT_ROLES = ["interface-enumerator", "interface-placement"]

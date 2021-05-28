@@ -12,6 +12,8 @@ interface-type: macro
 links:
 - role: interface-placement
   uid: ../../task/if/header
+- role: interface-ingroup-hidden
+  uid: group
 name: rtems_scheduler_get_processor
 notes: null
 params: []

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: interface-ingroup-hidden
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      It defines the interface hidden group membership role of links.  This
+      role may be used to make an interface a group member and hide this
+      relationship in the documentation.  An example is an optimized macro
+      implementation of a directive which has the same name as the
+      corresponding directive.
+    mandatory-attributes: all
+spec-name: Interface Hidden Group Membership Link Role
+spec-type: interface-ingroup-hidden
+type: spec
