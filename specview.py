@@ -28,9 +28,10 @@
 import argparse
 import itertools
 import sys
-from typing import List, Set, Tuple
+from typing import Any, List, Set, Tuple
 
-from rtemsspec.items import Item, ItemCache, Link
+from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
+    ItemGetValueContext, Link
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.util import load_config
 from rtemsspec.validation import Transition, TransitionMap
@@ -43,14 +44,62 @@ _CHILD_ROLES = [
 _PARENT_ROLES = ["interface-enumerator", "interface-placement"]
 
 
+def _get_value_dummy(_ctx: ItemGetValueContext) -> Any:
+    return ""
+
+
+_MAPPER = ItemMapper(EmptyItem())
+_MAPPER.add_get_value("requirement/functional/action:/text-template",
+                      _get_value_dummy)
+_MAPPER.add_get_value("glossary/term:/plural", _get_value_dummy)
+_MAPPER.add_get_value(
+    "requirement/non-functional/performance-runtime:/limit-kind",
+    _get_value_dummy)
+_MAPPER.add_get_value(
+    "requirement/non-functional/performance-runtime:/limit-condition",
+    _get_value_dummy)
+_MAPPER.add_get_value(
+    "requirement/non-functional/performance-runtime:/environment",
+    _get_value_dummy)
+
+
+def _visit_action_conditions(item: Item, name: str) -> None:
+    for index, condition in enumerate(item[name]):
+        for index_2, state in enumerate(condition["states"]):
+            _MAPPER.substitute(state["text"], item,
+                               f"{name}[{index}]/states[{index_2}]/text")
+
+
+def _visit_action(item: Item) -> None:
+    _visit_action_conditions(item, "pre-conditions")
+    _visit_action_conditions(item, "post-conditions")
+
+
+_VISITORS = {
+    "requirement/functional/action": _visit_action,
+}
+
+
+def _visit_item(item: Item, level: int) -> None:
+    print(f"{'  ' * level}{item.uid}")
+    if item.type.startswith("requirement"):
+        _MAPPER.substitute(item["text"], item)
+    try:
+        visitor = _VISITORS[item.type]
+    except KeyError:
+        pass
+    else:
+        visitor(item)
+
+
 def _view_interface_placment(item: Item, level: int) -> None:
     for child in item.children("interface-placement"):
-        print(f"{'  ' * level}{child.uid}")
+        _visit_item(child, level)
         _view_interface_placment(child, level + 1)
 
 
 def _view(item: Item, level: int) -> None:
-    print(f"{'  ' * level}{item.uid}")
+    _visit_item(item, level)
     _view_interface_placment(item, level + 1)
     for child in item.children(_CHILD_ROLES):
         _view(child, level + 1)
