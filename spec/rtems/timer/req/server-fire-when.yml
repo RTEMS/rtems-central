@@ -137,9 +137,9 @@ post-conditions:
       );
     text: |
       The ${../glossary/timerserviceroutine:/term} shall be invoked at the
-      wall time (see ${../glossary/realtimeclock:/term}), which was provided by
-      the ${../if/server-fire-when:/params[1]/name} parameter
-      in the past call to ${../if/server-fire-when:/name}.
+      wall time (see ${../glossary/realtimeclock:/term}) (ignoring ticks),
+      which was provided by the ${../if/server-fire-when:/params[1]/name}
+      parameter in the past call to ${../if/server-fire-when:/name}.
   - name: Nop
     test-code: |
       /*
@@ -244,8 +244,8 @@ pre-conditions:
     test-code: |
       ctx->routine_param = TimerServiceRoutine;
     text: |
-      While the ${../if/server-fire-when:/params[2]/name} parameter references an
-      object of type ${../if/service-routine-entry:/name}.
+      While the ${../if/server-fire-when:/params[2]/name} parameter references
+      an object of type ${../if/service-routine-entry:/name}.
   - name: 'Null'
     test-code: |
       ctx->routine_param = NULL;
@@ -260,13 +260,21 @@ pre-conditions:
     test-code: |
       ctx->wall_time_param = &tod_schedule;
     text: |
-      While the ${../if/server-fire-when:/params[1]/name} parameter is a positive
-      (greater than 0) number.
+      While the ${../if/server-fire-when:/params[1]/name} parameter references
+      a time at least one second in the future but not later than the last
+      second of the year 2105. (Times after 2105 are invalid.)
   - name: Invalid
     test-code: |
       ctx->wall_time_param = &tod_invalid;
     text: |
       While the ${../if/server-fire-when:/params[1]/name} parameter is invalid.
+  - name: Past
+    test-code: |
+      ctx->wall_time_param = &tod_past;
+    text: |
+      While the ${../if/server-fire-when:/params[1]/name} parameter references
+      a time in the current second or in the past but not earlier than 1988.
+      (Times before 1988 are invalid.)
   - name: 'Null'
     test-code: |
       ctx->wall_time_param = NULL;
@@ -445,20 +453,20 @@ test-context:
   member: |
     rtems_id timer_id
 - brief: |
-    This member specifies the ${../if/server-fire-when:/params[0]/name} parameter
-    for the action.
+    This member specifies the ${../if/server-fire-when:/params[0]/name}
+    parameter for the action.
   description: null
   member: |
     rtems_id id_param
 - brief: |
-    This member specifies the ${../if/server-fire-when:/params[1]/name} parameter
-    for the action.
+    This member specifies the ${../if/server-fire-when:/params[1]/name}
+    parameter for the action.
   description: null
   member: |
     const rtems_time_of_day *wall_time_param
 - brief: |
-    This member specifies the ${../if/server-fire-when:/params[2]/name} parameter
-    for the action.
+    This member specifies the ${../if/server-fire-when:/params[2]/name}
+    parameter for the action.
   description: null
   member: |
     rtems_timer_service_routine_entry routine_param
@@ -570,6 +578,7 @@ test-support: |
   static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
   static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 5, 0, 0, 0 };
   static const rtems_time_of_day tod_invalid  = { 1985, 1, 1, 0, 0, 0, 0 };
+  static const rtems_time_of_day tod_past     = { 1999, 12, 31, 23, 59, 59, 1 };
 
   static void TriggerTimer(
     const RtemsTimerReqServerFireWhen_Context *ctx,
@@ -981,6 +990,7 @@ transition-map:
     WallTime:
     - Valid
     - Invalid
+    - Past
     Id: all
     Context:
     - None
@@ -1007,6 +1017,7 @@ transition-map:
     WallTime:
     - Valid
     - Invalid
+    - Past
     Id: all
     Context:
     - Server
@@ -1033,6 +1044,7 @@ transition-map:
     WallTime:
     - Valid
     - Invalid
+    - Past
     Id: all
     Context:
     - Interrupt
@@ -1060,6 +1072,7 @@ transition-map:
     - Valid
     WallTime:
     - Invalid
+    - Past
     Id: all
     Context:
     - None
@@ -1085,6 +1098,7 @@ transition-map:
     - Valid
     WallTime:
     - Invalid
+    - Past
     Id: all
     Context:
     - Server
@@ -1110,6 +1124,7 @@ transition-map:
     - Valid
     WallTime:
     - Invalid
+    - Past
     Id: all
     Context:
     - Interrupt

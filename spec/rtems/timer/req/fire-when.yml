@@ -131,8 +131,8 @@ post-conditions:
       );
     text: |
       The ${../glossary/timerserviceroutine:/term} shall be invoked at the
-      wall time (see ${../glossary/realtimeclock:/term}), which was provided by
-      the ${../if/fire-when:/params[1]/name} parameter
+      wall time (see ${../glossary/realtimeclock:/term}) (ignoring ticks),
+      which was provided by the ${../if/fire-when:/params[1]/name} parameter
       in the past call to ${../if/fire-when:/name}.
   - name: Nop
     test-code: |
@@ -233,13 +233,21 @@ pre-conditions:
     test-code: |
       ctx->wall_time_param = &tod_schedule;
     text: |
-      While the ${../if/fire-when:/params[1]/name} parameter is a positive
-      (greater than 0) number.
+      While the ${../if/fire-when:/params[1]/name} parameter references
+      a time at least one second in the future but not later than the last
+      second of the year 2105. (Times after 2105 are invalid.)
   - name: Invalid
     test-code: |
       ctx->wall_time_param = &tod_invalid;
     text: |
       While the ${../if/fire-when:/params[1]/name} parameter is invalid.
+  - name: Past
+    test-code: |
+      ctx->wall_time_param = &tod_past;
+    text: |
+      While the ${../if/fire-when:/params[1]/name} parameter references
+      a time in the current second or in the past but not earlier than 1988.
+      (Times before 1988 are invalid.)
   - name: 'Null'
     test-code: |
       ctx->wall_time_param = NULL;
@@ -549,6 +557,11 @@ test-support: |
   static const rtems_time_of_day tod_now      = { 2000, 1, 1, 0, 0, 0, 0 };
   static const rtems_time_of_day tod_schedule = { 2000, 1, 1, 5, 0, 0, 0 };
   static const rtems_time_of_day tod_invalid  = { 1985, 1, 1, 0, 0, 0, 0 };
+  /*
+   * rtems_fire_when() ignores ticks and treads all wall times in the
+   * current second like being in the "past". This border case is tested.
+   */
+  static const rtems_time_of_day tod_past     = { 2000, 1, 1, 0, 0, 0, 50 };
 
   static void TriggerTimer(
     const RtemsTimerReqFireWhen_Context *ctx,
@@ -904,6 +917,7 @@ transition-map:
     WallTime:
     - Valid
     - Invalid
+    - Past
     Id: all
     Context:
     - None
@@ -928,6 +942,7 @@ transition-map:
     WallTime:
     - Valid
     - Invalid
+    - Past
     Id: all
     Context:
     - Server
@@ -952,6 +967,7 @@ transition-map:
     WallTime:
     - Valid
     - Invalid
+    - Past
     Id: all
     Context:
     - Interrupt
@@ -977,6 +993,7 @@ transition-map:
     - Valid
     WallTime:
     - Invalid
+    - Past
     Id: all
     Context:
     - None
@@ -1000,6 +1017,7 @@ transition-map:
     - Valid
     WallTime:
     - Invalid
+    - Past
     Id: all
     Context:
     - Server
@@ -1023,6 +1041,7 @@ transition-map:
     - Valid
     WallTime:
     - Invalid
+    - Past
     Id: all
     Context:
     - Interrupt
