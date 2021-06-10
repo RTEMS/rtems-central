@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This header file defines the Interrupt Manager API.
+  This header file defines data structures of the Chain Handler.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
@@ -8,7 +8,7 @@ index-entries: []
 interface-type: header-file
 links:
 - role: interface-placement
-  uid: /if/domain
-path: rtems/rtems/intr.h
+  uid: ../../if/domain
+path: rtems/score/chain.h
 prefix: cpukit/include
 type: interface

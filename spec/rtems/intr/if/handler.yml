@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Interrupt handler routines shall have this type.
+copyrights:
+- Copyright (C) 2008, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+  default: void ( *${.:/name} )( void * )
+  variants: []
+description: null
+enabled-by: true
+index-entries: []
+interface-type: typedef
+links:
+- role: interface-placement
+  uid: header-2
+- role: interface-ingroup
+  uid: group
+name: rtems_interrupt_handler
+notes: null
+type: interface
