@@ -32,10 +32,10 @@ name: rtems_clock_get_uptime_timeval
 notes: null
 params:
 - description: |
-    is the pointer to a timeval structure variable.  The seconds and
+    is the pointer to a ${/c/if/timeval:/name} object.  The seconds and
     microseconds elapsed since some time point during the system initialization
     and some point during the directive call using
-    ${/glossary/clock-monotonic:/term} will be stored in this variable.  The
+    ${/glossary/clock-monotonic:/term} will be stored in this object.  The
     pointer shall be valid, otherwise the behaviour is undefined.
   dir: out
   name: uptime

@@ -169,9 +169,9 @@ params:
   dir: null
   name: priority_ceiling
 - description: |
-    is the pointer to an object identifier variable.  When the directive call
-    is successful, the identifier of the created semaphore will be stored in
-    this variable.
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive
+    call is successful, the identifier of the created semaphore will be stored
+    in this object.
   dir: out
   name: id
 return:

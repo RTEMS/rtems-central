@@ -50,9 +50,9 @@ params:
   dir: null
   name: id
 - description: |
-    is the pointer to a buffer pointer variable.  When the directive call is
+    is the pointer to a ``void`` pointer object.  When the directive call is
     successful, the pointer to the allocated buffer will be stored in this
-    variable.
+    object.
   dir: out
   name: buffer
 return:

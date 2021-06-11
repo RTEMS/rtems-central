@@ -84,9 +84,9 @@ params:
   dir: null
   name: maximum_waiters
 - description: |
-    is the pointer to an object identifier variable.  When the directive call
+    is the pointer to an ${../../type/if/id:/name} object.  When the directive call
     is successful, the identifier of the created barrier will be stored in this
-    variable.
+    object.
   dir: null
   name: id
 return:

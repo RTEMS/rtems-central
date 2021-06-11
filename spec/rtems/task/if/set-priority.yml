@@ -69,10 +69,10 @@ params:
   dir: null
   name: new_priority
 - description: |
-    is the pointer to an ${../../type/if/priority:/name} variable.  When the
+    is the pointer to an ${../../type/if/priority:/name} object.  When the
     directive call is successful, the current or previous priority of the task
     with respect to its ${/glossary/scheduler-home:/term} will be stored in
-    this variable.
+    this object.
   dir: out
   name: old_priority
 return:

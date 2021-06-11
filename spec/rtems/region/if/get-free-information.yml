@@ -51,9 +51,9 @@ params:
   dir: null
   name: id
 - description: |
-    is the pointer to a ${/score/heap/if/information-block:/name} variable.
-    When the directive call is successful, the free information of the region
-    will be stored in this variable.
+    is the pointer to a ${/score/heap/if/information-block:/name} object.  When
+    the directive call is successful, the free information of the region will
+    be stored in this object.
   dir: out
   name: the_info
 return:

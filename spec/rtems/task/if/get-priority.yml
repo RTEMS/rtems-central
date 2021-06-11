@@ -53,9 +53,9 @@ params:
   dir: null
   name: scheduler_id
 - description: |
-    is the pointer to an ${../../type/if/priority:/name} variable.  When the
+    is the pointer to an ${../../type/if/priority:/name} object.  When the
     directive call is successful, the current priority of the task with respect
-    to the specified scheduler will be stored in this variable.
+    to the specified scheduler will be stored in this object.
   dir: out
   name: priority
 return:

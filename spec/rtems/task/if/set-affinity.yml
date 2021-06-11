@@ -42,15 +42,16 @@ params:
   dir: null
   name: id
 - description: |
-    is the size of the referenced processor set variable in bytes.
+    is the size of the processor set referenced by ${.:/params[2]/name} in
+    bytes.
   dir: null
   name: cpusetsize
 - description: |
-    is the pointer to a processor set variable.  The processor set defines the
-    new processor affinity set of the task.  A set bit in the processor set
-    means that the corresponding processor shall be in the processor affinity
-    set of the task, otherwise the bit shall be cleared.
-  dir: null
+    is the pointer to a ${/c/if/cpu_set_t:/name} object.  The processor set
+    defines the new processor affinity set of the task.  A set bit in the
+    processor set means that the corresponding processor shall be in the
+    processor affinity set of the task, otherwise the bit shall be cleared.
+  dir: out
   name: cpuset
 return:
   return: null

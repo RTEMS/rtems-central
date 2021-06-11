@@ -58,9 +58,9 @@ params:
   dir: null
   name: size
 - description: |
-    is the pointer to an ${/c/if/uint32_t:/name} variable.  When the directive
+    is the pointer to an ${/c/if/uint32_t:/name} object.  When the directive
     call is successful, the number of unblocked tasks will be stored in this
-    variable.
+    object.
   dir: out
   name: count
 return:

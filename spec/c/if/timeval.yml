@@ -3,10 +3,11 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified
+interface-type: unspecified-type
 links:
 - role: interface-placement
   uid: sys-impl-timeval
 name: struct timeval
-references: {}
+references:
+  url: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/time.h.html
 type: interface

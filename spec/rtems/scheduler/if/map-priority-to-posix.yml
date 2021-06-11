@@ -38,9 +38,9 @@ params:
   dir: null
   name: priority
 - description: |
-    is the pointer to a POSIX thread priority variable.  When the directive
-    call is successful, the POSIX thread priority value corresponding to the
-    specified Classic API task priority value will be stored in this variable.
+    is the pointer to an ``int`` object.  When the directive call is
+    successful, the POSIX thread priority value corresponding to the specified
+    Classic API task priority value will be stored in this object.
   dir: out
   name: posix_priority
 return:

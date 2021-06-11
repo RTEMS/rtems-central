@@ -159,9 +159,9 @@ params:
   dir: null
   name: new_priority
 - description: |
-    is the pointer to a task priority variable.  When the directive call is
-    successful, the old priority of the semaphore corresponding to the
-    specified scheduler will be stored in this variable.
+    is the pointer to an ${../../type/if/priority:/name} object.  When the
+    directive call is successful, the old priority of the semaphore
+    corresponding to the specified scheduler will be stored in this object.
   dir: out
   name: old_priority
 return:

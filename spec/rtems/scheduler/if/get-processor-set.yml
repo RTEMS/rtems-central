@@ -35,13 +35,14 @@ params:
   dir: null
   name: scheduler_id
 - description: |
-    is the size of the referenced processor set variable in bytes.
+    is the size of the processor set referenced by ${.:/params[2]/name} in
+    bytes.
   dir: null
   name: cpusetsize
 - description: |
-    is the pointer to a processor set variable.  When the directive call is
-    successful, the processor set of the scheduler will be stored in this
-    variable.  A set bit in the processor set means that the corresponding
+    is the pointer to a ${/c/if/cpu_set_t:/name} object.  When the directive
+    call is successful, the processor set of the scheduler will be stored in
+    this object.  A set bit in the processor set means that the corresponding
     processor is owned by the scheduler, otherwise the bit is cleared.
   dir: out
   name: cpuset

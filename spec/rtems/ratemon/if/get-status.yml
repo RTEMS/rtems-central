@@ -60,9 +60,9 @@ params:
   dir: null
   name: id
 - description: |
-    is the pointer to a ${period-status:/name} variable.  When the directive
+    is the pointer to an ${period-status:/name} object.  When the directive
     call is successful, the detailed period status will be stored in this
-    variable.
+    object.
   dir: out
   name: status
 return:

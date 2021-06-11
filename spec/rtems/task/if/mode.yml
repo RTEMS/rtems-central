@@ -132,9 +132,9 @@ params:
   dir: null
   name: mask
 - description: |
-    is the pointer to a mode variable.  When the directive call
-    is successful, the mode of the task before any mode changes done by the
-    directive call will be stored in this variable.
+    is the pointer to an ${../../mode/if/mode:/name} object.  When the
+    directive call is successful, the mode of the task before any mode changes
+    done by the directive call will be stored in this object.
   dir: null
   name: previous_mode_set
 return:

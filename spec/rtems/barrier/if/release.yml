@@ -40,8 +40,9 @@ params:
   dir: null
   name: id
 - description: |
-    is the pointer to an integer variable.  When the directive call is
-    successful, the number of released tasks will be stored in this variable.
+    is the pointer to an ${/c/if/uint32_t:/name} object.  When the directive
+    call is successful, the number of released tasks will be stored in this
+    object.
   dir: out
   name: released
 return:

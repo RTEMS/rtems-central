@@ -47,9 +47,9 @@ params:
   dir: null
   name: segment
 - description: |
-    is the pointer to a ${/c/if/uintptr_t:/name} variable.  When the directive
+    is the pointer to a ${/c/if/uintptr_t:/name} object.  When the directive
     call is successful, the size of the segment in bytes will be stored in this
-    variable.
+    object.
   dir: out
   name: size
 return:

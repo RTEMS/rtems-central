@@ -96,11 +96,11 @@ params:
   dir: null
   name: buffer
 - description: |
-    is the pointer to a ${/c/if/size_t:/name} variable.  When the directive
-    call is successful, the size in bytes of the received messages will be
-    stored in this variable.  This parameter cannot be used to specify the size
-    of the buffer.
-  dir: null
+    is the pointer to a ${/c/if/size_t:/name} object.  When the directive call
+    is successful, the size in bytes of the received messages will be stored in
+    this object.  This parameter cannot be used to specify the size of the
+    buffer.
+  dir: out
   name: size
 - description: |
     is the option set.
