@@ -158,12 +158,14 @@ def _add_definition(node: "Node", item: Item, prefix: str,
     variants = value["variants"]
     if variants:
         ifelse = "#if "
-        with node.mapper.prefix(os.path.join(prefix, "variants")):
-            for variant in variants:
+        for index, variant in enumerate(variants):
+            prefix_2 = os.path.join(prefix, f"variants[{index}]")
+            with node.mapper.prefix(prefix_2):
                 enabled_by = enabled_by_to_exp(
                     variant["enabled-by"],
                     _InterfaceExpressionMapper(node.mapper))
                 content.append(f"{ifelse}{enabled_by}")
+            with node.mapper.prefix(os.path.join(prefix_2, "definition")):
                 with content.indent():
                     content.append(get_lines(node, item,
                                              variant["definition"]))
