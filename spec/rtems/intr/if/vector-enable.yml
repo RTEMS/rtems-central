@@ -1,9 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Clears the interrupt vector.
+  Enables the interrupt vector.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
     attributes: null
@@ -12,13 +11,18 @@ definition:
     - ${vector-number:/name} ${.:/params[0]/name}
     return: ${../../status/if/code:/name}
   variants: []
-description: null
+description: |
+  The directive enables the interrupt vector specified by ${.:/params[0]/name}.
+  This allows that interrupt service requests are issued to the target
+  processors of the interrupt vector.  Interrupt service requests for an
+  interrupt vector may be caused by ${cause:/name}, ${cause-on:/name},
+  external signals, or messages.
 enabled-by: true
 index-entries: []
 interface-type: function
 links:
 - role: interface-placement
-  uid: header
+  uid: header-2
 - role: interface-ingroup
   uid: group
 - role: constraint
@@ -29,13 +33,14 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/directive-no-preempt
-name: rtems_interrupt_clear
+name: rtems_interrupt_vector_enable
 notes: |
   The ${get-attributes:/name} directive may be used to check if an interrupt
-  vector can be cleared.
+  vector can be enabled.  Interrupt vectors may be disabled by
+  ${vector-disable:/name}.
 params:
 - description: |
-    is the number of the interrupt vector to clear.
+    is the number of the interrupt vector to enable.
   dir: null
   name: vector
 return:
@@ -49,6 +54,6 @@ return:
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
-      The request to cause the interrupt vector has not been satisfied.
+      The request to enable the interrupt vector has not been satisfied.
     value: ${../../status/if/unsatisfied:/name}
 type: interface

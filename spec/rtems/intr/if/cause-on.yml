@@ -1,15 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Clears the interrupt vector.
+  Causes the interrupt vector on the processor.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 definition:
   default:
     attributes: null
     body: null
     params:
     - ${vector-number:/name} ${.:/params[0]/name}
+    - ${/c/if/uint32_t:/name} ${.:/params[1]/name}
     return: ${../../status/if/code:/name}
   variants: []
 description: null
@@ -29,15 +29,19 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/directive-no-preempt
-name: rtems_interrupt_clear
+name: rtems_interrupt_cause_on
 notes: |
   The ${get-attributes:/name} directive may be used to check if an interrupt
-  vector can be cleared.
+  vector can be caused on a processor.
 params:
 - description: |
-    is the number of the interrupt vector to clear.
+    is the number of the interrupt vector to cause.
   dir: null
   name: vector
+- description: |
+    is the index of the target processor of the interrupt vector to cause.
+  dir: null
+  name: cpu_index
 return:
   return: null
   return-values:
@@ -48,6 +52,14 @@ return:
       There was no interrupt vector associated with the number specified by
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
+  - description: |
+      The processor specified by ${.:/params[1]/name} was not configured to be
+      used by the application.
+    value: ${../../status/if/not-configured:/name}
+  - description: |
+      The processor specified by ${.:/params[1]/name} was configured to be used
+      by the application, however, it was not online.
+    value: ${../../status/if/incorrect-state:/name}
   - description: |
       The request to cause the interrupt vector has not been satisfied.
     value: ${../../status/if/unsatisfied:/name}

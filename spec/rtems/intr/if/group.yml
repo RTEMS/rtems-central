@@ -34,10 +34,6 @@ links:
 - role: placement-order
   uid: is-in-progress
 - role: placement-order
-  uid: cause
-- role: placement-order
-  uid: clear
-- role: placement-order
   uid: lock-initialize
 - role: placement-order
   uid: lock-destroy
@@ -78,9 +74,29 @@ links:
 - role: placement-order
   uid: handler-remove
 - role: placement-order
+  uid: vector-is-enabled
+- role: placement-order
+  uid: vector-enable
+- role: placement-order
+  uid: vector-disable
+- role: placement-order
+  uid: is-pending
+- role: placement-order
+  uid: cause
+- role: placement-order
+  uid: cause-on
+- role: placement-order
+  uid: clear
+- role: placement-order
   uid: get-affinity
 - role: placement-order
   uid: set-affinity
+- role: placement-order
+  uid: signal-variant
+- role: placement-order
+  uid: attributes
+- role: placement-order
+  uid: get-attributes
 - role: placement-order
   uid: handler-iterate
 - role: placement-order
