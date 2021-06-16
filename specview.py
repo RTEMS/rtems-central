@@ -34,7 +34,7 @@ from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext, Link
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.util import load_config
-from rtemsspec.validation import Transition, TransitionMap
+from rtemsspec.transitionmap import Transition, TransitionMap
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
