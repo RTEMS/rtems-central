@@ -51,7 +51,7 @@ params:
     defines the new processor affinity set of the task.  A set bit in the
     processor set means that the corresponding processor shall be in the
     processor affinity set of the task, otherwise the bit shall be cleared.
-  dir: out
+  dir: null
   name: cpuset
 return:
   return: null
