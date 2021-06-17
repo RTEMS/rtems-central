@@ -70,6 +70,16 @@ links:
 - role: placement-order
   uid: is-replace
 - role: placement-order
+  uid: entry
+- role: placement-order
+  uid: entry-initializer
+- role: placement-order
+  uid: entry-initialize
+- role: placement-order
+  uid: entry-install
+- role: placement-order
+  uid: entry-remove
+- role: placement-order
   uid: handler-install
 - role: placement-order
   uid: handler-remove
