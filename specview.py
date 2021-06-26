@@ -194,9 +194,14 @@ def _action_list(enabled: List[str], item: Item) -> None:
         if post_cond[0]:
             print(transition_map.skip_idx_to_name(post_cond[0]))
         else:
-            print(", ".join(
-                _to_name(transition_map, co_idx, st_idx)
-                for co_idx, st_idx in enumerate(post_cond[1:])))
+            names = []  # type: List[str]
+            for co_idx, st_idx in enumerate(post_cond[1:]):
+                st_name = transition_map.post_co_idx_st_idx_to_st_name(
+                    co_idx, st_idx)
+                if st_name != "NA":
+                    co_name = transition_map.post_co_idx_to_co_name(co_idx)
+                    names.append(f"{co_name} = {st_name}")
+            print(", ".join(names))
         for row in pre_conds:
             entries = []
             for co_idx, co_states in enumerate(row):
@@ -206,7 +211,8 @@ def _action_list(enabled: List[str], item: Item) -> None:
                         co_idx, st_idx) for st_idx in set(co_states)
                 ]
                 if len(states) == 1:
-                    entries.append(f"{co_name} = {states[0]}")
+                    if states[0] != "NA":
+                        entries.append(f"{co_name} = {states[0]}")
                 else:
                     entries.append(f"{co_name} = {{ " + ", ".join(states) +
                                    " }")
