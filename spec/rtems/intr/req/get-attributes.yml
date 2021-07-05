@@ -104,6 +104,7 @@ test-action: |
     for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
       rtems_status_code sc;
 
+      memset( &ctx->attributes_obj, 0xff, sizeof( ctx->attributes_obj ) );
       sc = rtems_interrupt_get_attributes( vector, ctx->attributes );
 
       if ( sc == RTEMS_INVALID_ID ) {
@@ -112,6 +113,22 @@ test-action: |
 
       T_rsc_success( sc );
       ctx->status = sc;
+
+      if ( ctx->attributes_obj.always_enabled ) {
+        T_true( ctx->attributes_obj.can_enable );
+        T_true( ctx->attributes_obj.maybe_enable );
+        T_false( ctx->attributes_obj.can_disable );
+      }
+
+      if ( ctx->attributes_obj.can_enable ) {
+        T_true( ctx->attributes_obj.maybe_enable );
+      }
+
+      if ( ctx->attributes_obj.can_disable ) {
+        T_true(
+          ctx->attributes_obj.can_enable || ctx->attributes_obj.maybe_enable
+        );
+      }
     }
   } else {
     if ( ctx->valid_vector ) {
