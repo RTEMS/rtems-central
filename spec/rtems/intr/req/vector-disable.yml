@@ -56,6 +56,15 @@ post-conditions:
     text: |
       The interrupt vector specified by ${../if/vector-disable:/params[0]/name}
       shall be disabled.
+  - name: Maybe
+    test-code: |
+      /*
+       * Validation is done by CheckVectorDisable() for each interrupt
+       * vector.
+       */
+    text: |
+      The interrupt vector specified by ${../if/vector-disable:/params[0]/name}
+      may be disabled.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -107,7 +116,16 @@ pre-conditions:
        */
     text: |
       While the interrupt vector associated with the
-      ${../if/vector-disable:/params[0]/name} parameter can be enabled.
+      ${../if/vector-disable:/params[0]/name} parameter can be disabled.
+  - name: Maybe
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector,
+       * see CheckVectorDisable().
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/vector-disable:/params[0]/name} parameter may be disabled.
   - name: 'No'
     test-code: |
       /*
@@ -116,7 +134,7 @@ pre-conditions:
        */
     text: |
       While the interrupt vector associated with the
-      ${../if/vector-disable:/params[0]/name} parameter cannot be enabled.
+      ${../if/vector-disable:/params[0]/name} parameter cannot be disabled.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -144,7 +162,6 @@ test-action: |
       T_rsc_success( sc );
 
       has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
-
       CheckVectorDisable( ctx, &attr, has_installed_entries );
     }
   } else {
@@ -262,21 +279,16 @@ test-support: |
   {
     rtems_status_code sc;
 
-    if ( has_installed_entries ) {
+    if ( !attr->maybe_disable ) {
+      CheckUnsatisfied( ctx );
+    } else if ( has_installed_entries ) {
       T_true( IsEnabled( ctx ) );
-
-      if ( attr->can_enable && attr->can_disable ) {
-        Disable( ctx );
-        T_false( IsEnabled( ctx ) );
-        Enable( ctx );
-      } else if ( !attr->can_disable ) {
-        CheckUnsatisfied( ctx );
-      }
-
+      Disable( ctx );
+      T_true( !attr->can_disable || !IsEnabled( ctx ) );
+      Enable( ctx );
       T_true( IsEnabled( ctx ) );
-    } else if ( attr->can_enable && attr->can_disable && attr->is_maskable ) {
+    } else if ( attr->is_maskable && attr->maybe_enable && attr->can_disable ) {
       rtems_interrupt_entry entry;
-      bool                  enabled;
 
       ctx->interrupt_occurred = false;
       rtems_interrupt_entry_initialize( &entry, EntryRoutine, ctx, "Info" );
@@ -287,21 +299,23 @@ test-support: |
       );
       T_rsc_success( sc );
 
-      Disable( ctx );
-      T_false( IsEnabled( ctx ) );
-      Enable( ctx );
+      if ( IsEnabled( ctx ) ) {
+        bool enabled;
 
-      enabled = false;
-      sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled );
-      T_rsc_success( sc );
-      T_true( enabled || ctx->interrupt_occurred );
+        Disable( ctx );
+        T_false( IsEnabled( ctx ) );
+        Enable( ctx );
+
+        enabled = false;
+        sc = rtems_interrupt_vector_is_enabled( ctx->vector, &enabled );
+        T_rsc_success( sc );
+        T_true( enabled || ctx->interrupt_occurred );
+      }
 
       sc = rtems_interrupt_entry_remove( ctx->vector, &entry );
       T_rsc_success( sc );
 
       T_false( IsEnabled( ctx ) );
-    } else if ( !attr->can_disable ) {
-      CheckUnsatisfied( ctx );
     }
   }
 test-target: testsuites/validation/tc-intr-vector-disable.c
@@ -311,13 +325,19 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    IsEnabled: 'No'
+    IsEnabled:
+    - if:
+        pre-conditions:
+          CanDisable: 'Yes'
+      then: 'No'
+    - else: Maybe
   pre-conditions:
     Vector:
     - Valid
     IsEnabled: all
     CanDisable:
     - 'Yes'
+    - Maybe
 - enabled-by: true
   post-conditions:
     Status: InvId

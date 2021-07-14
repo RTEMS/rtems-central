@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This interrupt signal variant indicates that the interrupt trigger signal is
-  unspecified.
+  This interrupt signal variant indicates that the interrupt cannot be
+  triggered by a signal.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -12,6 +12,6 @@ enabled-by: true
 index-entries: []
 interface-type: enumerator
 links: []
-name: RTEMS_INTERRUPT_UNSPECIFIED_SIGNAL
+name: RTEMS_INTERRUPT_NO_SIGNAL
 notes: null
 type: interface

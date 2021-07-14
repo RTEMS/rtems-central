@@ -16,6 +16,8 @@ links:
 - role: interface-enumerator
   uid: signal-unspecified
 - role: interface-enumerator
+  uid: signal-no
+- role: interface-enumerator
   uid: signal-level-low
 - role: interface-enumerator
   uid: signal-level-high

@@ -125,6 +125,7 @@ test-action: |
       }
 
       if ( ctx->attributes_obj.can_disable ) {
+        T_true( ctx->attributes_obj.maybe_disable );
         T_true(
           ctx->attributes_obj.can_enable || ctx->attributes_obj.maybe_enable
         );

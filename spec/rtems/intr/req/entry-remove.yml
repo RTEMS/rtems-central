@@ -47,7 +47,7 @@ post-conditions:
       ${../../status/if/unsatisfied:/name}.
   test-epilogue: null
   test-prologue: null
-- name: IsEnabled
+- name: Disabled
   states:
   - name: Nop
     test-code: |
@@ -58,13 +58,32 @@ post-conditions:
       The enabled status of the interrupt vector specified by
       ${../if/entry-remove:/params[0]/name} shall not be modified by the
       ${../if/entry-remove:/name} call.
-  - name: 'No'
+  - name: 'Yes'
     test-code: |
-      T_true( ctx->enabled_before || ctx->interrupt_occurred );
-      T_false( ctx->enabled_after );
+      if ( ctx->attributes.can_disable ) {
+        T_false( ctx->enabled_after );
+      }
     text: |
       The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
       shall be disabled.
+  - name: Maybe
+    test-code: |
+      /* The comment of pre-condition ``CanDisable`` for the ``Yes`` state. */
+      if ( ctx->attributes.can_disable ) {
+        T_false( ctx->enabled_after );
+      }
+    text: |
+      The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
+      may be disabled.
+  - name: 'No'
+    test-code: |
+      /* The comment of pre-condition ``CanDisable`` for the ``Yes`` state. */
+      if ( ctx->attributes.can_disable ) {
+        T_false( ctx->enabled_after );
+      }
+    text: |
+      The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
+      shall not be disabled.
   test-epilogue: null
   test-prologue: null
 - name: Installed
@@ -73,7 +92,7 @@ post-conditions:
     test-code: |
       ctx->visited_entries = 0;
       sc = rtems_interrupt_handler_iterate(
-        ctx->valid_vector,
+        ctx->test_vector,
         VisitInstalledNo,
         ctx
       );
@@ -91,13 +110,13 @@ post-conditions:
 
       if ( expected_entries > 0 ) {
         ctx->entry_counter = 0;
-        bsp_interrupt_handler_dispatch( ctx->valid_vector );
+        bsp_interrupt_handler_dispatch( ctx->test_vector );
         T_eq_u32( ctx->entry_counter, 0 );
       } else {
         rtems_interrupt_entry *first;
 
         first = bsp_interrupt_handler_table[
-          bsp_interrupt_handler_index( ctx->valid_vector )
+          bsp_interrupt_handler_index( ctx->test_vector )
         ];
         T_null( first );
       }
@@ -109,7 +128,7 @@ post-conditions:
     test-code: |
       ctx->visited_entries = 0;
       sc = rtems_interrupt_handler_iterate(
-        ctx->valid_vector,
+        ctx->test_vector,
         VisitInstalledNop,
         ctx
       );
@@ -129,7 +148,7 @@ post-conditions:
 
       if ( ctx->installed ) {
         ctx->entry_counter = 0;
-        bsp_interrupt_handler_dispatch( ctx->valid_vector );
+        bsp_interrupt_handler_dispatch( ctx->test_vector );
         T_eq_u32( ctx->entry_counter, 1 );
       }
     text: |
@@ -145,7 +164,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->vector = ctx->valid_vector;
+      ctx->vector = ctx->test_vector;
     text: |
       While the ${../if/entry-remove:/params[0]/name} parameter is
       associated with an interrupt vector.
@@ -267,6 +286,34 @@ pre-conditions:
       context.
   test-epilogue: null
   test-prologue: null
+- name: CanDisable
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * This pre-condition depends on the attributes of an interrupt vector.
+       * For the validation test of ${../if/entry-remove:/name} a testable
+       * interrupt vector is determined by GetTestableInterruptVector().  The
+       * implementation of ${../if/entry-remove:/name} uses
+       * ${../if/vector-disable:/name} which is validated separately in detail.
+       */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/entry-remove:/params[0]/name} parameter can be disabled.
+  - name: Maybe
+    test-code: |
+      /* See comment for ``Yes`` state */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/entry-remove:/params[0]/name} parameter may be disabled.
+  - name: 'No'
+    test-code: |
+      /* See comment for ``Yes`` state */
+    text: |
+      While the interrupt vector associated with the
+      ${../if/entry-remove:/params[0]/name} parameter cannot be disabled.
+  test-epilogue: null
+  test-prologue: null
 - name: First
   states:
   - name: 'Yes'
@@ -348,17 +395,17 @@ test-cleanup: |
   rtems_status_code sc;
 
   if ( ctx->third_installed ) {
-    sc = rtems_interrupt_entry_remove( ctx->valid_vector, &ctx->third_entry );
+    sc = rtems_interrupt_entry_remove( ctx->test_vector, &ctx->third_entry );
     T_rsc_success( sc );
   }
 
   if ( ctx->other_installed ) {
-    sc = rtems_interrupt_entry_remove( ctx->valid_vector, &ctx->other_entry );
+    sc = rtems_interrupt_entry_remove( ctx->test_vector, &ctx->other_entry );
     T_rsc_success( sc );
   }
 
   if ( ctx->installed && ctx->status != RTEMS_SUCCESSFUL ) {
-    sc = rtems_interrupt_entry_remove( ctx->valid_vector, ctx->entry );
+    sc = rtems_interrupt_entry_remove( ctx->test_vector, ctx->entry );
     T_rsc_success( sc );
   }
 test-context:
@@ -419,10 +466,15 @@ test-context:
   member: |
     bool match
 - brief: |
-    This member provides a valid interrupt vector number.
+    This member provides the vector number of a testable interrupt vector.
   description: null
   member: |
-    rtems_vector_number valid_vector
+    rtems_vector_number test_vector
+- brief: |
+    This member provides the attributes of the testable interrupt vector.
+  description: null
+  member: |
+    rtems_interrupt_attributes attributes
 - brief: |
     If this member is true, then the service shall be initialized.
   description: null
@@ -490,27 +542,12 @@ test-prepare: |
 test-setup:
   brief: null
   code: |
+    rtems_status_code sc;
+
     ctx->initialized_during_setup = bsp_interrupt_is_initialized();
-
-    /* Find a valid interrupt vector for this test */
-    for (
-      ctx->valid_vector = 0;
-      ctx->valid_vector < BSP_INTERRUPT_VECTOR_COUNT;
-      ++ctx->valid_vector
-    ) {
-      rtems_status_code          sc;
-      rtems_interrupt_attributes attr;
-
-      sc = rtems_interrupt_get_attributes( ctx->valid_vector, &attr );
-
-      if (
-        sc == RTEMS_SUCCESSFUL && attr.can_enable && attr.can_disable &&
-        attr.is_maskable &&
-        !HasInterruptVectorEntriesInstalled( ctx->valid_vector )
-      ) {
-        break;
-      }
-    }
+    ctx->test_vector = GetTestableInterruptVector();
+    sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
+    T_rsc_success( sc );
   description: null
 test-stop: null
 test-support: |
@@ -541,7 +578,7 @@ test-support: |
     );
 
     sc = rtems_interrupt_entry_install(
-      ctx->valid_vector,
+      ctx->test_vector,
       RTEMS_INTERRUPT_SHARED,
       entry
     );
@@ -555,7 +592,7 @@ test-support: |
 
     (void) arg;
     ctx = T_fixture_context();
-    sc = rtems_interrupt_vector_disable( ctx->valid_vector );
+    sc = rtems_interrupt_vector_disable( ctx->test_vector );
     T_rsc_success( sc );
 
     ctx->interrupt_occurred = true;
@@ -586,7 +623,7 @@ test-support: |
     ctx = arg;
 
     sc = rtems_interrupt_vector_is_enabled(
-      ctx->valid_vector,
+      ctx->test_vector,
       &ctx->enabled_before
     );
     T_rsc_success( sc );
@@ -604,7 +641,7 @@ test-support: |
     );
 
     sc = rtems_interrupt_vector_is_enabled(
-      ctx->valid_vector,
+      ctx->test_vector,
       &ctx->enabled_after
     );
     T_rsc_success( sc );
@@ -694,12 +731,12 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    IsEnabled:
+    Disabled:
     - if:
         pre-conditions:
           First: 'Yes'
           Last: 'Yes'
-      then: 'No'
+      then-specified-by: CanDisable
     - else: Nop
     Installed: 'No'
   pre-conditions:
@@ -715,12 +752,13 @@ transition-map:
     - 'Yes'
     ISR:
     - 'No'
+    CanDisable: all
     First: all
     Last: all
 - enabled-by: true
   post-conditions:
     Status: Unsat
-    IsEnabled: Nop
+    Disabled: Nop
     Installed: N/A
   pre-conditions:
     Vector:
@@ -736,12 +774,13 @@ transition-map:
     - 'Yes'
     ISR:
     - 'No'
+    CanDisable: all
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    IsEnabled: Nop
+    Disabled: Nop
     Installed: N/A
   pre-conditions:
     Vector:
@@ -752,12 +791,13 @@ transition-map:
     EntryObj: N/A
     Init: all
     ISR: all
+    CanDisable: all
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    IsEnabled: N/A
+    Disabled: N/A
     Installed: N/A
   pre-conditions:
     Vector:
@@ -768,15 +808,17 @@ transition-map:
     EntryObj: N/A
     Init: all
     ISR: all
+    CanDisable: N/A
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: IncStat
-    IsEnabled: Nop
+    Disabled: Nop
     Installed: N/A
   pre-conditions:
-    Vector: all
+    Vector:
+    - Valid
     Entry:
     - Obj
     Routine: all
@@ -784,12 +826,31 @@ transition-map:
     Init:
     - 'No'
     ISR: all
+    CanDisable: all
+    First: N/A
+    Last: N/A
+- enabled-by: true
+  post-conditions:
+    Status: IncStat
+    Disabled: N/A
+    Installed: N/A
+  pre-conditions:
+    Vector:
+    - Invalid
+    Entry:
+    - Obj
+    Routine: all
+    EntryObj: N/A
+    Init:
+    - 'No'
+    ISR: all
+    CanDisable: N/A
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    IsEnabled: Nop
+    Disabled: Nop
     Installed: N/A
   pre-conditions:
     Vector:
@@ -802,12 +863,13 @@ transition-map:
     Init:
     - 'Yes'
     ISR: all
+    CanDisable: all
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    IsEnabled: N/A
+    Disabled: N/A
     Installed: N/A
   pre-conditions:
     Vector:
@@ -819,13 +881,14 @@ transition-map:
     EntryObj: N/A
     Init:
     - 'Yes'
+    CanDisable: N/A
     ISR: all
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: InvId
-    IsEnabled: N/A
+    Disabled: N/A
     Installed: N/A
   pre-conditions:
     Vector:
@@ -838,12 +901,13 @@ transition-map:
     Init:
     - 'Yes'
     ISR: all
+    CanDisable: N/A
     First: N/A
     Last: N/A
 - enabled-by: true
   post-conditions:
     Status: CalledFromISR
-    IsEnabled: Nop
+    Disabled: Nop
     Installed: Nop
   pre-conditions:
     Vector:
@@ -858,12 +922,13 @@ transition-map:
     - 'Yes'
     ISR:
     - 'Yes'
+    CanDisable: all
     First: all
     Last: all
 - enabled-by: true
   post-conditions:
     Status: CalledFromISR
-    IsEnabled: Nop
+    Disabled: Nop
     Installed: N/A
   pre-conditions:
     Vector:
@@ -879,6 +944,7 @@ transition-map:
     - 'Yes'
     ISR:
     - 'Yes'
+    CanDisable: all
     First: N/A
     Last: N/A
 type: requirement

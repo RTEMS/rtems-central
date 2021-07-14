@@ -33,9 +33,8 @@ definition:
     definition: bool ${.:name}
     description: |
       When an interrupt vector can be enabled, this means that the enabled
-      state can always be changed from disabled to enabled and from enabled to
-      enabled.  For an interrupt vector which can be enabled it follows that it
-      may be enabled.
+      state can always be changed from disabled to enabled.  For an interrupt
+      vector which can be enabled it follows that it may be enabled.
     kind: member
     name: can_enable
   variants: []
@@ -46,11 +45,10 @@ definition:
     definition: bool ${.:name}
     description: |
       When an interrupt vector may be enabled, this means that the enabled
-      state may be changed from disabled to enabled and from enabled to
-      enabled.  The requested enabled state change should be checked by
-      ${vector-is-enabled:/name}.  Some interrupt vectors may be optionally
-      avaialable and cannot be enabled on a particular
-      ${/glossary/target:/term}.
+      state may be changed from disabled to enabled.  The requested enabled
+      state change should be checked by ${vector-is-enabled:/name}.  Some
+      interrupt vectors may be optionally avaialable and cannot be enabled on a
+      particular ${/glossary/target:/term}.
     kind: member
     name: maybe_enable
   variants: []
@@ -61,10 +59,24 @@ definition:
     definition: bool ${.:name}
     description: |
       When an interrupt vector can be disabled, this means that the enabled
-      state can be changed from disabled to disabled and from enabled to
-      disabled.
+      state can be changed from enabled to disabled.  For an interrupt vector
+      which can be disabled it follows that it may be disabled.
     kind: member
     name: can_disable
+  variants: []
+- default:
+    brief: |
+      This member is true, if the interrupt vector may be disabled by
+      ${vector-disable:/name}, otherwise it is false.
+    definition: bool ${.:name}
+    description: |
+      When an interrupt vector may be disabled, this means that the enabled
+      state may be changed from enabled to disabled.  The requested enabled
+      state change should be checked by ${vector-is-enabled:/name}.  Some
+      interrupt vectors may be always enabled and cannot be disabled on a
+      particular ${/glossary/target:/term}.
+    kind: member
+    name: maybe_disable
   variants: []
 - default:
     brief: |
@@ -127,12 +139,12 @@ definition:
       vector can be triggered by a message.
     definition: bool ${.:name}
     description: |
-      Interrupts may be also triggered by signals, ${cause:/name} or
+      Interrupts may be also triggered by signals, ${cause:/name}, or
       ${cause-on:/name}.  Examples for message triggered interrupts are the
       PCIe MSI/MSI-X and the ARM GICv3 Locality-specific Peripheral Interrupts
       (LPI).
     kind: member
-    name: may_be_triggered_by_message
+    name: can_be_triggered_by_message
   variants: []
 - default:
     brief: |
@@ -140,8 +152,9 @@ definition:
       the interrupt vector.
     definition: ${signal-variant:/name} ${.:name}
     description: |
-      Interrupts may be also triggered by messages, ${cause:/name} or
-      ${cause-on:/name}.
+      Interrupts are normally triggered by signals which indicate an interrupt
+      request from a peripheral.  Interrupts may be also triggered by messages,
+      ${cause:/name}, or ${cause-on:/name}.
     kind: member
     name: trigger_signal
   variants: []
