@@ -67,7 +67,7 @@ pre-conditions:
   states:
   - name: Ticks
     test-code: |
-      ctx->timeout = 2;
+      ctx->timeout = UINT32_MAX;
     text: |
       While the ${../if/release:/params[1]/name} parameter is a clock tick
       interval.
@@ -84,7 +84,9 @@ pre-conditions:
   - name: Never
     test-code: |
       if ( ctx->timeout == RTEMS_NO_TIMEOUT ) {
-        SendEvents( ctx->low_worker_id, EVENT_CHECK_TIMER | EVENT_RELEASE );
+        SendEvents( ctx->low_worker_id, EVENT_TIMER_INACTIVE | EVENT_RELEASE );
+      } else {
+        SendEvents( ctx->low_worker_id, EVENT_TIMER_EXPIRE );
       }
     text: |
       While the calling task waits at the barrier, while the barrier is not
@@ -193,13 +195,15 @@ test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-  #define EVENT_CHECK_TIMER RTEMS_EVENT_0
+  #define EVENT_TIMER_INACTIVE RTEMS_EVENT_0
 
   #define EVENT_WAIT RTEMS_EVENT_1
 
   #define EVENT_RELEASE RTEMS_EVENT_2
 
   #define EVENT_DELETE RTEMS_EVENT_3
+
+  #define EVENT_TIMER_EXPIRE RTEMS_EVENT_4
 
   typedef RtemsBarrierReqWait_Context Context;
 
@@ -215,7 +219,7 @@ test-support: |
 
       events = ReceiveAnyEvents();
 
-      if ( ( events & EVENT_CHECK_TIMER ) != 0 ) {
+      if ( ( events & EVENT_TIMER_INACTIVE ) != 0 ) {
         T_eq_int(
           T_get_thread_timer_state( ctx->main_id ),
           T_THREAD_TIMER_INACTIVE
@@ -261,6 +265,14 @@ test-support: |
 
         prio = SetSelfPriority( prio );
         T_eq_u32( prio, PRIO_HIGH );
+      }
+
+      if ( ( events & EVENT_TIMER_EXPIRE ) != 0 ) {
+        T_eq_int(
+          T_get_thread_timer_state( ctx->main_id ),
+          T_THREAD_TIMER_SCHEDULED
+        );
+        FinalClockTick();
       }
     }
   }
