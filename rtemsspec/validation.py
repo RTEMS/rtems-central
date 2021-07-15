@@ -24,6 +24,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# pylint: disable=too-many-lines
+
 import itertools
 import os
 import re
@@ -896,12 +898,20 @@ class _SourceFile:
         content.write(os.path.join(base_directory, self._file))
 
 
+def _gather_build_source_files(item: Item, files: List[str]):
+    for parent in item.parents("build-dependency"):
+        _gather_build_source_files(parent, files)
+    files.extend(item.data.get("source", []))
+
+
 class _TestProgram:
     """ A test program. """
     def __init__(self, item: Item):
         """ Initializes a test program. """
         self._item = item
         self._source_files = []  # type: List[_SourceFile]
+        self._build_source_files = []  # type: List[str]
+        _gather_build_source_files(item, self._build_source_files)
 
     @property
     def source_files(self) -> List[_SourceFile]:
@@ -913,7 +923,7 @@ class _TestProgram:
         Adds the source files of the test program which are present in the
         source file map.
         """
-        for filename in self._item["source"]:
+        for filename in self._build_source_files:
             source_file = source_files.get(filename, None)
             if source_file is not None:
                 self._source_files.append(source_file)
