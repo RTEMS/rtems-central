@@ -24,7 +24,7 @@ text: |
   referring to an argument of that function,
   and the function argument number ${../if/printflike:/params[0]/name}
   is a ``printf``-format string,
-  and the function argument {../if/printflike:/params[1]/name} is 0,
+  and the function argument ${../if/printflike:/params[1]/name} is 0,
   the macro shall cause the compiler to use this information for
   checking the format string.
 type: requirement

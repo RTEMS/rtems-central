@@ -10,5 +10,5 @@ rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The runtime of {../if/group:/name} directives shall be measured.
+  The runtime of the ${../if/group:/name} directives shall be measured.
 type: requirement

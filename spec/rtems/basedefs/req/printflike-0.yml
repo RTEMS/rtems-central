@@ -21,12 +21,12 @@ text: |
   referring to two different arguments of that function,
   and the function argument number ${../if/printflike:/params[0]/name}
   is a ``printf``-format string,
-  and the function argument number {../if/printflike:/params[1]/name}
+  and the function argument number ${../if/printflike:/params[1]/name}
   is the first argument to be used in the ``printf``-format string,
   and all other arguments used in the ``printf``-format string
-  are arguments {../if/printflike:/params[1]/name} + 1,
-  {../if/printflike:/params[1]/name} + 2,
-  {../if/printflike:/params[1]/name} + 3, and so on,
+  are arguments ${../if/printflike:/params[1]/name} + 1,
+  ${../if/printflike:/params[1]/name} + 2,
+  ${../if/printflike:/params[1]/name} + 3, and so on,
   the macro shall cause the compiler to use this information for
   type checking the format string and arguments.
 type: requirement

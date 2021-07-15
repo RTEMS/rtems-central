@@ -28,7 +28,7 @@ text: |
   ${../if/have-member-same-type:/params[2]/name},
   the ${../if/have-member-same-type:/name} macro shall
   evaluate to the integer values 1 or 0 depending on whether
-  the types of the members {../if/have-member-same-type:/params[1]/name}
+  the types of the members ${../if/have-member-same-type:/params[1]/name}
   and ${../if/have-member-same-type:/params[3]/name} are compatible in
   the sense of C.
 type: requirement
