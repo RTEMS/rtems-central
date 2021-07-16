@@ -320,8 +320,6 @@ class Node:
 
     def generate_group(self) -> None:
         """ Generates a group. """
-        for ingroup in self.ingroups.values():
-            self.header_file.add_dependency(self, ingroup)
         self.content.add_group(self.item["identifier"], self.item["name"],
                                _get_group_identifiers(self.ingroups),
                                self.substitute_text(self.item["brief"]),
@@ -698,16 +696,11 @@ class _HeaderFile:
             node.depends_on.add(other)
             other.dependents.add(node)
 
-    def _resolve_ingroups(self, node: Node) -> None:
-        for ingroup in node.ingroups.values():
-            self.add_dependency(node, ingroup)
-
     def generate_nodes(self) -> None:
         """ Generates all nodes of this header file. """
         for child in self._item.children("interface-placement"):
             self._add_child(child)
         for node in self._nodes.values():
-            self._resolve_ingroups(node)
             node.generate()
 
     def _get_nodes_in_dependency_order(self) -> List[Node]:
