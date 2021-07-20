@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This group contains the ${/glossary/c11:/term} and ${/glossary/posix:/name}.
+  This group contains the ${/glossary/c11:/term} and ${/glossary/posix:/term}.
   interfaces.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
@@ -15,5 +15,5 @@ links:
 name: C and POSIX
 text: |
   The ${/glossary/api:/term} shall contain interfaces specified by
-  ${/glossary/c11:/term} and ${/glossary/posix:/name}.
+  ${/glossary/c11:/term} and ${/glossary/posix:/term}.
 type: interface
