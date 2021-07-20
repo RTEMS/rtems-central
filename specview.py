@@ -82,8 +82,9 @@ _VISITORS = {
 
 def _visit_item(item: Item, level: int) -> None:
     print(f"{'  ' * level}{item.uid}")
-    if item.type.startswith("requirement"):
-        _MAPPER.substitute(item["text"], item)
+    for name in ["text", "brief", "description", "notes"]:
+        if name in item:
+            _MAPPER.substitute(item[name], item)
     try:
         visitor = _VISITORS[item.type]
     except KeyError:
