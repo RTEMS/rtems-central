@@ -28,7 +28,7 @@
 import argparse
 import itertools
 import sys
-from typing import Any, List, Set, Tuple
+from typing import Any, List, Optional, Set, Tuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext, Link
@@ -80,8 +80,9 @@ _VISITORS = {
 }
 
 
-def _visit_item(item: Item, level: int) -> None:
-    print(f"{'  ' * level}{item.uid}")
+def _visit_item(item: Item, level: int, role: Optional[str]) -> None:
+    role_info = "" if role is None else f" ({role})"
+    print(f"{'  ' * level}{item.uid}{role_info}")
     for name in ["text", "brief", "description", "notes"]:
         if name in item:
             _MAPPER.substitute(item[name], item)
@@ -94,16 +95,16 @@ def _visit_item(item: Item, level: int) -> None:
 
 
 def _view_interface_placment(item: Item, level: int) -> None:
-    for child in item.children("interface-placement"):
-        _visit_item(child, level)
-        _view_interface_placment(child, level + 1)
+    for link in item.links_to_children("interface-placement"):
+        _visit_item(link.item, level, link.role)
+        _view_interface_placment(link.item, level + 1)
 
 
-def _view(item: Item, level: int) -> None:
-    _visit_item(item, level)
+def _view(item: Item, level: int, role: Optional[str]) -> None:
+    _visit_item(item, level, role)
     _view_interface_placment(item, level + 1)
-    for child in item.children(_CHILD_ROLES):
-        _view(child, level + 1)
+    for link in item.links_to_children(_CHILD_ROLES):
+        _view(link.item, level + 1, link.role)
 
 
 def _no_validation(item: Item, path: List[str]) -> List[str]:
@@ -247,7 +248,7 @@ def main() -> None:
     root = item_cache["/req/root"]
 
     if args.filter == "none":
-        _view(root, 0)
+        _view(root, 0, None)
     elif args.filter == "action-table":
         enabled = args.enabled.split(",") if args.enabled else []
         for uid in args.UIDs:
