@@ -10,10 +10,11 @@ index-entries: []
 interface-type: group
 links:
 - role: requirement-refinement
-  uid: ../req/root
+  uid: ../req/api
 - role: interface-placement
   uid: ../rtems/basedefs/if/header
 name: API
 text: |
-  The software product shall have an ${../glossary/api:/term}.
+  The ${../glossary/api:/term} shall provide interfaces specific to
+  ${/glossary/rtems:/term}.
 type: interface
