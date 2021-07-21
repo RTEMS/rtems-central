@@ -1,6 +1,6 @@
 build:
   arch: sparc
-  bsp: leon3
+  bsp: gr712rc
   config-ini: |
     [${arch}/${bsp}]
     RTEMS_SMP = True
@@ -9,6 +9,7 @@ build:
     BUILD_TESTS = False
     BUILD_MEMBENCH = True
     BUILD_VALIDATIONTESTS = True
+    BSP_PRINT_EXCEPTION_CONTEXT = False
   doxyfile-template: templates/Doxyfile
   enabled:
   - INSTALL_LEGACY_MAKEFILES
