@@ -4,7 +4,7 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: api
+  uid: root
 non-functional-type: interface-requirement
 rationale: null
 references: []
