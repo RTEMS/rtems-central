@@ -5,39 +5,39 @@ enabled-by: true
 functional-type: action
 links:
 - role: interface-function
-  uid: ../if/cause-on
+  uid: ../if/raise-on
 post-conditions:
 - name: Status
   states:
   - name: Ok
     test-code: |
-      /* Validation is done by CheckCauseOn() for each interrupt vector */
+      /* Validation is done by CheckRaiseOn() for each interrupt vector */
     text: |
-      The return status of ${../if/cause-on:/name} shall be
+      The return status of ${../if/raise-on:/name} shall be
       ${../../status/if/successful:/name}.
   - name: InvId
     test-code: |
       T_rsc( ctx->status, RTEMS_INVALID_ID );
     text: |
-      The return status of ${../if/cause-on:/name} shall be
+      The return status of ${../if/raise-on:/name} shall be
       ${../../status/if/invalid-id:/name}.
   - name: NotConf
     test-code: |
       T_rsc( ctx->status, RTEMS_NOT_CONFIGURED );
     text: |
-      The return status of ${../if/cause-on:/name} shall be
+      The return status of ${../if/raise-on:/name} shall be
       ${../../status/if/not-configured:/name}.
   - name: IncStat
     test-code: |
       T_rsc( ctx->status, RTEMS_INCORRECT_STATE );
     text: |
-      The return status of ${../if/cause-on:/name} shall be
+      The return status of ${../if/raise-on:/name} shall be
       ${../../status/if/incorrect-state:/name}.
   - name: Unsat
     test-code: |
-      /* Validation is done by CheckCauseOn() for each interrupt vector */
+      /* Validation is done by CheckRaiseOn() for each interrupt vector */
     text: |
-      The return status of ${../if/cause-on:/name} shall be
+      The return status of ${../if/raise-on:/name} shall be
       ${../../status/if/unsatisfied:/name}.
   test-epilogue: null
   test-prologue: null
@@ -45,18 +45,18 @@ post-conditions:
   states:
   - name: 'Yes'
     test-code: |
-      /* Validation is done by CheckCauseOn() for each interrupt vector */
+      /* Validation is done by CheckRaiseOn() for each interrupt vector */
     text: |
       The interrupt associated with the interrupt vector specified by
-      ${../if/cause-on:/params[0]/name} shall be made pending by the
-      ${../if/cause-on:/name} call.
+      ${../if/raise-on:/params[0]/name} shall be made pending by the
+      ${../if/raise-on:/name} call.
   - name: 'No'
     test-code: |
-      /* Validation is done by CheckCauseOn() for each interrupt vector */
+      /* Validation is done by CheckRaiseOn() for each interrupt vector */
     text: |
       The interrupt associated with the interrupt vector specified by
-      ${../if/cause-on:/params[0]/name} shall not be made pending by the
-      ${../if/cause-on:/name} call.
+      ${../if/raise-on:/params[0]/name} shall not be made pending by the
+      ${../if/raise-on:/name} call.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -66,13 +66,13 @@ pre-conditions:
     test-code: |
       ctx->valid_vector = true;
     text: |
-      While the ${../if/cause-on:/params[0]/name} parameter is
+      While the ${../if/raise-on:/params[0]/name} parameter is
       associated with an interrupt vector.
   - name: Invalid
     test-code: |
       ctx->valid_vector = false;
     text: |
-      While the ${../if/cause-on:/params[0]/name} parameter is
+      While the ${../if/raise-on:/params[0]/name} parameter is
       not associated with an interrupt vector.
   test-epilogue: null
   test-prologue: null
@@ -82,46 +82,46 @@ pre-conditions:
     test-code: |
       ctx->cpu_index = 0;
     text: |
-      While the ${../if/cause-on:/params[1]/name} parameter is associated with
+      While the ${../if/raise-on:/params[1]/name} parameter is associated with
       a configured processor,
-      while the processor specified by ${../if/cause-on:/params[1]/name} is not
+      while the processor specified by ${../if/raise-on:/params[1]/name} is not
       online.
   - name: NotOnline
     test-code: |
       ctx->cpu_index = 4;
     text: |
-      While the ${../if/cause-on:/params[1]/name} parameter is associated with
+      While the ${../if/raise-on:/params[1]/name} parameter is associated with
       a configured processor,
-      while the processor specified by ${../if/cause-on:/params[1]/name} is not
+      while the processor specified by ${../if/raise-on:/params[1]/name} is not
       online.
   - name: NotConf
     test-code: |
       ctx->cpu_index = 5;
     text: |
-      While the ${../if/cause-on:/params[1]/name} parameter is not associated
+      While the ${../if/raise-on:/params[1]/name} parameter is not associated
       with a configured processor.
   test-epilogue: null
   test-prologue: null
-- name: CanCauseOn
+- name: CanRaiseOn
   states:
   - name: 'Yes'
     test-code: |
       /*
        * This pre-condition depends on the attributes of an interrupt vector,
-       * see CheckCauseOn().
+       * see CheckRaiseOn().
        */
     text: |
       While the interrupt vector associated with the
-      ${../if/cause-on:/params[0]/name} parameter can be caused on a processor.
+      ${../if/raise-on:/params[0]/name} parameter can be raised on a processor.
   - name: 'No'
     test-code: |
       /*
        * This pre-condition depends on the attributes of an interrupt vector,
-       * see CheckCauseOn().
+       * see CheckRaiseOn().
        */
     text: |
       While the interrupt vector associated with the
-      ${../if/cause-on:/params[0]/name} parameter cannot be caused on a
+      ${../if/raise-on:/params[0]/name} parameter cannot be raised on a
       processor.
   test-epilogue: null
   test-prologue: null
@@ -153,7 +153,7 @@ test-action: |
       T_rsc_success( sc );
 
       has_installed_entries = HasInterruptVectorEntriesInstalled( ctx->vector );
-      CheckCauseOn( ctx, &attr, has_installed_entries );
+      CheckRaiseOn( ctx, &attr, has_installed_entries );
     }
   } else {
     if ( ctx->valid_vector ) {
@@ -162,7 +162,7 @@ test-action: |
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
     }
 
-    ctx->status = rtems_interrupt_cause_on( ctx->vector, ctx->cpu_index );
+    ctx->status = rtems_interrupt_raise_on( ctx->vector, ctx->cpu_index );
   }
 test-brief: null
 test-cleanup: null
@@ -188,18 +188,18 @@ test-context:
   member: |
     rtems_vector_number some_vector
 - brief: |
-    If this member is true, then the ${../if/cause-on:/params[0]/name}
+    If this member is true, then the ${../if/raise-on:/params[0]/name}
     parameter shall be valid.
   description: null
   member: |
     bool valid_vector
 - brief: |
-    This member specifies the ${../if/cause-on:/params[1]/name} parameter.
+    This member specifies the ${../if/raise-on:/params[1]/name} parameter.
   description: null
   member: |
     uint32_t cpu_index
 - brief: |
-    This member contains the return value of the ${../if/cause-on:/name}
+    This member contains the return value of the ${../if/raise-on:/name}
     call.
   description: null
   member: |
@@ -221,7 +221,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsIntrReqCauseOn_Context Context;
+  typedef RtemsIntrReqRaiseOn_Context Context;
 
   static bool IsEnabled( const Context *ctx )
   {
@@ -255,11 +255,11 @@ test-support: |
     T_rsc_success( sc );
   }
 
-  static void CauseOn( const Context *ctx )
+  static void RaiseOn( const Context *ctx )
   {
     rtems_status_code sc;
 
-    sc = rtems_interrupt_cause_on( ctx->vector, ctx->cpu_index );
+    sc = rtems_interrupt_raise_on( ctx->vector, ctx->cpu_index );
     T_rsc_success( sc );
   }
 
@@ -297,7 +297,7 @@ test-support: |
     sc = rtems_interrupt_is_pending( ctx->vector, &pending_before );
     T_rsc_success( sc );
 
-    sc = rtems_interrupt_cause_on( ctx->vector, ctx->cpu_index );
+    sc = rtems_interrupt_raise_on( ctx->vector, ctx->cpu_index );
     T_rsc( sc, RTEMS_UNSATISFIED );
 
     pending_after = !pending_before;
@@ -307,7 +307,7 @@ test-support: |
     T_eq( pending_before, pending_after );
   }
 
-  static void CheckCauseOn(
+  static void CheckRaiseOn(
     Context                          *ctx,
     const rtems_interrupt_attributes *attr,
     bool                              has_installed_entries
@@ -315,7 +315,7 @@ test-support: |
   {
     rtems_status_code sc;
 
-    if ( !attr->can_cause_on ) {
+    if ( !attr->can_raise_on ) {
       CheckUnsatisfied( ctx );
     } else if ( has_installed_entries ) {
       /* We cannot test this vector, since it is used by a device driver */
@@ -323,7 +323,7 @@ test-support: |
       /* We can only safely test maskable interrupts */
     } else if ( IsPending( ctx ) ) {
       /*
-       * If there is already an interrupt pending, then it is probably caused
+       * If there is already an interrupt pending, then it is probably raised
        * by a peripheral which we cannot control.
        */
     } else if (
@@ -348,7 +348,7 @@ test-support: |
 
         if ( attr->can_disable ) {
           Disable( ctx );
-          CauseOn( ctx );
+          RaiseOn( ctx );
           T_true( IsPending( ctx ) );
 
           sc = rtems_interrupt_vector_enable( ctx->vector );
@@ -364,7 +364,7 @@ test-support: |
         T_false( IsPending( ctx ) );
 
         rtems_interrupt_local_disable( level );
-        CauseOn( ctx );
+        RaiseOn( ctx );
         T_true( IsPending( ctx ) );
         rtems_interrupt_local_enable( level );
 
@@ -379,7 +379,7 @@ test-support: |
       T_rsc_success( sc );
     }
   }
-test-target: testsuites/validation/tc-intr-cause-on.c
+test-target: testsuites/validation/tc-intr-raise-on.c
 test-teardown: null
 text: ${.:text-template}
 transition-map:
@@ -392,7 +392,7 @@ transition-map:
     - Valid
     CPU:
     - Online
-    CanCauseOn:
+    CanRaiseOn:
     - 'Yes'
 - enabled-by: true
   post-conditions:
@@ -402,7 +402,7 @@ transition-map:
     Vector:
     - Invalid
     CPU: all
-    CanCauseOn: N/A
+    CanRaiseOn: N/A
 - enabled-by: true
   post-conditions:
     Status: NotConf
@@ -412,7 +412,7 @@ transition-map:
     - Valid
     CPU:
     - NotConf
-    CanCauseOn: all
+    CanRaiseOn: all
 - enabled-by: true
   post-conditions:
     Status: Unsat
@@ -422,7 +422,7 @@ transition-map:
     - Valid
     CPU:
     - Online
-    CanCauseOn:
+    CanRaiseOn:
     - 'No'
 - enabled-by: true
   post-conditions: OnlyOneCPU
@@ -430,7 +430,7 @@ transition-map:
     Vector: all
     CPU:
     - NotOnline
-    CanCauseOn: all
+    CanRaiseOn: all
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: InvId
@@ -440,7 +440,7 @@ transition-map:
     - Invalid
     CPU:
     - NotOnline
-    CanCauseOn: N/A
+    CanRaiseOn: N/A
 - enabled-by: RTEMS_SMP
   post-conditions:
     Status: IncStat
@@ -450,5 +450,5 @@ transition-map:
     - Valid
     CPU:
     - NotOnline
-    CanCauseOn: all
+    CanRaiseOn: all
 type: requirement

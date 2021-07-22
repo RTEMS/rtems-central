@@ -34,8 +34,8 @@ links:
   uid: /constraint/directive-no-preempt
 name: rtems_interrupt_is_pending
 notes: |
-  Interrupts may be made pending by calling the ${cause:/name} or
-  ${cause-on:/name} directives or due to exernal signals or messages.  The
+  Interrupts may be made pending by calling the ${raise:/name} or
+  ${raise-on:/name} directives or due to exernal signals or messages.  The
   pending state may be cleared by ${clear:/name}.
 params:
 - description: |

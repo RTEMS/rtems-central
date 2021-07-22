@@ -49,6 +49,6 @@ return:
       ${.:/params[0]/name}.
     value: ${../../status/if/invalid-id:/name}
   - description: |
-      The request to cause the interrupt vector has not been satisfied.
+      The request to raise the interrupt vector has not been satisfied.
     value: ${../../status/if/unsatisfied:/name}
 type: interface

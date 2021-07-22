@@ -195,11 +195,11 @@ test-support: |
     T_rsc_success( sc );
   }
 
-  static void Cause( const Context *ctx )
+  static void Raise( const Context *ctx )
   {
     rtems_status_code sc;
 
-    sc = rtems_interrupt_cause( ctx->vector );
+    sc = rtems_interrupt_raise( ctx->vector );
     T_rsc_success( sc );
   }
 
@@ -297,7 +297,7 @@ test-support: |
 
         if ( attr->can_disable ) {
           Disable( ctx );
-          Cause( ctx );
+          Raise( ctx );
           T_true( IsPending( ctx ) );
           Clear( ctx );
           T_false( IsPending( ctx ) );
@@ -311,7 +311,7 @@ test-support: |
         T_false( IsPending( ctx ) );
 
         rtems_interrupt_local_disable( level );
-        Cause( ctx );
+        Raise( ctx );
         T_true( IsPending( ctx ) );
         Clear( ctx );
         T_false( IsPending( ctx ) );

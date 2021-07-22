@@ -80,21 +80,21 @@ definition:
   variants: []
 - default:
     brief: |
-      This member is true, if the interrupt vector can be caused by
-      ${cause:/name}, otherwise it is false.
+      This member is true, if the interrupt vector can be raised by
+      ${raise:/name}, otherwise it is false.
     definition: bool ${.:name}
     description: null
     kind: member
-    name: can_cause
+    name: can_raise
   variants: []
 - default:
     brief: |
-      This member is true, if the interrupt vector can be caused on a processor
-      by ${cause-on:/name}, otherwise it is false.
+      This member is true, if the interrupt vector can be raised on a processor
+      by ${raise-on:/name}, otherwise it is false.
     definition: bool ${.:name}
     description: null
     kind: member
-    name: can_cause_on
+    name: can_raise_on
   variants: []
 - default:
     brief: |
@@ -139,8 +139,8 @@ definition:
       vector can be triggered by a message.
     definition: bool ${.:name}
     description: |
-      Interrupts may be also triggered by signals, ${cause:/name}, or
-      ${cause-on:/name}.  Examples for message triggered interrupts are the
+      Interrupts may be also triggered by signals, ${raise:/name}, or
+      ${raise-on:/name}.  Examples for message triggered interrupts are the
       PCIe MSI/MSI-X and the ARM GICv3 Locality-specific Peripheral Interrupts
       (LPI).
     kind: member
@@ -154,7 +154,7 @@ definition:
     description: |
       Interrupts are normally triggered by signals which indicate an interrupt
       request from a peripheral.  Interrupts may be also triggered by messages,
-      ${cause:/name}, or ${cause-on:/name}.
+      ${raise:/name}, or ${raise-on:/name}.
     kind: member
     name: trigger_signal
   variants: []

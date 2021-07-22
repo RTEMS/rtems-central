@@ -15,7 +15,7 @@ description: |
   The directive enables the interrupt vector specified by ${.:/params[0]/name}.
   This allows that interrupt service requests are issued to the target
   processors of the interrupt vector.  Interrupt service requests for an
-  interrupt vector may be caused by ${cause:/name}, ${cause-on:/name},
+  interrupt vector may be raised by ${raise:/name}, ${raise-on:/name},
   external signals, or messages.
 enabled-by: true
 index-entries: []

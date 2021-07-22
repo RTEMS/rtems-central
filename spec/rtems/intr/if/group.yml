@@ -92,9 +92,9 @@ links:
 - role: placement-order
   uid: is-pending
 - role: placement-order
-  uid: cause
+  uid: raise
 - role: placement-order
-  uid: cause-on
+  uid: raise-on
 - role: placement-order
   uid: clear
 - role: placement-order
