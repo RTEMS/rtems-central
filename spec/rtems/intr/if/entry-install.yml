@@ -30,7 +30,7 @@ description: |
   If the option ${unique:/name} is set, then it will be ensured that the
   handler will be the only one for the interrupt vector.
 
-  If the option ${shared:/name} is set, then multiple handler may be installed
+  If the option ${shared:/name} is set, then multiple handlers may be installed
   for the interrupt vector.
 enabled-by: true
 index-entries: []
@@ -64,7 +64,7 @@ params:
   dir: null
   name: options
 - description: |
-    is the interrupt entry to install
+    is the interrupt entry to install.
   dir: null
   name: entry
 return:

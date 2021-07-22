@@ -35,7 +35,7 @@ links:
 name: rtems_interrupt_is_pending
 notes: |
   Interrupts may be made pending by calling the ${raise:/name} or
-  ${raise-on:/name} directives or due to exernal signals or messages.  The
+  ${raise-on:/name} directives or due to external signals or messages.  The
   pending state may be cleared by ${clear:/name}.
 params:
 - description: |

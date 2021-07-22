@@ -47,7 +47,7 @@ definition:
       When an interrupt vector may be enabled, this means that the enabled
       state may be changed from disabled to enabled.  The requested enabled
       state change should be checked by ${vector-is-enabled:/name}.  Some
-      interrupt vectors may be optionally avaialable and cannot be enabled on a
+      interrupt vectors may be optionally available and cannot be enabled on a
       particular ${/glossary/target:/term}.
     kind: member
     name: maybe_enable

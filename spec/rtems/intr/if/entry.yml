@@ -30,7 +30,7 @@ definition:
   variants: []
 - default:
     brief: |
-      This member is the descriptive information of the entry
+      This member is the descriptive information of the entry.
     definition: const char *${.:name}
     description: null
     kind: member
