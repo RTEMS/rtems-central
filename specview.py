@@ -80,9 +80,24 @@ _VISITORS = {
 }
 
 
-def _visit_item(item: Item, level: int, role: Optional[str]) -> None:
-    role_info = "" if role is None else f" ({role})"
-    print(f"{'  ' * level}{item.uid}{role_info}")
+def _validated(item: Item) -> str:
+    try:
+        if item["_validated"]:
+            return ", validated=yes"
+        return ", validated=no"
+    except KeyError:
+        return ""
+
+
+def _visit_item(item: Item, level: int, role: Optional[str],
+                validated_filter: str) -> bool:
+    validated = _validated(item)
+    if validated_filter == "yes" and validated != ", validated=yes":
+        return False
+    if validated_filter == "no" and validated != ", validated=no":
+        return False
+    role_info = "" if role is None else f", role={role}"
+    print(f"{'  ' * level}{item.uid} (type={item.type}{role_info}{validated})")
     for name in ["text", "brief", "description", "notes"]:
         if name in item:
             _MAPPER.substitute(item[name], item)
@@ -92,19 +107,54 @@ def _visit_item(item: Item, level: int, role: Optional[str]) -> None:
         pass
     else:
         visitor(item)
+    return True
 
 
-def _view_interface_placment(item: Item, level: int) -> None:
+def _view_interface_placment(item: Item, level: int,
+                             validated_filter: str) -> None:
     for link in item.links_to_children("interface-placement"):
-        _visit_item(link.item, level, link.role)
-        _view_interface_placment(link.item, level + 1)
+        if _visit_item(link.item, level, link.role, validated_filter):
+            _view_interface_placment(link.item, level + 1, validated_filter)
 
 
-def _view(item: Item, level: int, role: Optional[str]) -> None:
-    _visit_item(item, level, role)
-    _view_interface_placment(item, level + 1)
+def _view(item: Item, level: int, role: Optional[str],
+          validated_filter: str) -> None:
+    if not _visit_item(item, level, role, validated_filter):
+        return
+    _view_interface_placment(item, level + 1, validated_filter)
     for link in item.links_to_children(_CHILD_ROLES):
-        _view(link.item, level + 1, link.role)
+        _view(link.item, level + 1, link.role, validated_filter)
+
+
+def _validate(item: Item) -> bool:
+    count = 0
+    validated = True
+    for child in item.children(_CHILD_ROLES):
+        validated = _validate(child) and validated
+        count += 1
+    if count == 0:
+        validated = item.type in [
+            "constraint",
+            "glossary/group",
+            "interface/appl-config-group",
+            "interface/domain",
+            "interface/group",
+            "interface/header-file",
+            "interface/register-block",
+            "interface/struct",
+            "interface/typedef",
+            "interface/union",
+            "requirement/functional/action",
+            "requirement/non-functional/performance-runtime",
+            "runtime-measurement-test",
+            "test-case",
+            "test-suite",
+        ]
+        if not validated:
+            item["_validated"] = False
+    else:
+        item["_validated"] = validated
+    return validated
 
 
 def _no_validation(item: Item, path: List[str]) -> List[str]:
@@ -233,6 +283,11 @@ def main() -> None:
                         type=str.lower,
                         default="none",
                         help="filter the items")
+    parser.add_argument('--validated',
+                        choices=["all", "yes", "no"],
+                        type=str.lower,
+                        default="all",
+                        help="filter the items by the validated status")
     parser.add_argument(
         "--enabled",
         help=("a comma separated list of enabled options used to evaluate "
@@ -248,7 +303,8 @@ def main() -> None:
     root = item_cache["/req/root"]
 
     if args.filter == "none":
-        _view(root, 0, None)
+        _validate(root)
+        _view(root, 0, None, args.validated)
     elif args.filter == "action-table":
         enabled = args.enabled.split(",") if args.enabled else []
         for uid in args.UIDs:
