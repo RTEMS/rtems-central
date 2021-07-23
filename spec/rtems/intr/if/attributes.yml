@@ -17,17 +17,6 @@ definition:
   variants: []
 - default:
     brief: |
-      This member is true, if the interrupt vector is always enabled, otherwise
-      it is false.
-    definition: bool ${.:name}
-    description: |
-      For an always enabled interrupt vector it follows that it can be enabled
-      and that it cannot be disabled.
-    kind: member
-    name: always_enabled
-  variants: []
-- default:
-    brief: |
       This member is true, if the interrupt vector can be enabled by
       ${vector-enable:/name}, otherwise it is false.
     definition: bool ${.:name}

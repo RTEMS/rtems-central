@@ -114,12 +114,6 @@ test-action: |
       T_rsc_success( sc );
       ctx->status = sc;
 
-      if ( ctx->attributes_obj.always_enabled ) {
-        T_true( ctx->attributes_obj.can_enable );
-        T_true( ctx->attributes_obj.maybe_enable );
-        T_false( ctx->attributes_obj.can_disable );
-      }
-
       if ( ctx->attributes_obj.can_enable ) {
         T_true( ctx->attributes_obj.maybe_enable );
       }

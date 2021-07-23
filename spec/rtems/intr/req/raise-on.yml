@@ -327,8 +327,7 @@ test-support: |
        * by a peripheral which we cannot control.
        */
     } else if (
-      ( attr->always_enabled || attr->can_disable ) &&
-      ( attr->can_clear || attr->cleared_by_acknowledge )
+      attr->can_disable && ( attr->can_clear || attr->cleared_by_acknowledge )
     ) {
       rtems_interrupt_entry entry;
       rtems_interrupt_level level;

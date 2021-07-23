@@ -291,10 +291,7 @@ test-support: |
 
       Enable( ctx );
       T_true( IsEnabled( ctx ) );
-    } else if (
-      attr->is_maskable && attr->maybe_enable &&
-      ( attr->always_enabled || attr->can_disable )
-    ) {
+    } else if ( attr->is_maskable && attr->can_disable ) {
       rtems_interrupt_entry entry;
       bool                  enabled;
 
