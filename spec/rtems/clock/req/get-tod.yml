@@ -41,9 +41,9 @@ post-conditions:
       T_eq_u32( ctx->get_tod_value.hour,   ctx->set_tod_value.hour );
       T_eq_u32( ctx->get_tod_value.minute, ctx->set_tod_value.minute );
       T_eq_u32( ctx->get_tod_value.second, ctx->set_tod_value.second );
-      T_ge_u32( ctx->get_tod_value.ticks,  ctx->set_tod_value.ticks );
-      T_lt_u32( ctx->get_tod_value.ticks,
-        ctx->set_tod_value.ticks + ctx->grace_ticks );
+      /* rtems_clock_set() or rtems_clock_get_tod() cause an error of 1 tick */
+      T_ge_u32( ctx->get_tod_value.ticks + 1,  ctx->set_tod_value.ticks );
+      T_le_u32( ctx->get_tod_value.ticks, ctx->set_tod_value.ticks );
     text: |
       The value of the object referenced by the
       ${../if/get-tod:/params[0]/name} parameter shall be set to the value
@@ -87,7 +87,7 @@ pre-conditions:
     test-code: |
       ctx->set_tod_value =
         (rtems_time_of_day) { 2100, 2, 28, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - ctx->grace_ticks };
+        rtems_clock_get_ticks_per_second() - 1 };
     text: |
       While the ${/glossary/clock-realtime:/term} indicates a
       date for a non-leap year with the value of 28th of February.
@@ -109,7 +109,7 @@ pre-conditions:
     test-code: |
       ctx->set_tod_value =
         (rtems_time_of_day) { 2105, 12, 31, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - ctx->grace_ticks };
+        rtems_clock_get_ticks_per_second() - 1 };
     text: |
       While the ${/glossary/clock-realtime:/term} indicates the
       oldest date and time accepted (2105-12-31T23:59:59.999999999Z).
@@ -145,10 +145,12 @@ test-action: |
     ctx->set_tod_status = rtems_clock_set( &ctx->set_tod_value );
     ctx->get_tod_status = rtems_clock_get_tod( ctx->get_tod_ref );
   } else {
-    ctx->get_tod_status = get_tod_before_set_tod( ctx->get_tod_ref );
+    UnsetClock();
+    ctx->get_tod_status = rtems_clock_get_tod( ctx->get_tod_ref );
   }
 test-brief: null
-test-cleanup: null
+test-cleanup: |
+  UnsetClock();
 test-context:
 - brief: null
   description: null
@@ -165,9 +167,6 @@ test-context:
 - brief: null
   description: null
   member: rtems_status_code get_tod_status
-- brief: Grace period in tick which may be passed between set and get ToD.
-  description: null
-  member: uint32_t grace_ticks
 - brief: null
   description: null
   member: bool isDef
@@ -177,45 +176,15 @@ test-header: null
 test-includes:
 - rtems.h
 test-local-includes:
-- tc-clock-get-tod.h
+- tx-support.h
 test-prepare: |
     ctx->get_tod_value = (rtems_time_of_day) { 1, 1, 1, 1, 1, 1, 1 };
     ctx->get_tod_ref = &ctx->get_tod_value;
     ctx->set_tod_value = (rtems_time_of_day) { 2023, 4, 5, 6, 7, 8, 0 };
     ctx->isDef = true;
-test-setup:
-  brief: null
-  code: |
-    /* Call rtems_clock_get_tod() once before rtems_clock_set() gets called */
-    get_tod_before_set_tod( NULL );
-
-    ctx->grace_ticks = rtems_clock_get_ticks_per_second() * GRACE_PERIOD / 1000;
-  description: null
+test-setup: null
 test-stop: null
-test-support: |
-  rtems_status_code get_tod_before_set_tod( rtems_time_of_day *time_of_day )
-  {
-    static rtems_time_of_day tod_buf = { 1, 1, 1, 1, 1, 1, 1 };
-    static rtems_status_code status;
-    static bool has_been_called = false;
-
-    if ( ! has_been_called ) {
-      status = rtems_clock_get_tod( &tod_buf );
-      has_been_called = true;
-    }
-
-    if ( NULL != time_of_day ) {
-      *time_of_day = tod_buf;
-    }
-
-    return status;
-  }
-
-  /*
-   * How much time may pass between a call to rtems_clock_set() and
-   * a follow up call to rtems_clock_get_tod() in milliseconds?
-   */
-  #define GRACE_PERIOD 5
+test-support: null
 test-target: testsuites/validation/tc-clock-get-tod.c
 test-teardown: null
 text: ${.:text-template}
@@ -246,6 +215,7 @@ transition-map:
       - Leap400
       - Youngest
       - Oldest
+      - NotSet
     Param:
       - 'Null'
 - enabled-by: true
@@ -257,5 +227,4 @@ transition-map:
       - NotSet
     Param:
       - Valid
-      - 'Null'
 type: requirement

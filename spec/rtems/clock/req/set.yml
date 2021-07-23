@@ -41,9 +41,9 @@ post-conditions:
       T_eq_u32( ctx->tod_after.hour, ctx->target_tod_value.hour );
       T_eq_u32( ctx->tod_after.minute, ctx->target_tod_value.minute );
       T_eq_u32( ctx->tod_after.second, ctx->target_tod_value.second );
-      T_ge_u32( ctx->tod_after.ticks, ctx->target_tod_value.ticks );
-      T_lt_u32( ctx->tod_after.ticks,
-        ctx->target_tod_value.ticks + ctx->grace_ticks );
+      /* rtems_clock_set() or rtems_clock_get_tod() cause an error of 1 tick */
+      T_ge_u32( ctx->tod_after.ticks + 1, ctx->target_tod_value.ticks );
+      T_le_u32( ctx->tod_after.ticks, ctx->target_tod_value.ticks );
     text: |
       The ${/glossary/clock-realtime:/term} shall be set
       to the values of the object referenced by the
@@ -58,9 +58,7 @@ post-conditions:
       T_eq_u32( ctx->tod_after.hour, ctx->tod_before.hour );
       T_eq_u32( ctx->tod_after.minute, ctx->tod_before.minute );
       T_eq_u32( ctx->tod_after.second, ctx->tod_before.second );
-      T_ge_u32( ctx->tod_after.ticks, ctx->tod_before.ticks );
-      T_lt_u32( ctx->tod_after.ticks,
-        ctx->tod_before.ticks + 2 * ctx->grace_ticks );
+      T_eq_u32( ctx->tod_after.ticks, ctx->tod_before.ticks );
     text: |
       The state of the ${/glossary/clock-realtime:/term} shall not be changed
       by the ${../if/set:/name} call.
@@ -76,8 +74,7 @@ post-conditions:
       T_eq_u32( ctx->timer_routine_tod.day, 1 );
       T_eq_u32( ctx->timer_routine_tod.minute, 0 );
       T_eq_u32( ctx->timer_routine_tod.second, 0 );
-      T_ge_u32( ctx->timer_routine_tod.ticks, 0 );
-      T_lt_u32( ctx->timer_routine_tod.ticks, 0 + ctx->grace_ticks );
+      T_eq_u32( ctx->timer_routine_tod.ticks, 0 );
     text: |
       The timer routine shall be executed once after the
       ${/glossary/clock-realtime:/term} has been set and before
@@ -141,7 +138,7 @@ pre-conditions:
     test-code: |
       ctx->target_tod_value =
         (rtems_time_of_day) { 2105, 12, 31, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - ctx->grace_ticks };
+        rtems_clock_get_ticks_per_second() - 1 };
     text: |
       While the ${../if/set:/params[0]/name} parameter references the
       oldest date and time accepted (2105-12-31T23:59:59.999999999Z).
@@ -312,16 +309,12 @@ test-context:
 - brief: null
   description: null
   member: rtems_time_of_day timer_routine_tod
-- brief: Grace period in tick which may be passed between set and get ToD.
-  description: null
-  member: uint32_t grace_ticks
 test-context-support: null
 test-description: null
 test-header: null
 test-includes:
 - rtems.h
-test-local-includes:
-- tc-clock-get-tod.h
+test-local-includes: []
 test-prepare: |
   rtems_status_code status;
 
@@ -336,10 +329,6 @@ test-setup:
     rtems_name timer_name = rtems_build_name( 'T', 'M', 'R', '0' );
     ctx->timer_id = RTEMS_ID_NONE;
 
-    /* Call rtems_clock_get_tod() once before rtems_clock_set() gets called */
-    get_tod_before_set_tod( NULL );
-
-    ctx->grace_ticks = rtems_clock_get_ticks_per_second() * GRACE_PERIOD / 1000;
     ctx->target_tod = &ctx->target_tod_value;
 
     status = rtems_timer_create( timer_name, &ctx->timer_id );
@@ -347,12 +336,6 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  /*
-   * How much time may pass between a call to rtems_clock_set() and
-   * a follow up call to rtems_clock_get_tod() in millisecond?
-   */
-  #define GRACE_PERIOD 5
-
   static rtems_timer_service_routine _TOD_timer_routine(
     rtems_id   timer_id,
     void      *user_data

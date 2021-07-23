@@ -12,9 +12,8 @@ test-actions:
     int32_t difference; /* Note: rtems_interval = uint32_t (unsigned!) */
 
     result_0 = rtems_clock_get_ticks_since_boot();
-    do {
-      result_1 = rtems_clock_get_ticks_since_boot();
-    } while( result_0 == result_1 );
+    ClockTick();
+    result_1 = rtems_clock_get_ticks_since_boot();
     /*
      * Because of the ones-complement, the overflow
      * is handled correctly. result_0 = 0xFFFFFFFF will become -1
@@ -59,6 +58,7 @@ test-includes:
 - rtems.h
 test-local-includes:
 - ts-config.h
+- tx-support.h
 test-setup: null
 test-stop: null
 test-support: null

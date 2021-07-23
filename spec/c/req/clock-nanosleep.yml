@@ -359,6 +359,8 @@ test-prepare: |
 test-setup:
   brief: null
   code: |
+    rtems_time_of_day now = { 1988, 1, 1, 0, 0, 0, 0 };
+    T_rsc_success( rtems_clock_set( &now ) );
     SetSelfPriority( PRIO_NORMAL );
     ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
     StartTask( ctx->worker_id, Worker, ctx );

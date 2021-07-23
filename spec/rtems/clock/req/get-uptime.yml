@@ -28,8 +28,8 @@ post-conditions:
   - name: Set
     test-code: |
       T_eq_ptr( ctx->uptime, &ctx->uptime_value );
-      T_gt_i64( ctx->uptime_value.tv_sec, 0LL );
-      T_gt_long( ctx->uptime_value.tv_nsec, 0L );
+      T_ge_i64( ctx->uptime_value.tv_sec, 0LL );
+      T_ge_long( ctx->uptime_value.tv_nsec, 0L );
       T_lt_long( ctx->uptime_value.tv_nsec, 1000000000L );
     text: |
       The value of the object referenced by the
