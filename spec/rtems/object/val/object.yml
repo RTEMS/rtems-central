@@ -75,8 +75,23 @@ test-actions:
   links:
   - role: validation
     uid: ../req/build-name-macro
+- action-brief: |
+    Validate the result of ${../if/get-local-node:/name}.
+  action-code: |
+    uint32_t node;
+
+    node = rtems_object_get_local_node();
+  checks:
+  - brief: |
+      Check that the returned value is zero.
+    code: |
+      T_step_eq_u32( ${step}, node, 0 );
+    links: []
+  links:
+  - role: validation
+    uid: ../req/get-local-node
 test-brief: |
-  Tests the rtems_build_name() macro.
+  Tests the ${../if/group:/name} directives.
 test-context: []
 test-context-support: null
 test-description: null
