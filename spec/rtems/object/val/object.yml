@@ -91,7 +91,7 @@ test-actions:
   - role: validation
     uid: ../req/get-local-node
 test-brief: |
-  Tests the ${../if/group:/name} directives.
+  Tests some ${../if/group:/name} directives.
 test-context: []
 test-context-support: null
 test-description: null
