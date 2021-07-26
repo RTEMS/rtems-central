@@ -14,13 +14,13 @@ post-conditions:
       T_true( ctx->result );
     text: |
       The return value of ${../if/is-successful:/name} shall be
-      ${../../status/if/successful:/name}.
+      ${/c/if/true:/name}.
   - name: 'False'
     test-code: |
       T_false( ctx->result );
     text: |
-      The return status of ${../if/is-successful:/name} shall be
-      ${../../status/if/invalid-address:/name}.
+      The return value of ${../if/is-successful:/name} shall be
+      ${/c/if/false:/name}.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
