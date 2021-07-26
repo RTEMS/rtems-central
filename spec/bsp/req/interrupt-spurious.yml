@@ -130,11 +130,26 @@ test-prepare: null
 test-setup:
   brief: null
   code: |
-    ctx->vector = GetValidInterruptVectorNumber( NULL );
-    T_assert_lt_u32( ctx->vector, BSP_INTERRUPT_VECTOR_COUNT );
+    rtems_vector_number vector;
 
+    for ( vector = 0; vector < BSP_INTERRUPT_VECTOR_COUNT; ++vector ) {
+      rtems_status_code          sc;
+      rtems_interrupt_attributes attributes;
+
+      sc = rtems_interrupt_get_attributes( vector, &attributes );
+
+      if (
+        sc == RTEMS_SUCCESSFUL &&
+        !HasInterruptVectorEntriesInstalled( vector )
+      ) {
+        break;
+      }
+    }
+
+    T_assert_lt_u32( vector, BSP_INTERRUPT_VECTOR_COUNT );
+    ctx->vector = vector;
     ctx->first = &bsp_interrupt_handler_table[
-      bsp_interrupt_handler_index( ctx->vector )
+      bsp_interrupt_handler_index( vector )
     ];
 
     rtems_interrupt_entry_initialize( &ctx->entry, EntryRoutine, ctx, "Info" );
