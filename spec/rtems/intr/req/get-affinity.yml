@@ -52,6 +52,25 @@ post-conditions:
       processor affinity set of the interrupt specified by the
       ${../if/get-affinity:/params[0]/name} parameter at some point during the
       call after the return of the ${../if/get-affinity:/name} call.
+  - name: Partial
+    test-code: |
+      /* Validation done by CheckGetAffinity() for each interrupt vector */
+    text: |
+      The value of the object referenced by the
+      ${../if/get-affinity:/params[2]/name} parameter shall be set to the
+      subset of the processor affinity set which fits into the object of the
+      interrupt specified by the ${../if/get-affinity:/params[0]/name}
+      parameter at some point during the call after the return of the
+      ${../if/get-affinity:/name} call.
+  - name: Zero
+    test-code: |
+      /*
+       * Validation done by CheckGetAffinity() for each interrupt vector and in
+       * the action code.
+       */
+    text: |
+      The value of the object referenced by the
+      ${../if/get-affinity:/params[2]/name} parameter shall be set to zero.
   - name: Nop
     test-code: |
       /*
@@ -178,7 +197,7 @@ test-action: |
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
     }
 
-    CPU_ZERO( &ctx->cpuset_obj );
+    CPU_FILL( &ctx->cpuset_obj );
 
     ctx->status = rtems_interrupt_get_affinity(
       ctx->vector,
@@ -186,7 +205,12 @@ test-action: |
       ctx->cpuset
     );
 
-    CPU_ZERO( &set );
+    if ( ctx->cpuset == NULL || ctx->cpusetsize != sizeof( ctx->cpuset ) ) {
+      CPU_FILL( &set );
+    } else {
+      CPU_ZERO( &set );
+    }
+
     T_eq_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
   }
 test-brief: null
@@ -261,6 +285,13 @@ test-support: |
   )
   {
     rtems_status_code sc;
+    cpu_set_t         set;
+
+    if ( attr->can_get_affinity ) {
+      CPU_ZERO( &ctx->cpuset_obj );
+    } else {
+      CPU_FILL( &ctx->cpuset_obj );
+    }
 
     sc = rtems_interrupt_get_affinity(
       ctx->vector,
@@ -268,10 +299,14 @@ test-support: |
       ctx->cpuset
     );
 
+    CPU_ZERO( &set );
+
     if ( attr->can_get_affinity ) {
       T_rsc_success( sc );
+      T_ne_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
     } else {
       T_rsc( sc, RTEMS_UNSATISFIED );
+      T_eq_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
     }
   }
 test-target: testsuites/validation/tc-intr-get-affinity.c
@@ -316,14 +351,14 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvId
-    CPUSetObj: Nop
+    CPUSetObj: Zero
   pre-conditions:
     Vector:
     - Invalid
     CPUSetSize: all
     CPUSet:
     - Valid
-    CanGetAffinity: all
+    CanGetAffinity: N/A
 - enabled-by: true
   post-conditions:
     Status: InvSize
@@ -339,7 +374,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: InvSize
-    CPUSetObj: Nop
+    CPUSetObj: Partial
   pre-conditions:
     Vector:
     - Valid
@@ -352,7 +387,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Unsat
-    CPUSetObj: Nop
+    CPUSetObj: Zero
   pre-conditions:
     Vector:
     - Valid
