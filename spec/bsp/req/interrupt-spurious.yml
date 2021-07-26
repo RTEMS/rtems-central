@@ -72,7 +72,11 @@ test-action: |
   ctx->fatal_code = UINT32_MAX;
 
   if ( setjmp( ctx->before_call ) == 0 ) {
-    bsp_interrupt_spurious( ctx->vector );
+    if ( *ctx->first == NULL ) {
+      bsp_interrupt_handler_dispatch_unchecked( ctx->vector );
+    } else {
+      bsp_interrupt_spurious( ctx->vector );
+    }
   }
 test-brief: null
 test-cleanup: null
