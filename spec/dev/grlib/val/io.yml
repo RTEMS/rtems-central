@@ -5,7 +5,7 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Call ${../if/grlib-load-08:/name} to load a prepared value.
+    Call ${../if/load-08:/name} to load a prepared value.
   action-code: |
     uint8_t reg_8;
     uint8_t val_8;
@@ -19,10 +19,10 @@ test-actions:
       T_step_eq_u8( ${step}, val_8, 0x81 );
     links:
     - role: validation
-      uid: ../req/grlib-load-08
+      uid: /bsp/sparc/req/grlib-load-08
   links: []
 - action-brief: |
-    Call ${../if/grlib-load-16:/name} to load a prepared value.
+    Call ${../if/load-16:/name} to load a prepared value.
   action-code: |
     uint16_t reg_16;
     uint16_t val_16;
@@ -36,10 +36,10 @@ test-actions:
       T_step_eq_u16( ${step}, val_16, 0x8001 );
     links:
     - role: validation
-      uid: ../req/grlib-load-16
+      uid: /bsp/sparc/req/grlib-load-16
   links: []
 - action-brief: |
-    Call ${../if/grlib-load-32:/name} to load a prepared value.
+    Call ${../if/load-32:/name} to load a prepared value.
   action-code: |
     uint32_t reg_32;
     uint32_t val_32;
@@ -53,10 +53,10 @@ test-actions:
       T_step_eq_u32( ${step}, val_32, 0x80000001 );
     links:
     - role: validation
-      uid: ../req/grlib-load-32
+      uid: /bsp/sparc/req/grlib-load-32
   links: []
 - action-brief: |
-    Call ${../if/grlib-load-64:/name} to load a prepared value.
+    Call ${../if/load-64:/name} to load a prepared value.
   action-code: |
     uint64_t reg_64;
     uint64_t val_64;
@@ -70,10 +70,10 @@ test-actions:
       T_step_eq_u64( ${step}, val_64, 0x8000000000000001 );
     links:
     - role: validation
-      uid: ../req/grlib-load-64
+      uid: /bsp/sparc/req/grlib-load-64
   links: []
 - action-brief: |
-    Call ${../if/grlib-store-08:/name} to store a value to an object.
+    Call ${../if/store-08:/name} to store a value to an object.
   action-code: |
     uint8_t reg_8;
 
@@ -85,10 +85,10 @@ test-actions:
       T_step_eq_u8( ${step}, reg_8, 0x81 );
     links:
     - role: validation
-      uid: ../req/grlib-store-08
+      uid: /bsp/sparc/req/grlib-store-08
   links: []
 - action-brief: |
-    Call ${../if/grlib-store-16:/name} to store a value to an object.
+    Call ${../if/store-16:/name} to store a value to an object.
   action-code: |
     uint16_t reg_16;
 
@@ -100,10 +100,10 @@ test-actions:
       T_step_eq_u16( ${step}, reg_16, 0x8001 );
     links:
     - role: validation
-      uid: ../req/grlib-store-16
+      uid: /bsp/sparc/req/grlib-store-16
   links: []
 - action-brief: |
-    Call ${../if/grlib-store-32:/name} to store a value to an object.
+    Call ${../if/store-32:/name} to store a value to an object.
   action-code: |
     uint32_t reg_32;
 
@@ -115,10 +115,10 @@ test-actions:
       T_step_eq_u32( ${step}, reg_32, 0x80000001 );
     links:
     - role: validation
-      uid: ../req/grlib-store-32
+      uid: /bsp/sparc/req/grlib-store-32
   links: []
 - action-brief: |
-    Call ${../if/grlib-store-64:/name} to store a value to an object.
+    Call ${../if/store-64:/name} to store a value to an object.
   action-code: |
     uint64_t reg_64;
 
@@ -130,20 +130,61 @@ test-actions:
       T_step_eq_u64( ${step}, reg_64, 0x8000000000000001 );
     links:
     - role: validation
-      uid: ../req/grlib-store-64
+      uid: /bsp/sparc/req/grlib-store-64
+  links: []
+- action-brief: |
+    Call ${../if/apbuart-outbyte-polled:/name} to store a character to the data
+    register.  The transmitter FIFO shall be initially non-empty.  The status
+    is checked by ${../if/apbuart-outbyte-wait:/name}.
+  action-code: |
+    apbuart regs;
+
+    memset( &regs, 0, sizeof( regs ) );
+    SetIORelaxHandler( ApbuartIORelax, &regs );
+    apbuart_outbyte_polled( &regs, (char) 0xff );
+    SetIORelaxHandler( NULL, NULL );
+  checks:
+  - brief: |
+      Check that the transmitter FIFO empty flag was set by ApbuartIORelax().
+    code: |
+      T_step_eq_u32( ${step}, regs.status, APBUART_STATUS_TE );
+    links:
+    - role: validation
+      uid: ../req/apbuart-outbyte-wait
+    - role: validation
+      uid: ../req/apbuart-outbyte-polled
+  - brief: |
+      Check that the data register was written by
+      ${../if/apbuart-outbyte-polled:/name}.
+    code: |
+      T_step_eq_u32( ${step}, regs.data, 0xff );
+    links:
+    - role: validation
+      uid: ../req/apbuart-outbyte-polled
   links: []
 test-brief: |
-  Tests the SPARC-specific GRLIB API.
+  Tests some ${../if/group:/name} directives.
 test-context: []
 test-context-support: null
 test-description: null
 test-header: null
 test-includes:
-- dev/grlib/io.h
-test-local-includes: []
+- grlib/apbuart.h
+- grlib/io.h
+- string.h
+test-local-includes:
+- tx-support.h
 test-setup: null
 test-stop: null
-test-support: null
-test-target: testsuites/validation/tc-bsp-sparc-leon3.c
+test-support: |
+  static void ApbuartIORelax( void *arg )
+  {
+    apbuart *regs;
+
+    regs = arg;
+    regs->status = 0x4;
+    T_quiet_eq_u32( regs->data, 0 );
+  }
+test-target: testsuites/validation/tc-dev-grlib-io.c
 test-teardown: null
 type: test-case
