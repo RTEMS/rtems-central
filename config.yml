@@ -12,6 +12,7 @@ build:
     BSP_PRINT_EXCEPTION_CONTEXT = False
   doxyfile-template: templates/Doxyfile
   enabled:
+  - bsps/sparc/leon3
   - INSTALL_LEGACY_MAKEFILES
   - RTEMS_QUAL
   - RTEMS_QUAL_ONLY
