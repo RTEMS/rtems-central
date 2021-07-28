@@ -16,6 +16,13 @@ spec-info:
           header code is placed at file scope after the general test
           declarations and before the test run function declaration.
         spec-type: optional-str
+      freestanding:
+        description: |
+          The value shall be ``true``, if the test case is freestanding,
+          otherwise ``false``.  Freestanding test cases are not statically
+          registered.  Instead the generated test runner uses
+          :c:func:`T_case_begin` and :c:func:`T_case_end`.
+        spec-type: bool
       includes:
         description: |
           It shall be a list of header files included by the header file via

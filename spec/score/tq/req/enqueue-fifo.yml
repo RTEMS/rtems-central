@@ -68,6 +68,7 @@ test-context-support: null
 test-description: null
 test-header:
   code: null
+  freestanding: false
   includes: []
   local-includes:
   - tx-thread-queue.h

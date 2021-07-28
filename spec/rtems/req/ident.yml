@@ -172,6 +172,7 @@ test-header:
   code: |
     #define ClassicObjectIdentName \
       rtems_build_name( 'I', 'D', 'N', 'T' )
+  freestanding: false
   includes:
   - rtems.h
   local-includes: []

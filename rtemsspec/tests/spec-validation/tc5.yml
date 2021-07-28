@@ -43,6 +43,7 @@ test-description: Test case 5 description.
 test-header:
   code: |
     /* Header code for ${.:/test-run}() */
+  freestanding: true
   includes:
   - d.h
   local-includes:

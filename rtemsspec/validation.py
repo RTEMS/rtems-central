@@ -392,6 +392,27 @@ class _TestItem:
                 for param in header["run-params"]
             ])
 
+    def _add_runner_prologue_and_epilogue(self, content: CContent,
+                                          prologue: CContent,
+                                          epilogue: CContent,
+                                          fixture: str) -> None:
+        header = self["test-header"]
+        if self.context == "void":
+            result = None
+        else:
+            prologue.add(f"{self.context} *ctx;")
+            self.assign_run_params(prologue, header)
+            result = "ctx ="
+        if header["freestanding"]:
+            prologue.call_function(result, "T_case_begin",
+                                   [f"\"{self.ident}\"", fixture])
+            epilogue.add("T_case_end();")
+        else:
+            content.add(f"static T_fixture_node {self.ident}_Node;")
+            prologue.call_function(result, "T_push_fixture",
+                                   [f"&{self.ident}_Node", fixture])
+            epilogue.add("T_pop_fixture();")
+
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
@@ -411,16 +432,8 @@ class _TestItem:
             if self._mapper.steps > 0 and not fixture:
                 fixture = "&T_empty_fixture"
             if fixture:
-                content.add(f"static T_fixture_node {self.ident}_Node;")
-                if self.context == "void":
-                    result = None
-                else:
-                    prologue.add(f"{self.context} *ctx;")
-                    self.assign_run_params(prologue, header)
-                    result = "ctx ="
-                prologue.call_function(result, "T_push_fixture",
-                                       [f"&{self.ident}_Node", fixture])
-                epilogue.add("T_pop_fixture();")
+                self._add_runner_prologue_and_epilogue(content, prologue,
+                                                       epilogue, fixture)
             align = True
         else:
             ret = ""

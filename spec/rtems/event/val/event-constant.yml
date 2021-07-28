@@ -416,6 +416,7 @@ test-context-support: null
 test-description: null
 test-header:
   code: null
+  freestanding: false
   includes:
   - rtems.h
   local-includes: []

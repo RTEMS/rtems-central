@@ -1332,8 +1332,6 @@ static void Tc5_Action_1( Tc5_Context *ctx )
   /* Test case action 1 check 1 code */
 }
 
-static T_fixture_node Tc5_Node;
-
 void Tc5_Run( int *a, int b, int *c )
 {
   Tc5_Context *ctx;
@@ -1343,14 +1341,14 @@ void Tc5_Run( int *a, int b, int *c )
   ctx->b = b;
   ctx->c = c;
 
-  ctx = T_push_fixture( &Tc5_Node, &Tc5_Fixture );
+  ctx = T_case_begin( "Tc5", &Tc5_Fixture );
 
   T_plan( 2 );
 
   Tc5_Action_0( ctx );
   Tc5_Action_1( ctx );
 
-  T_pop_fixture();
+  T_case_end();
 }
 
 /** @} */

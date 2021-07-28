@@ -427,6 +427,7 @@ test-context-support: |
 test-description: null
 test-header:
   code: null
+  freestanding: false
   includes:
   - rtems.h
   - rtems/score/thread.h
