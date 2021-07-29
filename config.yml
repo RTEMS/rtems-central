@@ -38,6 +38,7 @@ build:
   - testsuites/validation/tc-basedefs-pendant.h
   - testsuites/validation/tr-event-constant.h
   - testsuites/validation/tr-event-send-receive.h
+  - testsuites/validation/tr-io-kernel.h
   - testsuites/validation/tr-model-chains-api.h
   - testsuites/validation/tr-model-events-mgr.h
   - testsuites/validation/tr-object-ident.h
@@ -135,6 +136,9 @@ interface-documentation:
 - directives-target: modules/rtems-docs/c-user/io/directives.rst
   group: /rtems/io/if/group
   introduction-target: modules/rtems-docs/c-user/io/introduction.rst
+- directives-target: modules/rtems-docs/c-user/kernel-character-io/directives.rst
+  group: /rtems/io/if/group-3
+  introduction-target: modules/rtems-docs/c-user/kernel-character-io/introduction.rst
 - directives-target: modules/rtems-docs/c-user/region/directives.rst
   group: /rtems/region/if/group
   introduction-target: modules/rtems-docs/c-user/region/introduction.rst

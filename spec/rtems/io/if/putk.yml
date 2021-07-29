@@ -1,17 +1,16 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  Outputs the characters defined by the format string and the arguments to the
-  kernel character output device.
+  Outputs the characters of the string and a newline character to the kernel
+  character output device.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 2015 On-Line Applications Research Corporation (OAR)
 definition:
   default:
-    attributes: ${../../basedefs/if/printflike:/name}( 1, 2 )
+    attributes: null
     body: null
     params:
     - const char *${.:/params[0]/name}
-    - '...'
     return: int
   variants: []
 description: null
@@ -27,9 +26,7 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
-- role: constraint
-  uid: ../constraint/no-floating-point
-name: printk
+name: putk
 notes: |
   The directive may be used to print debug and test information.  It uses
   ${putc:/name} to output the characters.  This directive performs a character
@@ -39,13 +36,9 @@ notes: |
   interleaved output may occur.
 params:
 - description: |
-    is a printf()-style format string.
+    is the string to output.
   dir: null
-  name: fmt
-- description: |
-    is a list of optional parameters required by the format string.
-  dir: null
-  name: '...'
+  name: s
 return:
   return: |
     Returns the number of characters output to the kernel character output
