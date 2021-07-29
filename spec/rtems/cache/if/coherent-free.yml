@@ -20,6 +20,12 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/object-allocator
 name: rtems_cache_coherent_free
 notes: null
 params:
