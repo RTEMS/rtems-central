@@ -3,12 +3,10 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-function
+interface-type: unspecified-define
 links:
 - role: interface-placement
   uid: header
-- role: interface-ingroup
-  uid: group-startup
-name: boot_card
+name: RTEMS_FATAL_SOURCE_BSP
 references: {}
 type: interface

@@ -6,9 +6,9 @@ index-entries: []
 interface-type: unspecified-function
 links:
 - role: interface-placement
-  uid: header
+  uid: fatal-extension-header
 - role: interface-ingroup
-  uid: group-startup
-name: boot_card
+  uid: group-fatal
+name: bsp_fatal_extension
 references: {}
 type: interface

@@ -8,6 +8,8 @@ interface-type: header-file
 links:
 - role: interface-placement
   uid: domain
+- role: interface-ingroup
+  uid: group-startup
 path: bsp/bootcard.h
 prefix: bsps/include
 type: interface
