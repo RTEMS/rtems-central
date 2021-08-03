@@ -78,7 +78,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: terminate-userext
+      uid: ../req/terminate-userext
   - brief: |
       Check that the fatal user extensions were called with the expected always
       set to false argument.
@@ -89,7 +89,7 @@ test-actions:
       T_step_false( ${step}, info[ 3 ].always_set_to_false );
     links:
     - role: validation
-      uid: terminate-userext
+      uid: ../req/terminate-userext
   - brief: |
       Check that the fatal user extensions were called with the expected code.
     code: |
@@ -99,7 +99,7 @@ test-actions:
       T_step_eq_ulong( ${step}, info[ 3 ].code, 123456 );
     links:
     - role: validation
-      uid: terminate-userext
+      uid: ../req/terminate-userext
   - brief: |
       Check that the fatal user extensions were called in forward order.
     code: |
@@ -109,14 +109,14 @@ test-actions:
       T_step_eq_uint( ${step}, info[ 3 ].counter, 4 );
     links:
     - role: validation
-      uid: terminate-userext
+      uid: ../req/terminate-userext
   - brief: |
       Check that the system state is terminated.
     code: |
       T_step_eq_int( ${step}, _System_state_Get(), SYSTEM_STATE_TERMINATED );
     links:
     - role: validation
-      uid: terminate-state
+      uid: ../req/terminate-state
   - brief: |
       Where the system was built with SMP support enabled, check that a
       shutdown request was issued.
@@ -129,34 +129,34 @@ test-actions:
       T_step_true( ${step}, shutdown_ok );
     links:
     - role: validation
-      uid: terminate-shutdown
+      uid: ../req/terminate-shutdown
   - brief: |
       Check that the system was halted with the expected fatal source.
     code: |
       T_step_eq_int( ${step}, halt_source, RTEMS_FATAL_SOURCE_APPLICATION );
     links:
     - role: validation
-      uid: terminate-halt
+      uid: ../req/terminate-halt
     - role: validation
-      uid: terminate-shutdown-halt
+      uid: ../req/terminate-shutdown-halt
   - brief: |
       Check that the system was halted with the expected fatal code.
     code: |
       T_step_eq_ulong( ${step}, halt_code, 123456 );
     links:
     - role: validation
-      uid: terminate-halt
+      uid: ../req/terminate-halt
     - role: validation
-      uid: terminate-shutdown-halt
+      uid: ../req/terminate-shutdown-halt
   - brief: |
       Check that the system was finally halted.
     code: |
       T_step_eq_uint( ${step}, counter, 5 );
     links:
     - role: validation
-      uid: terminate-halt
+      uid: ../req/terminate-halt
     - role: validation
-      uid: terminate-shutdown-halt
+      uid: ../req/terminate-shutdown-halt
   links:
   - role: validation
     uid: ../req/terminate
