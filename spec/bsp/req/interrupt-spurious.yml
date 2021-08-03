@@ -71,12 +71,10 @@ test-action: |
   ctx->fatal_source = RTEMS_FATAL_SOURCE_LAST;
   ctx->fatal_code = UINT32_MAX;
 
-  if ( setjmp( ctx->before_call ) == 0 ) {
-    if ( *ctx->first == NULL ) {
-      bsp_interrupt_handler_dispatch_unchecked( ctx->vector );
-    } else {
-      bsp_interrupt_spurious( ctx->vector );
-    }
+  if ( *ctx->first == NULL ) {
+    bsp_interrupt_handler_dispatch_unchecked( ctx->vector );
+  } else {
+    bsp_interrupt_spurious( ctx->vector );
   }
 test-brief: null
 test-cleanup: null
@@ -157,11 +155,14 @@ test-setup:
     ];
 
     rtems_interrupt_entry_initialize( &ctx->entry, EntryRoutine, ctx, "Info" );
+    test_case_active = true;
     SetFatalExtension( FatalExtension );
   description: null
 test-stop: null
 test-support: |
   typedef BspReqInterruptSpurious_Context Context;
+
+  static bool test_case_active;
 
   static void EntryRoutine( void *arg )
   {
@@ -186,11 +187,31 @@ test-support: |
     ++ctx->fatal_counter;
     longjmp( ctx->before_call, 1 );
   }
+
+  void __real_bsp_interrupt_spurious( rtems_vector_number vector );
+
+  void __wrap_bsp_interrupt_spurious( rtems_vector_number vector );
+
+  void __wrap_bsp_interrupt_spurious( rtems_vector_number vector )
+  {
+    if ( test_case_active ) {
+      Context *ctx;
+
+      ctx = T_fixture_context();
+
+      if ( setjmp( ctx->before_call ) == 0 ) {
+        __real_bsp_interrupt_spurious( vector );
+      }
+    } else {
+      __real_bsp_interrupt_spurious( vector );
+    }
+  }
 test-target: testsuites/validation/tc-bsp-interrupt-spurious.c
 test-teardown:
   brief: null
   code: |
     SetFatalExtension( NULL );
+    test_case_active = false;
   description: null
 text: ${.:text-template}
 transition-map:
