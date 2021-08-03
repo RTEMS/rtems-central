@@ -41,7 +41,7 @@ _CHILD_ROLES = [
     "interface-function", "validation", "appl-config-group-member"
 ]
 
-_PARENT_ROLES = ["interface-enumerator", "interface-placement"]
+_PARENT_ROLES = ["interface-enumerator"]
 
 
 def _get_value_dummy(_ctx: ItemGetValueContext) -> Any:
