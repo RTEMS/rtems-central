@@ -23,6 +23,25 @@ test-actions:
     links:
     - role: validation
       uid: ../req/fatal-shutdown-response
+  - brief: |
+      Check that the processor state is shutdown.
+    code: |
+      T_step_eq_int(
+        ${step},
+        _Per_CPU_Get_state( _Per_CPU_Get() ),
+        PER_CPU_STATE_SHUTDOWN
+      );
+    links:
+    - role: validation
+      uid: ../req/fatal-shutdown-response
+  - brief: |
+      Check that a second shutdown request does not end in a recursive shutdown
+      response.
+    code: |
+      _SMP_Process_message( _Per_CPU_Get(), SMP_MESSAGE_SHUTDOWN );
+    links:
+    - role: validation
+      uid: ../req/fatal-shutdown-response
   links: []
 - action-brief: |
     Issue a job on a processor in the shutdown state.  Check that the right
@@ -147,6 +166,7 @@ test-header:
 test-includes:
 - rtems/sysinit.h
 - rtems/score/atomic.h
+- rtems/score/percpu.h
 - rtems/score/smpimpl.h
 - setjmp.h
 test-local-includes:
