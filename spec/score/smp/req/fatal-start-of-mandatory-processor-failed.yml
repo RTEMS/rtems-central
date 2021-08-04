@@ -12,8 +12,8 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  While the system is initialized, if the processor receives an SMP shutdown
-  request message, then the system shall terminate with the
-  ${/score/interr/if/source-smp:/name} fatal source and the
+  While the system is initialized, if the start of a mandatory processor
+  defined by the application configuration fails, then the system shall
+  terminate with the ${/score/interr/if/source-smp:/name} fatal source and the
   ${../if/fatal-start-of-mandatory-processor-failed:/name} fatal code.
 type: requirement
