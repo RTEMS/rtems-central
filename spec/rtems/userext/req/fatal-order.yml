@@ -4,13 +4,12 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: terminate
+  uid: ../if/group
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  When ${../if/terminate:/name} is called, the fatal
-  ${/glossary/userextensions:/term} shall be invoked with the fatal source and
-  fatal code specified by the respective parameter.
+  The fatal ${/glossary/userextensions:/term} shall be invoked in
+  ${/glossary/extension-forward-order:/term}.
 type: requirement

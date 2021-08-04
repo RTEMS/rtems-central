@@ -5,8 +5,9 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Create two dynamic extensions.  Call the system termination procedure.
-    Delete the two dynamic extensions.
+    Create three dynamic extensions.  Call the system termination procedure.
+    Delete one dynamic extension during the fatal extension invocation.  Delete
+    the two remaining dynamic extensions.
   action-code: |
     rtems_status_code      sc;
     rtems_extensions_table table;
@@ -38,6 +39,14 @@ test-actions:
     );
     T_step_rsc_success( ${step}, sc );
 
+    table.fatal = FatalExtension4;
+    sc = rtems_extension_create(
+      rtems_build_name( ' ', ' ', ' ', '4' ),
+      &table,
+      &extension_id_4
+    );
+    T_step_rsc_success( ${step}, sc );
+
     test_case_active = true;
 
     if ( setjmp( before_terminate ) == 0 ) {
@@ -53,8 +62,7 @@ test-actions:
     T_step_rsc_success( ${step}, sc );
   checks:
   - brief: |
-      Check that the fatal user extensions were called with the expected
-      source.
+      Check that the fatal extensions were invoked with the expected source.
     code: |
       T_step_eq_int(
         ${step},
@@ -80,8 +88,8 @@ test-actions:
     - role: validation
       uid: ../req/terminate-userext
   - brief: |
-      Check that the fatal user extensions were called with the expected always
-      set to false argument.
+      Check that the fatal extensions were invoked with the expected always set
+      to false argument.
     code: |
       T_step_false( ${step}, info[ 0 ].always_set_to_false );
       T_step_false( ${step}, info[ 1 ].always_set_to_false );
@@ -91,7 +99,7 @@ test-actions:
     - role: validation
       uid: ../req/terminate-userext
   - brief: |
-      Check that the fatal user extensions were called with the expected code.
+      Check that the fatal extensions were invoked with the expected code.
     code: |
       T_step_eq_ulong( ${step}, info[ 0 ].code, 123456 );
       T_step_eq_ulong( ${step}, info[ 1 ].code, 123456 );
@@ -101,7 +109,7 @@ test-actions:
     - role: validation
       uid: ../req/terminate-userext
   - brief: |
-      Check that the fatal user extensions were called in forward order.
+      Check that the fatal extensions were invoked in forward order.
     code: |
       T_step_eq_uint( ${step}, info[ 0 ].counter, 1 );
       T_step_eq_uint( ${step}, info[ 1 ].counter, 2 );
@@ -109,7 +117,18 @@ test-actions:
       T_step_eq_uint( ${step}, info[ 3 ].counter, 4 );
     links:
     - role: validation
-      uid: ../req/terminate-userext
+      uid: /rtems/userext/req/fatal-order
+  - brief: |
+      Check that the fatal extension in the deleted extension set was not
+      invoked.
+    code: |
+      T_step_eq_int( ${step}, info[ 4 ].source, 0 );
+      T_step_false( ${step}, info[ 4 ].always_set_to_false );
+      T_step_eq_ulong( ${step}, info[ 4 ].code, 0 );
+      T_step_eq_uint( ${step}, info[ 4 ].counter, 0 );
+    links:
+    - role: validation
+      uid: /rtems/userext/req/fatal-iterate-remove
   - brief: |
       Check that the system state is terminated.
     code: |
@@ -187,7 +206,7 @@ test-support: |
 
   static Atomic_Uint counter;
 
-  static FatalInfo info[ 4 ];
+  static FatalInfo info[ 5 ];
 
   static bool test_case_active;
 
@@ -200,6 +219,8 @@ test-support: |
   static rtems_fatal_source halt_source;
 
   static rtems_fatal_code halt_code;
+
+  static rtems_id extension_id_4;
 
   static unsigned int GetCounter( void )
   {
@@ -267,6 +288,20 @@ test-support: |
   }
 
   static void FatalExtension3(
+    rtems_fatal_source source,
+    bool               always_set_to_false,
+    rtems_fatal_code   code
+  )
+  {
+    rtems_status_code sc;
+
+    FatalExtension( source, always_set_to_false, code, 3 );
+
+    sc = rtems_extension_delete( extension_id_4 );
+    T_quiet_rsc_success( sc );
+  }
+
+  static void FatalExtension4(
     rtems_fatal_source source,
     bool               always_set_to_false,
     rtems_fatal_code   code
