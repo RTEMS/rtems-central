@@ -344,6 +344,22 @@ post-conditions:
       ${../if/restart:/name} call.
   test-epilogue: null
   test-prologue: null
+- name: TerminateExtensions
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_terminate, 1 );
+    text: |
+      The thread terminate user extensions shall be invoked by the
+      ${../if/restart:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_u32( ctx->calls_after_restart.thread_terminate, 0 );
+    text: |
+      The thread terminate user extensions shall not be invoked by the
+      ${../if/restart:/name} call.
+  test-epilogue: null
+  test-prologue: null
 pre-conditions:
 - name: Id
   states:
@@ -1437,6 +1453,15 @@ transition-map:
           ThreadDispatch: Enabled
       then: 'Yes'
     - else: Nop
+    TerminateExtensions:
+    - if:
+        pre-conditions:
+          Id: Executing
+          Terminating: 'Yes'
+          Context: Task
+          ThreadDispatch: Enabled
+      then: 'Yes'
+    - else: Nop
   pre-conditions:
     Id:
     - Executing
@@ -1464,6 +1489,7 @@ transition-map:
     Terminating: N/A
     Protected: N/A
     RestartExtensions: Nop
+    TerminateExtensions: Nop
   pre-conditions:
     Id:
     - Invalid
@@ -1494,6 +1520,7 @@ transition-map:
     Terminating: 'No'
     Protected: 'No'
     RestartExtensions: Nop
+    TerminateExtensions: Nop
   pre-conditions:
     Id:
     - Other
