@@ -418,7 +418,7 @@ test-context:
   member: |
     uint32_t obtain_counter[ WORKER_COUNT ]
 - brief: |
-    This member contains the count of the semaphore after the the
+    This member contains the count of the semaphore after the
     ${../if/release:/name} call.
   description: null
   member: |

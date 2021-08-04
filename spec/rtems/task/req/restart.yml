@@ -437,13 +437,13 @@ pre-conditions:
     test-code: |
       ctx->protected = true;
     text: |
-      While thread life of the the task specified by the
+      While thread life of the task specified by the
       ${../if/restart:/params[0]/name} parameter is protected.
   - name: 'No'
     test-code: |
       ctx->protected = false;
     text: |
-      While thread life of the the task specified by the
+      While thread life of the task specified by the
       ${../if/restart:/params[0]/name} parameter is not protected.
   test-epilogue: null
   test-prologue: null
