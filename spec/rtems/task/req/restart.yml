@@ -43,12 +43,12 @@ post-conditions:
       The fatal error with a fatal source of
       ${/score/interr/if/internal-error-core:/name} and a fatal code of
       ${/score/interr/if/bad-thread-dispatch-disable-level:/name} shall occur
-      by the ${../if/restart:/name} call.
+      through the ${../if/restart:/name} call.
   - name: Nop
     test-code: |
       T_eq_u32( ctx->calls.fatal, 0 );
     text: |
-      No fatal error shall occur by the ${../if/restart:/name} call.
+      No fatal error shall occur through the ${../if/restart:/name} call.
   test-epilogue: null
   test-prologue: null
 - name: Argument
@@ -626,7 +626,7 @@ test-action: |
         sc = rtems_task_restart( ctx->deleter_id, (rtems_task_argument) ctx );
         T_rsc_success( sc );
       } else {
-        PrepareNestedRequest( ctx );
+        WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
 
         sc = rtems_task_restart( ctx->worker_id, (rtems_task_argument) ctx );
         T_rsc_success( sc );
@@ -671,21 +671,10 @@ test-context:
   member: |
     jmp_buf thread_dispatch_context;
 - brief: |
-    This member provides an call within ISR request.
+    This member provides the context to wrap thread queue operations.
   description: null
   member: |
-    CallWithinISRRequest isr_request
-- brief: |
-    This member may reference wrapped thread queue operations used to trigger a
-    nested request.
-  description: null
-  member: |
-    const Thread_queue_Operations *wrapped_operations
-- brief: |
-    This member provides a thread queue used to trigger a nested request.
-  description: null
-  member: |
-    Thread_queue_Control thread_queue
+    WrapThreadQueueContext wrap_tq_ctx
 - brief: |
     This member contains the identifier of the runner scheduler.
   description: null
@@ -852,14 +841,13 @@ test-context-support: null
 test-description: null
 test-header: null
 test-includes:
-- limits.h
 - rtems.h
-- setjmp.h
 - rtems/test-scheduler.h
 - rtems/score/statesimpl.h
 - rtems/score/threaddispatch.h
 - rtems/score/threadimpl.h
-- rtems/score/threadqimpl.h
+- limits.h
+- setjmp.h
 test-local-includes:
 - tx-support.h
 test-prepare: |
@@ -885,11 +873,7 @@ test-setup:
     ctx->scheduler_id = GetSelfScheduler();
     ctx->mutex_id = CreateMutexNoProtocol();
     ObtainMutex( ctx->mutex_id );
-
-    ctx->isr_request.handler = Restart;
-    ctx->isr_request.arg = ctx;
-
-    _Thread_queue_Initialize( &ctx->thread_queue, "Nested Request" );
+    WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, Restart, ctx );
 
     sc = rtems_extension_create(
       rtems_build_name( 'T', 'E', 'S', 'T' ),
@@ -994,10 +978,10 @@ test-support: |
         /*
          * Where the system was built with SMP support enabled, a suspended
          * executing thread during the ${../if/restart:/name} call can happen
-         * if the thread was suspended by another processor and the inter
-         * interrupt interrupt did not yet arrive.  Where the system was built
-         * with SMP support disabled, this state cannot happen with the current
-         * implementation.  However, we still specify and validate this
+         * if the thread was suspended by another processor and the
+         * inter-processor interrupt did not yet arrive.  Where the system was
+         * built with SMP support disabled, this state cannot happen with the
+         * current implementation.  However, we still specify and validate this
          * behaviour unconditionally since there exist alternative
          * implementations which would lead to such a state if the executing
          * thread is suspended by an ISR.
@@ -1094,58 +1078,12 @@ test-support: |
     longjmp( ctx->thread_dispatch_context, 1 );
   }
 
-  static void TriggerNestedRequest(
-    Thread_queue_Queue   *queue,
-    Thread_Control       *thread,
-    Thread_queue_Context *queue_context
-  )
-  {
-    Context *ctx;
-
-    ctx = T_fixture_context();
-    CallWithinISRSubmit( &ctx->isr_request );
-
-    if ( ctx->wrapped_operations ) {
-      thread->Wait.operations = ctx->wrapped_operations;
-      ( *thread->Wait.operations->extract )( queue, thread, queue_context );
-    }
-  }
-
-  const Thread_queue_Operations trigger_nested_request = {
-    .extract = TriggerNestedRequest
-  };
-
-  static void PrepareNestedRequest( Context *ctx )
-  {
-    Thread_Control *thread;
-
-    thread = ctx->worker_tcb;
-
-    if ( thread->Wait.queue != NULL ) {
-      ctx->wrapped_operations = thread->Wait.operations;
-      thread->Wait.operations = &trigger_nested_request;
-    } else {
-      Thread_queue_Context queue_context;
-
-      ctx->wrapped_operations = NULL;
-      _Thread_queue_Context_initialize( &queue_context );
-      _Thread_queue_Acquire( &ctx->thread_queue, &queue_context );
-      _Thread_Wait_flags_set(
-        thread,
-        THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK
-      );
-      _Thread_Wait_claim( thread, &ctx->thread_queue.Queue );
-      _Thread_Wait_claim_finalize( thread, &trigger_nested_request );
-      _Thread_queue_Release( &ctx->thread_queue, &queue_context );
-    }
-  }
-
   static void TriggerNestedRequestViaSelfRestart(
     Context         *ctx,
     Per_CPU_Control *cpu_self
   )
   {
-    PrepareNestedRequest( ctx );
+    WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
     SetFatalExtension( ResumeThreadDispatch );
 
     if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
@@ -1257,7 +1195,7 @@ test-support: |
       }
 
       if ( ctx->nested_request ) {
-        PrepareNestedRequest( ctx );
+        WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
         DeleteTask( ctx->worker_id );
       } else {
         DeleteTask( ctx->worker_id );
@@ -1344,7 +1282,7 @@ test-teardown:
     DeleteMutex( ctx->mutex_id );
     RestoreRunnerASR();
     RestoreRunnerPriority();
-    _Thread_queue_Destroy( &ctx->thread_queue );
+    WrapThreadQueueDestroy( &ctx->wrap_tq_ctx );
   description: null
 text: ${.:text-template}
 transition-map:
