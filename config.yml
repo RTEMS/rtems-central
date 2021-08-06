@@ -36,6 +36,7 @@ build:
   - gccdeps.py
   - long_gcc.py
   - testsuites/validation/tc-basedefs-pendant.h
+  - testsuites/validation/tc-terminate.h
   - testsuites/validation/tr-model-chains-api.h
   - testsuites/validation/tr-model-events-mgr.h
   - testsuites/validation/ts-config.h
