@@ -1169,26 +1169,8 @@ test-support: |
          * below.
          */
         if ( ctx->nested_request ) {
-          rtems_status_code sc;
-          rtems_id          id;
-
-          /*
-           * This sequence lowers the priority to PRIO_NORMAL without an
-           * implicit yield.
-           */
-
-          sc = rtems_semaphore_create(
-            rtems_build_name( 'M', 'U', 'T', 'X' ),
-            0,
-            RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
-            PRIO_HIGH,
-            &id
-          );
-          T_rsc_success( sc );
-
-          SetSelfPriority( PRIO_NORMAL );
-          ReleaseMutex( id );
-          DeleteMutex( id );
+          /* Lower the priority to PRIO_NORMAL without an * implicit yield */
+          SetSelfPriorityNoYield( PRIO_NORMAL );
         } else {
           SetScheduler( ctx->worker_id, ctx->scheduler_id, PRIO_HIGH );
         }
