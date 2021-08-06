@@ -131,10 +131,13 @@ post-conditions:
       parameter shall be set to 0.
   - name: Nop
     test-code: |
-      T_eq_mem(
-        &ctx->period_status.since_last_period,
-        &initial_period,
-        sizeof( ctx->elapsed )
+      T_eq_u64(
+        ctx->period_status.since_last_period.tv_sec,
+        initial_period.tv_sec
+      );
+      T_eq_long(
+        ctx->period_status.since_last_period.tv_nsec,
+        initial_period.tv_nsec
       );
     text: |
       Objects referenced by the ${../if/get-status:/params[1]/name}
@@ -183,10 +186,13 @@ post-conditions:
       shall be set to 0.
   - name: Nop
     test-code: |
-      T_eq_mem(
-        &ctx->period_status.executed_since_last_period,
-        &initial_period,
-        sizeof( ctx->consumed )
+      T_eq_u64(
+        ctx->period_status.executed_since_last_period.tv_sec,
+        initial_period.tv_sec
+      );
+      T_eq_long(
+        ctx->period_status.executed_since_last_period.tv_nsec,
+        initial_period.tv_nsec
       );
     text: |
       Objects referenced by the ${../if/get-status:/params[1]/name}
