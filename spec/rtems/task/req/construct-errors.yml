@@ -476,68 +476,79 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: Ok
-    Name: Valid
-    IdVar: Set
-    CreateExt: 'Yes'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext:
-    - Ok
-    Id:
-    - Valid
+    Status:
+    - if:
+        pre-conditions:
+          Config: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Name: Inv
+      then: InvName
+    - if:
+        pre-conditions:
+          Id: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Prio: Zero
+          SysTsk: 'No'
+      then: InvPrio
+    - if:
+        pre-conditions:
+          Prio: Inv
+      then: InvPrio
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+        pre-conditions:
+          TLS: Small
+      then: InvSize
+    - if:
+        pre-conditions:
+          Stack: Small
+      then: InvSize
+    - if:
+        pre-conditions:
+          Ext: Err
+      then: Unsat
+    - else: Ok
     Name:
-    - Valid
-    SysTsk: all
-    Prio:
-    - Valid
-    Stack:
-    - Enough
-    TLS:
-    - Enough
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Name: Valid
-    IdVar: Set
-    CreateExt: 'Yes'
-    DelExt: 'No'
-    StoFree: 'No'
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    CreateExt:
+    - if:
+        post-conditions:
+          Status:
+          - Ok
+          - Unsat
+      then: 'Yes'
+    - else: 'No'
+    DelExt:
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: 'Yes'
+    - else: 'No'
+    StoFree:
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: 'Yes'
+    - else: 'No'
   pre-conditions:
-    Config:
-    - Valid
-    Ext:
-    - Ok
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Zero
-    Stack:
-    - Enough
-    TLS:
-    - Enough
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvAddr
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - 'Null'
+    Config: all
     Ext: all
     Id: all
     Name: all
@@ -546,319 +557,4 @@ transition-map:
     Stack: all
     TLS: all
     Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Zero
-    Stack:
-    - Small
-    TLS:
-    - Enough
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Zero
-    Stack:
-    - Enough
-    TLS:
-    - Small
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Zero
-    Stack:
-    - Small
-    TLS:
-    - Small
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvName
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id: all
-    Name:
-    - Inv
-    SysTsk: all
-    Prio: all
-    Stack: all
-    TLS: all
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvAddr
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - 'Null'
-    Name:
-    - Valid
-    SysTsk: all
-    Prio: all
-    Stack: all
-    TLS: all
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvPrio
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Inv
-    Stack: all
-    TLS: all
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvPrio
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'No'
-    Prio:
-    - Zero
-    - Inv
-    Stack: all
-    TLS: all
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: TooMany
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk: all
-    Prio:
-    - Valid
-    Stack: all
-    TLS: all
-    Free:
-    - 'No'
-- enabled-by: true
-  post-conditions:
-    Status: TooMany
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Zero
-    Stack: all
-    TLS: all
-    Free:
-    - 'No'
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk: all
-    Prio:
-    - Valid
-    Stack: all
-    TLS:
-    - Small
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'No'
-    DelExt: 'No'
-    StoFree: 'No'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext: all
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk: all
-    Prio:
-    - Valid
-    Stack:
-    - Small
-    TLS:
-    - Enough
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: Unsat
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'Yes'
-    DelExt: 'Yes'
-    StoFree: 'Yes'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext:
-    - Err
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk: all
-    Prio:
-    - Valid
-    Stack:
-    - Enough
-    TLS:
-    - Enough
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: Unsat
-    Name: Invalid
-    IdVar: Nop
-    CreateExt: 'Yes'
-    DelExt: 'Yes'
-    StoFree: 'Yes'
-  pre-conditions:
-    Config:
-    - Valid
-    Ext:
-    - Err
-    Id:
-    - Valid
-    Name:
-    - Valid
-    SysTsk:
-    - 'Yes'
-    Prio:
-    - Zero
-    Stack:
-    - Enough
-    TLS:
-    - Enough
-    Free:
-    - 'Yes'
 type: requirement
