@@ -5,14 +5,12 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Create three dynamic extensions.  Call the system termination procedure.
-    Delete one dynamic extension during the fatal extension invocation.  Delete
-    the two remaining dynamic extensions.
+    Create five dynamic extensions.  Call the system termination procedure.
+    Delete three dynamic extension during the fatal extension invocation.
+    Delete the two remaining dynamic extensions.
   action-code: |
     rtems_status_code      sc;
     rtems_extensions_table table;
-    rtems_id               id_2;
-    rtems_id               id_3;
     bool                   shutdown_ok;
 
     #if defined(RTEMS_SMP)
@@ -27,7 +25,7 @@ test-actions:
     sc = rtems_extension_create(
       rtems_build_name( ' ', ' ', ' ', '2' ),
       &table,
-      &id_2
+      &extension_ids[ 2 ]
     );
     T_step_rsc_success( ${step}, sc );
 
@@ -35,7 +33,7 @@ test-actions:
     sc = rtems_extension_create(
       rtems_build_name( ' ', ' ', ' ', '3' ),
       &table,
-      &id_3
+      &extension_ids[ 3 ]
     );
     T_step_rsc_success( ${step}, sc );
 
@@ -43,7 +41,23 @@ test-actions:
     sc = rtems_extension_create(
       rtems_build_name( ' ', ' ', ' ', '4' ),
       &table,
-      &extension_id_4
+      &extension_ids[ 4 ]
+    );
+    T_step_rsc_success( ${step}, sc );
+
+    table.fatal = FatalExtension5;
+    sc = rtems_extension_create(
+      rtems_build_name( ' ', ' ', ' ', '5' ),
+      &table,
+      &extension_ids[ 5 ]
+    );
+    T_step_rsc_success( ${step}, sc );
+
+    table.fatal = FatalExtension6;
+    sc = rtems_extension_create(
+      rtems_build_name( ' ', ' ', ' ', '6' ),
+      &table,
+      &extension_ids[ 6 ]
     );
     T_step_rsc_success( ${step}, sc );
 
@@ -55,10 +69,10 @@ test-actions:
 
     test_case_active = false;
 
-    sc = rtems_extension_delete( id_2 );
+    sc = rtems_extension_delete( extension_ids[ 2 ] );
     T_step_rsc_success( ${step}, sc );
 
-    sc = rtems_extension_delete( id_3 );
+    sc = rtems_extension_delete( extension_ids[ 6 ] );
     T_step_rsc_success( ${step}, sc );
   checks:
   - brief: |
@@ -81,7 +95,17 @@ test-actions:
       );
       T_step_eq_int(
         ${step},
-        info[ 3 ].source,
+        info[ 4 ].source,
+        RTEMS_FATAL_SOURCE_APPLICATION
+      );
+      T_step_eq_int(
+        ${step},
+        info[ 5 ].source,
+        RTEMS_FATAL_SOURCE_APPLICATION
+      );
+      T_step_eq_int(
+        ${step},
+        info[ 6 ].source,
         RTEMS_FATAL_SOURCE_APPLICATION
       );
     links:
@@ -94,7 +118,9 @@ test-actions:
       T_step_false( ${step}, info[ 0 ].always_set_to_false );
       T_step_false( ${step}, info[ 1 ].always_set_to_false );
       T_step_false( ${step}, info[ 2 ].always_set_to_false );
-      T_step_false( ${step}, info[ 3 ].always_set_to_false );
+      T_step_false( ${step}, info[ 4 ].always_set_to_false );
+      T_step_false( ${step}, info[ 5 ].always_set_to_false );
+      T_step_false( ${step}, info[ 6 ].always_set_to_false );
     links:
     - role: validation
       uid: ../req/terminate-userext
@@ -104,7 +130,9 @@ test-actions:
       T_step_eq_ulong( ${step}, info[ 0 ].code, 123456 );
       T_step_eq_ulong( ${step}, info[ 1 ].code, 123456 );
       T_step_eq_ulong( ${step}, info[ 2 ].code, 123456 );
-      T_step_eq_ulong( ${step}, info[ 3 ].code, 123456 );
+      T_step_eq_ulong( ${step}, info[ 4 ].code, 123456 );
+      T_step_eq_ulong( ${step}, info[ 5 ].code, 123456 );
+      T_step_eq_ulong( ${step}, info[ 6 ].code, 123456 );
     links:
     - role: validation
       uid: ../req/terminate-userext
@@ -114,7 +142,9 @@ test-actions:
       T_step_eq_uint( ${step}, info[ 0 ].counter, 1 );
       T_step_eq_uint( ${step}, info[ 1 ].counter, 2 );
       T_step_eq_uint( ${step}, info[ 2 ].counter, 3 );
-      T_step_eq_uint( ${step}, info[ 3 ].counter, 4 );
+      T_step_eq_uint( ${step}, info[ 4 ].counter, 4 );
+      T_step_eq_uint( ${step}, info[ 5 ].counter, 5 );
+      T_step_eq_uint( ${step}, info[ 6 ].counter, 6 );
     links:
     - role: validation
       uid: /rtems/userext/req/fatal-order
@@ -122,10 +152,10 @@ test-actions:
       Check that the fatal extension in the deleted extension set was not
       invoked.
     code: |
-      T_step_eq_int( ${step}, info[ 4 ].source, 0 );
-      T_step_false( ${step}, info[ 4 ].always_set_to_false );
-      T_step_eq_ulong( ${step}, info[ 4 ].code, 0 );
-      T_step_eq_uint( ${step}, info[ 4 ].counter, 0 );
+      T_step_eq_int( ${step}, info[ 3 ].source, 0 );
+      T_step_false( ${step}, info[ 3 ].always_set_to_false );
+      T_step_eq_ulong( ${step}, info[ 3 ].code, 0 );
+      T_step_eq_uint( ${step}, info[ 3 ].counter, 0 );
     links:
     - role: validation
       uid: /rtems/userext/req/fatal-iterate-remove
@@ -170,7 +200,7 @@ test-actions:
   - brief: |
       Check that the system was finally halted.
     code: |
-      T_step_eq_uint( ${step}, counter, 5 );
+      T_step_eq_uint( ${step}, counter, 7 );
     links:
     - role: validation
       uid: ../req/terminate-halt
@@ -193,7 +223,7 @@ test-includes:
 - setjmp.h
 - string.h
 test-local-includes:
-- tc-terminate.h
+- tc-userext.h
 test-setup: null
 test-stop: null
 test-support: |
@@ -206,7 +236,7 @@ test-support: |
 
   static Atomic_Uint counter;
 
-  static FatalInfo info[ 5 ];
+  static FatalInfo info[ 7 ];
 
   static bool test_case_active;
 
@@ -220,7 +250,7 @@ test-support: |
 
   static rtems_fatal_code halt_code;
 
-  static rtems_id extension_id_4;
+  static rtems_id extension_ids[ 7 ];
 
   static unsigned int GetCounter( void )
   {
@@ -284,7 +314,12 @@ test-support: |
     rtems_fatal_code   code
   )
   {
+    rtems_status_code sc;
+
     FatalExtension( source, always_set_to_false, code, 2 );
+
+    sc = rtems_extension_delete( extension_ids[ 3 ] );
+    T_quiet_rsc_success( sc );
   }
 
   static void FatalExtension3(
@@ -293,12 +328,7 @@ test-support: |
     rtems_fatal_code   code
   )
   {
-    rtems_status_code sc;
-
     FatalExtension( source, always_set_to_false, code, 3 );
-
-    sc = rtems_extension_delete( extension_id_4 );
-    T_quiet_rsc_success( sc );
   }
 
   static void FatalExtension4(
@@ -307,7 +337,35 @@ test-support: |
     rtems_fatal_code   code
   )
   {
-    FatalExtension( source, always_set_to_false, code, 3 );
+    FatalExtension( source, always_set_to_false, code, 4 );
+  }
+
+  static void FatalExtension5(
+    rtems_fatal_source source,
+    bool               always_set_to_false,
+    rtems_fatal_code   code
+  )
+  {
+    rtems_status_code sc;
+
+    FatalExtension( source, always_set_to_false, code, 5 );
+
+    sc = rtems_extension_delete( extension_ids[ 5 ] );
+    T_quiet_rsc_success( sc );
+  }
+
+  static void FatalExtension6(
+    rtems_fatal_source source,
+    bool               always_set_to_false,
+    rtems_fatal_code   code
+  )
+  {
+    rtems_status_code sc;
+
+    FatalExtension( source, always_set_to_false, code, 6 );
+
+    sc = rtems_extension_delete( extension_ids[ 4 ] );
+    T_quiet_rsc_success( sc );
   }
 test-target: testsuites/validation/tc-terminate.c
 test-teardown: null

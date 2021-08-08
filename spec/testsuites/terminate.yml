@@ -25,7 +25,7 @@ test-code: |
 test-description: null
 test-includes: []
 test-local-includes:
-- tc-terminate.h
-test-suite-name: Fatal
+- tc-userext.h
+test-suite-name: Terminate
 test-target: testsuites/validation/ts-terminate.c
 type: test-suite
