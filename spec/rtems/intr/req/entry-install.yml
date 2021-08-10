@@ -63,7 +63,7 @@ post-conditions:
   states:
   - name: Nop
     test-code: |
-      if ( !ctx->interrupt_occurred ) {
+      if ( ctx->handler_counter == 0 ) {
         T_eq( ctx->enabled_before, ctx->enabled_after );
       }
     text: |
@@ -72,18 +72,19 @@ post-conditions:
       ${../if/entry-install:/name} call.
   - name: 'Yes'
     test-code: |
-      if ( ctx->attributes.can_enable ) {
-        T_true( ctx->enabled_after || ctx->interrupt_occurred );
-      }
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
     text: |
       The interrupt vector specified by ${../if/entry-install:/params[0]/name}
       shall be enabled.
   - name: Maybe
     test-code: |
-      /* The comment of pre-condition ``CanEnable`` for the ``Yes`` state. */
-      if ( ctx->attributes.can_enable ) {
-        T_true( ctx->enabled_after || ctx->interrupt_occurred );
-      }
+      /*
+       * Interrupt vectors which cannot be enabled are not selected as a
+       * testable interrupt vector by GetTestableInterruptVector(), so this
+       * path is not validated by this test.  See also comment for
+       * ``CanEnable`` pre-condition state ``Yes``.
+       */
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
     text: |
       The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
       may be enabled.
@@ -91,8 +92,11 @@ post-conditions:
     test-code: |
       /*
        * Interrupt vectors which cannot be enabled are not selected as a
-       * testable interrupt vector by GetTestableInterruptVector().
+       * testable interrupt vector by GetTestableInterruptVector(), so this
+       * path is not validated by this test.  See also comment for
+       * ``CanEnable`` pre-condition state ``Yes``.
        */
+      T_true( ctx->enabled_after || ctx->handler_counter > 3 );
     text: |
       The interrupt vector specified by ${../if/entry-remove:/params[0]/name}
       shall not be enabled.
@@ -137,6 +141,24 @@ post-conditions:
       ctx
     );
     T_rsc_success( sc );
+
+    if ( ctx->status == RTEMS_SUCCESSFUL ) {
+      uint32_t counter;
+
+      counter = 1;
+
+      if ( ctx->other_installed ) {
+        T_eq_u32( ctx->counter_by_entry[ 1 ], counter );
+        ++counter;
+      }
+
+      if ( ctx->third_installed ) {
+        T_eq_u32( ctx->counter_by_entry[ 2 ], counter );
+        ++counter;
+      }
+
+      T_eq_u32( ctx->counter_by_entry[ 0 ], counter );
+    }
 pre-conditions:
 - name: Vector
   states:
@@ -382,10 +404,15 @@ test-context:
   member: |
     bool initialized_during_setup
 - brief: |
-    If this member is true, then an interrupt occurred.
+    This member provides a counter for handler invocations.
   description: null
   member: |
-    bool interrupt_occurred
+    uint32_t handler_counter
+- brief: |
+    This member provides a counter snapshot for each entry.
+  description: null
+  member: |
+    uint32_t counter_by_entry[ 3 ];
 - brief: |
     This member provides the vector number of a testable interrupt vector.
   description: null
@@ -488,16 +515,25 @@ test-includes:
 test-local-includes:
 - tx-support.h
 test-prepare: |
-  ctx->interrupt_occurred = false;
+  size_t i;
+
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->counter_by_entry ); ++i ) {
+    ctx->counter_by_entry[ i ] = 0;
+  }
+
+  ctx->handler_counter = 0;
   ctx->other_installed = false;
   ctx->third_installed = false;
 test-setup:
   brief: null
   code: |
+    rtems_interrupt_attributes required = {
+      .can_raise = true
+    };
     rtems_status_code sc;
 
     ctx->initialized_during_setup = bsp_interrupt_is_initialized();
-    ctx->test_vector = GetTestableInterruptVector( NULL );
+    ctx->test_vector = GetTestableInterruptVector( &required );
     sc = rtems_interrupt_get_attributes( ctx->test_vector, &ctx->attributes );
     T_rsc_success( sc );
   description: null
@@ -544,29 +580,66 @@ test-support: |
     ctx->other_installed = true;
   }
 
-  static void OtherRoutine( void *arg )
+  static void Routine( Context *ctx, uint32_t counter )
   {
-    Context          *ctx;
     rtems_status_code sc;
 
-    (void) arg;
-    ctx = T_fixture_context();
-    sc = rtems_interrupt_vector_disable( ctx->test_vector );
-    T_rsc_success( sc );
+    ctx->handler_counter = counter;
 
-    ctx->interrupt_occurred = true;
+    if (
+      ctx->attributes.can_clear &&
+      !ctx->attributes.cleared_by_acknowledge
+    ) {
+      sc = rtems_interrupt_clear( ctx->test_vector );
+      T_rsc_success( sc );
+    }
+
+    if ( counter > 3 ) {
+      sc = rtems_interrupt_vector_disable( ctx->test_vector );
+      T_rsc_success( sc );
+    }
   }
 
   static void EntryRoutine( void *arg )
   {
-    T_eq_ptr( arg, &entry_arg );
-    OtherRoutine( NULL );
+    Context *ctx;
+    uint32_t counter;
+
+    ctx = T_fixture_context();
+    counter = ctx->handler_counter + 1;
+
+    if ( arg == &other_arg ) {
+      ctx->counter_by_entry[ 1 ] = counter;
+    } else {
+      ctx->counter_by_entry[ 0 ] = counter;
+      T_eq_ptr( arg, &entry_arg );
+    }
+
+    Routine( ctx, counter );
+  }
+
+  static void OtherRoutine( void *arg )
+  {
+    Context *ctx;
+    uint32_t counter;
+
+    (void) arg;
+    ctx = T_fixture_context();
+    counter = ctx->handler_counter + 1;
+    ctx->counter_by_entry[ 1 ] = counter;
+    Routine( ctx, counter );
   }
 
   static void ThirdRoutine( void *arg )
   {
+    Context *ctx;
+    uint32_t counter;
+
+    ctx = T_fixture_context();
+    counter = ctx->handler_counter + 1;
+    ctx->counter_by_entry[ 2 ] = counter;
     T_eq_ptr( arg, &third_arg );
-    OtherRoutine( NULL );
+    Routine( ctx, counter );
   }
 
   static void InstallThird( Context *ctx )
@@ -624,6 +697,11 @@ test-support: |
       &ctx->enabled_after
     );
     T_rsc_success( sc );
+
+    if ( ctx->status == RTEMS_SUCCESSFUL ) {
+      sc = rtems_interrupt_raise( ctx->test_vector );
+      T_rsc_success( sc );
+    }
   }
 
   static void VisitInstalled(
