@@ -79,14 +79,20 @@ pre-conditions:
       ctx->buffer = (void *) ( (uintptr_t) ctx->buffer_in_use + 1 );
     text: |
       While the ${../if/return-buffer:/params[1]/name} parameter is an address
-      inside the buffer area of the partition and not on a valid buffer
-      boundary.
-  - name: OutOfArea
+      inside the buffer area of the partition,
+      while the address is not on a valid buffer boundary.
+  - name: BelowArea
     test-code: |
-      ctx->buffer = (void *) (uintptr_t) 1;
+      ctx->buffer = (void *) ( (uintptr_t) buffers - 1 );
     text: |
       While the ${../if/return-buffer:/params[1]/name} parameter is an address
-      outside the buffer area of the partition.
+      below the buffer area of the partition.
+  - name: AboveArea
+    test-code: |
+      ctx->buffer = (void *) ( (uintptr_t) buffers + sizeof( buffers ) );
+    text: |
+      While the ${../if/return-buffer:/params[1]/name} parameter is an address
+      above the buffer area of the partition.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -192,7 +198,8 @@ transition-map:
   pre-conditions:
     Buf:
     - BadAlign
-    - OutOfArea
+    - BelowArea
+    - AboveArea
     Id:
     - Part
 type: requirement
