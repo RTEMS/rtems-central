@@ -96,12 +96,18 @@ post-conditions:
   test-prologue: null
 - name: CreateExt
   states:
-  - name: 'Yes'
+  - name: All
     test-code: |
-      T_eq_u32( ctx->create_extension_calls, 1 );
+      T_eq_u32( ctx->create_extension_calls, 2 );
     text: |
       The create user extensions shall be invoked during the
       ${../if/construct:/name} call.
+  - name: UpToFailing
+    test-code: |
+      T_eq_u32( ctx->create_extension_calls, 1 );
+    text: |
+      The create user extensions up to the failing extension shall be invoked
+      during the ${../if/construct:/name} call.
   - name: 'No'
     test-code: |
       T_eq_u32( ctx->create_extension_calls, 0 );
@@ -114,7 +120,7 @@ post-conditions:
   states:
   - name: 'Yes'
     test-code: |
-      T_eq_u32( ctx->delete_extension_calls, 1 );
+      T_eq_u32( ctx->delete_extension_calls, 2 );
     text: |
       The delete user extensions shall be invoked during the
       ${../if/construct:/name} call.
@@ -353,7 +359,7 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_id extension_id
+    rtems_id extension_ids[ 2 ]
 - brief: null
   description: null
   member: |
@@ -388,9 +394,16 @@ test-setup:
     tls_variable = var;
 
     sc = rtems_extension_create(
-      rtems_build_name( 'T', 'E', 'X', 'T' ),
-      &extensions,
-      &ctx->extension_id
+      rtems_build_name( 'E', 'X', 'T', '1' ),
+      &extensions[ 0 ],
+      &ctx->extension_ids[ 0 ]
+    );
+    T_rsc_success( sc );
+
+    sc = rtems_extension_create(
+      rtems_build_name( 'E', 'X', 'T', '2' ),
+      &extensions[ 1 ],
+      &ctx->extension_ids[ 1 ]
     );
     T_rsc_success( sc );
   description: null
@@ -451,6 +464,15 @@ test-support: |
     return RtemsTaskReqConstructErrors_Instance.create_extension_status;
   }
 
+  static bool SecondThreadCreate( rtems_tcb *executing, rtems_tcb *created )
+  {
+    (void) executing;
+    (void) created;
+
+    ++RtemsTaskReqConstructErrors_Instance.create_extension_calls;
+    return true;
+  }
+
   static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
   {
     (void) executing;
@@ -459,9 +481,14 @@ test-support: |
     ++RtemsTaskReqConstructErrors_Instance.delete_extension_calls;
   }
 
-  static const rtems_extensions_table extensions = {
-    .thread_create = ThreadCreate,
-    .thread_delete = ThreadDelete
+  static const rtems_extensions_table extensions[] = {
+    {
+      .thread_create = ThreadCreate,
+      .thread_delete = ThreadDelete
+    }, {
+      .thread_create = SecondThreadCreate,
+      .thread_delete = ThreadDelete
+    }
   };
 test-target: testsuites/validation/tc-task-construct-errors.c
 test-teardown:
@@ -469,7 +496,10 @@ test-teardown:
   code: |
     rtems_status_code sc;
 
-    sc = rtems_extension_delete( ctx->extension_id );
+    sc = rtems_extension_delete( ctx->extension_ids[ 0 ] );
+    T_rsc_success( sc );
+
+    sc = rtems_extension_delete( ctx->extension_ids[ 1 ] );
     T_rsc_success( sc );
   description: null
 text: ${.:text-template}
@@ -530,10 +560,12 @@ transition-map:
     CreateExt:
     - if:
         post-conditions:
-          Status:
-          - Ok
-          - Unsat
-      then: 'Yes'
+          Status: Ok
+      then: All
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: UpToFailing
     - else: 'No'
     DelExt:
     - if:
