@@ -65,6 +65,12 @@ post-conditions:
     text: |
       The calling task shall yield by the scheduler exactly once by the
       ${../if/wake-after:/name} call.
+  - name: Nop
+    test-code: |
+      T_eq_sz( ctx->scheduler_log.header.recorded, 0 );
+    text: |
+      The calling task shall not carry out a scheduler operation through the
+      ${../if/wake-after:/name} call.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -84,6 +90,20 @@ pre-conditions:
       ${../if/yield-processor:/name}.
   test-epilogue: null
   test-prologue: null
+- name: Suspended
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->suspended = true;
+    text: |
+      While the calling task is suspended.
+  - name: 'No'
+    test-code: |
+      ctx->suspended = false;
+    text: |
+      While the calling task is not suspended.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
@@ -92,6 +112,11 @@ test-action: |
   ResumeTask( ctx->worker_id );
   (void) T_scheduler_record( NULL );
   GetTaskTimerInfo( ctx->worker_id, &ctx->timer_info );
+
+  if ( ctx->suspended ) {
+    ResumeTask( ctx->worker_id );
+  }
+
   FinalClockTick();
 test-brief: null
 test-cleanup: null
@@ -112,6 +137,12 @@ test-context:
   description: null
   member: |
     rtems_id worker_id;
+- brief: |
+    If this member is true, then the worker shall be suspended during the
+    ${../if/wake-after:/name} call.
+  description: null
+  member: |
+    bool suspended;
 - brief: |
     This member contains the timer information of the worker task.
   description: null
@@ -136,6 +167,7 @@ test-includes:
 - rtems.h
 - rtems/test-scheduler.h
 - rtems/score/timecounter.h
+- rtems/score/threaddispatch.h
 test-local-includes:
 - tx-support.h
 test-prepare: |
@@ -162,10 +194,28 @@ test-support: |
 
       SuspendSelf();
 
+      ctx->now = rtems_clock_get_ticks_since_boot();
+
+      if ( ctx->suspended ) {
+        Per_CPU_Control *cpu_self;
+
+        /*
+         * The rtems_task_wake_after() disables thread dispatching to carry out
+         * its operations. While thread dispatching is disabled, when an
+         * interrupt suspends the calling task, the suspended task executes
+         * until it enables thread dispatching.  We simulate this situation
+         * with the code below.  Where the system was built with SMP support
+         * enabled, other processors may suspend an executing task in parallel.
+         * This case is also simulated by the code below.
+         */
+        cpu_self = _Thread_Dispatch_disable();
+        SuspendSelf();
+        cpu_self->dispatch_necessary = false;
+        _Thread_Dispatch_enable( cpu_self );
+      }
+
       log = T_scheduler_record_4( &ctx->scheduler_log );
       T_null( log );
-
-      ctx->now = rtems_clock_get_ticks_since_boot();
 
       ctx->status = rtems_task_wake_after( ctx->ticks );
 
@@ -186,17 +236,29 @@ transition-map:
     Status: Ok
     Timer: Ticks
     Expire: Relative
-    Scheduler: Block
+    Scheduler:
+    - if:
+        pre-conditions:
+          Suspended: 'Yes'
+      then: Nop
+    - else: Block
   pre-conditions:
     Ticks:
     - Interval
+    Suspended: all
 - enabled-by: true
   post-conditions:
     Status: Ok
     Timer: Inactive
     Expire: N/A
-    Scheduler: Yield
+    Scheduler:
+    - if:
+        pre-conditions:
+          Suspended: 'Yes'
+      then: Nop
+    - else: Yield
   pre-conditions:
     Ticks:
     - Yield
+    Suspended: all
 type: requirement
