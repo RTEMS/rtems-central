@@ -16,6 +16,22 @@ post-conditions:
     text: |
       The return status of the directive call shall be derived from
       ${../../status/if/successful:/name}.
+  - name: OkOrMutexCeilingViolated
+    test-code: |
+      if ( ctx->tq_ctx->priority_ceiling != PRIO_INVALID ) {
+        T_eq_int( ctx->status, Status( ctx, STATUS_MUTEX_CEILING_VIOLATED ) );
+      } else {
+        T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
+        TQSurrender( &ctx->tq_ctx->base );
+      }
+    text: |
+      Where the mutex provides a priority ceiling, the return status of the
+      directive call shall be derived from
+      ${../../status/if/mutex-ceiling-violated:/name}.
+
+      Where the mutex does not provide a priority ceiling, the return status of
+      the directive call shall be derived from
+      ${../../status/if/successful:/name}.
   - name: Recursive
     test-code: |
       switch ( ctx->tq_ctx->recursive ) {
@@ -83,25 +99,36 @@ post-conditions:
   test-prologue: null
 - name: Owner
   states:
-  - name: Nop
+  - name: Other
     test-code: |
-      if ( ctx->owner_self ) {
-        T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
-      } else if ( ctx->owner_other ) {
-        T_eq_ptr(
-          ctx->owner_after,
-          ctx->tq_ctx->base.worker_tcb[ TQ_BLOCKER_A ]
-        );
-      } else {
-        T_null( ctx->owner_after );
-      }
+      T_eq_ptr(
+        ctx->owner_after,
+        ctx->tq_ctx->base.worker_tcb[ TQ_BLOCKER_A ]
+      );
     text: |
-      The owner of the semaphore shall not be modified.
-  - name: New
+      The owner of the mutex shall not be modified.
+  - name: Caller
     test-code: |
       T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
     text: |
-      The owner of the semaphore shall be the calling thread.
+      The owner of the mutex shall be the calling thread.
+  - name: CallerOrNoOwner
+    test-code: |
+      T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
+    text: |
+      The owner of the mutex shall be the calling thread.
+    test-code: |
+      if ( ctx->tq_ctx->priority_ceiling != PRIO_INVALID ) {
+        T_null( ctx->owner_after );
+      } else {
+        T_eq_ptr( ctx->owner_after, ctx->tq_ctx->base.runner_tcb );
+      }
+    text: |
+      Where the mutex provides a priority ceiling, the mutex shall have no
+      owner.
+
+      Where the mutex does not provide a priority ceiling, the owner of the
+      mutex shall be the calling thread.
   test-epilogue: null
   test-prologue: null
 - name: Priority
@@ -134,9 +161,9 @@ pre-conditions:
       /* This is the default */
     text: |
       While the mutex has no owner.
-  - name: Self
+  - name: Caller
     test-code: |
-      ctx->owner_self = true;
+      ctx->owner_caller = true;
     text: |
       While the owner of the mutex is the calling thread.
   - name: Other
@@ -151,10 +178,35 @@ pre-conditions:
       While the attempt to seize the mutex results in a deadlock.
   test-epilogue: null
   test-prologue: null
+- name: Priority
+  states:
+  - name: LT
+    test-code: |
+      ctx->priority_before = ctx->tq_ctx->priority_ceiling - 1;
+    text: |
+      Where the mutex provides a priority ceiling, while the calling thread has
+      a ${/glossary/priority-current:/term} less than the priority ceiling.
+  - name: EQ
+    test-code: |
+      ctx->priority_before = ctx->tq_ctx->priority_ceiling;
+    text: |
+      Where the mutex provides a priority ceiling, while the calling thread has
+      a ${/glossary/priority-current:/term} equal to the priority ceiling.
+  - name: GT
+    test-code: |
+      ctx->priority_before = ctx->tq_ctx->priority_ceiling + 1;
+    text: |
+      Where the mutex provides a priority ceiling, while the calling thread has
+      a ${/glossary/priority-current:/term} greater than the priority ceiling.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
-skip-reasons: {}
+skip-reasons:
+  CeilingOwner: |
+    Where the mutex provides a priority ceiling, the owner of the mutex cannot
+    have a ${/glossary/priority-current:/term} greater than the priority ceiling.
 test-action: |
   if ( !ctx->deadlock ) {
     NonDeadlockAction( ctx );
@@ -167,7 +219,7 @@ test-context:
     mutex.
   description: null
   member: |
-    bool owner_self;
+    bool owner_caller;
 - brief: |
     If this member is true, then a thread other than the calling thread shall
     be the owner of the mutex.
@@ -229,7 +281,7 @@ test-prepare: |
   ctx->tq_ctx->base.enqueue_prepare = TQEnqueuePrepareClassicSem;
   ctx->tq_ctx->base.enqueue_done = TQSurrenderClassicSem;
   ctx->tq_ctx->base.get_properties = GetProperties;
-  ctx->owner_self = false;
+  ctx->owner_caller = false;
   ctx->owner_other = false;
   ctx->deadlock = false;
 test-setup: null
@@ -266,7 +318,11 @@ test-support: |
 
   static void NonDeadlockAction( Context *ctx )
   {
-    if ( ctx->owner_self ) {
+    rtems_task_priority priority;
+
+    priority = GetSelfPriority();
+
+    if ( ctx->owner_caller ) {
       Status_Control status;
 
       status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
@@ -290,12 +346,17 @@ test-support: |
       }
     }
 
-    ctx->priority_before = GetSelfPriority();
+    if ( ctx->tq_ctx->priority_ceiling != PRIO_INVALID ) {
+      SetSelfPriority( ctx->priority_before );
+    } else {
+      ctx->priority_before = GetSelfPriority();
+    }
+
     ctx->status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
     ctx->owner_after = TQMtxGetOwner( ctx->tq_ctx );
     ctx->priority_after = GetSelfPriority();
 
-    if ( ctx->owner_self ) {
+    if ( ctx->owner_caller ) {
       TQSurrender( &ctx->tq_ctx->base );
     } else if ( ctx->owner_other ) {
       if ( ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY ) {
@@ -315,6 +376,8 @@ test-support: |
         TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
       }
     }
+
+    SetSelfPriority( priority );
   }
 test-target: testsuites/validation/tr-mtx-seize-wait.c
 test-teardown: null
@@ -324,27 +387,44 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Owner: New
+    Owner: Caller
     Priority: Ceiling
   pre-conditions:
     Owner:
     - 'No'
+    Priority:
+    - EQ
+    - GT
 - enabled-by: true
   post-conditions:
-    Status: Recursive
-    Owner: Nop
+    Status: OkOrMutexCeilingViolated
+    Owner: CallerOrNoOwner
     Priority: Nop
   pre-conditions:
     Owner:
-    - Self
+    - 'No'
+    Priority:
+    - LT
+- enabled-by: true
+  post-conditions:
+    Status: Recursive
+    Owner: Caller
+    Priority: Nop
+  pre-conditions:
+    Owner:
+    - Caller
+    Priority:
+    - LT
+    - EQ
 - enabled-by: true
   post-conditions:
     Status: Enqueued
-    Owner: Nop
+    Owner: Other
     Priority: Nop
   pre-conditions:
     Owner:
     - Other
+    Priority: all
 - enabled-by: true
   post-conditions:
     Status: Deadlock
@@ -353,4 +433,12 @@ transition-map:
   pre-conditions:
     Owner:
     - Deadlock
+    Priority: all
+- enabled-by: true
+  post-conditions: CeilingOwner
+  pre-conditions:
+    Owner:
+    - Caller
+    Priority:
+    - GT
 type: requirement

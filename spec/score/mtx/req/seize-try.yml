@@ -147,24 +147,24 @@ pre-conditions:
   test-prologue: null
 - name: Priority
   states:
-  - name: Higher
+  - name: LT
     test-code: |
       ctx->priority_before = ctx->tq_ctx->priority_ceiling - 1;
     text: |
       Where the mutex provides a priority ceiling, while the calling thread has
-      a ${/glossary/priority-current:/term} greater than the priority ceiling.
-  - name: Equal
+      a ${/glossary/priority-current:/term} less than the priority ceiling.
+  - name: EQ
     test-code: |
       ctx->priority_before = ctx->tq_ctx->priority_ceiling;
     text: |
       Where the mutex provides a priority ceiling, while the calling thread has
       a ${/glossary/priority-current:/term} equal to the priority ceiling.
-  - name: Lower
+  - name: GT
     test-code: |
       ctx->priority_before = ctx->tq_ctx->priority_ceiling + 1;
     text: |
       Where the mutex provides a priority ceiling, while the calling thread has
-      a ${/glossary/priority-current:/term} lower than the priority ceiling.
+      a ${/glossary/priority-current:/term} greater than the priority ceiling.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -173,7 +173,7 @@ requirement-type: functional
 skip-reasons:
   CeilingOwner: |
     Where the mutex provides a priority ceiling, the owner of the mutex cannot
-    have a ${/glossary/priority-current:/term} lower than the priority ceiling.
+    have a ${/glossary/priority-current:/term} greater than the priority ceiling.
 test-action: |
   rtems_task_priority priority;
 
@@ -316,8 +316,8 @@ transition-map:
     Owner:
     - 'No'
     Priority:
-    - Equal
-    - Lower
+    - EQ
+    - GT
 - enabled-by: true
   post-conditions:
     Status: OkOrMutexCeilingViolated
@@ -327,7 +327,7 @@ transition-map:
     Owner:
     - 'No'
     Priority:
-    - Higher
+    - LT
 - enabled-by: true
   post-conditions:
     Status: Recursive
@@ -337,8 +337,8 @@ transition-map:
     Owner:
     - Caller
     Priority:
-    - Higher
-    - Equal
+    - LT
+    - EQ
 - enabled-by: true
   post-conditions:
     Status: Unsat
@@ -354,5 +354,5 @@ transition-map:
     Owner:
     - Caller
     Priority:
-    - Lower
+    - GT
 type: requirement
