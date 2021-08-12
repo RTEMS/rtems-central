@@ -107,7 +107,7 @@ pre-conditions:
       ctx->cpusetsize = sizeof( ctx->cpuset_obj );
     text: |
       While the ${../if/get-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long,
+      multiple of the size of ``long``,
       while the ${../if/get-affinity:/params[1]/name} parameter specifies a
       processor set which is large enough to contain the processor affinity set
       of the interrupt specified by ${../if/get-affinity:/params[0]/name}.
@@ -116,7 +116,7 @@ pre-conditions:
       ctx->cpusetsize = 0;
     text: |
       While the ${../if/get-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long,
+      multiple of the size of ``long``,
       while the ${../if/get-affinity:/params[1]/name} parameter specifies a
       processor set which is not large enough to contain the processor affinity
       set of the interrupt specified by ${../if/get-affinity:/params[0]/name}.
@@ -125,14 +125,14 @@ pre-conditions:
       ctx->cpusetsize = SIZE_MAX;
     text: |
       While the ${../if/get-affinity:/params[1]/name} parameter is not an
-      integral multiple of the size of long.
+      integral multiple of the size of ``long``.
   test-epilogue: null
   test-prologue: null
 - name: CPUSet
   states:
   - name: Valid
     test-code: |
-      ctx->cpuset = &ctx->cpuset_obj;
+      ctx->cpuset = ctx->cpuset_obj;
     text: |
       While the ${../if/get-affinity:/params[2]/name} parameter references an
       object of type ${/c/if/cpu_set_t:/name}.
@@ -167,7 +167,7 @@ skip-reasons: {}
 test-action: |
   if (
     ctx->valid_vector && ctx->cpusetsize == sizeof( ctx->cpuset_obj ) &&
-    ctx->cpuset == &ctx->cpuset_obj
+    ctx->cpuset == ctx->cpuset_obj
   ) {
     for (
       ctx->vector = 0;
@@ -189,7 +189,7 @@ test-action: |
       CheckGetAffinity( ctx, &attr );
     }
   } else {
-    cpu_set_t set;
+    cpu_set_t set[ 2 ];
 
     if ( ctx->valid_vector ) {
       ctx->vector = ctx->some_vector;
@@ -197,7 +197,7 @@ test-action: |
       ctx->vector = BSP_INTERRUPT_VECTOR_COUNT;
     }
 
-    CPU_FILL( &ctx->cpuset_obj );
+    CPU_FILL_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
 
     ctx->status = rtems_interrupt_get_affinity(
       ctx->vector,
@@ -205,13 +205,16 @@ test-action: |
       ctx->cpuset
     );
 
-    if ( ctx->cpuset == NULL || ctx->cpusetsize != sizeof( ctx->cpuset ) ) {
-      CPU_FILL( &set );
+    if (
+      ctx->cpuset == NULL ||
+      ctx->cpusetsize != sizeof( ctx->cpuset_obj )
+    ) {
+      CPU_FILL_S( sizeof( set ), set );
     } else {
-      CPU_ZERO( &set );
+      CPU_ZERO_S( sizeof( set ), set );
     }
 
-    T_eq_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
+    T_true( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
   }
 test-brief: null
 test-cleanup: null
@@ -231,7 +234,7 @@ test-context:
     ${../if/get-affinity:/params[2]/name} parameter.
   description: null
   member: |
-    cpu_set_t cpuset_obj
+    cpu_set_t cpuset_obj[ 2 ];
 - brief: |
     This member contains the return value of the ${../if/get-affinity:/name}
     call.
@@ -285,12 +288,12 @@ test-support: |
   )
   {
     rtems_status_code sc;
-    cpu_set_t         set;
+    cpu_set_t         set[ 2 ];
 
     if ( attr->can_get_affinity ) {
-      CPU_ZERO( &ctx->cpuset_obj );
+      CPU_ZERO_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
     } else {
-      CPU_FILL( &ctx->cpuset_obj );
+      CPU_FILL_S( sizeof( ctx->cpuset_obj ), ctx->cpuset_obj );
     }
 
     sc = rtems_interrupt_get_affinity(
@@ -299,14 +302,14 @@ test-support: |
       ctx->cpuset
     );
 
-    CPU_ZERO( &set );
+    CPU_ZERO_S( sizeof( set ), set );
 
     if ( attr->can_get_affinity ) {
       T_rsc_success( sc );
-      T_ne_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
+      T_false( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
     } else {
       T_rsc( sc, RTEMS_UNSATISFIED );
-      T_eq_int( CPU_CMP( &ctx->cpuset_obj, &set ), 0 );
+      T_true( CPU_EQUAL_S( sizeof( set ), ctx->cpuset_obj, set ) );
     }
   }
 test-target: testsuites/validation/tc-intr-get-affinity.c
