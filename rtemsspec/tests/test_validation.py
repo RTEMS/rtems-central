@@ -258,6 +258,15 @@ typedef enum {
   Directive_Post_Id_NA
 } Directive_Post_Id;
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_Name_NA : 1;
+  uint16_t Pre_Node_NA : 1;
+  uint16_t Pre_Id_NA : 1;
+  uint16_t Post_Status : 3;
+  uint16_t Post_Id : 3;
+} Directive_Entry;
+
 /**
  * @brief Test context for spec:/directive test case.
  */
@@ -281,16 +290,27 @@ typedef struct {
 
   rtems_id id_remote_task;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 3 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 3 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    Directive_Entry entry;
+  } Map;
 } Directive_Context;
 
 static Directive_Context
@@ -599,7 +619,7 @@ static void Directive_Setup_Wrap( void *arg )
   Directive_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   Directive_Setup( ctx );
 }
 
@@ -618,7 +638,7 @@ static void Directive_Teardown_Wrap( void *arg )
   Directive_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   Directive_Teardown( ctx );
 }
 
@@ -626,15 +646,6 @@ static void Directive_Action( Directive_Context *ctx )
 {
   ctx->status = rtems_task_ident( ctx->name, ctx->node, ctx->id );
 }
-
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_Name_NA : 1;
-  uint16_t Pre_Node_NA : 1;
-  uint16_t Pre_Id_NA : 1;
-  uint16_t Post_Status : 3;
-  uint16_t Post_Id : 3;
-} Directive_Entry;
 
 static const Directive_Entry
 Directive_Entries[] = {
@@ -661,8 +672,8 @@ static size_t Directive_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( Directive_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( Directive_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -676,8 +687,12 @@ static T_fixture Directive_Fixture = {
   .initial_context = &Directive_Instance
 };
 
-static inline Directive_Entry Directive_GetEntry( size_t index )
+static inline Directive_Entry Directive_PopEntry( Directive_Context *ctx )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return Directive_Entries[
     Directive_Map[ index ]
   ];
@@ -689,38 +704,34 @@ static inline Directive_Entry Directive_GetEntry( size_t index )
 T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 {
   Directive_Context *ctx;
-  size_t index;
 
   ctx = T_fixture_context();
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = Directive_Pre_Name_Invalid;
-    ctx->pcs[ 0 ] < Directive_Pre_Name_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = Directive_Pre_Name_Invalid;
+    ctx->Map.pcs[ 0 ] < Directive_Pre_Name_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = Directive_Pre_Node_Local;
-      ctx->pcs[ 1 ] < Directive_Pre_Node_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = Directive_Pre_Node_Local;
+      ctx->Map.pcs[ 1 ] < Directive_Pre_Node_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = Directive_Pre_Id_NullPtr;
-        ctx->pcs[ 2 ] < Directive_Pre_Id_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = Directive_Pre_Id_NullPtr;
+        ctx->Map.pcs[ 2 ] < Directive_Pre_Id_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
-        Directive_Entry entry;
+        ctx->Map.entry = Directive_PopEntry( ctx );
 
-        entry = Directive_GetEntry( index );
-        ++index;
-
-        Directive_Pre_Name_Prepare( ctx, ctx->pcs[ 0 ] );
-        Directive_Pre_Node_Prepare( ctx, ctx->pcs[ 1 ] );
-        Directive_Pre_Id_Prepare( ctx, ctx->pcs[ 2 ] );
+        Directive_Pre_Name_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+        Directive_Pre_Node_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+        Directive_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
         Directive_Action( ctx );
-        Directive_Post_Status_Check( ctx, entry.Post_Status );
-        Directive_Post_Id_Check( ctx, entry.Post_Id );
+        Directive_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+        Directive_Post_Id_Check( ctx, ctx->Map.entry.Post_Id );
       }
     }
   }
@@ -1824,6 +1835,15 @@ void Action2_Run( int *a, int b, int *c );
  * @{
  */
 
+typedef struct {
+  uint16_t Skip : 1;
+  uint16_t Pre_A_NA : 1;
+  uint16_t Pre_B_NA : 1;
+  uint16_t Pre_C_NA : 1;
+  uint16_t Post_A : 3;
+  uint16_t Post_B : 2;
+} Action2_Entry;
+
 /* Context support code */
 
 /**
@@ -1855,16 +1875,27 @@ typedef struct {
    */
   int *c;
 
-  /**
-   * @brief This member defines the pre-condition states for the next action.
-   */
-  size_t pcs[ 3 ];
+  struct {
+    /**
+     * @brief This member defines the pre-condition states for the next action.
+     */
+    size_t pcs[ 3 ];
 
-  /**
-   * @brief This member indicates if the test action loop is currently
-   *   executed.
-   */
-  bool in_action_loop;
+    /**
+     * @brief If this member is true, then the test action loop is executed.
+     */
+    bool in_action_loop;
+
+    /**
+     * @brief This member contains the next transition map index.
+     */
+    size_t index;
+
+    /**
+     * @brief This member contains the current transition map entry.
+     */
+    Action2_Entry entry;
+  } Map;
 } Action2_Context;
 
 static Action2_Context
@@ -2094,7 +2125,7 @@ static void Action2_Setup_Wrap( void *arg )
   Action2_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   Action2_Setup( ctx );
 }
 
@@ -2113,7 +2144,7 @@ static void Action2_Teardown_Wrap( void *arg )
   Action2_Context *ctx;
 
   ctx = arg;
-  ctx->in_action_loop = false;
+  ctx->Map.in_action_loop = false;
   Action2_Teardown( ctx );
 }
 
@@ -2131,15 +2162,6 @@ static void Action2_Cleanup( Action2_Context *ctx )
 {
   /* Cleanup */
 }
-
-typedef struct {
-  uint16_t Skip : 1;
-  uint16_t Pre_A_NA : 1;
-  uint16_t Pre_B_NA : 1;
-  uint16_t Pre_C_NA : 1;
-  uint16_t Post_A : 3;
-  uint16_t Post_B : 2;
-} Action2_Entry;
 
 static const Action2_Entry
 Action2_Entries[] = {
@@ -2171,8 +2193,8 @@ static size_t Action2_Scope( void *arg, char *buf, size_t n )
 
   ctx = arg;
 
-  if ( ctx->in_action_loop ) {
-    return T_get_scope( Action2_PreDesc, buf, n, ctx->pcs );
+  if ( ctx->Map.in_action_loop ) {
+    return T_get_scope( Action2_PreDesc, buf, n, ctx->Map.pcs );
   }
 
   return 0;
@@ -2186,8 +2208,12 @@ static T_fixture Action2_Fixture = {
   .initial_context = &Action2_Instance
 };
 
-static inline Action2_Entry Action2_GetEntry( size_t index )
+static inline Action2_Entry Action2_PopEntry( Action2_Context *ctx )
 {
+  size_t index;
+
+  index = ctx->Map.index;
+  ctx->Map.index = index + 1;
   return Action2_Entries[
     Action2_Map[ index ]
   ];
@@ -2198,7 +2224,6 @@ static T_fixture_node Action2_Node;
 void Action2_Run( int *a, int b, int *c )
 {
   Action2_Context *ctx;
-  size_t index;
 
   ctx = &Action2_Instance;
   ctx->a = a;
@@ -2206,43 +2231,40 @@ void Action2_Run( int *a, int b, int *c )
   ctx->c = c;
 
   ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
-  ctx->in_action_loop = true;
-  index = 0;
+  ctx->Map.in_action_loop = true;
+  ctx->Map.index = 0;
 
   for (
-    ctx->pcs[ 0 ] = Action2_Pre_A_A0;
-    ctx->pcs[ 0 ] < Action2_Pre_A_NA;
-    ++ctx->pcs[ 0 ]
+    ctx->Map.pcs[ 0 ] = Action2_Pre_A_A0;
+    ctx->Map.pcs[ 0 ] < Action2_Pre_A_NA;
+    ++ctx->Map.pcs[ 0 ]
   ) {
     for (
-      ctx->pcs[ 1 ] = Action2_Pre_B_B0;
-      ctx->pcs[ 1 ] < Action2_Pre_B_NA;
-      ++ctx->pcs[ 1 ]
+      ctx->Map.pcs[ 1 ] = Action2_Pre_B_B0;
+      ctx->Map.pcs[ 1 ] < Action2_Pre_B_NA;
+      ++ctx->Map.pcs[ 1 ]
     ) {
       for (
-        ctx->pcs[ 2 ] = Action2_Pre_C_C0;
-        ctx->pcs[ 2 ] < Action2_Pre_C_NA;
-        ++ctx->pcs[ 2 ]
+        ctx->Map.pcs[ 2 ] = Action2_Pre_C_C0;
+        ctx->Map.pcs[ 2 ] < Action2_Pre_C_NA;
+        ++ctx->Map.pcs[ 2 ]
       ) {
-        Action2_Entry entry;
+        ctx->Map.entry = Action2_PopEntry( ctx );
 
-        entry = Action2_GetEntry( index );
-        ++index;
-
-        if ( entry.Skip ) {
+        if ( ctx->Map.entry.Skip ) {
           continue;
         }
 
         Action2_Prepare( ctx );
         Action2_Pre_A_Prepare(
           ctx,
-          entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->pcs[ 0 ]
+          ctx->Map.entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->Map.pcs[ 0 ]
         );
-        Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
-        Action2_Pre_C_Prepare( ctx, ctx->pcs[ 2 ] );
+        Action2_Pre_B_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+        Action2_Pre_C_Prepare( ctx, ctx->Map.pcs[ 2 ] );
         Action2_Action( ctx );
-        Action2_Post_A_Check( ctx, entry.Post_A );
-        Action2_Post_B_Check( ctx, entry.Post_B );
+        Action2_Post_A_Check( ctx, ctx->Map.entry.Post_A );
+        Action2_Post_B_Check( ctx, ctx->Map.entry.Post_B );
         Action2_Cleanup( ctx );
       }
     }

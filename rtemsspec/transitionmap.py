@@ -616,6 +616,20 @@ class TransitionMap:
             bits += math.ceil(math.log2(len(st_idx_to_st_name)))
         return 2**max(math.ceil(math.log2(bits)), 3)
 
+    def add_map_entry_type(self, content: CContent, ident: str) -> None:
+        """ Adds the transition map entry type definition to the content. """
+        bits = self._get_entry_bits()
+        content.add("typedef struct {")
+        with content.indent():
+            content.append(f"uint{bits}_t Skip : 1;")
+            for condition in self["pre-conditions"]:
+                content.append(f"uint{bits}_t Pre_{condition['name']}_NA : 1;")
+            for condition in self["post-conditions"]:
+                state_bits = math.ceil(math.log2(len(condition["states"]) + 1))
+                content.append(
+                    f"uint{bits}_t Post_{condition['name']} : {state_bits};")
+        content.add(f"}} {ident}_Entry;")
+
     def add_map(self, content: CContent, ident: str) -> None:
         """ Adds the transition map definitions to the content. """
         entries = []
@@ -636,17 +650,6 @@ class TransitionMap:
                 enumerators.append(self._get_entry(ident, transitions[0]))
                 enumerators.append("#endif")
                 entries.append("\n".join(enumerators))
-        bits = self._get_entry_bits()
-        content.add("typedef struct {")
-        with content.indent():
-            content.append(f"uint{bits}_t Skip : 1;")
-            for condition in self["pre-conditions"]:
-                content.append(f"uint{bits}_t Pre_{condition['name']}_NA : 1;")
-            for condition in self["post-conditions"]:
-                state_bits = math.ceil(math.log2(len(condition["states"]) + 1))
-                content.append(
-                    f"uint{bits}_t Post_{condition['name']} : {state_bits};")
-        content.add(f"}} {ident}_Entry;")
         content.add([f"static const {ident}_Entry", f"{ident}_Entries[] = {{"])
         entries[-1] = entries[-1].replace("},", "}")
         content.append(entries)

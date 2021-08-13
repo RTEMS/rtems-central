@@ -528,23 +528,32 @@ class _ActionRequirementTestItem(_TestItem):
 
     def add_default_context_members(self, content: CContent) -> None:
         super().add_default_context_members(content)
-        content.add_description_block(
-            "This member defines the pre-condition states "
-            "for the next action.", None)
-        content.add(f"size_t pcs[ {self._pre_co_count} ];")
-        content.add_description_block(
-            "This member indicates if the test action loop "
-            "is currently executed.", None)
-        content.add("bool in_action_loop;")
+        content.add("struct {")
+        with content.indent():
+            content.add_description_block(
+                "This member defines the pre-condition states "
+                "for the next action.", None)
+            content.add(f"size_t pcs[ {self._pre_co_count} ];")
+            content.add_description_block(
+                "If this member is true, then the test action "
+                "loop is executed.", None)
+            content.add("bool in_action_loop;")
+            content.add_description_block(
+                "This member contains the next transition map index.", None)
+            content.add("size_t index;")
+            content.add_description_block(
+                "This member contains the current transition map entry.", None)
+            content.add(f"{self.ident}_Entry entry;")
+        content.append("} Map;")
 
     def _add_fixture_scope(self, content: CContent) -> None:
         params = ["void *arg", "char *buf", "size_t n"]
         with content.function("static size_t", f"{self.ident}_Scope", params):
             content.add([f"{self.context} *ctx;", "", "ctx = arg;"])
-            with content.condition("ctx->in_action_loop"):
+            with content.condition("ctx->Map.in_action_loop"):
                 content.call_function(
                     "return", "T_get_scope",
-                    [f"{self.ident}_PreDesc", "buf", "n", "ctx->pcs"])
+                    [f"{self.ident}_PreDesc", "buf", "n", "ctx->Map.pcs"])
             content.add("return 0;")
 
     def _add_call(self, content: CContent, key: str, name: str) -> None:
@@ -554,34 +563,34 @@ class _ActionRequirementTestItem(_TestItem):
 
     def _add_loop_body(self, content: CContent,
                        transition_map: TransitionMap) -> None:
-        content.add(f"{self.ident}_Entry entry;")
-        content.call_function("entry =", f"{self.ident}_GetEntry", ["index"])
-        content.append("++index;")
+        entry = "ctx->Map.entry"
+        content.call_function(f"{entry} =", f"{self.ident}_PopEntry", ["ctx"])
         if transition_map.pre_co_summary[0]:
-            with content.condition("entry.Skip"):
+            with content.condition(f"{entry}.Skip"):
                 content.append("continue;")
         content.add_blank_line()
         self._add_call(content, "test-prepare", "Prepare")
         for index, pre_co in enumerate(self._item["pre-conditions"]):
             content.gap = False
-            state = f"ctx->pcs[ {index} ]"
+            state = f"ctx->Map.pcs[ {index} ]"
             if transition_map.pre_co_summary[index + 1]:
                 enum_na = self._pre_co_idx_to_enum[index][-1]
-                state = f"entry.Pre_{pre_co['name']}_NA ? {enum_na} : {state}"
+                name = pre_co["name"]
+                state = f"{entry}.Pre_{name}_NA ? {enum_na} : {state}"
             prepare = f"{self._pre_co_idx_to_enum[index][0]}_Prepare"
             content.call_function(None, prepare, ["ctx", state])
         self._add_call(content, "test-action", "Action")
         for index, enum in enumerate(self._post_co_idx_to_enum):
             content.gap = False
             content.call_function(None, f"{enum[0]}_Check", [
-                "ctx", f"entry.{transition_map.get_post_entry_member(index)}"
+                "ctx", f"{entry}.{transition_map.get_post_entry_member(index)}"
             ])
         self._add_call(content, "test-cleanup", "Cleanup")
 
     def _add_for_loops(self, content: CContent, transition_map: TransitionMap,
                        index: int) -> None:
         if index < self._pre_co_count:
-            var = f"ctx->pcs[ {index} ]"
+            var = f"ctx->Map.pcs[ {index} ]"
             begin = self._pre_co_idx_to_enum[index][1]
             end = self._pre_co_idx_to_enum[index][-1]
             with content.for_loop(f"{var} = {begin}", f"{var} < {end}",
@@ -593,11 +602,12 @@ class _ActionRequirementTestItem(_TestItem):
     def _add_test_case(self, content: CContent, transition_map: TransitionMap,
                        header: Dict[str, Any]) -> None:
         ret = f"static inline {self.ident}_Entry"
-        name = f"{self.ident}_GetEntry"
-        params = ["size_t index"]
+        name = f"{self.ident}_PopEntry"
+        params = [f"{self.context} *ctx"]
         with content.function(ret, name, params, align=True):
             content.add([
-                f"return {self.ident}_Entries[",
+                "size_t index;", "", "index = ctx->Map.index;",
+                "ctx->Map.index = index + 1;", f"return {self.ident}_Entries[",
                 f"  {self.ident}_Map[ index ]", "];"
             ])
         fixture = f"{self.ident}_Fixture"
@@ -608,11 +618,12 @@ class _ActionRequirementTestItem(_TestItem):
             ret = "void"
             name = f"{self.ident}_Run"
             params = self._get_run_params(header)
-            prologue.add([f"{self.context} *ctx;", "size_t index;"])
+            prologue.add([f"{self.context} *ctx;"])
             self.assign_run_params(prologue, header)
             prologue.call_function("ctx =", "T_push_fixture",
                                    [f"&{self.ident}_Node", f"&{fixture}"])
-            prologue.append(["ctx->in_action_loop = true;", "index = 0;"])
+            prologue.append(
+                ["ctx->Map.in_action_loop = true;", "ctx->Map.index = 0;"])
             epilogue.add("T_pop_fixture();")
             align = True
         else:
@@ -624,9 +635,8 @@ class _ActionRequirementTestItem(_TestItem):
             name = "T_TEST_CASE_FIXTURE"
             params = [f"{self.ident}", f"&{fixture}"]
             prologue.add([
-                f"{self.context} *ctx;", "size_t index;", "",
-                "ctx = T_fixture_context();", "ctx->in_action_loop = true;",
-                "index = 0;"
+                f"{self.context} *ctx;", "", "ctx = T_fixture_context();",
+                "ctx->Map.in_action_loop = true;", "ctx->Map.index = 0;"
             ])
             align = False
         with content.function(ret, name, params, align=align):
@@ -678,6 +688,8 @@ class _ActionRequirementTestItem(_TestItem):
         else:
             _add_condition_enum(content, self._pre_co_idx_to_enum)
             _add_condition_enum(content, self._post_co_idx_to_enum)
+        transition_map = TransitionMap(self.item)
+        transition_map.add_map_entry_type(content, self.ident)
         instance = self.add_context(content)
         self._add_pre_condition_descriptions(content)
         content.add(self.substitute_code(self["test-support"]))
@@ -685,7 +697,7 @@ class _ActionRequirementTestItem(_TestItem):
                           self._pre_co_idx_to_enum, "Prepare")
         self._add_handler(content, self["post-conditions"],
                           self._post_co_idx_to_enum, "Check")
-        optional_code = "ctx->in_action_loop = false;"
+        optional_code = "ctx->Map.in_action_loop = false;"
         setup = self.add_support_method(content,
                                         "test-setup",
                                         "Setup",
@@ -701,7 +713,6 @@ class _ActionRequirementTestItem(_TestItem):
         self.add_function(content, "test-prepare", "Prepare")
         self.add_function(content, "test-action", "Action")
         self.add_function(content, "test-cleanup", "Cleanup")
-        transition_map = TransitionMap(self.item)
         transition_map.add_map(content, self.ident)
         self._add_fixture_scope(content)
         content.add([
