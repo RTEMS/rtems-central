@@ -554,30 +554,22 @@ class _ActionRequirementTestItem(_TestItem):
 
     def _add_loop_body(self, content: CContent,
                        transition_map: TransitionMap) -> None:
-        has_pre_co_na = max(transition_map.pre_co_summary[1:])
         content.add(f"{self.ident}_Entry entry;")
-        if has_pre_co_na:
-            content.append(f"size_t pcs[ {self._pre_co_count} ];")
         content.call_function("entry =", f"{self.ident}_GetEntry", ["index"])
         content.append("++index;")
         if transition_map.pre_co_summary[0]:
             with content.condition("entry.Skip"):
                 content.append("continue;")
-        if has_pre_co_na:
-            content.call_function(None, "memcpy",
-                                  ["pcs", "ctx->pcs", "sizeof( pcs )"])
-            for index, pre_co in enumerate(self._item["pre-conditions"]):
-                if transition_map.pre_co_summary[index + 1]:
-                    name = pre_co["name"]
-                    with content.condition(f"entry.Pre_{name}_NA"):
-                        enum_na = self._pre_co_idx_to_enum[index][-1]
-                        content.append(f"ctx->pcs[ {index} ] = {enum_na};")
         content.add_blank_line()
         self._add_call(content, "test-prepare", "Prepare")
-        for index, enum in enumerate(self._pre_co_idx_to_enum):
+        for index, pre_co in enumerate(self._item["pre-conditions"]):
             content.gap = False
-            content.call_function(None, f"{enum[0]}_Prepare",
-                                  ["ctx", f"ctx->pcs[ {index} ]"])
+            state = f"ctx->pcs[ {index} ]"
+            if transition_map.pre_co_summary[index + 1]:
+                enum_na = self._pre_co_idx_to_enum[index][-1]
+                state = f"entry.Pre_{pre_co['name']}_NA ? {enum_na} : {state}"
+            prepare = f"{self._pre_co_idx_to_enum[index][0]}_Prepare"
+            content.call_function(None, prepare, ["ctx", state])
         self._add_call(content, "test-action", "Action")
         for index, enum in enumerate(self._post_co_idx_to_enum):
             content.gap = False
@@ -585,10 +577,6 @@ class _ActionRequirementTestItem(_TestItem):
                 "ctx", f"entry.{transition_map.get_post_entry_member(index)}"
             ])
         self._add_call(content, "test-cleanup", "Cleanup")
-        if has_pre_co_na:
-            content.gap = False
-            content.call_function(None, "memcpy",
-                                  ["ctx->pcs", "pcs", "sizeof( ctx->pcs )"])
 
     def _add_for_loops(self, content: CContent, transition_map: TransitionMap,
                        index: int) -> None:

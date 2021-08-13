@@ -2225,7 +2225,6 @@ void Action2_Run( int *a, int b, int *c )
         ++ctx->pcs[ 2 ]
       ) {
         Action2_Entry entry;
-        size_t pcs[ 3 ];
 
         entry = Action2_GetEntry( index );
         ++index;
@@ -2234,21 +2233,17 @@ void Action2_Run( int *a, int b, int *c )
           continue;
         }
 
-        memcpy( pcs, ctx->pcs, sizeof( pcs ) );
-
-        if ( entry.Pre_A_NA ) {
-          ctx->pcs[ 0 ] = Action2_Pre_A_NA;
-        }
-
         Action2_Prepare( ctx );
-        Action2_Pre_A_Prepare( ctx, ctx->pcs[ 0 ] );
+        Action2_Pre_A_Prepare(
+          ctx,
+          entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->pcs[ 0 ]
+        );
         Action2_Pre_B_Prepare( ctx, ctx->pcs[ 1 ] );
         Action2_Pre_C_Prepare( ctx, ctx->pcs[ 2 ] );
         Action2_Action( ctx );
         Action2_Post_A_Check( ctx, entry.Post_A );
         Action2_Post_B_Check( ctx, entry.Post_B );
         Action2_Cleanup( ctx );
-        memcpy( ctx->pcs, pcs, sizeof( ctx->pcs ) );
       }
     }
   }
