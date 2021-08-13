@@ -63,6 +63,7 @@ pre-conditions:
   - name: A1
     test-code: |
       /* Pre A 1 */
+      ${.:skip}
     text: |
       Pre A 1.
   test-epilogue: |

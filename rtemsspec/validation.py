@@ -48,7 +48,7 @@ def _get_test_run(ctx: ItemGetValueContext) -> Any:
 
 
 class _Mapper(ItemMapper):
-    def __init__(self, item: Item):
+    def __init__(self, item: Item, test_item: "_TestItem"):
         super().__init__(item)
         self._step = 0
         self.add_get_value("glossary/term:/plural", get_value_plural)
@@ -60,6 +60,9 @@ class _Mapper(ItemMapper):
         self.add_get_value("interface/macro:/params/name", get_value_params)
         self.add_get_value("requirement/functional/action:/test-run",
                            _get_test_run)
+        self.add_get_value(("requirement/functional/action:"
+                            "/pre-conditions/states/test-code/skip"),
+                           test_item.skip_pre_condition)
         self.add_get_value("test-case:/test-run", _get_test_run)
 
     @property
@@ -99,7 +102,7 @@ class _TestItem:
         self._item = item
         self._ident = to_camel_case(item.uid[1:])
         self._context = f"{self._ident}_Context"
-        self._mapper = _Mapper(item)
+        self._mapper = _Mapper(item, self)
 
     def __getitem__(self, key: str):
         return self._item[key]
@@ -154,9 +157,13 @@ class _TestItem:
         """ Returns the group identifier. """
         return f"RTEMSTestCase{self.ident}"
 
-    def substitute_code(self, text: Optional[str]) -> str:
-        """ Performs a variable substitution for code. """
-        return self._mapper.substitute(text)
+    def substitute_code(self,
+                        text: Optional[str],
+                        prefix: Optional[str] = None) -> str:
+        """
+        Performs a variable substitution for code with an optional prefix.
+        """
+        return self._mapper.substitute(text, prefix=prefix)
 
     def substitute_text(self,
                         text: Optional[str],
@@ -460,6 +467,10 @@ class _TestItem:
             content.add(epilogue)
         content.add("/** @} */")
 
+    def skip_pre_condition(self, _ctx: ItemGetValueContext) -> Any:
+        # pylint: disable=no-self-use
+        """ Adds code to skip the current pre-condition state. """
+
 
 class _TestSuiteItem(_TestItem):
     """ A test suite item. """
@@ -501,6 +512,7 @@ class _ActionRequirementTestItem(_TestItem):
     """ An action requirement test item. """
     def __init__(self, item: Item):
         super().__init__(item)
+        self._pre_co_skip = {}  # type: Dict[int, bool]
         self._pre_co_count = len(item["pre-conditions"])
         self._pre_co_idx_to_enum = _to_enum(f"{self.ident}_Pre",
                                             item["pre-conditions"])
@@ -544,6 +556,10 @@ class _ActionRequirementTestItem(_TestItem):
             content.add_description_block(
                 "This member contains the current transition map entry.", None)
             content.add(f"{self.ident}_Entry entry;")
+            content.add_description_block(
+                "If this member is true, then the current transition "
+                "variant should be skipped.", None)
+            content.add("bool skip;")
         content.append("} Map;")
 
     def _add_fixture_scope(self, content: CContent) -> None:
@@ -561,6 +577,27 @@ class _ActionRequirementTestItem(_TestItem):
             content.gap = False
             content.call_function(None, f"{self.ident}_{name}", ["ctx"])
 
+    def _add_skip(self, content: CContent) -> Any:
+        with content.function("static void", f"{self.ident}_Skip",
+                              [f"{self.context} *ctx", "size_t index"]):
+            content.append([
+                "size_t increment;", "", "ctx->Map.skip = false;",
+                "increment = 1;", "", "switch ( index + 1 ) {"
+            ])
+            fall_through = "/* Fall through */"
+            with content.indent():
+                for index, enum in enumerate(self._pre_co_idx_to_enum):
+                    content.add(f"case {index}:")
+                    with content.indent():
+                        content.append([
+                            f"increment *= {enum[-1]};",
+                            f"ctx->Map.pcs[ {index} ] = {enum[-1]} - 1;",
+                            fall_through
+                        ])
+                content.lines[-1] = content.lines[-1].replace(
+                    fall_through, "break;")
+            content.append(["}", "", "ctx->Map.index += increment - 1;"])
+
     def _add_test_variant(self, content: CContent,
                           transition_map: TransitionMap) -> None:
         entry = "ctx->Map.entry"
@@ -573,6 +610,12 @@ class _ActionRequirementTestItem(_TestItem):
                 state = f"{entry}.Pre_{name}_NA ? {enum_na} : {state}"
             prepare = f"{self._pre_co_idx_to_enum[index][0]}_Prepare"
             content.call_function(None, prepare, ["ctx", state])
+            if self._pre_co_skip.get(index, False):
+                with content.condition("ctx->Map.skip"):
+                    content.call_function(None, f"{self.ident}_Skip",
+                                          ["ctx", str(index)])
+                    content.append("return;")
+                content.add_blank_line()
         self._add_call(content, "test-action", "Action")
         for index, enum in enumerate(self._post_co_idx_to_enum):
             content.gap = False
@@ -616,6 +659,8 @@ class _ActionRequirementTestItem(_TestItem):
                 "ctx->Map.index = index + 1;", f"return {self.ident}_Entries[",
                 f"  {self.ident}_Map[ index ]", "];"
             ])
+        if self._pre_co_skip:
+            self._add_skip(content)
         with content.function("static void", f"{self.ident}_TestVariant",
                               [f"{self.context} *ctx"]):
             self._add_test_variant(content, transition_map)
@@ -653,9 +698,9 @@ class _ActionRequirementTestItem(_TestItem):
             self._add_for_loops(content, transition_map, 0)
             content.add(epilogue)
 
-    def _add_handler(self, content: CContent, conditions: List[Any],
+    def _add_handler(self, content: CContent, conditions: str,
                      co_idx_to_enum: _IdxToX, action: str) -> None:
-        for co_idx, condition in enumerate(conditions):
+        for co_idx, condition in enumerate(self[conditions]):
             enum = co_idx_to_enum[co_idx]
             handler = f"{enum[0]}_{action}"
             params = [f"{self.context} *ctx", f"{enum[0]} state"]
@@ -665,12 +710,15 @@ class _ActionRequirementTestItem(_TestItem):
                 with content.indent():
                     for state_index, state in enumerate(condition["states"]):
                         content.add(f"case {enum[state_index + 1]}: {{")
+                        prefix = (f"/{conditions}[{co_idx}]"
+                                  f"/states[{state_index}]/test-code")
                         with content.indent():
                             with content.comment_block():
                                 content.wrap(
                                     self.substitute_text(state["text"]))
                             content.append(
-                                self.substitute_code(state["test-code"]))
+                                self.substitute_code(state["test-code"],
+                                                     prefix))
                             content.append("break;")
                         content.add("}")
                     content.add(f"case {enum[-1]}:")
@@ -702,9 +750,9 @@ class _ActionRequirementTestItem(_TestItem):
         instance = self.add_context(content)
         self._add_pre_condition_descriptions(content)
         content.add(self.substitute_code(self["test-support"]))
-        self._add_handler(content, self["pre-conditions"],
-                          self._pre_co_idx_to_enum, "Prepare")
-        self._add_handler(content, self["post-conditions"],
+        self._add_handler(content, "pre-conditions", self._pre_co_idx_to_enum,
+                          "Prepare")
+        self._add_handler(content, "post-conditions",
                           self._post_co_idx_to_enum, "Check")
         optional_code = "ctx->Map.in_action_loop = false;"
         setup = self.add_support_method(content,
@@ -732,6 +780,11 @@ class _ActionRequirementTestItem(_TestItem):
         ])
         self._add_test_case(content, transition_map, header)
         content.add("/** @} */")
+
+    def skip_pre_condition(self, ctx: ItemGetValueContext) -> Any:
+        index = int(ctx.path.split("]")[0].split("[")[1])
+        self._pre_co_skip[index] = True
+        return "ctx->Map.skip = true;"
 
 
 class _RuntimeMeasurementRequestItem(_TestItem):

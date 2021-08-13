@@ -310,6 +310,12 @@ typedef struct {
      * @brief This member contains the current transition map entry.
      */
     Directive_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
   } Map;
 } Directive_Context;
 
@@ -1899,6 +1905,12 @@ typedef struct {
      * @brief This member contains the current transition map entry.
      */
     Action2_Entry entry;
+
+    /**
+     * @brief If this member is true, then the current transition variant
+     *   should be skipped.
+     */
+    bool skip;
   } Map;
 } Action2_Context;
 
@@ -1952,6 +1964,7 @@ static void Action2_Pre_A_Prepare( Action2_Context *ctx, Action2_Pre_A state )
        * Pre A 1.
        */
       /* Pre A 1 */
+      ctx->Map.skip = true;
       break;
     }
 
@@ -2223,12 +2236,43 @@ static inline Action2_Entry Action2_PopEntry( Action2_Context *ctx )
   ];
 }
 
+static void Action2_Skip( Action2_Context *ctx, size_t index )
+{
+  size_t increment;
+
+  ctx->Map.skip = false;
+  increment = 1;
+
+  switch ( index + 1 ) {
+    case 0:
+      increment *= Action2_Pre_A_NA;
+      ctx->Map.pcs[ 0 ] = Action2_Pre_A_NA - 1;
+      /* Fall through */
+    case 1:
+      increment *= Action2_Pre_B_NA;
+      ctx->Map.pcs[ 1 ] = Action2_Pre_B_NA - 1;
+      /* Fall through */
+    case 2:
+      increment *= Action2_Pre_C_NA;
+      ctx->Map.pcs[ 2 ] = Action2_Pre_C_NA - 1;
+      break;
+  }
+
+  ctx->Map.index += increment - 1;
+}
+
 static void Action2_TestVariant( Action2_Context *ctx )
 {
   Action2_Pre_A_Prepare(
     ctx,
     ctx->Map.entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->Map.pcs[ 0 ]
   );
+
+  if ( ctx->Map.skip ) {
+    Action2_Skip( ctx, 0 );
+    return;
+  }
+
   Action2_Pre_B_Prepare( ctx, ctx->Map.pcs[ 1 ] );
   Action2_Pre_C_Prepare( ctx, ctx->Map.pcs[ 2 ] );
   Action2_Action( ctx );
