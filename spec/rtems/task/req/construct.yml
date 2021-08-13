@@ -173,6 +173,24 @@ post-conditions:
       during the ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
+- name: FloatingPoint
+  states:
+  - name: 'Yes'
+    test-code: |
+      /* Validated by WorkerTask() */
+    text: |
+      Where threads have a dedicated floating-point context, the task
+      constructed by the ${../if/construct:/name} call shall be able to use the
+      floating-point unit.
+  - name: 'No'
+    test-code: |
+      /* Validated by WorkerTask() */
+    text: |
+      Where threads have a dedicated floating-point context, the task
+      constructed by the ${../if/construct:/name} call shall not be able to use
+      the floating-point unit.
+  test-epilogue: null
+  test-prologue: null
 pre-conditions:
 - name: Config
   states:
@@ -229,7 +247,7 @@ pre-conditions:
       While the attributes of the task configuration specifies a system task.
   - name: 'No'
     test-code: |
-      /* Nothing to do */
+      ctx->config_obj.attributes |= RTEMS_APPLICATION_TASK;
     text: |
       While the attributes of the task configuration specifies an application
       task.
@@ -239,7 +257,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config_obj.initial_priority = 254;
+      ctx->config_obj.initial_priority = PRIO_HIGH;
     text: |
       While the initial priority of the task configuration is valid and
       non-zero.
@@ -315,6 +333,22 @@ pre-conditions:
       While at least one of the thread create user extensions fails.
   test-epilogue: null
   test-prologue: null
+- name: FloatingPoint
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->config_obj.attributes |= RTEMS_FLOATING_POINT;
+    text: |
+      While the attributes of the task configuration specifies a floating-point
+      task.
+  - name: 'No'
+    test-code: |
+      ctx->config_obj.attributes |= RTEMS_NO_FLOATING_POINT;
+    text: |
+      While the attributes of the task configuration specifies a
+      non-floating-point task.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
@@ -333,6 +367,10 @@ test-action: |
     ctx->config_obj.attributes
   );
   ctx->status = rtems_task_construct( ctx->config, ctx->id );
+
+  if ( ctx->status == RTEMS_SUCCESSFUL ) {
+    StartTask( ctx->id_obj, WorkerTask, ctx );
+  }
 test-brief: null
 test-cleanup: |
   if ( ctx->id_obj != INVALID_ID ) {
@@ -646,6 +684,32 @@ test-support: |
     }
   #endif
   }
+
+  static volatile double double_object;
+
+  static RTEMS_NO_INLINE void UseFloatingPointUnit( void )
+  {
+    double_object = ( 123.0 * double_object + double_object / 123.0 ) / 2.0;
+  }
+
+  static void WorkerTask( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+
+    /*
+     * We don't validate here that we cannot use the floating-point unit if the
+     * RTEMS_FLOATING_POINT attribute is not set.  This is done elsewhere.
+     * Using the floating-point unit if the RTEMS_FLOATING_POINT attribute is
+     * not set may result in unrecoverable fatal errors.
+     */
+    if ( ( ctx->config_obj.attributes & RTEMS_FLOATING_POINT ) != 0 ) {
+      UseFloatingPointUnit();
+    }
+
+    SuspendSelf();
+  }
 test-target: testsuites/validation/tc-task-construct.c
 test-teardown:
   brief: null
@@ -750,6 +814,12 @@ transition-map:
             - Valid
       then: 'Yes'
     - else: 'No'
+    FloatingPoint:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: FloatingPoint
+    - else: N/A
     StorageFree:
     - if:
         post-conditions:
@@ -766,4 +836,5 @@ transition-map:
     Stack: all
     TLS: all
     Free: all
+    FloatingPoint: all
 type: requirement
