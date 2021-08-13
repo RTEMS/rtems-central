@@ -60,7 +60,7 @@ post-conditions:
       id = 0;
       sc = rtems_task_ident( NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
       T_rsc_success( sc );
-      T_eq_u32( id, ctx->id_value );
+      T_eq_u32( id, ctx->id_obj );
     text: |
       The unique object name shall identify the task constructed by
       the ${../if/construct:/name} call.
@@ -74,12 +74,12 @@ post-conditions:
   test-prologue: |
     rtems_status_code sc;
     rtems_id          id;
-- name: IdVar
+- name: IdObj
   states:
   - name: Set
     test-code: |
-      T_eq_ptr( ctx->id, &ctx->id_value );
-      T_ne_u32( ctx->id_value, INVALID_ID );
+      T_eq_ptr( ctx->id, &ctx->id_obj );
+      T_ne_u32( ctx->id_obj, INVALID_ID );
     text: |
       The value of the object referenced by the
       ${../if/construct:/params[1]/name} parameter shall be set to the object
@@ -87,52 +87,77 @@ post-conditions:
       ${../if/construct:/name} call.
   - name: Nop
     test-code: |
-      T_eq_u32( ctx->id_value, INVALID_ID );
+      T_eq_u32( ctx->id_obj, INVALID_ID );
     text: |
       Objects referenced by the ${../if/construct:/params[1]/name} parameter in
       past calls to ${../if/construct:/name} shall not be accessed by the
       ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
-- name: CreateExt
+- name: CreateNew
   states:
   - name: All
     test-code: |
       T_eq_u32( ctx->create_extension_calls, 2 );
     text: |
-      The create user extensions shall be invoked during the
-      ${../if/construct:/name} call.
+      The thread create user extensions shall be invoked for the task under
+      construction during the ${../if/construct:/name} call.
   - name: UpToFailing
     test-code: |
       T_eq_u32( ctx->create_extension_calls, 1 );
     text: |
-      The create user extensions up to the failing extension shall be invoked
-      during the ${../if/construct:/name} call.
-  - name: 'No'
+      The thread create user extensions up to the failing extension shall be
+      invoked for the task under construction during the
+      ${../if/construct:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->create_extension_calls, 0 );
     text: |
-      The create user extensions shall not be invoked during the
-      ${../if/construct:/name} call.
+      The thread create user extensions shall not be invoked for the task under
+      construction during the ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
-- name: DelExt
+- name: DeleteNew
   states:
-  - name: 'Yes'
+  - name: All
     test-code: |
       T_eq_u32( ctx->delete_extension_calls, 2 );
     text: |
-      The delete user extensions shall be invoked during the
-      ${../if/construct:/name} call.
-  - name: 'No'
+      The thread delete user extensions shall be invoked for the task under
+      construction during the ${../if/construct:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( ctx->delete_extension_calls, 0 );
     text: |
-      The delete user extensions shall not be invoked during the
+      The thread delete user extensions shall not be invoked for the task under
+      construction during the ${../if/construct:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: KillZombies
+  states:
+  - name: 'Yes'
+    test-code: |
+      /*
+       * We cannot check the zombie delete extension calls if we should call
+       * rtems_task_construct() without an inactive TCB available.  Killing
+       * a zombie would make one inactive TCB available.
+       */
+      if ( ctx->seized_objects == NULL ) {
+        T_eq_u32( ctx->delete_zombie_extension_calls, 2 );
+      }
+    text: |
+      The registered zombie threads shall be killed before an attempt to
+      allocate a ${/glossary/tcb:/term} is made by the ${../if/construct:/name}
+      call.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->delete_zombie_extension_calls, 0 );
+    text: |
+      The registered zombie threads shall not be killed by the
       ${../if/construct:/name} call.
   test-epilogue: null
   test-prologue: null
-- name: StoFree
+- name: StorageFree
   states:
   - name: 'Yes'
     test-code: |
@@ -153,7 +178,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config = &ctx->config_value;
+      ctx->config = &ctx->config_obj;
     text: |
       While the ${../if/construct:/params[0]/name} parameter references an
       object of type ${../if/config:/name}.
@@ -169,12 +194,12 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->config_value.name = NAME;
+      ctx->config_obj.name = NAME;
     text: |
       While the name of the task configuration is valid.
-  - name: Inv
+  - name: Invalid
     test-code: |
-      ctx->config_value.name = 0;
+      ctx->config_obj.name = 0;
     text: |
       While the name of the task configuration is invalid.
   test-epilogue: null
@@ -183,7 +208,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->id = &ctx->id_value;
+      ctx->id = &ctx->id_obj;
     text: |
       While the ${../if/construct:/params[1]/name} parameter references an
       object of type ${../../type/if/id:/name}.
@@ -195,11 +220,11 @@ pre-conditions:
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
-- name: SysTsk
+- name: SystemTask
   states:
   - name: 'Yes'
     test-code: |
-      ctx->config_value.attributes |= RTEMS_SYSTEM_TASK;
+      ctx->config_obj.attributes |= RTEMS_SYSTEM_TASK;
     text: |
       While the attributes of the task configuration specifies a system task.
   - name: 'No'
@@ -210,22 +235,22 @@ pre-conditions:
       task.
   test-epilogue: null
   test-prologue: null
-- name: Prio
+- name: Priority
   states:
   - name: Valid
     test-code: |
-      ctx->config_value.initial_priority = 254;
+      ctx->config_obj.initial_priority = 254;
     text: |
       While the initial priority of the task configuration is valid and
       non-zero.
   - name: Zero
     test-code: |
-      ctx->config_value.initial_priority = 0;
+      ctx->config_obj.initial_priority = 0;
     text: |
       While the initial priority of the task configuration is zero.
-  - name: Inv
+  - name: Invalid
     test-code: |
-      ctx->config_value.initial_priority = 0xffffffff;
+      ctx->config_obj.initial_priority = 0xffffffff;
     text: |
       While the initial priority of the task configuration is invalid.
   test-epilogue: null
@@ -248,13 +273,13 @@ pre-conditions:
   states:
   - name: Enough
     test-code: |
-      ctx->config_value.maximum_thread_local_storage_size = MAX_TLS_SIZE;
+      ctx->config_obj.maximum_thread_local_storage_size = MAX_TLS_SIZE;
     text: |
       While the maximum thread-local storage size of the task configuration is
       greater than or equal to the thread-local storage size.
-  - name: Small
+  - name: TooSmall
     test-code: |
-      ctx->config_value.maximum_thread_local_storage_size = 0;
+      ctx->config_obj.maximum_thread_local_storage_size = 0;
     text: |
       While the maximum thread-local storage size of the task configuration is
       less than the thread-local storage size.
@@ -268,7 +293,7 @@ pre-conditions:
     text: |
       While the task stack size of the task configuration is greater than or
       equal to the configured minimum size.
-  - name: Small
+  - name: TooSmall
     test-code: |
       ctx->stack_size = 0;
     text: |
@@ -276,18 +301,18 @@ pre-conditions:
       configured minimum size.
   test-epilogue: null
   test-prologue: null
-- name: Ext
+- name: Create
   states:
   - name: Ok
     test-code: |
       ctx->create_extension_status = true;
     text: |
-      While none of the task create extensions fails.
-  - name: Err
+      While none of the thread create user extensions fails.
+  - name: Error
     test-code: |
       ctx->create_extension_status = false;
     text: |
-      While at least one of the task create extensions fails.
+      While at least one of the thread create user extensions fails.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -295,27 +320,48 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
+  if ( ctx->seized_objects == NULL ) {
+    PrepareZombie( ctx );
+  }
+
   ctx->create_extension_calls = 0;
   ctx->delete_extension_calls = 0;
+  ctx->delete_zombie_extension_calls = 0;
   ctx->storage_free_calls = 0;
-  ctx->config_value.storage_size = RTEMS_TASK_STORAGE_SIZE(
-    ctx->config_value.maximum_thread_local_storage_size + ctx->stack_size,
-    ctx->config_value.attributes
+  ctx->config_obj.storage_size = RTEMS_TASK_STORAGE_SIZE(
+    ctx->config_obj.maximum_thread_local_storage_size + ctx->stack_size,
+    ctx->config_obj.attributes
   );
   ctx->status = rtems_task_construct( ctx->config, ctx->id );
 test-brief: null
 test-cleanup: |
-  if ( ctx->id_value != INVALID_ID ) {
+  if ( ctx->id_obj != INVALID_ID ) {
     rtems_status_code sc;
 
-    sc = rtems_task_delete( ctx->id_value );
+    sc = rtems_task_delete( ctx->id_obj );
     T_rsc_success( sc );
 
-    ctx->id_value = INVALID_ID;
+    ctx->id_obj = INVALID_ID;
   }
 
   T_surrender_objects( &ctx->seized_objects, rtems_task_delete );
 test-context:
+- brief: |
+    This member contains the scheduler B identifier.
+  description: null
+  member: |
+    rtems_id scheduler_b_id
+- brief: |
+    This member contains the thread zombie registry ticket right before the
+    task exit of the zombie task.
+  description: null
+  member: |
+    unsigned int thread_zombie_ticket
+- brief: |
+    If this member is true, then the zombie thread is ready to get killed.
+  description: null
+  member: |
+    volatile bool zombie_ready;
 - brief: null
   description: null
   member: |
@@ -327,7 +373,11 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_task_config config_value
+    rtems_task_config config_obj
+- brief: null
+  description: null
+  member: |
+    rtems_id zombie_id
 - brief: null
   description: null
   member: |
@@ -335,7 +385,7 @@ test-context:
 - brief: null
   description: null
   member: |
-    rtems_id id_value
+    rtems_id id_obj
 - brief: null
   description: null
   member: |
@@ -348,6 +398,10 @@ test-context:
   description: null
   member: |
     uint32_t delete_extension_calls
+- brief: null
+  description: null
+  member: |
+    uint32_t delete_zombie_extension_calls
 - brief: null
   description: null
   member: |
@@ -369,29 +423,40 @@ test-description: null
 test-header: null
 test-includes:
 - rtems.h
-- string.h
-- rtems/score/apimutex.h
+- rtems/score/atomic.h
+- rtems/score/percpu.h
 - rtems/score/threadimpl.h
+- string.h
 test-local-includes:
+- ts-config.h
 - tx-support.h
 test-prepare: |
-  _RTEMS_Lock_allocator();
-  _Thread_Kill_zombies();
-  _RTEMS_Unlock_allocator();
-
-  ctx->id_value = INVALID_ID;
-  memset( &ctx->config_value, 0, sizeof( ctx->config_value ) );
-  ctx->config_value.storage_area = task_storage,
-  ctx->config_value.storage_free = StorageFree;
+  KillZombies();
+  ctx->id_obj = INVALID_ID;
+  memset( &ctx->config_obj, 0, sizeof( ctx->config_obj ) );
+  ctx->config_obj.storage_area = task_storage,
+  ctx->config_obj.storage_free = StorageFree;
 test-setup:
   brief: null
   code: |
     rtems_status_code sc;
     int var;
 
-    var = tls_variable;
+    var = tls_object;
     RTEMS_OBFUSCATE_VARIABLE( var );
-    tls_variable = var;
+    tls_object = var;
+
+    ctx->scheduler_b_id = INVALID_ID;
+    #if defined(RTEMS_SMP)
+    ctx->zombie_ready = true;
+    if ( rtems_scheduler_get_processor_maximum() > 1 ) {
+      sc = rtems_scheduler_ident(
+        TEST_SCHEDULER_B_NAME,
+        &ctx->scheduler_b_id
+      );
+      T_rsc_success( sc );
+    }
+    #endif
 
     sc = rtems_extension_create(
       rtems_build_name( 'E', 'X', 'T', '1' ),
@@ -406,14 +471,16 @@ test-setup:
       &ctx->extension_ids[ 1 ]
     );
     T_rsc_success( sc );
+
+    SetSelfPriority( PRIO_NORMAL );
   description: null
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-  typedef RtemsTaskReqConstructErrors_Context Context;
+  typedef RtemsTaskReqConstruct_Context Context;
 
-  static _Thread_local int tls_variable;
+  static volatile _Thread_local int tls_object;
 
   #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 128, RTEMS_TASK_STORAGE_ALIGNMENT )
 
@@ -437,7 +504,7 @@ test-support: |
   static void StorageFree( void *ptr )
   {
     T_eq_ptr( ptr, task_storage );
-    ++RtemsTaskReqConstructErrors_Instance.storage_free_calls;
+    ++RtemsTaskReqConstruct_Instance.storage_free_calls;
   }
 
   static rtems_status_code Create( void *arg, uint32_t *id )
@@ -460,8 +527,8 @@ test-support: |
     (void) executing;
     (void) created;
 
-    ++RtemsTaskReqConstructErrors_Instance.create_extension_calls;
-    return RtemsTaskReqConstructErrors_Instance.create_extension_status;
+    ++RtemsTaskReqConstruct_Instance.create_extension_calls;
+    return RtemsTaskReqConstruct_Instance.create_extension_status;
   }
 
   static bool SecondThreadCreate( rtems_tcb *executing, rtems_tcb *created )
@@ -469,20 +536,81 @@ test-support: |
     (void) executing;
     (void) created;
 
-    ++RtemsTaskReqConstructErrors_Instance.create_extension_calls;
+    ++RtemsTaskReqConstruct_Instance.create_extension_calls;
     return true;
   }
 
   static void ThreadDelete( rtems_tcb *executing, rtems_tcb *deleted )
   {
-    (void) executing;
-    (void) deleted;
+    Context *ctx;
 
-    ++RtemsTaskReqConstructErrors_Instance.delete_extension_calls;
+    (void) executing;
+
+    ctx = &RtemsTaskReqConstruct_Instance;
+
+    if ( deleted->Object.id == ctx->zombie_id ) {
+      ++ctx->delete_zombie_extension_calls;
+    } else {
+      ++ctx->delete_extension_calls;
+    }
   }
+
+  #if defined(RTEMS_SMP)
+  static void PreemptionIntervention( void *arg )
+  {
+    Context     *ctx;
+    unsigned int ticket;
+
+    ctx = arg;
+    T_false( ctx->zombie_ready );
+    ctx->zombie_ready = true;
+
+    do {
+      ticket = _Atomic_Load_uint(
+        &_Thread_Zombies.Lock.Lock.Ticket_lock.now_serving,
+        ATOMIC_ORDER_RELAXED
+      );
+    } while ( ( ticket - ctx->thread_zombie_ticket ) < 2 );
+
+    T_busy( 100 );
+  }
+
+  static void ThreadTerminate( rtems_tcb *executing )
+  {
+    Context *ctx;
+
+    ctx = &RtemsTaskReqConstruct_Instance;
+
+    if (
+      ctx->scheduler_b_id != INVALID_ID &&
+      ctx->zombie_id == executing->Object.id
+    ) {
+      /*
+       * We use the ticket lock of the thread zombie registry to delay the thread
+       * dispatch and provoke an executing thread in
+       * _Thread_Kill_zombies().  The first acquire is done in the
+       * rtems_task_exit() below.  The second acquire is done in
+       * _Thread_Kill_zombies().
+       */
+      ctx->thread_zombie_ticket = _Atomic_Fetch_add_uint(
+        &_Thread_Zombies.Lock.Lock.Ticket_lock.now_serving,
+        0,
+        ATOMIC_ORDER_RELAXED
+      );
+      SetPreemptionIntervention(
+        _Per_CPU_Get_snapshot(),
+        PreemptionIntervention,
+        ctx
+      );
+    }
+  }
+  #endif
 
   static const rtems_extensions_table extensions[] = {
     {
+  #if defined(RTEMS_SMP)
+      .thread_terminate = ThreadTerminate,
+  #endif
       .thread_create = ThreadCreate,
       .thread_delete = ThreadDelete
     }, {
@@ -490,7 +618,35 @@ test-support: |
       .thread_delete = ThreadDelete
     }
   };
-test-target: testsuites/validation/tc-task-construct-errors.c
+
+  static void ZombieTask( rtems_task_argument arg )
+  {
+    (void) arg;
+    rtems_task_exit();
+  }
+
+  static void PrepareZombie( Context *ctx )
+  {
+    bool create_extension_status;
+
+    create_extension_status = ctx->create_extension_status;
+    ctx->create_extension_status = true;
+    ctx->zombie_id = CreateTask( "ZOMB", PRIO_HIGH );
+    ctx->create_extension_status = create_extension_status;
+  #if defined(RTEMS_SMP)
+    if ( ctx->scheduler_b_id != INVALID_ID ) {
+      ctx->zombie_ready = false;
+      SetScheduler( ctx->zombie_id, ctx->scheduler_b_id, PRIO_NORMAL );
+    }
+  #endif
+    StartTask( ctx->zombie_id, ZombieTask, ctx );
+  #if defined(RTEMS_SMP)
+    while ( !ctx->zombie_ready ) {
+      /* Wait */
+    }
+  #endif
+  }
+test-target: testsuites/validation/tc-task-construct.c
 test-teardown:
   brief: null
   code: |
@@ -501,6 +657,8 @@ test-teardown:
 
     sc = rtems_extension_delete( ctx->extension_ids[ 1 ] );
     T_rsc_success( sc );
+
+    RestoreRunnerPriority();
   description: null
 text: ${.:text-template}
 transition-map:
@@ -513,7 +671,7 @@ transition-map:
       then: InvAddr
     - if:
         pre-conditions:
-          Name: Inv
+          Name: Invalid
       then: InvName
     - if:
         pre-conditions:
@@ -521,12 +679,12 @@ transition-map:
       then: InvAddr
     - if:
         pre-conditions:
-          Prio: Zero
-          SysTsk: 'No'
+          Priority: Zero
+          SystemTask: 'No'
       then: InvPrio
     - if:
         pre-conditions:
-          Prio: Inv
+          Priority: Invalid
       then: InvPrio
     - if:
         pre-conditions:
@@ -534,15 +692,15 @@ transition-map:
       then: TooMany
     - if:
         pre-conditions:
-          TLS: Small
+          TLS: TooSmall
       then: InvSize
     - if:
         pre-conditions:
-          Stack: Small
+          Stack: TooSmall
       then: InvSize
     - if:
         pre-conditions:
-          Ext: Err
+          Create: Error
       then: Unsat
     - else: Ok
     Name:
@@ -551,13 +709,13 @@ transition-map:
           Status: Ok
       then: Valid
     - else: Invalid
-    IdVar:
+    IdObj:
     - if:
         post-conditions:
           Status: Ok
       then: Set
     - else: Nop
-    CreateExt:
+    CreateNew:
     - if:
         post-conditions:
           Status: Ok
@@ -566,14 +724,33 @@ transition-map:
         post-conditions:
           Status: Unsat
       then: UpToFailing
-    - else: 'No'
-    DelExt:
+    - else: Nop
+    DeleteNew:
     - if:
         post-conditions:
           Status: Unsat
+      then: All
+    - else: Nop
+    KillZombies:
+    - if:
+        - pre-conditions:
+            Config: Valid
+            Name: Valid
+            Id: Valid
+            SystemTask: 'Yes'
+            Priority:
+            - Valid
+            - Zero
+        - pre-conditions:
+            Config: Valid
+            Name: Valid
+            Id: Valid
+            SystemTask: 'No'
+            Priority:
+            - Valid
       then: 'Yes'
     - else: 'No'
-    StoFree:
+    StorageFree:
     - if:
         post-conditions:
           Status: Unsat
@@ -581,11 +758,11 @@ transition-map:
     - else: 'No'
   pre-conditions:
     Config: all
-    Ext: all
+    Create: all
     Id: all
     Name: all
-    SysTsk: all
-    Prio: all
+    SystemTask: all
+    Priority: all
     Stack: all
     TLS: all
     Free: all
