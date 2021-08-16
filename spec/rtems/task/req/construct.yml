@@ -191,7 +191,96 @@ post-conditions:
       the floating-point unit.
   test-epilogue: null
   test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_PREEMPT, RTEMS_PREEMPT );
+    text: |
+      Task preemption in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be enabled.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_PREEMPT, 0 );
+    text: |
+      Task preemption in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeslice
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_TIMESLICE, RTEMS_TIMESLICE );
+    text: |
+      Timeslicing in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be enabled.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_TIMESLICE, 0 );
+    text: |
+      Timeslicing in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_ASR, RTEMS_ASR );
+    text: |
+      ASR processing in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be enabled.
+  - name: 'No'
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_ASR, 0 );
+    text: |
+      ASR processing in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvl
+  states:
+  - name: Zero
+    test-code: |
+      T_eq_u32( ctx->actual_modes & RTEMS_INTERRUPT_MASK, 0 );
+    text: |
+      The interrupt level in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be zero.
+  - name: Positive
+    test-code: |
+      T_eq_u32(
+        ctx->actual_modes & RTEMS_INTERRUPT_MASK,
+        ctx->config_obj.initial_modes & RTEMS_INTERRUPT_MASK
+      );
+    text: |
+      The interrupt level in the initial modes of the task constructed by the
+      ${../if/construct:/name} call shall be the interrupt level specified by
+      the initial modes of the task configuration mapped to an
+      ${/glossary/target-arch:/term}-specific positive value.
+  test-epilogue: null
+  test-prologue: null
 pre-conditions:
+- name: CPUs
+  states:
+  - name: One
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() != 1 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system does not need inter-processor interrupts,
+      where the scheduler does support the no-preempt mode.
+  - name: More
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() == 1 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system needs inter-processor interrupts,
+      where the scheduler does not support the no-preempt mode.
+  test-epilogue: null
+  test-prologue: null
 - name: Config
   states:
   - name: Valid
@@ -349,15 +438,84 @@ pre-conditions:
       non-floating-point task.
   test-epilogue: null
   test-prologue: null
+- name: Preempt
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_PREEMPT;
+    text: |
+      While the initial modes of the task configuration specify that preemption
+      is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_NO_PREEMPT;
+    text: |
+      While the initial modes of the task configuration specify that preemption
+      is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: Timeslice
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_TIMESLICE;
+    text: |
+      While the initial modes of the task configuration specify that
+      timeslicing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_NO_TIMESLICE;
+    text: |
+      While the initial modes of the task configuration specify that
+      timeslicing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: ASR
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_ASR;
+    text: |
+      While the initial modes of the task configuration specify that ASR
+      processing is enabled.
+  - name: 'No'
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_NO_ASR;
+    text: |
+      While the initial modes of the task configuration specify that ASR
+      processing is disabled.
+  test-epilogue: null
+  test-prologue: null
+- name: IntLvl
+  states:
+  - name: Zero
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_INTERRUPT_LEVEL( 0 );
+    text: |
+      While the initial modes of the task configuration specify an interrupt
+      level of zero.
+  - name: Positive
+    test-code: |
+      ctx->config_obj.initial_modes |= RTEMS_INTERRUPT_LEVEL( 1 );
+    text: |
+      While the initial modes of the task configuration specify an interrupt
+      level greater than zero and less than or equal to
+      ${/score/cpu/if/modes-interrupt-mask:/name}.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
-skip-reasons: {}
+skip-reasons:
+  OnlyOneCPU: |
+    Where the system is build with SMP support disabled, the system has exactly
+    one processor.
 test-action: |
   if ( ctx->seized_objects == NULL ) {
     PrepareZombie( ctx );
   }
 
+  ctx->actual_modes = UINT32_MAX;
   ctx->create_extension_calls = 0;
   ctx->delete_extension_calls = 0;
   ctx->delete_zombie_extension_calls = 0;
@@ -400,6 +558,11 @@ test-context:
   description: null
   member: |
     volatile bool zombie_ready;
+- brief: |
+    This member contains the actual modes of the constructed task.
+  description: null
+  member: |
+    rtems_mode actual_modes
 - brief: null
   description: null
   member: |
@@ -697,6 +860,7 @@ test-support: |
     Context *ctx;
 
     ctx = (Context *) arg;
+    ctx->actual_modes = GetMode();
 
     /*
      * We don't validate here that we cannot use the floating-point unit if the
@@ -814,19 +978,45 @@ transition-map:
             - Valid
       then: 'Yes'
     - else: 'No'
-    FloatingPoint:
-    - if:
-        post-conditions:
-          Status: Ok
-      then-specified-by: FloatingPoint
-    - else: N/A
     StorageFree:
     - if:
         post-conditions:
           Status: Unsat
       then: 'Yes'
     - else: 'No'
+    FloatingPoint:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: FloatingPoint
+    - else: N/A
+    Preempt:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Preempt
+    - else: N/A
+    Timeslice:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Timeslice
+    - else: N/A
+    ASR:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: ASR
+    - else: N/A
+    IntLvl:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: IntLvl
+    - else: N/A
   pre-conditions:
+    CPUs:
+    - One
     Config: all
     Create: all
     Id: all
@@ -837,4 +1027,328 @@ transition-map:
     TLS: all
     Free: all
     FloatingPoint: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+- enabled-by: true
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    CPUs:
+    - More
+    Config: all
+    Create: all
+    Id: all
+    Name: all
+    SystemTask: all
+    Priority: all
+    Stack: all
+    TLS: all
+    Free: all
+    FloatingPoint: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+- enabled-by: CPU_ENABLE_ROBUST_THREAD_DISPATCH
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Config: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Name: Invalid
+      then: InvName
+    - if:
+        pre-conditions:
+          Id: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Priority: Zero
+          SystemTask: 'No'
+      then: InvPrio
+    - if:
+        pre-conditions:
+          Priority: Invalid
+      then: InvPrio
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+        pre-conditions:
+          TLS: TooSmall
+      then: InvSize
+    - if:
+        pre-conditions:
+          Stack: TooSmall
+      then: InvSize
+    - if:
+        pre-conditions:
+          IntLvl: Positive
+      then: Unsat
+    - if:
+        pre-conditions:
+          Create: Error
+      then: Unsat
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdObj:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    CreateNew:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: All
+    - if:
+        and:
+          - post-conditions:
+              Status: Unsat
+          - pre-conditions:
+              IntLvl: Zero
+      then: UpToFailing
+    - else: Nop
+    DeleteNew:
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: All
+    - else: Nop
+    KillZombies:
+    - if:
+        - pre-conditions:
+            Config: Valid
+            Name: Valid
+            Id: Valid
+            SystemTask: 'Yes'
+            Priority:
+            - Valid
+            - Zero
+        - pre-conditions:
+            Config: Valid
+            Name: Valid
+            Id: Valid
+            SystemTask: 'No'
+            Priority:
+            - Valid
+      then: 'Yes'
+    - else: 'No'
+    StorageFree:
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: 'Yes'
+    - else: 'No'
+    FloatingPoint:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: FloatingPoint
+    - else: N/A
+    Preempt:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Preempt
+    - else: N/A
+    Timeslice:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Timeslice
+    - else: N/A
+    ASR:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: ASR
+    - else: N/A
+    IntLvl:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: IntLvl
+    - else: N/A
+  pre-conditions:
+    CPUs:
+    - One
+    Config: all
+    Create: all
+    Id: all
+    Name: all
+    SystemTask: all
+    Priority: all
+    Stack: all
+    TLS: all
+    Free: all
+    FloatingPoint: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          Config: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Name: Invalid
+      then: InvName
+    - if:
+        pre-conditions:
+          Id: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Priority: Zero
+          SystemTask: 'No'
+      then: InvPrio
+    - if:
+        pre-conditions:
+          Priority: Invalid
+      then: InvPrio
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+        pre-conditions:
+          TLS: TooSmall
+      then: InvSize
+    - if:
+        pre-conditions:
+          Stack: TooSmall
+      then: InvSize
+    - if:
+        pre-conditions:
+          Preempt: 'No'
+      then: Unsat
+    - if:
+        pre-conditions:
+          IntLvl: Positive
+      then: Unsat
+    - if:
+        pre-conditions:
+          Create: Error
+      then: Unsat
+    - else: Ok
+    Name:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdObj:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+    CreateNew:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: All
+    - if:
+        and:
+          - post-conditions:
+              Status: Unsat
+          - pre-conditions:
+              Preempt: 'Yes'
+              IntLvl: Zero
+      then: UpToFailing
+    - else: Nop
+    DeleteNew:
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: All
+    - else: Nop
+    KillZombies:
+    - if:
+        - pre-conditions:
+            Config: Valid
+            Name: Valid
+            Id: Valid
+            SystemTask: 'Yes'
+            Priority:
+            - Valid
+            - Zero
+        - pre-conditions:
+            Config: Valid
+            Name: Valid
+            Id: Valid
+            SystemTask: 'No'
+            Priority:
+            - Valid
+      then: 'Yes'
+    - else: 'No'
+    StorageFree:
+    - if:
+        post-conditions:
+          Status: Unsat
+      then: 'Yes'
+    - else: 'No'
+    FloatingPoint:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: FloatingPoint
+    - else: N/A
+    Preempt:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Preempt
+    - else: N/A
+    Timeslice:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: Timeslice
+    - else: N/A
+    ASR:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: ASR
+    - else: N/A
+    IntLvl:
+    - if:
+        post-conditions:
+          Status: Ok
+      then-specified-by: IntLvl
+    - else: N/A
+  pre-conditions:
+    CPUs:
+    - More
+    Config: all
+    Create: all
+    Id: all
+    Name: all
+    SystemTask: all
+    Priority: all
+    Stack: all
+    TLS: all
+    Free: all
+    FloatingPoint: all
+    Preempt: all
+    Timeslice: all
+    ASR: all
+    IntLvl: all
 type: requirement
