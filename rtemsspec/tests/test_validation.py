@@ -698,6 +698,16 @@ static inline Directive_Entry Directive_PopEntry( Directive_Context *ctx )
   ];
 }
 
+static void Directive_TestVariant( Directive_Context *ctx )
+{
+  Directive_Pre_Name_Prepare( ctx, ctx->Map.pcs[ 0 ] );
+  Directive_Pre_Node_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  Directive_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  Directive_Action( ctx );
+  Directive_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
+  Directive_Post_Id_Check( ctx, ctx->Map.entry.Post_Id );
+}
+
 /**
  * @fn void T_case_body_Directive( void )
  */
@@ -725,13 +735,7 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
         ++ctx->Map.pcs[ 2 ]
       ) {
         ctx->Map.entry = Directive_PopEntry( ctx );
-
-        Directive_Pre_Name_Prepare( ctx, ctx->Map.pcs[ 0 ] );
-        Directive_Pre_Node_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-        Directive_Pre_Id_Prepare( ctx, ctx->Map.pcs[ 2 ] );
-        Directive_Action( ctx );
-        Directive_Post_Status_Check( ctx, ctx->Map.entry.Post_Status );
-        Directive_Post_Id_Check( ctx, ctx->Map.entry.Post_Id );
+        Directive_TestVariant( ctx );
       }
     }
   }
@@ -2219,6 +2223,19 @@ static inline Action2_Entry Action2_PopEntry( Action2_Context *ctx )
   ];
 }
 
+static void Action2_TestVariant( Action2_Context *ctx )
+{
+  Action2_Pre_A_Prepare(
+    ctx,
+    ctx->Map.entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->Map.pcs[ 0 ]
+  );
+  Action2_Pre_B_Prepare( ctx, ctx->Map.pcs[ 1 ] );
+  Action2_Pre_C_Prepare( ctx, ctx->Map.pcs[ 2 ] );
+  Action2_Action( ctx );
+  Action2_Post_A_Check( ctx, ctx->Map.entry.Post_A );
+  Action2_Post_B_Check( ctx, ctx->Map.entry.Post_B );
+}
+
 static T_fixture_node Action2_Node;
 
 void Action2_Run( int *a, int b, int *c )
@@ -2256,15 +2273,7 @@ void Action2_Run( int *a, int b, int *c )
         }
 
         Action2_Prepare( ctx );
-        Action2_Pre_A_Prepare(
-          ctx,
-          ctx->Map.entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->Map.pcs[ 0 ]
-        );
-        Action2_Pre_B_Prepare( ctx, ctx->Map.pcs[ 1 ] );
-        Action2_Pre_C_Prepare( ctx, ctx->Map.pcs[ 2 ] );
-        Action2_Action( ctx );
-        Action2_Post_A_Check( ctx, ctx->Map.entry.Post_A );
-        Action2_Post_B_Check( ctx, ctx->Map.entry.Post_B );
+        Action2_TestVariant( ctx );
         Action2_Cleanup( ctx );
       }
     }

@@ -561,15 +561,9 @@ class _ActionRequirementTestItem(_TestItem):
             content.gap = False
             content.call_function(None, f"{self.ident}_{name}", ["ctx"])
 
-    def _add_loop_body(self, content: CContent,
-                       transition_map: TransitionMap) -> None:
+    def _add_test_variant(self, content: CContent,
+                          transition_map: TransitionMap) -> None:
         entry = "ctx->Map.entry"
-        content.call_function(f"{entry} =", f"{self.ident}_PopEntry", ["ctx"])
-        if transition_map.pre_co_summary[0]:
-            with content.condition(f"{entry}.Skip"):
-                content.append("continue;")
-        content.add_blank_line()
-        self._add_call(content, "test-prepare", "Prepare")
         for index, pre_co in enumerate(self._item["pre-conditions"]):
             content.gap = False
             state = f"ctx->Map.pcs[ {index} ]"
@@ -585,6 +579,18 @@ class _ActionRequirementTestItem(_TestItem):
             content.call_function(None, f"{enum[0]}_Check", [
                 "ctx", f"{entry}.{transition_map.get_post_entry_member(index)}"
             ])
+
+    def _add_loop_body(self, content: CContent,
+                       transition_map: TransitionMap) -> None:
+        entry = "ctx->Map.entry"
+        content.call_function(f"{entry} =", f"{self.ident}_PopEntry", ["ctx"])
+        if transition_map.pre_co_summary[0]:
+            with content.condition(f"{entry}.Skip"):
+                content.append("continue;")
+            content.add_blank_line()
+        self._add_call(content, "test-prepare", "Prepare")
+        content.gap = False
+        content.call_function(None, f"{self.ident}_TestVariant", ["ctx"])
         self._add_call(content, "test-cleanup", "Cleanup")
 
     def _add_for_loops(self, content: CContent, transition_map: TransitionMap,
@@ -610,6 +616,9 @@ class _ActionRequirementTestItem(_TestItem):
                 "ctx->Map.index = index + 1;", f"return {self.ident}_Entries[",
                 f"  {self.ident}_Map[ index ]", "];"
             ])
+        with content.function("static void", f"{self.ident}_TestVariant",
+                              [f"{self.context} *ctx"]):
+            self._add_test_variant(content, transition_map)
         fixture = f"{self.ident}_Fixture"
         prologue = CContent()
         epilogue = CContent()
