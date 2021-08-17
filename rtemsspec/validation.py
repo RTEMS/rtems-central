@@ -1053,7 +1053,9 @@ _GATHER = {
 }
 
 
-def generate(config: dict, item_cache: ItemCache) -> None:
+def generate(config: dict,
+             item_cache: ItemCache,
+             targets: Optional[List[str]] = None) -> None:
     """
     Generates source files and build specification items for validation test
     suites and test cases according to the configuration.
@@ -1079,5 +1081,10 @@ def generate(config: dict, item_cache: ItemCache) -> None:
                 test_case_to_suites.setdefault(test_case.uid,
                                                []).extend(test_suites)
 
-    for src in source_files.values():
-        src.generate(config["base-directory"], test_case_to_suites)
+    if not targets:
+        for src in source_files.values():
+            src.generate(config["base-directory"], test_case_to_suites)
+    else:
+        for target in targets:
+            source_files[target].generate(config["base-directory"],
+                                          test_case_to_suites)

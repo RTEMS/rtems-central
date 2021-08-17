@@ -60,6 +60,7 @@ def test_validation(tmpdir):
     assert len(list(transition_map.get_post_conditions(["RTEMS_SMP"]))) == 9
 
     generate(validation_config, item_cache)
+    generate(validation_config, item_cache, ["ts.c"])
 
     with open(os.path.join(base_directory, "ts.c"), "r") as src:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */

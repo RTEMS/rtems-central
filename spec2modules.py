@@ -25,20 +25,32 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import argparse
+import sys
+
 import rtemsspec
 
 
 def main() -> None:
     """ Generates files of the modules from the specification. """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("targets",
+                        metavar="TARGET",
+                        nargs="*",
+                        help="a target file of a specification item")
+    args = parser.parse_args(sys.argv[1:])
     config = rtemsspec.util.load_config("config.yml")
     item_cache = rtemsspec.items.ItemCache(config["spec"])
-    rtemsspec.interface.generate(config["interface"], item_cache)
-    rtemsspec.validation.generate(config["validation"], item_cache)
-    rtemsspec.applconfig.generate(config["appl-config"], item_cache)
-    rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
-    rtemsspec.glossary.generate(config["glossary"], item_cache)
-    rtemsspec.interfacedoc.generate(config["interface-documentation"],
-                                    item_cache)
+    rtemsspec.validation.generate(config["validation"], item_cache,
+                                  args.targets)
+
+    if not args.targets:
+        rtemsspec.interface.generate(config["interface"], item_cache)
+        rtemsspec.applconfig.generate(config["appl-config"], item_cache)
+        rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
+        rtemsspec.glossary.generate(config["glossary"], item_cache)
+        rtemsspec.interfacedoc.generate(config["interface-documentation"],
+                                        item_cache)
 
 
 if __name__ == "__main__":
