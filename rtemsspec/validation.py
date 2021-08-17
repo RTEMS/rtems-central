@@ -48,7 +48,7 @@ def _get_test_run(ctx: ItemGetValueContext) -> Any:
 
 
 class _Mapper(ItemMapper):
-    def __init__(self, item: Item, test_item: "_TestItem"):
+    def __init__(self, item: Item):
         super().__init__(item)
         self._step = 0
         self.add_get_value("glossary/term:/plural", get_value_plural)
@@ -60,9 +60,6 @@ class _Mapper(ItemMapper):
         self.add_get_value("interface/macro:/params/name", get_value_params)
         self.add_get_value("requirement/functional/action:/test-run",
                            _get_test_run)
-        self.add_get_value(("requirement/functional/action:"
-                            "/pre-conditions/states/test-code/skip"),
-                           test_item.skip_pre_condition)
         self.add_get_value("test-case:/test-run", _get_test_run)
 
     @property
@@ -102,7 +99,7 @@ class _TestItem:
         self._item = item
         self._ident = to_camel_case(item.uid[1:])
         self._context = f"{self._ident}_Context"
-        self._mapper = _Mapper(item, self)
+        self._mapper = _Mapper(item)
 
     def __getitem__(self, key: str):
         return self._item[key]
@@ -467,10 +464,6 @@ class _TestItem:
             content.add(epilogue)
         content.add("/** @} */")
 
-    def skip_pre_condition(self, _ctx: ItemGetValueContext) -> Any:
-        # pylint: disable=no-self-use
-        """ Adds code to skip the current pre-condition state. """
-
 
 class _TestSuiteItem(_TestItem):
     """ A test suite item. """
@@ -512,6 +505,9 @@ class _ActionRequirementTestItem(_TestItem):
     """ An action requirement test item. """
     def __init__(self, item: Item):
         super().__init__(item)
+        self._mapper.add_get_value(("requirement/functional/action:"
+                                    "/pre-conditions/states/test-code/skip"),
+                                   self._skip_pre_condition)
         self._pre_co_skip = {}  # type: Dict[int, bool]
         self._pre_co_count = len(item["pre-conditions"])
         self._pre_co_idx_to_enum = _to_enum(f"{self.ident}_Pre",
@@ -781,7 +777,8 @@ class _ActionRequirementTestItem(_TestItem):
         self._add_test_case(content, transition_map, header)
         content.add("/** @} */")
 
-    def skip_pre_condition(self, ctx: ItemGetValueContext) -> Any:
+    def _skip_pre_condition(self, ctx: ItemGetValueContext) -> Any:
+        """ Adds code to skip the current pre-condition state. """
         index = int(ctx.path.split("]")[0].split("[")[1])
         self._pre_co_skip[index] = True
         return "ctx->Map.skip = true;"
