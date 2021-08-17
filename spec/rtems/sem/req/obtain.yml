@@ -37,7 +37,6 @@ post-conditions:
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
-      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
@@ -48,7 +47,6 @@ post-conditions:
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
-      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
@@ -59,7 +57,6 @@ post-conditions:
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
-      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
@@ -70,7 +67,6 @@ post-conditions:
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
-      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
@@ -81,7 +77,6 @@ post-conditions:
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_NO_STATUS;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
-      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall try to seize the mutex as specified by
@@ -92,7 +87,6 @@ post-conditions:
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
       ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_NO_STATUS;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
-      ctx->tq_mtx_ctx.get_owner = TQMtxGetOwnerClassic;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall wait to seize the mutex as specified by
@@ -258,6 +252,7 @@ test-setup:
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
     ctx->tq_ctx.surrender = TQSurrenderClassicSem;
+    ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
     ctx->tq_ctx.convert_status = TQConvertStatusClassic;
     TQInitialize( &ctx->tq_ctx );
   description: null

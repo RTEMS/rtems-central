@@ -353,7 +353,7 @@ test-support: |
     }
 
     ctx->status = TQEnqueue( &ctx->tq_ctx->base, TQ_NO_WAIT );
-    ctx->owner_after = TQMtxGetOwner( ctx->tq_ctx );
+    ctx->owner_after = TQGetOwner( &ctx->tq_ctx->base );
     ctx->priority_after = GetSelfPriority();
 
     if ( ctx->owner_caller ) {
