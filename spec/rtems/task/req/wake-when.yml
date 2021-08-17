@@ -211,7 +211,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsTaskReqWakeWhen_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void SetTOD( rtems_time_of_day *tod, uint32_t year )
   {

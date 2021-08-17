@@ -295,7 +295,7 @@ test-support: |
 
   #define EVENT_OBTAIN RTEMS_EVENT_0
 
-  typedef RtemsSemReqDelete_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void WakeUp( Context *ctx, size_t index )
   {

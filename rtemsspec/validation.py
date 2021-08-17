@@ -43,8 +43,16 @@ ItemMap = Dict[str, Item]
 _STEPS = re.compile(r"^steps/([0-9]+)$")
 
 
+def _get_test_context_instance(ctx: ItemGetValueContext) -> Any:
+    return f"{to_camel_case(ctx.item.uid[1:])}_Instance"
+
+
+def _get_test_context_type(ctx: ItemGetValueContext) -> Any:
+    return f"{to_camel_case(ctx.item.uid[1:])}_Context"
+
+
 def _get_test_run(ctx: ItemGetValueContext) -> Any:
-    return f"{to_camel_case(ctx.item.uid[1:]).replace(' ', '')}_Run"
+    return f"{to_camel_case(ctx.item.uid[1:])}_Run"
 
 
 class _Mapper(ItemMapper):
@@ -58,8 +66,17 @@ class _Mapper(ItemMapper):
         self.add_get_value("interface/group:/name", get_value_doxygen_group)
         self.add_get_value("interface/macro:/name", get_value_doxygen_function)
         self.add_get_value("interface/macro:/params/name", get_value_params)
+        self.add_get_value(
+            "requirement/functional/action:/test-context-instance",
+            _get_test_context_instance)
+        self.add_get_value("requirement/functional/action:/test-context-type",
+                           _get_test_context_type)
         self.add_get_value("requirement/functional/action:/test-run",
                            _get_test_run)
+        self.add_get_value("test-case:/test-context-instance",
+                           _get_test_context_instance)
+        self.add_get_value("test-case:/test-context-type",
+                           _get_test_context_type)
         self.add_get_value("test-case:/test-run", _get_test_run)
 
     @property

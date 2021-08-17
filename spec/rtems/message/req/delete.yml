@@ -149,7 +149,7 @@ test-support: |
 
   #define MAX_MESSAGE_SIZE 1
 
-  typedef RtemsMessageReqDelete_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE )
     buffers[ MAX_PENDING_MESSAGES ];

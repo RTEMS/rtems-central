@@ -1946,6 +1946,7 @@ static const char * const * const Action2_PreDesc[] = {
 };
 
 /* Support code */
+Action2_Context *instance = &Action2_Instance;
 
 static void Action2_Pre_A_Prepare( Action2_Context *ctx, Action2_Pre_A state )
 {

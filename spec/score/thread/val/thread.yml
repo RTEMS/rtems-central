@@ -103,7 +103,7 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: |
-  typedef ScoreThreadValThread_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void TaskTerminate( rtems_tcb *executing )
   {

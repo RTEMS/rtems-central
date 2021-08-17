@@ -179,6 +179,7 @@ test-setup:
 test-stop: null
 test-support: |
   /* Support code */
+  ${.:/test-context-type} *instance = &${.:/test-context-instance};
 test-target: action2.c
 test-teardown:
   brief: |

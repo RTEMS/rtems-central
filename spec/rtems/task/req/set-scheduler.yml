@@ -558,7 +558,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsTaskReqSetScheduler_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   #define EVENT_OBTAIN_MUTEX_A RTEMS_EVENT_0
 

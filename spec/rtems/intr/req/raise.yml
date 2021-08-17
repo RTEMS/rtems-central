@@ -160,7 +160,7 @@ test-prepare: null
 test-setup: null
 test-stop: null
 test-support: |
-  typedef RtemsIntrReqRaise_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static bool IsEnabled( const Context *ctx )
   {

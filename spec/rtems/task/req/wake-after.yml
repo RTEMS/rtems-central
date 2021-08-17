@@ -181,7 +181,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsTaskReqWakeAfter_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void Worker( rtems_task_argument arg )
   {

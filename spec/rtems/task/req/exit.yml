@@ -348,7 +348,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsTaskReqExit_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void Signal( rtems_signal_set signals )
   {

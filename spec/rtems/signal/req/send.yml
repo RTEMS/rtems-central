@@ -338,7 +338,7 @@ test-support: |
 
   #define EVENT_WORKER_DONE RTEMS_EVENT_4
 
-  typedef RtemsSignalReqSend_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void WorkerDone( const Context *ctx )
   {

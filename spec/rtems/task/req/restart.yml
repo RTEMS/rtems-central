@@ -899,7 +899,7 @@ test-support: |
 
   #define UNSET_ARGUMENT 1
 
-  typedef RtemsTaskReqRestart_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void PrepareRealPriority( Context *ctx )
   {

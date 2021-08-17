@@ -175,7 +175,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef BspReqInterruptSpurious_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static bool test_case_active;
 

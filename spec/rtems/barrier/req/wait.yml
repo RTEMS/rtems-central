@@ -205,7 +205,7 @@ test-support: |
 
   #define EVENT_TIMER_EXPIRE RTEMS_EVENT_4
 
-  typedef RtemsBarrierReqWait_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void Worker( rtems_task_argument arg )
   {

@@ -88,7 +88,7 @@ test-prepare: null
 test-setup: null
 test-stop: null
 test-support: |
-  typedef RtemsIoReqGetchark_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static int PollChar( void )
   {

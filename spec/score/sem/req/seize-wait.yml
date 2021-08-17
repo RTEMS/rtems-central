@@ -125,7 +125,7 @@ test-prepare: |
 test-setup: null
 test-stop: null
 test-support: |
-  typedef ScoreSemReqSeizeWait_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static Status_Control Status( const Context *ctx, Status_Control status )
   {

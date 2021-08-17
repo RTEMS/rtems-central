@@ -507,7 +507,7 @@ test-stop: null
 test-support: |
   #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
 
-  typedef RtemsEventReqSendReceive_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static rtems_id CreateWakeupSema( void )
   {

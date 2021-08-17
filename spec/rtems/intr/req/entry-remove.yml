@@ -551,7 +551,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsIntrReqEntryRemove_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static char entry_arg;
 

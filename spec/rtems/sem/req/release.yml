@@ -571,7 +571,7 @@ test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-  typedef RtemsSemReqRelease_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   typedef enum {
     EVENT_HELPER_SYNC = RTEMS_EVENT_0,

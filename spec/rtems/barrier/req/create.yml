@@ -271,7 +271,7 @@ test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-  typedef RtemsBarrierReqCreate_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void Worker( rtems_task_argument arg )
   {

@@ -679,7 +679,7 @@ test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-  typedef RtemsTaskReqConstruct_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static volatile _Thread_local int tls_object;
 
@@ -705,7 +705,7 @@ test-support: |
   static void StorageFree( void *ptr )
   {
     T_eq_ptr( ptr, task_storage );
-    ++RtemsTaskReqConstruct_Instance.storage_free_calls;
+    ++${.:/test-context-instance}.storage_free_calls;
   }
 
   static rtems_status_code Create( void *arg, uint32_t *id )
@@ -728,8 +728,8 @@ test-support: |
     (void) executing;
     (void) created;
 
-    ++RtemsTaskReqConstruct_Instance.create_extension_calls;
-    return RtemsTaskReqConstruct_Instance.create_extension_status;
+    ++${.:/test-context-instance}.create_extension_calls;
+    return ${.:/test-context-instance}.create_extension_status;
   }
 
   static bool SecondThreadCreate( rtems_tcb *executing, rtems_tcb *created )
@@ -737,7 +737,7 @@ test-support: |
     (void) executing;
     (void) created;
 
-    ++RtemsTaskReqConstruct_Instance.create_extension_calls;
+    ++${.:/test-context-instance}.create_extension_calls;
     return true;
   }
 
@@ -747,7 +747,7 @@ test-support: |
 
     (void) executing;
 
-    ctx = &RtemsTaskReqConstruct_Instance;
+    ctx = &${.:/test-context-instance};
 
     if ( deleted->Object.id == ctx->zombie_id ) {
       ++ctx->delete_zombie_extension_calls;
@@ -780,7 +780,7 @@ test-support: |
   {
     Context *ctx;
 
-    ctx = &RtemsTaskReqConstruct_Instance;
+    ctx = &${.:/test-context-instance};
 
     if (
       ctx->scheduler_b_id != INVALID_ID &&

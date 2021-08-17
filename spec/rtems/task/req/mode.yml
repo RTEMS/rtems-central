@@ -562,7 +562,7 @@ test-support: |
 
   #define EVENT_TIMESLICE RTEMS_EVENT_1
 
-  typedef RtemsTaskReqMode_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void Worker( rtems_task_argument arg )
   {

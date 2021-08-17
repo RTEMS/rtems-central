@@ -309,13 +309,13 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef RtemsTaskReqStart_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void WorkerA( rtems_task_argument arg )
   {
     Context *ctx;
 
-    ctx = &RtemsTaskReqStart_Instance;
+    ctx = &${.:/test-context-instance};
 
     while ( true ) {
       ctx->actual_argument += arg;
@@ -328,7 +328,7 @@ test-support: |
   {
     Context *ctx;
 
-    ctx = &RtemsTaskReqStart_Instance;
+    ctx = &${.:/test-context-instance};
 
     while ( true ) {
       ctx->actual_argument += arg;
@@ -341,7 +341,7 @@ test-support: |
     (void) executing;
     (void) started;
 
-    ++RtemsTaskReqStart_Instance.start_extension_calls;
+    ++${.:/test-context-instance}.start_extension_calls;
   }
 
   static const rtems_extensions_table extensions = {

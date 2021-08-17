@@ -186,7 +186,7 @@ test-support: |
 
   #define RELEASED_INVALID_VALUE 0xffffffff
 
-  typedef RtemsBarrierReqRelease_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static void Worker( rtems_task_argument arg )
   {

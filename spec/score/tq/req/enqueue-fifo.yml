@@ -92,7 +92,7 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
-  typedef ScoreTqReqEnqueueFifo_Context Context;
+  typedef ${.:/test-context-type} Context;
 
   static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
   {
