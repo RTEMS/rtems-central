@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../../option/if/default
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The value of macro ${../../option/if/default:/name} shall be equal
+  to the value of the expression ``RTEMS_WAIT``.
+type: requirement

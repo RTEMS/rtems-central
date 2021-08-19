@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: ../../attr/if/default
+non-functional-type: interface
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The value of macro ${../../attr/if/default:/name} shall be equal to the value
+  of the expression ``RTEMS_FIFO | RTEMS_LOCAL``.
+
+  Note: ${../../attr/if/global:/name} is not part of the space profile
+  because no remote ${/glossary/node:/plural} are supported.
+type: requirement
