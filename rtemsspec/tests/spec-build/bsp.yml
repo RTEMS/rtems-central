@@ -6,7 +6,9 @@ install:
 - source:
   - abc
 links:
-- role: build-dependency
+- enabled-by:
+    not: false
+  role: build-dependency-conditional
   uid: o
 - role: build-dependency
   uid: op

@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: build-dependency-conditional
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      enabled-by:
+        description: |
+          It shall define under which conditions the build dependency is
+          enabled.
+        spec-type: enabled-by
+    description: |
+      It defines the build dependency conditional role of links.
+    mandatory-attributes: all
+spec-name: Build Dependency Conditional Link Role
+spec-type: build-dependency-conditional
+type: spec
