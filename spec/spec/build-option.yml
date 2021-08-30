@@ -22,6 +22,7 @@ spec-example: |
   default-by-variant:
   - value: 9600
     variants:
+    - bsps/powerpc/motorola_powerpc
     - m68k/m5484FireEngine
     - powerpc/hsc_cm01
   - value: 19200
@@ -54,8 +55,11 @@ spec-info:
         spec-type: build-option-value
       default-by-variant:
         description: |
-          The list is processed from top to bottom.  If a matching variant is
-          found, then the processing stops.
+          The list is checked two times and processed from top to bottom.
+          Firstly, the base BSP name is used to match with a variant.
+          Secondly, the BSP family name prefixed by ``bsps/`` is used to match
+          with a variant.  If a matching variant is found, then the processing
+          stops.
         spec-type: build-default-by-variant-list
       description:
         description: |
