@@ -77,26 +77,30 @@ def _gather_source_files(item: Item, enabled: List[str],
     _EXTEND_SOURCE_FILES[item["build-type"]](item, source_files)
 
 
-def _gather_test_files(item_cache: ItemCache, source_files: List[str]) -> None:
+def _gather_test_header(item_cache: ItemCache,
+                        source_files: List[str]) -> None:
     for item in item_cache.all.values():
         tests = ["test-case", "requirement/functional/action"]
         if item.type in tests and item["test-header"]:
             source_files.append(item["test-header"]["target"])
 
 
-def gather_files(config: dict, item_cache: ItemCache) -> List[str]:
+def gather_files(config: dict,
+                 item_cache: ItemCache,
+                 test_header: bool = True) -> List[str]:
     """ Generates a list of files form the build specification. """
     bsps = {}  # type: BSPMap
     for item in item_cache.all.values():
         if item["type"] == "build" and item["build-type"] == "bsp":
             arch_bsps = bsps.setdefault(item["arch"].strip(), {})
             arch_bsps[item["bsp"].strip()] = item
-    source_files = config["sources"]  # type: List[str]
+    source_files = list(config["sources"])  # type: List[str]
     arch = config["arch"]
     bsp = config["bsp"]
     enabled = [arch, arch + "/" + bsp] + config["enabled"]
     _gather_source_files(bsps[arch][bsp], enabled, source_files)
     for uid in config["uids"]:
         _gather_source_files(item_cache[uid], enabled, source_files)
-    _gather_test_files(item_cache, source_files)
+    if test_header:
+        _gather_test_header(item_cache, source_files)
     return source_files

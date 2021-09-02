@@ -42,3 +42,5 @@ def test_build(tmpdir):
     build_config["uids"] = ["/g"]
     files = gather_files(build_config, item_cache)
     assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def", "ghi", "th"]
+    files = gather_files(build_config, item_cache, test_header=False)
+    assert files == ["a", "b", "stu", "jkl", "mno", "abc", "def", "ghi"]
