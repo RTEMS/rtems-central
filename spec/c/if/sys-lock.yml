@@ -1,14 +1,15 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  This header file defines the Newlib-specific interfaces to lock and
+  synchronization objects.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: unspecified-function
+interface-type: header-file
 links:
-- role: interface-ingroup
-  uid: group
 - role: interface-placement
-  uid: /c/if/sys-lock
-name: _Futex_Wait
-references: {}
+  uid: domain
+path: sys/lock.h
+prefix: ''
 type: interface

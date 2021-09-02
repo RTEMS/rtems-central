@@ -7,6 +7,8 @@ interface-type: unspecified-function
 links:
 - role: interface-ingroup
   uid: group
+- role: interface-placement
+  uid: /c/if/sys-lock
 name: _Futex_Wake
 references: {}
 type: interface
