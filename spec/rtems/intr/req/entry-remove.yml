@@ -110,7 +110,7 @@ post-conditions:
 
       if ( expected_entries > 0 ) {
         ctx->entry_counter = 0;
-        bsp_interrupt_handler_dispatch( ctx->test_vector );
+        bsp_interrupt_handler_dispatch_unchecked( ctx->test_vector );
         T_eq_u32( ctx->entry_counter, 0 );
       } else {
         rtems_interrupt_entry *first;
@@ -148,7 +148,7 @@ post-conditions:
 
       if ( ctx->installed ) {
         ctx->entry_counter = 0;
-        bsp_interrupt_handler_dispatch( ctx->test_vector );
+        bsp_interrupt_handler_dispatch_unchecked( ctx->test_vector );
         T_eq_u32( ctx->entry_counter, 1 );
       }
     text: |
