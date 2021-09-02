@@ -335,22 +335,26 @@ class _TestItem:
     def add_context(self, content: CContent) -> str:
         """ Adds the context to the content. """
         content.add(self.substitute_code(self["test-context-support"]))
-        if not self["test-context"] and (
-                not self["test-header"]
-                or not self["test-header"]["run-params"]):
+        default_members = CContent()
+        with default_members.indent():
+            self.add_default_context_members(default_members)
+        if not self["test-context"] and not default_members.lines:
             return "NULL"
         with content.doxygen_block():
             content.add_brief_description(
                 f"Test context for {self.name} test case.")
         content.append("typedef struct {")
+        gap = False
         with content.indent():
             for info in self["test-context"]:
                 content.add_description_block(
                     self.substitute_text(info["brief"]),
                     self.substitute_text(info["description"]))
                 content.add(f"{info['member'].strip()};")
-            self.add_default_context_members(content)
-        content.add([
+            gap = content.gap
+        content.gap = gap
+        content.add(default_members)
+        content.append([
             f"}} {self.context};", "", f"static {self.context}",
             f"  {self.ident}_Instance;"
         ])
