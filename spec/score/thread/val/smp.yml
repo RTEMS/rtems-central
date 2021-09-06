@@ -94,6 +94,11 @@ test-actions:
     code: |
       _Thread_Pin( executing );
 
+      /* We have to preempt the runner to end up in _Thread_Do_unpin() */
+      SetPriority( ctx->worker_c_id, PRIO_HIGH );
+      SendEvents( ctx->worker_c_id, EVENT_COUNT );
+      T_eq_u32( ctx->counter, 2 );
+
       cpu_self = _Thread_Dispatch_disable();
       CallWithinISR( Suspend, executing );
       _Thread_Unpin( executing, cpu_self );
