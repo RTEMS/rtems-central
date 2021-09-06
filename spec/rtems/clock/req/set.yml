@@ -27,6 +27,12 @@ post-conditions:
     text: |
       The return status of ${../if/set:/name} shall be
       ${../../status/if/invalid-clock:/name}.
+  - name: Hook
+    test-code: |
+      T_rsc( ctx->status, RTEMS_UNSATISFIED );
+    text: |
+      The return status of ${../if/set:/name} shall be derived from the status
+      returned by the TOD hook.
   test-epilogue: null
   test-prologue: null
 - name: Clock
@@ -49,7 +55,7 @@ post-conditions:
       to the values of the object referenced by the
       ${../if/set:/params[0]/name} parameter during
       the ${../if/set:/name} call.
-  - name: Unchanged
+  - name: Nop
     test-code: |
       T_rsc_success( ctx->get_tod_before_status );
       T_eq_u32( ctx->tod_after.year, ctx->tod_before.year );
@@ -79,7 +85,7 @@ post-conditions:
       The timer routine shall be executed once after the
       ${/glossary/clock-realtime:/term} has been set and before
       the execution of the ${../if/set:/name} call terminates.
-  - name: Uncalled
+  - name: Nop
     test-code: |
       T_eq_int( ctx->timer_routine_counter, 0 );
     text: |
@@ -254,20 +260,61 @@ pre-conditions:
       ${/c/if/null:/name}.
   test-epilogue: null
   test-prologue: null
+- name: Hook
+  states:
+  - name: None
+    test-code: |
+      ctx->register_hook = false;
+    text: |
+      While no TOD hook is registered.
+  - name: Ok
+    test-code: |
+      ctx->register_hook = true;
+      ctx->hook_status = STATUS_SUCCESSFUL;
+    text: |
+      While all TOD hooks invoked by the ${../if/set:/name} call return a
+      status code equal to ${/score/status/if/successful:/name}.
+  - name: NotOk
+    test-code: |
+      ctx->register_hook = true;
+      ctx->hook_status = STATUS_UNAVAILABLE;
+    text: |
+      While at least one TOD hook invoked by the ${../if/set:/name} call
+      returns a status code not equal to ${/score/status/if/successful:/name}.
+  test-epilogue: null
+  test-prologue: null
 rationale: null
 references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
+    TOD_Hook hook = {
+      .handler = TODHook
+    };
+
+    if ( ctx->register_hook ) {
+      _TOD_Hook_Register( &hook );
+    }
+
     ctx->get_tod_before_status = rtems_clock_get_tod( &ctx->tod_before );
     ctx->status = rtems_clock_set( ctx->target_tod );
     ctx->get_tod_after_status = rtems_clock_get_tod( &ctx->tod_after );
+
+    if ( ctx->register_hook ) {
+      _TOD_Hook_Unregister( &hook );
+    }
 test-brief: null
 test-cleanup: null
 test-context:
 - brief: null
   description: null
   member: rtems_status_code status
+- brief: null
+  description: null
+  member: bool register_hook
+- brief: null
+  description: null
+  member: Status_Control hook_status
 - brief: null
   description: null
   member: rtems_time_of_day *target_tod
@@ -300,6 +347,7 @@ test-description: null
 test-header: null
 test-includes:
 - rtems.h
+- rtems/score/todimpl.h
 test-local-includes: []
 test-prepare: |
   rtems_status_code status;
@@ -322,19 +370,21 @@ test-setup:
   description: null
 test-stop: null
 test-support: |
+  typedef ${.:/test-context-type} Context;
+
   static rtems_timer_service_routine _TOD_timer_routine(
     rtems_id   timer_id,
     void      *user_data
   )
   {
-    RtemsClockReqSet_Context *ctx = user_data;
+    Context *ctx = user_data;
     rtems_status_code status;
     ++ctx->timer_routine_counter;
     status = rtems_clock_get_tod( &ctx->timer_routine_tod );
     T_rsc_success( status );
   }
 
-  static void _TOD_prepare_timer( RtemsClockReqSet_Context *ctx )
+  static void _TOD_prepare_timer( Context *ctx )
   {
     rtems_status_code status;
     rtems_time_of_day tod = { 1988, 1, 1, 0, 0, 0, 0 };
@@ -350,6 +400,20 @@ test-support: |
       ctx
     );
     T_rsc_success( status );
+  }
+
+  static Status_Control TODHook(
+    TOD_Action             action,
+    const struct timespec *tod
+  )
+  {
+    Context *ctx;
+
+    ctx = T_fixture_context();
+    T_eq_int( action, TOD_ACTION_SET_CLOCK );
+    T_not_null( tod );
+
+    return ctx->hook_status;
   }
 test-target: testsuites/validation/tc-clock-set.c
 test-teardown:
@@ -368,7 +432,7 @@ transition-map:
   post-conditions:
     Status: Ok
     Clock: Set
-    Timer: Uncalled
+    Timer: Nop
   pre-conditions:
     ToD:
       - Valid
@@ -377,6 +441,9 @@ transition-map:
       - ValidLeap4
       - ValidLeap400
       - BeforeTimer
+    Hook:
+      - None
+      - Ok
 - enabled-by: true
   post-conditions:
     Status: Ok
@@ -386,19 +453,23 @@ transition-map:
     ToD:
       - AtTimer
       - AfterTimer
+    Hook:
+      - None
+      - Ok
 - enabled-by: true
   post-conditions:
     Status: InvAddr
-    Clock: Unchanged
-    Timer: Uncalled
+    Clock: Nop
+    Timer: Nop
   pre-conditions:
     ToD:
       - 'Null'
+    Hook: all
 - enabled-by: true
   post-conditions:
     Status: InvClk
-    Clock: Unchanged
-    Timer: Uncalled
+    Clock: Nop
+    Timer: Nop
   pre-conditions:
     ToD:
       - TooJung
@@ -414,4 +485,22 @@ transition-map:
       - InvLeap4
       - InvLeap100
       - InvLeap400
+    Hook: all
+- enabled-by: true
+  post-conditions:
+    Status: Hook
+    Clock: Nop
+    Timer: Nop
+  pre-conditions:
+    ToD:
+      - AtTimer
+      - AfterTimer
+      - Valid
+      - Youngest
+      - Oldest
+      - ValidLeap4
+      - ValidLeap400
+      - BeforeTimer
+    Hook:
+      - NotOk
 type: requirement
