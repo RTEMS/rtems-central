@@ -83,14 +83,6 @@ pre-conditions:
     text: |
       While the ${/glossary/clock-realtime:/term} indicates a
       date for a leap year with the value of 29th of February.
-  - name: Leap100
-    test-code: |
-      ctx->set_tod_value =
-        (rtems_time_of_day) { 2100, 2, 28, 23, 59, 59,
-        rtems_clock_get_ticks_per_second() - 1 };
-    text: |
-      While the ${/glossary/clock-realtime:/term} indicates a
-      date for a non-leap year with the value of 28th of February.
   - name: Leap400
     test-code: |
       ctx->set_tod_value =
@@ -108,11 +100,11 @@ pre-conditions:
   - name: Oldest
     test-code: |
       ctx->set_tod_value =
-        (rtems_time_of_day) { 2105, 12, 31, 23, 59, 59,
+        (rtems_time_of_day) { 2099, 12, 31, 23, 59, 59,
         rtems_clock_get_ticks_per_second() - 1 };
     text: |
       While the ${/glossary/clock-realtime:/term} indicates the
-      oldest date and time accepted (2105-12-31T23:59:59.999999999Z).
+      oldest date and time accepted (2099-12-31T23:59:59.999999999Z).
   - name: NotSet
     test-code: |
       ctx->isDef = false;
@@ -197,7 +189,6 @@ transition-map:
     ToD:
       - Arbitrary
       - Leap4
-      - Leap100
       - Leap400
       - Youngest
       - Oldest
@@ -211,7 +202,6 @@ transition-map:
     ToD:
       - Arbitrary
       - Leap4
-      - Leap100
       - Leap400
       - Youngest
       - Oldest

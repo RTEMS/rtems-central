@@ -102,24 +102,10 @@ pre-conditions:
   - name: ValidLeap4
     test-code: |
       ctx->target_tod_value =
-        (rtems_time_of_day) { 2104, 2, 29, 0, 0, 0, 0 };
+        (rtems_time_of_day) { 2096, 2, 29, 0, 0, 0, 0 };
     text: |
       While the ${../if/set:/params[0]/name} parameter references a
       date for a leap year with the value of 29th of February.
-  - name: ValidLeap100
-    test-code: |
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2100, 2, 28, 23, 59, 59, 0 };
-    text: |
-      While the ${../if/set:/params[0]/name} parameter references a
-      date for a non-leap century year with the value of 28th of February.
-  - name: ValidNoneLeap100
-    test-code: |
-      ctx->target_tod_value =
-        (rtems_time_of_day) { 2100, 3, 1, 0, 0, 0, 0 };
-    text: |
-      While the ${../if/set:/params[0]/name} parameter references a
-      date for a non-leap century year with the value of 1st of March.
   - name: ValidLeap400
     test-code: |
       ctx->target_tod_value =
@@ -137,11 +123,11 @@ pre-conditions:
   - name: Oldest
     test-code: |
       ctx->target_tod_value =
-        (rtems_time_of_day) { 2105, 12, 31, 23, 59, 59,
+        (rtems_time_of_day) { 2099, 12, 31, 23, 59, 59,
         rtems_clock_get_ticks_per_second() - 1 };
     text: |
       While the ${../if/set:/params[0]/name} parameter references the
-      oldest date and time accepted (2105-12-31T23:59:59.999999999Z).
+      oldest date and time accepted (2099-12-31T23:59:59.999999999Z).
   - name: TooJung
     test-code: |
       ctx->target_tod_value =
@@ -389,8 +375,6 @@ transition-map:
       - Youngest
       - Oldest
       - ValidLeap4
-      - ValidLeap100
-      - ValidNoneLeap100
       - ValidLeap400
       - BeforeTimer
 - enabled-by: true
