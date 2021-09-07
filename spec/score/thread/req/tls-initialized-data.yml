@@ -5,7 +5,7 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: ../if/group
-functional-type: capability
+functional-type: function
 rationale: null
 references: []
 requirement-type: functional

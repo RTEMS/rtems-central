@@ -10,6 +10,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  While the thread entry execution begins, the storage space of zero
-  initialized thread-local storage objects shall be cleared to zero.
+  Where the configured maximum thread-local storage size is equal to zero, the
+  thread-local storage allocation size shall be defined by the thread-local
+  storage size of the application executable.
 type: requirement
