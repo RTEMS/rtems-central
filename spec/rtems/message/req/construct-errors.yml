@@ -344,216 +344,67 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: Ok
-    Name: Valid
-    IdVar: Set
-  pre-conditions:
-    Area:
-    - Valid
-    AreaSize:
-    - Valid
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Valid
-    MaxSize:
-    - Valid
+    Status:
+    - if:
+        pre-conditions:
+          Config: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          Name: Invalid
+      then: InvName
+    - if:
+        pre-conditions:
+          Id: 'Null'
+      then: InvAddr
+    - if:
+        pre-conditions:
+          MaxPending: Zero
+      then: InvNum
+    - if:
+        pre-conditions:
+          MaxSize: Zero
+      then: InvSize
+    - if:
+        pre-conditions:
+          Free: 'No'
+      then: TooMany
+    - if:
+        pre-conditions:
+          MaxSize: Big
+      then: InvSize
+    - if:
+        pre-conditions:
+          MaxPending: Big
+      then: InvNum
+    - if:
+        pre-conditions:
+          Area: 'Null'
+      then: Unsat
+    - if:
+        pre-conditions:
+          AreaSize: Invalid
+      then: Unsat
+    - else: Ok
     Name:
-    - Valid
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvAddr
-    Name: Invalid
-    IdVar: Nop
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Valid
+    - else: Invalid
+    IdVar:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
   pre-conditions:
     Area: all
     AreaSize: all
-    Config:
-    - 'Null'
+    Config: all
     Id: all
     MaxPending: all
     MaxSize: all
     Name: all
     Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvName
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id: all
-    MaxPending: all
-    MaxSize: all
-    Name:
-    - Invalid
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvAddr
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - 'Null'
-    MaxPending: all
-    MaxSize: all
-    Name:
-    - Valid
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvNum
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Zero
-    MaxSize: all
-    Name:
-    - Valid
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Valid
-    - Big
-    MaxSize:
-    - Zero
-    Name:
-    - Valid
-    Free: all
-- enabled-by: true
-  post-conditions:
-    Status: TooMany
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Valid
-    - Big
-    MaxSize:
-    - Valid
-    - Big
-    Name:
-    - Valid
-    Free:
-    - 'No'
-- enabled-by: true
-  post-conditions:
-    Status: InvNum
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Big
-    MaxSize:
-    - Valid
-    Name:
-    - Valid
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: InvSize
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area: all
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Valid
-    - Big
-    MaxSize:
-    - Big
-    Name:
-    - Valid
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: Unsat
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area:
-    - 'Null'
-    AreaSize: all
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Valid
-    MaxSize:
-    - Valid
-    Name:
-    - Valid
-    Free:
-    - 'Yes'
-- enabled-by: true
-  post-conditions:
-    Status: Unsat
-    Name: Invalid
-    IdVar: Nop
-  pre-conditions:
-    Area:
-    - Valid
-    AreaSize:
-    - Invalid
-    Config:
-    - Valid
-    Id:
-    - Id
-    MaxPending:
-    - Valid
-    MaxSize:
-    - Valid
-    Name:
-    - Valid
-    Free:
-    - 'Yes'
 type: requirement
