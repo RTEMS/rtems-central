@@ -40,7 +40,9 @@ test-actions:
     id = CreateTask( "BENV", PRIO_HIGH );
     StartTask( id, ISRDisabledThreadDispatchTask, NULL );
 
+    #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
     if ( rtems_configuration_get_maximum_processors() > 1 ) {
+    #endif
       T_eq_uint( GetFatalCounter(), counter + 1 );
       T_eq_int( fatal_info.source, INTERNAL_ERROR_CORE );
       T_false( fatal_info.always_set_to_false );
@@ -48,16 +50,20 @@ test-actions:
         fatal_info.code,
         INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
       );
+    #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
     } else {
       T_eq_uint( GetFatalCounter(), counter );
     }
+    #endif
 
     RestoreRunnerPriority();
     SetFatalExtension( NULL );
   checks: []
   links:
   - role: validation
-    uid: ../thread/req/fatal-bad-thread-dispatch-environment
+    uid: ../thread/req/fatal-bad-thread-dispatch-environment-ipi
+  - role: validation
+    uid: ../thread/req/fatal-bad-thread-dispatch-environment-robust
   - role: validation
     uid: ../thread/req/thread-dispatch-isr-disabled
 - action-brief: |
