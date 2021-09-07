@@ -6,7 +6,7 @@ glossary-type: term
 links:
 - role: glossary-member
   uid: /glossary-requirements
-term: First message
+term: first message
 text: |
   Messages are stored - and kept - in a ${/glossary/messagequeue:/term}
   in a defined order: Mgs[0], Mgs[1], Mgs[2] till Msg[N-1] when N
@@ -20,14 +20,14 @@ text: |
   place so that "old" message Msg[i] becomes "new" Msg[i-1].
 
   Messages are stored by ${../if/send:/name} in a
-  ${/glossary/messagequeue:/term} in {/glossary/fifo:/term} order
+  ${/glossary/messagequeue:/term} in ${/glossary/fifo:/term} order
   (if no ${../if/receive:/name} directive is waiting to receive a
   message).  ${../if/send:/name} adds the message as "new" last message
   Msg[N] to the queue and the number of messages in the queue increases
   by one: N+1.
 
   In contrast, messages are stored by ${../if/urgent:/name} in a
-  ${/glossary/messagequeue:/term} in {/glossary/lifo:/term} order
+  ${/glossary/messagequeue:/term} in ${/glossary/lifo:/term} order
   (if no ${../if/receive:/name} directive is waiting to receive a
   message).  ${../if/urgent:/name} adds the message as "new" first message
   Msg[0] to the queue. The messages which have been in the queue before

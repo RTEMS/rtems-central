@@ -248,6 +248,24 @@ test-actions:
     - role: validation
       uid: ../req/semaphore-class
   links: []
+- action-brief: |
+    Check the value of ${../if/default:/name}.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      Check ${../if/default:/name} equals
+      ``${../if/fifo:/name} | ${../if/local:/name}``.
+    code: |
+      T_step_eq_int(
+        ${step},
+        ${../if/default:/name},
+        ${../if/fifo:/name} | ${../if/local:/name}
+      );
+    links:
+    - role: validation
+      uid: ../req/default-equals
+  links: []
 test-brief: |
   Tests the attribute constants of the Classic API.
 test-context: []

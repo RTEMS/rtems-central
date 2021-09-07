@@ -329,9 +329,10 @@ test-context:
     uint8_t send_message[ MAXIMUM_MESSAGE_SIZE ]
 - brief: |
     This member specifies the directive to be called as action.
-  description: This is either ${../if/send:/name} or ${../if/urgent:/name}.
+  description: |
+    This is either ${../if/send:/name} or ${../if/urgent:/name}.
   member:
-     rtems_status_code (*action)( rtems_id id, const void *buffer, size_t size )
+    rtems_status_code (*action)( rtems_id id, const void *buffer, size_t size )
 - brief: |
     This member specifies the ${../if/send:/params[0]/name} parameter
     for the action.

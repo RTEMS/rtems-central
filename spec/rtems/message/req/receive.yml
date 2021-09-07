@@ -644,6 +644,8 @@ test-support: |
     size_t message_size
   )
   {
+    (void) message_buffer;
+    (void) message_size;
     T_rsc( status, RTEMS_UNSATISFIED  );
   }
 

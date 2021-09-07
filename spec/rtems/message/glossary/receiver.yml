@@ -6,12 +6,12 @@ glossary-type: term
 links:
 - role: glossary-member
   uid: /glossary-requirements
-term: Receiver
+term: receiver
 text: |
-  In this particular case, *receiver* shall be a task which invoked
-  directive ${../if/receice:/name} on the empty ${/glossary/messagequeue:/term}
-  with ${../if/receive:/params[3]/name} set to ${../../option/if/wait:/name}
-  and which is still waiting to receive a message when a
-  ${../if/send:/name} or ${../if/urgent:/name} directive is invoked on
-  that ${/glossary/messagequeue:/term}.
+  In this particular case, *receiver* shall be a ${/glossary/task:/term}
+  which has invoked directive ${../if/receive:/name} with
+  ${../if/receive:/params[3]/name} set to ${../../option/if/wait:/name} on an
+  empty ${/glossary/messagequeue:/term} and which is still waiting to receive
+  a message when a ${../if/send:/name} or ${../if/urgent:/name} directive
+  is invoked on that ${/glossary/messagequeue:/term}.
 type: glossary

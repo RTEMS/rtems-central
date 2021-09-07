@@ -6,7 +6,7 @@ glossary-type: term
 links:
 - role: glossary-member
   uid: /glossary-requirements
-term: Last message
+term: last message
 text: |
   See ${../glossary/firstmessage:/term}.
 type: glossary

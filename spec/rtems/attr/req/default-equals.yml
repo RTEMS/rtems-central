@@ -4,12 +4,12 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: ../../option/if/default
+  uid: ../if/default
 non-functional-type: interface
 rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The value of macro ${../../option/if/default:/name} shall be equal
-  to the value of the expression ``RTEMS_WAIT``.
+  The value of macro ${../if/default:/name} shall be equal to the value
+  of expression ``${../if/fifo:/name} | ${../if/local:/name}``.
 type: requirement

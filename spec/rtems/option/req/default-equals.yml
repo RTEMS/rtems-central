@@ -4,15 +4,12 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: ../../attr/if/default
+  uid: ../if/default
 non-functional-type: interface
 rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The value of macro ${../../attr/if/default:/name} shall be equal to the value
-  of the expression ``RTEMS_FIFO | RTEMS_LOCAL``.
-
-  Note: ${../../attr/if/global:/name} is not part of the space profile
-  because no remote ${/glossary/node:/plural} are supported.
+  The value of macro ${../if/default:/name} shall be equal
+  to the value of expression ``${../if/wait:/name}``.
 type: requirement
