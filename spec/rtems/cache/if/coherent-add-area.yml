@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Adds a cache coherent memory area to the cache coherent allocator.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -19,7 +19,7 @@ interface-type: function
 links:
 - role: interface-placement
   uid: header
-- role: interface-ingroup
+- role: interface-ingroup-hidden
   uid: group
 - role: constraint
   uid: /constraint/directive-ctx-devinit
@@ -30,12 +30,14 @@ links:
 name: rtems_cache_coherent_add_area
 notes: null
 params:
-- description: '%'
+- description: |
+    is the begin address of the cache coherent memory area to add.
   dir: null
-  name: area_begin
-- description: '%'
+  name: begin
+- description: |
+    is the size in bytes of the cache coherent memory area to add.
   dir: null
-  name: area_size
+  name: size
 return:
   return: null
   return-values: []

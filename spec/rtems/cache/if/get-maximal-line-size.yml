@@ -1,8 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the maximal cache line size in bytes of all caches (data, instruction,
+  or unified).
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016 Pavel Pisa
 definition:
   default:
     attributes: null
@@ -27,6 +29,11 @@ name: rtems_cache_get_maximal_line_size
 notes: null
 params: []
 return:
-  return: null
-  return-values: []
+  return: |
+    Returns the maximal cache line size in bytes of all caches (data,
+    instruction, or unified).
+  return-values:
+  - description: |
+      There is no cache present.
+    value: 0
 type: interface

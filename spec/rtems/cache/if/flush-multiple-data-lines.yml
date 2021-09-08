@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Flushes the data cache lines covering the memory area.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -12,7 +12,9 @@ definition:
     - ${/c/if/size_t:/name} ${.:/params[1]/name}
     return: void
   variants: []
-description: null
+description: |
+  Dirty data cache lines covering the area are transfered to memory.  Depending
+  on the cache implementation this may mark the lines as invalid.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -28,10 +30,12 @@ links:
 name: rtems_cache_flush_multiple_data_lines
 notes: null
 params:
-- description: '%'
+- description: |
+    is the begin address of the memory area to flush.
   dir: null
-  name: addr
-- description: '%'
+  name: begin
+- description: |
+    is the size in bytes of the memory area to flush.
   dir: null
   name: size
 return:

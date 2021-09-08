@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the instruction cache line size in bytes.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -27,6 +27,11 @@ name: rtems_cache_get_instruction_line_size
 notes: null
 params: []
 return:
-  return: null
-  return-values: []
+  return: |
+    Returns the instruction cache line size in bytes.  For multi-level caches
+    this is the maximum of the cache line sizes of all levels.
+  return-values:
+  - description: |
+      There is no instruction cache present.
+    value: 0
 type: interface

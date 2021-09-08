@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Invalidates the instruction cache lines covering the memory area.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -12,7 +12,9 @@ definition:
     - ${/c/if/size_t:/name} ${.:/params[1]/name}
     return: void
   variants: []
-description: null
+description: |
+  The cache lines covering the area are marked as invalid.  A later
+  instruction fetch from the area will result in a load from memory.
 enabled-by: true
 index-entries: []
 interface-type: function
@@ -26,12 +28,16 @@ links:
 - role: constraint
   uid: /constraint/directive-no-preempt
 name: rtems_cache_invalidate_multiple_instruction_lines
-notes: null
+notes: |
+  In SMP configurations, on processors without instruction cache snooping, this
+  operation will invalidate the instruction cache lines on all processors.
 params:
-- description: '%'
+- description: |
+    is the begin address of the memory area to invalidate.
   dir: null
-  name: addr
-- description: '%'
+  name: begin
+- description: |
+    is the size in bytes of the memory area to invalidate.
   dir: null
   name: size
 return:

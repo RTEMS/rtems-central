@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Gets the instruction cache size in bytes for the cache level.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2014, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default:
     attributes: null
@@ -27,10 +27,16 @@ links:
 name: rtems_cache_get_instruction_cache_size
 notes: null
 params:
-- description: '%'
+- description: |
+    is the requested instruction cache level.  The cache level zero specifies
+    the entire instruction cache.
   dir: null
   name: level
 return:
-  return: null
-  return-values: []
+  return: |
+    Returns the instruction cache size in bytes of the requested cache level.
+  return-values:
+  - description: |
+      There is no instruction cache present at the requested cache level.
+    value: 0
 type: interface

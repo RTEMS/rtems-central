@@ -1,8 +1,9 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Ensures necessary synchronization required after code changes.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2016 Pavel Pisa
 definition:
   default:
     attributes: null
@@ -26,14 +27,21 @@ links:
 - role: constraint
   uid: /constraint/directive-no-preempt
 name: rtems_cache_instruction_sync_after_code_change
-notes: null
+notes: |
+  When code is loaded or modified, then most systems require synchronization
+  instructions to update the instruction caches so that the loaded or modified
+  code is fetched.  For example, systems with separate data and instruction
+  caches or systems without instruction cache snooping.  The directives should
+  be used by run time loader for example.
 params:
-- description: '%'
+- description: |
+    is the begin address of the code area to synchronize.
   dir: null
-  name: code_addr
-- description: '%'
+  name: begin
+- description: |
+    is the size in bytes of the code area to synchronize.
   dir: null
-  name: n_bytes
+  name: size
 return:
   return: null
   return-values: []
