@@ -1,0 +1,120 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: RTEMS_SMP
+links: []
+test-actions:
+- action-brief: |
+    Create a worker thread and a MrsP mutex.  Use the mutex and the worker to
+    perform a bad sticky thread queue enqueue.
+  action-code: |
+    rtems_status_code sc;
+    rtems_id          worker_id;
+    rtems_id          scheduler_b_id;
+
+    ctx->done = false;
+
+    sc = rtems_scheduler_ident( TEST_SCHEDULER_B_NAME, &scheduler_b_id );
+    T_rsc_success( sc );
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'M', 'U', 'T', 'X' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_HIGH,
+      &ctx->mutex_id
+    );
+    T_rsc_success( sc );
+
+    worker_id = CreateTask( "WORK", PRIO_NORMAL );
+    SetScheduler( worker_id, scheduler_b_id, PRIO_NORMAL );
+
+    ObtainMutex( ctx->mutex_id );
+    SetFatalExtension( BadEnqueueFatal );
+    StartTask( worker_id, BadEnqueueTask, ctx );
+
+    while ( !ctx->done ) {
+      /* Wait */
+    }
+
+    DeleteTask( worker_id );
+    ReleaseMutex( ctx->mutex_id );
+    DeleteMutex( ctx->mutex_id );
+  checks: []
+  links:
+  - role: validation
+    uid: /score/tq/req/fatal-enqueue-sticky-from-bad-state
+test-brief: |
+  Tests SMP-specific semaphore behaviour.
+test-context:
+- brief: |
+    This member contains the mutex identifier.
+  description: null
+  member: |
+    rtems_id mutex_id;
+- brief: |
+    If this member is true, then the worker is done.
+  description: null
+  member: |
+    volatile bool done
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/threaddispatch.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup:
+  brief: null
+  code: |
+    SetSelfPriority( PRIO_NORMAL );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static void BadEnqueueFatal(
+    rtems_fatal_source source,
+    bool               always_set_to_false,
+    rtems_fatal_code   code
+  )
+  {
+    Per_CPU_Control *cpu_self;
+    Context         *ctx;
+
+    T_eq_int( source, INTERNAL_ERROR_CORE );
+    T_false( always_set_to_false );
+    T_eq_ulong(
+      code,
+      INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
+    );
+
+    SetFatalExtension( NULL );
+
+    cpu_self = _Per_CPU_Get();
+    _Thread_Dispatch_unnest( cpu_self );
+    _Thread_Dispatch_unnest( cpu_self );
+
+    ctx = T_fixture_context();
+    ctx->done = true;
+    SuspendSelf();
+  }
+
+  static void BadEnqueueTask( rtems_task_argument arg )
+  {
+    Context *ctx;
+
+    ctx = (Context *) arg;
+    (void) _Thread_Dispatch_disable();
+    ObtainMutex( ctx->mutex_id );
+  }
+test-target: testsuites/validation/tc-sem-smp.c
+test-teardown:
+  brief: null
+  code: |
+    RestoreRunnerPriority();
+  description: null
+type: test-case
