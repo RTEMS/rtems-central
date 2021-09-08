@@ -771,7 +771,9 @@ test-teardown:
     DeleteWakeupSema( ctx->runner_wakeup );
     RestoreRunnerPriority();
   description: null
-text: ${.:text-template}
+text: |
+  When the event send and receive directive variants are called in the
+  specified system condition.
 transition-map:
 - enabled-by: true
   post-conditions:

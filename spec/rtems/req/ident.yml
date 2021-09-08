@@ -199,7 +199,8 @@ test-stop: null
 test-support: null
 test-target: testsuites/validation/tr-object-ident.c
 test-teardown: null
-text: ${.:text-template}
+text: |
+  When the specified object identification directive is called.
 transition-map:
 - enabled-by: true
   post-conditions:
