@@ -17,4 +17,6 @@ links:
   uid: group
 name: rtems_fatal_code
 notes: null
+params: []
+return: null
 type: interface

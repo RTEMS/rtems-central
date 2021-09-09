@@ -17,4 +17,6 @@ links:
   uid: group
 name: rtems_stack_free_hook
 notes: null
+params: []
+return: null
 type: interface

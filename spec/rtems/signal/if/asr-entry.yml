@@ -22,4 +22,6 @@ links:
   uid: group
 name: rtems_asr_entry
 notes: null
+params: []
+return: null
 type: interface

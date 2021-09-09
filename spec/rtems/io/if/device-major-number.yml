@@ -20,4 +20,6 @@ name: rtems_device_major_number
 notes: |
   The major number of a device is determined by ${register-driver:/name} and
   the application configuration (see ${/acfg/if/max-drivers:/name}) .
+params: []
+return: null
 type: interface

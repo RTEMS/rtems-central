@@ -20,4 +20,6 @@ links:
   uid: group
 name: rtems_isr_entry
 notes: null
+params: []
+return: null
 type: interface

@@ -24,4 +24,6 @@ links:
   uid: group
 name: rtems_interrupt_per_handler_routine
 notes: null
+params: []
+return: null
 type: interface

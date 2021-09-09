@@ -216,6 +216,13 @@ def _get_register_name(definition: Dict[str, Any]) -> Tuple[str, str]:
     return name, alias
 
 
+_CONSTRAINT_TARGET = {
+    "interface/function": "this directive",
+    "interface/macro": "this directive",
+    "interface/typedef": "functions of this type",
+}
+
+
 class Node:
     """ Nodes of a header file. """
 
@@ -609,9 +616,10 @@ class Node:
             ]
             if constraints:
                 constraint_content = CContent()
+                target = _CONSTRAINT_TARGET[item.type]
                 constraint_content.add_list(
                     constraints,
-                    "The following constraints apply to this directive:")
+                    f"The following constraints apply to {target}:")
                 content.add_paragraph("Constraints", constraint_content)
         return content
 

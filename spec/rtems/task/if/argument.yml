@@ -19,4 +19,6 @@ name: rtems_task_argument
 notes: |
   The type is an architecture-specific unsigned integer type which is large
   enough to represent pointer values and 32-bit unsigned integers.
+params: []
+return: null
 type: interface

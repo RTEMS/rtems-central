@@ -19,4 +19,6 @@ links:
   uid: gb
 name: Integer3
 notes: null
+params: []
+return: null
 type: interface

@@ -18,4 +18,6 @@ links:
   uid: group
 name: rtems_mpci_initialization_entry
 notes: null
+params: []
+return: null
 type: interface

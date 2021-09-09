@@ -18,4 +18,6 @@ links:
   uid: group
 name: rtems_exception_frame
 notes: null
+params: []
+return: null
 type: interface

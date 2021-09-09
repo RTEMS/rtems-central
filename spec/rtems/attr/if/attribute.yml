@@ -19,4 +19,6 @@ links:
 name: rtems_attribute
 notes: |
   Attributes are primarily used when creating objects.
+params: []
+return: null
 type: interface

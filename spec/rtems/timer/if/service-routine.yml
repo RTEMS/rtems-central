@@ -20,4 +20,6 @@ links:
   uid: group
 name: rtems_timer_service_routine
 notes: null
+params: []
+return: null
 type: interface

@@ -23,4 +23,6 @@ links:
   uid: group
 name: rtems_device_driver_entry
 notes: null
+params: []
+return: null
 type: interface

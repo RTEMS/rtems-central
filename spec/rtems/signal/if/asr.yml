@@ -21,4 +21,6 @@ name: rtems_asr
 notes: |
   This type can be used to document asynchronous signal routines in the source
   code.
+params: []
+return: null
 type: interface

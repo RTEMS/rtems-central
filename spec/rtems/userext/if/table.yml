@@ -17,4 +17,6 @@ links:
   uid: group
 name: rtems_extensions_table
 notes: null
+params: []
+return: null
 type: interface

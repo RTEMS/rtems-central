@@ -17,4 +17,6 @@ links:
   uid: group
 name: rtems_interrupt_handler
 notes: null
+params: []
+return: null
 type: interface

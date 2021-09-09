@@ -18,4 +18,6 @@ links:
   uid: group
 name: rtems_interrupt_lock
 notes: null
+params: []
+return: null
 type: interface

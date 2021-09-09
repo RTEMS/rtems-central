@@ -17,4 +17,6 @@ links:
   uid: group
 name: rtems_task_begin_extension
 notes: null
+params: []
+return: null
 type: interface

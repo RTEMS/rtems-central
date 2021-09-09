@@ -8,4 +8,6 @@ links:
 - role: interface-placement
   uid: math
 name: float_t
+params: []
+return: null
 type: interface

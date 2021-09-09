@@ -19,4 +19,6 @@ links:
   uid: group
 name: rtems_event_set
 notes: null
+params: []
+return: null
 type: interface

@@ -19,4 +19,6 @@ links:
 name: rtems_device_minor_number
 notes: |
   The minor number of devices is managed by the device driver.
+params: []
+return: null
 type: interface

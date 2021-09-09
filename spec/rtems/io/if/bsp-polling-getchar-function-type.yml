@@ -17,4 +17,6 @@ links:
   uid: group-3
 name: BSP_polling_getchar_function_type
 notes: null
+params: []
+return: null
 type: interface

@@ -20,4 +20,6 @@ links:
   uid: group
 name: rtems_name
 notes: null
+params: []
+return: null
 type: interface

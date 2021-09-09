@@ -19,4 +19,6 @@ links:
   uid: group
 name: rtems_task
 notes: null
+params: []
+return: null
 type: interface

@@ -30,6 +30,12 @@ spec-info:
       notes:
         description: null
         spec-type: interface-notes
+      params:
+        description: null
+        spec-type: interface-param-list
+      return:
+        description: null
+        spec-type: interface-return-directive
     description: |
       This set of attributes specifies a typedef.
     mandatory-attributes: all
