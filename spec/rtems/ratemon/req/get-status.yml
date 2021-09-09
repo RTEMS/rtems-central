@@ -464,6 +464,7 @@ test-prepare: |
   ctx->consumed.tv_sec  = 0;
   ctx->consumed.tv_nsec = 0;
   ctx->postponed_jobs_count = 0;
+  TimecounterTick();
 test-setup:
   brief: null
   code: |
