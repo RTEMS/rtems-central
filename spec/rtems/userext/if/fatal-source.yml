@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  This enumeration represents system termination sources.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: ${/score/interr/if/source:/name} ${.:/name}
   variants: []
@@ -16,7 +16,9 @@ links:
 - role: interface-ingroup
   uid: group
 name: rtems_fatal_source
-notes: null
+notes: |
+  The system termination code may provide additional information depending on
+  the system termination source, see ${fatal-code:/name}.
 params: []
 return: null
 type: interface

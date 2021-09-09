@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  Task exitted extensions are invoked when a task entry returns.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2009, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: ${/score/userext/if/thread-exitted:/name} ${.:/name}
   variants: []
@@ -15,8 +15,16 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/thread-dispatching-enabled
 name: rtems_task_exitted_extension
-notes: null
-params: []
+notes: |
+  The task exitted extensions are invoked in
+  ${/glossary/extension-forward-order:/term}.
+params:
+- description: |
+    is the ${/glossary/tcb:/term} of the executing thread.
+  dir: null
+  name: executing
 return: null
 type: interface

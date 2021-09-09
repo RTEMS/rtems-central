@@ -8,7 +8,7 @@ copyrights:
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 description: null
 enabled-by: true
-identifier: RTEMSAPIClassicUserext
+identifier: RTEMSAPIClassicUserExt
 index-entries: []
 interface-type: group
 links:

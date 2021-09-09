@@ -1,8 +1,10 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: '%'
+brief: |
+  The extensions table contains a set of extensions which may be registered in
+  the system through the ${/acfg/if/initial-extensions:/name} application
+  configuration option or the ${../if/create:/name} directive.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-- Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
   default: ${/score/userext/if/table:/name} ${.:/name}
   variants: []
