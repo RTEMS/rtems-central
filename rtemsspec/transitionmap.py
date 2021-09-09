@@ -467,6 +467,11 @@ class TransitionMap:
             variant = self._map_post_cond(map_idx, co_idx, variant)
         return variant
 
+    def _update_pre_co_summary(self, variant: Transition) -> None:
+        self.pre_co_summary = tuple(
+            a + b for a, b in zip(self.pre_co_summary, (variant.skip, ) +
+                                  variant.pre_cond_na))
+
     def _add_variant(self, transition_map: _TransitionMap, map_idx: int,
                      variant: Transition) -> None:
         if transition_map[map_idx]:
@@ -479,6 +484,7 @@ class TransitionMap:
                         # some pre-conditions.  It makes it also easier to skip
                         # pre-conditon states which are controlled by build
                         # options.
+                        self._update_pre_co_summary(variant)
                         transition_map[map_idx].replace(index, variant)
                         return
                     raise ValueError(
@@ -499,9 +505,7 @@ class TransitionMap:
                 f"{self._item.spec} is the first variant for "
                 f"{{{self._map_index_to_pre_conditions(map_idx)}}} "
                 "and it is not enabled by default")
-        self.pre_co_summary = tuple(
-            a + b for a, b in zip(self.pre_co_summary, (variant.skip, ) +
-                                  variant.pre_cond_na))
+        self._update_pre_co_summary(variant)
         transition_map[map_idx].add(variant)
 
     def _add_transitions(self, transition_map: _TransitionMap,
