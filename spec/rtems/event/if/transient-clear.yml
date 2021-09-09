@@ -34,7 +34,5 @@ links:
 name: rtems_event_transient_clear
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

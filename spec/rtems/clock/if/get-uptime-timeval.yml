@@ -39,7 +39,5 @@ params:
     pointer shall be valid, otherwise the behaviour is undefined.
   dir: out
   name: uptime
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

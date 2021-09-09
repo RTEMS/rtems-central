@@ -32,7 +32,5 @@ params:
     one).
   dir: null
   name: _ap_pos
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

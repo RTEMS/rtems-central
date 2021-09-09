@@ -33,7 +33,5 @@ params:
 - description: is the identifier of the task to receive the transient event.
   dir: null
   name: id
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

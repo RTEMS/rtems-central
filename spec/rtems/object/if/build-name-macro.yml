@@ -31,7 +31,5 @@ params:
 - description: null
   dir: null
   name: _c4
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

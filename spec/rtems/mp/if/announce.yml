@@ -37,7 +37,5 @@ notes: |
 
   This directive does not generate activity on remote nodes.
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

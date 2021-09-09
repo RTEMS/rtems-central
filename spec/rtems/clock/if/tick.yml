@@ -23,7 +23,5 @@ notes: |
   The directive is a legacy interface.  It should not be called by applications
   directly.  A ${/glossary/clock-driver:/term} may call this directive.
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

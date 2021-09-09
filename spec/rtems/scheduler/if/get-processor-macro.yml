@@ -17,7 +17,5 @@ links:
 name: rtems_scheduler_get_processor
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

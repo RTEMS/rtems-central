@@ -21,7 +21,5 @@ links:
 name: Func5
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

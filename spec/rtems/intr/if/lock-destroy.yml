@@ -33,7 +33,5 @@ params:
     is the ISR lock to destroy.
   dir: inout
   name: _lock
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

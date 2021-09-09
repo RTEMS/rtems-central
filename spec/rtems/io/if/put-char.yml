@@ -37,7 +37,5 @@ params:
     is an unused argument.
   dir: null
   name: unused
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

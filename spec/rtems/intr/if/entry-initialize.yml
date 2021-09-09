@@ -52,7 +52,5 @@ params:
     is the descriptive information for the entry.
   dir: null
   name: info
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

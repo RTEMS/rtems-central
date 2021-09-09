@@ -39,7 +39,5 @@ params:
 - description: is the event set to send.
   dir: null
   name: event_in
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

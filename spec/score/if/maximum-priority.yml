@@ -20,7 +20,5 @@ links:
 name: _RTEMS_Maximum_priority
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

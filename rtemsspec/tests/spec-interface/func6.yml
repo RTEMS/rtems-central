@@ -23,7 +23,5 @@ params:
 - description: null
   dir: null
   name: Param0
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

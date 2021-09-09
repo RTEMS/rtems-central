@@ -29,7 +29,5 @@ params:
     is the variable to obfuscate.
   dir: null
   name: _var
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

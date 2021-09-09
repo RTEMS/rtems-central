@@ -27,7 +27,5 @@ params:
     is the allocation size parameter index (starting with one).
   dir: null
   name: _index
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

@@ -51,7 +51,5 @@ params:
 - description: is the fourth character of the object name.
   dir: out
   name: c4
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

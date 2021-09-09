@@ -20,6 +20,7 @@ spec-info:
     description: |
       This set of attributes specifies an interface return.
     mandatory-attributes: all
+  none: null
 spec-name: Interface Return Directive
 spec-type: interface-return-directive
 type: spec

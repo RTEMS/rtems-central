@@ -33,7 +33,5 @@ params:
     is a pointer returned by ${coherent-allocate:/name}.
   dir: null
   name: ptr
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

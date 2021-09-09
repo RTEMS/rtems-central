@@ -26,7 +26,5 @@ params:
     is the section name as a string.
   dir: null
   name: _section
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

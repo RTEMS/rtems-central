@@ -51,7 +51,5 @@ params:
     is the interrupt server request to submit.
   dir: inout
   name: request
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

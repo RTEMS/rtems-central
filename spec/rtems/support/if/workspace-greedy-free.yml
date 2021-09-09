@@ -36,7 +36,5 @@ params:
     ${workspace-greedy-allocate-all-except-largest:/name}.
   dir: null
   name: opaque
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

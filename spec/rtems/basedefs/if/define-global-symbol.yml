@@ -39,7 +39,5 @@ params:
     understood by the assembler.
   dir: null
   name: _value
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

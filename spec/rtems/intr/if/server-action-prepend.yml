@@ -52,8 +52,8 @@ params:
   dir: inout
   name: entry
 - description: |
-   is the interrupt server action to initialize and prepend to the list of
-   actions of the entry.
+    is the interrupt server action to initialize and prepend to the list of
+    actions of the entry.
   dir: out
   name: action
 - description: |
@@ -64,7 +64,5 @@ params:
     is the interrupt handler argument to set in the action.
   dir: null
   name: arg
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

@@ -40,7 +40,5 @@ params:
     is the size in bytes of the memory area to invalidate.
   dir: null
   name: size
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

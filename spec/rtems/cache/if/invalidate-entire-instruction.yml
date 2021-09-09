@@ -26,7 +26,5 @@ links:
 name: rtems_cache_invalidate_entire_instruction
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

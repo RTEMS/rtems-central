@@ -594,8 +594,8 @@ class Node:
                 content.add_param_description(item["params"],
                                               self.substitute_text)
             content.doxyfy(self.substitute_text(item["description"]))
-            if "return" in item:
-                ret = item["return"]
+            ret = item.get("return", None)
+            if ret:
                 for retval in ret["return-values"]:
                     content.wrap(self.substitute_text(retval["description"]),
                                  initial_indent=self.substitute_text(

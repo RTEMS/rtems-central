@@ -32,7 +32,5 @@ notes: |
   Errors in the initialization sequence are usually fatal and lead to a system
   termination.
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

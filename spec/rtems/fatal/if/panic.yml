@@ -50,7 +50,5 @@ params:
     is a list of optional parameters required by the message format.
   dir: null
   name: '...'
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

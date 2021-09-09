@@ -29,19 +29,17 @@ links:
   uid: ../constraint/no-smp
 name: rtems_interrupt_flash
 notes: |
-    The ${.:/params[0]/name} parameter value must be obtained by a previous
-    call to ${disable:/name} or ${flash:/name}.  Using an otherwise obtained
-    value is undefined behaviour.
+  The ${.:/params[0]/name} parameter value must be obtained by a previous
+  call to ${disable:/name} or ${flash:/name}.  Using an otherwise obtained
+  value is undefined behaviour.
 
-    Historically, the interrupt flash directive was heavily used in the
-    operating system implementation.  However, this is no longer the case.  The
-    interrupt flash directive is provided for backward compatibility reasons.
+  Historically, the interrupt flash directive was heavily used in the
+  operating system implementation.  However, this is no longer the case.  The
+  interrupt flash directive is provided for backward compatibility reasons.
 params:
 - description: |
     is the previous interrupt level.
   dir: inout
   name: _isr_cookie
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

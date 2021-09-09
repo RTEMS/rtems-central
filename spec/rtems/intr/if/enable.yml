@@ -43,7 +43,5 @@ params:
     a previous call to ${disable:/name} or ${flash:/name}.
   dir: in
   name: _isr_cookie
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

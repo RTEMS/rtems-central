@@ -21,7 +21,5 @@ links:
 name: _Assert_Unreachable
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

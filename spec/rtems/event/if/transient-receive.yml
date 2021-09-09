@@ -42,7 +42,5 @@ params:
 - description: is the optional timeout in clock ticks.
   dir: null
   name: ticks
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

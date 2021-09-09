@@ -21,7 +21,5 @@ params:
 - description: null
   dir: null
   name: _id
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

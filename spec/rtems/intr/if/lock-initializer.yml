@@ -26,7 +26,5 @@ params:
     the system was built with profiling support enabled.
   dir: null
   name: _name
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

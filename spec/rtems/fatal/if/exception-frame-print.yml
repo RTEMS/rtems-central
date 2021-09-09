@@ -32,7 +32,5 @@ params:
     is the reference to the exception frame to print.
   dir: null
   name: frame
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

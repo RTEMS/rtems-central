@@ -56,7 +56,5 @@ params:
     lock by calling ${lock-release-isr:/name}.
   dir: out
   name: _lock_context
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

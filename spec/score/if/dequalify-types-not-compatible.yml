@@ -31,7 +31,5 @@ links:
 name: RTEMS_DEQUALIFY_types_not_compatible
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

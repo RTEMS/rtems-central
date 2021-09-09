@@ -49,7 +49,5 @@ notes: |
         (void) pthread_exit( NULL);
       }
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

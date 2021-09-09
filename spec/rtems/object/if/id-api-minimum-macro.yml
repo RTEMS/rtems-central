@@ -18,7 +18,5 @@ links:
 name: rtems_object_id_api_minimum
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

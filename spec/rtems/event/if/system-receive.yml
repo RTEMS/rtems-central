@@ -53,7 +53,5 @@ params:
     in the referenced event set if the operation was successful.
   dir: null
   name: event_out
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

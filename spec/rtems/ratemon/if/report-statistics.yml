@@ -31,7 +31,5 @@ links:
 name: rtems_rate_monotonic_report_statistics
 notes: null
 params: []
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

@@ -73,7 +73,5 @@ params:
     previous interrupt level.
   dir: out
   name: _isr_cookie
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

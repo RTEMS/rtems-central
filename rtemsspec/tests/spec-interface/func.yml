@@ -52,7 +52,5 @@ params:
 - description: null
   dir: null
   name: Param4
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

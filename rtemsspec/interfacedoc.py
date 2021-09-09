@@ -187,18 +187,17 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
         content.add(".. rubric:: DESCRIPTION:")
         content.wrap(mapper.substitute(item["description"]))
     ret = item["return"]
-    if ret["return"] or ret["return-values"]:
+    if ret:
         content.add(".. rubric:: RETURN VALUES:")
-        if ret["return-values"]:
-            for retval in ret["return-values"]:
-                if isinstance(retval["value"], str):
-                    value = mapper.substitute(str(retval["value"]))
-                else:
-                    value = f"``{str(retval['value'])}``"
-                content.add_definition_item(value,
-                                            mapper.substitute(
-                                                retval["description"]),
-                                            wrap=True)
+        for retval in ret["return-values"]:
+            if isinstance(retval["value"], str):
+                value = mapper.substitute(str(retval["value"]))
+            else:
+                value = f"``{str(retval['value'])}``"
+            content.add_definition_item(value,
+                                        mapper.substitute(
+                                            retval["description"]),
+                                        wrap=True)
         content.wrap(mapper.substitute(ret["return"]))
     if item["notes"]:
         content.add(".. rubric:: NOTES:")

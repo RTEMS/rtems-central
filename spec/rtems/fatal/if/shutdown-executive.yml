@@ -42,7 +42,5 @@ params:
     is the fatal code.
   dir: null
   name: fatal_code
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

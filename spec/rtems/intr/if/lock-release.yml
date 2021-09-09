@@ -43,7 +43,5 @@ params:
     the lock by calling ${lock-acquire:/name}.
   dir: inout
   name: _lock_context
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

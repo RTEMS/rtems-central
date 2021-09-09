@@ -26,7 +26,5 @@ params:
     is the target function name.
   dir: null
   name: _target
-return:
-  return: null
-  return-values: []
+return: null
 type: interface

@@ -46,7 +46,5 @@ params:
     is the variable.
   dir: null
   name: _var
-return:
-  return: null
-  return-values: []
+return: null
 type: interface
