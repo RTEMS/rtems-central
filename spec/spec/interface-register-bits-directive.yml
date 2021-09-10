@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      default:
+        description: |
+          The default definition will be used if no variant-specific definition
+          is enabled.
+        spec-type: interface-register-bits-list
+      variants:
+        description: null
+        spec-type: interface-register-bits-variant-list
+    description: |
+      This set of attributes specifies a register bits directive.
+    mandatory-attributes: all
+spec-name: Register Bits Definition Directive
+spec-type: interface-register-bits-directive
+type: spec

@@ -1,0 +1,39 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      bits:
+        description: null
+        spec-type: interface-register-bits-directive-list
+      brief:
+        description: null
+        spec-type: interface-brief
+      description:
+        description: null
+        spec-type: interface-description
+      name:
+        description: |
+          It shall be the unique name to identify the register definition.
+        spec-type: str
+      width:
+        description: |
+          It shall be the width of the register in bits.
+        spec-type: int
+    description: |
+      This set of attributes specifies a register.
+    generic-attributes:
+      description: null
+      key-spec-type: name
+      value-spec-type: any
+    mandatory-attributes: all
+spec-name: Register Definition
+spec-type: interface-register
+type: spec

@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: register-block-include
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: |
+          It shall be the unique name to identify the included register block
+          within the item.
+        spec-type: str
+    description: |
+      It defines the register block include role of links.  Links of this role
+      are used to build register blocks using other register blocks.
+    mandatory-attributes: all
+spec-name: Register Block Include Role
+spec-type: interface-register-block-include-role
+type: spec

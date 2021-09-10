@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+      re: ^[a-zA-Z_][a-zA-Z0-9_]*(:[a-zA-Z_][a-zA-Z0-9_]*)?$
+    description: |
+      The name consists either of an identifier, or an identifier and an alias.
+      The identifier and alias are separated by a colon (``:``).  The
+      identifier shall match with the name of a register definition of the item
+      (see ${interface-register:/spec-name}) or the name of a register block
+      include of the item
+      (see ${interface-register-block-include-role:/spec-name}).  If no alias
+      is specified, then the identifier is used for the register block member
+      name, otherwise the alias is used.  If the register block member names
+      are not unique within the item, then a postfix number is appended to the
+      names.  The number starts with zero for each set of names.
+spec-name: Register Name
+spec-type: interface-register-name
+type: spec

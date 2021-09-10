@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      definition:
+        description: |
+          The definition will be used if the expression defined by the
+          ``enabled-by`` attribute evaluates to true.  In generated header
+          files, the expression is evaluated by the C preprocessor.
+        spec-type: interface-register-block-member
+      enabled-by:
+        description: null
+        spec-type: interface-enabled-by
+    description: |
+      This set of attributes specifies a register block member definition
+      variant.
+    mandatory-attributes: all
+spec-name: Register Block Member Definition Variant
+spec-type: interface-register-block-member-variant
+type: spec

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  none: null
+  dict:
+    attributes:
+      count:
+        description: |
+          It shall be the count of registers of the register block member.
+        spec-type: int
+      name:
+        description: null
+        spec-type: interface-register-name
+    description: |
+      This set of attributes specifies a register block member definition.
+    mandatory-attributes: all
+spec-name: Register Block Member Definition
+spec-type: interface-register-block-member
+type: spec

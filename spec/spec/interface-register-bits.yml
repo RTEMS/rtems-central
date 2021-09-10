@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  none: null
+  dict:
+    attributes:
+      access:
+        description: |
+          It shall be the list of access attributes.
+        spec-type: list-str
+      brief:
+        description: null
+        spec-type: interface-brief
+      description:
+        description: null
+        spec-type: interface-description
+      name:
+        description: |
+          It shall be the name of the register bit field.
+        spec-type: str
+      start:
+        description: |
+          It shall be the start bit of the bit field.  Bit ``0`` is the
+          least-significant bit.
+        spec-type: int
+      width:
+        description: |
+          It shall be the width in bits of the bit field.
+        spec-type: int
+    description: |
+      This set of attributes specifies register bits.
+    mandatory-attributes: all
+spec-name: Register Bits Definition
+spec-type: interface-register-bits
+type: spec
