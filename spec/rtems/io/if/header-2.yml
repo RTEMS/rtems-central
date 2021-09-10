@@ -4,10 +4,10 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: container
+interface-type: header-file
 links:
 - role: interface-placement
-  uid: /if/domain
+  uid: /score/if/domain
 path: rtems/libio.h
 prefix: cpukit/include
 type: interface
