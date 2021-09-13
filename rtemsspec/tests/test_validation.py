@@ -2246,16 +2246,12 @@ static void Action2_Skip( Action2_Context *ctx, size_t index )
   increment = 1;
 
   switch ( index + 1 ) {
-    case 0:
-      increment *= Action2_Pre_A_NA;
-      ctx->Map.pcs[ 0 ] = Action2_Pre_A_NA - 1;
-      /* Fall through */
     case 1:
-      increment *= Action2_Pre_B_NA;
+      increment *= Action2_Pre_B_NA - ctx->Map.pcs[ 1 ];
       ctx->Map.pcs[ 1 ] = Action2_Pre_B_NA - 1;
       /* Fall through */
     case 2:
-      increment *= Action2_Pre_C_NA;
+      increment *= Action2_Pre_C_NA - ctx->Map.pcs[ 2 ];
       ctx->Map.pcs[ 2 ] = Action2_Pre_C_NA - 1;
       break;
   }

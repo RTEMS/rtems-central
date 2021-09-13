@@ -603,13 +603,13 @@ class _ActionRequirementTestItem(_TestItem):
             ])
             fall_through = "/* Fall through */"
             with content.indent():
-                for index, enum in enumerate(self._pre_co_idx_to_enum):
+                for index, enum in enumerate(self._pre_co_idx_to_enum[1:], 1):
                     content.add(f"case {index}:")
                     with content.indent():
+                        pcs = f"ctx->Map.pcs[ {index} ]"
                         content.append([
-                            f"increment *= {enum[-1]};",
-                            f"ctx->Map.pcs[ {index} ] = {enum[-1]} - 1;",
-                            fall_through
+                            f"increment *= {enum[-1]} - {pcs};",
+                            f"{pcs} = {enum[-1]} - 1;", fall_through
                         ])
                 content.lines[-1] = content.lines[-1].replace(
                     fall_through, "break;")
