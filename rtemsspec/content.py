@@ -920,28 +920,31 @@ class CContent(Content):
         self.add("}")
 
     @contextmanager
-    def condition(self, expression: Optional[str]) -> Iterator[None]:
+    def condition(self, expression: Optional[str] = None) -> Iterator[None]:
         """ Opens a condition context. """
         self.open_condition(expression)
         yield
         self.close_condition()
 
     @contextmanager
-    def first_condition(self, expression: Optional[str]) -> Iterator[None]:
+    def first_condition(self,
+                        expression: Optional[str] = None) -> Iterator[None]:
         """ Opens the first condition context. """
         self.open_condition(expression, False)
         yield
         self.pop_indent()
 
     @contextmanager
-    def next_condition(self, expression: Optional[str]) -> Iterator[None]:
+    def next_condition(self,
+                       expression: Optional[str] = None) -> Iterator[None]:
         """ Opens the next condition context. """
         self.open_condition(expression, True)
         yield
         self.pop_indent()
 
     @contextmanager
-    def final_condition(self, expression: Optional[str]) -> Iterator[None]:
+    def final_condition(self,
+                        expression: Optional[str] = None) -> Iterator[None]:
         """ Opens the final condition context. """
         self.open_condition(expression, True)
         yield
