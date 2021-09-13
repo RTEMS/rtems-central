@@ -1888,6 +1888,12 @@ typedef struct {
 
   struct {
     /**
+     * @brief This member defines the pre-condition indices for the next
+     *   action.
+     */
+    size_t pci[ 3 ];
+
+    /**
      * @brief This member defines the pre-condition states for the next action.
      */
     size_t pcs[ 3 ];
@@ -2247,24 +2253,33 @@ static void Action2_Skip( Action2_Context *ctx, size_t index )
 
   switch ( index + 1 ) {
     case 1:
-      increment *= Action2_Pre_B_NA - ctx->Map.pcs[ 1 ];
-      ctx->Map.pcs[ 1 ] = Action2_Pre_B_NA - 1;
+      increment *= Action2_Pre_B_NA - ctx->Map.pci[ 1 ];
+      ctx->Map.pci[ 1 ] = Action2_Pre_B_NA - 1;
       /* Fall through */
     case 2:
-      increment *= Action2_Pre_C_NA - ctx->Map.pcs[ 2 ];
-      ctx->Map.pcs[ 2 ] = Action2_Pre_C_NA - 1;
+      increment *= Action2_Pre_C_NA - ctx->Map.pci[ 2 ];
+      ctx->Map.pci[ 2 ] = Action2_Pre_C_NA - 1;
       break;
   }
 
   ctx->Map.index += increment - 1;
 }
 
+static void Action2_SetPreConditionStates( Action2_Context *ctx )
+{
+  if ( ctx->Map.entry.Pre_A_NA ) {
+    ctx->Map.pcs[ 0 ] = Action2_Pre_A_NA;
+  } else {
+    ctx->Map.pcs[ 0 ] = ctx->Map.pci[ 0 ];
+  }
+
+  ctx->Map.pcs[ 1 ] = ctx->Map.pci[ 1 ];
+  ctx->Map.pcs[ 2 ] = ctx->Map.pci[ 2 ];
+}
+
 static void Action2_TestVariant( Action2_Context *ctx )
 {
-  Action2_Pre_A_Prepare(
-    ctx,
-    ctx->Map.entry.Pre_A_NA ? Action2_Pre_A_NA : ctx->Map.pcs[ 0 ]
-  );
+  Action2_Pre_A_Prepare( ctx, ctx->Map.pcs[ 0 ] );
 
   if ( ctx->Map.skip ) {
     Action2_Skip( ctx, 0 );
@@ -2294,19 +2309,19 @@ void Action2_Run( int *a, int b, int *c )
   ctx->Map.index = 0;
 
   for (
-    ctx->Map.pcs[ 0 ] = Action2_Pre_A_A0;
-    ctx->Map.pcs[ 0 ] < Action2_Pre_A_NA;
-    ++ctx->Map.pcs[ 0 ]
+    ctx->Map.pci[ 0 ] = Action2_Pre_A_A0;
+    ctx->Map.pci[ 0 ] < Action2_Pre_A_NA;
+    ++ctx->Map.pci[ 0 ]
   ) {
     for (
-      ctx->Map.pcs[ 1 ] = Action2_Pre_B_B0;
-      ctx->Map.pcs[ 1 ] < Action2_Pre_B_NA;
-      ++ctx->Map.pcs[ 1 ]
+      ctx->Map.pci[ 1 ] = Action2_Pre_B_B0;
+      ctx->Map.pci[ 1 ] < Action2_Pre_B_NA;
+      ++ctx->Map.pci[ 1 ]
     ) {
       for (
-        ctx->Map.pcs[ 2 ] = Action2_Pre_C_C0;
-        ctx->Map.pcs[ 2 ] < Action2_Pre_C_NA;
-        ++ctx->Map.pcs[ 2 ]
+        ctx->Map.pci[ 2 ] = Action2_Pre_C_C0;
+        ctx->Map.pci[ 2 ] < Action2_Pre_C_NA;
+        ++ctx->Map.pci[ 2 ]
       ) {
         ctx->Map.entry = Action2_PopEntry( ctx );
 
@@ -2314,6 +2329,7 @@ void Action2_Run( int *a, int b, int *c )
           continue;
         }
 
+        Action2_SetPreConditionStates( ctx );
         Action2_Prepare( ctx );
         Action2_TestVariant( ctx );
         Action2_Cleanup( ctx );

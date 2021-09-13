@@ -535,6 +535,7 @@ class _ActionRequirementTestItem(_TestItem):
                                             item["pre-conditions"])
         self._post_co_idx_to_enum = _to_enum(f"{self.ident}_Post",
                                              item["post-conditions"])
+        self._pci = "pcs"
 
     def _add_pre_condition_descriptions(self, content: CContent) -> None:
         for condition in self["pre-conditions"]:
@@ -559,6 +560,11 @@ class _ActionRequirementTestItem(_TestItem):
         super().add_default_context_members(content)
         content.add("struct {")
         with content.indent():
+            if self._pci == "pci":
+                content.add_description_block(
+                    "This member defines the pre-condition indices "
+                    "for the next action.", None)
+                content.add(f"size_t pci[ {self._pre_co_count} ];")
             content.add_description_block(
                 "This member defines the pre-condition states "
                 "for the next action.", None)
@@ -606,10 +612,10 @@ class _ActionRequirementTestItem(_TestItem):
                 for index, enum in enumerate(self._pre_co_idx_to_enum[1:], 1):
                     content.add(f"case {index}:")
                     with content.indent():
-                        pcs = f"ctx->Map.pcs[ {index} ]"
+                        pci = f"ctx->Map.{self._pci}[ {index} ]"
                         content.append([
-                            f"increment *= {enum[-1]} - {pcs};",
-                            f"{pcs} = {enum[-1]} - 1;", fall_through
+                            f"increment *= {enum[-1]} - {pci};",
+                            f"{pci} = {enum[-1]} - 1;", fall_through
                         ])
                 content.lines[-1] = content.lines[-1].replace(
                     fall_through, "break;")
@@ -618,13 +624,9 @@ class _ActionRequirementTestItem(_TestItem):
     def _add_test_variant(self, content: CContent,
                           transition_map: TransitionMap) -> None:
         entry = "ctx->Map.entry"
-        for index, pre_co in enumerate(self._item["pre-conditions"]):
+        for index in range(self._pre_co_count):
             content.gap = False
             state = f"ctx->Map.pcs[ {index} ]"
-            if transition_map.pre_co_summary[index + 1]:
-                enum_na = self._pre_co_idx_to_enum[index][-1]
-                name = pre_co["name"]
-                state = f"{entry}.Pre_{name}_NA ? {enum_na} : {state}"
             prepare = f"{self._pre_co_idx_to_enum[index][0]}_Prepare"
             content.call_function(None, prepare, ["ctx", state])
             if self._pre_co_skip.get(index, False):
@@ -648,6 +650,10 @@ class _ActionRequirementTestItem(_TestItem):
             with content.condition(f"{entry}.Skip"):
                 content.append("continue;")
             content.add_blank_line()
+        if transition_map.has_pre_co_not_applicable():
+            name = f"{self.ident}_SetPreConditionStates"
+            content.gap = False
+            content.call_function(None, name, ["ctx"])
         self._add_call(content, "test-prepare", "Prepare")
         content.gap = False
         content.call_function(None, f"{self.ident}_TestVariant", ["ctx"])
@@ -656,7 +662,7 @@ class _ActionRequirementTestItem(_TestItem):
     def _add_for_loops(self, content: CContent, transition_map: TransitionMap,
                        index: int) -> None:
         if index < self._pre_co_count:
-            var = f"ctx->Map.pcs[ {index} ]"
+            var = f"ctx->Map.{self._pci}[ {index} ]"
             begin = self._pre_co_idx_to_enum[index][1]
             end = self._pre_co_idx_to_enum[index][-1]
             with content.for_loop(f"{var} = {begin}", f"{var} < {end}",
@@ -664,6 +670,29 @@ class _ActionRequirementTestItem(_TestItem):
                 self._add_for_loops(content, transition_map, index + 1)
         else:
             self._add_loop_body(content, transition_map)
+
+    def _add_set_pre_co_states(self, content: CContent,
+                               transition_map: TransitionMap) -> None:
+        ret = "static void"
+        name = f"{self.ident}_SetPreConditionStates"
+        params = [f"{self.context} *ctx"]
+        with content.function(ret, name, params, align=True):
+            entry = "ctx->Map.entry"
+            gap = False
+            for index, pre_co in enumerate(self._item["pre-conditions"]):
+                pcs_pci = f"ctx->Map.pcs[ {index} ] = ctx->Map.pci[ {index} ];"
+                if transition_map.pre_co_summary[index + 1]:
+                    is_na = f"{entry}.Pre_{pre_co['name']}_NA"
+                    with content.first_condition(is_na):
+                        enum_na = self._pre_co_idx_to_enum[index][-1]
+                        content.add(f"ctx->Map.pcs[ {index} ] = {enum_na};")
+                    with content.final_condition():
+                        content.add(pcs_pci)
+                    gap = True
+                else:
+                    content.gap = gap
+                    gap = False
+                    content.add(pcs_pci)
 
     def _add_test_case(self, content: CContent, transition_map: TransitionMap,
                        header: Dict[str, Any]) -> None:
@@ -678,6 +707,8 @@ class _ActionRequirementTestItem(_TestItem):
             ])
         if self._pre_co_skip:
             self._add_skip(content)
+        if transition_map.has_pre_co_not_applicable():
+            self._add_set_pre_co_states(content, transition_map)
         with content.function("static void", f"{self.ident}_TestVariant",
                               [f"{self.context} *ctx"]):
             self._add_test_variant(content, transition_map)
@@ -763,6 +794,8 @@ class _ActionRequirementTestItem(_TestItem):
             _add_condition_enum(content, self._pre_co_idx_to_enum)
             _add_condition_enum(content, self._post_co_idx_to_enum)
         transition_map = TransitionMap(self.item)
+        if transition_map.has_pre_co_not_applicable():
+            self._pci = "pci"
         transition_map.add_map_entry_type(content, self.ident)
         instance = self.add_context(content)
         self._add_pre_condition_descriptions(content)

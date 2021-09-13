@@ -383,6 +383,12 @@ class TransitionMap:
             map_idx //= count
         return tuple(reversed(co_states))
 
+    def has_pre_co_not_applicable(self) -> bool:
+        """
+        Returns true, if there are N/A pre-conditions, otherwise false.
+        """
+        return sum(self.pre_co_summary[1:]) > 0
+
     def pre_co_name_to_co_idx(self, co_name: str) -> int:
         """
         Maps the pre-condition name to the associated pre-condition index.
