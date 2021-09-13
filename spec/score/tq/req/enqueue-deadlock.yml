@@ -52,6 +52,13 @@ test-action: |
       ctx->tq_ctx->other_scheduler_id,
       PRIO_HIGH
     );
+  } else {
+    TQSetScheduler(
+      ctx->tq_ctx,
+      TQ_BLOCKER_A,
+      ctx->tq_ctx->runner_scheduler_id,
+      PRIO_HIGH
+    );
   }
 
   TQSendAndWaitForExecutionStop( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );

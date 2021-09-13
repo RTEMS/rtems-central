@@ -35,32 +35,24 @@ post-conditions:
   - name: Recursive
     test-code: |
       switch ( ctx->tq_ctx->recursive ) {
-        case TQ_MTX_RECURSIVE_YES:
+        case TQ_MTX_RECURSIVE_ALLOWED:
           T_eq_int( ctx->status, Status( ctx, STATUS_SUCCESSFUL ) );
           TQSurrender( &ctx->tq_ctx->base );
           break;
-        case TQ_MTX_RECURSIVE_NO_STATUS:
+        case TQ_MTX_RECURSIVE_DEADLOCK:
           T_eq_int( ctx->status, Status( ctx, STATUS_DEADLOCK ) );
-          break;
-        case TQ_MTX_RECURSIVE_NO_FATAL:
-          /* TODO */
-          T_unreachable();
           break;
         default:
           T_unreachable();
           break;
       }
     text: |
-      Where the mutex supports a recursive seize, the return status of the
+      Where recursive seize of the mutex is allowed, the return status of the
       directive call shall be derived from ${../../status/if/successful:/name}.
 
-      Where the mutex does not support a recursive seize, where a deadlock is
-      indicated by a status code, the return status of the directive call shall
-      be derived from ${../../status/if/deadlock:/name}.
-
-      Where the mutex does not support a recursive seize, where a deadlock is
-      indicated by a fatal error, the thread queue deadlock internal error
-      shall occur.
+      Where recursive seize of the mutex results in a deadlock, the return
+      status of the directive call shall be derived from
+      ${../../status/if/deadlock:/name}.
   - name: Unsat
     test-code: |
       T_eq_int( ctx->status, Status( ctx, STATUS_UNSATISFIED ) );

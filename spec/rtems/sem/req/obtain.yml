@@ -35,7 +35,8 @@ post-conditions:
   - name: MtxSeizeTry
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
-      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.deadlock = TQ_MTX_DEADLOCK_STATUS;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
@@ -45,7 +46,8 @@ post-conditions:
   - name: MtxSeizeWait
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
-      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.deadlock = TQ_MTX_DEADLOCK_STATUS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
@@ -55,7 +57,8 @@ post-conditions:
   - name: CeilingMtxSeizeTry
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
-      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.deadlock = TQ_MTX_DEADLOCK_STATUS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
@@ -65,7 +68,8 @@ post-conditions:
   - name: CeilingMtxSeizeWait
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_BLOCKS;
-      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_YES;
+      ctx->tq_mtx_ctx.deadlock = TQ_MTX_DEADLOCK_STATUS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
@@ -75,7 +79,8 @@ post-conditions:
   - name: MrsPMtxSeizeTry
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
-      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_NO_STATUS;
+      ctx->tq_mtx_ctx.deadlock = TQ_MTX_DEADLOCK_STATUS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ${/score/mtx/req/seize-try:/test-run}( &ctx->tq_mtx_ctx );
     text: |
@@ -85,7 +90,8 @@ post-conditions:
   - name: MrsPMtxSeizeWait
     test-code: |
       ctx->tq_mtx_ctx.base.enqueue_variant = TQ_ENQUEUE_STICKY;
-      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_NO_STATUS;
+      ctx->tq_mtx_ctx.deadlock = TQ_MTX_DEADLOCK_STATUS;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
       ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
       ${/score/mtx/req/seize-wait:/test-run}( &ctx->tq_mtx_ctx );
     text: |
@@ -210,6 +216,18 @@ test-action: |
     &ctx->tq_ctx.thread_queue_id
   );
   T_rsc_success( sc );
+
+  if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
+    rtems_task_priority prio;
+
+    sc = rtems_semaphore_set_priority(
+      ctx->tq_ctx.thread_queue_id,
+      ctx->tq_ctx.other_scheduler_id,
+      PRIO_VERY_HIGH,
+      &prio
+    );
+    T_rsc_success( sc );
+  }
 test-brief: null
 test-cleanup:
   rtems_status_code sc;
