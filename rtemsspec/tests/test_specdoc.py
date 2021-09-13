@@ -130,7 +130,7 @@ A value of this type shall be of one of the following variants:
 
 * The value may be a list. Each list element shall be a :ref:`SpecTypeRoot`.
 
-* There may by be no value (null).
+* There may be no value (null).
 
 * The value may be a string. The value
 

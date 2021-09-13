@@ -413,7 +413,7 @@ class _Documenter:
                       _info: Any) -> None:
         """ Documents a none value. """
         # pylint: disable=no-self-use
-        content.paste(f"There {shall} by be no value (null).")
+        content.paste(f"There {shall} be no value (null).")
 
     def _add_description(self, content: SphinxContent) -> None:
         refines = [
