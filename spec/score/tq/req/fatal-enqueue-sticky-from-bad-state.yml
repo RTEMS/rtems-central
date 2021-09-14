@@ -14,5 +14,6 @@ text: |
   thread dispatch disable level is not equal to one, if the sticky thread queue
   enqueue is performed, then the system shall terminate with the
   ${/score/interr/if/internal-error-core:/name} fatal source and the
-  ${/score/interr/if/thread-queue-enqueue-sticky-from-bad-state} fatal code.
+  ${/score/interr/if/thread-queue-enqueue-sticky-from-bad-state:/name} fatal
+  code.
 type: requirement
