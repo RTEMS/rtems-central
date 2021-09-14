@@ -46,12 +46,12 @@ post-conditions:
       T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_B ) );
       T_eq_ptr( event->thread, GetTCB( ctx, TQ_BLOCKER_B ) );
 
-      if ( ctx->minimum ) {
+      if ( ctx->minimum && rtems_configuration_get_maximum_processors() > 1 ) {
         /*
          * This superfluous priority update is carried out by
          * _Thread_queue_Enqueue() since TQ_BLOCKER_B would have inherited its
-         * priority to TQ_BLOCKER_A if it were not flushed from the thread
-         * queue.
+         * priority for scheduler B to TQ_BLOCKER_A if it were not flushed from
+         * the thread queue.
          */
         event = GetPriorityUpdate( ctx, &i );
         T_eq_ptr( event->executing, GetTCB( ctx, TQ_BLOCKER_B ) );
