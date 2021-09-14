@@ -28,13 +28,17 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
-  uid: /constraint/directive-ctx-task
-- role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint
-  uid: /constraint/directive-remote
+  uid: /constraint/directive-ctx-devinit
+- role: constraint
+  uid: /constraint/directive-ctx-task
+- role: constraint
+  uid: /constraint/directive-no-preempt
 name: rtems_message_queue_flush
-notes: null
+notes: |
+  The directive does not flush tasks waiting to receive a message from the
+  ${/glossary/waitqueue:/term} of the message queue.
 params:
 - description: |
     is the queue identifier.

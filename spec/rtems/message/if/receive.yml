@@ -132,10 +132,6 @@ return:
       The queue was empty.
     value: ${../../status/if/unsatisfied:/name}
   - description: |
-      The queue was flushed while the calling task was waiting to receive a
-      message.
-    value: ${../../status/if/unsatisfied:/name}
-  - description: |
       The timeout happened while the calling task was waiting to receive a
       message
     value: ${../../status/if/timeout:/name}
