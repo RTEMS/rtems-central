@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    TODO.
+  action-code: |
+    /* TODO */
+  checks: []
+  links:
+  - name: _CORE_message_queue_Insert_message
+    role: unit-test
+    uid: ../../if/domain
+test-brief: |
+  Unit tests for the Message Queue Handler.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/score/coremsgimpl.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/unit/tc-score-msgq.c
+test-teardown: null
+type: test-case
