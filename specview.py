@@ -38,7 +38,8 @@ from rtemsspec.transitionmap import Transition, TransitionMap
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
-    "interface-function", "validation", "appl-config-group-member"
+    "interface-function", "validation", "appl-config-group-member",
+    "glossary-member"
 ]
 
 _PARENT_ROLES = ["interface-enumerator"]
@@ -136,6 +137,7 @@ def _validate(item: Item) -> bool:
         validated = item.type in [
             "constraint",
             "glossary/group",
+            "glossary/term",
             "interface/appl-config-group",
             "interface/domain",
             "interface/group",
@@ -157,15 +159,25 @@ def _validate(item: Item) -> bool:
     return validated
 
 
+_VALIDATION_LEAF = [
+    "constraint", "glossary/term", "interface/domain", "interface/container",
+    "interface/header-file", "interface/register-block",
+    "requirement/functional/action",
+    "requirement/non-functional/performance-runtime",
+    "runtime-measurement-test", "test-case", "test-suite", "validation",
+    "interface/unspecified-define", "interface/unspecified-function",
+    "interface/struct", "interface/union", "interface/typedef",
+    "interface/enum"
+]
+
+
 def _no_validation(item: Item, path: List[str]) -> List[str]:
     leaf = True
     path_2 = path + [item.uid]
     for child in item.children(_CHILD_ROLES):
         path_2 = _no_validation(child, path_2)
         leaf = False
-    if leaf and item.type not in [
-            "requirement/functional/action", "test-case", "test-suite"
-    ]:
+    if leaf and item.type not in _VALIDATION_LEAF:
         for index, component in enumerate(path_2):
             if component:
                 print(f"{'  ' * index}{component}")
