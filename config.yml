@@ -111,6 +111,7 @@ interface:
   - /user/if/container
   domains:
     /if/domain: modules/rtems
+    /dev/if/domain: modules/rtems
 interface-documentation:
 - directives-target: modules/rtems-docs/c-user/barrier/directives.rst
   group: /rtems/barrier/if/group

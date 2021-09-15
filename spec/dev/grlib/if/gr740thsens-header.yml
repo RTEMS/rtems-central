@@ -8,7 +8,7 @@ index-entries: []
 interface-type: header-file
 links:
 - role: interface-placement
-  uid: /if/domain
+  uid: ../../if/domain
 - role: interface-ingroup
   uid: gr740thsens
 path: grlib/gr740thsens-regs.h
