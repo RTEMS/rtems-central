@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/wake
+- role: validation
+  uid: ../../tq/req/flush-filter-stop
 post-conditions:
 - name: Result
   states:
