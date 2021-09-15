@@ -2,8 +2,9 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: |
-  This interface domain contains interfaces provided by the C programming
-  language standard library.
+  This interface domain contains interfaces provided by the
+  ${/glossary/c11:/term} programming language standard library and
+  ${/glossary/posix:/term}.
 enabled-by: true
 index-entries: []
 interface-type: domain
