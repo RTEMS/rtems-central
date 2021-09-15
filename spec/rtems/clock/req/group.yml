@@ -1,8 +1,8 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-identifier: RTEMSImplClassicTimer
+identifier: RTEMSImplClassicClock
 links:
 - role: interface-ingroup
   uid: ../../req/group
@@ -11,6 +11,6 @@ rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The software architecture shall have a component containing the Timer Manager
+  The software architecture shall have a component containing the Clock Manager
   implementation.
 type: requirement
