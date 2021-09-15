@@ -6,8 +6,8 @@ glossary-type: term
 links:
 - role: glossary-member
   uid: ../glossary-general
-term: higher priority
+term: lower priority
 text: |
-  A ${task:/term} ``H`` has a higher ${priority:/term} than a task ``L``, if
-  task ``H`` is more important than task ``L``.
+  A ${task:/term} ``L`` has a lower ${priority:/term} than a task ``H``, if
+  task ``L`` is less important than task ``H``.
 type: glossary
