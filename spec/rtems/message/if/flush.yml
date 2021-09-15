@@ -46,8 +46,8 @@ params:
   name: id
 - description: |
     is the pointer to an ${/c/if/uint32_t:/name} object.  When the directive
-    call is successful, the number of unblocked tasks will be stored in this
-    object.
+    call is successful, the number of pending messages removed from the queue
+    will be stored in this object.
   dir: out
   name: count
 return:
