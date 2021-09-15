@@ -33,7 +33,7 @@ spec-info:
         spec-type: optional-str
       references:
         description: null
-        spec-type: requirement-reference-list
+        spec-type: external-reference-list
       requirement-type:
         description: |
           It shall be the requirement item type.

@@ -10,7 +10,7 @@ spec-example: null
 spec-info:
   list:
     description: null
-    spec-type: requirement-reference
-spec-name: Requirement Reference List
-spec-type: requirement-reference-list
+    spec-type: external-reference
+spec-name: External Reference List
+spec-type: external-reference-list
 type: spec

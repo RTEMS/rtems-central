@@ -1,0 +1,29 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      identifier:
+        description: |
+          It shall be the type-specific identifier of the referenced object.
+          For *group* references use the Doxygen group identifier.  For *file*
+          references use a file system path to the file.
+        spec-type: str
+      type:
+        description: |
+          It shall be the type of the referenced object.
+        spec-type: name
+    description: |
+      This set of attributes specifies a reference to some object external to
+      the specification.
+    mandatory-attributes: all
+spec-name: External Reference
+spec-type: external-reference
+type: spec

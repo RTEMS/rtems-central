@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+    - re: ^[A-Za-z0-9+_=-]{44}$
+    description: |
+      It shall be a SHA256 hash value encoded in base64url.
+spec-name: SHA256 Hash Value
+spec-type: sha256
+type: spec
