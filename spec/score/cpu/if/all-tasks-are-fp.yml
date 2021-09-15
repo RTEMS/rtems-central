@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_ALL_TASKS_ARE_FP
-references: {}
+references: []
 type: interface

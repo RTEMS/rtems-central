@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Earliest Deadline First SMP Scheduler
 references:
-  c-user: SchedulerSMPEDF
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#earliest-deadline-first-smp-scheduler
+- identifier: SchedulerSMPEDF
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#earliest-deadline-first-smp-scheduler
+  type: url
 type: interface

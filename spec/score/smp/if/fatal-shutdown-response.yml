@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-impl
 name: SMP_SHUTDOWN_RESPONSE
-references: {}
+references: []
 type: interface

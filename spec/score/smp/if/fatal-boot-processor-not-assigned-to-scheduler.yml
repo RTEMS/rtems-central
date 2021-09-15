@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-impl
 name: SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
-references: {}
+references: []
 type: interface

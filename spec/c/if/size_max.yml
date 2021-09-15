@@ -9,5 +9,6 @@ links:
   uid: stdint
 name: SIZE_MAX
 references:
-  url: https://en.cppreference.com/w/c/types/limits
+- identifier: https://en.cppreference.com/w/c/types/limits
+  type: url
 type: interface

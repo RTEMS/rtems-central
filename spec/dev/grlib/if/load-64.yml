@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: io-header
 name: grlib_load_64
-references: {}
+references: []
 type: interface

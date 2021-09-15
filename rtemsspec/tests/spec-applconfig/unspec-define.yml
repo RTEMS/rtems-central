@@ -6,5 +6,7 @@ interface-type: unspecified-define
 links: []
 name: UNSPEC_DEFINE
 references:
-  c-user: SphinxRefTarget
+- identifier: SphinxRefTarget
+  name: c-user
+  type: document
 type: interface

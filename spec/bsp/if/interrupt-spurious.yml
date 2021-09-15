@@ -10,5 +10,5 @@ links:
 - role: interface-ingroup
   uid: group-interrupt
 name: bsp_interrupt_spurious
-references: {}
+references: []
 type: interface

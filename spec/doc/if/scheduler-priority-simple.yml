@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Simple Priority Scheduler
 references:
-  c-user: SchedulerPrioritySimple
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#simple-priority-scheduler
+- identifier: SchedulerPrioritySimple
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#simple-priority-scheduler
+  type: url
 type: interface

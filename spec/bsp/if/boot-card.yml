@@ -10,5 +10,5 @@ links:
 - role: interface-ingroup
   uid: group-startup
 name: boot_card
-references: {}
+references: []
 type: interface

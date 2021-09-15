@@ -9,5 +9,6 @@ links:
   uid: time
 name: CLOCK_MONOTONIC
 references:
-  url: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html
+- identifier: https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/time.h.html
+  type: url
 type: interface

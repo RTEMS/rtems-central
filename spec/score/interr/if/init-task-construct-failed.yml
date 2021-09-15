@@ -9,5 +9,7 @@ links:
   uid: header
 name: INTERNAL_ERROR_RTEMS_INIT_TASK_CONSTRUCT_FAILED
 references:
-  c-user: internal_errors
+- identifier: internal_errors
+  name: c-user
+  type: document
 type: interface

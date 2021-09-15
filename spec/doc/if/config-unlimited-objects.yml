@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Unlimited Objects
 references:
-  c-user: ConfigUnlimitedObjects
-  url: https://docs.rtems.org/branches/master/c-user/config/intro.html#unlimited-objects
+- identifier: ConfigUnlimitedObjects
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/config/intro.html#unlimited-objects
+  type: url
 type: interface

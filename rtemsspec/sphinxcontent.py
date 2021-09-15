@@ -229,12 +229,13 @@ def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
 
 def _get_value_sphinx_ref(ctx: ItemGetValueContext, get_value: ItemGetValue,
                           postfix: str) -> Any:
-    if "c-user" in ctx.item["references"]:
-        sphinx_ref = ctx.item["references"]["c-user"]
-        return f":ref:`{ctx.value[ctx.key]}{postfix} <{sphinx_ref}>`"
-    if "url" in ctx.item["references"]:
-        url = ctx.item["references"]["url"]
-        return f"`{ctx.value[ctx.key]}{postfix} <{url}>`_"
+    for ref in ctx.item["references"]:
+        ref_type = ref["type"]
+        identifier = ref["identifier"]
+        if ref_type == "document" and ref["name"] == "c-user":
+            return f":ref:`{ctx.value[ctx.key]}{postfix} <{identifier}>`"
+        if ref_type == "url":
+            return f"`{ctx.value[ctx.key]}{postfix} <{identifier}>`_"
     return get_value(ctx)
 
 
@@ -247,11 +248,13 @@ def _get_value_sphinx_unspecified_function(ctx: ItemGetValueContext) -> Any:
 
 
 def _get_value_sphinx_unspecified_group(ctx: ItemGetValueContext) -> Any:
-    if "c-user" in ctx.item["references"]:
-        return f":ref:`{ctx.item['references']['c-user']}`"
-    if "url" in ctx.item["references"]:
-        url = ctx.item["references"]["url"]
-        return f"`{ctx.value[ctx.key]} <{url}>`_"
+    for ref in ctx.item["references"]:
+        ref_type = ref["type"]
+        identifier = ref["identifier"]
+        if ref_type == "document" and ref["name"] == "c-user":
+            return f":ref:`{identifier}`"
+        if ref_type == "url":
+            return f"`{ctx.value[ctx.key]} <{identifier}>`_"
     return ctx.value[ctx.key]
 
 

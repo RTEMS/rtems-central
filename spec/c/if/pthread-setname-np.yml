@@ -9,5 +9,6 @@ links:
   uid: pthread
 name: pthread_setname_np
 references:
-  url: http://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
+- identifier: http://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
+  type: url
 type: interface

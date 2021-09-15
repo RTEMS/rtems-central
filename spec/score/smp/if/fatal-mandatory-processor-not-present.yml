@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-impl
 name: SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT
-references: {}
+references: []
 type: interface

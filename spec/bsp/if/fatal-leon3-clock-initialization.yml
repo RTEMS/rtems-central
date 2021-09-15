@@ -10,5 +10,5 @@ links:
 - role: interface-ingroup
   uid: group-fatal
 name: LEON3_FATAL_CLOCK_INITIALIZATION
-references: {}
+references: []
 type: interface

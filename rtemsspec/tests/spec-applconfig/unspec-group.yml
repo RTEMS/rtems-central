@@ -6,6 +6,9 @@ interface-type: unspecified-group
 links: []
 name: Unspec Group
 references:
-  c-user: SphinxRefUnspecGroup
-  url: unspec-group.html
+- identifier: SphinxRefUnspecGroup
+  name: c-user
+  type: document
+- identifier: unspec-group.html
+  type: url
 type: interface

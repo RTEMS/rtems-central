@@ -9,5 +9,6 @@ links:
   uid: container
 name: __STDC_VERSION__
 references:
-  url: https://en.cppreference.com/w/c/preprocessor/replace
+- identifier: https://en.cppreference.com/w/c/preprocessor/replace
+  type: url
 type: interface

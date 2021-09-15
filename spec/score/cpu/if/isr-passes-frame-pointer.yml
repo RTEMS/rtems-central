@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_ISR_PASSES_FRAME_POINTER
-references: {}
+references: []
 type: interface

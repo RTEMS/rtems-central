@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: MP_PACKET_MINIMUN_HETERO_CONVERSION
-references: {}
+references: []
 type: interface

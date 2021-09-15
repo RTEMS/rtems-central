@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: INTERNAL_ERROR_RTEMS_API
-references: {}
+references: []
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: OBJECTS_APIS_LAST
-references: {}
+references: []
 type: interface

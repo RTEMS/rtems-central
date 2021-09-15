@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Announcing a Fatal Error
 references:
-  c-user: Terminate
-  url: https://docs.rtems.org/branches/master/c-user/fatal_error.html#announcing-a-fatal-error
+- identifier: Terminate
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/fatal_error.html#announcing-a-fatal-error
+  type: url
 type: interface

@@ -9,5 +9,6 @@ links:
   uid: stdarg
 name: va_list
 references:
-  url: https://en.cppreference.com/w/c/variadic/va_list
+- identifier: https://en.cppreference.com/w/c/variadic/va_list
+  type: url
 type: interface

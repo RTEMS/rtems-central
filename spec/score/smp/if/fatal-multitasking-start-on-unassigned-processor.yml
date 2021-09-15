@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-impl
 name: SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR
-references: {}
+references: []
 type: interface

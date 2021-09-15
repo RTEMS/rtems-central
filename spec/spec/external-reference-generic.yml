@@ -23,6 +23,10 @@ links:
   uid: external-reference
 - role: spec-refinement
   spec-key: type
+  spec-value: url
+  uid: external-reference
+- role: spec-refinement
+  spec-key: type
   spec-value: variable
   uid: external-reference
 spec-description: |

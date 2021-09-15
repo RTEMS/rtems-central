@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: STACK_MINIMUM_SIZE
-references: {}
+references: []
 type: interface

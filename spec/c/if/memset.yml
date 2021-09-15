@@ -11,5 +11,6 @@ links:
   uid: group
 name: memset
 references:
-  url: https://en.cppreference.com/w/c/string/byte/memset
+- identifier: https://en.cppreference.com/w/c/string/byte/memset
+  type: url
 type: interface

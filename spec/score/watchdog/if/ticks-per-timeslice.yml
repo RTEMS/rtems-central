@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Watchdog_Ticks_per_timeslice
-references: {}
+references: []
 type: interface

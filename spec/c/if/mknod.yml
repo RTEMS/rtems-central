@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: sys-stat
 name: mknod
-references: {}
+references: []
 type: interface

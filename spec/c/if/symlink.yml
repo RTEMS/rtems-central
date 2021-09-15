@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: sys-stat
 name: symlink
-references: {}
+references: []
 type: interface

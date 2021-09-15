@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-2
 name: MP_packet_Classes
-references: {}
+references: []
 type: interface

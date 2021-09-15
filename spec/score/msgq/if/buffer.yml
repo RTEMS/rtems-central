@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-2
 name: CORE_message_queue_Buffer
-references: {}
+references: []
 type: interface

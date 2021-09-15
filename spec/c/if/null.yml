@@ -9,5 +9,6 @@ links:
   uid: stddef
 name: 'NULL'
 references:
-  url: https://en.cppreference.com/w/c/types/NULL
+- identifier: https://en.cppreference.com/w/c/types/NULL
+  type: url
 type: interface

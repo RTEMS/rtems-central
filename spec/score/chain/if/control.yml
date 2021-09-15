@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: Chain_Control
-references: {}
+references: []
 type: interface

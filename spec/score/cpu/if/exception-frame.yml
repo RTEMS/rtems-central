@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_Exception_frame
-references: {}
+references: []
 type: interface

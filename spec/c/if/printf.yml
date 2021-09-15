@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: stdio
 name: printf
-references: {}
+references: []
 type: interface

@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Constant Bandwidth Server Scheduling (CBS)
 references:
-  c-user: SchedulerCBS
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#constant-bandwidth-server-scheduling-cbs
+- identifier: SchedulerCBS
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#constant-bandwidth-server-scheduling-cbs
+  type: url
 type: interface

@@ -6,5 +6,6 @@ interface-type: unspecified-group
 links: []
 name: Unspec Group 3
 references:
-  url: unspec-group-3.html
+- identifier: unspec-group-3.html
+  type: url
 type: interface

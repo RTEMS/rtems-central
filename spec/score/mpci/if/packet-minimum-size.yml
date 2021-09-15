@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: MP_PACKET_MINIMUM_PACKET_SIZE
-references: {}
+references: []
 type: interface

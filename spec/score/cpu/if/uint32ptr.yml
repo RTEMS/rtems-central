@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_Uint32ptr
-references: {}
+references: []
 type: interface

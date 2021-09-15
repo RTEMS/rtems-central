@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: container
 name: 'FALSE'
-references: {}
+references: []
 type: interface

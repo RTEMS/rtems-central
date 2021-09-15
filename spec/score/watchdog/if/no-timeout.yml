@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: WATCHDOG_NO_TIMEOUT
-references: {}
+references: []
 type: interface

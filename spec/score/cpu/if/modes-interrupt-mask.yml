@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_MODES_INTERRUPT_MASK
-references: {}
+references: []
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: User_extensions_thread_delete_extension
-references: {}
+references: []
 type: interface

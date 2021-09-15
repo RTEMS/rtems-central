@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: _SMP_Processor_configured_maximum
-references: {}
+references: []
 type: interface

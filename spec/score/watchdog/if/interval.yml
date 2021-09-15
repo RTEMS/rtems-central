@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: Watchdog_Interval
-references: {}
+references: []
 type: interface

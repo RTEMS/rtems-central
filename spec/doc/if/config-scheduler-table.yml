@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Configuration Step 3 - Scheduler Table
 references:
-  c-user: ConfigurationSchedulerTable
-  url: https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html#configuration-step-3-scheduler-table
+- identifier: ConfigurationSchedulerTable
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html#configuration-step-3-scheduler-table
+  type: url
 type: interface

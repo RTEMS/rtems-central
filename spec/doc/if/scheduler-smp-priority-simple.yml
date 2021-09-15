@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Simple Priority SMP Scheduler
 references:
-  c-user: SchedulerSMPPrioritySimple
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#simple-priority-smp-scheduler
+- identifier: SchedulerSMPPrioritySimple
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#simple-priority-smp-scheduler
+  type: url
 type: interface

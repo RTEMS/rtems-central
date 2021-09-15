@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Multiprocessor Resource Sharing Protocol (MrsP)
 references:
-  c-user: MrsP
-  url: https://docs.rtems.org/branches/master/c-user/key_concepts.html#multiprocessor-resource-sharing-protocol-mrsp
+- identifier: MrsP
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/key_concepts.html#multiprocessor-resource-sharing-protocol-mrsp
+  type: url
 type: interface

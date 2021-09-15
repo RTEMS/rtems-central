@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-impl
 name: SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
-references: {}
+references: []
 type: interface

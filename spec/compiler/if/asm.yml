@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: container
 name: __asm__
-references: {}
+references: []
 type: interface

@@ -11,5 +11,6 @@ links:
   uid: group
 name: memcpy
 references:
-  url: https://en.cppreference.com/w/c/string/byte/memcpy
+- identifier: https://en.cppreference.com/w/c/string/byte/memcpy
+  type: url
 type: interface

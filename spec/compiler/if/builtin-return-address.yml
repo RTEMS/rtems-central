@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: container
 name: __builtin_return_address
-references: {}
+references: []
 type: interface

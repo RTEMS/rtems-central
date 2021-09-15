@@ -10,5 +10,5 @@ links:
 - role: interface-placement
   uid: /c/if/sys-lock
 name: _Futex_Wait
-references: {}
+references: []
 type: interface

@@ -11,5 +11,6 @@ links:
   uid: group
 name: posix_memalign
 references:
-  url: https://pubs.opengroup.org/onlinepubs/9699919799/functions/posix_memalign.html
+- identifier: https://pubs.opengroup.org/onlinepubs/9699919799/functions/posix_memalign.html
+  type: url
 type: interface

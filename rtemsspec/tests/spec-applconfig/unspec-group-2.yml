@@ -5,5 +5,7 @@ enabled-by: true
 interface-type: unspecified-group
 links: []
 name: Unspec Group 2
-references: []
+references:
+- identifier: blub
+  type: function
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header-3
 name: _ISR_lock_Destroy
-references: {}
+references: []
 type: interface

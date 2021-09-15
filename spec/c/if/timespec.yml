@@ -9,5 +9,6 @@ links:
   uid: sys-impl-timespec
 name: struct timespec
 references:
-  url: https://en.cppreference.com/w/c/chrono/timespec
+- identifier: https://en.cppreference.com/w/c/chrono/timespec
+  type: url
 type: interface

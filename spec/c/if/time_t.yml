@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: time
 name: time_t
-references: {}
+references: []
 type: interface

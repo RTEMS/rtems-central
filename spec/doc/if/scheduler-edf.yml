@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Earliest Deadline First Scheduler
 references:
-  c-user: SchedulerEDF
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#earliest-deadline-first-scheduler
+- identifier: SchedulerEDF
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/uniprocessor-schedulers.html#earliest-deadline-first-scheduler
+  type: url
 type: interface

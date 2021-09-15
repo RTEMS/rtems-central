@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: CPU_SIZEOF_POINTER
-references: {}
+references: []
 type: interface

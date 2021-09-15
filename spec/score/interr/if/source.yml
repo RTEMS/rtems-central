@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: Internal_errors_Source
-references: {}
+references: []
 type: interface

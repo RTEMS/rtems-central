@@ -6,6 +6,9 @@ interface-type: unspecified-function
 links: []
 name: unspec_func
 references:
-  c-user: SphinxRefUnspecFunc
-  url: unspec-func.html
+- identifier: SphinxRefUnspecFunc
+  name: c-user
+  type: document
+- identifier: unspec-func.html
+  type: url
 type: interface

@@ -257,27 +257,23 @@ def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
     content.add_licence_and_copyrights()
 
 
-def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Any:
-    url = ctx.item["references"]["url"]
-    return f"<a href=\"{url}\">{ctx.value[ctx.key]}</a>"
+def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Optional[str]:
+    for ref in ctx.item["references"]:
+        if ref["type"] == "url":
+            return f"<a href=\"{ref['identifier']}\">{ctx.value[ctx.key]}</a>"
+    return None
 
 
 def _get_value_doxygen_unspecified_define(ctx: ItemGetValueContext) -> Any:
-    if "url" in ctx.item["references"]:
-        return _get_value_doxygen_url(ctx)
-    return get_value_hash(ctx)
+    return _get_value_doxygen_url(ctx) or get_value_hash(ctx)
 
 
 def _get_value_doxygen_unspecified_group(ctx: ItemGetValueContext) -> Any:
-    if "url" in ctx.item["references"]:
-        return _get_value_doxygen_url(ctx)
-    return ctx.value[ctx.key]
+    return _get_value_doxygen_url(ctx) or ctx.value[ctx.key]
 
 
 def _get_value_doxygen_unspecfied_type(ctx: ItemGetValueContext) -> Any:
-    if "url" in ctx.item["references"]:
-        return _get_value_doxygen_url(ctx)
-    return get_value_double_colon(ctx)
+    return _get_value_doxygen_url(ctx) or get_value_double_colon(ctx)
 
 
 def _add_doxygen_get_values(mapper: ItemMapper) -> None:

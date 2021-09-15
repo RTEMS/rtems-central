@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Scheduling Concepts
 references:
-  c-user: RTEMSAPIClassicScheduler
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/index.html
+- identifier: RTEMSAPIClassicScheduler
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/index.html
+  type: url
 type: interface

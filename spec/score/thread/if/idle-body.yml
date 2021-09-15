@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: _Thread_Idle_body
-references: {}
+references: []
 type: interface

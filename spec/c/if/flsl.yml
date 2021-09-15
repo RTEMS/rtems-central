@@ -11,5 +11,6 @@ links:
   uid: group
 name: flsl
 references:
-  url: https://www.freebsd.org/cgi/man.cgi?query=fls&sektion=3
+- identifier: https://www.freebsd.org/cgi/man.cgi?query=fls&sektion=3
+  type: url
 type: interface

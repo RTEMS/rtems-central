@@ -9,5 +9,7 @@ links:
   uid: header
 name: INTERNAL_ERROR_CORE
 references:
-  c-user: FatalErrorSources
+- identifier: FatalErrorSources
+  name: c-user
+  type: document
 type: interface

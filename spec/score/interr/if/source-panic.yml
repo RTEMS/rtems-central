@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: RTEMS_FATAL_SOURCE_PANIC
-references: {}
+references: []
 type: interface

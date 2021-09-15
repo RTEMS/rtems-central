@@ -36,7 +36,7 @@ spec-info:
         spec-type: str
       references:
         description: null
-        spec-type: interface-references
+        spec-type: external-reference-list
     description: |
       This set of attributes specifies an unspecified interface.
     mandatory-attributes: all

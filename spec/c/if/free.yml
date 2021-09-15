@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: stdlib
 name: free
-references: {}
+references: []
 type: interface

@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: container
 name: __USER_LABEL_PREFIX__
-references: {}
+references: []
 type: interface

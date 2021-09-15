@@ -9,5 +9,6 @@ links:
   uid: stdint
 name: UINT32_MAX
 references:
-  url: https://en.cppreference.com/w/c/types/integer
+- identifier: https://en.cppreference.com/w/c/types/integer
+  type: url
 type: interface

@@ -9,5 +9,7 @@ links:
   uid: header
 name: INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
 references:
-  c-user: internal_errors
+- identifier: internal_errors
+  name: c-user
+  type: document
 type: interface

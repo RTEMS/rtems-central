@@ -9,5 +9,6 @@ links:
   uid: sys-impl-timeval
 name: struct timeval
 references:
-  url: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/time.h.html
+- identifier: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/time.h.html
+  type: url
 type: interface

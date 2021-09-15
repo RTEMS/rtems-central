@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Clustered Scheduler Configuration
 references:
-  c-user: ConfigurationSchedulersClustered
-  url: https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html
+- identifier: ConfigurationSchedulersClustered
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/config/scheduler-clustered.html
+  type: url
 type: interface

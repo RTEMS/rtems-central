@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: STATUS_MUTEX_CEILING_VIOLATED
-references: {}
+references: []
 type: interface

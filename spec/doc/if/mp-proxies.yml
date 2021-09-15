@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Proxies
 references:
-  c-user: MPCIProxies
-  url: https://docs.rtems.org/branches/master/c-user/multiprocessing.html#proxies
+- identifier: MPCIProxies
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/multiprocessing.html#proxies
+  type: url
 type: interface

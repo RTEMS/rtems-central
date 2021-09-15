@@ -8,5 +8,5 @@ links:
 - role: interface-placement
   uid: header
 name: STATUS_SUCCESSFUL
-references: {}
+references: []
 type: interface

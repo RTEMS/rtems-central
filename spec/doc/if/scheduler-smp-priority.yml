@@ -9,6 +9,9 @@ links:
   uid: domain
 name: Deterministic Priority SMP Scheduler
 references:
-  c-user: SchedulerSMPPriority
-  url: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler
+- identifier: SchedulerSMPPriority
+  name: c-user
+  type: document
+- identifier: https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html#deterministic-priority-smp-scheduler
+  type: url
 type: interface
