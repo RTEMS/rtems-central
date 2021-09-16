@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: type
+  spec-value: document
+  uid: external-reference
+spec-description: |
+  It specifies a reference to a document.
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: |
+          It shall be the name of the document.
+        spec-type: str
+    description: null
+    mandatory-attributes: all
+spec-name: External Document Reference
+spec-type: external-reference-document
+type: spec
