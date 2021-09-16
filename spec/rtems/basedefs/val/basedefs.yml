@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links: []
 test-actions:
@@ -755,6 +755,22 @@ test-actions:
       uid: ../req/no-return-0
   links: []
 - action-brief: |
+    Use the ${../if/noinit:/name} macro on ``noinit_variable`` at the
+    beginning of this file.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be checked that the ${../if/noinit:/name}
+      macro has the desired effect. Yet, the check confirms that such a
+      macro exists and can be used.
+    code: |
+      T_step_not_null( ${step}, &noinit_variable );
+    links:
+    - role: validation
+      uid: ../req/noinit-0
+  links: []
+- action-brief: |
     Use the ${../if/obfuscate-variable:/name} macro.
   action-code: |
     short obfuscate_variable = 66;
@@ -933,6 +949,46 @@ test-actions:
     links:
     - role: validation
       uid: ../req/section-0
+  links: []
+- action-brief: |
+    Use the ${../if/static-analysis:/name} macro.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be automatically check that
+      the ${../if/static-analysis:/name} macro has the desired effect.
+    code: |
+      #if defined(__COVERITY__)
+      #  if defined(RTEMS_STATIC_ANALYSIS)
+        T_quiet_true( true, "test passes, no output" );
+      #  else
+        T_quiet_true( false, "RTEMS_STATIC_ANALYSIS not defined" );
+      #  endif
+      #endif
+    links:
+    - role: validation
+      uid: ../req/static-analysis-0
+  links: []
+- action-brief: |
+    Use the ${../if/static-analysis:/name} macro.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      It cannot be automatically check that
+      the ${../if/static-analysis:/name} macro has the desired effect.
+    code: |
+      #if !defined(__COVERITY__)
+      #  if !defined(RTEMS_STATIC_ANALYSIS)
+        T_quiet_true( true, "test passes, no output" );
+      #  else
+        T_quiet_true( false, "RTEMS_STATIC_ANALYSIS defined" );
+      #  endif
+      #endif
+    links:
+    - role: validation
+      uid: ../req/static-analysis-1
   links: []
 - action-brief: |
     Use the ${../if/static-assert:/name} macro.
@@ -1508,6 +1564,8 @@ test-support: |
       /* Loop forever */
     }
   }
+
+  RTEMS_NOINIT static uint32_t noinit_variable;
 
   static int ori_func( int x )
   {

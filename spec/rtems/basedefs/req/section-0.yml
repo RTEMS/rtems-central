@@ -18,6 +18,6 @@ text: |
   C sting containing valid linker section name,
   and the file format used supports arbitary sections,
   the macro shall cause the compiler to store the function or
-  variable is a section named like the result of the pre-processor
+  variable in a section named like the result of the pre-processor
   substitutions on its argument ${../if/section:/params[0]/name}.
 type: requirement
