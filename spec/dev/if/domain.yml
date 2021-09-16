@@ -9,5 +9,5 @@ interface-type: domain
 links:
 - role: requirement-refinement
   uid: /req/domains
-name: Implementation
+name: Devices
 type: interface
