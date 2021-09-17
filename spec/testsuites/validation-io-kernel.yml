@@ -24,7 +24,7 @@ test-code: |
     .buf_size = sizeof( buffer ),
     .putchar = rtems_put_char,
     .verbosity = RTEMS_TEST_VERBOSITY,
-    .now = T_now_dummy,
+    .now = T_now_tick,
     .action_count = T_ARRAY_SIZE( actions ),
     .actions = actions
   };
@@ -37,7 +37,7 @@ test-code: |
 
     rtems_test_begin( rtems_test_name, TEST_STATE );
     T_run_initialize( &test_config );
-    RtemsIoValKernel_Run();
+    ${/rtems/io/val/kernel:/test-run}();
 
     if ( T_run_finalize() ) {
       rtems_test_end( rtems_test_name );
