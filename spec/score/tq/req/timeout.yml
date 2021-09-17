@@ -36,13 +36,13 @@ post-conditions:
       T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
-      The thread of the timeout operation shall not be unblocked by the timeout
+      The thread of the timeout operation shall be unblocked by the timeout
       operation.
   - name: 'No'
     test-code: |
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
-      The thread of the timeout operation shall be unblocked by the timeout
+      The thread of the timeout operation shall not be unblocked by the timeout
       operation.
   test-epilogue: null
   test-prologue: |
@@ -50,70 +50,23 @@ post-conditions:
 
     i = 0;
 pre-conditions:
-- name: EnqueueVariant
-  states:
-  - name: Blocking
-    test-code: |
-      if ( ctx->tq_ctx->enqueue_variant != TQ_ENQUEUE_BLOCKS ) {
-        ${.:skip}
-      }
-    text: |
-      Where the thread queue enqueue operation is blocking.
-  - name: Sticky
-    test-code: |
-      if ( ctx->tq_ctx->enqueue_variant != TQ_ENQUEUE_STICKY ) {
-        ${.:skip}
-      }
-    text: |
-      Where the thread queue enqueue operation is sticky.
-  test-epilogue: null
-  test-prologue: null
 - name: WaitState
   states:
   - name: Blocked
     test-code: |
-      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
-        T_unreachable();
-      } else {
-        TQEnqueuePrepare( ctx->tq_ctx );
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
-        Yield();
-        Tick( ctx );
-        TQEnqueueDone( ctx->tq_ctx );
-      }
+      TQEnqueuePrepare( ctx->tq_ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
+      Tick( ctx );
+      TQEnqueueDone( ctx->tq_ctx );
     text: |
       While the thread of the timeout operation is in the blocked wait state.
   - name: IntendToBlock
     test-code: |
       TQEnqueuePrepare( ctx->tq_ctx );
-
-      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
-        Per_CPU_Control *cpu;
-
-        TQSendAndWaitForIntendToBlock(
-          ctx->tq_ctx,
-          TQ_BLOCKER_A,
-          TQ_EVENT_ENQUEUE
-        );
-        cpu = _Thread_Get_CPU( ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ] );
-
-        /*
-         * We have to make sure that the worker thread inserted its thread
-         * timer.  Checking the intend to block wait state is not enough to
-         * ensure this.
-         */
-        while ( cpu->thread_dispatch_disable_level != 0 ) {
-          /* Wait */
-        }
-
-        Tick( ctx );
-        WaitForExecutionStop( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
-      } else {
-        T_scheduler_set_event_handler( SchedulerBlock, ctx );
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
-        Yield();
-      }
-
+      T_scheduler_set_event_handler( SchedulerBlock, ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
       TQEnqueueDone( ctx->tq_ctx );
     text: |
       While the thread of the timeout operation is in the intend to block wait
@@ -121,24 +74,11 @@ pre-conditions:
   - name: ReadyAgain
     test-code: |
       TQEnqueuePrepare( ctx->tq_ctx );
-
-      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
-        TQSendAndWaitForIntendToBlock(
-          ctx->tq_ctx,
-          TQ_BLOCKER_A,
-          TQ_EVENT_ENQUEUE | TQ_EVENT_TIMEOUT | TQ_EVENT_SURRENDER |
-            TQ_EVENT_SCHEDULER_RECORD_STOP
-        );
-        TQSchedulerRecordStart( ctx->tq_ctx );
-        TQEnqueueDone( ctx->tq_ctx );
-        WaitForExecutionStop( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
-      } else {
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
-        Yield();
-        T_scheduler_set_event_handler( SchedulerUnblock, ctx );
-        TQEnqueueDone( ctx->tq_ctx );
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
-      }
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      Yield();
+      T_scheduler_set_event_handler( SchedulerUnblock, ctx );
+      TQEnqueueDone( ctx->tq_ctx );
+      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
     text: |
       While the thread of the timeout operation is in the ready again wait
       state.
@@ -147,10 +87,7 @@ pre-conditions:
 rationale: null
 references: []
 requirement-type: functional
-skip-reasons:
-  StickyHasNoBlocking: |
-    When a sticky thread queue enqueue operation is performed, the blocked wait
-    state cannot occur.
+skip-reasons: {}
 test-action: |
   /*
    * The action is performed by the ``WaitState`` pre-condition preparation.
@@ -225,13 +162,20 @@ test-support: |
     TQSchedulerRecordStop( ctx->tq_ctx );
   }
 
-  static void SchedulerBlock( void *arg, const T_scheduler_event *event )
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
   {
     Context *ctx;
 
     ctx = arg;
 
-    if ( event->operation == T_SCHEDULER_BLOCK ) {
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
       T_scheduler_set_event_handler( NULL, NULL );
       ctx->request.handler = Tick;
       CallWithinISRSubmit( &ctx->request );
@@ -250,13 +194,20 @@ test-support: |
     TQSchedulerRecordStop( ctx->tq_ctx );
   }
 
-  static void SchedulerUnblock( void *arg, const T_scheduler_event *event )
+  static void SchedulerUnblock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
   {
     Context *ctx;
 
     ctx = arg;
 
-    if ( event->operation == T_SCHEDULER_UNBLOCK ) {
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_UNBLOCK
+    ) {
       T_scheduler_set_event_handler( NULL, NULL );
       ctx->request.handler = ThreadTimeout;
       CallWithinISRSubmit( &ctx->request );
@@ -276,8 +227,6 @@ transition-map:
     Status: Timeout
     Unblock: 'Yes'
   pre-conditions:
-    EnqueueVariant:
-    - Blocking
     WaitState:
     - Blocked
 - enabled-by: true
@@ -285,7 +234,6 @@ transition-map:
     Status: Timeout
     Unblock: 'No'
   pre-conditions:
-    EnqueueVariant: all
     WaitState:
     - IntendToBlock
 - enabled-by: true
@@ -293,14 +241,6 @@ transition-map:
     Status: Ok
     Unblock: 'No'
   pre-conditions:
-    EnqueueVariant: all
     WaitState:
     - ReadyAgain
-- enabled-by: true
-  post-conditions: StickyHasNoBlocking
-  pre-conditions:
-    EnqueueVariant:
-    - Sticky
-    WaitState:
-    - Blocked
 type: requirement

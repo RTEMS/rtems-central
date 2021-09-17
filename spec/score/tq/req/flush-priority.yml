@@ -165,13 +165,20 @@ test-support: |
     TQFlush( ctx->tq_ctx );
   }
 
-  static void SchedulerEvent( void *arg, const T_scheduler_event *event )
+  static void SchedulerEvent(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
   {
     Context *ctx;
 
     ctx = arg;
 
-    if ( event->operation == T_SCHEDULER_BLOCK ) {
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
       ctx->request.handler = Flush;
       ctx->request.arg = ctx;
       CallWithinISRSubmit( &ctx->request );

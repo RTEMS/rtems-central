@@ -15,6 +15,12 @@ post-conditions:
     text: |
       The semaphore obtain timeout actions shall be done as specified by
       ${/score/tq/req/timeout}.
+  - name: TimeoutPriorityInherit
+    test-code: |
+      ${/score/tq/req/timeout-priority-inherit:/test-run}( &ctx->tq_ctx );
+    text: |
+      The semaphore obtain timeout actions shall be done as specified by
+      ${/score/tq/req/timeout-priority-inherit}.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -123,6 +129,7 @@ test-includes:
 - string.h
 test-local-includes:
 - tr-tq-timeout.h
+- tr-tq-timeout-priority-inherit.h
 - tx-thread-queue.h
 - tx-support.h
 test-prepare: |
@@ -153,17 +160,17 @@ text: |
 transition-map:
 - enabled-by: true
   post-conditions:
-    Action: Timeout
+    Action:
+    - if:
+        pre-conditions:
+          Class:
+          - PrioInherit
+          - MrsP
+      then: TimeoutPriorityInherit
+    - else: Timeout
   pre-conditions:
     Class: all
     Discipline: all
-- enabled-by: true
-  post-conditions: NoMrsP
-  pre-conditions:
-    Class:
-    - MrsP
-    Discipline:
-    - Priority
 - enabled-by: true
   post-conditions: NeedsPriorityDiscipline
   pre-conditions:
@@ -173,9 +180,9 @@ transition-map:
     - MrsP
     Discipline:
     - FIFO
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Action: Timeout
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: NoMrsP
   pre-conditions:
     Class:
     - MrsP

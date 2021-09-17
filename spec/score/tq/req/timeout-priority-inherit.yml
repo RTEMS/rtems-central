@@ -1,0 +1,414 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links:
+- role: requirement-refinement
+  uid: ../if/group
+post-conditions:
+- name: Status
+  states:
+  - name: Ok
+    test-code: |
+      T_eq_int(
+        ctx->tq_ctx->status[ TQ_BLOCKER_A ],
+        TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL )
+      );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/successful:/name}.
+  - name: Timeout
+    test-code: |
+      T_eq_int(
+        ctx->tq_ctx->status[ TQ_BLOCKER_A ],
+        TQConvertStatus( ctx->tq_ctx, STATUS_TIMEOUT )
+      );
+    text: |
+      The return status of the directive call shall be derived from
+      ${../../status/if/timeout:/name}.
+  test-epilogue: null
+  test-prologue: null
+- name: Unblock
+  states:
+  - name: 'Yes'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread of the timeout operation shall be unblocked by the timeout
+      operation.
+  - name: 'No'
+    test-code: |
+      T_eq_ptr( GetUnblock( ctx, &i ), NULL );
+    text: |
+      The thread of the timeout operation shall not be unblocked by the timeout
+      operation.
+  test-epilogue: null
+  test-prologue: |
+    size_t i;
+
+    i = 0;
+pre-conditions:
+- name: EnqueueVariant
+  states:
+  - name: Blocking
+    test-code: |
+      if ( ctx->tq_ctx->enqueue_variant != TQ_ENQUEUE_BLOCKS ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue enqueue operation is blocking.
+  - name: Sticky
+    test-code: |
+      if ( ctx->tq_ctx->enqueue_variant != TQ_ENQUEUE_STICKY ) {
+        ${.:skip}
+      }
+    text: |
+      Where the thread queue enqueue operation is sticky.
+  test-epilogue: null
+  test-prologue: null
+- name: Scheduler
+  states:
+  - name: Same
+    test-code: |
+      ctx->other_scheduler = false;
+
+      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+        TQSetScheduler(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          SCHEDULER_A_ID,
+          PRIO_LOW
+        );
+        RemoveProcessor( SCHEDULER_B_ID, 1 );
+        AddProcessor( SCHEDULER_A_ID, 1 );
+        ctx->restore_scheduler = true;
+      } else {
+        TQSetScheduler(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          SCHEDULER_A_ID,
+          PRIO_ULTRA_HIGH
+        );
+      }
+    text: |
+      While the ${/glossary/scheduler-home:/term} of the thread is equal to the
+      ${/glossary/scheduler-home:/term} of the thread queue owner.
+  - name: Other
+    test-code: |
+      ctx->other_scheduler = true;
+
+      TQSetScheduler(
+        ctx->tq_ctx,
+        TQ_BLOCKER_A,
+        SCHEDULER_B_ID,
+        PRIO_NORMAL
+      );
+    text: |
+      While the ${/glossary/scheduler-home:/term} of the thread is not equal to
+      the ${/glossary/scheduler-home:/term} of the thread queue owner.
+  test-epilogue: null
+  test-prologue: null
+- name: WaitState
+  states:
+  - name: Blocked
+    test-code: |
+      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+        T_unreachable();
+      } else {
+        TQEnqueuePrepare( ctx->tq_ctx );
+        TQClearDone( ctx->tq_ctx, TQ_BLOCKER_A );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          TQ_EVENT_ENQUEUE
+        );
+        Tick( ctx );
+        TQWaitForDone( ctx->tq_ctx, TQ_BLOCKER_A );
+        TQEnqueueDone( ctx->tq_ctx );
+      }
+    text: |
+      While the thread of the timeout operation is in the blocked wait state.
+  - name: IntendToBlock
+    test-code: |
+      TQEnqueuePrepare( ctx->tq_ctx );
+
+      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+        Per_CPU_Control *cpu;
+
+        TQSendAndWaitForIntendToBlock(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          TQ_EVENT_ENQUEUE
+        );
+        cpu = _Thread_Get_CPU( ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ] );
+
+        /*
+         * We have to make sure that the worker thread inserted its thread
+         * timer.  Checking the intend to block wait state is not enough to
+         * ensure this.
+         */
+        while ( cpu->thread_dispatch_disable_level != 0 ) {
+          /* Wait */
+        }
+
+        Tick( ctx );
+        WaitForExecutionStop( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+      } else {
+        T_scheduler_set_event_handler( SchedulerBlock, ctx );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          TQ_EVENT_ENQUEUE
+        );
+      }
+
+      TQEnqueueDone( ctx->tq_ctx );
+    text: |
+      While the thread of the timeout operation is in the intend to block wait
+      state.
+  - name: ReadyAgain
+    test-code: |
+      TQEnqueuePrepare( ctx->tq_ctx );
+
+      if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
+        TQSendAndWaitForIntendToBlock(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          TQ_EVENT_ENQUEUE | TQ_EVENT_TIMEOUT | TQ_EVENT_SURRENDER |
+            TQ_EVENT_SCHEDULER_RECORD_STOP
+        );
+        TQSchedulerRecordStart( ctx->tq_ctx );
+        TQEnqueueDone( ctx->tq_ctx );
+        WaitForExecutionStop( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+      } else {
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          TQ_EVENT_ENQUEUE
+        );
+        T_scheduler_set_event_handler( SchedulerUnblock, ctx );
+        TQEnqueueDone( ctx->tq_ctx );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          TQ_BLOCKER_A,
+          TQ_EVENT_SURRENDER
+        );
+      }
+    text: |
+      While the thread of the timeout operation is in the ready again wait
+      state.
+  test-epilogue: null
+  test-prologue: null
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  StickyHasNoBlocking: |
+    When a sticky thread queue enqueue operation is performed, the blocked wait
+    state cannot occur.
+  OnlyOneCPU: |
+    Where the system was built with SMP support disabled, exactly one scheduler
+    is present in an application using exactly one processor.
+test-action: |
+  /*
+   * The action is performed by the ``WaitState`` pre-condition preparation.
+   */
+test-brief: null
+test-cleanup: |
+  if ( ctx->restore_scheduler ) {
+    RemoveProcessor( SCHEDULER_A_ID, 1 );
+    AddProcessor( SCHEDULER_B_ID, 1 );
+  }
+test-context:
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
+- brief: |
+    If this member is true, then the enqueued thread shall use a home scheduler
+    other than the home scheduler of the owner.
+  description: null
+  member: |
+    bool other_scheduler
+- brief: |
+    If this member is true, then the processor set of the schedulers shall be
+    restored.
+  description: null
+  member: |
+    bool restore_scheduler
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes: []
+  local-includes:
+  - tx-thread-queue.h
+  run-params:
+  - description: |
+      is the thread queue test context.
+    dir: inout
+    name: tq_ctx
+    specifier: TQContext *${.:name}
+  target: testsuites/validation/tr-tq-timeout-priority-inherit.h
+test-includes:
+- rtems/score/smpimpl.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+- tr-tq-timeout-priority-inherit.h
+test-prepare: |
+  ctx->restore_scheduler = false;
+test-setup:
+  brief: null
+  code: |
+    ctx->request.arg = ctx;
+    TQReset( ctx->tq_ctx );
+    TQSetScheduler(
+      ctx->tq_ctx,
+      TQ_HELPER_OTHER,
+      SCHEDULER_A_ID,
+      PRIO_NORMAL
+    );
+  description: null
+test-stop: null
+test-support: |
+  typedef ${.:/test-context-type} Context;
+
+  static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
+  {
+    return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
+  }
+
+  static const rtems_tcb *GetTCB( Context *ctx, TQWorkerKind worker )
+  {
+    return ctx->tq_ctx->worker_tcb[ worker ];
+  }
+
+  static void Tick( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    FinalClockTick();
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  static void SchedulerBlock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_BLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = Tick;
+      CallWithinISRSubmit( &ctx->request );
+    }
+  }
+
+  static void ThreadTimeout( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    TQSchedulerRecordStart( ctx->tq_ctx );
+    _Thread_Timeout(
+      &ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ]->Timer.Watchdog
+    );
+    TQSchedulerRecordStop( ctx->tq_ctx );
+  }
+
+  static void SchedulerUnblock(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_UNBLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+
+      if ( ctx->other_scheduler ) {
+  #if defined(RTEMS_SMP)
+        _SMP_Unicast_action( 1, ThreadTimeout, ctx );
+  #else
+        T_unreachable();
+  #endif
+      } else {
+        ctx->request.handler = ThreadTimeout;
+        CallWithinISRSubmit( &ctx->request );
+      }
+    }
+  }
+test-target: testsuites/validation/tr-tq-timeout-priority-inherit.c
+test-teardown:
+  brief: null
+  code: |
+    TQReset( ctx->tq_ctx );
+  description: null
+text: |
+  When the thread queue enqueue operation timed out.
+transition-map:
+- enabled-by: true
+  post-conditions:
+    Status: Timeout
+    Unblock: 'Yes'
+  pre-conditions:
+    EnqueueVariant:
+    - Blocking
+    Scheduler: all
+    WaitState:
+    - Blocked
+- enabled-by: true
+  post-conditions:
+    Status: Timeout
+    Unblock: 'No'
+  pre-conditions:
+    EnqueueVariant: all
+    Scheduler: all
+    WaitState:
+    - IntendToBlock
+- enabled-by: true
+  post-conditions:
+    Status: Ok
+    Unblock: 'No'
+  pre-conditions:
+    EnqueueVariant: all
+    Scheduler: all
+    WaitState:
+    - ReadyAgain
+- enabled-by: true
+  post-conditions: StickyHasNoBlocking
+  pre-conditions:
+    EnqueueVariant:
+    - Sticky
+    Scheduler: all
+    WaitState:
+    - Blocked
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    EnqueueVariant: all
+    Scheduler:
+    - Other
+    WaitState: all
+type: requirement
