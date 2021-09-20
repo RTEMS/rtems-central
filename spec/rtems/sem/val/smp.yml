@@ -31,7 +31,7 @@ test-actions:
     SetScheduler( worker_id, scheduler_b_id, PRIO_NORMAL );
 
     ObtainMutex( ctx->mutex_id );
-    SetFatalExtension( BadEnqueueFatal );
+    SetFatalHandler( BadEnqueueFatal, ctx );
     StartTask( worker_id, BadEnqueueTask, ctx );
 
     while ( !ctx->done ) {
@@ -270,27 +270,26 @@ test-support: |
 
   static void BadEnqueueFatal(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Per_CPU_Control *cpu_self;
     Context         *ctx;
 
     T_eq_int( source, INTERNAL_ERROR_CORE );
-    T_false( always_set_to_false );
     T_eq_ulong(
       code,
       INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
     );
 
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
 
     cpu_self = _Per_CPU_Get();
     _Thread_Dispatch_unnest( cpu_self );
     _Thread_Dispatch_unnest( cpu_self );
 
-    ctx = T_fixture_context();
+    ctx = arg;
     ctx->done = true;
     SuspendSelf();
   }

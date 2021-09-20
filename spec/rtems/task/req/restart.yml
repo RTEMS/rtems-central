@@ -882,7 +882,7 @@ test-setup:
     );
     T_rsc_success( sc );
 
-    SetFatalExtension( Fatal );
+    SetFatalHandler( Fatal, ctx );
     SetSelfPriority( PRIO_NORMAL );
 
     ctx->deleter_id = CreateTask( "DELE", PRIO_HIGH );
@@ -1038,18 +1038,17 @@ test-support: |
 
   static void Fatal(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Context         *ctx;
     Per_CPU_Control *cpu_self;
 
     T_eq_int( source, INTERNAL_ERROR_CORE );
-    T_false( always_set_to_false );
     T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
 
-    ctx = T_fixture_context();
+    ctx = arg;
     ++ctx->calls.fatal;
     T_assert_eq_int( ctx->calls.fatal, 1 );
 
@@ -1062,19 +1061,17 @@ test-support: |
 
   static void ResumeThreadDispatch(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Context *ctx;
 
     T_eq_int( source, INTERNAL_ERROR_CORE );
-    T_false( always_set_to_false );
     T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
 
-    SetFatalExtension( Fatal );
-
-    ctx = T_fixture_context();
+    ctx = arg;
+    SetFatalHandler( Fatal, ctx );
     longjmp( ctx->thread_dispatch_context, 1 );
   }
 
@@ -1084,7 +1081,7 @@ test-support: |
   )
   {
     WrapThreadQueueExtract( &ctx->wrap_tq_ctx, ctx->worker_tcb );
-    SetFatalExtension( ResumeThreadDispatch );
+    SetFatalHandler( ResumeThreadDispatch, ctx );
 
     if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
       (void) rtems_task_restart(
@@ -1111,7 +1108,7 @@ test-support: |
 
       if ( ctx->interrupt || ctx->nested_request ) {
         if ( ctx->blocked ) {
-          SetFatalExtension( ResumeThreadDispatch );
+          SetFatalHandler( ResumeThreadDispatch, ctx );
           cpu_self = _Thread_Dispatch_disable();
 
           if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
@@ -1258,7 +1255,7 @@ test-teardown:
     sc = rtems_extension_delete( ctx->extension_id );
     T_rsc_success( sc );
 
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
     DeleteTask( ctx->deleter_id );
     ReleaseMutex( ctx->mutex_id );
     DeleteMutex( ctx->mutex_id );

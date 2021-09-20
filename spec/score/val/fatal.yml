@@ -11,17 +11,16 @@ test-actions:
     rtems_id     id;
     unsigned int counter;
 
-    SetFatalExtension( FatalTaskExit );
+    SetFatalHandler( FatalTaskExit, ctx );
     SetSelfPriority( PRIO_NORMAL );
-    counter = ResetFatalInfo();
+    counter = ResetFatalInfo( ctx );
     id = CreateTask( "EXIT", PRIO_HIGH );
     StartTask( id, ExitTask, NULL );
-    T_eq_uint( GetFatalCounter(), counter + 1 );
-    T_eq_int( fatal_info.source, INTERNAL_ERROR_CORE );
-    T_false( fatal_info.always_set_to_false );
-    T_eq_ulong( fatal_info.code, INTERNAL_ERROR_THREAD_EXITTED );
+    T_eq_uint( GetFatalCounter( ctx ), counter + 1 );
+    T_eq_int( ctx->source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( ctx->code, INTERNAL_ERROR_THREAD_EXITTED );
     RestoreRunnerPriority();
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
   checks: []
   links:
   - role: validation
@@ -34,30 +33,26 @@ test-actions:
     rtems_id     id;
     unsigned int counter;
 
-    SetFatalExtension( FatalBadThreadDispatchEnvironment );
+    SetFatalHandler( FatalBadThreadDispatchEnvironment, ctx );
     SetSelfPriority( PRIO_NORMAL );
-    counter = ResetFatalInfo();
+    counter = ResetFatalInfo( ctx );
     id = CreateTask( "BENV", PRIO_HIGH );
     StartTask( id, ISRDisabledThreadDispatchTask, NULL );
 
     #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
     if ( rtems_configuration_get_maximum_processors() > 1 ) {
     #endif
-      T_eq_uint( GetFatalCounter(), counter + 1 );
-      T_eq_int( fatal_info.source, INTERNAL_ERROR_CORE );
-      T_false( fatal_info.always_set_to_false );
-      T_eq_ulong(
-        fatal_info.code,
-        INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
-      );
+      T_eq_uint( GetFatalCounter( ctx ), counter + 1 );
+      T_eq_int( ctx->source, INTERNAL_ERROR_CORE );
+      T_eq_ulong( ctx->code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT );
     #if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
     } else {
-      T_eq_uint( GetFatalCounter(), counter );
+      T_eq_uint( GetFatalCounter( ctx ), counter );
     }
     #endif
 
     RestoreRunnerPriority();
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
   checks: []
   links:
   - role: validation
@@ -73,20 +68,16 @@ test-actions:
     rtems_id     id;
     unsigned int counter;
 
-    SetFatalExtension( FatalBadThreadDispatchDisableLevel );
+    SetFatalHandler( FatalBadThreadDispatchDisableLevel, ctx );
     SetSelfPriority( PRIO_NORMAL );
-    counter = ResetFatalInfo();
+    counter = ResetFatalInfo( ctx );
     id = CreateTask( "BLVL", PRIO_HIGH );
     StartTask( id, BadLevelThreadDispatchTask, NULL );
-    T_eq_uint( GetFatalCounter(), counter + 1 );
-    T_eq_int( fatal_info.source, INTERNAL_ERROR_CORE );
-    T_false( fatal_info.always_set_to_false );
-    T_eq_ulong(
-      fatal_info.code,
-      INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
-    );
+    T_eq_uint( GetFatalCounter( ctx ), counter + 1 );
+    T_eq_int( ctx->source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( ctx->code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
     RestoreRunnerPriority();
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
   checks: []
   links:
   - role: validation
@@ -113,9 +104,9 @@ test-actions:
 
     deadlock_mutex = CreateMutex();
 
-    SetFatalExtension( FatalThreadQueueDeadlock );
+    SetFatalHandler( FatalThreadQueueDeadlock, ctx );
     SetSelfPriority( PRIO_NORMAL );
-    counter = ResetFatalInfo();
+    counter = ResetFatalInfo( ctx );
 
     ObtainMutex( deadlock_mutex );
 
@@ -128,16 +119,12 @@ test-actions:
 
     ReleaseMutex( deadlock_mutex );
 
-    T_eq_uint( GetFatalCounter(), counter + 1 );
-    T_eq_int( fatal_info.source, INTERNAL_ERROR_CORE );
-    T_false( fatal_info.always_set_to_false );
-    T_eq_ulong(
-      fatal_info.code,
-      INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK
-    );
+    T_eq_uint( GetFatalCounter( ctx ), counter + 1 );
+    T_eq_int( ctx->source, INTERNAL_ERROR_CORE );
+    T_eq_ulong( ctx->code, INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
 
     RestoreRunnerPriority();
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
 
     sc = rtems_extension_delete( extension_id );
     T_rsc_success( sc );
@@ -149,7 +136,22 @@ test-actions:
     uid: ../object/req/fatal-allocator-mutex-deadlock
 test-brief: |
   Tests some fatal errors.
-test-context: []
+test-context:
+- brief: |
+    This member is a fatal extension invocation counter.
+  description: null
+  member: |
+    Atomic_Uint counter
+- brief: |
+    This member contains the last fatal source.
+  description: null
+  member: |
+    rtems_fatal_source source
+- brief: |
+    This member contains the last fatal code.
+  description: null
+  member: |
+    rtems_fatal_code code
 test-context-support: null
 test-description: null
 test-header: null
@@ -165,48 +167,39 @@ test-local-includes:
 test-setup: null
 test-stop: null
 test-support: |
-  typedef struct {
-    Atomic_Uint        counter;
-    rtems_fatal_source source;
-    bool               always_set_to_false;
-    rtems_fatal_code   code;
-  } FatalInfo;
+  typedef ${.:/test-context-type} Context;
 
-  static FatalInfo fatal_info;
-
-  static unsigned int GetFatalCounter( void )
+  static unsigned int GetFatalCounter( const Context *ctx )
   {
-    return _Atomic_Load_uint( &fatal_info.counter, ATOMIC_ORDER_RELAXED );
+    return _Atomic_Load_uint( &ctx->counter, ATOMIC_ORDER_RELAXED );
   }
 
-  static unsigned int ResetFatalInfo( void )
+  static unsigned int ResetFatalInfo( Context *ctx )
   {
-    fatal_info.source = RTEMS_FATAL_SOURCE_APPLICATION;
-    fatal_info.always_set_to_false = true;
-    fatal_info.code = INTERNAL_ERROR_NO_MPCI;
+    ctx->source = RTEMS_FATAL_SOURCE_APPLICATION;
+    ctx->code = INTERNAL_ERROR_NO_MPCI;
 
-    return GetFatalCounter();
+    return GetFatalCounter( ctx );
   }
 
   static void Fatal(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    Context           *ctx
   )
   {
-    fatal_info.source = source;
-    fatal_info.always_set_to_false = always_set_to_false;
-    fatal_info.code = code;
-    _Atomic_Fetch_add_uint( &fatal_info.counter, 1, ATOMIC_ORDER_RELAXED );
+    ctx->source = source;
+    ctx->code = code;
+    _Atomic_Fetch_add_uint( &ctx->counter, 1, ATOMIC_ORDER_RELAXED );
   }
 
   static void FatalTaskExit(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
-    Fatal( source, always_set_to_false, code );
+    Fatal( source, code, arg );
     rtems_task_exit();
   }
 
@@ -217,11 +210,11 @@ test-support: |
 
   static void FatalBadThreadDispatchEnvironment(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
-    Fatal( source, always_set_to_false, code );
+    Fatal( source, code, arg );
     _ISR_Set_level( 0 );
     _Thread_Dispatch_direct_no_return( _Per_CPU_Get() );
   }
@@ -238,13 +231,13 @@ test-support: |
 
   static void FatalBadThreadDispatchDisableLevel(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Per_CPU_Control *cpu_self;
 
-    Fatal( source, always_set_to_false, code );
+    Fatal( source, code, arg );
     cpu_self = _Per_CPU_Get();
     _Thread_Dispatch_unnest( cpu_self );
     _Thread_Dispatch_direct_no_return( cpu_self );
@@ -274,11 +267,11 @@ test-support: |
 
   static void FatalThreadQueueDeadlock(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
-    Fatal( source, always_set_to_false, code );
+    Fatal( source, code, arg );
     longjmp( before_deadlock, 1 );
   }
 

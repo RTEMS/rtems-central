@@ -340,7 +340,7 @@ test-setup:
     );
     T_rsc_success( sc );
 
-    SetFatalExtension( Fatal );
+    SetFatalHandler( Fatal, ctx );
     SetSelfPriority( PRIO_NORMAL );
 
     ctx->deleter_id = CreateTask( "DELE", PRIO_HIGH );
@@ -421,19 +421,18 @@ test-support: |
 
   static void Fatal(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Context         *ctx;
     T_scheduler_log *log;
     Per_CPU_Control *cpu_self;
 
-    ctx = T_fixture_context();
+    ctx = arg;
     ++ctx->fatal_extension_calls;
 
     T_eq_int( source, INTERNAL_ERROR_CORE );
-    T_false( always_set_to_false );
     T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
     T_assert_eq_int( ctx->fatal_extension_calls, 1 );
 
@@ -496,7 +495,7 @@ test-teardown:
     sc = rtems_extension_delete( ctx->extension_id );
     T_rsc_success( sc );
 
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
     DeleteTask( ctx->deleter_id );
     RestoreRunnerASR();
     RestoreRunnerPriority();

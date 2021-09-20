@@ -724,7 +724,7 @@ test-setup:
     );
     T_rsc_success( sc );
 
-    SetFatalExtension( Fatal );
+    SetFatalHandler( Fatal, ctx );
     SetTaskSwitchExtension( TaskSwitch );
     SetSelfPriority( PRIO_NORMAL );
 
@@ -802,39 +802,34 @@ test-support: |
 
   static void Fatal(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Context *ctx;
 
     T_eq_int( source, INTERNAL_ERROR_CORE );
-    T_false( always_set_to_false );
     T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
 
-    ctx = T_fixture_context();
+    ctx = arg;
     ++ctx->calls.fatal;
     T_assert_eq_int( ctx->calls.fatal, 1 );
-
-    ctx = T_fixture_context();
     longjmp( ctx->thread_dispatch_context, 1 );
   }
 
   static void ResumeThreadDispatch(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Context *ctx;
 
     T_eq_int( source, INTERNAL_ERROR_CORE );
-    T_false( always_set_to_false );
     T_eq_ulong( code, INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
 
-    SetFatalExtension( Fatal );
-
-    ctx = T_fixture_context();
+    ctx = arg;
+    SetFatalHandler( Fatal, ctx );
     longjmp( ctx->thread_dispatch_context, 1 );
   }
 
@@ -931,7 +926,7 @@ test-support: |
         if ( ctx->blocked ) {
           Per_CPU_Control *cpu_self;
 
-          SetFatalExtension( ResumeThreadDispatch );
+          SetFatalHandler( ResumeThreadDispatch, ctx );
           cpu_self = _Thread_Dispatch_disable();
 
           if ( setjmp( ctx->thread_dispatch_context ) == 0 ) {
@@ -1103,7 +1098,7 @@ test-teardown:
     sc = rtems_extension_delete( ctx->extension_id );
     T_rsc_success( sc );
 
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
     SetTaskSwitchExtension( NULL );
     DeleteTask( ctx->deleter_id );
     DeleteTask( ctx->deleter_2_id );

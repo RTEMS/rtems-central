@@ -139,8 +139,8 @@ test-setup:
   brief: null
   code: |
     memset( ctx, 0, sizeof( *ctx ) );
-    ctx->tq_ctx.wait = TQ_WAIT_TICKS;
-    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareClassicSem;
+    ctx->tq_ctx.wait = TQ_WAIT_TIMED;
+    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
     ctx->tq_ctx.enqueue_done = TQSurrenderClassicSem;
     ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
     ctx->tq_ctx.surrender = TQSurrenderClassicSem;

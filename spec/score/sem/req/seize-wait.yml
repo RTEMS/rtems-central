@@ -78,7 +78,7 @@ pre-conditions:
   states:
   - name: Zero
     test-code: |
-      /* Done by TQEnqueuePrepareClassicSem() */
+      /* Done by TQEnqueuePrepareDefault() */
     text: |
       While the count of the semaphore is zero.
   - name: Positive
@@ -119,7 +119,7 @@ test-local-includes:
 - tr-tq-enqueue-fifo.h
 - tr-tq-enqueue-priority.h
 test-prepare: |
-  ctx->tq_ctx->base.enqueue_prepare = TQEnqueuePrepareClassicSem;
+  ctx->tq_ctx->base.enqueue_prepare = TQEnqueuePrepareDefault;
   ctx->tq_ctx->base.enqueue_done = TQSurrenderClassicSem;
   ctx->tq_ctx->base.get_properties = GetProperties;
 test-setup: null
@@ -147,7 +147,7 @@ test-support: |
       ctx->base.worker_id[ enqueued_worker ]
     );
 
-    if ( base->wait == TQ_WAIT_TICKS ) {
+    if ( base->wait == TQ_WAIT_TIMED ) {
       T_eq_int( timer_state, T_THREAD_TIMER_SCHEDULED );
     } else {
       T_eq_int( timer_state, T_THREAD_TIMER_INACTIVE );

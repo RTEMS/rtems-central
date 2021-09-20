@@ -273,7 +273,7 @@ pre-conditions:
       ${../../option/if/no-wait:/name} option.
   - name: Timeout
     test-code: |
-      ctx->tq_ctx.wait =      TQ_WAIT_TICKS;
+      ctx->tq_ctx.wait =      TQ_WAIT_TIMED;
       ctx->option_set_param = RTEMS_WAIT;
       ctx->timeout_param =    timeout_ticks;
     text: |
@@ -768,7 +768,7 @@ test-support: |
         option_set = RTEMS_WAIT;
         timeout = RTEMS_NO_TIMEOUT;
         break;
-      case TQ_WAIT_TICKS:
+      case TQ_WAIT_TIMED:
         option_set = RTEMS_WAIT;
         timeout = UINT32_MAX;
         break;

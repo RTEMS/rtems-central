@@ -325,8 +325,6 @@ test-local-includes:
 - tr-tq-enqueue-mrsp.h
 - tr-tq-enqueue-priority.h
 test-prepare: |
-  ctx->tq_ctx->base.enqueue_prepare = TQEnqueuePrepareClassicSem;
-  ctx->tq_ctx->base.enqueue_done = TQSurrenderClassicSem;
   ctx->owner_caller = false;
   ctx->owner_other = false;
   ctx->deadlock = false;

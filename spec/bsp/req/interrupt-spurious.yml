@@ -171,7 +171,7 @@ test-setup:
 
     rtems_interrupt_entry_initialize( &ctx->entry, EntryRoutine, ctx, "Info" );
     test_case_active = true;
-    SetFatalExtension( FatalExtension );
+    SetFatalHandler( Fatal, ctx );
   description: null
 test-stop: null
 test-support: |
@@ -207,16 +207,15 @@ test-support: |
     ProcessInterrupt( ctx );
   }
 
-  static void FatalExtension(
+  static void Fatal(
     rtems_fatal_source source,
-    bool               always_set_to_false,
-    rtems_fatal_code   code
+    rtems_fatal_code   code,
+    void              *arg
   )
   {
     Context *ctx;
 
-    ctx = T_fixture_context();
-    T_false( always_set_to_false );
+    ctx = arg;
     ctx->fatal_source = source;
     ctx->fatal_code = code;
     ++ctx->fatal_counter;
@@ -246,7 +245,7 @@ test-target: testsuites/validation/tc-bsp-interrupt-spurious.c
 test-teardown:
   brief: null
   code: |
-    SetFatalExtension( NULL );
+    SetFatalHandler( NULL, NULL );
     test_case_active = false;
   description: null
 text: ${.:text-template}
