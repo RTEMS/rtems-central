@@ -359,12 +359,6 @@ test-context:
     rtems_status_code status
 - brief: |
     This member contains the ${/glossary/task:/term} identifier of the
-    main ${/glossary/task:/term}.
-  description: null
-  member: |
-    rtems_id task_id
-- brief: |
-    This member contains the ${/glossary/task:/term} identifier of the
     worker ${/glossary/task:/term}.
   description: null
   member: |
@@ -409,7 +403,6 @@ test-setup:
   brief: null
   code: |
     ctx->magic   = MAGIC;
-    ctx->task_id = rtems_task_self();
 
     SetSelfPriority( PRIO_NORMAL );
     ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );

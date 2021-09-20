@@ -385,12 +385,6 @@ test-context:
   member: |
     uint32_t count
 - brief: |
-    This member contains the ${/glossary/task:/term} identifier of the
-    main ${/glossary/task:/term}.
-  description: null
-  member: |
-    rtems_id task_id
-- brief: |
     This member contains the ${/glossary/task:/term} identifiers of the
     worker ${/glossary/task:/plural}.
   description: null
@@ -442,7 +436,6 @@ test-setup:
   brief: null
   code: |
     size_t i;
-    ctx->task_id = rtems_task_self();
     SetSelfPriority( PRIO_NORMAL );
 
     for ( i = 0; i < NUMBER_OF_WORKERS; ++i ) {
