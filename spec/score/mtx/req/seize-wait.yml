@@ -30,7 +30,8 @@ post-conditions:
       ${../../status/if/deadlock:/name}.
   - name: DeadlockFatal
     test-code: |
-      T_unreachable();
+      T_eq_int( ctx->tq_ctx->base.status[ TQ_BLOCKER_A ], STATUS_DEADLOCK );
+      ${../../tq/req/enqueue-deadlock:/test-run}( &ctx->tq_ctx->base );
     text: |
       The system shall terminate with the
       ${/score/interr/if/internal-error-core:/name} fatal source and the
@@ -162,14 +163,14 @@ pre-conditions:
   states:
   - name: Status
     test-code: |
-      if ( ctx->tq_ctx->deadlock != TQ_MTX_DEADLOCK_STATUS ) {
+      if ( ctx->tq_ctx->base.deadlock != TQ_DEADLOCK_STATUS ) {
         ${.:skip}
       }
     text: |
       Where a detected deadlock results in a return with a status code.
   - name: Fatal
     test-code: |
-      if ( ctx->tq_ctx->deadlock != TQ_MTX_DEADLOCK_FATAL ) {
+      if ( ctx->tq_ctx->base.deadlock != TQ_DEADLOCK_FATAL ) {
         ${.:skip}
       }
     text: |
@@ -196,7 +197,7 @@ pre-conditions:
   test-prologue: null
 - name: Owner
   states:
-  - name: 'No'
+  - name: None
     test-code: |
       /* This is the default */
     text: |
@@ -255,7 +256,7 @@ test-action: |
   TQSetScheduler(
     &ctx->tq_ctx->base,
     TQ_BLOCKER_B,
-    ctx->tq_ctx->base.runner_scheduler_id,
+    SCHEDULER_A_ID,
     PRIO_VERY_HIGH
   );
 
@@ -346,10 +347,12 @@ test-support: |
 
   static void Action( Context *ctx )
   {
+    TQEvent enqueue;
+
     TQSetScheduler(
       &ctx->tq_ctx->base,
       TQ_BLOCKER_A,
-      ctx->tq_ctx->base.runner_scheduler_id,
+      SCHEDULER_A_ID,
       PRIO_VERY_HIGH
     );
 
@@ -376,7 +379,14 @@ test-support: |
     }
 
     TQSetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A, ctx->priority_before );
-    TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+
+    if ( ctx->tq_ctx->base.deadlock == TQ_DEADLOCK_FATAL ) {
+      enqueue = TQ_EVENT_ENQUEUE_FATAL;
+    } else {
+      enqueue = TQ_EVENT_ENQUEUE;
+    }
+
+    TQSend( &ctx->tq_ctx->base, TQ_BLOCKER_A, enqueue );
     ctx->owner_after = TQGetOwner( &ctx->tq_ctx->base );
     ctx->priority_after = TQGetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A );
 
@@ -412,7 +422,7 @@ test-support: |
     TQSetScheduler(
       &ctx->tq_ctx->base,
       TQ_BLOCKER_A,
-      ctx->tq_ctx->base.other_scheduler_id,
+      SCHEDULER_B_ID,
       PRIO_VERY_HIGH
     );
 
@@ -431,10 +441,7 @@ test-support: |
         );
       }
 
-      SetSelfScheduler(
-        ctx->tq_ctx->base.other_scheduler_id,
-        PRIO_ULTRA_HIGH
-      );
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
       TQSendAndSynchronizeRunner(
         &ctx->tq_ctx->base,
         TQ_BLOCKER_B,
@@ -449,10 +456,7 @@ test-support: |
         );
       }
 
-      SetSelfScheduler(
-        ctx->tq_ctx->base.runner_scheduler_id,
-        PRIO_ULTRA_HIGH
-      );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
     }
 
     TQSetPriority( &ctx->tq_ctx->base, TQ_BLOCKER_A, ctx->priority_before );
@@ -480,10 +484,7 @@ test-support: |
         );
       }
 
-      SetSelfScheduler(
-        ctx->tq_ctx->base.other_scheduler_id,
-        PRIO_ULTRA_HIGH
-      );
+      SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
       TQSendAndSynchronizeRunner(
         &ctx->tq_ctx->base,
         TQ_BLOCKER_B,
@@ -498,10 +499,7 @@ test-support: |
         );
       }
 
-      SetSelfScheduler(
-        ctx->tq_ctx->base.runner_scheduler_id,
-        PRIO_NORMAL
-      );
+      SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
     }
 
     TQWaitForDone( &ctx->tq_ctx->base, TQ_BLOCKER_A );
@@ -532,7 +530,7 @@ transition-map:
     DeadlockResult: all
     Recursive: all
     Owner:
-    - 'No'
+    - None
     Priority: N/A
 - enabled-by: true
   post-conditions:
@@ -690,7 +688,7 @@ transition-map:
     DeadlockResult: all
     Recursive: all
     Owner:
-    - 'No'
+    - None
     Priority:
     - Low
     - Equal
@@ -756,7 +754,7 @@ transition-map:
     Owner:
     - if:
         pre-conditions:
-          Owner: 'No'
+          Owner: None
       then: None
     - else: Other
     Priority: Nop
@@ -768,7 +766,7 @@ transition-map:
     DeadlockResult: all
     Recursive: all
     Owner:
-    - 'No'
+    - None
     Priority:
     - High
 - enabled-by: true
@@ -778,7 +776,7 @@ transition-map:
     Owner:
     - if:
         pre-conditions:
-          Owner: 'No'
+          Owner: None
       then: None
     - else: Other
     Priority: Nop
@@ -790,7 +788,7 @@ transition-map:
     DeadlockResult: all
     Recursive: all
     Owner:
-    - 'No'
+    - None
     - Other
     - Deadlock
     Priority:

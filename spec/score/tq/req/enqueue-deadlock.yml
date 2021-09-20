@@ -7,17 +7,42 @@ links:
 - role: requirement-refinement
   uid: ../if/group
 post-conditions:
-- name: Status
+- name: Result
   states:
-  - name: Deadlock
+  - name: Status
     test-code: |
       /* Checked by action */
     text: |
       The return status of the directive call shall be derived from
       ${../../status/if/deadlock:/name}.
+  - name: Fatal
+    test-code: |
+      /* Checked by action */
+    text: |
+      The system shall terminate with the
+      ${/score/interr/if/internal-error-core:/name} fatal source and the
+      ${/score/interr/if/thread-queue-deadlock:/name} fatal code.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
+- name: Notification
+  states:
+  - name: Status
+    test-code: |
+      if ( ctx->tq_ctx->deadlock != TQ_DEADLOCK_STATUS ) {
+        ${.:skip}
+      }
+    text: |
+      Where a detected deadlock results in a return with a status code.
+  - name: Fatal
+    test-code: |
+      if ( ctx->tq_ctx->deadlock != TQ_DEADLOCK_FATAL ) {
+        ${.:skip}
+      }
+    text: |
+      Where a detected deadlock results in a fatal error.
+  test-epilogue: null
+  test-prologue: null
 - name: Deadlock
   states:
   - name: One
@@ -43,53 +68,63 @@ skip-reasons: {}
 test-action: |
   Status_Control status;
 
-  TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_A );
-
   if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
-    TQSetScheduler(
-      ctx->tq_ctx,
-      TQ_BLOCKER_A,
-      ctx->tq_ctx->other_scheduler_id,
-      PRIO_HIGH
-    );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
   } else {
     TQSetScheduler(
       ctx->tq_ctx,
       TQ_BLOCKER_A,
-      ctx->tq_ctx->runner_scheduler_id,
-      PRIO_HIGH
+      SCHEDULER_A_ID,
+      PRIO_VERY_HIGH
     );
   }
 
+  TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_A_ID, PRIO_HIGH );
+  TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_A_ID, PRIO_HIGH );
+
+  TQSortMutexesByID( ctx->tq_ctx );
+  TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_C );
   TQSendAndWaitForExecutionStop( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
 
   if ( ctx->more ) {
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_B_OBTAIN );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_C_OBTAIN );
+    Yield();
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_B_OBTAIN );
+    Yield();
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_A_OBTAIN );
+    Yield();
     TQSendAndWaitForExecutionStop(
       ctx->tq_ctx,
       TQ_BLOCKER_A,
       TQ_EVENT_MUTEX_B_OBTAIN
     );
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
   } else {
     TQSendAndWaitForExecutionStop(
       ctx->tq_ctx,
       TQ_BLOCKER_A,
-      TQ_EVENT_MUTEX_A_OBTAIN
+      TQ_EVENT_MUTEX_C_OBTAIN
     );
   }
 
-  status = TQEnqueue( ctx->tq_ctx, TQ_WAIT_FOREVER );
-  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_DEADLOCK ) );
+  if ( ctx->tq_ctx->deadlock == TQ_DEADLOCK_FATAL ) {
+    status = TQEnqueueFatal( ctx->tq_ctx );
+    T_eq_int( status, STATUS_DEADLOCK );
+  } else {
+    status = TQEnqueue( ctx->tq_ctx, TQ_WAIT_FOREVER );
+    T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_DEADLOCK ) );
+  }
 
-  TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_A );
+  TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_C );
 
   if ( ctx->more ) {
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_C_RELEASE );
     TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_RELEASE );
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_B_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_A_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_C, TQ_EVENT_MUTEX_B_RELEASE );
     TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_B_RELEASE );
   } else {
-    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_A_RELEASE );
+    TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_MUTEX_C_RELEASE );
   }
 
   if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
@@ -146,7 +181,9 @@ text: |
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: Deadlock
+    Result:
+    - specified-by: Notification
   pre-conditions:
+    Notification: all
     Deadlock: all
 type: requirement
