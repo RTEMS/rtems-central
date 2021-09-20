@@ -7,182 +7,92 @@ links:
 - role: interface-function
   uid: ../if/release
 post-conditions:
-- name: Status
+- name: Action
   states:
-  - name: Ok
-    test-code: |
-      T_rsc_success( ctx->status );
-    text: |
-      The return status of ${../if/release:/name} shall be
-      ${../../status/if/successful:/name}.
   - name: InvId
     test-code: |
-      T_rsc( ctx->status, RTEMS_INVALID_ID );
+      sc = rtems_semaphore_release( 0xffffffff );
+      T_rsc( sc, RTEMS_INVALID_ID );
     text: |
       The return status of ${../if/release:/name} shall be
       ${../../status/if/invalid-id:/name}.
-  - name: NotOwner
+  - name: BinarySurrender
     test-code: |
-      T_rsc( ctx->status, RTEMS_NOT_OWNER_OF_RESOURCE );
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = NULL;
+      ctx->tq_sem_ctx.variant = TQ_SEM_BINARY;
+      ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
+      ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
+      ${/score/sem/req/surrender:/test-run}( &ctx->tq_sem_ctx );
     text: |
-      The return status of ${../if/release:/name} shall be
-      ${../../status/if/not-owner-of-resource:/name}.
-  - name: Unsat
+      The calling task shall surrender the binary semaphore as specified by
+      ${/score/sem/req/surrender}.
+  - name: CountingSurrender
     test-code: |
-      T_rsc( ctx->status, RTEMS_UNSATISFIED );
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = NULL;
+      ctx->tq_sem_ctx.variant = TQ_SEM_COUNTING;
+      ctx->tq_sem_ctx.get_count = TQSemGetCountClassic;
+      ctx->tq_sem_ctx.set_count = TQSemSetCountClassic;
+      ${/score/sem/req/surrender:/test-run}( &ctx->tq_sem_ctx );
     text: |
-      The return status of ${../if/release:/name} shall be
-      ${../../status/if/unsatisfied:/name}.
+      The calling task shall surrender the counting semaphore as specified by
+      ${/score/sem/req/surrender}.
+  - name: MtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_NO_PROTOCOL;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue blocks and a recursive seize
+      is allowed.
+  - name: InheritMtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_INHERIT;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_INVALID;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue blocks and a recursive seize
+      is allowed.
+  - name: CeilingMtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_PRIORITY_CEILING;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_ALLOWED;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
+      allowed, and a priority ceiling is used.
+  - name: MrsPMtxSurrender
+    test-code: |
+      ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
+      ctx->tq_ctx.get_owner = TQGetOwnerClassicSem;
+      ctx->tq_mtx_ctx.protocol = TQ_MTX_MRSP;
+      ctx->tq_mtx_ctx.recursive = TQ_MTX_RECURSIVE_DEADLOCK;
+      ctx->tq_mtx_ctx.owner_check = TQ_MTX_CHECKS_OWNER;
+      ctx->tq_mtx_ctx.priority_ceiling = PRIO_VERY_HIGH;
+      ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
+    text: |
+      The calling task shall surrender the mutex as specified by
+      ${/score/mtx/req/surrender} where an enqueue is sticky, a recursive seize
+      returns an error status, and a priority ceiling is used.
   test-epilogue: null
-  test-prologue: null
-- name: Count
-  states:
-  - name: Zero
-    test-code: |
-      T_eq_u32( ctx->sem_count, 0 );
-    text: |
-      The count of the semaphore shall be zero.
-  - name: One
-    test-code: |
-      T_eq_u32( ctx->sem_count, 1 );
-    text: |
-      The count of the semaphore shall be one.
-  - name: PlusOne
-    test-code: |
-      T_eq_u32( ctx->sem_count, ctx->count + 1 );
-    text: |
-      The count of the semaphore shall be incremented by one.
-  - name: Max
-    test-code: |
-      T_eq_u32( ctx->sem_count, UINT32_MAX );
-    text: |
-      The count of the semaphore shall be the maximum count.
-  - name: Nop
-    test-code: |
-      T_eq_u32( ctx->sem_count, ctx->count );
-    text: |
-      The count of the semaphore shall not be modified.
-  test-epilogue: null
-  test-prologue: null
-- name: Owner
-  states:
-  - name: 'No'
-    test-code: |
-      T_eq_u32( ctx->owner, 0 );
-    text: |
-      The semaphore shall not have an owner.
-  - name: Self
-    test-code: |
-      T_eq_u32( ctx->owner, ctx->runner_id );
-    text: |
-      The owner of the semaphore shall be the calling task.
-  - name: Other
-    test-code: |
-      T_eq_u32( ctx->owner, ctx->worker_id[ BLOCKER_B ] );
-    text: |
-      The owner of the semaphore shall be the other task.
-  - name: FIFO
-    test-code: |
-      T_eq_u32( ctx->owner, ctx->worker_id[ BLOCKER_A ] );
-    text: |
-      The owner of the semaphore shall be the first task unblocked in FIFO
-      order.
-  - name: Priority
-    test-code: |
-      T_eq_u32( ctx->owner, ctx->worker_id[ BLOCKER_C ] );
-    text: |
-      The owner of the semaphore shall be the first task unblocked in priority
-      order.
-  - name: MrsP
-    test-code: |
-      if ( CanUseThirdScheduler() ) {
-        T_eq_u32( ctx->owner, ctx->worker_id[ BLOCKER_A ] );
-      } else {
-        T_eq_u32( ctx->owner, ctx->worker_id[ BLOCKER_B ] );
-      }
-    text: |
-      The owner of the semaphore shall be the first task unblocked in MrsP
-      priority order.
-  test-epilogue: null
-  test-prologue: null
-- name: Next
-  states:
-  - name: FIFO
-    test-code: |
-      T_eq_u32( ctx->obtain_counter[ BLOCKER_A ], 1 );
-      T_eq_u32( ctx->obtain_counter[ BLOCKER_B ], 2 );
-      T_eq_u32( ctx->obtain_counter[ BLOCKER_C ], 3 );
-    text: |
-      The first blocked task in FIFO order shall be made ready.
-  - name: Priority
-    test-code: |
-      if ( ctx->owner_other ) {
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_A ], 0 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_B ], 1 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_C ], 0 );
-      } else {
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_A ], 3 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_B ], 2 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_C ], 1 );
-      }
-    text: |
-      The first blocked task in priority order shall be made ready.
-  - name: MrsP
-    test-code: |
-      if ( CanUseThirdScheduler() ) {
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_A ], 1 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_B ], 2 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_C ], 3 );
-      } else {
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_A ], 0 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_B ], 1 );
-        T_eq_u32( ctx->obtain_counter[ BLOCKER_C ], 0 );
-      }
-    text: |
-      The first blocked task in MrsP priority order shall be made ready.
-  test-epilogue: null
-  test-prologue: null
-- name: CallerPrio
-  states:
-  - name: Inherit
-    test-code: |
-      T_eq_u32( ctx->after_release_priority, PRIO_ULTRA_HIGH );
-    text: |
-      The current priority of the calling task shall be the inherited priority
-      of the semaphore.
-  - name: Ceiling
-    test-code: |
-      T_eq_u32( ctx->after_release_priority, PRIO_ULTRA_HIGH );
-    text: |
-      The current priority of the calling task shall be the ceiling priority of
-      the semaphore.
-  - name: Real
-    test-code: |
-      T_eq_u32( ctx->after_release_priority, PRIO_NORMAL );
-    text: |
-      The current priority of the calling task shall be its real priority.
-  test-epilogue: null
-  test-prologue: null
-- name: CallerCPU
-  states:
-  - name: Home
-    test-code: |
-      T_eq_u32( ctx->after_release_scheduler_id, ctx->runner_scheduler_id );
-    text: |
-      The calling task shall execute on a processor owned by its home
-      scheduler.
-  - name: Other
-    test-code: |
-      if ( IsMrsP( ctx ) && CanUseThirdScheduler() ) {
-        T_eq_u32( ctx->after_release_scheduler_id, ctx->third_scheduler_id );
-      } else {
-        T_eq_u32( ctx->after_release_scheduler_id, ctx->other_scheduler_id );
-      }
-    text: |
-      The calling task shall execute on a processor not owned by its home
-      scheduler.
-  test-epilogue: null
-  test-prologue: null
+  test-prologue: |
+    rtems_status_code sc;
 pre-conditions:
 - name: Class
   states:
@@ -224,122 +134,28 @@ pre-conditions:
   - name: FIFO
     test-code: |
       ctx->attribute_set |= RTEMS_FIFO;
+      ctx->tq_ctx.discipline = TQ_FIFO;
     text: |
       While the semaphore uses the FIFO task wait queue discipline.
   - name: Priority
     test-code: |
       ctx->attribute_set |= RTEMS_PRIORITY;
+      ctx->tq_ctx.discipline = TQ_PRIORITY;
     text: |
       While the semaphore uses the priority task wait queue discipline.
-  test-epilogue: null
-  test-prologue: null
-- name: Count
-  states:
-  - name: LessMax
-    test-code: |
-      if ( ( ctx->attribute_set & RTEMS_SIMPLE_BINARY_SEMAPHORE ) != 0 ) {
-        ctx->count = 0;
-      } else {
-        ctx->count = UINT32_MAX - 1;
-      }
-    text: |
-      While the count of the semaphore is less than the maximum count.
-  - name: Max
-    test-code: |
-      if ( ( ctx->attribute_set & RTEMS_SIMPLE_BINARY_SEMAPHORE ) != 0 ) {
-        ctx->count = 1;
-      } else {
-        ctx->count = UINT32_MAX;
-      }
-    text: |
-      While the count of the semaphore is equal to the maximum count.
-  - name: Blocked
-    test-code: |
-      ctx->blocked = true;
-      ctx->count = 0;
-    text: |
-      While the semaphore has tasks blocked on the semaphore.
-  test-epilogue: null
-  test-prologue: null
-- name: Owner
-  states:
-  - name: 'No'
-    test-code: |
-      ctx->count = 1;
-    text: |
-      While the semaphore has no owner.
-  - name: Self
-    test-code: |
-      ctx->count = 0;
-    text: |
-      While the calling task is the owner of the semaphore, while the calling
-      task did not recursively obtain the semaphore.
-  - name: Other
-    test-code: |
-      ctx->count = 1;
-      ctx->owner_other = true;
-    text: |
-      While a task other than the calling task is the owner of the semaphore.
-  - name: Blocked
-    test-code: |
-      ctx->count = 0;
-      ctx->blocked = true;
-    text: |
-      While the calling task is the owner of the semaphore, while the calling
-      task did not recursively obtain the semaphore, while tasks are blocked on
-      the semaphore.
-  - name: Nested
-    test-code: |
-      ctx->count = 0;
-      ctx->nested = true;
-    text: |
-      While the calling task is the owner of the semaphore, while the calling
-      task did recursively obtain the semaphore.
-  - name: BlockedNested
-    test-code: |
-      ctx->count = 0;
-      ctx->blocked = true;
-      ctx->nested = true;
-    text: |
-      While the calling task is the owner of the semaphore, while the calling
-      task did recursively obtain the semaphore, while tasks are blocked on the
-      semaphore.
-  - name: BlockedOther
-    test-code: |
-      ctx->count = 0;
-      ctx->blocked = true;
-      ctx->other_scheduler = true;
-    text: |
-      While the calling task is the owner of the semaphore, while the calling
-      task did not recursively obtain the semaphore, while tasks are blocked on
-      the semaphore, while the calling task executes on a processor owned by a
-      scheduler other than its home scheduler due to a locking protocol
-      mechanism provided by the semaphore.
-  - name: BlockedNestedOther
-    test-code: |
-      ctx->count = 0;
-      ctx->blocked = true;
-      ctx->nested = true;
-      ctx->other_scheduler = true;
-    text: |
-      While the calling task is the owner of the semaphore, while the calling
-      task did recursively obtain the semaphore, while tasks are blocked on the
-      semaphore, while the calling task executes on a processor owned by a
-      scheduler other than its home scheduler due to a locking protocol
-      mechanism provided by the semaphore.
   test-epilogue: null
   test-prologue: null
 - name: Id
   states:
   - name: Valid
     test-code: |
-      ctx->valid_id = true;
+      /* Nothing to prepare */
     text: |
       While the ${../if/release:/params[0]/name} parameter is associated with
       the semaphore.
   - name: Invalid
     test-code: |
-      ctx->valid_id = false;
+      /* Nothing to prepare */
     text: |
       While the ${../if/release:/params[0]/name} parameter is not associated
       with a semaphore.
@@ -352,1156 +168,184 @@ skip-reasons:
   NeedsPriorityDiscipline: |
     Binary semaphores with a locking protocol are required to use the priority
     task wait queue discipline.
-  NoNestedMrsP: |
-    Semaphores using the MrsP locking protocol cannot be recursively obtained.
-  NoOtherScheduler: |
-    Where the system was built with SMP support disabled, exactly one scheduler
-    is present in an application.
+  NoMrsP: |
+    Where the system is build with SMP support disabled, the MrsP locking
+    protocol is not available.
 test-action: |
-  PrepareForAction( ctx );
-  ctx->status = rtems_semaphore_release( ctx->id );
-  GetSemaphoreProperties( ctx );
-  CleanupAfterAction( ctx );
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_create(
+    NAME,
+    1,
+    ctx->attribute_set,
+    PRIO_VERY_HIGH,
+    &ctx->tq_ctx.thread_queue_id
+  );
+  T_rsc_success( sc );
+
+  if ( ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0 ) {
+    rtems_task_priority prio;
+
+    sc = rtems_semaphore_set_priority(
+      ctx->tq_ctx.thread_queue_id,
+      SCHEDULER_B_ID,
+      PRIO_VERY_HIGH,
+      &prio
+    );
+    T_rsc_success( sc );
+  }
 test-brief: null
-test-cleanup: null
+test-cleanup:
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_delete( ctx->tq_ctx.thread_queue_id );
+  T_rsc_success( sc );
 test-context:
 - brief: |
-    This member contains the identifier of the runner home scheduler.
+    This member contains the thread queue test context.
   description: null
   member: |
-    rtems_id runner_scheduler_id
-- brief: |
-    This member contains the identifier of another scheduler.
-  description: null
-  member: |
-    rtems_id other_scheduler_id
-- brief: |
-    This member contains the identifier of a third scheduler.
-  description: null
-  member: |
-    rtems_id third_scheduler_id
-- brief: |
-    This member contains the identifier of the scheduler owning the processor
-    of the calling task after the ${../if/release:/name} call.
-  description: null
-  member: |
-    rtems_id after_release_scheduler_id
-- brief: |
-    This member contains the current priority of the calling task after the
-    ${../if/release:/name} call.
-  description: null
-  member: |
-    rtems_id after_release_priority
-- brief: |
-    This member contains the runner task identifier.
-  description: null
-  member: |
-    rtems_id runner_id
-- brief: |
-    This member contains the worker task identifiers.
-  description: null
-  member: |
-    rtems_id worker_id[ WORKER_COUNT ]
-- brief: |
-    If this member is true, then the worker shall busy wait.
-  description: null
-  member: |
-    volatile bool busy_wait
-- brief: |
-    This member contains the worker activity counter.
-  description: null
-  member: |
-    uint32_t counter
-- brief: |
-    This member contains the semaphore obtain counter of a specific worker.
-  description: null
-  member: |
-    uint32_t obtain_counter[ WORKER_COUNT ]
-- brief: |
-    This member contains the count of the semaphore after the
-    ${../if/release:/name} call.
-  description: null
-  member: |
-    uint32_t sem_count
-- brief: |
-    This member contains identifier of the owner of the semaphore after the
-    ${../if/release:/name} call or zero if it had no owner.
-  description: null
-  member: |
-    rtems_id owner
+    union {
+      TQContext tq_ctx;
+      TQMtxContext tq_mtx_ctx;
+      TQSemContext tq_sem_ctx;
+    }
 - brief: |
     This member specifies if the attribute set of the semaphore.
   description: null
   member: |
     rtems_attribute attribute_set
-- brief: |
-    This member specifies if the initial count of the semaphore.
-  description: null
-  member: |
-    uint32_t count
-- brief: |
-    This member contains the semaphore identifier.
-  description: null
-  member: |
-    rtems_id semaphore_id
-- brief: |
-    If this member is true, then the ${../if/release:/params[0]/name}
-    parameter shall be valid.
-  description: null
-  member: |
-    bool valid_id
-- brief: |
-    If this member is true, then other tasks shall be blocked on the semaphore.
-  description: null
-  member: |
-    bool blocked
-- brief: |
-    If this member is true, then a task other than the runner task shall be the
-    owner of the semaphore.
-  description: null
-  member: |
-    bool owner_other
-- brief: |
-    If this member is true, then the runner task shall obtain the semaphore
-    recursively.
-  description: null
-  member: |
-    bool nested
-- brief: |
-    If this member is true, then the runner task shall migrate to another
-    scheduler due to the locking protocol used by the semaphore.
-  description: null
-  member: |
-    bool other_scheduler
-- brief: |
-    If this member is true, then the properties of the semaphore
-    shall be obtained.
-  description: null
-  member: |
-    bool need_properties
-- brief: |
-    This member specifies the ${../if/release:/params[0]/name} parameter for
-    the ${../if/release:/name} call.
-  description: null
-  member: |
-    rtems_id id
-- brief: |
-    This member contains the ${../if/release:/name} return status.
-  description: null
-  member: |
-    rtems_status_code status
-test-context-support: |
-  typedef enum {
-    BLOCKER_A,
-    BLOCKER_B,
-    BLOCKER_C,
-    HELPER_HOME,
-    HELPER_OTHER,
-    WORKER_COUNT
-  } WorkerKind;
+test-context-support: null
 test-description: null
 test-header: null
 test-includes:
 - rtems.h
 - string.h
-- rtems/rtems/semimpl.h
 test-local-includes:
 - tx-support.h
-- ts-config.h
+- tr-mtx-surrender.h
+- tr-sem-surrender.h
+- tx-thread-queue.h
 test-prepare: |
-  size_t i;
-
-  ctx->counter = 0;
-
-  for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_id ); ++i ) {
-    ctx->obtain_counter[ i ] = 0;
-  }
-
   ctx->attribute_set = RTEMS_DEFAULT_ATTRIBUTES;
-  ctx->blocked = false;
-  ctx->owner_other = false;
-  ctx->nested = false;
-  ctx->other_scheduler = false;
-  ctx->need_properties = true;
 test-setup:
   brief: null
   code: |
-    rtems_status_code sc;
-
-    memset( ctx, 0, sizeof( *ctx ) );
-    ctx->runner_id = rtems_task_self();
     SetSelfPriority( PRIO_NORMAL );
-    ctx->worker_id[ BLOCKER_A ] = CreateTask( "BLKA", PRIO_HIGH );
-    StartTask( ctx->worker_id[ BLOCKER_A ], BlockerA, ctx );
-    ctx->worker_id[ BLOCKER_B ] = CreateTask( "BLKB", PRIO_VERY_HIGH );
-    StartTask( ctx->worker_id[ BLOCKER_B ], BlockerB, ctx );
-    ctx->worker_id[ BLOCKER_C ] = CreateTask( "BLKC", PRIO_ULTRA_HIGH );
-    StartTask( ctx->worker_id[ BLOCKER_C ], BlockerC, ctx );
-
-    sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_scheduler_id );
-    T_rsc_success( sc );
-
-    #if defined(RTEMS_SMP)
-    ctx->worker_id[ HELPER_HOME ] = CreateTask( "HLPH", PRIO_VERY_ULTRA_HIGH );
-    StartTask( ctx->worker_id[ HELPER_HOME ], HelperHome, ctx );
-    ctx->worker_id[ HELPER_OTHER ] = CreateTask( "HLPO", PRIO_VERY_LOW );
-    StartTask( ctx->worker_id[ HELPER_OTHER ], HelperOther, ctx );
-
-    sc = rtems_scheduler_ident(
-      TEST_SCHEDULER_B_NAME,
-      &ctx->other_scheduler_id
-    );
-    T_rsc_success( sc );
-
-    sc = rtems_scheduler_ident(
-      TEST_SCHEDULER_C_NAME,
-      &ctx->third_scheduler_id
-    );
-    T_rsc_success( sc );
-
-    SetWorkerScheduler(
-      ctx,
-      HELPER_OTHER,
-      ctx->other_scheduler_id,
-      PRIO_VERY_LOW
-    );
-    #endif
+    memset( ctx, 0, sizeof( *ctx ) );
+    ctx->tq_ctx.deadlock = TQ_DEADLOCK_STATUS;
+    ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
+    ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
+    ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
+    ctx->tq_ctx.convert_status = TQConvertStatusClassic;
+    TQInitialize( &ctx->tq_ctx );
   description: null
 test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
   typedef ${.:/test-context-type} Context;
-
-  typedef enum {
-    EVENT_HELPER_SYNC = RTEMS_EVENT_0,
-    EVENT_OBTAIN = RTEMS_EVENT_1,
-    EVENT_GET_PROPERTIES = RTEMS_EVENT_2,
-    EVENT_OBTAIN_SYNC = RTEMS_EVENT_3,
-    EVENT_RELEASE = RTEMS_EVENT_4,
-    EVENT_RUNNER_SYNC = RTEMS_EVENT_5,
-    EVENT_BUSY_WAIT = RTEMS_EVENT_6
-  } Event;
-
-  static void SynchronizeRunner( void )
-  {
-    rtems_event_set events;
-
-    events = ReceiveAnyEvents();
-    T_eq_u32( events, EVENT_RUNNER_SYNC );
-  }
-
-  static void Send(
-    const Context  *ctx,
-    WorkerKind      worker,
-    rtems_event_set events
-  )
-  {
-    SendEvents( ctx->worker_id[ worker ], events );
-  }
-
-  static void MoveBackHome( Context *ctx )
-  {
-  #if defined(RTEMS_SMP)
-    rtems_task_priority priority;
-
-    /* Move us back to a processor of our home scheduler */
-    ctx->busy_wait = true;
-    Send( ctx, HELPER_OTHER, EVENT_BUSY_WAIT );
-    priority = SetPriority( ctx->worker_id[ HELPER_OTHER ], PRIO_VERY_ULTRA_HIGH );
-    SetPriority( ctx->worker_id[ HELPER_OTHER ], priority );
-    ctx->busy_wait = false;
-  #else
-    (void) ctx;
-  #endif
-  }
-
-  static bool CanUseThirdScheduler( void )
-  {
-    return rtems_scheduler_get_processor_maximum() >= 4;
-  }
-
-  static bool IsFIFO( const Context *ctx )
-  {
-    return ( ctx->attribute_set & RTEMS_PRIORITY ) == 0;
-  }
-
-  static bool IsMrsP( const Context *ctx )
-  {
-    return ( ctx->attribute_set & RTEMS_MULTIPROCESSOR_RESOURCE_SHARING ) != 0;
-  }
-
-  static bool IsPrioCeiling( const Context *ctx )
-  {
-    return ( ctx->attribute_set & RTEMS_PRIORITY_CEILING ) != 0;
-  }
-
-  #if defined(RTEMS_SMP)
-  static void SetWorkerScheduler(
-    const Context *ctx,
-    WorkerKind     worker,
-    rtems_id       scheduler_id,
-    Priority       priority
-  )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_task_set_scheduler(
-      ctx->worker_id[ worker ],
-      scheduler_id,
-      priority
-    );
-    T_rsc_success( sc );
-  }
-
-  static void SendAndWaitForIntendToBlock(
-    const Context  *ctx,
-    WorkerKind      worker,
-    rtems_event_set events
-  )
-  {
-    Thread_Control   *the_thread;
-    Thread_Wait_flags intend_to_block;
-
-    Send( ctx, worker, events );
-    the_thread = GetThread( ctx->worker_id[ worker ] );
-    T_assert_not_null( the_thread );
-    intend_to_block = THREAD_WAIT_CLASS_OBJECT |
-      THREAD_WAIT_STATE_INTEND_TO_BLOCK;
-
-    while ( _Thread_Wait_flags_get_acquire( the_thread ) != intend_to_block ) {
-      /* Wait */
-    }
-  }
-
-  static void BlockMrsP( Context *ctx )
-  {
-    if ( CanUseThirdScheduler() ) {
-      SetWorkerScheduler(
-        ctx,
-        BLOCKER_A,
-        ctx->third_scheduler_id,
-        PRIO_HIGH
-      );
-      SetWorkerScheduler(
-        ctx,
-        BLOCKER_C,
-        ctx->third_scheduler_id,
-        PRIO_ULTRA_HIGH
-      );
-      SendAndWaitForIntendToBlock(
-        ctx,
-        BLOCKER_A,
-        EVENT_OBTAIN | EVENT_GET_PROPERTIES | EVENT_RELEASE
-      );
-      SendAndWaitForIntendToBlock(
-        ctx,
-        BLOCKER_B,
-        EVENT_OBTAIN | EVENT_RELEASE
-      );
-      SendAndWaitForIntendToBlock(
-        ctx,
-        BLOCKER_C,
-        EVENT_OBTAIN | EVENT_OBTAIN_SYNC | EVENT_RELEASE
-      );
-    } else {
-      SendAndWaitForIntendToBlock(
-        ctx,
-        BLOCKER_B,
-        EVENT_OBTAIN | EVENT_GET_PROPERTIES | EVENT_OBTAIN_SYNC | EVENT_RELEASE
-      );
-    }
-  }
-  #endif
-
-  static void Obtain( const Context *ctx )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_semaphore_obtain(
-      ctx->semaphore_id,
-      RTEMS_WAIT,
-      RTEMS_NO_TIMEOUT
-    );
-    T_rsc_success( sc );
-  }
-
-  static void Release( const Context *ctx )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_semaphore_release( ctx->semaphore_id );
-    T_rsc_success( sc );
-  }
-
-  static void BlockNormal( Context *ctx )
-  {
-    rtems_event_set first;
-    rtems_event_set last;
-
-    first = EVENT_OBTAIN | EVENT_GET_PROPERTIES | EVENT_RELEASE;
-    last = EVENT_OBTAIN | EVENT_OBTAIN_SYNC | EVENT_RELEASE;
-
-    if ( IsFIFO( ctx ) ) {
-      Send( ctx, BLOCKER_A, first );
-    } else {
-      Send( ctx, BLOCKER_A, last );
-    }
-
-  #if defined(RTEMS_SMP)
-    Send( ctx, BLOCKER_B, EVENT_OBTAIN | EVENT_RELEASE | EVENT_HELPER_SYNC );
-    SynchronizeRunner();
-  #else
-    Send( ctx, BLOCKER_B, EVENT_OBTAIN | EVENT_RELEASE );
-  #endif
-
-    if ( IsFIFO( ctx ) ) {
-      Send( ctx, BLOCKER_C, last );
-    } else {
-      Send( ctx, BLOCKER_C, first );
-    }
-
-    MoveBackHome( ctx );
-  }
-
-  static void BlockPrioCeiling( const Context *ctx )
-  {
-    SetPriority( ctx->worker_id[ BLOCKER_A ], PRIO_ULTRA_HIGH );
-    Send( ctx, BLOCKER_A, EVENT_OBTAIN | EVENT_OBTAIN_SYNC | EVENT_RELEASE );
-    Yield();
-    SetPriority( ctx->worker_id[ BLOCKER_A ], PRIO_HIGH );
-
-    SetPriority( ctx->worker_id[ BLOCKER_B ], PRIO_ULTRA_HIGH );
-    Send( ctx, BLOCKER_B, EVENT_OBTAIN | EVENT_RELEASE );
-    Yield();
-    SetPriority( ctx->worker_id[ BLOCKER_B ], PRIO_VERY_HIGH );
-
-    Send(
-      ctx,
-      BLOCKER_C,
-      EVENT_OBTAIN | EVENT_GET_PROPERTIES | EVENT_RELEASE
-    );
-    Yield();
-  }
-
-  static void PrepareForAction( Context *ctx )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_semaphore_create(
-      NAME,
-      ctx->count,
-      ctx->attribute_set,
-      PRIO_ULTRA_HIGH,
-      &ctx->semaphore_id
-    );
-    T_rsc_success( sc );
-
-    if ( ctx->valid_id ) {
-      ctx->id = ctx->semaphore_id;
-    } else {
-      ctx->id = 0;
-    }
-
-  #if defined(RTEMS_SMP)
-    if ( !IsPrioCeiling( ctx ) ) {
-      SetWorkerScheduler(
-        ctx,
-        BLOCKER_B,
-        ctx->other_scheduler_id,
-        PRIO_LOW
-      );
-    }
-  #endif
-
-    if ( ctx->owner_other ) {
-      Event event;
-
-      event = EVENT_OBTAIN;
-  #if defined(RTEMS_SMP)
-      event |= EVENT_OBTAIN_SYNC;
-  #endif
-
-      Send( ctx, BLOCKER_B, event );
-  #if defined(RTEMS_SMP)
-      SynchronizeRunner();
-  #endif
-    }
-
-    if ( ctx->nested ) {
-      Obtain( ctx );
-    }
-
-    if ( ctx->blocked ) {
-  #if defined(RTEMS_SMP)
-      if ( IsMrsP( ctx ) ) {
-        BlockMrsP( ctx );
-      } else if ( IsPrioCeiling( ctx ) ) {
-        BlockPrioCeiling( ctx );
-      } else {
-        BlockNormal( ctx );
-      }
-  #else
-      if ( IsPrioCeiling( ctx ) || IsMrsP( ctx ) ) {
-        BlockPrioCeiling( ctx );
-      } else {
-        BlockNormal( ctx );
-      }
-  #endif
-    }
-
-    if ( ctx->other_scheduler ) {
-      ctx->busy_wait = true;
-      Send( ctx, HELPER_HOME, EVENT_BUSY_WAIT );
-      ctx->busy_wait = false;
-    }
-  }
-
-  static void GetSemaphoreProperties( Context *ctx )
-  {
-    Semaphore_Control   *semaphore;
-    Thread_queue_Context queue_context;
-    Thread_Control      *owner;
-
-    if ( !ctx->need_properties ) {
-      return;
-    }
-
-    ctx->need_properties = false;
-
-    semaphore = _Semaphore_Get( ctx->semaphore_id, &queue_context );
-    T_assert_not_null( semaphore );
-    ctx->sem_count = semaphore->Core_control.Semaphore.count;
-    owner = semaphore->Core_control.Wait_queue.Queue.owner;
-    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
-
-    if ( owner != NULL ) {
-      ctx->owner = owner->Object.id;
-    } else {
-      ctx->owner = 0;
-    }
-  }
-
-  static void CleanupAfterAction( Context *ctx )
-  {
-    rtems_status_code sc;
-
-    sc = rtems_scheduler_ident_by_processor(
-      rtems_scheduler_get_processor(),
-      &ctx->after_release_scheduler_id
-    );
-    T_rsc_success( sc );
-
-    ctx->after_release_priority = GetSelfPriority();
-
-    if ( ctx->nested ) {
-      Release( ctx );
-    }
-
-    if ( ctx->count == 0 && ctx->status != RTEMS_SUCCESSFUL ) {
-      Release( ctx );
-    }
-
-    if ( ctx->owner_other ) {
-      Send( ctx, BLOCKER_B, EVENT_RELEASE );
-    }
-
-    if ( ctx->blocked ) {
-      SynchronizeRunner();
-
-  #if defined(RTEMS_SMP)
-      if ( IsMrsP( ctx ) ) {
-        SetWorkerScheduler(
-          ctx,
-          BLOCKER_A,
-          ctx->runner_scheduler_id,
-          PRIO_HIGH
-        );
-        SetWorkerScheduler(
-          ctx,
-          BLOCKER_C,
-          ctx->runner_scheduler_id,
-          PRIO_ULTRA_HIGH
-        );
-      }
-  #endif
-    }
-
-    Obtain( ctx );
-    Release( ctx );
-
-  #if defined(RTEMS_SMP)
-    if ( !IsPrioCeiling( ctx ) ) {
-      SetWorkerScheduler(
-        ctx,
-        BLOCKER_B,
-        ctx->runner_scheduler_id,
-        PRIO_VERY_HIGH
-      );
-    }
-  #endif
-
-    sc = rtems_semaphore_delete( ctx->semaphore_id );
-    T_rsc_success( sc );
-  }
-
-  static void Worker( rtems_task_argument arg, WorkerKind worker )
-  {
-    Context *ctx;
-
-    ctx = (Context *) arg;
-
-    while ( true ) {
-      rtems_event_set events;
-
-      events = ReceiveAnyEvents();
-
-  #if defined(RTEMS_SMP)
-      if ( ( events & EVENT_HELPER_SYNC ) != 0 ) {
-        SendEvents( ctx->worker_id[ HELPER_OTHER ], EVENT_RUNNER_SYNC );
-      }
-  #endif
-
-      if ( ( events & EVENT_OBTAIN ) != 0 ) {
-        uint32_t counter;
-
-        Obtain( ctx );
-
-        counter = ctx->counter;
-        ++counter;
-        ctx->counter = counter;
-        ctx->obtain_counter[ worker ] = counter;
-      }
-
-      if ( ( events & EVENT_GET_PROPERTIES ) != 0 ) {
-        GetSemaphoreProperties( ctx );
-      }
-
-      if ( ( events & EVENT_OBTAIN_SYNC ) != 0 ) {
-        SendEvents( ctx->runner_id, EVENT_RUNNER_SYNC );
-      }
-
-  #if defined(RTEMS_SMP)
-      if ( ( events & EVENT_BUSY_WAIT ) != 0 ) {
-        while ( ctx->busy_wait ) {
-          /* Wait */
-        }
-      }
-  #endif
-
-      if ( ( events & EVENT_RELEASE ) != 0 ) {
-        Release( ctx );
-      }
-
-      if ( ( events & EVENT_RUNNER_SYNC ) != 0 ) {
-        SendEvents( ctx->runner_id, EVENT_RUNNER_SYNC );
-      }
-    }
-  }
-
-  static void BlockerA( rtems_task_argument arg )
-  {
-    Worker( arg, BLOCKER_A );
-  }
-
-  static void BlockerB( rtems_task_argument arg )
-  {
-    Worker( arg, BLOCKER_B );
-  }
-
-  static void BlockerC( rtems_task_argument arg )
-  {
-    Worker( arg, BLOCKER_C );
-  }
-
-  #if defined(RTEMS_SMP)
-  static void HelperHome( rtems_task_argument arg )
-  {
-    Worker( arg, HELPER_HOME );
-  }
-
-  static void HelperOther( rtems_task_argument arg )
-  {
-    Worker( arg, HELPER_OTHER );
-  }
-  #endif
 test-target: testsuites/validation/tc-sem-release.c
 test-teardown:
   brief: null
   code: |
-    size_t i;
-
-    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->worker_id ); ++i ) {
-      DeleteTask( ctx->worker_id[ i ] );
-    }
-
+    TQDestroy( &ctx->tq_ctx );
     RestoreRunnerPriority();
   description: null
 text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: InvId
-    Count: Nop
-    Owner: N/A
-    Next: N/A
-    CallerPrio: Real
-    CallerCPU: Home
+    Action: InvId
   pre-conditions:
+    Class: all
+    Discipline: all
     Id:
     - Invalid
-    Class:
-    - Counting
-    - Simple
-    Discipline: all
-    Count: all
-    Owner: N/A
 - enabled-by: true
   post-conditions:
-    Status: InvId
-    Count: N/A
-    Owner:
-    - if:
-        pre-conditions:
-          Owner: 'No'
-      then: 'No'
-    - if:
-        pre-conditions:
-          Owner: Other
-      then: Other
-    - else: Self
-    Next: N/A
-    CallerPrio: Real
-    CallerCPU: Home
+    Action: BinarySurrender
   pre-conditions:
-    Id:
-    - Invalid
-    Class:
-    - Binary
-    Discipline:
-    - FIFO
-    Count: N/A
-    Owner:
-    - 'No'
-    - Self
-    - Other
-    - Blocked
-    - Nested
-    - BlockedNested
-- enabled-by: true
-  post-conditions:
-    Status: InvId
-    Count: N/A
-    Owner:
-    - if:
-        pre-conditions:
-          Owner: 'No'
-      then: 'No'
-    - if:
-        pre-conditions:
-          Owner: Other
-      then: Other
-    - else: Self
-    Next: N/A
-    CallerPrio:
-    - if:
-        and:
-        - pre-conditions:
-            Class:
-            - PrioCeiling
-            - MrsP
-        - post-conditions:
-            Owner: Self
-      then: Ceiling
-    - if:
-        pre-conditions:
-          Class: PrioInherit
-          Owner:
-          - Blocked
-          - BlockedNested
-      then: Inherit
-    - else: Real
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Invalid
-    Class:
-    - Binary
-    - PrioCeiling
-    - PrioInherit
-    - MrsP
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - 'No'
-    - Self
-    - Other
-    - Blocked
-    - Nested
-    - BlockedNested
-- enabled-by: true
-  post-conditions:
-    Status: Unsat
-    Count: Max
-    Owner: N/A
-    Next: N/A
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Valid
-    Class:
-    - Counting
-    Discipline: all
-    Count:
-    - Max
-    Owner: N/A
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Count:
-    - if:
-        pre-conditions:
-          Count: Blocked
-      then: Zero
-    - else: PlusOne
-    Owner: N/A
-    Next:
-    - if:
-        pre-conditions:
-          Count: Blocked
-      then-specified-by: Discipline
-    - else: N/A
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Valid
-    Class:
-    - Counting
-    Discipline: all
-    Count:
-    - LessMax
-    - Blocked
-    Owner: N/A
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Count:
-    - if:
-        pre-conditions:
-          Count: Blocked
-      then: Zero
-    - else: One
-    Owner: N/A
-    Next:
-    - if:
-        pre-conditions:
-          Count: Blocked
-      then-specified-by: Discipline
-    - else: N/A
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Valid
     Class:
     - Simple
     Discipline: all
-    Count:
-    - LessMax
-    - Max
-    - Blocked
-    Owner: N/A
-- enabled-by: true
-  post-conditions:
-    Status: NotOwner
-    Count: N/A
-    Owner:
-    - if:
-        pre-conditions:
-          Owner: Other
-      then: Other
-    - else: 'No'
-    Next: N/A
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
     Id:
     - Valid
+- enabled-by: true
+  post-conditions:
+    Action: CountingSurrender
+  pre-conditions:
+    Class:
+    - Counting
+    Discipline: all
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Action: MtxSurrender
+  pre-conditions:
     Class:
     - Binary
     Discipline: all
-    Count: N/A
-    Owner:
-    - 'No'
-    - Other
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Count: N/A
-    Owner:
-    - if:
-        pre-conditions:
-          Owner: Blocked
-      then-specified-by: Discipline
-    - if:
-        pre-conditions:
-          Owner:
-          - Nested
-          - BlockedNested
-      then: Self
-    - else: 'No'
-    Next:
-    - if:
-        pre-conditions:
-          Owner: Blocked
-      then-specified-by: Discipline
-    - else: N/A
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
     Id:
     - Valid
-    Class:
-    - Binary
-    Discipline: all
-    Count: N/A
-    Owner:
-    - Self
-    - Blocked
-    - Nested
-    - BlockedNested
 - enabled-by: true
   post-conditions:
-    Status: NotOwner
-    Count: N/A
-    Owner:
-    - if:
-        pre-conditions:
-          Owner: Other
-      then: Other
-    - else: 'No'
-    Next: N/A
-    CallerPrio: Real
-    CallerCPU: Home
+    Action: CeilingMtxSurrender
   pre-conditions:
-    Id:
-    - Valid
     Class:
     - PrioCeiling
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Action: InheritMtxSurrender
+  pre-conditions:
+    Class:
     - PrioInherit
+    Discipline:
+    - Priority
+    Id:
+    - Valid
+- enabled-by: true
+  post-conditions: NoMrsP
+  pre-conditions:
+    Class:
     - MrsP
     Discipline:
     - Priority
-    Count: N/A
-    Owner:
-    - 'No'
-    - Other
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Count: N/A
-    Owner:
-    - if:
-        pre-conditions:
-          Owner: Blocked
-      then: Priority
-    - else: 'No'
-    Next:
-    - if:
-        pre-conditions:
-          Owner: Blocked
-      then: Priority
-    - else: N/A
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Valid
-    Class:
-    - PrioCeiling
-    - PrioInherit
-    - MrsP
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - Self
-    - Blocked
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Count: N/A
-    Owner: Self
-    Next: N/A
-    CallerPrio:
-    - if:
-        pre-conditions:
-          Class: PrioInherit
-          Owner: BlockedNested
-      then: Inherit
-    - if:
-        pre-conditions:
-          Class: PrioInherit
-          Owner: Nested
-      then: Real
-    - else: Ceiling
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Valid
-    Class:
-    - PrioCeiling
-    - PrioInherit
-    - MrsP
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - Nested
-    - BlockedNested
+    Id: all
 - enabled-by: true
   post-conditions: NeedsPriorityDiscipline
   pre-conditions:
-    Id: all
     Class:
     - PrioCeiling
     - PrioInherit
     - MrsP
     Discipline:
     - FIFO
-    Count: all
-    Owner: all
-- enabled-by: true
-  post-conditions: NoOtherScheduler
-  pre-conditions:
     Id: all
-    Class:
-    - Binary
-    Discipline: all
-    Count: N/A
-    Owner:
-    - BlockedOther
-    - BlockedNestedOther
-- enabled-by: true
-  post-conditions: NoOtherScheduler
+- enabled-by: RTEMS_SMP
+  post-conditions:
+    Action: InvId
   pre-conditions:
-    Id: all
     Class:
-    - PrioCeiling
-    - PrioInherit
     - MrsP
     Discipline:
     - Priority
-    Count: N/A
-    Owner:
-    - BlockedOther
-    - BlockedNestedOther
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Status: InvId
-    Count: N/A
-    Owner: Self
-    Next: N/A
-    CallerPrio: Inherit
-    CallerCPU: Other
-  pre-conditions:
     Id:
     - Invalid
-    Class:
-    - PrioInherit
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - BlockedOther
-    - BlockedNestedOther
 - enabled-by: RTEMS_SMP
   post-conditions:
-    Status: InvId
-    Count: N/A
-    Owner: Self
-    Next: N/A
-    CallerPrio: Ceiling
-    CallerCPU: Other
+    Action: MrsPMtxSurrender
   pre-conditions:
-    Id:
-    - Invalid
     Class:
     - MrsP
     Discipline:
     - Priority
-    Count: N/A
-    Owner:
-    - BlockedOther
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Status: Ok
-    Count: N/A
-    Owner: Priority
-    Next: Priority
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
     Id:
     - Valid
-    Class:
-    - PrioInherit
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - BlockedOther
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Status: Ok
-    Count: N/A
-    Owner: MrsP
-    Next: MrsP
-    CallerPrio: Real
-    CallerCPU: Home
-  pre-conditions:
-    Id:
-    - Valid
-    Class:
-    - MrsP
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - Blocked
-    - BlockedOther
-- enabled-by: RTEMS_SMP
-  post-conditions:
-    Status: Ok
-    Count: N/A
-    Owner: Self
-    Next: N/A
-    CallerPrio: Inherit
-    CallerCPU: Other
-  pre-conditions:
-    Id:
-    - Valid
-    Class:
-    - PrioInherit
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - BlockedNestedOther
-- enabled-by: RTEMS_SMP
-  post-conditions: NoNestedMrsP
-  pre-conditions:
-    Id: all
-    Class:
-    - MrsP
-    Discipline:
-    - Priority
-    Count: N/A
-    Owner:
-    - Nested
-    - BlockedNested
-    - BlockedNestedOther
 type: requirement
