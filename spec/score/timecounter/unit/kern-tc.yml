@@ -1,0 +1,196 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+
+#### _Timecounter_Getbintime() ################################################
+
+- action-brief: |
+    Call function _Timecounter_Getbintime().
+  action-code: |
+    struct bintime bt;
+    _Timecounter_Getbintime( &bt );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( bt.sec, TOD_SECONDS_1970_THROUGH_1988 );
+      T_eq_long( bt.frac, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Getbintime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Getbinuptime() ##############################################
+
+- action-brief: |
+    Call function _Timecounter_Getbinuptime().
+  action-code: |
+    struct bintime bt;
+    _Timecounter_Getbinuptime( &bt );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( bt.sec, 1 );
+      T_eq_long( bt.frac, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Getbinuptime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Getboottime() ##############$$$##############################
+
+- action-brief: |
+    Call function _Timecounter_Getboottime().
+  action-code: |
+    struct timeval tv;
+    _Timecounter_Getboottime( &tv );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( tv.tv_sec, TOD_SECONDS_1970_THROUGH_1988 - 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Getboottime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Getboottimebin() ############################################
+
+- action-brief: |
+    Call function _Timecounter_Getboottimebin().
+  action-code: |
+    struct bintime bt;
+    _Timecounter_Getboottimebin( &bt );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( bt.sec, TOD_SECONDS_1970_THROUGH_1988 - 1 );
+      T_eq_long( bt.frac, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Getboottimebin
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Getmicrotime() ##############################################
+
+- action-brief: |
+    Call function _Timecounter_Getmicrotime().
+  action-code: |
+    struct timeval tv;
+    _Timecounter_Getmicrotime( &tv );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( tv.tv_sec, TOD_SECONDS_1970_THROUGH_1988 );
+      T_eq_long( tv.tv_usec, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Getmicrotime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Getmicrouptime() ############################################
+
+- action-brief: |
+    Call function _Timecounter_Getmicrouptime().
+  action-code: |
+    struct timeval tv;
+    _Timecounter_Getmicrouptime( &tv );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( tv.tv_sec, 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Getmicrouptime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Microuptime() ##############################################
+
+- action-brief: |
+    Call function _Timecounter_Microuptime().
+  action-code: |
+    struct timeval tv;
+    _Timecounter_Microuptime( &tv );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( tv.tv_sec, 1 );
+      T_eq_long( tv.tv_usec, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Microuptime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Nanotime() #################################################
+
+- action-brief: |
+    Call function _Timecounter_Nanotime().
+  action-code: |
+    struct timespec ts;
+    _Timecounter_Nanotime( &ts );
+  checks:
+  - brief: |
+      Check value returned by function call.
+    code: |
+      T_eq_u64( ts.tv_sec, TOD_SECONDS_1970_THROUGH_1988 );
+      T_eq_long( ts.tv_nsec, 0 );
+    links: []
+  links:
+  - name: _Timecounter_Nanotime
+    role: unit-test
+    uid: ../../if/domain
+
+#### _Timecounter_Tick_simple() ###############################################
+
+- action-brief: |
+    Call function _Timecounter_Tick_simple().
+  action-code: |
+    ISR_lock_Context lock_context;
+    _Timecounter_Acquire( &lock_context );
+    _Timecounter_Tick_simple( 0, 0, &lock_context );
+  checks: []
+  links:
+  - name: _Timecounter_Tick_simple
+    role: unit-test
+    uid: ../../if/domain
+
+###############################################################################
+
+test-brief: |
+  Unit tests for the time counter kern_tc part.
+test-context: []
+test-context-support: null
+test-description: |
+  Parts of the file ``cpukit/score/src/kern_tc.c``
+  are only executed by the POSIX API and certain device driver code.  The
+  space qualified code subset does not contain those features.  This test
+  exercises the code parts otherwise not reached in order to achieve full
+  code coverage.
+test-header: null
+test-includes:
+- rtems/score/timecounter.h
+- rtems/score/todimpl.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/unit/tc-score-kern-tc.c
+test-teardown: null
+type: test-case
