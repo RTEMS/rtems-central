@@ -231,7 +231,8 @@ test-action: |
   );
 
   TQSchedulerRecordStart( ctx->tq_ctx );
-  TQSurrender( ctx->tq_ctx );
+  status = TQSurrender( ctx->tq_ctx );
+  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
   TQWaitForDone( ctx->tq_ctx, TQ_BLOCKER_A );
 
   if ( CanDoFullValidation() ) {

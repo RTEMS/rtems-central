@@ -205,7 +205,8 @@ test-action: |
   status = TQEnqueue( ctx->tq_ctx, TQ_WAIT_FOREVER );
   T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
   TQSchedulerRecordStop( ctx->tq_ctx );
-  TQSurrender( ctx->tq_ctx );
+  status = TQSurrender( ctx->tq_ctx );
+  T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
 
   if (
     ctx->priority != PRIO_PSEUDO_ISR &&

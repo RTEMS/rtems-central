@@ -488,7 +488,7 @@ test-setup:
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->magic                  = magic;
     ctx->tq_ctx.enqueue         = ReceiveMsg;
-    ctx->tq_ctx.surrender       = TQDoNothing;
+    ctx->tq_ctx.surrender       = TQDoNothingSuccessfully;
     ctx->tq_ctx.convert_status  = TQConvertStatusClassic;
     ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
     ctx->tq_ctx.enqueue_done    = EnqueueDone;

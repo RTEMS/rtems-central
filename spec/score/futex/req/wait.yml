@@ -108,7 +108,7 @@ test-setup:
     ctx->tq_ctx.enqueue_prepare = TQDoNothing;
     ctx->tq_ctx.enqueue = Enqueue;
     ctx->tq_ctx.enqueue_done = EnqueueDone;
-    ctx->tq_ctx.surrender = TQDoNothing;
+    ctx->tq_ctx.surrender = TQDoNothingSuccessfully;
     ctx->tq_ctx.convert_status = TQConvertStatusPOSIX;
     TQInitialize( &ctx->tq_ctx );
   description: null

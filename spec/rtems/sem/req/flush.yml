@@ -74,7 +74,7 @@ pre-conditions:
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE;
       ctx->initial_count = 1;
       ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
-      ctx->tq_ctx.enqueue_done = TQSurrenderClassicSem;
+      ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
     text: |
       While the semaphore object is a binary semaphore.
   - name: PrioCeiling
@@ -82,7 +82,7 @@ pre-conditions:
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING;
       ctx->initial_count = 1;
       ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
-      ctx->tq_ctx.enqueue_done = TQSurrenderClassicSem;
+      ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
     text: |
       While the semaphore object is a priority ceiling semaphore.
   - name: PrioInherit
@@ -90,7 +90,7 @@ pre-conditions:
       ctx->attribute_set |= RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY;
       ctx->initial_count = 1;
       ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
-      ctx->tq_ctx.enqueue_done = TQSurrenderClassicSem;
+      ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
     text: |
       While the semaphore object is a priority inheritance semaphore.
   - name: MrsP
@@ -99,7 +99,7 @@ pre-conditions:
         RTEMS_MULTIPROCESSOR_RESOURCE_SHARING;
       ctx->initial_count = 1;
       ctx->tq_ctx.enqueue_prepare = EnqueuePrepare;
-      ctx->tq_ctx.enqueue_done = TQSurrenderClassicSem;
+      ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
     text: |
       While the semaphore object is a MrsP semaphore.
   test-epilogue: null
@@ -199,7 +199,7 @@ test-setup:
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->tq_ctx.enqueue = Enqueue;
     ctx->tq_ctx.flush = Flush;
-    ctx->tq_ctx.surrender = TQDoNothing;
+    ctx->tq_ctx.surrender = TQSurrenderClassicSem;
     ctx->tq_ctx.convert_status = TQConvertStatusClassic;
     TQInitialize( &ctx->tq_ctx );
   description: null
