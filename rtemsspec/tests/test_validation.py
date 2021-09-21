@@ -2233,36 +2233,44 @@ static T_fixture Action2_Fixture = {
   .initial_context = &Action2_Instance
 };
 
+static const uint8_t Action2_Weights[] = {
+  9, 3, 1
+};
+
+static void Action2_Skip( Action2_Context *ctx, size_t index )
+{
+  switch ( index + 1 ) {
+    case 1:
+      ctx->Map.pci[ 1 ] = Action2_Pre_B_NA - 1;
+      /* Fall through */
+    case 2:
+      ctx->Map.pci[ 2 ] = Action2_Pre_C_NA - 1;
+      break;
+  }
+}
+
 static inline Action2_Entry Action2_PopEntry( Action2_Context *ctx )
 {
   size_t index;
 
-  index = ctx->Map.index;
+  if ( ctx->Map.skip ) {
+    size_t i;
+
+    ctx->Map.skip = false;
+    index = 0;
+
+    for ( i = 0; i < 3; ++i ) {
+      index += Action2_Weights[ i ] * ctx->Map.pci[ i ];
+    }
+  } else {
+    index = ctx->Map.index;
+  }
+
   ctx->Map.index = index + 1;
+
   return Action2_Entries[
     Action2_Map[ index ]
   ];
-}
-
-static void Action2_Skip( Action2_Context *ctx, size_t index )
-{
-  size_t increment;
-
-  ctx->Map.skip = false;
-  increment = 1;
-
-  switch ( index + 1 ) {
-    case 1:
-      increment *= Action2_Pre_B_NA - ctx->Map.pci[ 1 ];
-      ctx->Map.pci[ 1 ] = Action2_Pre_B_NA - 1;
-      /* Fall through */
-    case 2:
-      increment *= Action2_Pre_C_NA - ctx->Map.pci[ 2 ];
-      ctx->Map.pci[ 2 ] = Action2_Pre_C_NA - 1;
-      break;
-  }
-
-  ctx->Map.index += increment - 1;
 }
 
 static void Action2_SetPreConditionStates( Action2_Context *ctx )
@@ -2307,6 +2315,7 @@ void Action2_Run( int *a, int b, int *c )
   ctx = T_push_fixture( &Action2_Node, &Action2_Fixture );
   ctx->Map.in_action_loop = true;
   ctx->Map.index = 0;
+  ctx->Map.skip = false;
 
   for (
     ctx->Map.pci[ 0 ] = Action2_Pre_A_A0;

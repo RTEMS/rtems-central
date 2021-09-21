@@ -29,6 +29,7 @@
 from contextlib import contextmanager
 import collections
 import itertools
+import math
 import os
 import re
 import sys
@@ -1162,3 +1163,11 @@ def to_camel_case(name: str) -> str:
     return name[0].upper() + _CAMEL_CASE_TO_UPPER.sub(
         lambda match: match.group(1).upper(),
         _CAMEL_CASE_DISCARD.sub(" ", name[1:].replace("+", "X")))
+
+
+def get_integer_type(value: int) -> str:
+    """
+    Returns an unsigned integer type which is large enough to store the value.
+    """
+    power = 2**max(math.ceil(math.log2(math.floor(math.log2(value)) + 1)), 3)
+    return f"uint{power}_t"

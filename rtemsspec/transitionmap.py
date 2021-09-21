@@ -32,7 +32,8 @@ import math
 import textwrap
 from typing import Any, Dict, Iterator, List, NamedTuple, Optional, Tuple
 
-from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper
+from rtemsspec.content import CContent, enabled_by_to_exp, ExpressionMapper, \
+    get_integer_type
 from rtemsspec.items import is_enabled, Item
 
 
@@ -663,9 +664,9 @@ class TransitionMap:
         content.add([f"static const {ident}_Entry", f"{ident}_Entries[] = {{"])
         entries[-1] = entries[-1].replace("},", "}")
         content.append(entries)
-        bits = max(8, math.ceil(math.log2(len(self._entries)) / 8) * 8)
+        integer_type = get_integer_type(len(self._entries))
         content.append(
-            ["};", "", f"static const uint{bits}_t", f"{ident}_Map[] = {{"])
+            ["};", "", f"static const {integer_type}", f"{ident}_Map[] = {{"])
         text = ", ".join(
             str(self._entries[transitions.key][1])
             for transitions in self._map)

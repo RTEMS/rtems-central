@@ -27,12 +27,13 @@
 # pylint: disable=too-many-lines
 
 import itertools
+import functools
 import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, \
-    GenericContent, get_value_params, get_value_plural, \
+    GenericContent, get_integer_type, get_value_params, get_value_plural, \
     get_value_doxygen_group, get_value_doxygen_function, to_camel_case
 from rtemsspec.items import Item, ItemCache, \
     ItemGetValueContext, ItemMapper
@@ -601,25 +602,32 @@ class _ActionRequirementTestItem(_TestItem):
             content.call_function(None, f"{self.ident}_{name}", ["ctx"])
 
     def _add_skip(self, content: CContent) -> Any:
+        state_counts = [len(enum) - 2 for enum in self._pre_co_idx_to_enum]
+        weigths = [
+            str(
+                functools.reduce((lambda x, y: x * y),
+                                 state_counts[index + 1:], 1))
+            for index in range(self._pre_co_count)
+        ]
+        integer_type = get_integer_type(int(weigths[0]))
+        content.add(f"static const {integer_type} {self.ident}_Weights[] = {{")
+        with content.indent():
+            content.wrap(", ".join(weigths))
+        content.add("};")
         with content.function("static void", f"{self.ident}_Skip",
                               [f"{self.context} *ctx", "size_t index"]):
-            content.append([
-                "size_t increment;", "", "ctx->Map.skip = false;",
-                "increment = 1;", "", "switch ( index + 1 ) {"
-            ])
+            content.append("switch ( index + 1 ) {")
             fall_through = "/* Fall through */"
             with content.indent():
                 for index, enum in enumerate(self._pre_co_idx_to_enum[1:], 1):
                     content.add(f"case {index}:")
                     with content.indent():
                         pci = f"ctx->Map.{self._pci}[ {index} ]"
-                        content.append([
-                            f"increment *= {enum[-1]} - {pci};",
-                            f"{pci} = {enum[-1]} - 1;", fall_through
-                        ])
+                        content.append(
+                            [f"{pci} = {enum[-1]} - 1;", fall_through])
                 content.lines[-1] = content.lines[-1].replace(
                     fall_through, "break;")
-            content.append(["}", "", "ctx->Map.index += increment - 1;"])
+            content.append("}")
 
     def _add_test_variant(self, content: CContent,
                           transition_map: TransitionMap) -> None:
@@ -694,19 +702,38 @@ class _ActionRequirementTestItem(_TestItem):
                     gap = False
                     content.add(pcs_pci)
 
-    def _add_test_case(self, content: CContent, transition_map: TransitionMap,
-                       header: Dict[str, Any]) -> None:
+    def _add_pop_entry(self, content: CContent) -> None:
         ret = f"static inline {self.ident}_Entry"
         name = f"{self.ident}_PopEntry"
         params = [f"{self.context} *ctx"]
         with content.function(ret, name, params, align=True):
+            content.add("size_t index;")
+            if self._pre_co_skip:
+                with content.first_condition("ctx->Map.skip"):
+                    content.add([
+                        "size_t i;", "", "ctx->Map.skip = false;", "index = 0;"
+                    ])
+                    with content.for_loop("i = 0", f"i < {self._pre_co_count}",
+                                          "++i"):
+                        content.append(f"index += {self.ident}_Weights[ i ]"
+                                       f" * ctx->Map.{self._pci}[ i ];")
+                with content.final_condition():
+                    content.add("index = ctx->Map.index;")
+                content.add("ctx->Map.index = index + 1;")
+            else:
+                content.add(
+                    ["index = ctx->Map.index;", "ctx->Map.index = index + 1;"])
+                content.gap = False
             content.add([
-                "size_t index;", "", "index = ctx->Map.index;",
-                "ctx->Map.index = index + 1;", f"return {self.ident}_Entries[",
+                f"return {self.ident}_Entries[",
                 f"  {self.ident}_Map[ index ]", "];"
             ])
+
+    def _add_test_case(self, content: CContent, transition_map: TransitionMap,
+                       header: Dict[str, Any]) -> None:
         if self._pre_co_skip:
             self._add_skip(content)
+        self._add_pop_entry(content)
         if transition_map.has_pre_co_not_applicable():
             self._add_set_pre_co_states(content, transition_map)
         with content.function("static void", f"{self.ident}_TestVariant",
@@ -715,6 +742,11 @@ class _ActionRequirementTestItem(_TestItem):
         fixture = f"{self.ident}_Fixture"
         prologue = CContent()
         epilogue = CContent()
+        map_members_initialization = [
+            "ctx->Map.in_action_loop = true;", "ctx->Map.index = 0;"
+        ]
+        if self._pre_co_skip:
+            map_members_initialization.append("ctx->Map.skip = false;")
         if header:
             content.add(f"static T_fixture_node {self.ident}_Node;")
             ret = "void"
@@ -724,8 +756,7 @@ class _ActionRequirementTestItem(_TestItem):
             self.assign_run_params(prologue, header)
             prologue.call_function("ctx =", "T_push_fixture",
                                    [f"&{self.ident}_Node", f"&{fixture}"])
-            prologue.append(
-                ["ctx->Map.in_action_loop = true;", "ctx->Map.index = 0;"])
+            prologue.append(map_members_initialization)
             epilogue.add("T_pop_fixture();")
             align = True
         else:
@@ -737,9 +768,10 @@ class _ActionRequirementTestItem(_TestItem):
             name = "T_TEST_CASE_FIXTURE"
             params = [f"{self.ident}", f"&{fixture}"]
             prologue.add([
-                f"{self.context} *ctx;", "", "ctx = T_fixture_context();",
-                "ctx->Map.in_action_loop = true;", "ctx->Map.index = 0;"
-            ])
+                f"{self.context} *ctx;",
+                "",
+                "ctx = T_fixture_context();",
+            ] + map_members_initialization)
             align = False
         with content.function(ret, name, params, align=align):
             content.add(prologue)
