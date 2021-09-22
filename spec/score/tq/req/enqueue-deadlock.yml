@@ -134,12 +134,7 @@ test-action: |
       TQ_EVENT_SURRENDER | TQ_EVENT_RUNNER_SYNC
     );
     TQSynchronizeRunner();
-    TQSetScheduler(
-      ctx->tq_ctx,
-      TQ_BLOCKER_A,
-      ctx->tq_ctx->runner_scheduler_id,
-      PRIO_HIGH
-    );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_A_ID, PRIO_HIGH );
   } else {
     TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_SURRENDER );
   }

@@ -267,12 +267,6 @@ test-setup:
   code: |
     ctx->request.arg = ctx;
     TQReset( ctx->tq_ctx );
-    TQSetScheduler(
-      ctx->tq_ctx,
-      TQ_HELPER_OTHER,
-      SCHEDULER_A_ID,
-      PRIO_NORMAL
-    );
   description: null
 test-stop: null
 test-support: |

@@ -128,12 +128,7 @@ test-setup:
     TQReset( ctx->tq_ctx );
 
     if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
-      TQSetScheduler(
-        ctx->tq_ctx,
-        TQ_BLOCKER_A,
-        ctx->tq_ctx->other_scheduler_id,
-        PRIO_NORMAL
-      );
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
     } else {
       TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_HIGH );
     }

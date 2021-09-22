@@ -216,7 +216,7 @@ test-action: |
 
     sc = rtems_semaphore_set_priority(
       ctx->tq_ctx.thread_queue_id,
-      ctx->tq_ctx.other_scheduler_id,
+      SCHEDULER_B_ID,
       PRIO_VERY_HIGH,
       &prio
     );

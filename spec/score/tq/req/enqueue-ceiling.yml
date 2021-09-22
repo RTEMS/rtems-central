@@ -192,10 +192,10 @@ test-action: |
   if ( ctx->helping ) {
     if ( ctx->other_before || ctx->other_after ) {
       if ( rtems_scheduler_get_processor_maximum() > 2 ) {
-        AddHelper( ctx->tq_ctx, ctx->tq_ctx->third_scheduler_id );
+        AddHelper( ctx->tq_ctx, SCHEDULER_C_ID );
       }
     } else {
-      AddHelper( ctx->tq_ctx, ctx->tq_ctx->other_scheduler_id );
+      AddHelper( ctx->tq_ctx, SCHEDULER_B_ID );
     }
   }
 
@@ -283,17 +283,12 @@ test-setup:
   code: |
     rtems_id scheduler_id;
 
-    scheduler_id = ctx->tq_ctx->runner_scheduler_id;
+    scheduler_id = SCHEDULER_A_ID;
     TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, scheduler_id, PRIO_VERY_HIGH );
     TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, scheduler_id, PRIO_VERY_HIGH );
     TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, scheduler_id, PRIO_VERY_HIGH );
     #if defined( RTEMS_SMP )
-    TQSetScheduler(
-      ctx->tq_ctx,
-      TQ_BLOCKER_D,
-      ctx->tq_ctx->other_scheduler_id,
-      PRIO_LOW
-    );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_D, SCHEDULER_B_ID, PRIO_LOW );
     #endif
   description: null
 test-stop: null

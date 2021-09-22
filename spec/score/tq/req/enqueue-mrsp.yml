@@ -310,45 +310,17 @@ test-setup:
   brief: null
   code: |
     if ( CanDoFullValidation() ) {
-      rtems_status_code sc;
-
-      sc = rtems_scheduler_remove_processor(
-        ctx->tq_ctx->third_scheduler_id,
-        2
-      );
-      T_rsc_success( sc );
-
-      sc = rtems_scheduler_add_processor(
-        ctx->tq_ctx->other_scheduler_id,
-        2
-      );
-      T_rsc_success( sc );
-
-      TQSetScheduler(
-        ctx->tq_ctx,
-        TQ_BLOCKER_C,
-        ctx->tq_ctx->third_scheduler_id,
-        PRIO_LOW
-      );
+      RemoveProcessor( SCHEDULER_C_ID, 2 );
+      AddProcessor( SCHEDULER_B_ID, 2 );
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_C_ID, PRIO_LOW );
     }
 
-    TQSetScheduler(
-      ctx->tq_ctx,
-      TQ_BLOCKER_A,
-      ctx->tq_ctx->other_scheduler_id,
-      PRIO_LOW
-    );
-    TQSetScheduler(
-      ctx->tq_ctx,
-      TQ_BLOCKER_B,
-      ctx->tq_ctx->other_scheduler_id,
-      PRIO_LOW
-    );
-
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_LOW );
+    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_B_ID, PRIO_LOW );
     TQSetScheduler(
       ctx->tq_ctx,
       TQ_BLOCKER_D,
-      ctx->tq_ctx->runner_scheduler_id,
+      SCHEDULER_A_ID,
       PRIO_ULTRA_HIGH
     );
   description: null
@@ -369,19 +341,8 @@ test-teardown:
   brief: null
   code: |
     if ( CanDoFullValidation() ) {
-      rtems_status_code sc;
-
-      sc = rtems_scheduler_remove_processor(
-        ctx->tq_ctx->other_scheduler_id,
-        2
-      );
-      T_rsc_success( sc );
-
-      sc = rtems_scheduler_add_processor(
-        ctx->tq_ctx->third_scheduler_id,
-        2
-      );
-      T_rsc_success( sc );
+      RemoveProcessor( SCHEDULER_B_ID, 2 );
+      AddProcessor( SCHEDULER_C_ID, 2 );
     }
 
     TQReset( ctx->tq_ctx );

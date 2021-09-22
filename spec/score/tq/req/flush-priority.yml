@@ -130,11 +130,7 @@ test-setup:
       ctx->supports_multiple_priority_queues &&
       rtems_configuration_get_maximum_processors() > 1
     ) {
-      TQSetScheduler(
-        ctx->tq_ctx, TQ_BLOCKER_B,
-        ctx->tq_ctx->other_scheduler_id,
-        PRIO_HIGH
-      );
+      TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_B, SCHEDULER_B_ID, PRIO_HIGH );
     } else {
       TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_HIGH );
     }
