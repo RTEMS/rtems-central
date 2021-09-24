@@ -6,6 +6,10 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/release
+- role: function-implementation
+  uid: /score/mtx/req/surrender
+- role: function-implementation
+  uid: /score/sem/req/surrender
 post-conditions:
 - name: Action
   states:

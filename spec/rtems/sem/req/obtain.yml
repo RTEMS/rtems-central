@@ -6,6 +6,14 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/obtain
+- role: function-implementation
+  uid: /score/mtx/req/seize-try
+- role: function-implementation
+  uid: /score/mtx/req/seize-wait
+- role: function-implementation
+  uid: /score/sem/req/seize-try
+- role: function-implementation
+  uid: /score/sem/req/seize-wait
 post-conditions:
 - name: Action
   states:

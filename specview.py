@@ -38,11 +38,10 @@ from rtemsspec.transitionmap import Transition, TransitionMap
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
-    "interface-function", "validation", "appl-config-group-member",
-    "glossary-member"
+    "interface-function", "appl-config-group-member", "glossary-member"
 ]
 
-_PARENT_ROLES = ["interface-enumerator"]
+_PARENT_ROLES = ["function-implementation", "interface-enumerator"]
 
 
 def _get_value_dummy(_ctx: ItemGetValueContext) -> Any:
@@ -122,16 +121,23 @@ def _view(item: Item, level: int, role: Optional[str],
           validated_filter: str) -> None:
     if not _visit_item(item, level, role, validated_filter):
         return
+    for child in item.children("validation"):
+        _visit_item(child, level + 1, "validation", validated_filter)
     _view_interface_placment(item, level + 1, validated_filter)
     for link in item.links_to_children(_CHILD_ROLES):
+        _view(link.item, level + 1, link.role, validated_filter)
+    for link in item.links_to_parents(_PARENT_ROLES):
         _view(link.item, level + 1, link.role, validated_filter)
 
 
 def _validate(item: Item) -> bool:
-    count = 0
+    count = len(list(item.children("validation")))
     validated = True
     for child in item.children(_CHILD_ROLES):
         validated = _validate(child) and validated
+        count += 1
+    for parent in item.parents(_PARENT_ROLES):
+        validated = _validate(parent) and validated
         count += 1
     if count == 0:
         validated = item.type in [
@@ -151,6 +157,7 @@ def _validate(item: Item) -> bool:
             "runtime-measurement-test",
             "test-case",
             "test-suite",
+            "validation",
         ]
         if not validated:
             item["_validated"] = False
@@ -172,10 +179,15 @@ _VALIDATION_LEAF = [
 
 
 def _no_validation(item: Item, path: List[str]) -> List[str]:
-    leaf = True
     path_2 = path + [item.uid]
+    leaf = len(list(item.children("validation"))) == 0
+    if not leaf:
+        return path_2[:-1]
     for child in item.children(_CHILD_ROLES):
         path_2 = _no_validation(child, path_2)
+        leaf = False
+    for parent in item.parents(_PARENT_ROLES):
+        path_2 = _no_validation(parent, path_2)
         leaf = False
     if leaf and item.type not in _VALIDATION_LEAF:
         for index, component in enumerate(path_2):
@@ -194,6 +206,8 @@ def _gather_interface_placement(item: Item, spec: Set) -> None:
 def _gather(item: Item, spec: Set) -> None:
     spec.add(item)
     _gather_interface_placement(item, spec)
+    for child in item.children("validation"):
+        spec.add(child)
     for child in item.children(_CHILD_ROLES):
         _gather(child, spec)
     for parent in item.parents(_PARENT_ROLES):

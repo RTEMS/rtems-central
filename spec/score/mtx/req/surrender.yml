@@ -4,6 +4,10 @@ copyrights:
 enabled-by: true
 functional-type: action
 links:
+- role: function-implementation
+  uid: /score/tq/req/surrender
+- role: function-implementation
+  uid: /score/tq/req/surrender-priority-inherit
 - role: requirement-refinement
   uid: ../if/group
 post-conditions:

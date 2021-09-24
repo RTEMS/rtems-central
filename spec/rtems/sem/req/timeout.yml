@@ -6,6 +6,10 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/obtain
+- role: function-implementation
+  uid: /score/tq/req/timeout
+- role: function-implementation
+  uid: /score/tq/req/timeout-priority-inherit
 post-conditions:
 - name: Action
   states:

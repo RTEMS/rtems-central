@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/futex-wait
+- role: function-implementation
+  uid: /score/tq/req/enqueue-fifo
 - role: requirement-refinement
   uid: futex
 post-conditions:

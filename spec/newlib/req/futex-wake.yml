@@ -6,6 +6,10 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/futex-wake
+- role: function-implementation
+  uid: /score/tq/req/flush-fifo
+- role: function-implementation
+  uid: /score/tq/req/flush-filter-stop
 - role: requirement-refinement
   uid: futex
 - role: validation

@@ -6,6 +6,12 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/flush
+- role: function-implementation
+  uid: /score/tq/req/flush-fifo
+- role: function-implementation
+  uid: /score/tq/req/flush-priority
+- role: function-implementation
+  uid: /score/tq/req/flush-priority-inherit
 post-conditions:
 - name: Action
   states:

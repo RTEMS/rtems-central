@@ -4,6 +4,10 @@ copyrights:
 enabled-by: true
 functional-type: action
 links:
+- role: function-implementation
+  uid: /score/tq/req/enqueue-fifo
+- role: function-implementation
+  uid: /score/tq/req/enqueue-priority
 - role: requirement-refinement
   uid: ../if/group
 post-conditions:
