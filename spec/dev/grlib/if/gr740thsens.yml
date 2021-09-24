@@ -33,7 +33,6 @@ definition:
 register-prefix: null
 register-block-group: GR740THSENS
 register-block-size: 12
-register-block-type: memory
 registers:
 - bits:
   - default:

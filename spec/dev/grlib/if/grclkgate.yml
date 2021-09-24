@@ -38,7 +38,6 @@ definition:
 register-prefix: null
 register-block-group: GRCLKGATE
 register-block-size: 16
-register-block-type: memory
 registers:
 - bits:
   - default:

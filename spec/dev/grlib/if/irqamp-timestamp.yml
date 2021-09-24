@@ -38,7 +38,6 @@ definition:
 register-prefix: IRQAMP
 register-block-group: IRQ(A)MP Timestamp
 register-block-size: 16
-register-block-type: memory
 registers:
 - bits:
   - default:

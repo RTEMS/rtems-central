@@ -128,7 +128,6 @@ definition:
 register-prefix: null
 register-block-group: GRGPIO
 register-block-size: 128
-register-block-type: memory
 registers:
 - bits:
   - default:

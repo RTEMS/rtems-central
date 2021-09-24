@@ -118,7 +118,6 @@ definition:
 register-prefix: null
 register-block-group: GRIOMMU
 register-block-size: 272
-register-block-type: memory
 registers:
 - bits:
   - default:

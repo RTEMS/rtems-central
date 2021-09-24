@@ -113,7 +113,6 @@ definition:
 register-prefix: null
 register-block-group: GRPCI2
 register-block-size: 160
-register-block-type: memory
 registers:
 - bits:
   - default:

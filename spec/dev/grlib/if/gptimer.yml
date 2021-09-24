@@ -46,7 +46,6 @@ definition:
 register-prefix: null
 register-block-group: GPTIMER
 register-block-size: 256
-register-block-type: memory
 registers:
 - bits:
   - default:

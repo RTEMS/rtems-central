@@ -87,7 +87,6 @@ definition:
 register-prefix: null
 register-block-group: SpaceWire Plug-and-Play
 register-block-size: 49156
-register-block-type: memory
 registers:
 - bits:
   - default:

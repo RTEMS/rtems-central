@@ -17,8 +17,8 @@ spec-info:
         spec-type: interface-register-block-member
       offset:
         description: |
-          It shall be the offset in bytes from the register block begin to the
-          register member.
+          It shall be the offset from the register block begin to the register
+          member in units of the address space granule.
         spec-type: int
       variants:
         description: null

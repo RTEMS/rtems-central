@@ -63,7 +63,6 @@ definition:
 register-prefix: null
 register-block-group: GRETH_GBIT
 register-block-size: 48
-register-block-type: memory
 registers:
 - bits:
   - default:

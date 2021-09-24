@@ -78,7 +78,6 @@ definition:
 register-prefix: null
 register-block-group: MEMSCRUB
 register-block-size: 52
-register-block-type: memory
 registers:
 - bits:
   - default:

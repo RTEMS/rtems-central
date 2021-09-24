@@ -73,7 +73,6 @@ definition:
 register-prefix: null
 register-block-group: GRSPW2
 register-block-size: 52
-register-block-type: memory
 registers:
 - bits:
   - default:

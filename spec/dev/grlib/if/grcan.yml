@@ -113,7 +113,6 @@ definition:
 register-prefix: null
 register-block-group: GRCAN
 register-block-size: 800
-register-block-type: memory
 registers:
 - bits:
   - default:

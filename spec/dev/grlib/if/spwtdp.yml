@@ -203,7 +203,6 @@ definition:
 register-prefix: null
 register-block-group: SPWTDP
 register-block-size: 296
-register-block-type: memory
 registers:
 - bits:
   - default:

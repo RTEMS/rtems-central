@@ -43,7 +43,6 @@ definition:
 register-prefix: null
 register-block-group: APBUART
 register-block-size: 20
-register-block-type: memory
 registers:
 - bits:
   - default:

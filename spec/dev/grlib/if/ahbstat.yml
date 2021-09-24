@@ -28,7 +28,6 @@ definition:
 register-prefix: null
 register-block-group: AHBSTAT
 register-block-size: 8
-register-block-type: memory
 registers:
 - bits:
   - default:

@@ -23,7 +23,6 @@ definition:
 register-prefix: null
 register-block-group: GRGPREG
 register-block-size: 4
-register-block-type: memory
 registers:
 - bits:
   - default:

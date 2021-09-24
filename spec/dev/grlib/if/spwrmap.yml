@@ -177,7 +177,6 @@ definition:
 register-prefix: null
 register-block-group: SpaceWire Remote Memory Access Protocol (RMAP)
 register-block-size: 4104
-register-block-type: memory
 registers:
 - bits:
   - default:

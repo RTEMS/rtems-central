@@ -58,7 +58,6 @@ definition:
 register-prefix: null
 register-block-group: AHBTRACE
 register-block-size: 32
-register-block-type: memory
 registers:
 - bits:
   - default:

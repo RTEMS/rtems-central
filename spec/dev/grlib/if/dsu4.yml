@@ -148,7 +148,6 @@ definition:
 register-prefix: null
 register-block-group: DSU4
 register-block-size: 4194344
-register-block-type: memory
 registers:
 - bits:
   - default:

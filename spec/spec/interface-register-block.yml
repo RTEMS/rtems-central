@@ -43,11 +43,9 @@ spec-info:
         spec-type: str
       register-block-size:
         description: |
-          It shall be the size in bytes of the register block.
+          It shall be the size of the register block in units of the address
+          space granule.
         spec-type: int
-      register-block-type:
-        description: null
-        spec-type: interface-register-block-type
       register-prefix:
         description: |
           If the value is present, then it will be used to prefix register bit
@@ -56,13 +54,17 @@ spec-info:
         spec-type: optional-str
     description: |
       This set of attributes specifies a register block.  A register block may
-      be used to specify the memory-mapped interface to the hardware.  Register
-      blocks consist of register block members specified by the ``definition``
-      attribute.  Register block members are either instances of registers
-      specified by the ``registers`` attribute or instances of other register
-      blocks specified by links with the
+      be used to specify the interface of devices which use a linear address
+      space.  Register blocks consist of register block members specified by
+      the ``definition`` attribute.  Register block members are either
+      instances of registers specified by the ``registers`` attribute or
+      instances of other register blocks specified by links with the
       ${interface-register-block-include-role:/spec-name}.  Registers consists
-      of bit fields (see ${interface-register-bits:/spec-name}.
+      of bit fields (see ${interface-register-bits:/spec-name}.  The register
+      block members are placed into the address space of the device relative to
+      the base address of the register block.  Register member offests and the
+      register block size are specified in units of the address space granule.
+      The address space granule is usually 8-bits also known as one byte.
     generic-attributes:
       description: null
       key-spec-type: name

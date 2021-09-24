@@ -63,7 +63,6 @@ definition:
 register-prefix: null
 register-block-group: SPICTRL
 register-block-size: 64
-register-block-type: memory
 registers:
 - bits:
   - default:

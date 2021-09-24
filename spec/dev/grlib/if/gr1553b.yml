@@ -178,7 +178,6 @@ definition:
 register-prefix: null
 register-block-group: GR1553B
 register-block-size: 228
-register-block-type: memory
 registers:
 - bits:
   - default:

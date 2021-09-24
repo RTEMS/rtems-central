@@ -53,7 +53,6 @@ definition:
 register-prefix: null
 register-block-group: L4STAT
 register-block-size: 388
-register-block-type: memory
 registers:
 - bits:
   - default:

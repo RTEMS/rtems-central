@@ -101,7 +101,6 @@ definition:
 register-prefix: null
 register-block-group: IRQ(A)MP
 register-block-size: 1024
-register-block-type: memory
 registers:
 - bits:
   - default:
