@@ -5,7 +5,7 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: sys-lock-mutex-acquire-timed
-- role: interface-function
+- role: requirement-refinement
   uid: sys-lock-mutex-recursive-acquire-timed
 functional-type: function
 rationale: null
