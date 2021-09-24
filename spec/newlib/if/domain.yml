@@ -1,14 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: |
+  This interface domain contains interfaces defined by Newlib.
 enabled-by: true
 index-entries: []
-interface-type: unspecified-function
+interface-type: domain
 links:
-- role: interface-ingroup
-  uid: group
-- role: interface-placement
-  uid: /c/if/sys-lock
-name: _Futex_Wake
-references: []
+- role: requirement-refinement
+  uid: /req/domains
+name: Newlib
 type: interface

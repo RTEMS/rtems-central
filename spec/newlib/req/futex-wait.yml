@@ -5,64 +5,58 @@ enabled-by: true
 functional-type: action
 links:
 - role: interface-function
-  uid: ../if/wake
-- role: validation
-  uid: ../../tq/req/flush-filter-stop
+  uid: ../if/futex-wait
+- role: requirement-refinement
+  uid: futex
 post-conditions:
 - name: Result
   states:
-  - name: Count
+  - name: Zero
     test-code: |
-      /* This result is checked by Flush() */
+      /* This result is checked by Enqueue() */
     text: |
-      The return status of ${../if/wake:/name} shall be the count of threads
-      extracted from the thread queue of the futex object.
+      The return status of ${../if/futex-wait:/name} shall be zero.
+  - name: EAGAIN
+    test-code: |
+      eno = _Futex_Wait( &ctx->futex, &ctx->state, ctx->expected_value );
+      T_eq_int( eno, EAGAIN );
+    text: |
+      The return status of ${../if/futex-wait:/name} shall be
+      ${/c/if/eagain:/name}.
   test-epilogue: null
-  test-prologue: null
-- name: Flush
+  test-prologue: |
+    int eno;
+- name: Enqueue
   states:
   - name: 'No'
     test-code: |
-      /* This state is checked by Enqueue() */
+      /* The runner would block forever */
     text: |
-      No thread shall be extracted from the thread queue of the futex object.
-  - name: Partial
+      The calling thread shall not be enqueued on the thread queue of the futex
+      object.
+  - name: 'Yes'
     test-code: |
-      /* This state is checked by Flush() */
+      ${/score/tq/req/enqueue-fifo:/test-run}( &ctx->tq_ctx );
     text: |
-      The first count threads specified by the ``count`` parameter shall be
-      extracted from the thread queue of the futex object in
-      ${/glossary/fifo:/term} order.
-  - name: All
-    test-code: |
-      ${../../tq/req/flush-fifo:/test-run}( &ctx->tq_ctx );
-    text: |
-      All threads shall be extracted from the thread queue of the futex object
-      in ${/glossary/fifo:/term} order.
+      The calling thread shall be enqueued in FIFO order on the thread queue of
+      the futex object.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: Count
+- name: State
   states:
-  - name: Negative
+  - name: Equal
     test-code: |
-      /* This state is prepared by Enqueue() */
+      ctx->expected_value = 0;
     text: |
-      While the ``count`` parameter is less than zero.
-  - name: Partial
+      While the expected futex state value is equal to the actual futex state
+      value.
+  - name: NotEqual
     test-code: |
-      /* This state is prepared by Flush() */
+      ctx->expected_value = 1;
     text: |
-      While the ``count`` parameter is greater than or equal to zero,
-      while the ``count`` parameter is less than the count of threads enqueued
-      on the thread queue of the futex object.
-  - name: All
-    test-code: |
-      /* This state is prepared by Flush() */
-    text: |
-      While the ``count`` parameter is greater than or equal to zero,
-      while the ``count`` parameter is greater than or equal to the count of
-      threads enqueued on the thread queue of the futex object.
+      While the expected futex state value is not equal to the actual futex
+      state value.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -70,7 +64,7 @@ references: []
 requirement-type: functional
 skip-reasons: {}
 test-action: |
-  /* The action is performed in the ``Flush`` post-condition ``All`` state. */
+  /* The action is performed in the post-conditions. */
 test-brief: null
 test-cleanup:
   _Futex_Destroy( &ctx->futex );
@@ -80,6 +74,11 @@ test-context:
   description: null
   member: |
     TQContext tq_ctx;
+- brief: |
+    This member specifies the expected futex state value.
+  description: null
+  member: |
+    int expected_value
 - brief: |
     This member provides the futex object.
   description: null
@@ -99,9 +98,10 @@ test-includes:
 - rtems.h
 test-local-includes:
 - tx-thread-queue.h
-- tr-tq-flush-fifo.h
+- tr-tq-enqueue-fifo.h
 test-prepare: |
   _Futex_Initialize( &ctx->futex );
+  ctx->state = 0;
 test-setup:
   brief: null
   code: |
@@ -110,8 +110,7 @@ test-setup:
     ctx->tq_ctx.wait = TQ_WAIT_FOREVER;
     ctx->tq_ctx.enqueue_prepare = TQDoNothing;
     ctx->tq_ctx.enqueue = Enqueue;
-    ctx->tq_ctx.enqueue_done = TQDoNothing;
-    ctx->tq_ctx.flush = Flush;
+    ctx->tq_ctx.enqueue_done = EnqueueDone;
     ctx->tq_ctx.surrender = TQDoNothingSuccessfully;
     ctx->tq_ctx.convert_status = TQConvertStatusPOSIX;
     TQInitialize( &ctx->tq_ctx );
@@ -128,39 +127,25 @@ test-support: |
   static Status_Control Enqueue( TQContext *tq_ctx, TQWait wait )
   {
     Context *ctx;
-    int      count;
     int      eno;
 
     ctx = ToContext( tq_ctx );
-
-    count = _Futex_Wake( &ctx->futex, -1 );
-    T_eq_int( count, 0 );
-
-    count = _Futex_Wake( &ctx->futex, 0 );
-    T_eq_int( count, 0 );
-
-    eno = _Futex_Wait( &ctx->futex, &ctx->state, 0 );
+    eno = _Futex_Wait( &ctx->futex, &ctx->state, ctx->expected_value );
     T_eq_int( eno, 0 );
 
     return STATUS_BUILD( 0, eno );
   }
 
-  static void Flush( TQContext *tq_ctx )
+  static void EnqueueDone( TQContext *tq_ctx )
   {
     Context *ctx;
     int      count;
-    int      how_many;
 
     ctx = ToContext( tq_ctx );
-    how_many = (int) ctx->tq_ctx.how_many;
-
-    count = _Futex_Wake( &ctx->futex, 1 );
-    T_eq_int( count, how_many > 0 ? 1 : 0 );
-
     count = _Futex_Wake( &ctx->futex, INT_MAX );
-    T_eq_int( count, how_many > 1 ? how_many - 1 : 0 );
+    T_eq_int( count, (int) ctx->tq_ctx.how_many );
   }
-test-target: testsuites/validation/tc-futex-wake.c
+test-target: testsuites/validation/tc-futex-wait.c
 test-teardown:
   brief: null
   code: |
@@ -170,18 +155,16 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Result: Count
-    Flush: 'No'
+    Result: EAGAIN
+    Enqueue: 'No'
   pre-conditions:
-    Count:
-    - Negative
+    State:
+    - NotEqual
 - enabled-by: true
   post-conditions:
-    Result: Count
-    Flush:
-    - specified-by: Count
+    Result: Zero
+    Enqueue: 'Yes'
   pre-conditions:
-    Count:
-    - Partial
-    - All
+    State:
+    - Equal
 type: requirement

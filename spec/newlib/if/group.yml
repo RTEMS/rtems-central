@@ -1,15 +1,19 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This header file defines the Newlib-specific interfaces to lock and
-  synchronization objects.
+  This group contains Newlib interfaces.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
 enabled-by: true
+identifier: Newlib
 index-entries: []
-interface-type: header-file
+interface-type: group
 links:
+- role: requirement-refinement
+  uid: /req/api
 - role: interface-placement
   uid: domain
-path: sys/lock.h
-prefix: ''
+name: Newlib
+text: |
+  The ${/glossary/api:/term} shall provide interfaces defined by Newlib.
 type: interface
