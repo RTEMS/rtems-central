@@ -67,6 +67,8 @@ class _Mapper(ItemMapper):
         self.add_get_value("interface/group:/name", get_value_doxygen_group)
         self.add_get_value("interface/macro:/name", get_value_doxygen_function)
         self.add_get_value("interface/macro:/params/name", get_value_params)
+        self.add_get_value("interface/unspecified-function:/name",
+                           get_value_doxygen_function)
         self.add_get_value(
             "requirement/functional/action:/test-context-instance",
             _get_test_context_instance)
