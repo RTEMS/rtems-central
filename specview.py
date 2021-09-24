@@ -174,7 +174,7 @@ _VALIDATION_LEAF = [
     "runtime-measurement-test", "test-case", "test-suite", "validation",
     "interface/unspecified-define", "interface/unspecified-function",
     "interface/struct", "interface/union", "interface/typedef",
-    "interface/enum"
+    "interface/enum", "interface/enumerator"
 ]
 
 
