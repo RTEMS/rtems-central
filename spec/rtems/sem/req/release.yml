@@ -53,8 +53,8 @@ post-conditions:
       ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall surrender the mutex as specified by
-      ${/score/mtx/req/surrender} where an enqueue blocks and a recursive seize
-      is allowed.
+      ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
+      allowed, the owner is checked, and no locking protocol is used.
   - name: InheritMtxSurrender
     test-code: |
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
@@ -66,8 +66,9 @@ post-conditions:
       ${/score/mtx/req/surrender:/test-run}( &ctx->tq_mtx_ctx );
     text: |
       The calling task shall surrender the mutex as specified by
-      ${/score/mtx/req/surrender} where an enqueue blocks and a recursive seize
-      is allowed.
+      ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
+      allowed, the owner is checked, and a priority inheritance protocol is
+      used.
   - name: CeilingMtxSurrender
     test-code: |
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_BLOCKS;
@@ -80,7 +81,7 @@ post-conditions:
     text: |
       The calling task shall surrender the mutex as specified by
       ${/score/mtx/req/surrender} where an enqueue blocks, a recursive seize is
-      allowed, and a priority ceiling is used.
+      allowed, the owner is checked, and a priority ceiling is used.
   - name: MrsPMtxSurrender
     test-code: |
       ctx->tq_ctx.enqueue_variant = TQ_ENQUEUE_STICKY;
@@ -93,7 +94,8 @@ post-conditions:
     text: |
       The calling task shall surrender the mutex as specified by
       ${/score/mtx/req/surrender} where an enqueue is sticky, a recursive seize
-      returns an error status, and a priority ceiling is used.
+      returns an error status, the owner is checked, and a priority ceiling is
+      used.
   test-epilogue: null
   test-prologue: |
     rtems_status_code sc;

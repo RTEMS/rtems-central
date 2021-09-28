@@ -4,6 +4,8 @@ copyrights:
 enabled-by: true
 functional-type: action
 links:
+- role: function-implementation
+  uid: /score/tq/req/surrender
 - role: requirement-refinement
   uid: ../if/group
 post-conditions:
@@ -23,19 +25,18 @@ post-conditions:
       ${../../status/if/maximum-count-exceeded:/name}.
   test-epilogue: null
   test-prologue: null
-- name: Dequeue
+- name: Surrender
   states:
   - name: FIFO
     test-code: |
-      /* TODO */
+      ${../../tq/req/surrender:/test-run}( &ctx->tq_ctx->base );
     text: |
-      The first thread in FIFO order shall be dequeued from the thread queue.
+      The thread queue of the semaphore shall be surrendered in FIFO order.
   - name: Priority
     test-code: |
-      /* TODO */
+      ${../../tq/req/surrender:/test-run}( &ctx->tq_ctx->base );
     text: |
-      The first thread in priority order shall be dequeued from the thread
-      queue.
+      The thread queue of the semaphore shall be surrendered in priority order.
   test-epilogue: null
   test-prologue: null
 - name: Count
@@ -144,6 +145,7 @@ test-action: |
 
   ctx->status = TQSurrender( &ctx->tq_ctx->base );
   ctx->count_after = TQSemGetCount( ctx->tq_ctx );
+  TQSemSetCount( ctx->tq_ctx, 1 );
 test-brief: null
 test-cleanup: null
 test-context:
@@ -186,6 +188,7 @@ test-header:
 test-includes: []
 test-local-includes:
 - tr-sem-surrender.h
+- tr-tq-surrender.h
 test-prepare: null
 test-setup:
   brief: null
@@ -209,7 +212,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Dequeue: N/A
+    Surrender: N/A
     Count: One
   pre-conditions:
     Variant:
@@ -221,7 +224,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Dequeue:
+    Surrender:
     - specified-by: Discipline
     Count: Zero
   pre-conditions:
@@ -233,7 +236,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Dequeue: N/A
+    Surrender: N/A
     Count: PlusOne
   pre-conditions:
     Variant:
@@ -244,7 +247,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: MaxCountExceeded
-    Dequeue: N/A
+    Surrender: N/A
     Count: Nop
   pre-conditions:
     Variant:
@@ -255,7 +258,7 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Dequeue:
+    Surrender:
     - specified-by: Discipline
     Count: Zero
   pre-conditions:
