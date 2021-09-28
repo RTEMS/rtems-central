@@ -177,6 +177,17 @@ _VALIDATION_LEAF = [
     "interface/enum", "interface/enumerator"
 ]
 
+_NOT_PRE_QUALIFIED = set([
+    "/acfg/constraint/option-not-pre-qualified",
+    "/constraint/directive-not-pre-qualified",
+])
+
+
+def _is_pre_qualified(item: Item) -> bool:
+    return not bool(
+        set(parent.uid for parent in item.parents("constraint")).intersection(
+            _NOT_PRE_QUALIFIED))
+
 
 def _no_validation(item: Item, path: List[str]) -> List[str]:
     path_2 = path + [item.uid]
@@ -189,7 +200,7 @@ def _no_validation(item: Item, path: List[str]) -> List[str]:
     for parent in item.parents(_PARENT_ROLES):
         path_2 = _no_validation(parent, path_2)
         leaf = False
-    if leaf and item.type not in _VALIDATION_LEAF:
+    if leaf and item.type not in _VALIDATION_LEAF and _is_pre_qualified(item):
         for index, component in enumerate(path_2):
             if component:
                 print(f"{'  ' * index}{component}")
