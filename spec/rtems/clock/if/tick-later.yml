@@ -33,7 +33,7 @@ links:
 name: rtems_clock_tick_later
 notes: null
 params:
-- description:
+- description: |
     is the delta value in clock ticks.
   dir: null
   name: delta

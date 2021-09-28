@@ -39,7 +39,7 @@ links:
 name: rtems_interrupt_server_handler_iterate
 notes: |
   The directive is intended for system information and diagnostics.
- 
+
   Never install or remove an interrupt handler within the visitor function.
   This may result in a deadlock.
 params:

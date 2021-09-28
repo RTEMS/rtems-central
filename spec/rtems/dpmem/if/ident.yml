@@ -40,7 +40,7 @@ notes: |
 
   The objects are searched from lowest to the highest index.  Only the local
   node is searched.
-  
+
   The port identifier is used with other dual-ported memory related directives
   to access the port.
 params:
