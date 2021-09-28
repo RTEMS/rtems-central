@@ -17,6 +17,8 @@ links:
   uid: ../req/imfs-disable-unmount
 - role: appl-config-group-member
   uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_IMFS_DISABLE_UNMOUNT
 notes: null
 type: interface

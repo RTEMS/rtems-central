@@ -14,6 +14,8 @@ links:
   uid: ../req/scheduler-cbs
 - role: appl-config-group-member
   uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_SCHEDULER_CBS
 notes: |
   This scheduler configuration option is an advanced configuration option.

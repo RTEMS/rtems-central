@@ -23,6 +23,8 @@ links:
   uid: ../constraint/max-uintptr
 - role: constraint
   uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_EXECUTIVE_RAM_SIZE
 notes: |
   This is an advanced configuration option.  Use it only if you know exactly

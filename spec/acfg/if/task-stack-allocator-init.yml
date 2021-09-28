@@ -16,6 +16,8 @@ links:
   uid: group-stackalloc
 - role: constraint
   uid: ../constraint/init-task-stack-allocator-init
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_TASK_STACK_ALLOCATOR_INIT
 notes: |
   A correctly configured system shall configure the following to be consistent:

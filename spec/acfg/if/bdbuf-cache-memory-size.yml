@@ -18,6 +18,8 @@ links:
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/max-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_BDBUF_CACHE_MEMORY_SIZE
 notes: null
 type: interface

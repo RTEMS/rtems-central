@@ -21,6 +21,8 @@ links:
   uid: ../req/malloc-bsp-supports-sbrk
 - role: appl-config-group-member
   uid: group-bsp
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK
 notes: |
   This option should not be defined by the application. Only the BSP knows how

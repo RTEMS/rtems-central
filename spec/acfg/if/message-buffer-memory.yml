@@ -23,6 +23,8 @@ links:
   uid: ../constraint/memory-size
 - role: constraint
   uid: ../constraint/wkspace
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MESSAGE_BUFFER_MEMORY
 notes: |
   The configuration options ${max-message-queues:/name} and

@@ -21,6 +21,8 @@ links:
   uid: ../constraint/stack-space
 - role: constraint
   uid: ../constraint/min-bsp-app
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
 notes: null
 type: interface

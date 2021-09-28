@@ -14,6 +14,8 @@ links:
   uid: ../req/scheduler-priority-affinity-smp
 - role: appl-config-group-member
   uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
 notes: |
   This scheduler configuration option is an advanced configuration option.

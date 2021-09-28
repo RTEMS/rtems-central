@@ -13,6 +13,8 @@ links:
   uid: ../req/posix-init-thread-table
 - role: appl-config-group-member
   uid: group-posixinit
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_POSIX_INIT_THREAD_TABLE
 notes: |
   The application shall define exactly one of the following configuration

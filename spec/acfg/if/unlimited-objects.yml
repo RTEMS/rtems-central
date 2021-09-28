@@ -13,6 +13,8 @@ links:
   uid: ../req/unlimited-objects
 - role: appl-config-group-member
   uid: group-general
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_UNLIMITED_OBJECTS
 notes: |
   When using unlimited objects, it is common practice to also specify

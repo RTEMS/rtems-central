@@ -13,6 +13,8 @@ links:
   uid: ../req/appl-needs-simple-console-driver
 - role: appl-config-group-member
   uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 notes: |
   This device driver is responsible for providing the :file:`/dev/console`

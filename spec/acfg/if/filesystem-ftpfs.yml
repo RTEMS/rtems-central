@@ -14,6 +14,8 @@ links:
   uid: ../req/filesystem-ftpfs
 - role: appl-config-group-member
   uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_FILESYSTEM_FTPFS
 notes: null
 type: interface

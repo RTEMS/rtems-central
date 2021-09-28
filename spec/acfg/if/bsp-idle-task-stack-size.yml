@@ -25,6 +25,8 @@ links:
   uid: ../constraint/min-bsp-app
 - role: constraint
   uid: ../constraint/valid-idle-stack-area
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: BSP_IDLE_TASK_STACK_SIZE
 notes: null
 type: interface

@@ -16,6 +16,8 @@ links:
   uid: group-mpci
 - role: constraint
   uid: ../constraint/init-mpci-table
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MP_MPCI_TABLE_POINTER
 notes: |
   RTEMS provides a Shared Memory MPCI Device Driver which can be used on any

@@ -56,6 +56,8 @@ links:
   uid: ../constraint/max-drivers
 - role: constraint
   uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MAXIMUM_DRIVERS
 notes: |
   If the application will dynamically install device drivers, then the

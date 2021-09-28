@@ -17,6 +17,8 @@ links:
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/max-uint32
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_SWAPOUT_WORKER_TASKS
 notes: null
 type: interface

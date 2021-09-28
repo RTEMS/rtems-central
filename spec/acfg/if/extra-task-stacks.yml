@@ -20,6 +20,8 @@ links:
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/stack-space
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_EXTRA_TASK_STACKS
 notes: |
   This parameter is very important.  If the application creates tasks with

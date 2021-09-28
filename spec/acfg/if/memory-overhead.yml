@@ -21,6 +21,8 @@ links:
   uid: ../constraint/memory-size
 - role: constraint
   uid: ../constraint/wkspace
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MEMORY_OVERHEAD
 notes: |
   This configuration option should only be used when it is suspected that a bug

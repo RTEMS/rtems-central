@@ -21,6 +21,8 @@ links:
   uid: ../constraint/max-size
 - role: constraint
   uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
 notes: |
   The default value was chosen for Linux compatibility, see

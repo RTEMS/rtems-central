@@ -14,6 +14,8 @@ links:
   uid: ../req/dirty-memory
 - role: appl-config-group-member
   uid: group-general
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_DIRTY_MEMORY
 notes: |
   Dirtying memory can add significantly to system initialization time.  It may

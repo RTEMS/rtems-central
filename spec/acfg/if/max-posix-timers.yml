@@ -24,6 +24,8 @@ links:
   uid: ../constraint/unlimited
 - role: constraint
   uid: ../constraint/posix-api
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MAXIMUM_POSIX_TIMERS
 notes: |
   This object class can be configured in unlimited allocation mode, see

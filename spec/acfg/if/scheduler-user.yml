@@ -14,6 +14,8 @@ links:
   uid: ../req/scheduler-user
 - role: appl-config-group-member
   uid: group-schedgeneral
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_SCHEDULER_USER
 notes: |
   This scheduler configuration option is an advanced configuration option.

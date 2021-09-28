@@ -18,6 +18,8 @@ links:
   uid: ../req/zero-workspace-automatically
 - role: appl-config-group-member
   uid: group-general
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_ZERO_WORKSPACE_AUTOMATICALLY
 notes: |
   Zeroing memory can add significantly to the system initialization time. It is

@@ -16,6 +16,8 @@ links:
   uid: group-posixinit
 - role: constraint
   uid: ../constraint/init-posix-thread-entry-point
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
 notes: |
   The application shall provide the function referenced by this configuration

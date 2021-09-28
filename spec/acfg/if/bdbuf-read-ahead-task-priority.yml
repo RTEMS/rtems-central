@@ -15,6 +15,8 @@ links:
   uid: group-bdbuf
 - role: constraint
   uid: ../constraint/valid-task-priority
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_BDBUF_READ_AHEAD_TASK_PRIORITY
 notes: null
 type: interface

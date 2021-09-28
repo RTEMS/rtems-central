@@ -17,6 +17,8 @@ links:
   uid: group-devdrv
 - role: constraint
   uid: ../constraint/init-driver-table
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
 notes: |
   The value of this configuration option is placed after the entries defined by

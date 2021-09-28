@@ -20,6 +20,8 @@ links:
   uid: ../constraint/max-size
 - role: constraint
   uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_CBS_MAXIMUM_SERVERS
 notes: |
   This configuration option is only evaluated if the configuration option

@@ -18,6 +18,8 @@ links:
   uid: ../constraint/min-task-stack-size
 - role: constraint
   uid: ../constraint/stack-space
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_INIT_TASK_STACK_SIZE
 notes: |
   The

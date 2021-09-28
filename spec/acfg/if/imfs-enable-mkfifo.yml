@@ -16,6 +16,8 @@ links:
   uid: ../req/imfs-enable-mkfifo
 - role: appl-config-group-member
   uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_IMFS_ENABLE_MKFIFO
 notes: null
 type: interface

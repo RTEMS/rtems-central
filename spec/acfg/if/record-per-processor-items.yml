@@ -22,6 +22,8 @@ links:
   uid: ../constraint/power-of-two
 - role: constraint
   uid: ../constraint/memory-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
 notes: |
   The event record buffers are statically allocated for each configured

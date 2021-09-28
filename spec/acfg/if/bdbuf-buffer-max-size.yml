@@ -18,6 +18,8 @@ links:
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/multiple-of-bdbuf-buffer-min-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_BDBUF_BUFFER_MAX_SIZE
 notes: null
 type: interface

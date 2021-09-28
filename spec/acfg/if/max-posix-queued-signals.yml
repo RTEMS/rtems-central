@@ -22,6 +22,8 @@ links:
   uid: ../constraint/wkspace
 - role: constraint
   uid: ../constraint/posix-api
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS
 notes: |
   Unlimited objects are not available for queued signals.

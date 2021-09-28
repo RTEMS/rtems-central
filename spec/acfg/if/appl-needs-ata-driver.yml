@@ -13,6 +13,8 @@ links:
   uid: ../req/appl-needs-ata-driver
 - role: appl-config-group-member
   uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_APPLICATION_NEEDS_ATA_DRIVER
 notes: |
   Most BSPs do not include support for an ATA Driver.

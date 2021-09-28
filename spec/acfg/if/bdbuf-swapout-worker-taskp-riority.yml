@@ -16,6 +16,8 @@ links:
   uid: group-bdbuf
 - role: constraint
   uid: ../constraint/valid-task-priority
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_SWAPOUT_WORKER_TASK_PRIORITY
 notes: null
 type: interface

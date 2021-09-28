@@ -17,6 +17,8 @@ links:
   uid: ../req/mp-appl
 - role: appl-config-group-member
   uid: group-mpci
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MP_APPLICATION
 notes: |
   This configuration option shall be undefined if the multiprocessing support

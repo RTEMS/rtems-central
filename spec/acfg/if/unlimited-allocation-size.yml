@@ -18,6 +18,8 @@ links:
   uid: group-general
 - role: constraint
   uid: ../constraint/unlimited-allocation-size
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_UNLIMITED_ALLOCATION_SIZE
 notes: |
   By allowing users to declare all resources as being unlimited the user can

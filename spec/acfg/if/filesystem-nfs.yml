@@ -14,6 +14,8 @@ links:
   uid: ../req/filesystem-nfs
 - role: appl-config-group-member
   uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_FILESYSTEM_NFS
 notes: null
 type: interface

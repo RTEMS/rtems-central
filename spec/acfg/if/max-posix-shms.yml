@@ -24,6 +24,8 @@ links:
   uid: ../constraint/wkspace
 - role: constraint
   uid: ../constraint/unlimited
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MAXIMUM_POSIX_SHMS
 notes: |
   This object class can be configured in unlimited allocation mode, see
