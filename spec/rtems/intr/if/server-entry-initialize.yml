@@ -27,6 +27,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_entry_initialize
 notes: |
   After initialization, the list of actions of the interrupt server entry is

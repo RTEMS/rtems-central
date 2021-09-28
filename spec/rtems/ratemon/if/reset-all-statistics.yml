@@ -27,6 +27,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_rate_monotonic_reset_all_statistics
 notes: null
 params: []

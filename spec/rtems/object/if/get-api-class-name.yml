@@ -26,6 +26,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_object_get_api_class_name
 notes: |
   The string returned is from constant space.  Do not modify or free it.

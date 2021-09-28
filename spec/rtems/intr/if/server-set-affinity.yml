@@ -33,6 +33,8 @@ links:
   uid: /constraint/affinity-may-preempt
 - role: constraint
   uid: /constraint/priority-may-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_set_affinity
 notes: |
   The scheduler is set determined by the highest numbered processor in the

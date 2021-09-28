@@ -69,6 +69,8 @@ links:
   uid: ../constraint/max
 - role: constraint
   uid: /constraint/obj-unlimited-alloc
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_region_create
 notes: |
   For control and maintenance of the region, RTEMS allocates a

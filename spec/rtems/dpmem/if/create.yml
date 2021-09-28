@@ -41,6 +41,10 @@ links:
   uid: ../constraint/max
 - role: constraint
   uid: /constraint/obj-unlimited-alloc
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_port_create
 notes: |
   The ${.:/params[1]/name} and ${.:/params[2]/name} parameters must be on a

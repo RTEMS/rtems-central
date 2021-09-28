@@ -27,6 +27,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_cache_aligned_malloc
 notes: null
 params:

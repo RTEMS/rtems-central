@@ -31,6 +31,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_timer_get_information
 notes: null
 params:

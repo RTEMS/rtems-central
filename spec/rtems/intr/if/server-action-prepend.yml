@@ -42,6 +42,8 @@ links:
   uid: ../constraint/server-entry-not-while-submit
 - role: constraint
   uid: ../constraint/server-entry-not-while-pending
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_action_prepend
 notes: |
   No error checking is performed by the directive.

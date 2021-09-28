@@ -29,6 +29,8 @@ links:
   uid: /constraint/directive-ctx-const
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_build_id
 notes: null
 params:

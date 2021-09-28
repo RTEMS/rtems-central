@@ -26,6 +26,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_object_get_classic_name
 notes: null
 params:

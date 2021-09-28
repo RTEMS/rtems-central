@@ -25,6 +25,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_object_api_maximum_class
 notes: null
 params:

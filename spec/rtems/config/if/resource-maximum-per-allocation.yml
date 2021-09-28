@@ -16,6 +16,8 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_resource_maximum_per_allocation
 notes: |
   This function is implemented as a macro and can be used to define compile

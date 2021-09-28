@@ -33,6 +33,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_region_extend
 notes: |
   There are no alignment requirements for the memory area.  The memory area

@@ -85,6 +85,8 @@ links:
   uid: /constraint/obj-unlimited-alloc
 - role: constraint
   uid: ../../constraint/mp-max-global-objects
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_message_queue_create
 notes: |
   For message queues with a global scope, the maximum message size is

@@ -16,6 +16,8 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_configuration_get_unified_work_area
 notes: |
   See ${/acfg/if/unified-work-areas:/name}.

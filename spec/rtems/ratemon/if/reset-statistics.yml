@@ -30,6 +30,8 @@ links:
   uid: /constraint/directive-ctx-isr
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_rate_monotonic_reset_statistics
 notes: null
 params:

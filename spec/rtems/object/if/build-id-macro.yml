@@ -16,6 +16,8 @@ links:
   uid: header
 - role: interface-ingroup-hidden
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_build_id
 notes: null
 params:

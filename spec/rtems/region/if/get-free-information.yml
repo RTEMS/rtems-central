@@ -33,6 +33,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_region_get_free_information
 notes: |
   This directive uses the same structure to return information as the

@@ -25,6 +25,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_get_target_hash
 notes: |
   For example, the device tree, settings of the memory controller, processor

@@ -43,6 +43,8 @@ links:
   uid: /constraint/directive-no-preempt
 - role: constraint
   uid: /constraint/cpu-simple-vectored-interrupts
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_catch
 notes: null
 params:

@@ -37,6 +37,10 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_port_internal_to_external
 notes: null
 params:

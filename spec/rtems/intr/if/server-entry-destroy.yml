@@ -28,6 +28,8 @@ links:
   uid: /constraint/request-response
 - role: constraint
   uid: ../constraint/server-entry-initialized
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_entry_destroy
 notes: |
   No error checking is performed by the directive.

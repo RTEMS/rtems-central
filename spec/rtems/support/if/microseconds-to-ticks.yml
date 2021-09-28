@@ -21,6 +21,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: RTEMS_MICROSECONDS_TO_TICKS
 notes: |
   The number of clock ticks per second is defined by the

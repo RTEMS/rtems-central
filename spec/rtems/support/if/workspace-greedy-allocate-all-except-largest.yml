@@ -31,6 +31,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_workspace_greedy_allocate_all_except_largest
 notes: |
   This directive is intended to be used by tests of the RTEMS test suites.

@@ -23,6 +23,8 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_io_unregister_driver
 notes: |
   Currently no specific checks are made and the driver is not closed.

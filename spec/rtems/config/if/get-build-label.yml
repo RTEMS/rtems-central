@@ -24,6 +24,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_get_build_label
 notes: |
   The build label can be used to distinguish test suite results obtained from

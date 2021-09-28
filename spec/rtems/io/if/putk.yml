@@ -26,6 +26,8 @@ links:
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: putk
 notes: |
   The directive may be used to print debug and test information.  It uses

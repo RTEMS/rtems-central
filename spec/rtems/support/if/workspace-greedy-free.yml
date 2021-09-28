@@ -27,6 +27,8 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_workspace_greedy_free
 notes: |
   This directive is intended to be used by tests of the RTEMS test suites.

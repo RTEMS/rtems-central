@@ -32,6 +32,8 @@ links:
   uid: /constraint/request-response
 - role: constraint
   uid: ../constraint/not-within-server
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_handler_remove
 notes: null
 params:
