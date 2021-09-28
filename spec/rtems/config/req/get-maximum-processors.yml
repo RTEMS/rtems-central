@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-maximum-processors
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-maximum-processors:/name} directive shall return the maximum
+  number of processors configured by ${/acfg/if/max-processors:/name}.
+type: requirement

@@ -1,0 +1,238 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Check the effect of application configuration options.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check that the configured
+      ${/acfg/if/min-tasks-with-user-provided-storage:/name} value reduced the
+      stack space size.
+    code: |
+      T_eq_uptr(
+        _Stack_Space_size,
+        RTEMS_ALIGN_UP( HEAP_BLOCK_HEADER_SIZE, CPU_HEAP_ALIGNMENT )
+      );
+    links:
+    - role: validation
+      uid: ../if/min-tasks-with-user-provided-storage
+  - brief: |
+      Check the configured ${/acfg/if/max-barriers:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_barriers(),
+        TEST_MAXIMUM_BARRIERS
+      );
+    links:
+    - role: validation
+      uid: ../if/max-barriers
+    - role: validation
+      uid: /rtems/config/if/get-maximum-barriers
+  - brief: |
+      Check the configured ${/acfg/if/max-user-extensions:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_extensions(),
+        TEST_MAXIMUM_USER_EXTENSIONS
+      );
+    links:
+    - role: validation
+      uid: ../if/max-user-extensions
+    - role: validation
+      uid: /rtems/config/if/get-maximum-extensions
+  - brief: |
+      Check the configured ${/acfg/if/max-message-queues:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_message_queues(),
+        TEST_MAXIMUM_MESSAGE_QUEUES
+      );
+    links:
+    - role: validation
+      uid: ../if/max-message-queues
+    - role: validation
+      uid: /rtems/config/if/get-maximum-message-queues
+  - brief: |
+      Check the configured ${/acfg/if/max-partitions:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_partitions(),
+        TEST_MAXIMUM_PARTITIONS
+      );
+    links:
+    - role: validation
+      uid: ../if/max-partitions
+    - role: validation
+      uid: /rtems/config/if/get-maximum-partitions
+  - brief: |
+      Check the configured ${/acfg/if/max-periods:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_periods(),
+        TEST_MAXIMUM_PERIODS
+      );
+    links:
+    - role: validation
+      uid: ../if/max-periods
+    - role: validation
+      uid: /rtems/config/if/get-maximum-periods
+  - brief: |
+      Check the configured ${/acfg/if/max-processors:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_processors(),
+      #if defined(RTEMS_SMP)
+        5
+      #else
+        1
+      #endif
+      );
+    links:
+    - role: validation
+      uid: ../if/max-processors
+    - role: validation
+      uid: /rtems/config/if/get-maximum-processors
+  - brief: |
+      Check the configured ${/acfg/if/max-semaphores:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_semaphores(),
+        TEST_MAXIMUM_SEMAPHORES
+      );
+    links:
+    - role: validation
+      uid: ../if/max-semaphores
+    - role: validation
+      uid: /rtems/config/if/get-maximum-semaphores
+  - brief: |
+      Check the configured ${/acfg/if/max-tasks:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_tasks(),
+        TEST_MAXIMUM_TASKS
+      );
+    links:
+    - role: validation
+      uid: ../if/max-tasks
+    - role: validation
+      uid: /rtems/config/if/get-maximum-tasks
+  - brief: |
+      Check the configured ${/acfg/if/max-timers:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_timers(),
+        TEST_MAXIMUM_TIMERS
+      );
+    links:
+    - role: validation
+      uid: ../if/max-timers
+    - role: validation
+      uid: /rtems/config/if/get-maximum-timers
+  - brief: |
+      Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
+      microseconds.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_microseconds_per_tick(),
+        TEST_MICROSECONDS_PER_TICK
+      );
+    links:
+    - role: validation
+      uid: ../if/microseconds-per-tick
+    - role: validation
+      uid: /rtems/config/if/get-microseconds-per-tick
+  - brief: |
+      Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
+      milliseconds.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_milliseconds_per_tick(),
+        TEST_MICROSECONDS_PER_TICK / 1000
+      );
+    links:
+    - role: validation
+      uid: ../if/microseconds-per-tick
+    - role: validation
+      uid: /rtems/config/if/get-milliseconds-per-tick
+  - brief: |
+      Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
+      nanoseconds.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_nanoseconds_per_tick(),
+        TEST_MICROSECONDS_PER_TICK * 1000
+      );
+    links:
+    - role: validation
+      uid: ../if/microseconds-per-tick
+    - role: validation
+      uid: /rtems/config/if/get-nanoseconds-per-tick
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-allocator:/name} hook.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_stack_allocate_hook(),
+        test_task_stack_allocate
+      );
+    links:
+    - role: validation
+      uid: ../if/task-stack-allocator
+    - role: validation
+      uid: /rtems/config/if/get-stack-allocate-hook
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-no-workspace:/name} value.
+    code: |
+      T_true( rtems_configuration_get_stack_allocator_avoids_work_space() );
+    links:
+    - role: validation
+      uid: ../if/task-stack-no-workspace
+    - role: validation
+      uid: /rtems/config/if/get-stack-allocator-avoids-work-space
+  - brief: |
+      Check the configured ${/acfg/if/task-stack-deallocator:/name} hook.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_stack_free_hook(),
+        test_task_stack_deallocate
+      );
+    links:
+    - role: validation
+      uid: ../if/task-stack-deallocator
+    - role: validation
+      uid: /rtems/config/if/get-stack-free-hook
+  - brief: |
+      Check the configured ${/acfg/if/ticks-per-time-slice:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_ticks_per_timeslice(),
+        TEST_TICKS_PER_TIMESLICE
+      );
+    links:
+    - role: validation
+      uid: ../if/ticks-per-time-slice
+    - role: validation
+      uid: /rtems/config/if/get-ticks-per-timeslice
+  links: []
+test-brief: |
+  Tests the effect of application configuration options.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems.h
+- rtems/score/heap.h
+test-local-includes:
+- ts-config.h
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-acfg.c
+test-teardown: null
+type: test-case

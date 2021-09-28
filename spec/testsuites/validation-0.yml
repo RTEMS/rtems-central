@@ -5,6 +5,8 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/test-suites
+- role: validation
+  uid: /acfg/if/appl-needs-clock-driver
 test-brief: |
   This general purpose validation test suite provides enough resources to run
   basic tests for all specified managers and functions.

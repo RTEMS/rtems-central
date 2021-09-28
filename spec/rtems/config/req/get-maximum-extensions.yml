@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-maximum-extensions
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-maximum-extensions:/name} directive shall return the maximum
+  number of Classic API User Extensions that can be concurrently active
+  configured by ${/acfg/if/max-user-extensions:/name}.
+type: requirement

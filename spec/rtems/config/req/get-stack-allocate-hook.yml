@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: interface-function
+  uid: ../if/get-stack-allocate-hook
+functional-type: function
+rationale: null
+references: []
+requirement-type: functional
+text: |
+  The ${../if/get-stack-allocate-hook:/name} directive shall return the task
+  stack allocator hook configured by ${/acfg/if/task-stack-allocator:/name}.
+type: requirement
