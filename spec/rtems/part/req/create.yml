@@ -278,6 +278,7 @@ test-includes:
 - rtems.h
 - string.h
 test-local-includes:
+- ts-config.h
 - tx-support.h
 test-prepare: |
   rtems_status_code sc;
@@ -295,7 +296,7 @@ test-stop: null
 test-support: |
   #define NAME rtems_build_name( 'T', 'E', 'S', 'T' )
 
-  #define MAX_PARTITIONS 4
+  #define MAX_PARTITIONS ( TEST_MAXIMUM_PARTITIONS + 1 )
 
   #define BUFFER_COUNT 2
 
