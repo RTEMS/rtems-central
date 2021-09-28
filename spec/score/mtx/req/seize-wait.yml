@@ -65,6 +65,12 @@ post-conditions:
       ${../../tq/req/enqueue-priority:/test-run}( &ctx->tq_ctx->base );
     text: |
       The calling thread shall be enqueued in priority order.
+  - name: PriorityInherit
+    test-code: |
+      ${../../tq/req/enqueue-priority:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The calling thread shall be enqueued in priority order with priorit
+      inheritance.
   - name: PriorityCeiling
     test-code: |
       ${../../tq/req/enqueue-ceiling:/test-run}( &ctx->tq_ctx->base );
@@ -121,34 +127,35 @@ post-conditions:
 pre-conditions:
 - name: Protocol
   states:
+  states:
+  - name: None
+    test-code: |
+      if ( ctx->tq_ctx->protocol != TQ_MTX_NO_PROTOCOL ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex does not use a locking protocol.
+  - name: Inherit
+    test-code: |
+      if ( ctx->tq_ctx->protocol != TQ_MTX_PRIORITY_INHERIT ) {
+        ${.:skip}
+      }
+    text: |
+      Where the mutex uses the priority inheritance locking protocol.
   - name: Ceiling
     test-code: |
-      if (
-        ctx->tq_ctx->priority_ceiling == PRIO_INVALID ||
-        ctx->tq_ctx->base.enqueue_variant == TQ_ENQUEUE_STICKY
-      ) {
+      if ( ctx->tq_ctx->protocol != TQ_MTX_PRIORITY_CEILING ) {
         ${.:skip}
       }
     text: |
       Where the mutex uses the priority ceiling locking protocol.
   - name: MrsP
     test-code: |
-      if (
-        ctx->tq_ctx->priority_ceiling == PRIO_INVALID ||
-        ctx->tq_ctx->base.enqueue_variant != TQ_ENQUEUE_STICKY
-      ) {
+      if ( ctx->tq_ctx->protocol != TQ_MTX_MRSP ) {
         ${.:skip}
       }
     text: |
       Where the mutex uses the MrsP locking protocol.
-  - name: Other
-    test-code: |
-      if ( ctx->tq_ctx->priority_ceiling != PRIO_INVALID ) {
-        ${.:skip}
-      }
-    text: |
-      Where the mutex does not use the priority ceiling or MrsP locking
-      protocol.
   test-epilogue: null
   test-prologue: null
 - name: Discipline
@@ -535,7 +542,8 @@ transition-map:
     Priority: Nop
   pre-conditions:
     Protocol:
-    - Other
+    - None
+    - Inherit
     Discipline: all
     DeadlockResult: all
     Recursive: all
@@ -546,12 +554,17 @@ transition-map:
   post-conditions:
     Status: N/A
     Enqueued:
+    - if:
+        pre-conditions:
+          Protocol: Inherit
+      then: PriorityInherit
     - specified-by: Discipline
     Owner: Other
     Priority: Nop
   pre-conditions:
     Protocol:
-    - Other
+    - None
+    - Inherit
     Discipline: all
     DeadlockResult: all
     Recursive: all
@@ -566,7 +579,8 @@ transition-map:
     Priority: Nop
   pre-conditions:
     Protocol:
-    - Other
+    - None
+    - Inherit
     Discipline: all
     DeadlockResult: all
     Recursive:
@@ -607,7 +621,8 @@ transition-map:
     Priority: Nop
   pre-conditions:
     Protocol:
-    - Other
+    - None
+    - Inherit
     Discipline: all
     DeadlockResult: all
     Recursive:
@@ -653,7 +668,8 @@ transition-map:
     Priority: Nop
   pre-conditions:
     Protocol:
-    - Other
+    - None
+    - Inherit
     Discipline: all
     DeadlockResult: all
     Recursive: all
@@ -821,6 +837,7 @@ transition-map:
   post-conditions: PriorityDisciplineByProtocol
   pre-conditions:
     Protocol:
+    - Inherit
     - Ceiling
     - MrsP
     Discipline:
