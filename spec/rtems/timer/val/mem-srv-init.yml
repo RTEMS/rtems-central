@@ -16,6 +16,21 @@ test-code: |
     (void) rtems_timer_initiate_server( 0, 0, 0 );
   }
 
+  static void *task_stack_allocate( size_t size )
+  {
+    (void) size;
+    return NULL;
+  }
+
+  static void task_stack_deallocate( void *stack )
+  {
+    (void) stack;
+  }
+
+  #define CONFIGURE_TASK_STACK_ALLOCATOR task_stack_allocate
+
+  #define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_deallocate
+
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
   #define TASK_STORAGE_SIZE \

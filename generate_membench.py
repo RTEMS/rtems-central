@@ -643,7 +643,22 @@ ${../if/create:/name} and ${../if/delete:/name}""",
 ${../if/initiate-server:/name}""",
         None,
         "(void) rtems_timer_initiate_server( 0, 0, 0 );",
-        _CONFIG_DEFAULT),
+        """static void *task_stack_allocate( size_t size )
+{
+  (void) size;
+  return NULL;
+}
+
+static void task_stack_deallocate( void *stack )
+{
+  (void) stack;
+}
+
+#define CONFIGURE_TASK_STACK_ALLOCATOR task_stack_allocate
+
+#define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_deallocate
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "srv-after",
