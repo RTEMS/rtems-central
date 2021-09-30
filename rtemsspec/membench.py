@@ -75,25 +75,31 @@ _SECTION_MAP = {
 }
 
 
-def _do_gather_items(items: List[Item], item: Item) -> None:
+def _do_gather_test_suites(items: List[Item], item: Item) -> None:
     if item.type == "test-suite":
         items.append(item)
     for child in item.children("validation"):
-        _do_gather_items(items, child)
+        _do_gather_test_suites(items, child)
     for child in item.children("requirement-refinement"):
-        _do_gather_items(items, child)
+        _do_gather_test_suites(items, child)
 
 
-def _gather_items(root: Item) -> List[Item]:
+def gather_test_suites(root: Item) -> List[Item]:
+    """ Gather all test suite items related to the root item. """
     items = []  # type: List[Item]
-    _do_gather_items(items, root)
+    _do_gather_test_suites(items, root)
     return items
 
 
-def _get_sections(item: Item, path: str) -> Dict[str, Tuple[int, int]]:
+def get_path_to_test_suite_elf_file(item: Item, path: str) -> str:
+    """ Returns the path to the ELF file of the test suite. """
     name = os.path.basename(item.uid).replace("mem-", "")
     module = os.path.basename(os.path.dirname(os.path.dirname(item.uid)))
-    elf = f"{path}/mem-{module}-{name}.norun.exe"
+    return f"{path}/mem-{module}-{name}.norun.exe"
+
+
+def _get_sections(item: Item, path: str) -> Dict[str, Tuple[int, int]]:
+    elf = get_path_to_test_suite_elf_file(item, path)
     stdout = []  # type: List[str]
     status = run_command(["objdump", "-h", elf], stdout=stdout)
     assert status == 0
@@ -155,7 +161,7 @@ def generate(content: SphinxContent, root: Item, mapper: ItemMapper,
     item and executables in the path.
     """
     for pivot in table_pivots:
-        items = _gather_items(root.map(pivot))
+        items = gather_test_suites(root.map(pivot))
         _generate_table(content, items, path)
-    items = _gather_items(root)
+    items = gather_test_suites(root)
     _generate_paragraphs(content, items, mapper)
