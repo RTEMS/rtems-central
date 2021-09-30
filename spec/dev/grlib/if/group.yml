@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
-  This group contains the GRLIB API.
+  This group contains the GRLIB interfaces.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 description: null
@@ -12,8 +12,9 @@ links:
 - role: interface-placement
   uid: gptimer-header
 - role: interface-ingroup
-  uid: /if/group
+  uid: /req/dev
 name: GRLIB
 text: |
-  The RTEMS API shall provide an interface to the GRLIB register blocks.
+  The device driver software component shall provide an interface to the GRLIB
+  register blocks.
 type: interface
