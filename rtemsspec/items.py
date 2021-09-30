@@ -438,6 +438,15 @@ class _ItemMapperContext(dict):
         return value
 
 
+class _GetValueDictionary(dict):
+    def __init__(self, get_value: ItemGetValue):
+        super().__init__()
+        self._get_value = get_value
+
+    def get(self, _key, _default):
+        return (self._get_value, {})
+
+
 class ItemMapper:
     """ Maps identifiers to items and attribute values. """
     def __init__(self, item: Item, recursive: bool = False):
@@ -456,17 +465,30 @@ class ItemMapper:
         """ Sets the item of the mapper. """
         self._item = item
 
-    def add_get_value(self, type_path_key: str,
-                      get_value: ItemGetValue) -> None:
-        """
-        Adds a get value for the specified type and key path.
-        """
+    def _add_get_value_map(
+            self, type_path_key: str, new_get_value_map: Tuple[ItemGetValue,
+                                                               Dict]) -> None:
         type_name, path_key = type_path_key.split(":")
         keys = path_key.strip("/").split("/")
         get_value_map = self._get_value_map.setdefault(type_name, {})
         for key in keys[:-1]:
             _, get_value_map = get_value_map.setdefault(key, (_get_value, {}))
-        get_value_map[keys[-1]] = (get_value, {})
+        get_value_map[keys[-1]] = new_get_value_map
+
+    def add_get_value(self, type_path_key: str,
+                      get_value: ItemGetValue) -> None:
+        """
+        Adds a get value for the specified type and key path.
+        """
+        self._add_get_value_map(type_path_key, (get_value, {}))
+
+    def add_get_value_dictionary(self, type_path_key: str,
+                                 get_value: ItemGetValue) -> None:
+        """
+        Adds a get value dictionary for the specified type and key path.
+        """
+        self._add_get_value_map(type_path_key,
+                                (_get_value, _GetValueDictionary(get_value)))
 
     def push_prefix(self, prefix: str) -> None:
         """ Pushes a key path prefix. """

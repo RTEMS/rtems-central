@@ -109,6 +109,10 @@ def get_x_to_b_value(ctx):
     return ctx.value["b"]
 
 
+def get_value_dict(ctx):
+    return ctx.key
+
+
 class Mapper(ItemMapper):
     def __init__(self, item):
         super().__init__(item)
@@ -157,6 +161,8 @@ def test_item_mapper(tmpdir):
     assert item_3 == item
     assert key_path_3 == "/v"
     assert value_3 == "p"
+    mapper.add_get_value_dictionary(":/dict", get_value_dict)
+    assert mapper["d/c:/dict/some-arbitrary-key"] == "some-arbitrary-key"
     recursive_mapper = ItemMapper(item, recursive=True)
     assert recursive_mapper.substitute("${.:/r1/r2/r3}") == "foobar"
     assert recursive_mapper[".:/r1/r2/r3"] == "foobar"
