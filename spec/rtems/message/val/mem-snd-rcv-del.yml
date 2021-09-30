@@ -4,16 +4,20 @@ copyrights:
 enabled-by: true
 links:
 - role: validation
-  uid: ../req/mem-exit
+  uid: ../req/mem-snd-rcv-del
 test-brief: |
   This static memory usage benchmark program facilitates a basic application
-  configuration with a call to ${../if/exit:/name}.
+  configuration with calls to ${../if/construct:/name}, ${../if/send:/name},
+  ${../if/receive:/name}, and ${../if/delete:/name}.
 test-code: |
   static void Init( rtems_task_argument arg )
   {
     (void) arg;
 
-    rtems_task_exit();
+    (void) rtems_message_queue_construct( NULL, NULL );
+    (void) rtems_message_queue_send( 0, NULL, 0 );
+    (void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );
+    (void) rtems_message_queue_delete( 0 );
   }
 
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
@@ -48,6 +52,6 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemExit
-test-target: testsuites/membench/mem-task-exit.c
+test-suite-name: MemSndRcvDel
+test-target: testsuites/membench/mem-message-snd-rcv-del.c
 type: test-suite

@@ -15,7 +15,6 @@ test-code: |
 
     (void) rtems_task_suspend( 0 );
     (void) rtems_task_resume( 0 );
-    
   }
 
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES

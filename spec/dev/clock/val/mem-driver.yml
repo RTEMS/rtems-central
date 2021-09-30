@@ -6,7 +6,7 @@ links:
 - role: validation
   uid: ../req/mem-driver
 test-brief: |
-  This static memory usage benchmark program facilitates "a basic application
+  This static memory usage benchmark program facilitates a basic application
   configuration with the clock driver enabled
   (${/acfg/if/appl-needs-clock-driver:/name}).
 test-code: |

@@ -4,16 +4,18 @@ copyrights:
 enabled-by: true
 links:
 - role: validation
-  uid: ../req/mem-exit
+  uid: ../req/mem-after
 test-brief: |
   This static memory usage benchmark program facilitates a basic application
-  configuration with a call to ${../if/exit:/name}.
+  configuration with calls to ${../if/create:/name} and
+  ${../if/fire-after:/name}.
 test-code: |
   static void Init( rtems_task_argument arg )
   {
     (void) arg;
 
-    rtems_task_exit();
+    (void) rtems_timer_create( 0, NULL );
+    (void) rtems_timer_fire_after( 0, 0, NULL, NULL );
   }
 
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
@@ -48,6 +50,6 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemExit
-test-target: testsuites/membench/mem-task-exit.c
+test-suite-name: MemAfter
+test-target: testsuites/membench/mem-timer-after.c
 type: test-suite

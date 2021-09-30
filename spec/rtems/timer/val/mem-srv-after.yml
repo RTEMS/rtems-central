@@ -4,17 +4,18 @@ copyrights:
 enabled-by: true
 links:
 - role: validation
-  uid: ../req/mem-del
+  uid: ../req/mem-srv-after
 test-brief: |
   This static memory usage benchmark program facilitates a basic application
-  configuration with a call to ${../if/delete:/name}.
+  configuration with calls to ${../if/create:/name} and
+  ${../if/server-fire-after:/name}.
 test-code: |
   static void Init( rtems_task_argument arg )
   {
     (void) arg;
 
-    (void) rtems_task_delete( 0 );
-    
+    (void) rtems_timer_create( 0, NULL );
+    (void) rtems_timer_server_fire_after( 0, 0, NULL, NULL );
   }
 
   #define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
@@ -49,6 +50,6 @@ test-description: null
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: MemDel
-test-target: testsuites/membench/mem-task-del.c
+test-suite-name: MemSrvAfter
+test-target: testsuites/membench/mem-timer-srv-after.c
 type: test-suite

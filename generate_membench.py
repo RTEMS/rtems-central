@@ -75,6 +75,14 @@ _CONFIG_DEFAULT = """#define TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
 
 #define CONFIGURE_INIT_TASK_CONSTRUCT_STORAGE_SIZE TASK_STORAGE_SIZE"""
 
+_CONFIG_SMP_1 = """#define CONFIGURE_MAXIMUM_PROCESSORS 1
+
+#if defined(RTEMS_SMP)
+#define CONFIGURE_SCHEDULER_EDF_SMP
+#endif
+
+""" + _CONFIG_DEFAULT
+
 _TEXT = ("The system shall provide a benchmark program to show the static "
          "memory usage of")
 
@@ -100,13 +108,7 @@ ${/acfg/if/max-processors:/name} defined to one using the SMP EDF scheduler
 (${/acfg/if/scheduler-edf-smp:/name})""",
         None,
         """/* Nothing to do */""",
-        """#define CONFIGURE_MAXIMUM_PROCESSORS 1
-
-#if defined(RTEMS_SMP)
-#define CONFIGURE_SCHEDULER_EDF_SMP
-#endif
-
-""" + _CONFIG_DEFAULT),
+        _CONFIG_SMP_1),
     _Test(
         "rtems",
         "smp-global-2",
@@ -215,13 +217,41 @@ RTEMS_SCHEDULER_EDF_SMP( d );
         "dev/clock",
         "driver",
         ["/rtems/req/mem-basic"],
-        """"a basic application configuration with the clock driver enabled
+        """a basic application configuration with the clock driver enabled
 (${/acfg/if/appl-needs-clock-driver:/name})""",
         None,
         """/* Nothing to do */""",
         _CONFIG_DEFAULT.replace(
             "CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER",
             "CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER")),
+    _Test(
+        "rtems/clock",
+        "set",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/set:/name}""",
+        None,
+        "(void) rtems_clock_set( NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/clock",
+        "set-get-tod",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/set:/name} and ${../if/get-tod:/name}""",
+        None,
+        """(void) rtems_clock_set( NULL );
+(void) rtems_clock_get_tod( NULL );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/clock",
+        "get-uptime",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/get-uptime:/name}""",
+        None,
+        "(void) rtems_clock_get_uptime( NULL );",
+        _CONFIG_DEFAULT),
     _Test(
         "rtems/barrier",
         "wait-rel",
@@ -270,6 +300,55 @@ and ${../if/receive:/name}""",
 ${../if/fatal:/name}""",
         None,
         "rtems_fatal( 0, 0 );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/message",
+        "snd-rcv",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/construct:/name}, ${../if/send:/name}, and
+${../if/receive:/name}""",
+        None,
+        """(void) rtems_message_queue_construct( NULL, NULL );
+(void) rtems_message_queue_send( 0, NULL, 0 );
+(void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/message",
+        "ugt-rcv",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/construct:/name}, ${../if/urgent:/name}, and
+${../if/receive:/name}""",
+        None,
+        """(void) rtems_message_queue_construct( NULL, NULL );
+(void) rtems_message_queue_urgent( 0, NULL, 0 );
+(void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/message",
+        "bcst-rcv",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/construct:/name}, ${../if/broadcast:/name}, and
+${../if/receive:/name}""",
+        None,
+        """(void) rtems_message_queue_construct( NULL, NULL );
+(void) rtems_message_queue_broadcast( 0, NULL, 0, NULL );
+(void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/message",
+        "snd-rcv-del",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/construct:/name}, ${../if/send:/name},
+${../if/receive:/name}, and ${../if/delete:/name}""",
+        None,
+        """(void) rtems_message_queue_construct( NULL, NULL );
+(void) rtems_message_queue_send( 0, NULL, 0 );
+(void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );
+(void) rtems_message_queue_delete( 0 );""",
         _CONFIG_DEFAULT),
     _Test(
         "rtems/part",
@@ -331,6 +410,24 @@ ${../if/delete:/name}""",
 
 """ + _CONFIG_DEFAULT),
     _Test(
+        "rtems/scheduler",
+        "add-cpu",
+        ["../../req/mem-smp-1"],
+        """a basic application configuration with a
+call to ${../if/add-processor:/name}""",
+        None,
+        "(void) rtems_scheduler_add_processor( 0, 0 );",
+        _CONFIG_SMP_1),
+    _Test(
+        "rtems/scheduler",
+        "rm-cpu",
+        ["../../req/mem-smp-1"],
+        """a basic application configuration with a
+call to ${../if/remove-processor:/name}""",
+        None,
+        "(void) rtems_scheduler_remove_processor( 0, 0 );",
+        _CONFIG_SMP_1),
+    _Test(
         "rtems/sem",
         "obt-rel",
         _LINKS_BASIC,
@@ -372,13 +469,12 @@ and ${../if/send:/name}""",
         _CONFIG_DEFAULT),
     _Test(
         "rtems/task",
-        "del",
+        "delete",
         _LINKS_BASIC,
         """a basic application configuration with a
 call to ${../if/delete:/name}""",
         None,
-        """(void) rtems_task_delete( 0 );
-""",
+        "(void) rtems_task_delete( 0 );",
         _CONFIG_DEFAULT),
     _Test(
         "rtems/task",
@@ -387,8 +483,7 @@ call to ${../if/delete:/name}""",
         """a basic application configuration with a
 call to ${../if/exit:/name}""",
         None,
-        """rtems_task_exit();
-""",
+        "rtems_task_exit();",
         _CONFIG_DEFAULT),
     _Test(
         "rtems/task",
@@ -397,8 +492,7 @@ call to ${../if/exit:/name}""",
         """a basic application configuration with a
 call to ${../if/restart:/name}""",
         None,
-        """(void) rtems_task_restart( 0, 0 );
-""",
+        "(void) rtems_task_restart( 0, 0 );",
         _CONFIG_DEFAULT),
     _Test(
         "rtems/task",
@@ -408,9 +502,193 @@ call to ${../if/restart:/name}""",
 calls to ${../if/suspend:/name} and ${../if/resume:/name}""",
         None,
         """(void) rtems_task_suspend( 0 );
-(void) rtems_task_resume( 0 );
-""",
+(void) rtems_task_resume( 0 );""",
         _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "set-priority",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/set-priority:/name}""",
+        None,
+        "(void) rtems_task_set_priority( 0, 0, NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "get-priority",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/get-priority:/name}""",
+        None,
+        "(void) rtems_task_get_priority( 0, 0, NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "mode",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/mode:/name}""",
+        None,
+        "(void) rtems_task_mode( 0, 0, 0 );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "wake-after",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/wake-after:/name}""",
+        None,
+        "(void) rtems_task_wake_after( 0 );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "wake-when",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/wake-when:/name}""",
+        None,
+        "(void) rtems_task_wake_when( NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "set-scheduler",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/set-scheduler:/name}""",
+        None,
+        "(void) rtems_task_set_scheduler( 0, 0, 0 );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "get-scheduler",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/get-scheduler:/name}""",
+        None,
+        "(void) rtems_task_get_scheduler( 0, NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "set-affinity",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/set-affinity:/name}""",
+        None,
+        "(void) rtems_task_set_affinity( 0, 0, NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/task",
+        "get-affinity",
+        _LINKS_BASIC,
+        """a basic application configuration with a
+call to ${../if/get-affinity:/name}""",
+        None,
+        "(void) rtems_task_get_affinity( 0, 0, NULL );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "after",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/fire-after:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_fire_after( 0, 0, NULL, NULL );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "when",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/fire-when:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_fire_when( 0, NULL, NULL, NULL );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "cancel",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/cancel:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_cancel( 0 );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "reset",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/reset:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_reset( 0 );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "delete",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/delete:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_delete( 0 );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "srv-init",
+        _LINKS_BASIC,
+        """a basic application configuration with a call to
+${../if/initiate-server:/name}""",
+        None,
+        "(void) rtems_timer_initiate_server( 0, 0, 0 );",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "srv-after",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/server-fire-after:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_server_fire_after( 0, 0, NULL, NULL );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/timer",
+        "srv-when",
+        _LINKS_BASIC,
+        """a basic application configuration with calls to
+${../if/create:/name} and ${../if/server-fire-when:/name}""",
+        None,
+        """(void) rtems_timer_create( 0, NULL );
+(void) rtems_timer_server_fire_when( 0, NULL, NULL, NULL );""",
+        _CONFIG_DEFAULT),
+    _Test(
+        "rtems/userext",
+        "create",
+        _LINKS_BASIC,
+        """a basic application configuration with
+${/acfg/if/max-user-extensions:/name} defined to one and a call to
+${../if/create:/name}""",
+        None,
+        "(void) rtems_extension_create( 0, NULL, NULL );",
+        """#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+""" + _CONFIG_DEFAULT),
+    _Test(
+        "rtems/userext",
+        "delete",
+        _LINKS_BASIC,
+        """a basic application configuration with
+${/acfg/if/max-user-extensions:/name} defined to one and calls to
+${../if/create:/name} and ${../if/delete:/name}""",
+        None,
+        """(void) rtems_extension_create( 0, NULL, NULL );
+(void) rtems_extension_delete( 0 );""",
+        """#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
+
+""" + _CONFIG_DEFAULT),
 ]  # yapf: disable
 
 
