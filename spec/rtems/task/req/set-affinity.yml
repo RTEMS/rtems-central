@@ -37,7 +37,7 @@ post-conditions:
   test-prologue: null
 - name: SetAffinity
   states:
-  - name: 'Yes'
+  - name: Set
     test-code: |
       #if defined(RTEMS_SMP)
       T_eq_sz( ctx->scheduler_log.header.recorded, 1 );
@@ -97,7 +97,7 @@ pre-conditions:
       associated with a task.
   test-epilogue: null
   test-prologue: null
-- name: CPUSetKind
+- name: CPUSetSize
   states:
   - name: Askew
     test-code: |
@@ -105,41 +105,69 @@ pre-conditions:
     text: |
       While the ${../if/set-affinity:/params[1]/name} parameter is not an
       integral multiple of the size of long.
-  - name: Huge
-    test-code: |
-      ctx->cpusetsize = sizeof( ctx->cpuset_obj );
-      CPU_ZERO( &ctx->cpuset_obj[ 0 ] );
-    text: |
-      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long, while the
-      ${../if/set-affinity:/params[1]/name} and
-      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
-      which exceeds the implementation limits.
-  - name: Supported
+  - name: Normal
     test-code: |
       ctx->cpusetsize = sizeof( ctx->cpuset_obj[ 0 ] );
     text: |
       While the ${../if/set-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long, while the
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} parameter is less than or
+      equal to the maximum processor set size storable in the system.
+  - name: Huge
+    test-code: |
+      ctx->cpusetsize = sizeof( ctx->cpuset_obj );
+    text: |
+      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
+      multiple of the size of long,
+      while the ${../if/set-affinity:/params[1]/name} parameter is greater than
+      the maximum processor set size storable in the system.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetOnline
+  states:
+  - name: Supported
+    test-code: |
+      /* Already prepared */
+    text: |
+      While the intersection of the processor set specified by the
       ${../if/set-affinity:/params[1]/name} and
-      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
-      which is an affinity set supported by the
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors represents an affinity set supported by the
       ${/glossary/scheduler-home:/term} of the task specified by the
       ${../if/set-affinity:/params[0]/name} parameter at some point during the
       ${../if/set-affinity:/name} call.
   - name: Unsupported
     test-code: |
-      ctx->cpusetsize = sizeof( ctx->cpuset_obj[ 0 ] );
       CPU_CLR( 0, &ctx->cpuset_obj[ 0 ] );
     text: |
-      While the ${../if/set-affinity:/params[1]/name} parameter is an integral
-      multiple of the size of long, while the
+      While the intersection of the processor set specified by the
       ${../if/set-affinity:/params[1]/name} and
-      ${../if/set-affinity:/params[2]/name} parameter specify a processor set
-      which is an affinity set not supported by the
+      ${../if/set-affinity:/params[2]/name} parameters and the set of online
+      processors represents an affinity set not supported by the
       ${/glossary/scheduler-home:/term} of the task specified by the
       ${../if/set-affinity:/params[0]/name} parameter at some point during the
       ${../if/set-affinity:/name} call.
+  test-epilogue: null
+  test-prologue: null
+- name: CPUSetHuge
+  states:
+  - name: NotZero
+    test-code: |
+      /* Already prepared */
+    text: |
+      While the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters contains at least one
+      processor which is not storable in a processor set supported by the
+      system.
+  - name: Zero
+    test-code: |
+      CPU_ZERO( &ctx->cpuset_obj[ 1 ] );
+    text: |
+      While the processor set specified by the
+      ${../if/set-affinity:/params[1]/name} and
+      ${../if/set-affinity:/params[2]/name} parameters contains no processor
+      which is not storable in a processor set supported by the system.
   test-epilogue: null
   test-prologue: null
 - name: CPUSet
@@ -233,13 +261,53 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: Ok
-    SetAffinity: 'Yes'
+    Status:
+    - if:
+        pre-conditions:
+          CPUSetSize: Askew
+      then: InvNum
+    - if:
+        pre-conditions:
+          CPUSetOnline: Unsupported
+      then: InvNum
+    - else: Ok
+    SetAffinity:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
   pre-conditions:
     Id:
     - Task
-    CPUSetKind:
-    - Supported
+    CPUSetSize:
+    - Askew
+    - Normal
+    CPUSetOnline: all
+    CPUSetHuge: N/A
+    CPUSet:
+    - Valid
+- enabled-by: true
+  post-conditions:
+    Status:
+    - if:
+        pre-conditions:
+          CPUSetOnline: Unsupported
+      then: InvNum
+    - else: Ok
+    SetAffinity:
+    - if:
+        post-conditions:
+          Status: Ok
+      then: Set
+    - else: Nop
+  pre-conditions:
+    Id:
+    - Task
+    CPUSetSize:
+    - Huge
+    CPUSetOnline: all
+    CPUSetHuge: all
     CPUSet:
     - Valid
 - enabled-by: true
@@ -247,8 +315,11 @@ transition-map:
     Status: InvAddr
     SetAffinity: Nop
   pre-conditions:
-    Id: all
-    CPUSetKind: N/A
+    Id:
+    - Task
+    CPUSetSize: all
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
     CPUSet:
     - 'Null'
 - enabled-by: true
@@ -258,20 +329,36 @@ transition-map:
   pre-conditions:
     Id:
     - Invalid
-    CPUSetKind: N/A
+    CPUSetSize:
+    - Askew
+    - Normal
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
     CPUSet:
     - Valid
 - enabled-by: true
   post-conditions:
-    Status: InvNum
+    Status: InvId
     SetAffinity: Nop
   pre-conditions:
     Id:
-    - Task
-    CPUSetKind:
-    - Askew
+    - Invalid
+    CPUSetSize:
     - Huge
-    - Unsupported
+    CPUSetOnline: N/A
+    CPUSetHuge: all
     CPUSet:
     - Valid
+- enabled-by: true
+  post-conditions:
+    Status: InvAddr
+    SetAffinity: Nop
+  pre-conditions:
+    Id:
+    - Invalid
+    CPUSetSize: all
+    CPUSetOnline: N/A
+    CPUSetHuge: N/A
+    CPUSet:
+    - 'Null'
 type: requirement
