@@ -106,7 +106,8 @@ expected <block end>, but found ':'
 
 def get_x_to_b_value(ctx):
     assert ctx.key == "x-to-b"
-    return ctx.value["b"]
+    args = ctx.args if ctx.args is not None else ""
+    return ctx.value["b"] + args
 
 
 def get_value_dict(ctx):
@@ -139,7 +140,7 @@ def test_item_mapper(tmpdir):
     assert mapper["d/c:v"] == "c"
     assert mapper["d/c:a/b"] == "e"
     mapper.add_get_value(":/a/x-to-b", get_x_to_b_value)
-    assert mapper["d/c:a/x-to-b"] == "e"
+    assert mapper["d/c:a/x-to-b:args:0:%"] == "eargs:0:%"
     assert mapper["d/c:a/f[1]"] == 2
     assert mapper["d/c:a/../a/f[3]/g[0]"] == 4
     item_3, key_path_3, value_3 = mapper.map("/p:/v")

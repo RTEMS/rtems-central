@@ -42,6 +42,7 @@ class ItemGetValueContext(NamedTuple):
     value: Any
     key: str
     index: Any  # should be int, but this triggers a mypy error
+    args: Optional[str]
 
 
 ItemMap = Dict[str, "Item"]
@@ -213,6 +214,7 @@ class Item:
         return self._data.get(key, default)
 
     def get_by_normalized_key_path(self, normalized_key_path: str,
+                                   args: Optional[str],
                                    get_value_map: ItemGetValueMap) -> Any:
         """
         Gets the attribute value corresponding to the normalized key path.
@@ -225,17 +227,20 @@ class Item:
                 index = int(parts[1].split("]")[0])
             except IndexError:
                 index = -1
-            ctx = ItemGetValueContext(self, path, value, parts[0], index)
+            ctx = ItemGetValueContext(self, path, value, parts[0], index, args)
             get_value, get_value_map = get_value_map.get(
                 parts[0], (_get_value, {}))
             value = get_value(ctx)
             path = os.path.join(path, key)
         return value
 
-    def get_by_key_path(self, key_path: str, prefix: str = "") -> Any:
+    def get_by_key_path(self,
+                        key_path: str,
+                        prefix: str = "",
+                        args: Optional[str] = None) -> Any:
         """ Gets the attribute value corresponding to the key path. """
         return self.get_by_normalized_key_path(
-            normalize_key_path(key_path, prefix), {})
+            normalize_key_path(key_path, prefix), args, {})
 
     @property
     def uid(self) -> str:
@@ -416,7 +421,7 @@ class Item:
 
 class ItemTemplate(string.Template):
     """ String template for item mapper identifiers. """
-    idpattern = "[a-zA-Z0-9._/-]+(:[][a-zA-Z0-9._/-]+)?"
+    idpattern = "[a-zA-Z0-9._/-]+(:[a-zA-Z0-9._/-]+)?(:[^${}]*)?"
 
 
 class _ItemMapperContext(dict):
@@ -519,9 +524,19 @@ class ItemMapper:
         """
         colon = identifier.find(":")
         if colon >= 0:
-            uid, key_path = identifier[:colon], identifier[colon + 1:]
+            uid = identifier[:colon]
+            more = identifier[colon + 1:]
+            colon = more.find(":")
+            if colon < 0:
+                key_path = more
+                args = None
+            else:
+                key_path = more[:colon]
+                args = more[colon + 1:]
         else:
-            uid, key_path = identifier, "/_uid"
+            uid = identifier
+            key_path = "/_uid"
+            args = None
         if item is None:
             item = self._item
         if uid == ".":
@@ -537,7 +552,7 @@ class ItemMapper:
                 raise ValueError(msg) from err
         key_path = normalize_key_path(key_path, prefix)
         try:
-            value = item.get_by_normalized_key_path(key_path,
+            value = item.get_by_normalized_key_path(key_path, args,
                                                     self.get_value_map(item))
         except Exception as err:
             msg = (f"cannot get value for '{key_path}' of {item.spec} "
