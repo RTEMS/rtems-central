@@ -88,7 +88,7 @@ def run_command(args: List[str],
         while True:
             raw_line = task.stdout.readline()
             if raw_line:
-                line = raw_line.decode("utf-8").rstrip()
+                line = raw_line.decode("utf-8", "ignore").rstrip()
                 if stdout is None:
                     logging.debug("%s", line)
                 else:
