@@ -113,27 +113,13 @@ def get_value_dict(ctx):
     return ctx.key
 
 
-class Mapper(ItemMapper):
-    def __init__(self, item):
-        super().__init__(item)
-
-    def u(self, value):
-        return "u" + value
-
-    def v(self, value):
-        return "v" + value
-
-    def dup(self, value):
-        return value + value
-
-
 def test_item_mapper(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
     item_cache = ItemCache(config)
     item = item_cache["/p"]
     base_mapper = ItemMapper(item)
     assert base_mapper["d/c:v"] == "c"
-    mapper = Mapper(item)
+    mapper = ItemMapper(item)
     assert mapper.substitute(None) == ""
     assert mapper.substitute(None, prefix="v") == ""
     with mapper.prefix("v"):
@@ -152,11 +138,10 @@ def test_item_mapper(tmpdir):
     assert mapper["d/c"] == "/d/c"
     assert mapper["d/c:v"] == "c"
     assert mapper["d/c:a/b"] == "e"
-    assert mapper["d/c:a/b|u"] == "ue"
     mapper.add_get_value(":/a/x-to-b", get_x_to_b_value)
-    assert mapper["d/c:a/x-to-b|u|v"] == "vue"
+    assert mapper["d/c:a/x-to-b"] == "e"
     assert mapper["d/c:a/f[1]"] == 2
-    assert mapper["d/c:a/../a/f[3]/g[0]|dup"] == 8
+    assert mapper["d/c:a/../a/f[3]/g[0]"] == 4
     item_3, key_path_3, value_3 = mapper.map("/p:/v")
     assert item_3 == item
     assert key_path_3 == "/v"

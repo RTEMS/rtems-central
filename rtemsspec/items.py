@@ -416,7 +416,7 @@ class Item:
 
 class ItemTemplate(string.Template):
     """ String template for item mapper identifiers. """
-    idpattern = "[a-zA-Z0-9._/-]+(:[][a-zA-Z0-9._/-]+)?(|[a-zA-Z0-9_]+)*"
+    idpattern = "[a-zA-Z0-9._/-]+(:[][a-zA-Z0-9._/-]+)?"
 
 
 class _ItemMapperContext(dict):
@@ -517,12 +517,11 @@ class ItemMapper:
         Maps an identifier with item and prefix to the corresponding item and
         attribute value.
         """
-        uid_key_path, *pipes = identifier.split("|")
-        colon = uid_key_path.find(":")
+        colon = identifier.find(":")
         if colon >= 0:
-            uid, key_path = uid_key_path[:colon], uid_key_path[colon + 1:]
+            uid, key_path = identifier[:colon], identifier[colon + 1:]
         else:
-            uid, key_path = uid_key_path, "/_uid"
+            uid, key_path = identifier, "/_uid"
         if item is None:
             item = self._item
         if uid == ".":
@@ -544,8 +543,6 @@ class ItemMapper:
             msg = (f"cannot get value for '{key_path}' of {item.spec} "
                    f"specified by '{identifier}'")
             raise ValueError(msg) from err
-        for func in pipes:
-            value = getattr(self, func)(value)
         return item, key_path, value
 
     def __getitem__(self, identifier):
