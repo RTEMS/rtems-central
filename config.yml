@@ -28,6 +28,7 @@ build:
   - cpukit/doxygen/top-level-groups.h
   - cpukit/libc/string/local.h
   - cpukit/libcsupport/src/malloc_p.h
+  - cpukit/libmisc/cpuuse/cpuuseimpl.h
   - cpukit/libtest/t-test-rtems.h
   - cpukit/score/cpu/sparc/syscall.h
   - cpukit/score/src/opt_compat.h

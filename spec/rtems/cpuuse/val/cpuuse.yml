@@ -1,0 +1,75 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Create a worker thread.  Generate some CPU usage.
+  action-code: |
+    rtems_id          id;
+    Thread_Control   *self;
+    Thread_Control   *other;
+    Timestamp_Control timestamp;
+
+    id = CreateTask( "WORK", GetSelfPriority() );
+    StartTask( id, Worker, NULL );
+
+    self = GetThread( RTEMS_SELF );
+    other = GetThread( id );
+
+    Yield();
+    Yield();
+  checks:
+  - brief: |
+      Check that we have a non-zero CPU usage.  Reset the CPU usage.  Check
+      that it was cleared to zero.
+    code: |
+      _Thread_Get_CPU_time_used( self, &timestamp );
+      T_gt_i64( timestamp, 0 );
+
+      _Thread_Get_CPU_time_used( other, &timestamp );
+      T_gt_i64( timestamp, 0 );
+
+      rtems_cpu_usage_reset();
+
+      /* Our CPU usage is now exactly one tick of the software timecounter */
+      _Thread_Get_CPU_time_used( self, &timestamp );
+      T_eq_i64( timestamp, 4295 );
+
+      _Thread_Get_CPU_time_used( other, &timestamp );
+      T_eq_i64( timestamp, 0 );
+    links:
+    - role: validation
+      uid: ../req/reset
+  - brief: |
+      Clean up all used resources.
+    code: |
+      DeleteTask( id );
+    links: []
+  links: []
+test-brief: |
+  Tests the CPU usage reporting and reset.
+test-context: null
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- rtems/cpuuse.h
+- rtems/score/threadimpl.h
+test-local-includes:
+- tx-support.h
+test-setup: null
+test-stop: null
+test-support: |
+  static void Worker( rtems_task_argument arg )
+  {
+    (void) arg;
+
+    while ( true ) {
+      Yield();
+    }
+  }
+test-target: testsuites/validation/tc-cpuuse.c
+test-teardown: null
+type: test-case

@@ -520,7 +520,11 @@ test-support: |
       jobs_count * period_length;
   }
 test-target: testsuites/validation/tc-ratemon-get-status.c
-test-teardown: null
+test-teardown:
+  brief: null
+  code: |
+    SetGetTimecountHandler( ctx->previous_timecounter_handler );
+  description: null
 text: ${.:text-template}
 transition-map:
 - enabled-by: true
