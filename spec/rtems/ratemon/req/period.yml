@@ -109,10 +109,6 @@ post-conditions:
       parameter in past calls to ${../if/period:/name} shall not be
       accessed by the ${../if/period:/name} call (see also
       ${../glossary/nop:/term}).
-
-      Note: A newly created period has an arbitrary the number of
-      ${../glossary/postponedjob:/plural} because ${../if/create:/name}
-      does not set this value 0.
   test-epilogue: null
   test-prologue: null
 - name: Delay
