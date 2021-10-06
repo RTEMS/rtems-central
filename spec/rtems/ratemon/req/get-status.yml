@@ -27,6 +27,12 @@ post-conditions:
     text: |
       The return status of ${../if/get-status:/name} shall be
       ${../../status/if/invalid-id:/name}.
+  - name: NotDef
+    test-code: |
+      T_rsc( ctx->status, RTEMS_NOT_DEFINED );
+    text: |
+      The return status of ${../if/get-status:/name} shall be
+      ${../../status/if/not-defined:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Owner
@@ -244,10 +250,6 @@ post-conditions:
       parameter in past calls to ${../if/get-status:/name} shall not be
       accessed by the ${../if/get-status:/name} call (see also
       ${../glossary/nop:/term}).
-
-      Note: A newly created period has an arbitrary the number of
-      ${../glossary/postponedjob:/plural} because ${../if/create:/name}
-      does not set this value 0.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -279,6 +281,22 @@ pre-conditions:
       ctx->id_param = RTEMS_ID_NONE;
     text: |
       While the ${../if/get-status:/params[0]/name} parameter is invalid.
+  test-epilogue: null
+  test-prologue: null
+- name: CpuUse
+  states:
+  - name: Kept
+    test-code: |
+      ctx->do_reset = NULL;
+    text: |
+      While the CPU usage statistics in not changed.
+  - name: Reset
+    test-code: |
+      ctx->do_reset = rtems_cpu_usage_reset;
+    text: |
+      While the ${../../cpuuse/if/reset:/name} directive is called between the
+      call to ${../if/period:/name} which started the period and
+      the call to ${../if/get-status:/name}.
   test-epilogue: null
   test-prologue: null
 - name: State
@@ -364,7 +382,14 @@ skip-reasons:
   NeverInExpiredState: |
     There must be ${../glossary/postponedjob:/plural} in
     ${../glossary/expired:/term} ${../glossary/state:/term}.
+  ResetOnlyWhenActive: |
+    The directive ${../../cpuuse/if/reset:/name} affects only periods
+    in ${../glossary/active:/term} or ${../glossary/expired:/term}
+    ${../glossary/state:/term}.
 test-action: |
+  if ( ctx->do_reset != NULL ) {
+      ctx->do_reset();
+  }
   ctx->status = rtems_rate_monotonic_get_status(
     ctx->id_param,
     ctx->status_param
@@ -420,6 +445,12 @@ test-context:
   member: |
     rtems_rate_monotonic_period_states previous_state
 - brief: |
+    If the ${../../cpuuse/if/reset:/name} directive should be called
+    before ${../if/get-status:/name}, this member contains a pointer to it.
+  description: null
+  member: |
+    void (*do_reset)( void )
+- brief: |
     This member contains the ${/glossary/clock-monotonic:/term}
     ${../glossary/time:/term} ${../glossary/elapsed:/term}.
   description: null
@@ -441,6 +472,7 @@ test-description: null
 test-header: null
 test-includes:
 - rtems.h
+- rtems/cpuuse.h
 test-local-includes:
 - tx-support.h
 test-prepare: |
@@ -532,14 +564,16 @@ transition-map:
     Status: Ok
     Owner: OwnerTask
     State: Inactive
-    Elapsed: N/A
-    Consumed: N/A
+    Elapsed: Zero
+    Consumed: Zero
     Postponed: N/A
   pre-conditions:
     StatusAddr:
       - Valid
     Id:
       - Valid
+    CpuUse:
+      - Kept
     State:
       - Inactive
     Elapsed: N/A
@@ -560,6 +594,8 @@ transition-map:
       - Valid
     Id:
       - Valid
+    CpuUse:
+      - Kept
     State:
       - Active
       - Expired
@@ -580,6 +616,7 @@ transition-map:
     StatusAddr:
       - 'Null'
     Id: all
+    CpuUse: all
     State:
       - Inactive
     Elapsed: all
@@ -597,6 +634,7 @@ transition-map:
     StatusAddr:
       - 'Null'
     Id: all
+    CpuUse: all
     State:
       - Active
       - Expired
@@ -616,6 +654,7 @@ transition-map:
       - Valid
     Id:
       - Invalid
+    CpuUse: all
     State:
       - Inactive
     Elapsed: all
@@ -634,6 +673,30 @@ transition-map:
       - Valid
     Id:
       - Invalid
+    CpuUse: all
+    State:
+      - Active
+      - Expired
+    Elapsed: all
+    Consumed: all
+    Postponed: all
+- enabled-by: true
+  post-conditions:
+    Status: NotDef
+    Owner: OwnerTask
+    State:
+      - specified-by: State
+    Elapsed: Nop
+    Consumed: Nop
+    Postponed:
+      - specified-by: Postponed
+  pre-conditions:
+    StatusAddr:
+      - Valid
+    Id:
+      - Valid
+    CpuUse:
+      - Reset
     State:
       - Active
       - Expired
@@ -645,6 +708,7 @@ transition-map:
   pre-conditions:
     StatusAddr: all
     Id: all
+    CpuUse: all
     State:
       - Inactive
     Elapsed: all
@@ -657,10 +721,23 @@ transition-map:
   pre-conditions:
     StatusAddr: all
     Id: all
+    CpuUse: all
     State:
       - Expired
     Elapsed: all
     Consumed: all
     Postponed:
       - Zero
+- enabled-by: true
+  post-conditions: ResetOnlyWhenActive
+  pre-conditions:
+    StatusAddr: all
+    Id: all
+    CpuUse:
+      - Reset
+    State:
+      - Inactive
+    Elapsed: all
+    Consumed: all
+    Postponed: all
 type: requirement
