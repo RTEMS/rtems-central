@@ -259,6 +259,7 @@ pre-conditions:
   - name: New
     test-code:  |
       /* Nothing to do here as the period is newly created. */
+      ctx->postponed_jobs_count = 0;
     text: |
       While ${../if/period:/name} has never been invoked with result
       ${../../status/if/successful:/name} on the period object referenced
@@ -271,6 +272,7 @@ pre-conditions:
         TickTheClock( ctx, ctx->postponed_jobs_count * period_length );
       }
       OwnerDoWork( ctx, CancelPeriod );
+      ctx->postponed_jobs_count = 0;
     text: |
       While ${../if/period:/name} has never been invoked with result
       ${../../status/if/successful:/name} on the period object referenced
@@ -425,7 +427,6 @@ test-prepare: |
     &period_status
   );
   T_rsc_success( status );
-  ctx->postponed_jobs_count = period_status.postponed_jobs_count;
 test-setup:
   brief: null
   code: |

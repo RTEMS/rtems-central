@@ -56,21 +56,6 @@ post-conditions:
     text: |
       There shall be no ${../glossary/postponedjob:/plural}
       after the return of the ${../if/cancel:/name} call.
-  - name: One
-    test-code: |
-      T_eq_u32( ctx->period_status.postponed_jobs_count, 1 );
-    text: |
-      The number of ${../glossary/postponedjob:/plural} shall not be
-      changed by the past call to ${../if/cancel:/name}.
-  - name: Several
-    test-code: |
-      T_eq_u32(
-        ctx->period_status.postponed_jobs_count,
-        ctx->postponed_jobs_count
-      );
-    text: |
-      The number of ${../glossary/postponedjob:/plural} shall not be
-      changed by the past call to ${../if/cancel:/name}.
   - name: Nop
     test-code: |
       T_eq_u32( ctx->period_status.postponed_jobs_count,
@@ -447,8 +432,7 @@ transition-map:
   post-conditions:
     Status: Ok
     State: Inactive
-    Postponed:
-      - specified-by: Postponed
+    Postponed: Zero
     Scheduler: Called
   pre-conditions:
     Id:
