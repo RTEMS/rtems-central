@@ -93,24 +93,24 @@ pre-conditions:
     test-code: |
       /* This is the default */
     text: |
-      While the priority queue of the thread queue associated with an eligible
-      scheduler of the enqueueing thread is empty.
-  - name: EQ
+      While all priority queues of the thread queue associated with eligible
+      schedulers of the enqueueing thread are empty.
+  - name: Equal
     test-code: |
       ctx->priority = PRIO_VERY_HIGH;
     text: |
-      While the priority queue of the thread queue associated with an eligible
-      scheduler of the enqueueing thread is non-empty, while at least one
-      thread of this priority queue has a priority equal to the priority of the
-      enqueueing thread with respect to this scheduler.
-  - name: GT
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is equal to the priority
+      of the enqueueing thread with respect to the eligible scheduler.
+  - name: Low
     test-code: |
       ctx->priority = PRIO_HIGH;
     text: |
-      While the priority queue of the thread queue associated with an eligible
-      scheduler of the enqueueing thread is non-empty, while at least one
-      thread of this priority queue has a priority greater than the priority of
-      the enqueueing thread with respect to this scheduler.
+      While a priority queue of the thread queue associated with an eligible
+      scheduler of the enqueueing thread is non-empty,
+      while the highest priority of the priority queue is lower than the
+      priority of the enqueueing thread with respect to the eligible scheduler.
   test-epilogue: null
   test-prologue: null
 - name: QueueIneligible
@@ -354,7 +354,7 @@ transition-map:
     EligibleScheduler:
     - Home
     QueueEligible:
-    - GT
+    - Low
     QueueIneligible:
     - None
 - enabled-by: true
@@ -364,7 +364,7 @@ transition-map:
     EligibleScheduler:
     - Home
     QueueEligible:
-    - EQ
+    - Equal
     QueueIneligible:
     - None
 - enabled-by: true
@@ -387,7 +387,7 @@ transition-map:
     EligibleScheduler:
     - Helping
     QueueEligible:
-    - GT
+    - Low
     QueueIneligible:
     - None
 - enabled-by: RTEMS_SMP
@@ -397,7 +397,7 @@ transition-map:
     EligibleScheduler:
     - Helping
     QueueEligible:
-    - EQ
+    - Equal
     QueueIneligible:
     - None
 - enabled-by: RTEMS_SMP
@@ -406,8 +406,8 @@ transition-map:
   pre-conditions:
     EligibleScheduler: all
     QueueEligible:
-    - EQ
-    - GT
+    - Equal
+    - Low
     QueueIneligible:
     - Before
 - enabled-by: RTEMS_SMP
@@ -416,7 +416,7 @@ transition-map:
   pre-conditions:
     EligibleScheduler: all
     QueueEligible:
-    - GT
+    - Low
     QueueIneligible:
     - After
 - enabled-by: RTEMS_SMP
@@ -425,7 +425,7 @@ transition-map:
   pre-conditions:
     EligibleScheduler: all
     QueueEligible:
-    - EQ
+    - Equal
     QueueIneligible:
     - After
 type: requirement
