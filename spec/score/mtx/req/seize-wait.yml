@@ -14,6 +14,8 @@ links:
   uid: /score/tq/req/enqueue-mrsp
 - role: function-implementation
   uid: /score/tq/req/enqueue-priority
+- role: function-implementation
+  uid: /score/tq/req/enqueue-priority-inherit
 - role: requirement-refinement
   uid: ../if/group
 post-conditions:
@@ -67,7 +69,7 @@ post-conditions:
       The calling thread shall be enqueued in priority order.
   - name: PriorityInherit
     test-code: |
-      ${../../tq/req/enqueue-priority:/test-run}( &ctx->tq_ctx->base );
+      ${../../tq/req/enqueue-priority-inherit:/test-run}( &ctx->tq_ctx->base );
     text: |
       The calling thread shall be enqueued in priority order with priorit
       inheritance.
@@ -342,6 +344,7 @@ test-local-includes:
 - tr-tq-enqueue-fifo.h
 - tr-tq-enqueue-mrsp.h
 - tr-tq-enqueue-priority.h
+- tr-tq-enqueue-priority-inherit.h
 test-prepare: |
   ctx->owner_caller = false;
   ctx->owner_other = false;
