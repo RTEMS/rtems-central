@@ -7,15 +7,19 @@ links:
   uid: /req/test-suites
 test-brief: |
   This general purpose validation test suite provides enough resources to run
-  basic tests for all specified managers and functions in a configuration with
-  exactly one processor.
+  basic tests with exactly one processor and without a
+  ${/glossary/clock-driver:/term}.
 test-code: |
   const char rtems_test_name[] = "${.:/test-suite-name}";
+
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
   #define CONFIGURE_MAXIMUM_PROCESSORS 1
 
   #include "ts-default.h"
-test-description: null
+test-description: |
+  Two test suites of this configuration are provided to limit test run
+  duration.
 test-includes: []
 test-local-includes: []
 test-suite-name: ValidationOneCpu1
