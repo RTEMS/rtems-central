@@ -1,0 +1,114 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Start a period, reset the CPU usage counters and then
+    call ${../if/period:/name} again.  This second call will
+    invoke ``_Rate_monotonic_Update_statistics()`` and enter the
+    ``if()`` otherwise not reached.
+
+    After each call to ${../if/period:/name}, ${../if/period-status:/name}
+    will be called in order to check that the period status recovers from
+    the reset with the start of the second period.
+  action-code: |
+    rtems_status_code status_0;
+    rtems_status_code status_1;
+    rtems_status_code status_code_0;
+    rtems_status_code status_code_1;
+    rtems_rate_monotonic_period_status status_data;
+
+    status_0 = rtems_rate_monotonic_period( ctx->period_id, PERIOD_LENGTH );
+    rtems_cpu_usage_reset();
+
+    status_code_0 = rtems_rate_monotonic_get_status(
+      ctx->period_id,
+      &status_data
+    );
+
+    TimecounterTick();
+    status_1 = rtems_rate_monotonic_period( ctx->period_id, PERIOD_LENGTH );
+    status_code_1 = rtems_rate_monotonic_get_status(
+      ctx->period_id,
+      &status_data
+    );
+  checks:
+  - brief: |
+      Check status returned by the two calls to ${../if/period:/name}.
+    code: |
+      T_rsc_success( status_0 );
+      T_rsc( status_1, RTEMS_TIMEOUT );
+    links: []
+  - brief: |
+      Check the first call to ${../if/period-status:/name} is not
+      defined due to the preceding reset of the CUP usage counters.
+    code: |
+      T_rsc( status_code_0, RTEMS_NOT_DEFINED );
+    links: []
+  - brief: |
+      Check that the second call to ${../if/period-status:/name} is not
+      longer affected by the reset of the CUP usage counters in the
+      previous period.
+    code: |
+      T_rsc_success( status_code_1 );
+    links: []
+  links:
+  - name: _Rate_monotonic_Update_statistics
+    role: unit-test
+    uid: ../../if/domain
+test-brief: |
+  Unit tests for the Rate Monotonic Manager.
+test-context:
+- brief: |
+    This member contains a valid identifier of a period.
+  description: null
+  member: |
+    rtems_id period_id
+- brief: |
+    This member contains the previous timecounter handler to restore.
+  description: null
+  member: |
+    GetTimecountHandler previous_timecounter_handler
+test-context-support: |
+  static uint32_t FreezeTime( void );
+  #define PERIOD_LENGTH 1
+test-description: |
+  A line in the file ``cpukit/rtems/src/ratemonperiod.c`` is not reached
+  by validation tests.  The space qualified code subset does not
+  contain ${../if/get-statistics:/name}.  This test exercises the
+  code parts otherwise not reached in order to achieve full code coverage.
+test-header: null
+test-includes:
+- rtems.h
+- rtems/cpuuse.h
+test-local-includes:
+- ../validation/tx-support.h
+test-setup:
+  brief: null
+  code: |
+    rtems_status_code status;
+    ctx->previous_timecounter_handler = SetGetTimecountHandler( FreezeTime );
+
+    status =  rtems_rate_monotonic_create(
+      rtems_build_name( 'R', 'M', 'O', 'N' ),
+      &ctx->period_id
+    );
+    T_rsc_success( status );
+  description: null
+test-stop: null
+test-support: |
+  static uint32_t FreezeTime( void )
+  {
+    return GetTimecountCounter() - 1;
+  }
+test-target: testsuites/unit/tc-ratemon-statistics.c
+test-teardown:
+  brief: null
+  code: |
+    T_rsc_success( rtems_rate_monotonic_delete( ctx->period_id ) );
+    SetGetTimecountHandler( ctx->previous_timecounter_handler );
+  description: null
+
+type: test-case
