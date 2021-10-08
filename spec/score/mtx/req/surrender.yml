@@ -7,6 +7,8 @@ links:
 - role: function-implementation
   uid: /score/tq/req/surrender
 - role: function-implementation
+  uid: /score/tq/req/surrender-mrsp
+- role: function-implementation
   uid: /score/tq/req/surrender-priority-inherit
 - role: requirement-refinement
   uid: ../if/group
@@ -85,7 +87,14 @@ post-conditions:
       ${../../tq/req/surrender-priority-inherit:/test-run}( &ctx->tq_ctx->base );
     text: |
       The thread queue of the mutex shall be surrendered in priority order
-      priority inheritance.
+      with priority inheritance.
+  - name: MrsP
+    test-code: |
+      T_eq_u32( ctx->counter, 1 );
+      ${../../tq/req/surrender-mrsp:/test-run}( &ctx->tq_ctx->base );
+    text: |
+      The thread queue of the mutex shall be surrendered in priority order
+      with MrsP.
   test-epilogue: null
   test-prologue: null
 - name: Priority
@@ -367,6 +376,7 @@ test-includes: []
 test-local-includes:
 - tr-mtx-surrender.h
 - tr-tq-surrender.h
+- tr-tq-surrender-mrsp.h
 - tr-tq-surrender-priority-inherit.h
 test-prepare: |
   ctx->owner_caller = false;
@@ -588,7 +598,7 @@ transition-map:
             Owner: First
         - pre-conditions:
             Protocol: MrsP
-      then: PriorityInherit
+      then: MrsP
     - if:
         post-conditions:
           Owner: First

@@ -21,7 +21,7 @@ post-conditions:
   states:
   - name: 'Yes'
     test-code: |
-      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, TQ_BLOCKER_A ) );
+      T_eq_ptr( GetUnblock( ctx, &i ), GetTCB( ctx, NEW_OWNER ) );
       T_eq_ptr( GetUnblock( ctx, &i ), NULL );
     text: |
       The dequeued thread shall be unblocked by the thread queue surrender
@@ -53,6 +53,46 @@ post-conditions:
       updated.
   test-epilogue: null
   test-prologue: null
+- name: NewPriority
+  states:
+  - name: Raise
+    test-code: |
+      sc = rtems_task_get_priority(
+        ctx->tq_ctx->worker_id[ NEW_OWNER ],
+        SCHEDULER_A_ID,
+        &priority
+      );
+      T_rsc_success( sc );
+      T_eq_u32( priority, PRIO_LOW );
+    text: |
+      Each ${/glossary/priority-eligible:/term} of the new owner which
+      inherited the highest priority through the thread queue shall be updated.
+  - name: Nop
+    test-code: |
+      if ( ctx->gains_new_helping_scheduler ) {
+        scheduler_id = SCHEDULER_C_ID;
+      } else {
+        scheduler_id = SCHEDULER_A_ID;
+      }
+
+      sc = rtems_task_get_priority(
+        ctx->tq_ctx->worker_id[ NEW_OWNER ],
+        scheduler_id,
+        &priority
+      );
+      #if defined(RTEMS_SMP)
+      T_rsc( sc, RTEMS_NOT_DEFINED );
+      #else
+      T_rsc_success( sc );
+      T_eq_u32( priority, PRIO_HIGH );
+      #endif
+    text: |
+      No highest priority of the new owner shall be changed.
+  test-epilogue: null
+  test-prologue: |
+    rtems_id            scheduler_id;
+    rtems_task_priority priority;
+    rtems_status_code   sc;
 - name: RemoveHelper
   states:
   - name: 'Yes'
@@ -90,15 +130,21 @@ post-conditions:
       previous owner.
   test-epilogue: null
   test-prologue: |
-    rtems_status_code   sc;
     rtems_task_priority priority;
+    rtems_status_code   sc;
 - name: AddHelper
   states:
   - name: 'Yes'
     test-code: |
+      if ( ctx->gains_new_priority ) {
+        scheduler_id = SCHEDULER_C_ID;
+      } else {
+        scheduler_id = SCHEDULER_A_ID;
+      }
+
       sc = rtems_task_get_priority(
-        ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ],
-        SCHEDULER_A_ID,
+        ctx->tq_ctx->worker_id[ NEW_OWNER ],
+        scheduler_id,
         &priority
       );
       T_rsc_success( sc );
@@ -114,9 +160,15 @@ post-conditions:
       added to the new owner.
   - name: 'No'
     test-code: |
+      if ( ctx->gains_new_priority ) {
+        scheduler_id = SCHEDULER_C_ID;
+      } else {
+        scheduler_id = SCHEDULER_A_ID;
+      }
+
       sc = rtems_task_get_priority(
-        ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ],
-        SCHEDULER_A_ID,
+        ctx->tq_ctx->worker_id[ NEW_OWNER ],
+        scheduler_id,
         &priority
       );
       #if defined(RTEMS_SMP)
@@ -129,39 +181,47 @@ post-conditions:
       No ${/glossary/scheduler-helping:/term} shall added to the new owner.
   test-epilogue: null
   test-prologue: |
-    rtems_status_code   sc;
+    rtems_id            scheduler_id;
     rtems_task_priority priority;
+    rtems_status_code   sc;
 - name: Suspended
   states:
   - name: 'Yes'
     test-code: |
-      T_true( IsTaskSuspended( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] ) );
+      T_true( IsTaskSuspended( ctx->tq_ctx->worker_id[ NEW_OWNER ] ) );
     text: |
       The new owner shall be suspended.
   - name: 'No'
     test-code: |
-      T_false( IsTaskSuspended( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] ) );
+      T_false( IsTaskSuspended( ctx->tq_ctx->worker_id[ NEW_OWNER ] ) );
     text: |
       The new owner shall be not suspended.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: EnqueueVariant
+- name: SchedulerCount
   states:
-  - name: Blocking
+  - name: One
     test-code: |
-      if ( ctx->tq_ctx->enqueue_variant != TQ_ENQUEUE_BLOCKS ) {
+      if ( rtems_scheduler_get_processor_maximum() != 1 ) {
         ${.:skip}
       }
     text: |
-      Where the thread queue enqueue operation is blocking.
-  - name: Sticky
+      Where the system has exactly one schedulers.
+  - name: Two
     test-code: |
-      if ( ctx->tq_ctx->enqueue_variant != TQ_ENQUEUE_STICKY ) {
+      if ( rtems_scheduler_get_processor_maximum() != 2 ) {
         ${.:skip}
       }
     text: |
-      Where the thread queue enqueue operation is sticky.
+      Where the system has exactly two schedulers.
+  - name: More
+    test-code: |
+      if ( rtems_scheduler_get_processor_maximum() < 3 ) {
+        ${.:skip}
+      }
+    text: |
+      Where the system has at least three schedulers.
   test-epilogue: null
   test-prologue: null
 - name: InheritedPriority
@@ -197,7 +257,7 @@ pre-conditions:
       not only available due to a priority inherited through the thread queue.
   test-epilogue: null
   test-prologue: null
-- name: Scheduler
+- name: UsedScheduler
   states:
   - name: Home
     test-code: |
@@ -212,6 +272,22 @@ pre-conditions:
       While the previous owner executes in a
       ${/glossary/scheduler-helping:/term} which is available due to a priority
       inherited through the thread queue.
+  test-epilogue: null
+  test-prologue: null
+- name: NewPriority
+  states:
+  - name: Vital
+    test-code: |
+      ctx->gains_new_priority = true;
+    text: |
+      While at least one highest priority of the new owner is only available
+      due to a priority inherited through the thread queue.
+  - name: Dispensable
+    test-code: |
+      ctx->gains_new_priority = false;
+    text: |
+      While all highest priorities of the new owner are not only available due
+      to a priority inherited through the thread queue.
   test-epilogue: null
   test-prologue: null
 - name: NewHelping
@@ -263,15 +339,18 @@ rationale: null
 references: []
 requirement-type: functional
 skip-reasons:
-  StickyHasNoBlocking: |
-    When a sticky thread queue enqueue operation is performed, the blocked wait
-    state cannot occur.
-  OnlyOneCPU: |
+  NeedsSecondCPUForIntentToBlock: |
     Where the system was built with SMP support disabled, exactly one scheduler
     is present in an application using exactly one processor.  There is at most
     one executing thread.  Thread queues with an owner can only be surrendered
     by the previous owner.  Thus, the new owner of the thread queue cannot be
     in the intend to block wait state.
+  NeedsSecondScheduler: |
+    A second scheduler is required to get a
+    ${/glossary/scheduler-helping:/term}.
+  NeedsThirdScheduler: |
+    A third scheduler is required to get a vital scheduler and a vital priority
+    for the new owner at the same time.
 test-action: |
   if ( ctx->tq_ctx->enqueue_variant == TQ_ENQUEUE_STICKY ) {
     ActionSticky( ctx );
@@ -316,6 +395,12 @@ test-context:
   description: null
   member: |
     bool use_helping_scheduler
+- brief: |
+    If this member is true, then the new owner thread shall gain a vital
+    priority.
+  description: null
+  member: |
+    bool gains_new_priority
 - brief: |
     If this member is true, then the new owner thread shall gain a vital
     helping scheduler.
@@ -381,6 +466,7 @@ test-prepare: |
   ctx->inherited_priorities_are_dispensible = true;
   ctx->helping_schedules_are_dispensible = true;
   ctx->use_helping_scheduler = false;
+  ctx->gains_new_priority = false;
   ctx->gains_new_helping_scheduler = false;
   ctx->intend_to_block = false;
 test-setup:
@@ -399,6 +485,24 @@ test-stop: null
 test-support: |
   typedef ${.:/test-context-type} Context;
 
+  #define NEW_OWNER TQ_BLOCKER_A
+
+  #define PREV_OWNER_HELPER_A TQ_BLOCKER_B
+
+  #define PREV_OWNER_HELPER_B TQ_BLOCKER_C
+
+  #define PREV_OWNER_HELPER_C TQ_BLOCKER_D
+
+  #define NEW_OWNER_NEW_HELPER TQ_BLOCKER_E
+
+  #define NEW_OWNER_NEW_PRIORITY TQ_WORKER_F
+
+  #define NEW_OWNER_OLD_PRIORITY TQ_HELPER_C
+
+  #define PREV_OWNER_MOVER TQ_HELPER_A
+
+  #define PREV_OWNER TQ_HELPER_A
+
   static const rtems_tcb *GetUnblock( Context *ctx, size_t *index )
   {
     return TQGetNextUnblock( ctx->tq_ctx, index )->thread;
@@ -414,7 +518,7 @@ test-support: |
     Status_Control status;
 
     if ( ctx->suspended ) {
-      SuspendTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+      SuspendTask( ctx->tq_ctx->worker_id[ NEW_OWNER ] );
     }
 
     ctx->priority_before = GetSelfPriority();
@@ -422,7 +526,7 @@ test-support: |
     status = TQSurrender( ctx->tq_ctx );
     T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
     TQSchedulerRecordStop( ctx->tq_ctx );
-    T_eq_ptr( TQGetOwner( ctx->tq_ctx ), ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ] );
+    T_eq_ptr( TQGetOwner( ctx->tq_ctx ), ctx->tq_ctx->worker_tcb[ NEW_OWNER ] );
     ctx->priority_after = GetSelfPriority();
   }
 
@@ -466,17 +570,33 @@ test-support: |
   static void Setup( Context *ctx )
   {
   #if defined(RTEMS_SMP)
-    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_VERY_HIGH );
-    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_B_ID, PRIO_HIGH );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_D, PRIO_LOW );
-    TQSetPriority( ctx->tq_ctx, TQ_HELPER_A, PRIO_ULTRA_HIGH );
+    TQSetScheduler( ctx->tq_ctx, NEW_OWNER, SCHEDULER_B_ID, PRIO_NORMAL );
+    TQSetPriority( ctx->tq_ctx, PREV_OWNER_HELPER_A, PRIO_VERY_HIGH );
+    TQSetScheduler(
+      ctx->tq_ctx,
+      PREV_OWNER_HELPER_B,
+      SCHEDULER_B_ID,
+      PRIO_HIGH
+    );
+    TQSetPriority( ctx->tq_ctx, NEW_OWNER_OLD_PRIORITY, PRIO_VERY_LOW );
+    TQSetPriority( ctx->tq_ctx, NEW_OWNER_NEW_PRIORITY, PRIO_LOW );
+
+    TQSetPriority( ctx->tq_ctx, PREV_OWNER_MOVER, PRIO_ULTRA_HIGH );
+
+    if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+      TQSetScheduler(
+        ctx->tq_ctx,
+        PREV_OWNER_HELPER_C,
+        SCHEDULER_C_ID,
+        PRIO_HIGH
+      );
+    }
   #else
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_A, PRIO_HIGH );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_HIGH );
+    TQSetPriority( ctx->tq_ctx, NEW_OWNER, PRIO_HIGH );
+    TQSetPriority( ctx->tq_ctx, PREV_OWNER_HELPER_A, PRIO_HIGH );
   #endif
 
-    TQSetPriority( ctx->tq_ctx, TQ_HELPER_B, PRIO_VERY_LOW );
+    TQSetPriority( ctx->tq_ctx, TQ_HELPER_B, PRIO_ULTRA_LOW );
   }
 
   static void Action( Context *ctx )
@@ -488,29 +608,40 @@ test-support: |
 
     ctx->action_performed = true;
     ctx->previous_owner = ctx->tq_ctx->runner_id;
-
-    if (
-      ctx->inherited_priorities_are_dispensible
+    TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_A );
   #if defined(RTEMS_SMP)
-      || ctx->helping_schedules_are_dispensible
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      NEW_OWNER,
+      TQ_EVENT_MUTEX_B_OBTAIN
+    );
   #endif
-    ) {
-      TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_A );
 
-      if ( ctx->inherited_priorities_are_dispensible ) {
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
-      }
+    if ( ctx->inherited_priorities_are_dispensible ) {
+      TQSend(
+        ctx->tq_ctx,
+        PREV_OWNER_HELPER_A,
+        TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_MUTEX_A_RELEASE
+      );
+    }
 
   #if defined(RTEMS_SMP)
-      if ( ctx->helping_schedules_are_dispensible ) {
+    if ( ctx->helping_schedules_are_dispensible ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        PREV_OWNER_HELPER_B,
+        TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_MUTEX_A_RELEASE
+      );
+
+      if ( ctx->gains_new_priority && ctx->gains_new_helping_scheduler ) {
         TQSendAndWaitForExecutionStop(
           ctx->tq_ctx,
-          TQ_BLOCKER_C,
-          TQ_EVENT_MUTEX_A_OBTAIN
+          PREV_OWNER_HELPER_C,
+          TQ_EVENT_MUTEX_A_OBTAIN | TQ_EVENT_MUTEX_A_RELEASE
         );
       }
-  #endif
     }
+  #endif
 
     status = TQEnqueue( ctx->tq_ctx, TQ_NO_WAIT );
     T_eq_int( status, TQConvertStatus( ctx->tq_ctx, STATUS_SUCCESSFUL ) );
@@ -521,23 +652,56 @@ test-support: |
       _SMP_barrier_State_initialize( &state );
 
       T_scheduler_set_event_handler( SchedulerBlock, ctx );
-      TQSend( ctx->tq_ctx, TQ_BLOCKER_A, TQ_EVENT_ENQUEUE );
+      TQSend( ctx->tq_ctx, NEW_OWNER, TQ_EVENT_ENQUEUE );
 
       /* B0 */
       _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
     } else {
       TQSendAndWaitForExecutionStop(
         ctx->tq_ctx,
-        TQ_BLOCKER_A,
+        NEW_OWNER,
         TQ_EVENT_ENQUEUE
       );
     }
 
-    if ( ctx->gains_new_helping_scheduler ) {
+    if ( ctx->gains_new_priority ) {
       TQSend(
         ctx->tq_ctx,
-        TQ_BLOCKER_D,
-        TQ_EVENT_ENQUEUE | TQ_EVENT_HELPER_B_SYNC
+        NEW_OWNER_OLD_PRIORITY,
+        TQ_EVENT_HELPER_B_SYNC | TQ_EVENT_MUTEX_B_OBTAIN
+      );
+      TQSynchronizeRunner();
+      TQSend(
+        ctx->tq_ctx,
+        NEW_OWNER_NEW_PRIORITY,
+        TQ_EVENT_HELPER_B_SYNC | TQ_EVENT_ENQUEUE
+      );
+      TQSynchronizeRunner();
+
+      if ( ctx->gains_new_helping_scheduler ) {
+        TQSetScheduler(
+          ctx->tq_ctx,
+          NEW_OWNER_NEW_HELPER,
+          SCHEDULER_C_ID,
+          PRIO_LOW
+        );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          NEW_OWNER_NEW_HELPER,
+          TQ_EVENT_ENQUEUE
+        );
+      }
+    } else if ( ctx->gains_new_helping_scheduler ) {
+      TQSetScheduler(
+        ctx->tq_ctx,
+        NEW_OWNER_NEW_HELPER,
+        SCHEDULER_A_ID,
+        PRIO_LOW
+      );
+      TQSend(
+        ctx->tq_ctx,
+        NEW_OWNER_NEW_HELPER,
+        TQ_EVENT_HELPER_B_SYNC | TQ_EVENT_ENQUEUE
       );
       TQSynchronizeRunner();
     }
@@ -547,20 +711,20 @@ test-support: |
      * wait state, we would need at least three processors.  Skip it for now.
      */
     if ( ctx->use_helping_scheduler && !ctx->intend_to_block ) {
-      ctx->tq_ctx->busy_wait[ TQ_HELPER_A ] = true;
-      TQSend( ctx->tq_ctx, TQ_HELPER_A, TQ_EVENT_BUSY_WAIT );
+      ctx->tq_ctx->busy_wait[ PREV_OWNER_MOVER ] = true;
+      TQSend( ctx->tq_ctx, PREV_OWNER_MOVER, TQ_EVENT_BUSY_WAIT );
 
       while ( rtems_scheduler_get_processor() != 1 ) {
         /* Wait */
       }
 
-      ctx->tq_ctx->busy_wait[ TQ_HELPER_A ] = false;
+      ctx->tq_ctx->busy_wait[ PREV_OWNER_MOVER ] = false;
     }
   #else
     TQSend(
       ctx->tq_ctx,
-      TQ_BLOCKER_A,
-      TQ_EVENT_ENQUEUE | TQ_EVENT_HELPER_B_SYNC
+      NEW_OWNER,
+      TQ_EVENT_HELPER_B_SYNC | TQ_EVENT_ENQUEUE
     );
     TQSynchronizeRunner();
   #endif
@@ -578,48 +742,48 @@ test-support: |
   static void Cleanup( Context *ctx )
   {
     if ( ctx->suspended ) {
-      ResumeTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+      ResumeTask( ctx->tq_ctx->worker_id[ NEW_OWNER ] );
     }
 
     TQSendAndSynchronizeRunner(
       ctx->tq_ctx,
-      TQ_BLOCKER_A,
+      NEW_OWNER,
       TQ_EVENT_SURRENDER
     );
-    TQWaitForExecutionStop( ctx->tq_ctx, TQ_BLOCKER_A );
+    TQWaitForExecutionStop( ctx->tq_ctx, NEW_OWNER );
 
   #if defined(RTEMS_SMP)
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      NEW_OWNER,
+      TQ_EVENT_MUTEX_B_RELEASE
+    );
+
+    if ( ctx->gains_new_priority ) {
+      TQSendAndSynchronizeRunner(
+        ctx->tq_ctx,
+        NEW_OWNER_OLD_PRIORITY,
+        TQ_EVENT_MUTEX_B_RELEASE
+      );
+      TQSendAndSynchronizeRunner(
+        ctx->tq_ctx,
+        NEW_OWNER_NEW_PRIORITY,
+        TQ_EVENT_SURRENDER
+      );
+    }
+
     if ( ctx->gains_new_helping_scheduler ) {
       TQSendAndSynchronizeRunner(
         ctx->tq_ctx,
-        TQ_BLOCKER_D,
+        NEW_OWNER_NEW_HELPER,
         TQ_EVENT_SURRENDER
       );
     }
   #endif
 
-    if (
-      ctx->inherited_priorities_are_dispensible
-  #if defined(RTEMS_SMP)
-      || ctx->helping_schedules_are_dispensible
-  #endif
-    ) {
-      TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_A );
-
-      if ( ctx->inherited_priorities_are_dispensible ) {
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_RELEASE );
-      }
-
-  #if defined(RTEMS_SMP)
-      if ( ctx->helping_schedules_are_dispensible ) {
-        TQSendAndWaitForExecutionStop(
-          ctx->tq_ctx,
-          TQ_BLOCKER_C,
-          TQ_EVENT_MUTEX_A_RELEASE
-        );
-      }
-  #endif
-    }
+    TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_A );
+    TQMutexObtain( ctx->tq_ctx, TQ_MUTEX_A );
+    TQMutexRelease( ctx->tq_ctx, TQ_MUTEX_A );
 
     T_eq_u32( rtems_scheduler_get_processor(), 0 );
   }
@@ -627,11 +791,15 @@ test-support: |
   static void SetupSticky( Context *ctx )
   {
   #if defined(RTEMS_SMP)
-    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_A, SCHEDULER_B_ID, PRIO_NORMAL );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_B, PRIO_VERY_HIGH );
-    TQSetScheduler( ctx->tq_ctx, TQ_BLOCKER_C, SCHEDULER_B_ID, PRIO_LOW );
-    TQSetPriority( ctx->tq_ctx, TQ_BLOCKER_D, PRIO_VERY_HIGH );
-    TQSetPriority( ctx->tq_ctx, TQ_HELPER_A, PRIO_NORMAL );
+    TQSetScheduler( ctx->tq_ctx, NEW_OWNER, SCHEDULER_B_ID, PRIO_NORMAL );
+    TQSetPriority( ctx->tq_ctx, PREV_OWNER_HELPER_A, PRIO_VERY_HIGH );
+    TQSetScheduler( ctx->tq_ctx,
+      PREV_OWNER_HELPER_B,
+      SCHEDULER_B_ID,
+      PRIO_LOW
+    );
+    TQSetPriority( ctx->tq_ctx, NEW_OWNER_NEW_HELPER, PRIO_VERY_HIGH );
+    TQSetPriority( ctx->tq_ctx, PREV_OWNER, PRIO_NORMAL );
   #endif
   }
 
@@ -639,7 +807,7 @@ test-support: |
   {
   #if defined(RTEMS_SMP)
     ctx->action_performed = true;
-    ctx->previous_owner = ctx->tq_ctx->worker_id[ TQ_HELPER_A ];
+    ctx->previous_owner = ctx->tq_ctx->worker_id[ PREV_OWNER ];
 
     SetSelfPriority( PRIO_LOW );
 
@@ -647,16 +815,16 @@ test-support: |
       ctx->inherited_priorities_are_dispensible ||
       ctx->helping_schedules_are_dispensible
     ) {
-      TQSend( ctx->tq_ctx, TQ_HELPER_A, TQ_EVENT_MUTEX_A_OBTAIN );
+      TQSend( ctx->tq_ctx, PREV_OWNER, TQ_EVENT_MUTEX_A_OBTAIN );
 
       if ( ctx->inherited_priorities_are_dispensible ) {
-        TQSend( ctx->tq_ctx, TQ_BLOCKER_B, TQ_EVENT_MUTEX_A_OBTAIN );
+        TQSend( ctx->tq_ctx, PREV_OWNER_HELPER_A, TQ_EVENT_MUTEX_A_OBTAIN );
       }
 
       if ( ctx->helping_schedules_are_dispensible ) {
         TQSendAndWaitForExecutionStop(
           ctx->tq_ctx,
-          TQ_BLOCKER_C,
+          PREV_OWNER_HELPER_B,
           TQ_EVENT_MUTEX_A_OBTAIN
         );
       }
@@ -667,20 +835,20 @@ test-support: |
      * priority inheritance mutex.  This avoids having to deal with the ceiling
      * priority.
      */
-    ctx->priority_before = TQGetPriority( ctx->tq_ctx, TQ_HELPER_A );
+    ctx->priority_before = TQGetPriority( ctx->tq_ctx, PREV_OWNER );
 
     SetSelfScheduler( SCHEDULER_B_ID, PRIO_ULTRA_HIGH );
-    ctx->tq_ctx->busy_wait[ TQ_HELPER_A ] = true;
+    ctx->tq_ctx->busy_wait[ PREV_OWNER ] = true;
     TQSendAndSynchronizeRunner(
       ctx->tq_ctx,
-      TQ_HELPER_A,
+      PREV_OWNER,
       TQ_EVENT_ENQUEUE | TQ_EVENT_BUSY_WAIT
     );
     SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
 
     TQSendAndWaitForIntendToBlock(
       ctx->tq_ctx,
-      TQ_BLOCKER_A,
+      NEW_OWNER,
       TQ_EVENT_ENQUEUE
     );
 
@@ -689,13 +857,13 @@ test-support: |
     if ( ctx->gains_new_helping_scheduler ) {
       TQSend(
         ctx->tq_ctx,
-        TQ_BLOCKER_D,
+        NEW_OWNER_NEW_HELPER,
         TQ_EVENT_ENQUEUE
       );
-      YieldTask( ctx->tq_ctx->worker_id[ TQ_HELPER_A ] );
-      TQWaitForEventsReceived( ctx->tq_ctx, TQ_BLOCKER_D );
-      TQWaitForIntendToBlock( ctx->tq_ctx, TQ_BLOCKER_D );
-      YieldTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_D ] );
+      YieldTask( ctx->tq_ctx->worker_id[ PREV_OWNER ] );
+      TQWaitForEventsReceived( ctx->tq_ctx, NEW_OWNER_NEW_HELPER );
+      TQWaitForIntendToBlock( ctx->tq_ctx, NEW_OWNER_NEW_HELPER );
+      YieldTask( ctx->tq_ctx->worker_id[ NEW_OWNER_NEW_HELPER ] );
     }
 
     if ( ctx->use_helping_scheduler ) {
@@ -703,22 +871,22 @@ test-support: |
     }
 
     if ( ctx->suspended ) {
-      SuspendTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+      SuspendTask( ctx->tq_ctx->worker_id[ NEW_OWNER ] );
     }
 
-    ctx->tq_ctx->busy_wait[ TQ_HELPER_A ] = false;
+    ctx->tq_ctx->busy_wait[ PREV_OWNER ] = false;
     TQSendAndWaitForExecutionStop(
       ctx->tq_ctx,
-      TQ_HELPER_A,
+      PREV_OWNER,
       TQ_EVENT_SCHEDULER_RECORD_START |
         TQ_EVENT_SURRENDER
     );
     TQSchedulerRecordStop( ctx->tq_ctx );
     T_eq_ptr(
       TQGetOwner( ctx->tq_ctx ),
-      ctx->tq_ctx->worker_tcb[ TQ_BLOCKER_A ]
+      ctx->tq_ctx->worker_tcb[ NEW_OWNER ]
     );
-    ctx->priority_after = TQGetPriority( ctx->tq_ctx, TQ_HELPER_A );
+    ctx->priority_after = TQGetPriority( ctx->tq_ctx, PREV_OWNER );
   #endif
   }
 
@@ -728,19 +896,19 @@ test-support: |
     SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
 
     if ( ctx->suspended ) {
-      ResumeTask( ctx->tq_ctx->worker_id[ TQ_BLOCKER_A ] );
+      ResumeTask( ctx->tq_ctx->worker_id[ NEW_OWNER ] );
     }
 
     TQSendAndSynchronizeRunner(
       ctx->tq_ctx,
-      TQ_BLOCKER_A,
+      NEW_OWNER,
       TQ_EVENT_SURRENDER
     );
 
     if ( ctx->gains_new_helping_scheduler ) {
       TQSendAndSynchronizeRunner(
         ctx->tq_ctx,
-        TQ_BLOCKER_D,
+        NEW_OWNER_NEW_HELPER,
         TQ_EVENT_SURRENDER
       );
     }
@@ -751,14 +919,14 @@ test-support: |
     ) {
       TQSendAndSynchronizeRunner(
         ctx->tq_ctx,
-        TQ_HELPER_A,
+        PREV_OWNER,
         TQ_EVENT_MUTEX_A_RELEASE
       );
 
       if ( ctx->inherited_priorities_are_dispensible ) {
         TQSendAndSynchronizeRunner(
           ctx->tq_ctx,
-          TQ_BLOCKER_B,
+          PREV_OWNER_HELPER_A,
           TQ_EVENT_MUTEX_A_RELEASE
         );
       }
@@ -766,7 +934,7 @@ test-support: |
       if ( ctx->helping_schedules_are_dispensible ) {
         TQSendAndSynchronizeRunner(
           ctx->tq_ctx,
-          TQ_BLOCKER_C,
+          PREV_OWNER_HELPER_B,
           TQ_EVENT_MUTEX_A_RELEASE
         );
       }
@@ -797,6 +965,18 @@ transition-map:
           WaitState: IntendToBlock
       then: 'No'
     - else: 'Yes'
+    PreviousOwnerPriority:
+    - if:
+        pre-conditions:
+          InheritedPriority: Vital
+      then: Drop
+    - else: Nop
+    NewPriority:
+    - if:
+        pre-conditions:
+          NewPriority: Vital
+      then: Raise
+    - else: Nop
     RemoveHelper:
     - if:
         pre-conditions:
@@ -809,78 +989,92 @@ transition-map:
           NewHelping: Dispensable
       then: 'No'
     - else: 'Yes'
-    PreviousOwnerPriority:
-    - if:
-        pre-conditions:
-          InheritedPriority: Vital
-      then: Drop
-    - else: Nop
     Suspended:
     - specified-by: Suspended
   pre-conditions:
-    EnqueueVariant: all
+    SchedulerCount: all
     InheritedPriority: all
     PreviousHelping: all
-    Scheduler: all
+    UsedScheduler: all
+    NewPriority: all
     NewHelping: all
     Suspended: all
     WaitState: all
-- enabled-by: true
-  post-conditions: StickyHasNoBlocking
-  pre-conditions:
-    EnqueueVariant:
-    - Sticky
-    InheritedPriority: all
-    PreviousHelping: all
-    Scheduler: all
-    NewHelping: all
-    Suspended: all
-    WaitState:
-    - Blocked
 - enabled-by:
     not: RTEMS_SMP
-  post-conditions: OnlyOneCPU
+  post-conditions: NeedsSecondCPUForIntentToBlock
   pre-conditions:
-    EnqueueVariant: all
+    SchedulerCount: all
     InheritedPriority: all
     PreviousHelping: all
-    Scheduler: all
+    UsedScheduler: all
+    NewPriority: all
     NewHelping: all
     Suspended: all
     WaitState:
     - IntendToBlock
-- enabled-by:
-    not: RTEMS_SMP
-  post-conditions: OnlyOneCPU
+- enabled-by: true
+  post-conditions: NeedsSecondScheduler
   pre-conditions:
-    EnqueueVariant: all
+    SchedulerCount:
+    - One
     InheritedPriority: all
     PreviousHelping:
     - Vital
-    Scheduler: all
+    UsedScheduler: all
+    NewPriority: all
     NewHelping: all
     Suspended: all
     WaitState: all
-- enabled-by:
-    not: RTEMS_SMP
-  post-conditions: OnlyOneCPU
+- enabled-by: true
+  post-conditions: NeedsSecondScheduler
   pre-conditions:
-    EnqueueVariant: all
+    SchedulerCount:
+    - One
     InheritedPriority: all
     PreviousHelping: all
-    Scheduler:
+    UsedScheduler:
     - Helping
+    NewPriority: all
     NewHelping: all
     Suspended: all
     WaitState: all
-- enabled-by:
-    not: RTEMS_SMP
-  post-conditions: OnlyOneCPU
+- enabled-by: true
+  post-conditions: NeedsSecondScheduler
   pre-conditions:
-    EnqueueVariant: all
+    SchedulerCount:
+    - One
     InheritedPriority: all
     PreviousHelping: all
-    Scheduler: all
+    UsedScheduler: all
+    NewPriority:
+    - Vital
+    NewHelping: all
+    Suspended: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: NeedsSecondScheduler
+  pre-conditions:
+    SchedulerCount:
+    - One
+    InheritedPriority: all
+    PreviousHelping: all
+    UsedScheduler: all
+    NewPriority: all
+    NewHelping:
+    - Vital
+    Suspended: all
+    WaitState: all
+- enabled-by: true
+  post-conditions: NeedsThirdScheduler
+  pre-conditions:
+    SchedulerCount:
+    - Two
+    InheritedPriority: all
+    PreviousHelping: all
+    UsedScheduler: all
+    NewPriority:
+    - Vital
     NewHelping:
     - Vital
     Suspended: all
