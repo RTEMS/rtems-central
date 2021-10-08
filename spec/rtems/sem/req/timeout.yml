@@ -9,18 +9,29 @@ links:
 - role: function-implementation
   uid: /score/tq/req/timeout
 - role: function-implementation
+  uid: /score/tq/req/timeout-mrsp
+- role: function-implementation
   uid: /score/tq/req/timeout-priority-inherit
 post-conditions:
 - name: Action
   states:
   - name: Timeout
     test-code: |
+      ctx->tq_ctx.wait = TQ_WAIT_TIMED;
       ${/score/tq/req/timeout:/test-run}( &ctx->tq_ctx );
     text: |
       The semaphore obtain timeout actions shall be done as specified by
       ${/score/tq/req/timeout}.
+  - name: TimeoutMrsP
+    test-code: |
+      ctx->tq_ctx.wait = TQ_WAIT_TIMED;
+      ${/score/tq/req/timeout-mrsp:/test-run}( &ctx->tq_ctx );
+    text: |
+      The semaphore obtain timeout actions shall be done as specified by
+      ${/score/tq/req/timeout-mrsp}.
   - name: TimeoutPriorityInherit
     test-code: |
+      ctx->tq_ctx.wait = TQ_WAIT_FOREVER;
       ${/score/tq/req/timeout-priority-inherit:/test-run}( &ctx->tq_ctx );
     text: |
       The semaphore obtain timeout actions shall be done as specified by
@@ -133,6 +144,7 @@ test-includes:
 - string.h
 test-local-includes:
 - tr-tq-timeout.h
+- tr-tq-timeout-mrsp.h
 - tr-tq-timeout-priority-inherit.h
 - tx-thread-queue.h
 - tx-support.h
@@ -143,7 +155,6 @@ test-setup:
   brief: null
   code: |
     memset( ctx, 0, sizeof( *ctx ) );
-    ctx->tq_ctx.wait = TQ_WAIT_TIMED;
     ctx->tq_ctx.enqueue_prepare = TQEnqueuePrepareDefault;
     ctx->tq_ctx.enqueue_done = TQEnqueueDoneDefault;
     ctx->tq_ctx.enqueue = TQEnqueueClassicSem;
@@ -167,9 +178,11 @@ transition-map:
     Action:
     - if:
         pre-conditions:
-          Class:
-          - PrioInherit
-          - MrsP
+          Class: MrsP
+      then: TimeoutMrsP
+    - if:
+        pre-conditions:
+          Class: PrioInherit
       then: TimeoutPriorityInherit
     - else: Timeout
   pre-conditions:
