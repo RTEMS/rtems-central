@@ -13,12 +13,14 @@ post-conditions:
     test-code: |
       T_eq_u32( ctx->period->postponed_jobs, ctx->postponed_jobs );
     text: |
-      The count of postponed jobs of the period shall not be modified.
+      The count of ${../glossary/postponedjob:/plural} of the period shall
+      not be modified.
   - name: PlusOne
     test-code: |
       T_eq_u32( ctx->period->postponed_jobs, ctx->postponed_jobs + 1 );
     text: |
-      The count of postponed jobs of the period shall be incremented by one.
+      The count of ${../glossary/postponedjob:/plural} of the period shall
+      be incremented by one.
   test-epilogue: null
   test-prologue: null
 - name: ReleaseJob
@@ -27,14 +29,16 @@ post-conditions:
     test-code: |
       T_eq_u32( ctx->release_job_counter, 1 );
     text: |
-      The owner of the period shall release a job with a deadline equal to the
+      The ${../glossary/ownertask:/term} of the period shall release a
+      ${../glossary/job:/term} with a ${../glossary/deadline:/term} equal to the
       ${/glossary/clock-tick:/term} plus the next period length by the timeout
-      operation. 
+      operation.
   - name: 'No'
     test-code: |
       T_eq_u32( ctx->release_job_counter, 0 );
     text: |
-      The owner of the period shall not release a job by the timeout operation.
+      The ${../glossary/ownertask:/term} of the period shall not release a
+      ${../glossary/job:/term} by the timeout operation.
   test-epilogue: null
   test-prologue: null
 - name: Unblock
@@ -43,12 +47,14 @@ post-conditions:
     test-code: |
       T_eq_u32( ctx->unblock_counter, 1 );
     text: |
-      The owner of the period shall be unblocked by the timeout operation.
+      The ${../glossary/ownertask:/term} of the period shall be unblocked
+      by the timeout operation.
   - name: 'No'
     test-code: |
       T_eq_u32( ctx->unblock_counter, 0 );
     text: |
-      The owner of the period shall not be unblocked by the timeout operation.
+      The ${../glossary/ownertask:/term} of the period shall not be
+      unblocked by the timeout operation.
   test-epilogue: null
   test-prologue: null
 - name: PeriodState
@@ -105,7 +111,8 @@ post-conditions:
         ctx->period->cpu_usage_period_initiated
       );
     text: |
-      The period initiated CPU usage of the owner value shall not be modified.
+      The period initiated CPU usage of the ${../glossary/ownertask:/term}
+      value shall not be modified.
   - name: Set
     test-code: |
       T_ne_i64(
@@ -113,8 +120,10 @@ post-conditions:
         ctx->period->cpu_usage_period_initiated
       );
     text: |
-      The period initiated CPU usage of the owner value shall be set to the CPU
-      usage of the owner at some time point during the timeout operation.
+      The period initiated CPU usage of the ${../glossary/ownertask:/term}
+      value shall be set to the CPU
+      usage of the ${../glossary/ownertask:/term} at some time point during
+      the timeout operation.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -125,18 +134,21 @@ pre-conditions:
       ctx->wait_for_period = true;
       ctx->period_is_other = false;
     text: |
-      While the owner of the period waits for the period.
+      While the ${../glossary/ownertask:/term} of the period waits for
+      the period.
   - name: PeriodOther
     test-code: |
       ctx->wait_for_period = true;
       ctx->period_is_other = true;
     text: |
-      While the owner of the period waits for another period.
+      While the ${../glossary/ownertask:/term} of the period waits for
+      another period.
   - name: Other
     test-code: |
       ctx->wait_for_period = false;
     text: |
-      While the owner of the period does not wait for a period.
+      While the ${../glossary/ownertask:/term} of the period does not
+      wait for a period.
   test-epilogue: null
   test-prologue: null
 - name: WaitState
@@ -145,12 +157,13 @@ pre-conditions:
     test-code: |
       ctx->intend_to_block = false;
     text: |
-      While the owner is in the blocked wait state.
+      While the ${../glossary/ownertask:/term} is in the blocked wait state.
   - name: IntendToBlock
     test-code: |
       ctx->intend_to_block = true;
     text: |
-      While the owner is in the intend to block wait state.
+      While the ${../glossary/ownertask:/term} is in the intend to block
+      wait state.
   test-epilogue: null
   test-prologue: null
 - name: PostponedJobs
@@ -159,18 +172,19 @@ pre-conditions:
     test-code: |
       ctx->postponed_jobs = 0;
     text: |
-      While the count of postponed jobs is equal to zero.
+      While the count of ${../glossary/postponedjob:/plural} is equal to zero.
   - name: NotZeroOrMax
     test-code: |
       ctx->postponed_jobs = 123;
     text: |
-      While the count of postponed jobs is not equal to zero or
-      ${/c/if/uint32_max:/name}.
+      While the count of ${../glossary/postponedjob:/plural} is not equal
+      to zero or ${/c/if/uint32_max:/name}.
   - name: Max
     test-code: |
       ctx->postponed_jobs = UINT32_MAX;
     text: |
-      While the count of postponed jobs is equal to ${/c/if/uint32_max:/name}.
+      While the count of ${../glossary/postponedjob:/plural} is equal
+      to ${/c/if/uint32_max:/name}.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -178,7 +192,8 @@ references: []
 requirement-type: functional
 skip-reasons:
   WaitForPeriodZeroPostponedJobs: |
-    A thread can only wait for a period if its postponed jobs counter is zero.
+    A thread can only wait for a period if its
+    ${../glossary/postponedjob:/plural} counter is zero.
 test-action: |
   SendEvents( ctx->worker_id, EVENT_RESET );
   Yield();
@@ -245,7 +260,8 @@ test-context:
   member: |
     bool intend_to_block
 - brief: |
-    This member contains the postponed jobs count before the timeout.
+    This member contains the ${../glossary/postponedjob:/plural} count
+    before the timeout.
   description: null
   member: |
     uint32_t postponed_jobs
@@ -260,7 +276,7 @@ test-context:
   member: |
     Timestamp_Control cpu_usage_before
 - brief: |
-    This member contains the release job counter.
+    This member contains the release ${../glossary/job:/term} counter.
   description: null
   member: |
     uint32_t release_job_counter

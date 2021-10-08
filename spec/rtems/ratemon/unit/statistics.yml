@@ -57,7 +57,7 @@ test-actions:
   links:
   - name: _Rate_monotonic_Update_statistics
     role: unit-test
-    uid: ../../if/domain
+    uid: ../../../score/if/domain
 test-brief: |
   Unit tests for the Rate Monotonic Manager.
 test-context:
