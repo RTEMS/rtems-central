@@ -285,7 +285,7 @@ skip-reasons:
     Where the system was built with SMP support disabled, exactly one scheduler
     is present in an application using exactly one processor.
   HomeHasRealPriority: |
-    There is always at least the ${/glosssary/priority-real:/term} available
+    There is always at least the ${/glossary/priority-real:/term} available
     for the ${/glossary/scheduler-home:/term}.
   DispensableStopsVital: |
     Vital priority nodes cannot be after a dispensable priority node.
