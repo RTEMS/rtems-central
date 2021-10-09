@@ -109,6 +109,20 @@ pre-conditions:
       ${/glossary/scheduler-helping:/term} of the thread queue owner.
   test-epilogue: null
   test-prologue: null
+- name: OtherScheduler
+  states:
+  - name: 'Yes'
+    test-code: |
+      ctx->other_scheduler = true;
+    text: |
+      While the thread has at least two ${/glossary/scheduler-eligible:/term}.
+  - name: 'No'
+    test-code: |
+      ctx->other_scheduler = false;
+    text: |
+      While the thread has exactly one ${/glossary/scheduler-eligible:/term}.
+  test-epilogue: null
+  test-prologue: null
 - name: Queue
   states:
   - name: Only
@@ -310,6 +324,7 @@ test-action: |
     TQSend( ctx->tq_ctx, OWNER, ctx->owner_obtain | ctx->owner_release );
   }
 
+  PrepareThread( ctx );
   priority = PrepareQueue( ctx, priority );
   priority = PrepareOwner( ctx, priority );
   priority = PrepareOwnerQueue( ctx, priority );
@@ -325,6 +340,7 @@ test-action: |
         TQ_EVENT_ENQUEUE_TIMED
       );
       Tick( ctx );
+      GetPriorities( ctx );
       TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_SURRENDER );
       break;
     case TQ_WAIT_STATE_INTEND_TO_BLOCK:
@@ -334,6 +350,7 @@ test-action: |
         THREAD,
         TQ_EVENT_ENQUEUE_TIMED
       );
+      GetPriorities( ctx );
       TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_SURRENDER );
       break;
     case TQ_WAIT_STATE_READY_AGAIN:
@@ -344,16 +361,7 @@ test-action: |
       );
       T_scheduler_set_event_handler( SchedulerUnblock, ctx );
       TQSend( ctx->tq_ctx, OWNER, TQ_EVENT_SURRENDER );
-
-      ctx->owner_priority_after = GetPriorityByScheduler(
-        ctx->tq_ctx->worker_id[ OWNER ],
-        ctx->scheduler_id
-      );
-      ctx->owner_owner_priority_after = GetPriorityByScheduler(
-        ctx->tq_ctx->worker_id[ OWNER_OWNER ],
-        ctx->scheduler_id
-      );
-
+      GetPriorities( ctx );
       TQSend( ctx->tq_ctx, THREAD, TQ_EVENT_SURRENDER );
       break;
   }
@@ -403,6 +411,19 @@ test-cleanup: |
       TQ_EVENT_MUTEX_A_RELEASE
     );
   }
+
+  if ( ctx->other_scheduler ) {
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      THREAD,
+      TQ_EVENT_MUTEX_D_RELEASE
+    );
+    TQSendAndWaitForExecutionStop(
+      ctx->tq_ctx,
+      THREAD_HELPER,
+      TQ_EVENT_MUTEX_D_RELEASE
+    );
+  }
 test-context:
 - brief: |
     This member contains the call within ISR request.
@@ -414,6 +435,12 @@ test-context:
   description: null
   member: |
     rtems_id scheduler_id
+- brief: |
+    If this member is true, then the thread shall have at least two
+    ${/glossary/scheduler-eligible:/term}.
+  description: null
+  member: |
+    bool other_scheduler
 - brief: |
     This member specifies the queue node kind.
   description: null
@@ -547,6 +574,8 @@ test-support: |
 
   #define THREAD TQ_BLOCKER_A
 
+  #define THREAD_HELPER TQ_HELPER_B
+
   #define QUEUE_HELPER TQ_BLOCKER_B
 
   #define OWNER TQ_BLOCKER_C
@@ -584,15 +613,6 @@ test-support: |
     TQSchedulerRecordStart( ctx->tq_ctx );
     FinalClockTick();
     TQSchedulerRecordStop( ctx->tq_ctx );
-
-    ctx->owner_priority_after = GetPriorityByScheduler(
-      ctx->tq_ctx->worker_id[ OWNER ],
-      ctx->scheduler_id
-    );
-    ctx->owner_owner_priority_after = GetPriorityByScheduler(
-      ctx->tq_ctx->worker_id[ OWNER_OWNER ],
-      ctx->scheduler_id
-    );
   }
 
   static void SchedulerBlock(
@@ -658,6 +678,49 @@ test-support: |
     }
   }
 
+  static void GetPriorities( Context *ctx )
+  {
+    ctx->owner_priority_after = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ OWNER ],
+      ctx->scheduler_id
+    );
+    ctx->owner_owner_priority_after = GetPriorityByScheduler(
+      ctx->tq_ctx->worker_id[ OWNER_OWNER ],
+      ctx->scheduler_id
+    );
+  }
+
+  static void PrepareThread( const Context *ctx )
+  {
+    if ( ctx->other_scheduler ) {
+      rtems_id other_scheduler_id;
+
+      if ( ctx->scheduler_id == SCHEDULER_A_ID ) {
+        other_scheduler_id = SCHEDULER_B_ID;
+      } else {
+        other_scheduler_id = SCHEDULER_B_ID;
+      }
+
+      TQSetScheduler(
+        ctx->tq_ctx,
+        THREAD_HELPER,
+        other_scheduler_id,
+        PRIO_NEARLY_IDLE - 1
+      );
+
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD,
+        TQ_EVENT_MUTEX_D_OBTAIN
+      );
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD_HELPER,
+        TQ_EVENT_MUTEX_D_OBTAIN
+      );
+    }
+  }
+
   static rtems_task_priority PrepareQueue(
     Context            *ctx,
     rtems_task_priority priority
@@ -675,7 +738,11 @@ test-support: |
           ctx->scheduler_id,
           priority + 1
         );
-        TQSend( ctx->tq_ctx, QUEUE_HELPER, TQ_EVENT_ENQUEUE );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          QUEUE_HELPER,
+          TQ_EVENT_ENQUEUE
+        );
         break;
       case TQ_NODE_DISPENSABLE:
         ctx->queue_helper_surrender = true;
@@ -686,7 +753,11 @@ test-support: |
           ctx->scheduler_id,
           priority
         );
-        TQSend( ctx->tq_ctx, QUEUE_HELPER, TQ_EVENT_ENQUEUE );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          QUEUE_HELPER,
+          TQ_EVENT_ENQUEUE
+        );
         break;
     }
 
@@ -905,6 +976,7 @@ transition-map:
     OwnerOwnerPriority: N/A
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -947,6 +1019,7 @@ transition-map:
     OwnerOwnerPriority: N/A
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1012,6 +1085,7 @@ transition-map:
     - else: Nop
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1023,6 +1097,7 @@ transition-map:
   post-conditions: ReadyAgainNeedsSurrender
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1037,6 +1112,7 @@ transition-map:
   post-conditions: ReadyAgainNeedsSurrender
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue:
     - Dispensable
     OwnerPriority: all
@@ -1050,6 +1126,7 @@ transition-map:
   pre-conditions:
     Scheduler:
     - Home
+    OtherScheduler: all
     Queue: all
     OwnerPriority:
     - Only
@@ -1062,6 +1139,7 @@ transition-map:
   pre-conditions:
     Scheduler:
     - Home
+    OtherScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState: all
@@ -1073,6 +1151,7 @@ transition-map:
   post-conditions: DispensableStopsVital
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue:
     - Dispensable
     OwnerPriority:
@@ -1085,6 +1164,7 @@ transition-map:
   post-conditions: DispensableStopsVital
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue:
     - Dispensable
     OwnerPriority: all
@@ -1097,6 +1177,7 @@ transition-map:
   post-conditions: DispensableStopsVital
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority:
     - Dispensable
@@ -1109,6 +1190,7 @@ transition-map:
   post-conditions: DispensableStopsVital
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue:
     - Dispensable
     OwnerPriority: all
@@ -1121,6 +1203,7 @@ transition-map:
   post-conditions: DispensableStopsVital
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority:
     - Dispensable
@@ -1133,6 +1216,7 @@ transition-map:
   post-conditions: DispensableStopsVital
   pre-conditions:
     Scheduler: all
+    OtherScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState: all
@@ -1147,6 +1231,20 @@ transition-map:
   pre-conditions:
     Scheduler:
     - Helping
+    OtherScheduler: all
+    Queue: all
+    OwnerPriority: all
+    OwnerState: all
+    OwnerQueue: all
+    OwnerOwnerPriority: all
+    WaitState: all
+- enabled-by:
+    not: RTEMS_SMP
+  post-conditions: OnlyOneCPU
+  pre-conditions:
+    Scheduler: all
+    OtherScheduler:
+    - 'Yes'
     Queue: all
     OwnerPriority: all
     OwnerState: all
