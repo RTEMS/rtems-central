@@ -25,6 +25,8 @@ test-actions:
       Check that we have a non-zero CPU usage.  Reset the CPU usage.  Check
       that it was cleared to zero.
     code: |
+      TimecounterTick();
+
       _Thread_Get_CPU_time_used( self, &timestamp );
       T_gt_i64( timestamp, 0 );
 
