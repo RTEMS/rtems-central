@@ -5,35 +5,53 @@ enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
-    Create two worker threads and a mutex.  Use the mutex and the worker to do
-    a thread priority change in parallel with a thread queue extraction.
+    Create two or three worker threads and a mutex.  Use the mutex and the
+    worker to do a thread priority change in parallel with a thread queue
+    extraction.
   action-code: |
     _SMP_barrier_Control_initialize( &ctx->barrier );
     _SMP_barrier_State_initialize( &ctx->barrier_state );
     WrapThreadQueueInitialize( &ctx->wrap, Extract, ctx );
 
-    ctx->mutex_a_id = CreateMutex();
-    ctx->thread_queue = GetMutexThreadQueue( ctx->mutex_a_id );
+    if ( rtems_scheduler_get_processor_maximum() > 2 ) {
+      ctx->used_cpus = 3;
+    } else {
+      ctx->used_cpus = 2;
+    }
   checks:
   - brief: |
-      Create and start worker A on a second processor.  Let it obtain the
-      mutex.
+      Create a mutex and let the runner obtain it.
+    code: |
+      ctx->mutex_a_id = CreateMutexNoProtocol();
+      ctx->thread_queue = GetMutexThreadQueue( ctx->mutex_a_id );
+      ObtainMutex( ctx->mutex_a_id );
+    links: []
+  - brief: |
+      Create and start worker A on a second processor.
+      mutex.  Let it wait on the barrier.
     code: |
       ctx->worker_a_id = CreateTask( "WRKA", PRIO_NORMAL );
       SetScheduler( ctx->worker_a_id, SCHEDULER_B_ID, PRIO_NORMAL );
-      StartTask( ctx->worker_a_id, PriorityChangeWorkerA, ctx );
-
-      /* PC0 */
-      _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, 2 );
+      StartTask( ctx->worker_a_id, PriorityChangeWorker, ctx );
+    links: []
+  - brief: |
+      If there are more than two processors, then create and start also
+      worker C.  Let it wait on the barrier.
+    code: |
+      if ( ctx->used_cpus > 2 ) {
+        ctx->worker_c_id = CreateTask( "WRKC", PRIO_NORMAL );
+        SetScheduler( ctx->worker_c_id, SCHEDULER_C_ID, PRIO_NORMAL );
+        StartTask( ctx->worker_c_id, PriorityChangeWorker, ctx );
+      }
     links: []
   - brief: |
       Create and start worker B.  Let it try to obtain the mutex which is owned
-      by worker A.  Delete worker B to extract it from the thread queue.  Wrap
-      the thread queue extract operation to do a parallel thread priority
-      change carried out by worker A.
+      by the runner.  Delete worker B to extract it from the thread queue.
+      Wrap the thread queue extract operation to do a parallel thread priority
+      change carried out by worker A (and maybe C).
     code: |
       ctx->worker_b_id = CreateTask( "WRKB", PRIO_HIGH );
-      StartTask( ctx->worker_b_id, PriorityChangeWorkerB, ctx );
+      StartTask( ctx->worker_b_id, MutexObtainWorker, ctx );
       WrapThreadQueueExtractDirect( &ctx->wrap, GetThread( ctx->worker_b_id ) );
       DeleteTask( ctx->worker_b_id );
     links:
@@ -44,11 +62,18 @@ test-actions:
   - brief: |
       Clean up all used resources.
     code: |
-      /* PC2 */
-      _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, 2 );
+      /* PC1 */
+      _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, ctx->used_cpus );
 
       WaitForExecutionStop( ctx->worker_a_id );
       DeleteTask( ctx->worker_a_id );
+
+      if ( ctx->used_cpus > 2 ) {
+        WaitForExecutionStop( ctx->worker_c_id );
+        DeleteTask( ctx->worker_c_id );
+      }
+
+      ReleaseMutex( ctx->mutex_a_id );
       DeleteMutex( ctx->mutex_a_id );
       WrapThreadQueueDestroy( &ctx->wrap );
     links: []
@@ -226,6 +251,11 @@ test-context:
   member: |
     rtems_id mutex_d_id
 - brief: |
+    This member contains the count of processors used by the test.
+  description: null
+  member: |
+    uint32_t used_cpus
+- brief: |
     This member contains the thread queue of the mutex.
   description: null
   member: |
@@ -269,26 +299,27 @@ test-support: |
 
     ctx = arg;
 
-    /* PC1 */
-    _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, 2 );
+    /* PC0 */
+    _SMP_barrier_Wait( &ctx->barrier, &ctx->barrier_state, ctx->used_cpus );
 
     /*
-     * Ensure that worker A acquired the thread wait lock of worker B.
+     * Ensure that worker A (and maybe C) acquired the thread wait lock of
+     * worker B.
      */
-    TicketLockWaitForOthers( &ctx->thread_queue->Lock, 1 );
+    TicketLockWaitForOthers( &ctx->thread_queue->Lock, ctx->used_cpus - 1 );
 
     /*
      * Continue with the thread queue extraction.  The thread wait lock of
      * worker B will be changed back to the default thread wait lock.  This
-     * will cause worker A to release the thread queue lock and acquire the
-     * default thread wait lock of worker B instead to carry out the priority
-     * change.
+     * will cause worker A (and maybe C) to release the thread queue lock and
+     * acquire the default thread wait lock of worker B instead to carry out
+     * the priority change.
      *
      * See also _Thread_Wait_acquire_critical().
      */
   }
 
-  static void PriorityChangeWorkerA( rtems_task_argument arg )
+  static void PriorityChangeWorker( rtems_task_argument arg )
   {
     Context          *ctx;
     SMP_barrier_State state;
@@ -296,24 +327,18 @@ test-support: |
     ctx = (Context *) arg;
     _SMP_barrier_State_initialize( &state );
 
-    ObtainMutex( ctx->mutex_a_id );
-
     /* PC0 */
-    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
-
-    /* PC1 */
-    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+    _SMP_barrier_Wait( &ctx->barrier, &state, ctx->used_cpus );
 
     SetPriority( ctx->worker_b_id, PRIO_VERY_HIGH );
-    ReleaseMutex( ctx->mutex_a_id );
 
-    /* PC2 */
-    _SMP_barrier_Wait( &ctx->barrier, &state, 2 );
+    /* PC1 */
+    _SMP_barrier_Wait( &ctx->barrier, &state, ctx->used_cpus );
 
     (void) ReceiveAnyEvents();
   }
 
-  static void PriorityChangeWorkerB( rtems_task_argument arg )
+  static void MutexObtainWorker( rtems_task_argument arg )
   {
     Context *ctx;
 
