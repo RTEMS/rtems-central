@@ -22,6 +22,38 @@ links:
 - role: placement-order
   uid: get-tod-timeval
 - role: placement-order
+  uid: get-realtime
+- role: placement-order
+  uid: get-realtime-bintime
+- role: placement-order
+  uid: get-realtime-timeval
+- role: placement-order
+  uid: get-realtime-coarse
+- role: placement-order
+  uid: get-realtime-coarse-bintime
+- role: placement-order
+  uid: get-realtime-coarse-timeval
+- role: placement-order
+  uid: get-monotonic
+- role: placement-order
+  uid: get-monotonic-bintime
+- role: placement-order
+  uid: get-monotonic-sbintime
+- role: placement-order
+  uid: get-monotonic-timeval
+- role: placement-order
+  uid: get-monotonic-coarse
+- role: placement-order
+  uid: get-monotonic-coarse-bintime
+- role: placement-order
+  uid: get-monotonic-coarse-timeval
+- role: placement-order
+  uid: get-boot-time
+- role: placement-order
+  uid: get-boot-time-bintime
+- role: placement-order
+  uid: get-boot-time-timeval
+- role: placement-order
   uid: get-seconds-since-epoch
 - role: placement-order
   uid: get-ticks-per-second
