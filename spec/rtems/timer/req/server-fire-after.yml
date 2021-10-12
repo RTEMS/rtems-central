@@ -360,6 +360,26 @@ pre-conditions:
       ${../glossary/state:/term}.
   - name: Pending
     test-code: |
+      rtems_status_code status;
+      if ( ctx->pre_cond_contex == PRE_SERVER ) {
+        /*
+         * This call to rtems_timer_fire_after() serves to reach branch coverage
+         * in an if-statement which only serves performance optimization.
+         *
+         * cpukit/rtems/src/timerserver.c:70 else-branch was not reached:
+         * if ( wakeup ) {
+         *   (void) rtems_event_system_send( ts->server_id, RTEMS_EVENT_SYSTEM_SERVER );
+         * }
+         */
+        status = rtems_timer_server_fire_after(
+          ctx->timer_cover_id,
+          SCHEDULE_VERY_SOON,
+          TimerServiceRoutineCover,
+          ctx
+        );
+        T_rsc_success( status );
+      }
+
       T_rsc_success( rtems_task_suspend( GetTimerServerTaskId() ) );
       TriggerTimer( ctx );
       T_eq_int( ctx->invocations, 0 );
@@ -395,6 +415,7 @@ test-action: |
   rtems_task_resume( GetTimerServerTaskId() );
 test-brief: null
 test-cleanup: |
+  T_rsc_success( rtems_timer_delete( ctx->timer_cover_id ) );
   T_rsc_success( rtems_timer_delete( ctx->timer_id ) );
   DeleteTimerServer();
 test-context:
@@ -403,6 +424,13 @@ test-context:
   description: null
   member: |
     rtems_id timer_id
+- brief: |
+    This member contains a valid id of a second timer.
+  description: |
+    This timer is used reach branch coverage in an if-statement which only
+    serves performance optimization.
+  member: |
+    rtems_id timer_cover_id
 - brief: |
     This member specifies the ${../if/server-fire-after:/params[0]/name} parameter
     for the action.
@@ -495,10 +523,11 @@ test-context-support: |
   } PreConditionContext;
 
   typedef enum {
-    SCHEDULE_NONE  = 0,
-    SCHEDULE_SOON  = 1,
-    SCHEDULE_LATER = 2,
-    SCHEDULE_MAX   = 5
+    SCHEDULE_NONE       = 0,
+    SCHEDULE_VERY_SOON  = 1,
+    SCHEDULE_SOON       = 2,
+    SCHEDULE_LATER      = 3,
+    SCHEDULE_MAX        = 5
   } Scheduling_Ticks;
 test-description: null
 test-header: null
@@ -511,6 +540,12 @@ test-prepare: |
   status = rtems_timer_create(
     rtems_build_name( 'T', 'I', 'M', 'E' ),
     &ctx->timer_id
+  );
+  T_rsc_success( status );
+
+  status = rtems_timer_create(
+    rtems_build_name( 'C', 'O', 'V', 'R' ),
+    &ctx->timer_cover_id
   );
   T_rsc_success( status );
 
@@ -553,6 +588,19 @@ test-support: |
     RtemsTimerReqServerFireAfter_Context *ctx = user_data;
     ++( ctx->invocations );
     ctx->routine_user_data = user_data;
+  }
+
+  /*
+   * This service routine is used reach branch coverage in an if-statement
+   * which only serves performance optimization.
+   */
+  RTEMS_INLINE_ROUTINE void TimerServiceRoutineCover(
+    rtems_id timer_cover_id,
+    void *user_data
+  )
+  {
+    (void) timer_cover_id;
+    (void) user_data;
   }
 test-target: testsuites/validation/tc-timer-server-fire-after.c
 test-teardown:
