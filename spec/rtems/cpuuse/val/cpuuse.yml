@@ -10,7 +10,8 @@ test-actions:
     rtems_id          id;
     Thread_Control   *self;
     Thread_Control   *other;
-    Timestamp_Control timestamp;
+    Timestamp_Control cpu_usage_self;
+    Timestamp_Control cpu_usage_other;
 
     id = CreateTask( "WORK", GetSelfPriority() );
     StartTask( id, Worker, NULL );
@@ -27,20 +28,23 @@ test-actions:
     code: |
       TimecounterTick();
 
-      _Thread_Get_CPU_time_used( self, &timestamp );
-      T_gt_i64( timestamp, 0 );
+      cpu_usage_self = _Thread_Get_CPU_time_used( self );
+      cpu_usage_other = _Thread_Get_CPU_time_used( other );
 
-      _Thread_Get_CPU_time_used( other, &timestamp );
-      T_gt_i64( timestamp, 0 );
+      T_gt_i64( _Thread_Get_CPU_time_used_after_last_reset( self ), 0 );
+      T_gt_i64( _Thread_Get_CPU_time_used_after_last_reset( other ), 0 );
 
       rtems_cpu_usage_reset();
 
-      /* Our CPU usage is now exactly one tick of the software timecounter */
-      _Thread_Get_CPU_time_used( self, &timestamp );
-      T_eq_i64( timestamp, 4295 );
+      /*
+       * Our CPU usage after the last reset is now exactly one tick of the
+       * software timecounter.
+       */
+      T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( self ), 4295 );
+      T_eq_i64( _Thread_Get_CPU_time_used( self ), cpu_usage_self + 30065 );
 
-      _Thread_Get_CPU_time_used( other, &timestamp );
-      T_eq_i64( timestamp, 0 );
+      T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( other ), 0 );
+      T_eq_i64( _Thread_Get_CPU_time_used( other ), cpu_usage_other );
     links:
     - role: validation
       uid: ../req/reset
