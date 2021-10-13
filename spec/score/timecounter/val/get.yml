@@ -29,7 +29,7 @@ test-actions:
       provoke a change in the timehand generation number.
     code: |
       config.action = ActionRealtime;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -40,7 +40,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionRealtimeBintime;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -51,7 +51,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionRealtimeTimeval;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -62,7 +62,7 @@ test-actions:
       provoke a change in the timehand generation number.
     code: |
       config.action = ActionMonotonic;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -73,7 +73,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionMonotonicBintime;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -84,7 +84,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionMonotonicSbintime;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -95,7 +95,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionMonotonicTimeval;
-      InterruptTest( &config, tc, 1 );
+      T_true( InterruptTest( &config, tc, 1 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -111,7 +111,7 @@ test-actions:
       provoke a change in the timehand generation number.
     code: |
       config.action = ActionCoarseRealtime;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -122,7 +122,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionCoarseRealtimeBintime;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -133,7 +133,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionCoarseRealtimeTimeval;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -144,7 +144,7 @@ test-actions:
       provoke a change in the timehand generation number.
     code: |
       config.action = ActionCoarseMonotonic;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -155,7 +155,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionCoarseMonotonicBintime;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -166,7 +166,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionCoarseMonotonicTimeval;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -177,7 +177,7 @@ test-actions:
       provoke a change in the timehand generation number.
     code: |
       config.action = ActionBootTime;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -188,7 +188,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionBootTimeBintime;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -199,7 +199,7 @@ test-actions:
       directive to provoke a change in the timehand generation number.
     code: |
       config.action = ActionBootTimeTimeval;
-      InterruptTest( &config, tc, 10 );
+      T_true( InterruptTest( &config, tc, 10 ) );
     links:
     - role: validation
       uid: ../req/get-non-blocking
@@ -498,20 +498,25 @@ test-support: |
     return T_INTERRUPT_TEST_LATE;
   }
 
-  static void InterruptTest(
+  static bool InterruptTest(
     const T_interrupt_test_config *config,
     void                          *arg,
     uint32_t                       iterations
   )
   {
     uint32_t i;
+    bool     ok;
+
+    ok = false;
 
     for ( i = 0; i < iterations; ++i ) {
       T_interrupt_test_state test_state;
 
       test_state = T_interrupt_test( config, arg );
-      T_eq_int( test_state, T_INTERRUPT_TEST_DONE );
+      ok = ok || test_state == T_INTERRUPT_TEST_DONE;
     }
+
+    return ok;
   }
 test-target: testsuites/validation/tc-timecounter-get.c
 test-teardown: null
