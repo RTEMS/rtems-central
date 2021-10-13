@@ -93,7 +93,7 @@ post-conditions:
   test-epilogue: null
   test-prologue: null
 pre-conditions:
-- name: Scheduler
+- name: HomeScheduler
   states:
   - name: Home
     test-code: |
@@ -109,18 +109,18 @@ pre-conditions:
       ${/glossary/scheduler-helping:/term} of the thread queue owner.
   test-epilogue: null
   test-prologue: null
-- name: OtherScheduler
+- name: EligibleScheduler
   states:
-  - name: 'Yes'
-    test-code: |
-      ctx->other_scheduler = true;
-    text: |
-      While the thread has at least two ${/glossary/scheduler-eligible:/term}.
-  - name: 'No'
+  - name: One
     test-code: |
       ctx->other_scheduler = false;
     text: |
       While the thread has exactly one ${/glossary/scheduler-eligible:/term}.
+  - name: More
+    test-code: |
+      ctx->other_scheduler = true;
+    text: |
+      While the thread has at least two ${/glossary/scheduler-eligible:/term}.
   test-epilogue: null
   test-prologue: null
 - name: Queue
@@ -420,9 +420,17 @@ test-cleanup: |
     );
     TQSendAndWaitForExecutionStop(
       ctx->tq_ctx,
-      THREAD_HELPER,
+      THREAD_HELPER_A,
       TQ_EVENT_MUTEX_D_RELEASE
     );
+
+    if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+      TQSendAndWaitForExecutionStop(
+        ctx->tq_ctx,
+        THREAD_HELPER_B,
+        TQ_EVENT_MUTEX_D_RELEASE
+      );
+    }
   }
 test-context:
 - brief: |
@@ -574,7 +582,9 @@ test-support: |
 
   #define THREAD TQ_BLOCKER_A
 
-  #define THREAD_HELPER TQ_HELPER_B
+  #define THREAD_HELPER_A TQ_HELPER_B
+
+  #define THREAD_HELPER_B TQ_HELPER_C
 
   #define QUEUE_HELPER TQ_BLOCKER_B
 
@@ -701,23 +711,37 @@ test-support: |
         other_scheduler_id = SCHEDULER_B_ID;
       }
 
-      TQSetScheduler(
-        ctx->tq_ctx,
-        THREAD_HELPER,
-        other_scheduler_id,
-        PRIO_NEARLY_IDLE - 1
-      );
-
       TQSendAndWaitForExecutionStop(
         ctx->tq_ctx,
         THREAD,
         TQ_EVENT_MUTEX_D_OBTAIN
       );
+
+      TQSetScheduler(
+        ctx->tq_ctx,
+        THREAD_HELPER_A,
+        other_scheduler_id,
+        PRIO_NEARLY_IDLE - 1
+      );
       TQSendAndWaitForExecutionStop(
         ctx->tq_ctx,
-        THREAD_HELPER,
+        THREAD_HELPER_A,
         TQ_EVENT_MUTEX_D_OBTAIN
       );
+
+      if ( rtems_scheduler_get_processor_maximum() >= 3 ) {
+        TQSetScheduler(
+          ctx->tq_ctx,
+          THREAD_HELPER_B,
+          SCHEDULER_C_ID,
+          PRIO_NORMAL
+        );
+        TQSendAndWaitForExecutionStop(
+          ctx->tq_ctx,
+          THREAD_HELPER_B,
+          TQ_EVENT_MUTEX_D_OBTAIN
+        );
+      }
     }
   }
 
@@ -975,8 +999,8 @@ transition-map:
     - else: Nop
     OwnerOwnerPriority: N/A
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1018,8 +1042,8 @@ transition-map:
     - else: Nop
     OwnerOwnerPriority: N/A
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1084,8 +1108,8 @@ transition-map:
       then: Lower
     - else: Nop
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1096,8 +1120,8 @@ transition-map:
 - enabled-by: true
   post-conditions: ReadyAgainNeedsSurrender
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState:
@@ -1111,8 +1135,8 @@ transition-map:
 - enabled-by: true
   post-conditions: ReadyAgainNeedsSurrender
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue:
     - Dispensable
     OwnerPriority: all
@@ -1124,9 +1148,9 @@ transition-map:
 - enabled-by: true
   post-conditions: HomeHasRealPriority
   pre-conditions:
-    Scheduler:
+    HomeScheduler:
     - Home
-    OtherScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority:
     - Only
@@ -1137,9 +1161,9 @@ transition-map:
 - enabled-by: true
   post-conditions: HomeHasRealPriority
   pre-conditions:
-    Scheduler:
+    HomeScheduler:
     - Home
-    OtherScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState: all
@@ -1150,8 +1174,8 @@ transition-map:
 - enabled-by: true
   post-conditions: DispensableStopsVital
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue:
     - Dispensable
     OwnerPriority:
@@ -1163,8 +1187,8 @@ transition-map:
 - enabled-by: true
   post-conditions: DispensableStopsVital
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue:
     - Dispensable
     OwnerPriority: all
@@ -1176,8 +1200,8 @@ transition-map:
 - enabled-by: true
   post-conditions: DispensableStopsVital
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority:
     - Dispensable
@@ -1189,8 +1213,8 @@ transition-map:
 - enabled-by: true
   post-conditions: DispensableStopsVital
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue:
     - Dispensable
     OwnerPriority: all
@@ -1202,8 +1226,8 @@ transition-map:
 - enabled-by: true
   post-conditions: DispensableStopsVital
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority:
     - Dispensable
@@ -1215,8 +1239,8 @@ transition-map:
 - enabled-by: true
   post-conditions: DispensableStopsVital
   pre-conditions:
-    Scheduler: all
-    OtherScheduler: all
+    HomeScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState: all
@@ -1229,9 +1253,9 @@ transition-map:
     not: RTEMS_SMP
   post-conditions: OnlyOneCPU
   pre-conditions:
-    Scheduler:
+    HomeScheduler:
     - Helping
-    OtherScheduler: all
+    EligibleScheduler: all
     Queue: all
     OwnerPriority: all
     OwnerState: all
@@ -1242,9 +1266,9 @@ transition-map:
     not: RTEMS_SMP
   post-conditions: OnlyOneCPU
   pre-conditions:
-    Scheduler: all
-    OtherScheduler:
-    - 'Yes'
+    HomeScheduler: all
+    EligibleScheduler:
+    - More
     Queue: all
     OwnerPriority: all
     OwnerState: all
