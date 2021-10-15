@@ -41,7 +41,10 @@ test-actions:
        * software timecounter.
        */
       T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( self ), 4295 );
-      T_eq_i64( _Thread_Get_CPU_time_used( self ), cpu_usage_self + 30065 );
+      T_eq_i64(
+        _Thread_Get_CPU_time_used( self ),
+        cpu_usage_self + 12885 + rtems_scheduler_get_processor_maximum() * 4295
+      );
 
       T_eq_i64( _Thread_Get_CPU_time_used_after_last_reset( other ), 0 );
       T_eq_i64( _Thread_Get_CPU_time_used( other ), cpu_usage_other );
