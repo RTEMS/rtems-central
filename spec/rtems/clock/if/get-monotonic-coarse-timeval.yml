@@ -33,7 +33,7 @@ notes: |
   The directive does not access a device to get the time.  It uses a recent
   snapshot provided by the ${/glossary/clock-driver:/term}.  Alternatively, the
   ${get-monotonic-timeval:/name} directive may be used to get the time with
-  higher presision and higher runtime overhead.
+  higher precision and higher runtime overhead.
 
   See ${get-monotonic-coarse:/name} and ${get-monotonic-coarse-bintime:/name}
   to get the time in alternative formats.

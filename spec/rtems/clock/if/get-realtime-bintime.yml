@@ -33,7 +33,7 @@ notes: |
   ${/glossary/clock-driver:/term} to get the time in the highest precision
   available to the system.  Alternatively, the
   ${get-realtime-coarse-bintime:/name} directive may be used to get the time
-  with less presision and less runtime overhead.
+  with less precision and less runtime overhead.
 
   See ${get-realtime:/name} and ${get-realtime-timeval:/name} to get the time
   in alternative formats.

@@ -33,7 +33,7 @@ notes: |
   The directive does not access a device to get the time.  It uses a recent
   snapshot provided by the ${/glossary/clock-driver:/term}.  Alternatively, the
   ${get-realtime:/name} directive may be used to get the time with
-  higher presision and higher runtime overhead.
+  higher precision and higher runtime overhead.
 
   See ${get-realtime-coarse-bintime:/name} and
   ${get-realtime-coarse-timeval:/name} to get the time in alternative formats.
