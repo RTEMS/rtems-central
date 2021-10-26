@@ -46,7 +46,9 @@ links:
 - role: constraint
   uid: /constraint/directive-creator-only
 name: rtems_rate_monotonic_period
-notes: null
+notes: |
+  Resetting the processor usage time of tasks has no impact on the period
+  status and statistics.
 params:
 - description: |
     is the rate monotonic period identifier.
