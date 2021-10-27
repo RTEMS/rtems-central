@@ -278,9 +278,10 @@ test-support: |
     if ( has_installed_entries ) {
       /*
        * We cannot test this vector thoroughly, since it is used by a device
-       * driver.
+       * driver.  It may be pending or not.  For example in SMP configurations,
+       * it may be pending while being serviced right now on another processor.
        */
-      T_false( IsPending( ctx ) );
+      (void) IsPending( ctx );
     } else if ( !attr->is_maskable ) {
       /* We can only safely test maskable interrupts */
       T_false( IsPending( ctx ) );
