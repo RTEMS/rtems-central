@@ -908,7 +908,7 @@ test-actions:
       T_eq_u64( bt.frac, 1219770712064 );
     links:
     - role: validation
-      uid: ../req/ntp-second
+      uid: ../req/ntp-seconds
   - brief: |
       Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
       Check that the NTP update second handler is decremented the
@@ -924,7 +924,7 @@ test-actions:
       T_eq_u64( bt.frac, 1219770712064 );
     links:
     - role: validation
-      uid: ../req/ntp-second
+      uid: ../req/ntp-seconds
   - brief: |
       Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
       Check that the NTP update second handler increased the timecounter
