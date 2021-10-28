@@ -5,6 +5,21 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
+    Call the simple timecounter tick service with a zero delta and offset.
+    This will lead to an overflow to zero of the timehand generation.  It shall
+    not change the initial clock values.
+  action-code: |
+    ISR_lock_Context lock_context;
+
+    _Timecounter_Acquire( &lock_context );
+    _Timecounter_Tick_simple( 0, 0, &lock_context );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/tick-simple-delta
+  - role: validation
+    uid: ../req/tick-simple-offset
+- action-brief: |
     Call the directives to get the initial value of
     ${/glossary/clock-realtime:/term} and the initial boot time.
   action-code: |
@@ -780,6 +795,36 @@ test-actions:
   links:
   - role: validation
     uid: ../req/tick-large-delta
+- action-brief: |
+    Call the simple timecounter tick service with non-zero delta and offset
+    parameter values so that exactly one second passed.
+  action-code: |
+    ISR_lock_Context lock_context;
+    Timecounter     *tc;
+    struct bintime   bt;
+
+    tc = &high_quality_high_frequency;
+
+    _Timecounter_Acquire( &lock_context );
+    _Timecounter_Tick_simple(
+      tc->base.tc_frequency / 2,
+      GetCounter( tc ) - tc->base.tc_frequency / 2,
+      &lock_context
+    );
+  checks:
+  - brief: |
+      Check that exactly one second passed due to the simple clock tick
+      service.
+    code: |
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993603 );
+      T_eq_u64( bt.frac, 103079215104 );
+    links:
+    - role: validation
+      uid: ../req/tick-simple-delta
+    - role: validation
+      uid: ../req/tick-simple-offset
+  links: []
 test-brief: |
   Tests timecounter installation related functions and directives of the Clock
   Manager.
