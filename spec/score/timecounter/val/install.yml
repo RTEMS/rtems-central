@@ -843,6 +843,23 @@ test-actions:
     T_eq_u64( bt.frac, 1219770712064 );
   checks:
   - brief: |
+      Let the seconds value of ${/glossary/clock-realtime:/term} not change.
+      Check that the NTP update second handler is not called.
+    code: |
+      _Timecounter_Set_NTP_update_second( NtpUpdateCounter );
+      SetCounter( tc, tc->base.tc_frequency / 2 );
+      CallTimecounterTick();
+      _Timecounter_Set_NTP_update_second( NULL );
+
+      T_eq_u32( ntp_counter, 0 );
+
+      rtems_clock_get_realtime_bintime( &bt );
+      T_eq_i64( bt.sec, 567993603 );
+      T_eq_u64( bt.frac, 9223373256625487872 );
+    links:
+    - role: validation
+      uid: ../req/ntp-step
+  - brief: |
       Let the seconds value of ${/glossary/clock-realtime:/term} change by one.
       Check that the NTP update second handler is called exactly once.
     code: |
