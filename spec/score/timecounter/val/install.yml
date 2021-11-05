@@ -855,7 +855,7 @@ test-actions:
 
       rtems_clock_get_realtime_bintime( &bt );
       T_eq_i64( bt.sec, 567993603 );
-      T_eq_u64( bt.frac, 9223373256625487872 );
+      T_eq_u64( bt.frac, UINT64_C( 9223373256625487872 ) );
     links:
     - role: validation
       uid: ../req/ntp-step
