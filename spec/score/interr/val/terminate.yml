@@ -14,7 +14,8 @@ test-actions:
     bool                   shutdown_ok;
 
     #if defined(RTEMS_SMP)
-    shutdown_ok = ( _Per_CPU_Get_state( _Per_CPU_Get() ) == PER_CPU_STATE_UP );
+    shutdown_ok =
+      ( _Per_CPU_Get_state( _Per_CPU_Get_snapshot() ) == PER_CPU_STATE_UP );
     #else
     shutdown_ok = true;
     #endif
