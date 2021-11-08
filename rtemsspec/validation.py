@@ -382,8 +382,7 @@ class _TestItem:
                     self.add_header_body(content, header)
         content.write(os.path.join(base_directory, header["target"]))
 
-    def _add_context_and_fixture(self, content: CContent) -> Optional[str]:
-        instance = self.add_context(content)
+    def _add_fixture(self, content: CContent, instance: str) -> Optional[str]:
         if instance == "NULL":
             self._context = "void"
             do_wrap = False
@@ -445,8 +444,9 @@ class _TestItem:
                  test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
-        fixture = self._add_context_and_fixture(content)
+        instance = self.add_context(content)
         content.add(self.substitute_code(self["test-support"]))
+        fixture = self._add_fixture(content, instance)
         self._mapper.reset()
         actions = self._add_test_case_actions(content)
         header = self["test-header"]
