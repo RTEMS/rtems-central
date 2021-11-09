@@ -5,6 +5,30 @@ enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
+    Construct a system state in which an ask for help request is cancelled
+    while it is processed on another processor.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Block the runner thread while the owner thread of the highest priority
+      ready node is already scheduled.
+    code: |
+      SuspendTask( ctx->worker_id[ WORKER_A ] );
+      T_scheduler_set_event_handler( UnblockAskForHelp, ctx );
+      ResumeTask( ctx->worker_id[ WORKER_A ] );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-request
+  - brief: |
+      Clean up all used resources.
+    code: |
+      ResumeTask( ctx->worker_id[ WORKER_A ] );
+      StopBusy( ctx, WORKER_C );
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
     Construct a system state in which a scheduler tries to schedule a node
     those owner thread is already scheduled during a block operation.
   action-code: |
@@ -308,6 +332,11 @@ test-context:
   description: null
   member: |
     Per_CPU_Job_context job_context
+- brief: |
+    This member contains the call within ISR request.
+  description: null
+  member: |
+    CallWithinISRRequest request;
 test-context-support: |
   typedef enum {
     WORKER_A,
@@ -321,7 +350,7 @@ test-includes:
 - rtems.h
 - rtems/test-scheduler.h
 - rtems/score/percpu.h
-- rtems/score/thread.h
+- rtems/score/threadimpl.h
 test-local-includes:
 - tx-support.h
 test-setup:
@@ -525,6 +554,54 @@ test-support: |
   )
   {
     OperationSuspendA( arg, event, when, T_SCHEDULER_YIELD );
+  }
+
+  static void InterceptAskForHelp( void *arg )
+  {
+    Context         *ctx;
+    Per_CPU_Control *cpu_self;
+    ISR_lock_Context lock_context;
+    Chain_Node      *node;
+    Thread_Control  *thread;
+
+    ctx = arg;
+    cpu_self = _Per_CPU_Get();
+
+    _ISR_lock_ISR_disable( &lock_context );
+    _Per_CPU_Acquire( cpu_self, &lock_context );
+    ctx->job_context.handler = SuspendA;
+    _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job );
+    ISRLockWaitForOthers( &cpu_self->Lock, 1 );
+
+    /* See _Thread_Preemption_intervention() */
+    node = _Chain_Get_first_unprotected( &cpu_self->Threads_in_need_for_help );
+    thread = THREAD_OF_SCHEDULER_HELP_NODE( node );
+    T_assert_eq_ptr( thread, GetThread( ctx->worker_id[ WORKER_A ] ) );
+    thread->Scheduler.ask_for_help_cpu = NULL;
+
+    _Per_CPU_Release( cpu_self, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
+  }
+
+  static void UnblockAskForHelp(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_UNBLOCK
+    ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->request.handler = InterceptAskForHelp;
+      ctx->request.arg = ctx;
+      CallWithinISRSubmit( &ctx->request );
+    }
   }
 
   static void PrepareOwnerScheduled( Context *ctx )
