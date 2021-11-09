@@ -48,6 +48,272 @@ test-actions:
       SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
     links: []
   links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a block operation.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Block the runner thread while the owner thread of the highest priority
+      ready node is already scheduled.
+    code: |
+      T_scheduler_set_event_handler( BlockStopBusyC, ctx );
+      CallWithinISR( Block, ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is blocked during a block operation.
+  action-code: |
+    PrepareOwnerBlocked( ctx );
+  checks:
+  - brief: |
+      Block the runner thread while the owner thread of the highest priority
+      ready node is blocked.
+    code: |
+      T_scheduler_set_event_handler( BlockSuspendA, ctx );
+      CallWithinISR( Block, ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-helping
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerBlocked( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a set affinity operation.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Set the affinity of the runner thread while the owner thread of the
+      highest priority ready node is already scheduled.
+    code: |
+      T_scheduler_set_event_handler( SetAffinityStopBusyC, ctx );
+      SetSelfAffinityAll();
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a set affinity operation
+    while a sticky node is involved.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Set the affinity of the runner thread while the owner thread of the
+      highest priority ready node is already scheduled.
+    code: |
+      MakeSticky( ctx );
+      T_scheduler_set_event_handler( SetAffinityStopBusyC, ctx );
+      SetSelfAffinityAll();
+      CleanSticky( ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is blocked during a set affinity operation.
+  action-code: |
+    PrepareOwnerBlocked( ctx );
+  checks:
+  - brief: |
+      Set the affinity of the runner thread while the owner thread of the
+      highest priority ready node is blocked.
+    code: |
+      T_scheduler_set_event_handler( SetAffinitySuspendA, ctx );
+      SetSelfAffinityAll();
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-helping
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerBlocked( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is blocked during a set affinity operation while a
+    sticky node is involved.
+  action-code: |
+    PrepareOwnerBlocked( ctx );
+  checks:
+  - brief: |
+      Set the affinity of the runner thread while the owner thread of the
+      highest priority ready node is blocked.
+    code: |
+      MakeSticky( ctx );
+      T_scheduler_set_event_handler( SetAffinitySuspendA, ctx );
+      SetSelfAffinityAll();
+      CleanSticky( ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-helping
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerBlocked( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a set priority operation.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Set the priority of the runner thread while the owner thread of the
+      highest priority ready node is already scheduled.
+    code: |
+      SetSelfPriority( PRIO_HIGH );
+      T_scheduler_set_event_handler( UpdatePriorityStopBusyC, ctx );
+      SetSelfPriority( PRIO_NORMAL );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is blocked during a set priority operation.
+  action-code: |
+    PrepareOwnerBlocked( ctx );
+  checks:
+  - brief: |
+      Set the priority of the runner thread while the owner thread of the
+      highest priority ready node is blocked.
+    code: |
+      SetSelfPriority( PRIO_HIGH );
+      T_scheduler_set_event_handler( UpdatePrioritySuspendA, ctx );
+      SetSelfPriority( PRIO_NORMAL );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-helping
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerBlocked( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a yield operation.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Yield while the owner thread of the highest priority ready node is
+      already scheduled.
+    code: |
+      T_scheduler_set_event_handler( YieldStopBusyC, ctx );
+      Yield();
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a yield operation while a
+    sticky node is involved.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Yield while the owner thread of the highest priority ready node is
+      already scheduled.
+    code: |
+      MakeSticky( ctx );
+      T_scheduler_set_event_handler( YieldStopBusyC, ctx );
+      Yield();
+      CleanSticky( ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is blocked during a yield operation.
+  action-code: |
+    PrepareOwnerBlocked( ctx );
+  checks:
+  - brief: |
+      Yield while the owner thread of the highest priority ready node is
+      blocked.
+    code: |
+      T_scheduler_set_event_handler( YieldSuspendA, ctx );
+      Yield();
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-helping
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerBlocked( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is blocked during a yield operation while a sticky node
+    is involved.
+  action-code: |
+    PrepareOwnerBlocked( ctx );
+  checks:
+  - brief: |
+      Yield while the owner thread of the highest priority ready node is
+      blocked.
+    code: |
+      MakeSticky( ctx );
+      T_scheduler_set_event_handler( YieldSuspendA, ctx );
+      Yield();
+      CleanSticky( ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-helping
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerBlocked( ctx );
+    links: []
+  links: []
 test-brief: |
   Tests SMP-specific scheduler behaviour.
 test-context:
@@ -66,6 +332,11 @@ test-context:
   description: null
   member: |
     rtems_id mutex_id
+- brief: |
+    This member contains the sticky mutex identifier.
+  description: null
+  member: |
+    rtems_id sticky_id
 - brief: |
     This member contains the worker busy status.
   description: null
@@ -86,10 +357,21 @@ test-context:
   description: null
   member: |
     SMP_barrier_Control barrier
+- brief: |
+    This member contains the per-CPU job.
+  description: null
+  member: |
+    Per_CPU_Job job
+- brief: |
+    This member contains the per-CPU job context.
+  description: null
+  member: |
+    Per_CPU_Job_context job_context
 test-context-support: |
   typedef enum {
     WORKER_A,
     WORKER_B,
+    WORKER_C,
     WORKER_COUNT
   } WorkerIndex;
 test-description: null
@@ -97,14 +379,30 @@ test-header: null
 test-includes:
 - rtems.h
 - rtems/test-scheduler.h
+- rtems/score/percpu.h
 - rtems/score/smpbarrier.h
+- rtems/score/thread.h
 test-local-includes:
 - tx-support.h
 test-setup:
   brief: null
   code: |
+    rtems_status_code sc;
+
     ctx->runner_id = rtems_task_self();
+    ctx->job_context.arg = ctx;
+    ctx->job.context = &ctx->job_context;
     ctx->mutex_id = CreateMutex();
+
+    sc = rtems_semaphore_create(
+      rtems_build_name( 'S', 'T', 'K', 'Y' ),
+      1,
+      RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
+        RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+      PRIO_NORMAL,
+      &ctx->sticky_id
+    );
+    T_rsc_success( sc );
 
     SetSelfPriority( PRIO_NORMAL );
 
@@ -113,6 +411,9 @@ test-setup:
 
     ctx->worker_id[ WORKER_B ] = CreateTask( "WRKB", PRIO_HIGH );
     StartTask( ctx->worker_id[ WORKER_B ], WorkerB, ctx );
+
+    ctx->worker_id[ WORKER_C ] = CreateTask( "WRKC", PRIO_HIGH );
+    StartTask( ctx->worker_id[ WORKER_C ], WorkerC, ctx );
 
     WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, RequestISR, ctx );
   description: null
@@ -124,7 +425,8 @@ test-support: |
     EVENT_OBTAIN = RTEMS_EVENT_0,
     EVENT_RELEASE = RTEMS_EVENT_1,
     EVENT_SYNC_RUNNER = RTEMS_EVENT_2,
-    EVENT_RESTART = RTEMS_EVENT_3
+    EVENT_RESTART = RTEMS_EVENT_3,
+    EVENT_BUSY = RTEMS_EVENT_4
   } Event;
 
   static void Barriers( void *arg )
@@ -157,6 +459,205 @@ test-support: |
     SendEvents( ctx->worker_id[ worker ], EVENT_SYNC_RUNNER | event );
     ReceiveAllEvents( EVENT_SYNC_RUNNER );
     WaitForExecutionStop( ctx->worker_id[ worker ] );
+  }
+
+  static void MakeBusy( Context *ctx, WorkerIndex worker )
+  {
+    ctx->busy[ worker ] = true;
+    SendEvents( ctx->worker_id[ worker ], EVENT_BUSY );
+  }
+
+  static void StopBusy( Context *ctx, WorkerIndex worker )
+  {
+    ctx->busy[ worker ] = false;
+    WaitForExecutionStop( ctx->worker_id[ worker ] );
+  }
+
+  static void MakeSticky( const Context *ctx )
+  {
+    ObtainMutex( ctx->sticky_id );
+  }
+
+  static void CleanSticky( const Context *ctx )
+  {
+    ReleaseMutex( ctx->sticky_id );
+  }
+
+  static void Block( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    SuspendTask( ctx->runner_id );
+    ResumeTask( ctx->runner_id );
+  }
+
+  static void OperationStopBusyC(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when,
+    T_scheduler_operation    op
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if ( when == T_SCHEDULER_BEFORE && event->operation == op ) {
+      T_scheduler_set_event_handler( NULL, NULL );
+      StopBusy( ctx, WORKER_C );
+    }
+  }
+
+  static void BlockStopBusyC(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationStopBusyC( arg, event, when, T_SCHEDULER_BLOCK );
+  }
+
+  static void SetAffinityStopBusyC(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationStopBusyC( arg, event, when, T_SCHEDULER_SET_AFFINITY );
+  }
+
+  static void UpdatePriorityStopBusyC(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationStopBusyC( arg, event, when, T_SCHEDULER_UPDATE_PRIORITY );
+  }
+
+  static void YieldStopBusyC(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationStopBusyC( arg, event, when, T_SCHEDULER_YIELD );
+  }
+
+  static void SuspendA( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    SuspendTask( ctx->worker_id[ WORKER_A ] );
+  }
+
+  static void OperationSuspendA(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when,
+    T_scheduler_operation    op
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if ( when == T_SCHEDULER_BEFORE && event->operation == op ) {
+      const rtems_tcb *worker_a;
+
+      T_scheduler_set_event_handler( NULL, NULL );
+      ctx->job_context.handler = SuspendA;
+      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job );
+
+      worker_a = GetThread( ctx->worker_id[ WORKER_A ] );
+
+      while ( worker_a->Scheduler.state != THREAD_SCHEDULER_BLOCKED ) {
+        RTEMS_COMPILER_MEMORY_BARRIER();
+      }
+    }
+  }
+
+  static void BlockSuspendA(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationSuspendA( arg, event, when, T_SCHEDULER_BLOCK );
+  }
+
+  static void SetAffinitySuspendA(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationSuspendA( arg, event, when, T_SCHEDULER_SET_AFFINITY );
+  }
+
+  static void UpdatePrioritySuspendA(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationSuspendA( arg, event, when, T_SCHEDULER_UPDATE_PRIORITY );
+  }
+
+  static void YieldSuspendA(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    OperationSuspendA( arg, event, when, T_SCHEDULER_YIELD );
+  }
+
+  static void PrepareOwnerScheduled( Context *ctx )
+  {
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
+    SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+    SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
+    MakeBusy( ctx, WORKER_C );
+    MakeBusy( ctx, WORKER_A );
+  }
+
+  static void CleanupOwnerScheduled( Context *ctx )
+  {
+    StopBusy( ctx, WORKER_A );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
+    SendAndSync( ctx, WORKER_B, EVENT_RELEASE );
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
+    SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_HIGH );
+  }
+
+  static void PrepareOwnerBlocked( Context *ctx )
+  {
+    SetScheduler( ctx->worker_id[ WORKER_A ], SCHEDULER_B_ID, PRIO_NORMAL );
+    SendAndSync( ctx, WORKER_A, EVENT_OBTAIN );
+    SendEvents( ctx->worker_id[ WORKER_B ], EVENT_OBTAIN );
+    SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
+    MakeBusy( ctx, WORKER_C );
+    SetPriority( ctx->worker_id[ WORKER_B ], PRIO_LOW );
+    MakeBusy( ctx, WORKER_A );
+    SetPriority( ctx->worker_id[ WORKER_B ], PRIO_NORMAL );
+  }
+
+  static void CleanupOwnerBlocked( Context *ctx )
+  {
+    StopBusy( ctx, WORKER_C );
+    ResumeTask( ctx->worker_id[ WORKER_A ] );
+    StopBusy( ctx, WORKER_A );
+    SendAndSync( ctx, WORKER_A, EVENT_RELEASE );
+    SetPriority( ctx->worker_id[ WORKER_B ], PRIO_HIGH );
+    SendEvents( ctx->worker_id[ WORKER_B ], EVENT_RELEASE );
+    SetScheduler( ctx->worker_id[ WORKER_A ], SCHEDULER_A_ID, PRIO_HIGH );
+    SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_HIGH );
   }
 
   static void Worker( rtems_task_argument arg, WorkerIndex worker )
@@ -202,6 +703,12 @@ test-support: |
 
         T_eq_u32( rtems_scheduler_get_processor(), 0 );
       }
+
+      if ( ( events & EVENT_BUSY ) != 0 ) {
+        while ( ctx->busy[ worker ] ) {
+          /* Wait */
+        }
+      }
     }
   }
 
@@ -214,13 +721,20 @@ test-support: |
   {
     Worker( arg, WORKER_B );
   }
+
+  static void WorkerC( rtems_task_argument arg )
+  {
+    Worker( arg, WORKER_C );
+  }
 test-target: testsuites/validation/tc-sched-smp.c
 test-teardown:
   brief: null
   code: |
     DeleteTask( ctx->worker_id[ WORKER_A ] );
     DeleteTask( ctx->worker_id[ WORKER_B ] );
+    DeleteTask( ctx->worker_id[ WORKER_C ] );
     DeleteMutex( ctx->mutex_id );
+    DeleteMutex( ctx->sticky_id );
     RestoreRunnerPriority();
     WrapThreadQueueDestroy( &ctx->wrap_tq_ctx );
   description: null
