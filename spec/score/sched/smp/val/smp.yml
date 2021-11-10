@@ -5,50 +5,6 @@ enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
-    Use the mutex and the worker to construct the removal of the last processor
-    of a scheduler while a thread is scheduled.
-  action-code: |
-    SMP_barrier_State barrier_state;
-
-    _SMP_barrier_Control_initialize( &ctx->barrier );
-    _SMP_barrier_State_initialize( &barrier_state );
-
-    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
-  checks:
-  - brief: |
-      Let worker B help worker A.
-    code: |
-      SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
-      SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
-    links: []
-  - brief: |
-      Restart the worker B to withdraw the help offer and wait on barriers.
-      Move worker B to scheduler A.  Remove the processor while worker A is
-      scheduled.
-    code: |
-      SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RESTART );
-
-      /* A */
-      _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
-
-      SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
-      RemoveProcessor( SCHEDULER_B_ID, 1 );
-
-      /* B */
-      _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
-    links:
-    - role: validation
-      uid: ../req/remove-last-processor-helping
-  - brief: |
-      Clean up all used resources.
-    code: |
-      SetPriority( ctx->runner_id, PRIO_NORMAL );
-      AddProcessor( SCHEDULER_B_ID, 1 );
-      SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
-      SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
-    links: []
-  links: []
-- action-brief: |
     Construct a system state in which a scheduler tries to schedule a node
     those owner thread is already scheduled during a block operation.
   action-code: |
@@ -343,21 +299,6 @@ test-context:
   member: |
     volatile bool busy[ WORKER_COUNT ];
 - brief: |
-    This member provides the context to wrap thread queue operations.
-  description: null
-  member: |
-    WrapThreadQueueContext wrap_tq_ctx
-- brief: |
-    This member contains the call within ISR request.
-  description: null
-  member: |
-    CallWithinISRRequest request;
-- brief: |
-    This member contains the barrier to synchronize the runner and the workers.
-  description: null
-  member: |
-    SMP_barrier_Control barrier
-- brief: |
     This member contains the per-CPU job.
   description: null
   member: |
@@ -380,7 +321,6 @@ test-includes:
 - rtems.h
 - rtems/test-scheduler.h
 - rtems/score/percpu.h
-- rtems/score/smpbarrier.h
 - rtems/score/thread.h
 test-local-includes:
 - tx-support.h
@@ -414,8 +354,6 @@ test-setup:
 
     ctx->worker_id[ WORKER_C ] = CreateTask( "WRKC", PRIO_HIGH );
     StartTask( ctx->worker_id[ WORKER_C ], WorkerC, ctx );
-
-    WrapThreadQueueInitialize( &ctx->wrap_tq_ctx, RequestISR, ctx );
   description: null
 test-stop: null
 test-support: |
@@ -425,34 +363,8 @@ test-support: |
     EVENT_OBTAIN = RTEMS_EVENT_0,
     EVENT_RELEASE = RTEMS_EVENT_1,
     EVENT_SYNC_RUNNER = RTEMS_EVENT_2,
-    EVENT_RESTART = RTEMS_EVENT_3,
-    EVENT_BUSY = RTEMS_EVENT_4
+    EVENT_BUSY = RTEMS_EVENT_3
   } Event;
-
-  static void Barriers( void *arg )
-  {
-    Context          *ctx;
-    SMP_barrier_State barrier_state;
-
-    ctx = arg;
-    _SMP_barrier_State_initialize( &barrier_state );
-
-    /* A */
-    _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
-
-    /* B */
-    _SMP_barrier_Wait( &ctx->barrier, &barrier_state, 2 );
-  }
-
-  static void RequestISR( void *arg )
-  {
-    Context *ctx;
-
-    ctx = arg;
-    ctx->request.handler = Barriers;
-    ctx->request.arg = ctx;
-    CallWithinISRSubmit( &ctx->request );
-  }
 
   static void SendAndSync( Context *ctx, WorkerIndex worker, Event event )
   {
@@ -683,27 +595,6 @@ test-support: |
         ReleaseMutex( ctx->mutex_id );
       }
 
-      if ( ( events & EVENT_RESTART ) != 0 ) {
-        rtems_status_code sc;
-
-        T_eq_u32( rtems_scheduler_get_processor(), 0 );
-        SetPriority( ctx->runner_id, PRIO_VERY_HIGH );
-        T_eq_u32( rtems_scheduler_get_processor(), 1 );
-
-        WrapThreadQueueExtract(
-          &ctx->wrap_tq_ctx,
-          GetThread( ctx->worker_id[ WORKER_B ] )
-        );
-
-        sc = rtems_task_restart(
-          ctx->worker_id[ WORKER_B ],
-          (rtems_task_argument) ctx
-          );
-        T_rsc_success( sc );
-
-        T_eq_u32( rtems_scheduler_get_processor(), 0 );
-      }
-
       if ( ( events & EVENT_BUSY ) != 0 ) {
         while ( ctx->busy[ worker ] ) {
           /* Wait */
@@ -736,6 +627,5 @@ test-teardown:
     DeleteMutex( ctx->mutex_id );
     DeleteMutex( ctx->sticky_id );
     RestoreRunnerPriority();
-    WrapThreadQueueDestroy( &ctx->wrap_tq_ctx );
   description: null
 type: test-case
