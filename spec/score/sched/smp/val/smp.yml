@@ -186,6 +186,29 @@ test-actions:
   links: []
 - action-brief: |
     Construct a system state in which a scheduler tries to schedule a node
+    those owner thread is already scheduled during a set priority operation
+    while a sticky node is involved.
+  action-code: |
+    PrepareOwnerScheduled( ctx );
+  checks:
+  - brief: |
+      Set the priority of the runner thread while the owner thread of the
+      highest priority ready node is already scheduled.
+    code: |
+      MakeSticky( ctx );
+      CallWithinISR( RaiseWorkerPriorityWithIdleRunner, ctx );
+      CleanSticky( ctx );
+    links:
+    - role: validation
+      uid: ../req/ask-for-help-home
+  - brief: |
+      Clean up all used resources.
+    code: |
+      CleanupOwnerScheduled( ctx );
+    links: []
+  links: []
+- action-brief: |
+    Construct a system state in which a scheduler tries to schedule a node
     those owner thread is blocked during a set priority operation.
   action-code: |
     PrepareOwnerBlocked( ctx );
@@ -604,6 +627,18 @@ test-support: |
       ctx->request.arg = ctx;
       CallWithinISRSubmit( &ctx->request );
     }
+  }
+
+  static void RaiseWorkerPriorityWithIdleRunner( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    SuspendTask( ctx->runner_id );
+    T_scheduler_set_event_handler( UpdatePriorityStopBusyC, ctx );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
+    ResumeTask( ctx->runner_id );
   }
 
   static void PrepareOwnerScheduled( Context *ctx )
