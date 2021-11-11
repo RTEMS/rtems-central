@@ -479,7 +479,6 @@ test-prepare: |
   ctx->unsatisfied_pending = 0xffffffff;
   memset( &ctx->thread_switch_log, 0, sizeof( ctx->thread_switch_log ) );
   T_eq_u32( GetPendingEvents( ctx ), 0 );
-  _Thread_Wait_flags_set( ctx->runner_thread, THREAD_WAIT_FLAGS_INITIAL );
 test-setup:
   brief: null
   code: |
@@ -562,14 +561,14 @@ test-support: |
     return flags == ( ctx->wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK );
   }
 
-  static bool EventReadyAgain( Context *ctx, Thread_Wait_flags flags )
+  static bool IsReady( Context *ctx, Thread_Wait_flags flags )
   {
-    return flags == ( ctx->wait_class | THREAD_WAIT_STATE_READY_AGAIN );
+    return flags == THREAD_WAIT_STATE_READY;
   }
 
   static bool IsSatisfiedFlags( Context *ctx )
   {
-    return EventReadyAgain(
+    return IsReady(
       ctx,
       _Thread_Wait_flags_get( ctx->runner_thread )
     );
