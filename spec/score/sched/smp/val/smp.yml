@@ -11,8 +11,10 @@ test-actions:
     PrepareOwnerScheduled( ctx );
   checks:
   - brief: |
-      Block the runner thread while the owner thread of the highest priority
-      ready node is already scheduled.
+      Unblock worker A.  It cannot be scheduled on its home scheduler.
+      Intercept the ask for help request.  Block the worker A.  This will
+      cancel the ask for help request.  Remove the request while the other
+      processor tries to cancel the request.
     code: |
       SuspendTask( ctx->worker_id[ WORKER_A ] );
       T_scheduler_set_event_handler( UnblockAskForHelp, ctx );
