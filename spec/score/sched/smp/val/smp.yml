@@ -348,15 +348,15 @@ test-context:
   member: |
     volatile bool busy[ WORKER_COUNT ];
 - brief: |
-    This member contains the per-CPU job.
+    This member contains the per-CPU jobs.
   description: null
   member: |
-    Per_CPU_Job job
+    Per_CPU_Job job[ 2 ]
 - brief: |
-    This member contains the per-CPU job context.
+    This member contains the per-CPU job contexts.
   description: null
   member: |
-    Per_CPU_Job_context job_context
+    Per_CPU_Job_context job_context[ 2 ]
 - brief: |
     This member contains the call within ISR request.
   description: null
@@ -382,11 +382,15 @@ test-setup:
   brief: null
   code: |
     rtems_status_code sc;
+    size_t            i;
 
     ctx->runner_id = rtems_task_self();
-    ctx->job_context.arg = ctx;
-    ctx->job.context = &ctx->job_context;
     ctx->mutex_id = CreateMutex();
+
+    for ( i = 0; i < RTEMS_ARRAY_SIZE( ctx->job ); ++i ) {
+      ctx->job_context[ i ].arg = ctx;
+      ctx->job[ i ].context = &ctx->job_context[ i ];
+    }
 
     sc = rtems_semaphore_create(
       rtems_build_name( 'S', 'T', 'K', 'Y' ),
@@ -534,8 +538,8 @@ test-support: |
       const rtems_tcb *worker_a;
 
       T_scheduler_set_event_handler( NULL, NULL );
-      ctx->job_context.handler = SuspendA;
-      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job );
+      ctx->job_context[ 0 ].handler = SuspendA;
+      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job[ 0 ] );
 
       worker_a = GetThread( ctx->worker_id[ WORKER_A ] );
 
@@ -581,31 +585,60 @@ test-support: |
     OperationSuspendA( arg, event, when, T_SCHEDULER_YIELD );
   }
 
+  static void GuideAskForHelp( void *arg )
+  {
+    Context         *ctx;
+    Per_CPU_Control *cpu;
+    ISR_lock_Context lock_context;
+
+    ctx = arg;
+    cpu = _Per_CPU_Get_by_index( 0 );
+
+    _ISR_lock_ISR_disable( &lock_context );
+    _Per_CPU_Acquire( cpu, &lock_context );
+
+    ISRLockWaitForOthers( &cpu->Lock, 1 );
+
+    ctx->job_context[ 0 ].handler = SuspendA;
+    _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job[ 0 ] );
+    ISRLockWaitForOthers( &cpu->Lock, 2 );
+
+    _Per_CPU_Release( cpu, &lock_context );
+    _ISR_lock_ISR_enable( &lock_context );
+  }
+
   static void InterceptAskForHelp( void *arg )
   {
     Context         *ctx;
     Per_CPU_Control *cpu_self;
-    ISR_lock_Context lock_context;
-    Chain_Node      *node;
-    Thread_Control  *thread;
 
     ctx = arg;
     cpu_self = _Per_CPU_Get();
 
-    _ISR_lock_ISR_disable( &lock_context );
-    _Per_CPU_Acquire( cpu_self, &lock_context );
-    ctx->job_context.handler = SuspendA;
-    _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job );
-    ISRLockWaitForOthers( &cpu_self->Lock, 1 );
+    if ( rtems_scheduler_get_processor_maximum() > 2 ) {
+      ctx->job_context[ 1 ].handler = GuideAskForHelp;
+      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 2 ), &ctx->job[ 1 ] );
+      ISRLockWaitForOwned( &cpu_self->Lock );
+    } else {
+      ISR_lock_Context lock_context;
+      Chain_Node      *node;
+      Thread_Control  *thread;
 
-    /* See _Thread_Preemption_intervention() */
-    node = _Chain_Get_first_unprotected( &cpu_self->Threads_in_need_for_help );
-    thread = THREAD_OF_SCHEDULER_HELP_NODE( node );
-    T_assert_eq_ptr( thread, GetThread( ctx->worker_id[ WORKER_A ] ) );
-    thread->Scheduler.ask_for_help_cpu = NULL;
+      _ISR_lock_ISR_disable( &lock_context );
+      _Per_CPU_Acquire( cpu_self, &lock_context );
+      ctx->job_context[ 0 ].handler = SuspendA;
+      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job[ 0 ] );
+      ISRLockWaitForOthers( &cpu_self->Lock, 1 );
 
-    _Per_CPU_Release( cpu_self, &lock_context );
-    _ISR_lock_ISR_enable( &lock_context );
+      /* See _Thread_Preemption_intervention() */
+      node = _Chain_Get_first_unprotected( &cpu_self->Threads_in_need_for_help );
+      thread = THREAD_OF_SCHEDULER_HELP_NODE( node );
+      T_assert_eq_ptr( thread, GetThread( ctx->worker_id[ WORKER_A ] ) );
+      thread->Scheduler.ask_for_help_cpu = NULL;
+
+      _Per_CPU_Release( cpu_self, &lock_context );
+      _ISR_lock_ISR_enable( &lock_context );
+    }
   }
 
   static void UnblockAskForHelp(
