@@ -13,8 +13,9 @@ test-actions:
     SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
     SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
     SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
-    SendAndSync( ctx, WORKER_A, EVENT_STICKY_OBTAIN );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_STICKY_OBTAIN );
     MakeBusy( ctx, WORKER_A );
+    WaitForBusy( ctx, WORKER_A );
   checks:
   - brief: |
       Reschedule worker A by the home scheduler while worker A is not scheduled
@@ -382,6 +383,11 @@ test-context:
   member: |
     volatile bool busy[ WORKER_COUNT ];
 - brief: |
+    If this member is true, then the worker shall be in the busy loop.
+  description: null
+  member: |
+    volatile bool is_busy[ WORKER_COUNT ];
+- brief: |
     This member contains the per-CPU jobs.
   description: null
   member: |
@@ -469,8 +475,16 @@ test-support: |
 
   static void MakeBusy( Context *ctx, WorkerIndex worker )
   {
+    ctx->is_busy[ worker ] = false;
     ctx->busy[ worker ] = true;
     SendEvents( ctx->worker_id[ worker ], EVENT_BUSY );
+  }
+
+  static void WaitForBusy( Context *ctx, WorkerIndex worker )
+  {
+    while ( !ctx->is_busy[ worker ] ) {
+      /* Wait */
+    }
   }
 
   static void StopBusy( Context *ctx, WorkerIndex worker )
@@ -839,9 +853,13 @@ test-support: |
       }
 
       if ( ( events & EVENT_BUSY ) != 0 ) {
+        ctx->is_busy[ worker ] = true;
+
         while ( ctx->busy[ worker ] ) {
           /* Wait */
         }
+
+        ctx->is_busy[ worker ] = false;
       }
     }
   }
