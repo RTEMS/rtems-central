@@ -18,6 +18,7 @@ build:
   - RTEMS_QUAL
   - RTEMS_QUAL_ONLY
   - RTEMS_SMP
+  - sparc/gr712rc
   source-directory: modules/rtems
   sources:
   - bsps/shared/doxygen.h

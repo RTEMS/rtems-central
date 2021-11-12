@@ -189,16 +189,18 @@ def _is_pre_qualified(item: Item) -> bool:
             _NOT_PRE_QUALIFIED))
 
 
-def _no_validation(item: Item, path: List[str]) -> List[str]:
+def _no_validation(item: Item, path: List[str], enabled: List[str]) -> List[str]:
     path_2 = path + [item.uid]
+    if not item.is_enabled(enabled):
+        return path_2[:-1]
     leaf = len(list(item.children("validation"))) == 0
     if not leaf:
         return path_2[:-1]
     for child in item.children(_CHILD_ROLES):
-        path_2 = _no_validation(child, path_2)
+        path_2 = _no_validation(child, path_2, enabled)
         leaf = False
     for parent in item.parents(_PARENT_ROLES):
-        path_2 = _no_validation(parent, path_2)
+        path_2 = _no_validation(parent, path_2, enabled)
         leaf = False
     if leaf and item.type not in _VALIDATION_LEAF and _is_pre_qualified(item):
         for index, component in enumerate(path_2):
@@ -359,7 +361,7 @@ def main() -> None:
             if item not in spec:
                 print(item.uid)
     elif args.filter == "no-validation":
-        _no_validation(root, [])
+        _no_validation(root, [], config["build"]["enabled"])
 
 
 if __name__ == "__main__":
