@@ -40,6 +40,13 @@ post-conditions:
   - name: 'Yes'
     test-code: |
       if ( ctx->home && ctx->helping ) {
+        /*
+         * For these test scenarios we use scheduler A in which the runner
+         * remains scheduled.  So, an ask for help request is issued, when the
+         * processor allocated to a task which uses the scheduler as a helping
+         * scheduler is removed.
+         */
+        T_eq_u32( ctx->id, SCHEDULER_A_ID );
         T_eq_sz( ctx->scheduler_log.header.recorded, 3 );
         T_eq_int(
           ctx->scheduler_log.events[ 0 ].operation,
@@ -448,7 +455,7 @@ test-context:
     This member provides the scheduler operation records.
   description: null
   member: |
-    T_scheduler_log_10 scheduler_log;
+    T_scheduler_log_4 scheduler_log;
 - brief: |
     This member contains the return value of the
     ${../if/remove-processor:/name} call.
@@ -552,7 +559,7 @@ test-support: |
   {
     T_scheduler_log *log;
 
-    log = T_scheduler_record_10( &ctx->scheduler_log );
+    log = T_scheduler_record_4( &ctx->scheduler_log );
     T_null( log );
 
     ctx->status = rtems_scheduler_remove_processor( ctx->id, ctx->cpu_index );
