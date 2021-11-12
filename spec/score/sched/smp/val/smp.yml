@@ -5,6 +5,40 @@ enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
+    Construct a system state in which a thread is rescheduled  while it is not
+    scheduled on another scheduler.
+  action-code: |
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
+    SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+    SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
+    SendAndSync( ctx, WORKER_A, EVENT_STICKY_OBTAIN );
+    MakeBusy( ctx, WORKER_A );
+  checks:
+  - brief: |
+      Reschedule worker A by the home scheduler while worker A is not scheduled
+      on another scheduler.
+    code: |
+      CallWithinISR( ReadyToScheduled, ctx );
+    links:
+    - role: validation
+      uid: ../req/idle-to-scheduled
+  - brief: |
+      Clean up all used resources.
+    code: |
+      StopBusy( ctx, WORKER_C );
+      StopBusy( ctx, WORKER_A );
+      SendAndSync( ctx, WORKER_A, EVENT_STICKY_RELEASE );
+      SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+      SetSelfPriority( PRIO_NORMAL );
+      SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
+      SendAndSync( ctx, WORKER_B, EVENT_RELEASE );
+      SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
+      SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_HIGH );
+    links: []
+  links: []
+- action-brief: |
     Construct a system state in which an ask for help request is cancelled
     while it is processed on another processor.
   action-code: |
@@ -420,8 +454,10 @@ test-support: |
   typedef enum {
     EVENT_OBTAIN = RTEMS_EVENT_0,
     EVENT_RELEASE = RTEMS_EVENT_1,
-    EVENT_SYNC_RUNNER = RTEMS_EVENT_2,
-    EVENT_BUSY = RTEMS_EVENT_3
+    EVENT_STICKY_OBTAIN = RTEMS_EVENT_2,
+    EVENT_STICKY_RELEASE = RTEMS_EVENT_3,
+    EVENT_SYNC_RUNNER = RTEMS_EVENT_4,
+    EVENT_BUSY = RTEMS_EVENT_5
   } Event;
 
   static void SendAndSync( Context *ctx, WorkerIndex worker, Event event )
@@ -674,6 +710,58 @@ test-support: |
     ResumeTask( ctx->runner_id );
   }
 
+  static void MakeReady( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    MakeBusy( ctx, WORKER_C );
+  }
+
+  static void UpdatePriorityMakeReady(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if (
+      when == T_SCHEDULER_BEFORE &&
+      event->operation == T_SCHEDULER_UPDATE_PRIORITY
+    ) {
+      Thread_Control  *thread;
+
+      T_scheduler_set_event_handler( NULL, NULL );
+
+      thread = GetThread( ctx->worker_id[ WORKER_A ] );
+      T_eq_int( thread->Scheduler.state, THREAD_SCHEDULER_SCHEDULED );
+
+      ctx->job_context[ 0 ].handler = MakeReady;
+      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job[ 0 ] );
+
+      while ( thread->Scheduler.state != THREAD_SCHEDULER_READY ) {
+        RTEMS_COMPILER_MEMORY_BARRIER();
+      }
+    }
+  }
+
+  static void ReadyToScheduled( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    SuspendTask( ctx->runner_id );
+
+    T_scheduler_set_event_handler( UpdatePriorityMakeReady, ctx );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+
+    SetPriority( ctx->runner_id, PRIO_VERY_HIGH );
+    ResumeTask( ctx->runner_id );
+  }
+
   static void PrepareOwnerScheduled( Context *ctx )
   {
     SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
@@ -740,6 +828,14 @@ test-support: |
 
       if ( ( events & EVENT_RELEASE ) != 0 ) {
         ReleaseMutex( ctx->mutex_id );
+      }
+
+      if ( ( events & EVENT_STICKY_OBTAIN ) != 0 ) {
+        ObtainMutex( ctx->sticky_id );
+      }
+
+      if ( ( events & EVENT_STICKY_RELEASE ) != 0 ) {
+        ReleaseMutex( ctx->sticky_id );
       }
 
       if ( ( events & EVENT_BUSY ) != 0 ) {
