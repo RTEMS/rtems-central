@@ -7,11 +7,7 @@ definition:
   default:
     attributes: null
     body: |
-      ${/c/if/uint8_t:/name} value;
-
-      __asm__ volatile ( "ldub [%1], %0" : "=&r" ( value ) : "r" ( ${.:/params[0]/name} ) );
-
-      return value;
+      return *address;
     params:
     - const volatile ${/c/if/uint8_t:/name} *${.:/params[0]/name}
     return: ${/c/if/uint8_t:/name}

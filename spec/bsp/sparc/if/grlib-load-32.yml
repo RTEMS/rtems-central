@@ -7,11 +7,7 @@ definition:
   default:
     attributes: null
     body: |
-      ${/c/if/uint32_t:/name} value;
-
-      __asm__ volatile ( "ld [%1], %0" : "=&r" ( value ) : "r" ( ${.:/params[0]/name} ) );
-
-      return value;
+      return *address;
     params:
     - const volatile ${/c/if/uint32_t:/name} *${.:/params[0]/name}
     return: ${/c/if/uint32_t:/name}

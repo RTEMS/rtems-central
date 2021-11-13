@@ -7,7 +7,7 @@ definition:
   default:
     attributes: null
     body: |
-      __asm__ volatile ( "sth %0, [%1]" : : "r" ( ${.:/params[1]/name} ), "r" ( ${.:/params[0]/name} ) );
+      *address = value;
     params:
     - volatile ${/c/if/uint16_t:/name} *${.:/params[0]/name}
     - ${/c/if/uint16_t:/name} ${.:/params[1]/name}
