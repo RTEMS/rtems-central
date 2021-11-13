@@ -6,6 +6,12 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/entry-install
+- role: interface-function
+  uid: ../if/replace
+- role: interface-function
+  uid: ../if/shared
+- role: interface-function
+  uid: ../if/unique
 post-conditions:
 - name: Status
   states:

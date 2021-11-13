@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/set-priority
+- role: interface-function
+  uid: ../if/current-priority
 post-conditions:
 - name: Status
   states:

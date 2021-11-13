@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/mode
+- role: interface-function
+  uid: ../../mode/if/current-mode
 post-conditions:
 - name: Status
   states:

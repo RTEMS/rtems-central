@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/initiate-server
+- role: interface-function
+  uid: ../if/server-default-priority
 post-conditions:
 - name: Status
   states:

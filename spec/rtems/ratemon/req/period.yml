@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/period
+- role: interface-function
+  uid: ../if/period-status-define
 post-conditions:
 - name: Status
   states:

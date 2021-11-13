@@ -6,6 +6,8 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/wake-after
+- role: interface-function
+  uid: ../if/yield-processor
 post-conditions:
 - name: Status
   states:

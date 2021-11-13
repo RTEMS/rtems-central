@@ -6,6 +6,12 @@ functional-type: action
 links:
 - role: requirement-refinement
   uid: group
+- role: interface-function
+  uid: ../object/if/search-all-nodes
+- role: interface-function
+  uid: ../object/if/search-local-node
+- role: interface-function
+  uid: ../object/if/search-other-nodes
 post-conditions:
 - name: Status
   states:
@@ -109,17 +115,17 @@ pre-conditions:
     test-code: |
       ctx->node = RTEMS_SEARCH_ALL_NODES;
     text: |
-      While the ``node`` parameter is RTEMS_SEARCH_ALL_NODES.
+      While the ``node`` parameter is ${../object/if/search-all-nodes:/name}.
   - name: SearchOther
     test-code: |
       ctx->node = RTEMS_SEARCH_OTHER_NODES;
     text: |
-      While the ``node`` parameter is RTEMS_SEARCH_OTHER_NODES.
+      While the ``node`` parameter is ${../object/if/search-other-nodes:/name}.
   - name: SearchLocal
     test-code: |
       ctx->node = RTEMS_SEARCH_LOCAL_NODE;
     text: |
-      While the ``node`` parameter is RTEMS_SEARCH_LOCAL_NODE.
+      While the ``node`` parameter is ${../object/if/search-local-node:/name}.
   test-epilogue: null
   test-prologue: null
 - name: Id
