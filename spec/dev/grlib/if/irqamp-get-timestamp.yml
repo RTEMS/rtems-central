@@ -14,7 +14,7 @@ definition:
       itstmpc = ${load-32:/name}( &timestamp_regs->itstmpc );
 
       if ( IRQAMP_ITSTMPC_TSTAMP_GET( itstmpc ) == 0 ) {
-        return NULL;
+        return ${/c/if/null:/name};
       }
 
       return timestamp_regs;
