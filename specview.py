@@ -98,7 +98,7 @@ def _visit_item(item: Item, level: int, role: Optional[str],
         return False
     role_info = "" if role is None else f", role={role}"
     print(f"{'  ' * level}{item.uid} (type={item.type}{role_info}{validated})")
-    for name in ["text", "brief", "description", "notes"]:
+    for name in ["text", "brief", "description", "notes", "rationale"]:
         if name in item:
             _MAPPER.substitute(item[name], item)
     try:
