@@ -6,11 +6,13 @@ links:
 - role: interface-function
   uid: ../if/get-maximum-message-queues
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/max-message-queues:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-maximum-message-queues:/name} directive shall return the
-  maximum number of Classic API Message Queues that can be concurrently active
-  configured by ${/acfg/if/max-message-queues:/name}.
+  maximum number of objects managed by the ${../../message/if/group:/name} that
+  can be concurrently active.
 type: requirement

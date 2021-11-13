@@ -6,11 +6,13 @@ links:
 - role: interface-function
   uid: ../if/get-maximum-barriers
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/max-barriers:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-maximum-barriers:/name} directive shall return the maximum
-  number of Classic API Barriers that can be concurrently active configured by
-  ${/acfg/if/max-barriers:/name}.
+  number of objects managed by the ${../../barrier/if/group:/name} that can be
+  concurrently active.
 type: requirement

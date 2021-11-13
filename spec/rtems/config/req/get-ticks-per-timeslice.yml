@@ -6,11 +6,12 @@ links:
 - role: interface-function
   uid: ../if/get-ticks-per-timeslice
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/ticks-per-time-slice:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-ticks-per-timeslice:/name} directive shall return the number
-  of ${/glossary/clock-tick:/plural} per timeslice configured by
-  ${/acfg/if/ticks-per-time-slice:/name}.
+  of ${/glossary/clock-tick:/plural} per timeslice.
 type: requirement

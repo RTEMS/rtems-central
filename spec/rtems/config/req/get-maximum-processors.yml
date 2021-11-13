@@ -6,10 +6,15 @@ links:
 - role: interface-function
   uid: ../if/get-maximum-processors
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/max-processors:/name} application configuration option.  The
+  maximum number of processors which are actually available for use by the
+  application is returned by
+  ${../../scheduler/if/get-processor-maximum:/name}.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-maximum-processors:/name} directive shall return the maximum
-  number of processors configured by ${/acfg/if/max-processors:/name}.
+  number of processors which can be managed by the system.
 type: requirement

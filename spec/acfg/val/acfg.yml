@@ -206,6 +206,54 @@ test-actions:
     - role: validation
       uid: /rtems/config/if/get-stack-free-hook
   - brief: |
+      Check the configured ${/acfg/if/task-stack-allocator-for-idle:/name} hook.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_stack_allocate_for_idle_hook(),
+        test_idle_task_stack_allocate
+      );
+    links:
+    - role: validation
+      uid: ../if/task-stack-allocator-for-idle
+    - role: validation
+      uid: /rtems/config/if/get-stack-allocate-for-idle-hook
+  - brief: |
+      Check the configured ${/acfg/if/idle-task-stack-size:/name} value.
+    code: |
+      T_eq_sz(
+        rtems_configuration_get_idle_task_stack_size(),
+        TEST_IDLE_STACK_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../if/idle-task-stack-size
+    - role: validation
+      uid: /rtems/config/if/get-idle-task-stack-size
+  - brief: |
+      Check the configured ${/acfg/if/idle-task-body:/name}.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_idle_task(),
+        test_idle_task_body
+      );
+    links:
+    - role: validation
+      uid: ../if/idle-task-body
+    - role: validation
+      uid: /rtems/config/if/get-idle-task
+  - brief: |
+      Check the configured ${/acfg/if/interrupt-stack-size:/name} value.
+    code: |
+      T_eq_sz(
+        rtems_configuration_get_interrupt_stack_size(),
+        TEST_INTERRUPT_STACK_SIZE
+      );
+    links:
+    - role: validation
+      uid: ../if/interrupt-stack-size
+    - role: validation
+      uid: /rtems/config/if/get-interrupt-stack-size
+  - brief: |
       Check the configured ${/acfg/if/ticks-per-time-slice:/name} value.
     code: |
       T_eq_u32(

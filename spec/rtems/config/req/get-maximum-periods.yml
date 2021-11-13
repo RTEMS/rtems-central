@@ -6,11 +6,13 @@ links:
 - role: interface-function
   uid: ../if/get-maximum-periods
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/max-periods:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-maximum-periods:/name} directive shall return the maximum
-  number of Classic API Periods that can be concurrently active configured by
-  ${/acfg/if/max-periods:/name}.
+  number of objects managed by the ${../../ratemon/if/group:/name} that can be
+  concurrently active.
 type: requirement

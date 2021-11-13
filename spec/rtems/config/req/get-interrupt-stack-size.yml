@@ -6,10 +6,12 @@ links:
 - role: interface-function
   uid: ../if/get-interrupt-stack-size
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/interrupt-stack-size:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-interrupt-stack-size:/name} directive shall return the
-  interrupt stack size configured by ${/acfg/if/interrupt-stack-size:/name}.
+  interrupt stack size.
 type: requirement

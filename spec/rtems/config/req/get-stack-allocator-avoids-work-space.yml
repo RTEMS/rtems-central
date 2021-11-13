@@ -6,7 +6,9 @@ links:
 - role: interface-function
   uid: ../if/get-stack-allocator-avoids-work-space
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/task-stack-no-workspace:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |

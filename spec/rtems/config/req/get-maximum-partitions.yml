@@ -6,11 +6,13 @@ links:
 - role: interface-function
   uid: ../if/get-maximum-partitions
 functional-type: function
-rationale: null
+rationale: |
+  The directive may be used to check the setting of the
+  ${/acfg/if/max-partitions:/name} application configuration option.
 references: []
 requirement-type: functional
 text: |
   The ${../if/get-maximum-partitions:/name} directive shall return the maximum
-  number of Classic API Partitions that can be concurrently active configured
-  by ${/acfg/if/max-partitions:/name}.
+  number of objects managed by the ${../../part/if/group:/name} that can be
+  concurrently active.
 type: requirement
