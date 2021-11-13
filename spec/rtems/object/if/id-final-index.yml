@@ -17,6 +17,8 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/constant-not-pre-qualified
 name: RTEMS_OBJECT_ID_FINAL_INDEX
 notes: null
 type: interface

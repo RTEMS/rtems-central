@@ -22,6 +22,8 @@ links:
   uid: header
 - role: interface-ingroup
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_level_body
 notes: |
   This function is used by bindings from languages other than C and C++.

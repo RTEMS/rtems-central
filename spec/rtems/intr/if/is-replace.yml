@@ -16,6 +16,8 @@ links:
   uid: header-2
 - role: interface-ingroup-hidden
   uid: group
+- role: constraint
+  uid: /constraint/directive-not-pre-qualified
 name: RTEMS_INTERRUPT_IS_REPLACE
 notes: null
 params:

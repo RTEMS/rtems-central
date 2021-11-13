@@ -11,6 +11,8 @@ interface-type: appl-config-option
 links:
 - role: appl-config-group-member
   uid: group-devdrv
+- role: constraint
+  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_EXCEPTION_TO_SIGNAL_MAPPING
 notes: |
   This device driver is responsible for setting up a mapping from machine
