@@ -179,6 +179,7 @@ _VALIDATION_LEAF = [
 
 _NOT_PRE_QUALIFIED = set([
     "/acfg/constraint/option-not-pre-qualified",
+    "/constraint/constant-not-pre-qualified",
     "/constraint/directive-not-pre-qualified",
 ])
 
@@ -189,7 +190,8 @@ def _is_pre_qualified(item: Item) -> bool:
             _NOT_PRE_QUALIFIED))
 
 
-def _no_validation(item: Item, path: List[str], enabled: List[str]) -> List[str]:
+def _no_validation(item: Item, path: List[str],
+                   enabled: List[str]) -> List[str]:
     path_2 = path + [item.uid]
     if not item.is_enabled(enabled):
         return path_2[:-1]
