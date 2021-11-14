@@ -24,13 +24,13 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
 - role: constraint
   uid: /constraint/clock-driver
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_clock_get_tod_timeval
 notes: null
 params:

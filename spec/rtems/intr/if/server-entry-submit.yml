@@ -25,6 +25,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint
   uid: /constraint/directive-ctx-devinit
@@ -38,8 +40,6 @@ links:
   uid: ../constraint/server-entry-not-while-action-prepend
 - role: constraint
   uid: ../constraint/server-entry-not-while-move
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_entry_submit
 notes: |
   This directive may be used to do a two-step interrupt processing.  The first

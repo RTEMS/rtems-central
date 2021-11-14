@@ -51,13 +51,13 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint
   uid: /constraint/directive-no-preempt
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_rate_monotonic_get_statistics
 notes: null
 params:

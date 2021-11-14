@@ -22,6 +22,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-devinit
 - role: constraint
   uid: /constraint/directive-ctx-task
@@ -37,8 +39,6 @@ links:
   uid: ../constraint/server-entry-not-while-submit
 - role: constraint
   uid: ../constraint/server-entry-not-while-pending
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_entry_move
 notes: null
 params:

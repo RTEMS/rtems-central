@@ -23,9 +23,9 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
-  uid: /constraint/directive-ctx-any
-- role: constraint
   uid: /constraint/directive-not-pre-qualified
+- role: constraint
+  uid: /constraint/directive-ctx-any
 name: rtems_internal_error_text
 notes: null
 params:

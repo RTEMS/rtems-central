@@ -24,6 +24,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-devinit
 - role: constraint
   uid: /constraint/directive-ctx-task
@@ -33,8 +35,6 @@ links:
   uid: ../../constraint/delete-by-any-task
 - role: constraint
   uid: /constraint/obj-unlimited-free
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_region_delete
 notes: |
   The region cannot be deleted if any of its segments are still allocated.

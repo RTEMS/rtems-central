@@ -24,6 +24,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint
   uid: /constraint/directive-ctx-devinit
@@ -31,8 +33,6 @@ links:
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/unblock-may-preempt
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_multiprocessing_announce
 notes: |
   This directive is typically called from an ${/glossary/isr:/term}.

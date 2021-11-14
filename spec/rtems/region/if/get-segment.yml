@@ -68,6 +68,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-devinit
 - role: constraint
   uid: /constraint/directive-ctx-task
@@ -77,8 +79,6 @@ links:
   uid: ../../constraint/request-may-block
 - role: constraint
   uid: /constraint/clock-tick
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_region_get_segment
 notes: |
   The actual length of the allocated segment may be larger than the requested

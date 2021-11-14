@@ -15,11 +15,11 @@ links:
 - role: appl-config-group-member
   uid: group-mpci
 - role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/max-uint32
-- role: constraint
-  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MP_NODE_NUMBER
 notes: |
   In the RTEMS Multiprocessing Test Suite, the node number is derived from

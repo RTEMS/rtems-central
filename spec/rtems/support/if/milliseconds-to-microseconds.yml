@@ -18,11 +18,11 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-const
 - role: constraint
   uid: /constraint/directive-no-preempt
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: RTEMS_MILLISECONDS_TO_MICROSECONDS
 notes: null
 params:

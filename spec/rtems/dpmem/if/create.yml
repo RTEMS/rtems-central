@@ -32,6 +32,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-devinit
 - role: constraint
   uid: /constraint/directive-ctx-task
@@ -41,8 +43,6 @@ links:
   uid: ../constraint/max
 - role: constraint
   uid: /constraint/obj-unlimited-alloc
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 - role: constraint
   uid: /constraint/directive-not-pre-qualified
 name: rtems_port_create

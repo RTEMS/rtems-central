@@ -15,13 +15,13 @@ links:
 - role: appl-config-group-member
   uid: group-schedgeneral
 - role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/max-size
 - role: constraint
   uid: ../constraint/memory-size
-- role: constraint
-  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_CBS_MAXIMUM_SERVERS
 notes: |
   This configuration option is only evaluated if the configuration option

@@ -32,13 +32,13 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-devinit
 - role: constraint
   uid: /constraint/directive-ctx-task
 - role: constraint
   uid: /constraint/object-allocator
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_initialize
 notes: |
   Interrupt handlers may be installed on an interrupt server with

@@ -15,6 +15,8 @@ links:
 - role: appl-config-group-member
   uid: group-eventrecord
 - role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
   uid: ../constraint/min-16
 - role: constraint
   uid: ../constraint/max-size
@@ -22,8 +24,6 @@ links:
   uid: ../constraint/power-of-two
 - role: constraint
   uid: ../constraint/memory-size
-- role: constraint
-  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_RECORD_PER_PROCESSOR_ITEMS
 notes: |
   The event record buffers are statically allocated for each configured

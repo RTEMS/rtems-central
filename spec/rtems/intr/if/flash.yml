@@ -22,13 +22,13 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
 - role: constraint
   uid: ../constraint/no-smp
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_flash
 notes: |
   The ${.:/params[0]/name} parameter value must be obtained by a previous

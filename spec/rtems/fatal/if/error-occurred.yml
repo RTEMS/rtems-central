@@ -25,6 +25,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-return
@@ -34,8 +36,6 @@ links:
   uid: /constraint/no-atexit
 - role: constraint
   uid: /constraint/terminate
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_fatal_error_occurred
 notes: |
   This directive is deprecated and should not be used in new code.  It is

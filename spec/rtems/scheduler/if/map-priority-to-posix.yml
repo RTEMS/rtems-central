@@ -23,11 +23,11 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-any
 - role: constraint
   uid: /constraint/directive-no-preempt
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_scheduler_map_priority_to_posix
 notes: null
 params:

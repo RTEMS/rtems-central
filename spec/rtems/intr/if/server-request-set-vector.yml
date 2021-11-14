@@ -23,6 +23,8 @@ links:
 - role: interface-ingroup
   uid: group
 - role: constraint
+  uid: /constraint/directive-not-pre-qualified
+- role: constraint
   uid: /constraint/directive-ctx-isr
 - role: constraint
   uid: /constraint/directive-ctx-devinit
@@ -38,8 +40,6 @@ links:
   uid: ../constraint/server-request-not-while-submit
 - role: constraint
   uid: ../constraint/server-entry-not-while-pending
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_interrupt_server_request_set_vector
 notes: |
   By default, the interrupt vector of an interrupt server request is set to a

@@ -15,6 +15,8 @@ links:
 - role: appl-config-group-member
   uid: group-classic
 - role: constraint
+  uid: ../constraint/option-not-pre-qualified
+- role: constraint
   uid: ../constraint/min-zero
 - role: constraint
   uid: ../constraint/max-obj
@@ -22,8 +24,6 @@ links:
   uid: ../constraint/memory-size
 - role: constraint
   uid: ../constraint/unlimited
-- role: constraint
-  uid: ../constraint/option-not-pre-qualified
 name: CONFIGURE_MAXIMUM_REGIONS
 notes: |
   This object class can be configured in unlimited allocation mode, see
