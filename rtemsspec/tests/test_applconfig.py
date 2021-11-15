@@ -80,46 +80,51 @@ description
 a
 -
 
-CONSTANT:
-    ``a``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is a boolean feature define.
+``a``
 
-DEFAULT CONFIGURATION:
-    default a
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description a
+This configuration option is a boolean feature define.
 
-NOTES:
-    notes a
+.. rubric:: DEFAULT CONFIGURATION:
 
-    references:
+default a
 
-    * :ref:`b`
+.. rubric:: DESCRIPTION:
 
-    * :ref:`SphinxRefUnspecGroup`
+description a
 
-    * Unspec Group 2
+.. rubric:: NOTES:
 
-    * `Unspec Group 3 <unspec-group-3.html>`_
+notes a
 
-    * :ref:`unspec_func() <SphinxRefUnspecFunc>`
+references:
 
-    * :c:func:`func`
+* :ref:`b`
 
-    * :c:type:`td`
+* :ref:`SphinxRefUnspecGroup`
 
-    * :c:macro:`DEFINE`
+* Unspec Group 2
 
-    * :ref:`UNSPEC_DEFINE <SphinxRefTarget>`
+* `Unspec Group 3 <unspec-group-3.html>`_
 
-    * `UNSPEC_DEFINE_2 <https://foo>`_
+* :ref:`unspec_func() <SphinxRefUnspecFunc>`
 
-    * :c:type:`unspec_type`
+* :c:func:`func`
 
-    * `unspec_type_2 <https://bar>`_
+* :c:type:`td`
+
+* :c:macro:`DEFINE`
+
+* :ref:`UNSPEC_DEFINE <SphinxRefTarget>`
+
+* `UNSPEC_DEFINE_2 <https://foo>`_
+
+* :c:type:`unspec_type`
+
+* `unspec_type_2 <https://bar>`_
 
 .. Generated from spec:/b
 
@@ -130,21 +135,22 @@ NOTES:
 b
 -
 
-CONSTANT:
-    ``b``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is a boolean feature define.
+``b``
 
-DEFAULT CONFIGURATION:
-    If this configuration option is undefined, then the described feature is not
-    enabled.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description b
+This configuration option is a boolean feature define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT CONFIGURATION:
+
+If this configuration option is undefined, then the described feature is not
+enabled.
+
+.. rubric:: DESCRIPTION:
+
+description b
 
 .. Generated from spec:/c
 
@@ -155,23 +161,29 @@ NOTES:
 c
 -
 
-CONSTANT:
-    ``c``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``c``
 
-DEFAULT VALUE:
-    The default value is 13.
+.. rubric:: OPTION TYPE:
 
-VALUE CONSTRAINTS:
-    constraint d
+This configuration option is an integer define.
 
-DESCRIPTION:
-    description c
+.. rubric:: DEFAULT VALUE:
 
-NOTES:
-    notes c
+The default value is 13.
+
+.. rubric:: DESCRIPTION:
+
+description c
+
+.. rubric:: NOTES:
+
+notes c
+
+.. rubric:: CONSTRAINTS:
+
+constraint d
 
 .. Generated from spec:/e
 
@@ -182,20 +194,21 @@ NOTES:
 e
 -
 
-CONSTANT:
-    ``e``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``e``
 
-DEFAULT VALUE:
-    The default value is 7.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description e
+This configuration option is an integer define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT VALUE:
+
+The default value is 7.
+
+.. rubric:: DESCRIPTION:
+
+description e
 
 .. Generated from spec:/f
 
@@ -206,20 +219,21 @@ NOTES:
 f
 -
 
-CONSTANT:
-    ``f``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``f``
 
-DEFAULT VALUE:
-    The default value is 1.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description f
+This configuration option is an integer define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT VALUE:
+
+The default value is 1.
+
+.. rubric:: DESCRIPTION:
+
+description f
 
 .. Generated from spec:/h
 
@@ -230,20 +244,21 @@ NOTES:
 h
 -
 
-CONSTANT:
-    ``h``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``h``
 
-DEFAULT VALUE:
-    The default value is 1.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description h
+This configuration option is an integer define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT VALUE:
+
+The default value is 1.
+
+.. rubric:: DESCRIPTION:
+
+description h
 
 .. Generated from spec:/i
 
@@ -254,20 +269,21 @@ NOTES:
 i
 -
 
-CONSTANT:
-    ``i``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``i``
 
-DEFAULT VALUE:
-    The default value is 1.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description i
+This configuration option is an integer define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT VALUE:
+
+The default value is 1.
+
+.. rubric:: DESCRIPTION:
+
+description i
 
 .. Generated from spec:/j
 
@@ -278,23 +294,25 @@ NOTES:
 j
 -
 
-CONSTANT:
-    ``j``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``j``
 
-DEFAULT VALUE:
-    Foo bar.
+.. rubric:: OPTION TYPE:
 
-VALUE CONSTRAINTS:
-    constraint d
+This configuration option is an integer define.
 
-DESCRIPTION:
-    description j
+.. rubric:: DEFAULT VALUE:
 
-NOTES:
-    None.
+Foo bar.
+
+.. rubric:: DESCRIPTION:
+
+description j
+
+.. rubric:: CONSTRAINTS:
+
+constraint d
 
 .. Generated from spec:/k
 
@@ -305,20 +323,21 @@ NOTES:
 k
 -
 
-CONSTANT:
-    ``k``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an integer define.
+``k``
 
-DEFAULT VALUE:
-    The default value is 1.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description k
+This configuration option is an integer define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT VALUE:
+
+The default value is 1.
+
+.. rubric:: DESCRIPTION:
+
+description k
 
 .. Generated from spec:/l
 
@@ -329,28 +348,29 @@ NOTES:
 l
 -
 
-CONSTANT:
-    ``l``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an initializer define.
+``l``
 
-DEFAULT VALUE:
-    The default value is 1.
+.. rubric:: OPTION TYPE:
 
-VALUE CONSTRAINTS:
-    The value of this configuration option shall satisfy all of the following
-    constraints:
+This configuration option is an initializer define.
 
-    * It shall be greater than or equal to zero.
+.. rubric:: DEFAULT VALUE:
 
-    * It shall be less than or equal to two.
+The default value is 1.
 
-DESCRIPTION:
-    description l
+.. rubric:: DESCRIPTION:
 
-NOTES:
-    None.
+description l
+
+.. rubric:: CONSTRAINTS:
+
+The following constraints apply to this configuration option:
+
+* The value of the configuration option shall be greater than or equal to zero.
+
+* The value of the configuration option shall be less than or equal to two.
 
 .. Generated from spec:/m
 
@@ -361,20 +381,21 @@ NOTES:
 m
 -
 
-CONSTANT:
-    ``m``
+.. rubric:: CONSTANT:
 
-OPTION TYPE:
-    This configuration option is an initializer define.
+``m``
 
-DEFAULT VALUE:
-    The default value is 1.
+.. rubric:: OPTION TYPE:
 
-DESCRIPTION:
-    description m
+This configuration option is an initializer define.
 
-NOTES:
-    None.
+.. rubric:: DEFAULT VALUE:
+
+The default value is 1.
+
+.. rubric:: DESCRIPTION:
+
+description m
 """
         assert content == src.read()
     with open(doxygen_h, "r") as src:
@@ -506,7 +527,7 @@ NOTES:
  * @par Default Value
  * The default value is 13.
  *
- * @par Value Constraints
+ * @par Constraints
  * constraint d
  *
  * @par Notes
@@ -572,7 +593,7 @@ NOTES:
  * @par Default Value
  * Foo bar.
  *
- * @par Value Constraints
+ * @par Constraints
  * constraint d
  */
 #define j
@@ -599,14 +620,14 @@ NOTES:
  * @par Default Value
  * The default value is 1.
  *
- * @par Value Constraints
+ * @par Constraints
  * @parblock
- * The value of this configuration option shall satisfy all of the following
- * constraints:
+ * The following constraints apply to this configuration option:
  *
- * * It shall be greater than or equal to zero.
+ * * The value of the configuration option shall be greater than or equal to
+ *   zero.
  *
- * * It shall be less than or equal to two.
+ * * The value of the configuration option shall be less than or equal to two.
  * @endparblock
  */
 #define l
