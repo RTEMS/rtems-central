@@ -5,8 +5,8 @@ copyrights:
 default-value: |
   The default value is
   ${max-posix-keys:/name} *
-  ${max-tasks:/name} +
-  ${max-posix-threads:/name}.
+  ( ${max-tasks:/name} +
+  ${max-posix-threads:/name} ).
 description: |
   The value of this configuration option defines the maximum number of key
   value pairs used by POSIX API Keys that can be concurrently active.
