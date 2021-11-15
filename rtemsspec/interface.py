@@ -218,6 +218,7 @@ def _get_register_name(definition: Dict[str, Any]) -> Tuple[str, str]:
 
 _CONSTRAINT_TARGET = {
     "interface/function": "this directive",
+    "interface/define": "this constant",
     "interface/macro": "this directive",
     "interface/typedef": "functions of this type",
 }
