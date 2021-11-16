@@ -76,6 +76,7 @@ glossary:
     target: modules/rtems-docs/eng/glossary.rst
 appl-config:
   doxygen-target: modules/rtems/cpukit/doxygen/appl-config.h
+  enabled: []
   groups:
   - uid: /acfg/if/group-bdbuf
     target: modules/rtems-docs/c-user/config/bdbuf.rst

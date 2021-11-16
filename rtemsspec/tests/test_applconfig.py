@@ -37,6 +37,7 @@ def test_applconfig(tmpdir):
     item_cache = ItemCache(item_cache_config)
 
     applconfig_config = {}
+    applconfig_config["enabled"] = ["X"]
     g_rst = os.path.join(tmpdir, "g.rst")
     applconfig_config["groups"] = [{"uid": "/g", "target": g_rst}]
     doxygen_h = os.path.join(tmpdir, "doxygen.h")

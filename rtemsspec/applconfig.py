@@ -204,9 +204,12 @@ def _generate_feature(content: _ContentAdaptor, item: Item,
         content.substitute(_OPTION_DEFAULT_CONFIG[option_type](item)))
 
 
-def _get_constraints(content: _ContentAdaptor, item: Item) -> List[str]:
+def _get_constraints(content: _ContentAdaptor, item: Item,
+                     enabled: List[str]) -> List[str]:
     constraints = []  # type: List[str]
     for parent in item.parents("constraint"):
+        if not parent.is_enabled(enabled):
+            continue
         content.register_license_and_copyrights_of_item(parent)
         constraints.append(
             content.substitute(parent["text"]).replace(
@@ -214,8 +217,9 @@ def _get_constraints(content: _ContentAdaptor, item: Item) -> List[str]:
     return constraints
 
 
-def _generate_constraints(content: _ContentAdaptor, item: Item) -> None:
-    constraints = _get_constraints(content, item)
+def _generate_constraints(content: _ContentAdaptor, item: Item,
+                          enabled: List[str]) -> None:
+    constraints = _get_constraints(content, item, enabled)
     if len(constraints) > 1:
         constraint_list = Content("BSD-2-Clause", False)
         prologue = ("The following constraints apply "
@@ -241,7 +245,8 @@ _OPTION_GENERATORS = {
 }
 
 
-def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
+def _generate(group: Item, options: ItemMap, enabled: List[str],
+              content: _ContentAdaptor) -> None:
     content.register_license_and_copyrights_of_item(group)
     content.add_group(group.uid, group["name"],
                       content.substitute(group["description"]))
@@ -255,7 +260,7 @@ def _generate(group: Item, options: ItemMap, content: _ContentAdaptor) -> None:
         _OPTION_GENERATORS[option_type](content, item, option_type)
         content.add_option_description(content.substitute(item["description"]))
         content.add_option_notes(content.substitute(item["notes"]))
-        _generate_constraints(content, item)
+        _generate_constraints(content, item, enabled)
     content.add_licence_and_copyrights()
 
 
@@ -317,6 +322,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     with doxygen_content.content.defgroup_block(
             "RTEMSApplConfig", "Application Configuration Options"):
         doxygen_content.content.add("@ingroup RTEMSAPI")
+    enabled = config["enabled"]
     for group_config in config["groups"]:
         group = item_cache[group_config["uid"]]
         assert group.type == "interface/appl-config-group"
@@ -325,9 +331,9 @@ def generate(config: dict, item_cache: ItemCache) -> None:
             assert child.type.startswith("interface/appl-config-option")
             options[child.uid] = child
         sphinx_content = _SphinxContentAdaptor(sphinx_mapper)
-        _generate(group, options, sphinx_content)
+        _generate(group, options, enabled, sphinx_content)
         sphinx_content.write(group_config["target"])
-        _generate(group, options, doxygen_content)
+        _generate(group, options, enabled, doxygen_content)
     doxygen_content.content.prepend_copyrights_and_licenses()
     doxygen_content.content.prepend_spdx_license_identifier()
     doxygen_content.write(config["doxygen-target"])
