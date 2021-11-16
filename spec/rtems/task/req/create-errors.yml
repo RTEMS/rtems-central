@@ -170,7 +170,7 @@ pre-conditions:
   states:
   - name: Valid
     test-code: |
-      ctx->initial_priority = 254;
+      ctx->initial_priority = RTEMS_MAXIMUM_PRIORITY - 1;
     text: |
       While the ${../if/create:/params[1]/name} parameter is valid and
       non-zero.
