@@ -1,8 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: integer
 copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
-default-value: ${min-task-stack-size:/name}
+default-value: |
+  If the ${disable-bsp-settings:/name} configuration option is not defined and
+  ${/bsp/if/acfg-idle-task-stack-size:/name} is provided by the
+  ${/glossary/bsp:/term}, then the default value is defined by
+  ${/bsp/if/acfg-idle-task-stack-size:/name}, otherwise the default value is
+  defined by the ${min-task-stack-size:/name} configuration option.
 description: |
   The value of this configuration option defines the task stack size for an
   IDLE task.

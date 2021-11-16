@@ -22,7 +22,7 @@ links:
 name: CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
 notes: |
   The value of this configuration option is placed after the entries defined by
-  ${bsp-prerequisite-drivers:/name} and before all other device driver
+  ${/bsp/if/acfg-prerequisite-drivers:/name} and before all other device driver
   configuration options.
 
   See ${appl-extra-drivers:/name} for an alternative placement

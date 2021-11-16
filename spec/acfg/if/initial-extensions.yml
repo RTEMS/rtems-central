@@ -20,6 +20,6 @@ links:
 name: CONFIGURE_INITIAL_EXTENSIONS
 notes: |
   The value of this configuration option is placed before the entries of
-  ${bsp-initial-extension:/name} and after the entries of all other initial
-  user extensions.
+  ${/bsp/if/acfg-initial-extension:/name} and after the entries of all other
+  initial user extensions.
 type: interface

@@ -36,7 +36,7 @@ post-conditions:
       #if defined(RTEMS_SMP)
       T_eq_u32( ctx->priority_obj, INT_MAX );
       #else
-      T_eq_u32( ctx->priority_obj, 255 );
+      T_eq_u32( ctx->priority_obj, 127 );
       #endif
     text: |
       The value of the object referenced by the

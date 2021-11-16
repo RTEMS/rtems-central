@@ -18,68 +18,20 @@ links:
 - role: validation
   uid: /acfg/if/idle-task-body
 - role: validation
-  uid: /acfg/if/idle-task-stack-size
+  uid: /acfg/req/init
 test-brief: |
-  This validation test suite is used to validate the default value of application configuration options.
+  This validation test suite is used to validate the default value of
+  application configuration options taking the optional BSP provided settings
+  into account.
 test-code: |
-  #include <rtems.h>
-  #include <rtems/bspIo.h>
-  #include <rtems/test-info.h>
-  #include <rtems/testopts.h>
-
-  #include <rtems/test.h>
-
-  #include "tx-support.h"
-  #include "ts-config.h"
-
   const char rtems_test_name[] = "${.:/test-suite-name}";
-
-  static char buffer[ 512 ];
-
-  static const T_action actions[] = {
-    T_report_hash_sha256
-  };
-
-  static const T_config test_config = {
-    .name = rtems_test_name,
-    .buf = buffer,
-    .buf_size = sizeof( buffer ),
-    .putchar = rtems_put_char,
-    .verbosity = RTEMS_TEST_VERBOSITY,
-    .now = T_now_tick,
-    .allocate = T_memory_allocate,
-    .deallocate = T_memory_deallocate,
-    .action_count = T_ARRAY_SIZE( actions ),
-    .actions = actions
-  };
-
-  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-
-  #define CONFIGURE_MAXIMUM_FILE_DESCRIPTORS 0
-
-  #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
-
-  #define CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 
   #define CONFIGURE_IDLE_TASK_INITIALIZES_APPLICATION
 
-  #define CONFIGURE_IDLE_TASK_STACK_SIZE TEST_MINIMUM_STACK_SIZE
-
-  static void *IdleBody( uintptr_t ignored )
+  void *IdleBody( uintptr_t ignored )
   {
-    int exit_code;
-
     (void) ignored;
-
-    rtems_test_begin( rtems_test_name, TEST_STATE );
-    T_register();
-    exit_code = T_main( &test_config );
-
-    if ( exit_code == 0 ) {
-      rtems_test_end( rtems_test_name );
-    }
-
-    rtems_fatal( RTEMS_FATAL_SOURCE_EXIT, (uint32_t) exit_code );
+    RunTestSuite();
   }
 
   #define CONFIGURE_IDLE_TASK_BODY IdleBody
@@ -89,7 +41,9 @@ test-code: |
   #include <rtems/confdefs.h>
 test-description: null
 test-includes: []
-test-local-includes: []
+test-local-includes:
+- ts-acfg.h
+- tx-support.h
 test-suite-name: ValidationAcfg0
 test-target: testsuites/validation/ts-validation-acfg-0.c
 type: test-suite

@@ -1,10 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 appl-config-option-type: initializer
 copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 - Copyright (C) 1988, 2008 On-Line Applications Research Corporation (OAR)
 default-value: |
-  If ${bsp-idle-task-body:/name} is defined, then this will be the default value,
-  otherwise the default value is ``_CPU_Thread_Idle_body``.
+  If the ${disable-bsp-settings:/name} configuration option is not defined and
+  ${/bsp/if/acfg-idle-task-body:/name} is provided by the
+  ${/glossary/bsp:/term}, then the default value is defined by
+  ${/bsp/if/acfg-idle-task-body:/name}, otherwise the default value is
+  ``_CPU_Thread_Idle_body``.
 description: |
   The value of this configuration option initializes the IDLE thread body.
 enabled-by: true
@@ -25,4 +29,9 @@ notes: |
 
   IDLE threads can be used to initialize the application, see configuration
   option ${idle-task-init-appl:/name}.
+
+  The BSP may have knowledge of the specific CPU model, system controller
+  logic, and peripheral buses, so a BSP-specific IDLE task may be capable of
+  turning components off to save power during extended periods of no task
+  activity.
 type: interface

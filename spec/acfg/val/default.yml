@@ -5,6 +5,72 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
+    Check the effect of application configuration options with optional
+    BSP-provided settings.
+  action-code: |
+    rtems_extensions_table bsp = BSP_INITIAL_EXTENSION;
+  checks:
+  - brief: |
+      Check the configured ${/acfg/if/idle-task-body:/name}.
+    code: |
+      T_step_eq_ptr( ${step}, rtems_configuration_get_idle_task(), IdleBody );
+    links:
+    - role: validation
+      uid: ../if/idle-task-body
+    - role: validation
+      uid: /rtems/config/if/get-idle-task
+  - brief: |
+      Check the default value ${/acfg/if/idle-task-stack-size:/name} where the
+      optional BSP-provided default value is enabled.
+    code: |
+      T_step_eq_sz(
+        ${step},
+        rtems_configuration_get_idle_task_stack_size(),
+      #if defined(BSP_IDLE_TASK_STACK_SIZE)
+        BSP_IDLE_TASK_STACK_SIZE
+      #else
+        CPU_STACK_MINIMUM_SIZE
+      #endif
+      );
+    links:
+    - role: validation
+      uid: ../if/idle-task-stack-size
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  - brief: |
+      Check the default value ${/acfg/if/interrupt-stack-size:/name} where the
+      optional BSP-provided default value is enabled.
+    code: |
+      T_step_eq_sz(
+        ${step},
+        rtems_configuration_get_interrupt_stack_size(),
+      #if defined(BSP_INTERRUPT_STACK_SIZE)
+        BSP_INTERRUPT_STACK_SIZE
+      #else
+        CPU_STACK_MINIMUM_SIZE
+      #endif
+      );
+    links:
+    - role: validation
+      uid: ../if/interrupt-stack-size
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  - brief: |
+      Check the BSP-provided initial extension is registered.
+    code: |
+      T_step_eq_sz( ${step}, _User_extensions_Initial_count, 1 );
+      T_step_eq_ptr(
+        ${step},
+        _User_extensions_Initial_extensions[ 0 ].fatal,
+        bsp.fatal
+      );
+    links:
+    - role: validation
+      uid: ../req/bsp-initial-extension
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  links: []
+- action-brief: |
     Try to create a barrier.
   action-code: |
     rtems_status_code sc;
@@ -186,8 +252,9 @@ test-context-support: null
 test-description: null
 test-header: null
 test-includes:
-- rtems.h
+- bsp.h
 - string.h
+- rtems/score/userextdata.h
 test-local-includes:
 - tx-support.h
 test-setup: null

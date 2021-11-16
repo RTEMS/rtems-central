@@ -7,8 +7,66 @@ test-actions:
 - action-brief: |
     Check the effect of application configuration options.
   action-code: |
-    /* Nothing to do */
+    rtems_status_code sc;
+    rtems_id          id;
   checks:
+  - brief: |
+      Check the default value ${/acfg/if/idle-task-body:/name} where the
+      optional BSP-provided default value is enabled.
+    code: |
+      T_eq_ptr(
+        rtems_configuration_get_idle_task(),
+      #if defined(BSP_IDLE_TASK_BODY)
+        BSP_IDLE_TASK_BODY
+      #else
+        _CPU_Thread_Idle_body
+      #endif
+      );
+    links:
+    - role: validation
+      uid: ../if/idle-task-body
+    - role: validation
+      uid: ../if/disable-bsp-settings
+  - brief: |
+      Check the configured ${/acfg/if/init-task-arguments:/name}.  This
+      validates also the effect of ${/acfg/if/init-task-entrypoint:/name} and
+      ${/acfg/if/rtems-init-tasks-table:/name}.
+    code: |
+      T_eq_ulong( test_runner_argument, TEST_RUNNER_ARGUMENT );
+    links:
+    - role: validation
+      uid: ../if/init-task-arguments
+    - role: validation
+      uid: ../if/init-task-entrypoint
+    - role: validation
+      uid: ../if/rtems-init-tasks-table
+  - brief: |
+      Check the configured ${/acfg/if/init-task-initial-modes:/name}.
+    code: |
+      T_eq_u32( test_runner_initial_modes, TEST_RUNNER_INITIAL_MODES );
+    links:
+    - role: validation
+      uid: ../if/init-task-initial-modes
+  - brief: |
+      Check the configured ${/acfg/if/init-task-name:/name}.
+    code: |
+      sc = rtems_task_ident( TEST_RUNNER_NAME, RTEMS_SEARCH_LOCAL_NODE, &id );
+      T_rsc_success( sc );
+      T_eq_u32( id, rtems_task_self() );
+    links:
+    - role: validation
+      uid: ../if/init-task-name
+  - brief: |
+      Check the configured ${/acfg/if/init-task-priority:/name}.  A priority of
+      zero can only be set for system tasks.  This validates also
+      ${/acfg/if/init-task-attributes:/name}.
+    code: |
+      T_eq_u32( test_runner_initial_priority, 0 );
+    links:
+    - role: validation
+      uid: ../if/init-task-priority
+    - role: validation
+      uid: ../if/init-task-attributes
   - brief: |
       Check that the configured
       ${/acfg/if/min-tasks-with-user-provided-storage:/name} value reduced the
@@ -173,7 +231,16 @@ test-actions:
     - role: validation
       uid: /rtems/config/if/get-nanoseconds-per-tick
   - brief: |
-      Check the configured ${/acfg/if/task-stack-allocator:/name} hook.
+      Check the configured ${/acfg/if/task-stack-allocator:/name} hook.  Using
+      the test stack allocator validates also
+      ${/acfg/if/init-task-construct-storage-size}, since the
+      test_task_stack_allocate() allocate handler only supports
+      ${/acfg/if/max-tasks:/name} minus one stacks and the validation test for
+      ${/rtems/task/req/create-errors} creates for some pre-condition variants
+      all tasks until ${/rtems/status/if/too-many:/name} is returned.  In
+      addition, test_task_stack_allocate() checks that the allocation size is
+      greater than or equal to TEST_MINIMUM_STACK_SIZE which validates
+      ${/acfg/if/min-task-stack-size:/name}.
     code: |
       T_eq_ptr(
         rtems_configuration_get_stack_allocate_hook(),
@@ -182,6 +249,10 @@ test-actions:
     links:
     - role: validation
       uid: ../if/task-stack-allocator
+    - role: validation
+      uid: ../if/init-task-construct-storage-size
+    - role: validation
+      uid: ../if/min-task-stack-size
     - role: validation
       uid: /rtems/config/if/get-stack-allocate-hook
   - brief: |
@@ -230,18 +301,6 @@ test-actions:
     - role: validation
       uid: /rtems/config/if/get-idle-task-stack-size
   - brief: |
-      Check the configured ${/acfg/if/idle-task-body:/name}.
-    code: |
-      T_eq_ptr(
-        rtems_configuration_get_idle_task(),
-        test_idle_task_body
-      );
-    links:
-    - role: validation
-      uid: ../if/idle-task-body
-    - role: validation
-      uid: /rtems/config/if/get-idle-task
-  - brief: |
       Check the configured ${/acfg/if/interrupt-stack-size:/name} value.
     code: |
       T_eq_sz(
@@ -273,7 +332,7 @@ test-context-support: null
 test-description: null
 test-header: null
 test-includes:
-- rtems.h
+- bsp.h
 - rtems/score/heap.h
 test-local-includes:
 - ts-config.h

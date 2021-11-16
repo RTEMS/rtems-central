@@ -4,12 +4,16 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: /req/applconfig
-non-functional-type: interface-requirement
+  uid: init
+functional-type: function
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
-  The ${/glossary/bsp:/term} may define prerequisite drivers for the Device
-  Driver Table.
+  Where ${../if/disable-bsp-settings:/name} is not defined by the application,
+  where ${/bsp/if/acfg-prerequisite-drivers:/name} is defined by the
+  ${/glossary/bsp:/term}, when the application configuration is initialized,
+  the device driver entry points defined by
+  ${/bsp/if/acfg-prerequisite-drivers:/name} shall be registered in the
+  ${/glossary/devicedrivertable:/term}.
 type: requirement

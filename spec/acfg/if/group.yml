@@ -2,14 +2,15 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
+identifier: RTEMSApplConfig
 links:
-- role: requirement-refinement
-  uid: /req/applconfig
-non-functional-type: interface-requirement
+- role: interface-ingroup
+  uid: /if/group
+non-functional-type: design-group
 rationale: null
 references: []
 requirement-type: non-functional
 text: |
-  The ${/glossary/bsp:/term} may define the default value for
-  ${../if/interrupt-stack-size:/name}.
+  The ${/glossary/api:/term} shall contain the application configuration
+  interface.
 type: requirement

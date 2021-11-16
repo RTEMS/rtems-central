@@ -42,6 +42,7 @@ build:
   - testsuites/validation/tc-userext.h
   - testsuites/validation/tr-chains-api-model.h
   - testsuites/validation/tr-event-mgr-model.h
+  - testsuites/validation/ts-acfg.h
   - testsuites/validation/ts-config.h
   - testsuites/validation/ts-default.h
   - testsuites/validation/ts-fatal-sysinit.h
@@ -81,8 +82,6 @@ appl-config:
   groups:
   - uid: /acfg/if/group-bdbuf
     target: modules/rtems-docs/c-user/config/bdbuf.rst
-  - uid: /acfg/if/group-bsp
-    target: modules/rtems-docs/c-user/config/bsp-related.rst
   - uid: /acfg/if/group-classic
     target: modules/rtems-docs/c-user/config/classic-api.rst
   - uid: /acfg/if/group-classicinit
