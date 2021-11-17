@@ -95,8 +95,21 @@ test-actions:
     - role: validation
       uid: ../req/fifo
   links: []
+- action-brief: |
+    Assert that ${../if/alignment:/name} is a constant expression which
+    evaluates to the expected value.
+  action-code: |
+    RTEMS_STATIC_ASSERT(
+      RTEMS_PARTITION_ALIGNMENT == CPU_SIZEOF_POINTER,
+      ALIGNMENT
+    );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/alignment
 test-brief: |
-  Validates some functional requirements of the Partition Manager.
+  This test case collection provides validation test cases for requirements of
+  the ${../if/group:/name}.
 test-context: []
 test-context-support: null
 test-description: null

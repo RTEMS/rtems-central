@@ -4,13 +4,12 @@ copyrights:
 enabled-by: true
 links:
 - role: interface-function
-  uid: ../if/storage-alignment
+  uid: ../if/alignment
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ${../if/storage-alignment:/name} constant shall expand to a constant
-  expression which evaluates to the value of
-  ${/score/cpu/if/stack-alignment:/name}.
+  The ${../if/alignment:/name} constant shall expand to a constant expression
+  which evaluates to the value of ${/score/cpu/if/sizeof-pointer:/name}.
 type: requirement
