@@ -91,6 +91,8 @@ class _ContentAdaptor:
                    index_entries: List[str]) -> None:
         """ Adds an option. """
         self.content.add(f".. Generated from spec:{uid}")
+        with self.content.directive("raw", "latex"):
+            self.content.add("\\clearpage")
         self.content.add_index_entries([name] + index_entries)
         self.content.add_label(name)
         self.content.add_header(name, level=3)
