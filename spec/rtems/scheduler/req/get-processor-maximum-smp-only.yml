@@ -4,14 +4,14 @@ copyrights:
 enabled-by: RTEMS_SMP
 links:
 - role: interface-function
-  uid: ../if/get-processor-maximum
+  uid: ../if/get-processor-maximum-macro
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The return value of the ${../if/get-processor-maximum:/name} directive shall
-  be the minimum of the processors available at the ${/glossary/target:/term}
-  and the ${/acfg/if/max-processors:/name} application configuration option
-  value.
+  The return value of the ${../if/get-processor-maximum-macro:/name} directive
+  shall be the minimum of the processors available at the
+  ${/glossary/target:/term} and the ${/acfg/if/max-processors:/name}
+  application configuration option value.
 type: requirement

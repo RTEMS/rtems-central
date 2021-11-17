@@ -5,12 +5,12 @@ enabled-by:
   not: RTEMS_SMP
 links:
 - role: interface-function
-  uid: ../if/get-processor-maximum
+  uid: ../if/get-processor-maximum-macro
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ${../if/get-processor-maximum:/name} directive call shall be a constant
-  expression which evaluates to one.
+  The ${../if/get-processor-maximum-macro:/name} directive call shall evaluate
+  to a constant expression which is equal to one.
 type: requirement
