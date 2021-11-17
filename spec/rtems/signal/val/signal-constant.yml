@@ -1,0 +1,60 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Validate the signal constant.
+  action-code: |
+    /* No action */
+  checks:
+  - brief: |
+      Check that the signal constant is equal to the signal number bit in the
+      signal set.
+    code: |
+      T_step_eq_u32(
+        ${step},
+        ctx->signal,
+        ( (rtems_signal_set) 1 ) << ctx->number
+      );
+    links:
+    - role: validation
+      uid: ../req/signal-constant
+    - role: validation
+      uid: ../req/signal-number
+  links: []
+test-brief: |
+  Tests an signal constant and number of the Signal Manager using the Classic and
+  system signal sets of the executing task.
+test-context: []
+test-context-support: null
+test-description: null
+test-header:
+  code: null
+  freestanding: false
+  includes:
+  - rtems.h
+  local-includes: []
+  run-params:
+  - description: |
+      is the signal constant.
+    dir: null
+    name: signal
+    specifier: rtems_signal_set ${.:name}
+  - description: |
+      is the signal number.
+    dir: null
+    name: number
+    specifier: int ${.:name}
+  target: testsuites/validation/tr-signal-constant.h
+test-includes:
+- rtems.h
+test-local-includes:
+- tr-signal-constant.h
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tr-signal-constant.c
+test-teardown: null
+type: test-case
