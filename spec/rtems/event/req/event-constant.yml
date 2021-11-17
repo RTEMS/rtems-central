@@ -72,6 +72,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The ``i``-the event constant shall be a constant expression which evaluates
-  to a value of two to the power of ``i``.
+  Let :math:`J\in{0, 1, ..., 31}`.  The :math:`J`-th event number constant
+  shall be a constant expression which evaluates to the integer representation
+  of event number :math:`J`.
 type: requirement

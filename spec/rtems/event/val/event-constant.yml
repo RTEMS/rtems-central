@@ -21,6 +21,8 @@ test-actions:
     links:
     - role: validation
       uid: ../req/event-constant
+    - role: validation
+      uid: ../req/event-number
   - brief: |
       Check that the event number bit of the event constant is not set in
       RTEMS_PENDING_EVENTS.

@@ -7,11 +7,11 @@ test-actions:
 - action-brief: |
     Run the event constant and number test for all 32 event constants.
   action-code: |
-    int i;
+    unsigned int i;
 
     for ( i = 0; i < 32; ++i ) {
       ${event-constant:/test-run}( events[ i ], i );
-      T_step( (unsigned int) i ); /* ${steps/32} */
+      T_step( i ); /* ${steps/32} */
     }
   checks: []
   links: []
@@ -105,7 +105,7 @@ test-support: |
     RTEMS_EVENT_28,
     RTEMS_EVENT_29,
     RTEMS_EVENT_30,
-    RTEMS_EVENT_31,
+    RTEMS_EVENT_31
   };
 test-target: testsuites/validation/tc-events.c
 test-teardown: null
