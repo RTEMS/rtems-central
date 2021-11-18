@@ -5,7 +5,8 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Validate the results of rtems_build_name() for a sample set of parameters.
+    Validate the results of ${../if/build-name:/name} (function) and
+    ${../if/build-name-macro:/name} (macro) for a sample set of parameters.
   action-code: |
     static const uint16_t chars[] = { 0, 255, 257 };
     rtems_name            accumulated_name;
@@ -52,13 +53,22 @@ test-actions:
             T_quiet_eq_u32( actual_name, expected_name )
             accumulated_name += actual_name;
 
-            actual_name = rtems_build_name(
+            actual_name = BuildName(
               chars[ i ],
               chars[ j ],
               chars[ k ],
               chars[ r ]
             );
             T_quiet_eq_u32( actual_name, expected_name );
+
+            actual_name = BuildNameMacro(
+              chars[ i ],
+              chars[ j ],
+              chars[ k ],
+              chars[ r ]
+            );
+            T_quiet_eq_u32( actual_name, expected_name );
+
             accumulated_name += actual_name;
           }
         }
@@ -71,8 +81,12 @@ test-actions:
       T_step_eq_u32( ${step}, accumulated_name, 0x51515100 );
     links:
     - role: validation
+      uid: ../req/build-name
+    - role: validation
       uid: ../req/build-name-macro
   links:
+  - role: validation
+    uid: ../req/build-name
   - role: validation
     uid: ../req/build-name-macro
 - action-brief: |
@@ -101,7 +115,18 @@ test-includes:
 test-local-includes: []
 test-setup: null
 test-stop: null
-test-support: null
+test-support: |
+  static rtems_name BuildNameMacro( char c1, char c2, char c3, char c4 )
+  {
+    return rtems_build_name( c1, c2, c3, c4 );
+  }
+
+  #undef rtems_build_name
+
+  static rtems_name BuildName( char c1, char c2, char c3, char c4 )
+  {
+    return rtems_build_name( c1, c2, c3, c4 );
+  }
 test-target: testsuites/validation/tc-object.c
 test-teardown: null
 type: test-case
