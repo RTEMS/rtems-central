@@ -126,6 +126,18 @@ test-actions:
   - role: validation
     uid: ../req/minimum-stack-size
 - action-brief: |
+    Assert that ${../if/configured-minimum-stack-size:/name} is a constant
+    expression which evaluates to the expected value.
+  action-code: |
+    RTEMS_STATIC_ASSERT(
+      RTEMS_CONFIGURED_MINIMUM_STACK_SIZE == 0,
+      CONFIGURED_MINIMUM_STACK_SIZE
+    );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/configured-minimum-stack-size
+- action-brief: |
     Assert that ${../if/minimum-priority:/name} is a constant expression which
     evaluates to the expected value.
   action-code: |
