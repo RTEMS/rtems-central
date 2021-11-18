@@ -221,6 +221,7 @@ _CONSTRAINT_TARGET = {
     "interface/define": "this constant",
     "interface/macro": "this directive",
     "interface/typedef": "functions of this type",
+    "interface/variable": "this object",
 }
 
 
