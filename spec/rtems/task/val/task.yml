@@ -102,6 +102,18 @@ test-actions:
   - role: validation
     uid: ../req/storage-alignment
 - action-brief: |
+    Assert that ${../if/no-priority:/name} is a constant expression which
+    evaluates to the expected value.
+  action-code: |
+    RTEMS_STATIC_ASSERT(
+      RTEMS_NO_PRIORITY == RTEMS_CURRENT_PRIORITY,
+      NO_PRIORITY
+    );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/no-priority
+- action-brief: |
     Validate ${../if/self-define:/name} using a sample directive call.
   action-code: |
     rtems_status_code sc;
