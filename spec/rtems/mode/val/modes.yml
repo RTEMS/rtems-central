@@ -202,13 +202,57 @@ test-actions:
       T_step_eq_int( ${step}, PopCount( modes ), 11 );
     links:
     - role: validation
-      uid: ../req/unique
+      uid: ../req/masks-unique
     - role: validation
       uid: ../if/asr-mask
     - role: validation
       uid: ../if/preempt-mask
     - role: validation
       uid: ../if/timeslice-mask
+  links: []
+- action-brief: |
+    Calculate the bitwise or of all non-default task mode constants.
+  action-code: |
+    rtems_mode modes;
+
+    modes = 0;
+    modes |= RTEMS_NO_ASR;
+    modes |= RTEMS_NO_PREEMPT;
+    modes |= RTEMS_TIMESLICE;
+  checks:
+  - brief: |
+      Check that the count of set bits in the calculated value is equal to the
+      count of non-default task mode constants.  Since each non-default task
+      mode constants except is a power of this proves that each constant has a
+      unique value.
+    code: |
+      T_step_eq_int( ${step}, PopCount( modes ), 3 );
+    links:
+    - role: validation
+      uid: ../req/unique
+    - role: validation
+      uid: ../if/no-asr
+    - role: validation
+      uid: ../if/no-preempt
+    - role: validation
+      uid: ../if/timeslice
+  links: []
+- action-brief: |
+    Validate ${../if/interrupt-level:/name}.
+  action-code: |
+    /* Nothing to do */
+  checks:
+  - brief: |
+      Check the result of ${../if/interrupt-level:/name} for a sample value.
+    code: |
+      T_step_eq_u32(
+        ${step},
+        RTEMS_INTERRUPT_LEVEL( UINT32_MAX ),
+        RTEMS_INTERRUPT_MASK
+      );
+    links:
+    - role: validation
+      uid: ../req/interrupt-level
   links: []
 test-brief: |
   Tests the task mode constants and function-like macros of the Classic API.
