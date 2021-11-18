@@ -18,8 +18,8 @@ description: |
   This directive obtains a task identifier associated with the task name
   specified in ${.:/params[0]/name}.
 
-  A task may obtain its own identifier by specifying ${self-define:/name} for
-  the name.
+  A task may obtain its own identifier by specifying
+  ${../../object/if/who-am-i:/name} for the name.
 
   The node to search is specified in ${.:/params[1]/name}.  It shall be
 

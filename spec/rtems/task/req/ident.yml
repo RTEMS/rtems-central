@@ -6,10 +6,12 @@ functional-type: action
 links:
 - role: interface-function
   uid: ../if/ident
+- role: interface-function
+  uid: ../../object/if/who-am-i
 post-conditions:
 - name: Status
   states:
-  - name: OkAndSelfId
+  - name: OkAndWhoAmI
     test-code: |
       T_rsc( ctx->status, RTEMS_SUCCESSFUL );
       T_eq_ptr( ctx->id, &ctx->id_value );
@@ -29,21 +31,24 @@ post-conditions:
 pre-conditions:
 - name: Name
   states:
-  - name: Self
+  - name: WhoAmI
     test-code: |
       ctx->id_value = 0xffffffff;
       ctx->id = &ctx->id_value;
     text: |
-      While the ${../if/ident:/params[0]/name} parameter is
-      ${../if/self:/name}.
-  - name: NotSelf
+      While the ${../if/ident:/params[0]/name} parameter is equal to
+      ${../../object/if/who-am-i:/name},
+      while ${../if/ident:/params[2]/name} parameter is not equal to
+      ${/c/if/null:/name}.
+  - name: NotWhoAmI
     test-code: |
       ctx->id = NULL;
       /* Preparation performed by ${../../req/ident:/test-run}() */
     text: |
-      While the ${../if/ident:/params[0]/name} is not ${../if/self:/name} or
-      ${../if/ident:/params[2]/name} parameter is ${/c/if/null:/name}, the
-      behaviour of ${../if/ident:/name} shall be specified by
+      While the ${../if/ident:/params[0]/name} is not equal to
+      ${../../object/if/who-am-i:/name} or ${../if/ident:/params[2]/name}
+      parameter is equal to ${/c/if/null:/name},
+      the behaviour of ${../if/ident:/name} shall be specified by
       ${../../req/ident}.
   test-epilogue: null
   test-prologue: null
@@ -141,14 +146,14 @@ text: ${.:text-template}
 transition-map:
 - enabled-by: true
   post-conditions:
-    Status: OkAndSelfId
+    Status: OkAndWhoAmI
   pre-conditions:
     Name:
-    - Self
+    - WhoAmI
 - enabled-by: true
   post-conditions:
     Status: Skip
   pre-conditions:
     Name:
-    - NotSelf
+    - NotWhoAmI
 type: requirement
