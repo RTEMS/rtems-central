@@ -101,6 +101,21 @@ test-actions:
   links:
   - role: validation
     uid: ../req/storage-alignment
+- action-brief: |
+    Validate ${../if/self-define:/name} using a sample directive call.
+  action-code: |
+    rtems_status_code sc;
+  checks:
+  - brief: |
+      Check that ${../if/is-suspended:/name} returns the expected status if
+      called with a task identifier parameter of ${../if/self-define:/name}.
+    code: |
+      sc = rtems_task_is_suspended( RTEMS_SELF );
+      T_step_rsc_success( ${step}, sc );
+    links:
+    - role: validation
+      uid: ../req/self-define
+  links: []
 test-brief: |
   This test case collection provides validation test cases for requirements of
   the ${../if/group:/name}.
