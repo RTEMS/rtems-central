@@ -126,6 +126,15 @@ test-actions:
   - role: validation
     uid: ../req/minimum-stack-size
 - action-brief: |
+    Assert that ${../if/minimum-priority:/name} is a constant expression which
+    evaluates to the expected value.
+  action-code: |
+    RTEMS_STATIC_ASSERT( RTEMS_MINIMUM_PRIORITY == 1, MINIMUM_PRIORITY );
+  checks: []
+  links:
+  - role: validation
+    uid: ../req/minimum-priority
+- action-brief: |
     Validate ${../if/self-define:/name} using a sample directive call.
   action-code: |
     rtems_status_code sc;
