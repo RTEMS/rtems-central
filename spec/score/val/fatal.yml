@@ -124,7 +124,6 @@ test-actions:
     T_eq_ulong( ctx->code, INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
 
     RestoreRunnerPriority();
-    SetFatalHandler( NULL, NULL );
 
     sc = rtems_extension_delete( extension_id );
     T_rsc_success( sc );
@@ -294,6 +293,7 @@ test-support: |
     void              *arg
   )
   {
+    SetFatalHandler( NULL, NULL );
     Fatal( source, code, arg );
     longjmp( before_fatal, 1 );
   }
