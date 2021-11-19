@@ -12,6 +12,5 @@ references:
   type: file
 text: |
   Inspection of the referenced ${/glossary/sourcecode:/term} file showed that
-  the ${../req/bsp-prerequisite-drivers} requirement is implemented as
-  specified.
+  the requirement is implemented as specified.
 type: validation
