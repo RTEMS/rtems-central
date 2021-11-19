@@ -298,11 +298,8 @@ test-support: |
   {
     ctx->tq_ctx.busy_wait[ MOVER ] = true;
     TQSend( &ctx->tq_ctx, MOVER, TQ_EVENT_BUSY_WAIT );
-
-    while ( rtems_scheduler_get_processor() != 1 ) {
-      /* Wait */
-    }
-
+    TQWaitForEventsReceived( &ctx->tq_ctx, MOVER );
+    T_eq_u32( rtems_scheduler_get_processor(), 1 );
     ctx->tq_ctx.busy_wait[ MOVER ] = false;
     TQWaitForExecutionStop( &ctx->tq_ctx, MOVER );
   }
