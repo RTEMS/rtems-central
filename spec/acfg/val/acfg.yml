@@ -90,7 +90,7 @@ test-actions:
     - role: validation
       uid: ../if/max-barriers
     - role: validation
-      uid: /rtems/config/if/get-maximum-barriers
+      uid: /rtems/config/req/get-maximum-barriers
   - brief: |
       Check the configured ${/acfg/if/max-user-extensions:/name} value.
     code: |
@@ -102,7 +102,7 @@ test-actions:
     - role: validation
       uid: ../if/max-user-extensions
     - role: validation
-      uid: /rtems/config/if/get-maximum-extensions
+      uid: /rtems/config/req/get-maximum-extensions
   - brief: |
       Check the configured ${/acfg/if/max-message-queues:/name} value.
     code: |
@@ -114,7 +114,7 @@ test-actions:
     - role: validation
       uid: ../if/max-message-queues
     - role: validation
-      uid: /rtems/config/if/get-maximum-message-queues
+      uid: /rtems/config/req/get-maximum-message-queues
   - brief: |
       Check the configured ${/acfg/if/max-partitions:/name} value.
     code: |
@@ -126,7 +126,7 @@ test-actions:
     - role: validation
       uid: ../if/max-partitions
     - role: validation
-      uid: /rtems/config/if/get-maximum-partitions
+      uid: /rtems/config/req/get-maximum-partitions
   - brief: |
       Check the configured ${/acfg/if/max-periods:/name} value.
     code: |
@@ -138,7 +138,7 @@ test-actions:
     - role: validation
       uid: ../if/max-periods
     - role: validation
-      uid: /rtems/config/if/get-maximum-periods
+      uid: /rtems/config/req/get-maximum-periods
   - brief: |
       Check the configured ${/acfg/if/max-processors:/name} value.
     code: |
@@ -154,7 +154,7 @@ test-actions:
     - role: validation
       uid: ../if/max-processors
     - role: validation
-      uid: /rtems/config/if/get-maximum-processors
+      uid: /rtems/config/req/get-maximum-processors
   - brief: |
       Check the configured ${/acfg/if/max-semaphores:/name} value.
     code: |
@@ -166,7 +166,7 @@ test-actions:
     - role: validation
       uid: ../if/max-semaphores
     - role: validation
-      uid: /rtems/config/if/get-maximum-semaphores
+      uid: /rtems/config/req/get-maximum-semaphores
   - brief: |
       Check the configured ${/acfg/if/max-tasks:/name} value.
     code: |
@@ -178,7 +178,7 @@ test-actions:
     - role: validation
       uid: ../if/max-tasks
     - role: validation
-      uid: /rtems/config/if/get-maximum-tasks
+      uid: /rtems/config/req/get-maximum-tasks
   - brief: |
       Check the configured ${/acfg/if/max-timers:/name} value.
     code: |
@@ -190,7 +190,7 @@ test-actions:
     - role: validation
       uid: ../if/max-timers
     - role: validation
-      uid: /rtems/config/if/get-maximum-timers
+      uid: /rtems/config/req/get-maximum-timers
   - brief: |
       Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
       microseconds.
@@ -203,7 +203,7 @@ test-actions:
     - role: validation
       uid: ../if/microseconds-per-tick
     - role: validation
-      uid: /rtems/config/if/get-microseconds-per-tick
+      uid: /rtems/config/req/get-microseconds-per-tick
   - brief: |
       Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
       milliseconds.
@@ -216,7 +216,7 @@ test-actions:
     - role: validation
       uid: ../if/microseconds-per-tick
     - role: validation
-      uid: /rtems/config/if/get-milliseconds-per-tick
+      uid: /rtems/config/req/get-milliseconds-per-tick
   - brief: |
       Check the configured ${/acfg/if/microseconds-per-tick:/name} value in
       nanoseconds.
@@ -229,7 +229,7 @@ test-actions:
     - role: validation
       uid: ../if/microseconds-per-tick
     - role: validation
-      uid: /rtems/config/if/get-nanoseconds-per-tick
+      uid: /rtems/config/req/get-nanoseconds-per-tick
   - brief: |
       Check the configured ${/acfg/if/task-stack-allocator:/name} hook.  Using
       the test stack allocator validates also
@@ -254,7 +254,7 @@ test-actions:
     - role: validation
       uid: ../if/min-task-stack-size
     - role: validation
-      uid: /rtems/config/if/get-stack-allocate-hook
+      uid: /rtems/config/req/get-stack-allocate-hook
   - brief: |
       Check the configured ${/acfg/if/task-stack-no-workspace:/name} value.
     code: |
@@ -263,7 +263,7 @@ test-actions:
     - role: validation
       uid: ../if/task-stack-no-workspace
     - role: validation
-      uid: /rtems/config/if/get-stack-allocator-avoids-work-space
+      uid: /rtems/config/req/get-stack-allocator-avoids-work-space
   - brief: |
       Check the configured ${/acfg/if/task-stack-deallocator:/name} hook.
     code: |
@@ -275,7 +275,7 @@ test-actions:
     - role: validation
       uid: ../if/task-stack-deallocator
     - role: validation
-      uid: /rtems/config/if/get-stack-free-hook
+      uid: /rtems/config/req/get-stack-free-hook
   - brief: |
       Check the configured ${/acfg/if/task-stack-allocator-for-idle:/name} hook.
     code: |
@@ -287,7 +287,7 @@ test-actions:
     - role: validation
       uid: ../if/task-stack-allocator-for-idle
     - role: validation
-      uid: /rtems/config/if/get-stack-allocate-for-idle-hook
+      uid: /rtems/config/req/get-stack-allocate-for-idle-hook
   - brief: |
       Check the configured ${/acfg/if/idle-task-stack-size:/name} value.
     code: |
@@ -299,7 +299,7 @@ test-actions:
     - role: validation
       uid: ../if/idle-task-stack-size
     - role: validation
-      uid: /rtems/config/if/get-idle-task-stack-size
+      uid: /rtems/config/req/get-idle-task-stack-size
   - brief: |
       Check the configured ${/acfg/if/interrupt-stack-size:/name} value.
     code: |
@@ -311,7 +311,7 @@ test-actions:
     - role: validation
       uid: ../if/interrupt-stack-size
     - role: validation
-      uid: /rtems/config/if/get-interrupt-stack-size
+      uid: /rtems/config/req/get-interrupt-stack-size
   - brief: |
       Check the configured ${/acfg/if/ticks-per-time-slice:/name} value.
     code: |
@@ -323,7 +323,7 @@ test-actions:
     - role: validation
       uid: ../if/ticks-per-time-slice
     - role: validation
-      uid: /rtems/config/if/get-ticks-per-timeslice
+      uid: /rtems/config/req/get-ticks-per-timeslice
   links: []
 test-brief: |
   Tests the effect of application configuration options.

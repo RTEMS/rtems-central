@@ -23,7 +23,7 @@ test-actions:
     - role: validation
       uid: ../if/scheduler-priority
     - role: validation
-      uid: /rtems/task/if/maximum-priority
+      uid: /rtems/task/req/maximum-priority
   - brief: |
       Check the configured ${/acfg/if/max-priority:/name} value using
       ${/rtems/task/if/maximum-priority}.  This configuration option affects

@@ -18,7 +18,7 @@ test-actions:
     - role: validation
       uid: ../if/idle-task-body
     - role: validation
-      uid: /rtems/config/if/get-idle-task
+      uid: /rtems/config/req/get-idle-task
   - brief: |
       Check the default value ${/acfg/if/idle-task-stack-size:/name} where the
       optional BSP-provided default value is enabled.

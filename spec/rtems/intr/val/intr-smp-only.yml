@@ -31,17 +31,13 @@ test-actions:
       uid: ../req/lock-reference-target
     - role: validation
       uid: ../req/lock-reference-type
-    - role: validation
-      uid: ../if/lock-declare
-    - role: validation
-      uid: ../if/lock-define
   - brief: |
       Check that the lock is available after initialization.
     code: |
       T_true( ISRLockIsAvailable( &lock.member ) );
     links:
     - role: validation
-      uid: ../if/lock-initializer
+      uid: ../req/lock-initializer
   - brief: |
       Check that maskable interrupts are disabled before the call to
       ${../if/lock-isr-disable:/name} and disabled afterwards.
@@ -105,7 +101,7 @@ test-actions:
       T_true( ISRLockIsAvailable( &lock.member ) );
     links:
     - role: validation
-      uid: ../if/lock-initialize
+      uid: ../req/lock-initialize
   - brief: |
       Check that maskable interrupts are disabled before the call to
       ${../if/lock-acquire:/name} and disabled afterwards.  Check that the lock
@@ -149,7 +145,19 @@ test-actions:
     links:
     - role: validation
       uid: ../req/lock-destroy
-  links: []
+  links:
+  - role: validation
+    uid: ../req/lock-declare-identifier
+  - role: validation
+    uid: ../req/lock-declare-specifier
+  - role: validation
+    uid: ../req/lock-define-identifier
+  - role: validation
+    uid: ../req/lock-define-specifier
+  - role: validation
+    uid: ../req/lock-member-identifier
+  - role: validation
+    uid: ../req/lock-member-type
 test-brief: |
   Tests some ${../if/group:/name} directives.
 test-context: []
