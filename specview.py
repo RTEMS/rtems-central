@@ -80,24 +80,27 @@ _VISITORS = {
 }
 
 
-def _validated(item: Item) -> str:
+def _info(item: Item) -> str:
+    if not item.get("_pre_qualified", True):
+        return ", not-pre-qualified"
     try:
         if item["_validated"]:
-            return ", validated=yes"
-        return ", validated=no"
+            return ""
+        return ", not-validated"
     except KeyError:
         return ""
 
 
 def _visit_item(item: Item, level: int, role: Optional[str],
                 validated_filter: str) -> bool:
-    validated = _validated(item)
-    if validated_filter == "yes" and validated != ", validated=yes":
+    validated = item.get("_validated", True)
+    if validated_filter == "yes" and not validated:
         return False
-    if validated_filter == "no" and validated != ", validated=no":
+    if validated_filter == "no" and validated:
         return False
     role_info = "" if role is None else f", role={role}"
-    print(f"{'  ' * level}{item.uid} (type={item.type}{role_info}{validated})")
+    print(
+        f"{'  ' * level}{item.uid} (type={item.type}{role_info}{_info(item)})")
     for name in ["text", "brief", "description", "notes", "rationale"]:
         if name in item:
             _MAPPER.substitute(item[name], item)
@@ -117,64 +120,44 @@ def _view_interface_placment(item: Item, level: int,
             _view_interface_placment(link.item, level + 1, validated_filter)
 
 
-def _view(item: Item, level: int, role: Optional[str],
-          validated_filter: str) -> None:
+def _view(item: Item, level: int, role: Optional[str], validated_filter: str,
+          enabled: List[str]) -> None:
+    if not item.is_enabled(enabled):
+        return
     if not _visit_item(item, level, role, validated_filter):
         return
     for child in item.children("validation"):
-        _visit_item(child, level + 1, "validation", validated_filter)
+        if child.is_enabled(enabled):
+            _visit_item(child, level + 1, "validation", validated_filter)
     _view_interface_placment(item, level + 1, validated_filter)
     for link in item.links_to_children(_CHILD_ROLES):
-        _view(link.item, level + 1, link.role, validated_filter)
+        _view(link.item, level + 1, link.role, validated_filter, enabled)
     for link in item.links_to_parents(_PARENT_ROLES):
-        _view(link.item, level + 1, link.role, validated_filter)
-
-
-def _validate(item: Item) -> bool:
-    count = len(list(item.children("validation")))
-    validated = True
-    for child in item.children(_CHILD_ROLES):
-        validated = _validate(child) and validated
-        count += 1
-    for parent in item.parents(_PARENT_ROLES):
-        validated = _validate(parent) and validated
-        count += 1
-    if count == 0:
-        validated = item.type in [
-            "constraint",
-            "glossary/group",
-            "glossary/term",
-            "interface/appl-config-group",
-            "interface/domain",
-            "interface/group",
-            "interface/header-file",
-            "interface/register-block",
-            "interface/struct",
-            "interface/typedef",
-            "interface/union",
-            "requirement/functional/action",
-            "requirement/non-functional/performance-runtime",
-            "runtime-measurement-test",
-            "test-case",
-            "test-suite",
-            "validation",
-        ]
-        if not validated:
-            item["_validated"] = False
-    else:
-        item["_validated"] = validated
-    return validated
+        _view(link.item, level + 1, link.role, validated_filter, enabled)
 
 
 _VALIDATION_LEAF = [
-    "constraint", "glossary/term", "interface/domain", "interface/container",
-    "interface/header-file", "interface/register-block",
+    "constraint",
+    "glossary/group",
+    "glossary/term",
+    "interface/appl-config-group",
+    "interface/container",
+    "interface/domain",
+    "interface/enum",
+    "interface/enumerator",
+    "interface/header-file",
+    "interface/register-block",
+    "interface/struct",
+    "interface/typedef",
+    "interface/union",
+    "interface/unspecified-define",
+    "interface/unspecified-function",
     "requirement/functional/action",
     "requirement/non-functional/performance-runtime",
-    "runtime-measurement-test", "test-case", "test-suite", "validation",
-    "interface/unspecified-define", "interface/unspecified-function",
-    "interface/struct", "interface/union", "interface/typedef",
-    "interface/enum", "interface/enumerator"
+    "runtime-measurement-test",
+    "test-case",
+    "test-suite",
+    "validation",
 ]
 
 _NOT_PRE_QUALIFIED = set([
@@ -189,22 +172,46 @@ def _is_pre_qualified(item: Item) -> bool:
         set(parent.uid for parent in item.parents("constraint")).intersection(
             _NOT_PRE_QUALIFIED))
 
+def _validation_count(item: Item, enabled: List[str]) -> int:
+    return len(list(child for child in item.children("validation") if child.is_enabled(enabled)))
+
+
+def _validate(item: Item, enabled: List[str]) -> bool:
+    if not item.is_enabled(enabled):
+        return True
+    count = _validation_count(item, enabled)
+    validated = True
+    for child in item.children(_CHILD_ROLES):
+        validated = _validate(child, enabled) and validated
+        count += 1
+    for parent in item.parents(_PARENT_ROLES):
+        validated = _validate(parent, enabled) and validated
+        count += 1
+    dep_val = validated
+    pre_qualified = _is_pre_qualified(item)
+    item["_pre_qualified"] = pre_qualified
+    if count == 0:
+        if not pre_qualified:
+            validated = True
+        else:
+            validated = item.type in _VALIDATION_LEAF
+    item["_validated"] = validated
+    return validated
+
 
 def _no_validation(item: Item, path: List[str],
                    enabled: List[str]) -> List[str]:
     path_2 = path + [item.uid]
     if not item.is_enabled(enabled):
         return path_2[:-1]
-    leaf = len(list(item.children("validation"))) == 0
-    if not leaf:
-        return path_2[:-1]
+    leaf = _validation_count(item, enabled) == 0
     for child in item.children(_CHILD_ROLES):
         path_2 = _no_validation(child, path_2, enabled)
         leaf = False
     for parent in item.parents(_PARENT_ROLES):
         path_2 = _no_validation(parent, path_2, enabled)
         leaf = False
-    if leaf and item.type not in _VALIDATION_LEAF and _is_pre_qualified(item):
+    if leaf and not item.get("_validated", True):
         for index, component in enumerate(path_2):
             if component:
                 print(f"{'  ' * index}{component}")
@@ -338,20 +345,19 @@ def main() -> None:
                         nargs="*",
                         help="an UID of a specification item")
     args = parser.parse_args(sys.argv[1:])
+    enabled = args.enabled.split(",") if args.enabled else []
     config = load_config("config.yml")
     item_cache = ItemCache(config["spec"])
     _process_test_cases(item_cache)
     root = item_cache["/req/root"]
 
     if args.filter == "none":
-        _validate(root)
-        _view(root, 0, None, args.validated)
+        _validate(root, enabled)
+        _view(root, 0, None, args.validated, enabled)
     elif args.filter == "action-table":
-        enabled = args.enabled.split(",") if args.enabled else []
         for uid in args.UIDs:
             _action_table(enabled, item_cache[uid])
     elif args.filter == "action-list":
-        enabled = args.enabled.split(",") if args.enabled else []
         for uid in args.UIDs:
             _action_list(enabled, item_cache[uid])
     elif args.filter == "orphan":
@@ -363,7 +369,8 @@ def main() -> None:
             if item not in spec:
                 print(item.uid)
     elif args.filter == "no-validation":
-        _no_validation(root, [], config["build"]["enabled"])
+        _validate(root, enabled)
+        _no_validation(root, [], enabled)
 
 
 if __name__ == "__main__":
