@@ -30,10 +30,10 @@ links:
 name: rtems_clock_get_realtime_timeval
 notes: |
   The directive accesses a device provided by the
-  ${/glossary/clock-driver:/term} to get the time in the highest precision
+  ${/glossary/clock-driver:/term} to get the time in the highest resolution
   available to the system.  Alternatively, the
-  ${get-realtime-coarse-timeval:/name} directive may be used to get the time
-  with less precision and less runtime overhead.
+  ${get-realtime-coarse-timeval:/name} directive may be used to get the time in
+  a lower resolution and with less runtime overhead.
 
   See ${get-realtime:/name} and ${get-realtime-bintime:/name} to get the time
   in alternative formats.

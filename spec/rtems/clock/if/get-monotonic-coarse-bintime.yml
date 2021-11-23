@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Gets the time elapsed since some fixed time point in the past measured using
-  the ${/glossary/clock-monotonic:/term} in coarse precision in binary time
+  the ${/glossary/clock-monotonic:/term} in coarse resolution in binary time
   format.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
@@ -32,8 +32,8 @@ name: rtems_clock_get_monotonic_coarse_bintime
 notes: |
   The directive does not access a device to get the time.  It uses a recent
   snapshot provided by the ${/glossary/clock-driver:/term}.  Alternatively, the
-  ${get-monotonic-bintime:/name} directive may be used to get the time with
-  higher precision and higher runtime overhead.
+  ${get-monotonic-bintime:/name} directive may be used to get the time in a
+  higher resolution and with a higher runtime overhead.
 
   See ${get-monotonic-coarse:/name} and ${get-monotonic-coarse-timeval:/name}
   to get the time in alternative formats.

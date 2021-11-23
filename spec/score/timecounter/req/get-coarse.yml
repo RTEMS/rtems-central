@@ -11,5 +11,5 @@ references: []
 requirement-type: non-functional
 text: |
   The timecounter component shall implement directives to get time values in a
-  coarse precision.
+  coarse resolution.
 type: requirement

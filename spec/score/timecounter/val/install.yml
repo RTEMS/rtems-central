@@ -50,7 +50,7 @@ test-actions:
     - role: validation
       uid: ../req/clock-realtime-initial-frozen
   - brief: |
-      Check the initial ${/glossary/clock-realtime:/term} in coarse precision
+      Check the initial ${/glossary/clock-realtime:/term} in coarse resolution
       in seconds and nanoseconds format.
     code: |
       rtems_clock_get_realtime_coarse( &ts );
@@ -63,7 +63,7 @@ test-actions:
       uid: /rtems/clock/req/get-realtime-coarse
   - brief: |
       Check that ${/glossary/clock-realtime:/term} is frozen in coarse
-      precision in seconds and nanoseconds format.
+      resolution in seconds and nanoseconds format.
     code: |
       rtems_clock_get_realtime_coarse( &ts );
       T_eq_i64( ts.tv_sec, 567993600 );
@@ -94,7 +94,7 @@ test-actions:
     - role: validation
       uid: ../req/clock-realtime-initial-frozen
   - brief: |
-      Check the initial ${/glossary/clock-realtime:/term} in coarse precision
+      Check the initial ${/glossary/clock-realtime:/term} in coarse resolution
       in binary time format.
     code: |
       rtems_clock_get_realtime_coarse_bintime( &bt );
@@ -107,7 +107,7 @@ test-actions:
       uid: /rtems/clock/req/get-realtime-coarse
   - brief: |
       Check that ${/glossary/clock-realtime:/term} is frozen in coarse
-      precision in binary time format.
+      resolution in binary time format.
     code: |
       rtems_clock_get_realtime_coarse_bintime( &bt );
       T_eq_i64( bt.sec, 567993600 );
@@ -138,7 +138,7 @@ test-actions:
     - role: validation
       uid: ../req/clock-realtime-initial-frozen
   - brief: |
-      Check the initial ${/glossary/clock-realtime:/term} in coarse precision
+      Check the initial ${/glossary/clock-realtime:/term} in coarse resolution
       in seconds and microseconds format.
     code: |
       rtems_clock_get_realtime_coarse_timeval( &tv );
@@ -151,7 +151,7 @@ test-actions:
       uid: /rtems/clock/req/get-realtime-coarse
   - brief: |
       Check that ${/glossary/clock-realtime:/term} is frozen in coarse
-      precision in seconds and microseconds format.
+      resolution in seconds and microseconds format.
     code: |
       rtems_clock_get_realtime_coarse_timeval( &tv );
       T_eq_i64( tv.tv_sec, 567993600 );
@@ -231,7 +231,7 @@ test-actions:
     - role: validation
       uid: ../req/clock-monotonic-initial-frozen
   - brief: |
-      Check the initial ${/glossary/clock-monotonic:/term} in coarse precision
+      Check the initial ${/glossary/clock-monotonic:/term} in coarse resolution
       in seconds and nanoseconds format.
     code: |
       rtems_clock_get_monotonic_coarse( &ts );
@@ -244,7 +244,7 @@ test-actions:
       uid: /rtems/clock/req/get-monotonic-coarse
   - brief: |
       Check that ${/glossary/clock-monotonic:/term} is frozen in coarse
-      precision in seconds and nanoseconds format.
+      resolution in seconds and nanoseconds format.
     code: |
       rtems_clock_get_monotonic_coarse( &ts );
       T_eq_i64( ts.tv_sec, 1 );
@@ -275,7 +275,7 @@ test-actions:
     - role: validation
       uid: ../req/clock-monotonic-initial-frozen
   - brief: |
-      Check the initial ${/glossary/clock-monotonic:/term} in coarse precision
+      Check the initial ${/glossary/clock-monotonic:/term} in coarse resolution
       in binary time format.
     code: |
       rtems_clock_get_monotonic_coarse_bintime( &bt );
@@ -288,7 +288,7 @@ test-actions:
       uid: /rtems/clock/req/get-monotonic-coarse
   - brief: |
       Check that ${/glossary/clock-monotonic:/term} is frozen in coarse
-      precision in binary time format.
+      resolution in binary time format.
     code: |
       rtems_clock_get_monotonic_coarse_bintime( &bt );
       T_eq_i64( bt.sec, 1 );
@@ -339,7 +339,7 @@ test-actions:
     - role: validation
       uid: ../req/clock-monotonic-initial-frozen
   - brief: |
-      Check the initial ${/glossary/clock-monotonic:/term} in coarse precision
+      Check the initial ${/glossary/clock-monotonic:/term} in coarse resolution
       in seconds and microseconds format.
     code: |
       rtems_clock_get_monotonic_coarse_timeval( &tv );
@@ -352,7 +352,7 @@ test-actions:
       uid: /rtems/clock/req/get-monotonic-coarse
   - brief: |
       Check that ${/glossary/clock-monotonic:/term} is frozen in coarse
-      precision in seconds and microseconds format.
+      resolution in seconds and microseconds format.
     code: |
       rtems_clock_get_monotonic_coarse_timeval( &tv );
       T_eq_i64( tv.tv_sec, 1 );
@@ -461,7 +461,7 @@ test-actions:
       uid: ../req/install-quality
   links: []
 - action-brief: |
-    Call the directives to get the time in the highest precision available to
+    Call the directives to get the time in the highest resolution available to
     the system.
   action-code: |
     Timecounter    *tc;
@@ -552,7 +552,7 @@ test-actions:
       uid: /rtems/clock/req/get-monotonic
   links: []
 - action-brief: |
-    Call the directives to get the time in a coarse precision.
+    Call the directives to get the time in a coarse resolution.
   action-code: |
     Timecounter    *tc;
     uint32_t        counter;
@@ -664,7 +664,7 @@ test-actions:
       uid: /rtems/clock/req/get-boot-time
   links: []
 - action-brief: |
-    Call the directives to get the time in the highest precision available to
+    Call the directives to get the time in the highest resolution available to
     the system.
   action-code: |
     Timecounter    *tc;

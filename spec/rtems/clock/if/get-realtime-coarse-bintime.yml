@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: |
   Gets the time elapsed since the ${/glossary/unix-epoch:/term} measured using
-  ${/glossary/clock-realtime:/term} in coarse precision in binary time format.
+  ${/glossary/clock-realtime:/term} in coarse resolution in binary time format.
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
@@ -31,8 +31,8 @@ name: rtems_clock_get_realtime_coarse_bintime
 notes: |
   The directive does not access a device to get the time.  It uses a recent
   snapshot provided by the ${/glossary/clock-driver:/term}.  Alternatively, the
-  ${get-realtime-bintime:/name} directive may be used to get the time with
-  higher precision and higher runtime overhead.
+  ${get-realtime-bintime:/name} directive may be used to get the time in a
+  higher resolution and with a higher runtime overhead.
 
   See ${get-realtime-coarse:/name} and ${get-realtime-coarse-timeval:/name} to
   get the time in alternative formats.

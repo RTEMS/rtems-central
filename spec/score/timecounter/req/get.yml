@@ -11,5 +11,5 @@ references: []
 requirement-type: non-functional
 text: |
   The timecounter component shall implement directives to get time values in
-  the highest precision available to the system.
+  the highest resolution available to the system.
 type: requirement

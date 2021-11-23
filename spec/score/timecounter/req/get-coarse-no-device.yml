@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The directives to get time values in a coarse precision shall not use the
+  The directives to get time values in a coarse resolution shall not use the
   currently installed timecounter.
 type: requirement

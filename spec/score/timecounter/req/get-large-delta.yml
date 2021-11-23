@@ -12,5 +12,5 @@ requirement-type: functional
 text: |
   While the timehand used to get the time was not updated for one second or
   more, while the timecounter of the timehand did not overflow, the directives
-  to get time values in the highest precision shall return the correct time.
+  to get time values in the highest resolution shall return the correct time.
 type: requirement

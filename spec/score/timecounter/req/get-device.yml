@@ -10,6 +10,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The directives to get time values in the highest precision shall use the
+  The directives to get time values in the highest resolution shall use the
   currently installed timecounter to get a clock snapshot.
 type: requirement
