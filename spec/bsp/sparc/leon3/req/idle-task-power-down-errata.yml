@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: bsps/sparc/leon3
 links:
-- role: interface-function
+- role: requirement-refinement
   uid: idle-task-body
 functional-type: function
 rationale: null
