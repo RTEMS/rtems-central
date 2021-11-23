@@ -5,7 +5,7 @@ enabled-by: true
 links: []
 test-actions:
 - action-brief: |
-    Run the signal constant and number test for all 32 signal constants.
+    Run the signal test for all 32 signal constants.
   action-code: |
     unsigned int i;
 
@@ -14,8 +14,14 @@ test-actions:
       T_step( i ); /* ${steps/32} */
     }
   checks: []
-  links: []
-test-brief: Tests the Signal Manager API.
+  links:
+  - role: validation
+    uid: ../req/signal-count
+  - role: validation
+    uid: ../req/signal-set
+test-brief: |
+  This test case collection provides validation test cases for the
+  ${../if/group:/name}.
 test-context: []
 test-context-support: null
 test-description: null

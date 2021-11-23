@@ -3,13 +3,13 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
-- role: requirement-refinement
-  uid: signal-count
+- role: interface-function
+  uid: ../if/set
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  Let :math:`J\in{0, 1, ..., 31}`.  The signal :math:`J` shall be represented
-  by the integer :math:`2^J`.
+  Let :math:`J\in{0, 1, ..., 31}`.  The ${../if/set:/name} integer type shall
+  be able to represent the integer representation of signal :math:`J`.
 type: requirement

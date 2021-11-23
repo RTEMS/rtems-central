@@ -4,12 +4,11 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
-  uid: signal-count
+  uid: group
 functional-type: function
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  Let :math:`J\in{0, 1, ..., 31}`.  The signal :math:`J` shall be represented
-  by the integer :math:`2^J`.
+  The ${../if/group:/name} shall support exactly 32 signals.
 type: requirement
