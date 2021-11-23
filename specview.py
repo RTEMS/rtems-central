@@ -172,8 +172,11 @@ def _is_pre_qualified(item: Item) -> bool:
         set(parent.uid for parent in item.parents("constraint")).intersection(
             _NOT_PRE_QUALIFIED))
 
+
 def _validation_count(item: Item, enabled: List[str]) -> int:
-    return len(list(child for child in item.children("validation") if child.is_enabled(enabled)))
+    return len(
+        list(child for child in item.children("validation")
+             if child.is_enabled(enabled)))
 
 
 def _validate(item: Item, enabled: List[str]) -> bool:
@@ -187,7 +190,6 @@ def _validate(item: Item, enabled: List[str]) -> bool:
     for parent in item.parents(_PARENT_ROLES):
         validated = _validate(parent, enabled) and validated
         count += 1
-    dep_val = validated
     pre_qualified = _is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     if count == 0:
