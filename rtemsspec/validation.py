@@ -76,6 +76,8 @@ class _Mapper(ItemMapper):
                            _get_test_context_type)
         self.add_get_value("requirement/functional/action:/test-run",
                            _get_test_run)
+        self.add_get_value("runtime-measurement-test:/test-context-type",
+                           _get_test_context_type)
         self.add_get_value("test-case:/test-context-instance",
                            _get_test_context_instance)
         self.add_get_value("test-case:/test-context-type",
