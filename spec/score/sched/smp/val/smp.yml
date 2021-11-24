@@ -5,6 +5,38 @@ enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
+    Construct a system state in which a sticky thread is blocked while an idle
+    thread executes on behalf of the thread.
+  action-code: |
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
+    SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_STICKY_OBTAIN );
+    MakeBusy( ctx, WORKER_A );
+    WaitForBusy( ctx, WORKER_A );
+  checks:
+  - brief: |
+      Block the sticky worker A while it uses an idle thread in the home
+      scheduler.
+    code: |
+      CallWithinISR( BlockAndReuseIdle, ctx );
+    links:
+    - role: validation
+      uid: ../req/block-reuse-idle
+  - brief: |
+      Clean up all used resources.
+    code: |
+      StopBusy( ctx, WORKER_A );
+      SendAndSync( ctx, WORKER_A, EVENT_STICKY_RELEASE );
+      SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+      SetSelfPriority( PRIO_NORMAL );
+      SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
+      SendAndSync( ctx, WORKER_B, EVENT_RELEASE );
+      SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
+    links: []
+  links: []
+- action-brief: |
     Construct a system state in which a thread is preempted while it is
     blocked.
   action-code: |
@@ -808,6 +840,18 @@ test-support: |
     SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
 
     SetPriority( ctx->runner_id, PRIO_VERY_HIGH );
+    ResumeTask( ctx->runner_id );
+  }
+
+  static void BlockAndReuseIdle( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    SuspendTask( ctx->runner_id );
+    SuspendTask( ctx->worker_id[ WORKER_A ] );
+    ResumeTask( ctx->worker_id[ WORKER_A ] );
+    SetPriority( ctx->runner_id, PRIO_HIGH );
     ResumeTask( ctx->runner_id );
   }
 
