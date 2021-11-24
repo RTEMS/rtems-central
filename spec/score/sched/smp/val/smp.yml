@@ -5,6 +5,41 @@ enabled-by: RTEMS_SMP
 links: []
 test-actions:
 - action-brief: |
+    Construct a system state in which a thread is preempted while it is
+    blocked.
+  action-code: |
+    SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_B_ID, PRIO_NORMAL );
+    SendEvents( ctx->worker_id[ WORKER_A ], EVENT_OBTAIN );
+    SendAndSync( ctx, WORKER_B, EVENT_OBTAIN );
+    SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_B_ID, PRIO_HIGH );
+    SetPriority( ctx->worker_id[ WORKER_A ], PRIO_NORMAL );
+    MakeBusy( ctx, WORKER_A );
+    WaitForBusy( ctx, WORKER_A );
+  checks:
+  - brief: |
+      Block worker A and preempt it before the withdraw node operations are
+      performed for worker A.
+    code: |
+      T_scheduler_set_event_handler( BlockAndPreempt, ctx );
+      SuspendTask( ctx->worker_id[ WORKER_A ] );
+    links:
+    - role: validation
+      uid: ../req/preempt-blocked
+  - brief: |
+      Clean up all used resources.
+    code: |
+      ResumeTask( ctx->worker_id[ WORKER_A ] );
+      StopBusy( ctx, WORKER_C );
+      StopBusy( ctx, WORKER_A );
+      SetPriority( ctx->worker_id[ WORKER_A ], PRIO_HIGH );
+      SetSelfPriority( PRIO_NORMAL );
+      SendEvents( ctx->worker_id[ WORKER_A ], EVENT_RELEASE );
+      SendAndSync( ctx, WORKER_B, EVENT_RELEASE );
+      SetScheduler( ctx->worker_id[ WORKER_B ], SCHEDULER_A_ID, PRIO_HIGH );
+      SetScheduler( ctx->worker_id[ WORKER_C ], SCHEDULER_A_ID, PRIO_HIGH );
+    links: []
+  links: []
+- action-brief: |
     Construct a system state in which a thread is rescheduled  while it is not
     scheduled on another scheduler.
   action-code: |
@@ -774,6 +809,38 @@ test-support: |
 
     SetPriority( ctx->runner_id, PRIO_VERY_HIGH );
     ResumeTask( ctx->runner_id );
+  }
+
+  static void Preempt( void *arg )
+  {
+    Context *ctx;
+
+    ctx = arg;
+    MakeBusy( ctx, WORKER_C );
+  }
+
+  static void BlockAndPreempt(
+    void                    *arg,
+    const T_scheduler_event *event,
+    T_scheduler_when         when
+  )
+  {
+    Context *ctx;
+
+    ctx = arg;
+
+    if ( when == T_SCHEDULER_AFTER && event->operation == T_SCHEDULER_BLOCK ) {
+      Thread_Control  *thread;
+
+      T_scheduler_set_event_handler( NULL, NULL );
+
+      thread = GetThread( ctx->worker_id[ WORKER_A ] );
+      T_eq_int( thread->Scheduler.state, THREAD_SCHEDULER_BLOCKED );
+
+      ctx->job_context[ 0 ].handler = Preempt;
+      _Per_CPU_Submit_job( _Per_CPU_Get_by_index( 1 ), &ctx->job[ 0 ] );
+      _Per_CPU_Wait_for_job( _Per_CPU_Get_by_index( 1 ), &ctx->job[ 0 ] );
+    }
   }
 
   static void PrepareOwnerScheduled( Context *ctx )
