@@ -9,7 +9,8 @@ params:
   buffer-count: 100
   sample-count: 1000
 test-brief: |
-  This test case provides a context to run Partition Manager performance tests.
+  This test case provides a context to run ${../if/group:/name} performance
+  tests.
 test-cleanup: null
 test-context:
 - brief: |

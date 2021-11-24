@@ -11,6 +11,8 @@ test-brief: |
 test-code: |
   const char rtems_test_name[] = "${.:/test-suite-name}";
 
+  #define CONFIGURE_MAXIMUM_PROCESSORS 4
+
   #include "ts-default.h"
 test-description: |
   In SMP configurations, up to three scheduler instances using the SMP EDF

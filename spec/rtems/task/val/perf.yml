@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/perf-runtime
+params:
+  sample-count: 1000
+test-brief: |
+  This test case provides a context to run ${../if/group:/name} performance
+  tests.
+test-cleanup: null
+test-context:
+- brief: |
+    This member provides a status code.
+  description: null
+  member: |
+    rtems_status_code status
+test-context-support: null
+test-description: null
+test-includes:
+- rtems.h
+test-local-includes: []
+test-prepare: null
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-task-performance.c
+test-teardown: null
+type: runtime-measurement-test
