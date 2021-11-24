@@ -1035,6 +1035,16 @@ typedef struct {
    * @brief This member provides the measure runtime request.
    */
   T_measure_runtime_request request;
+
+  /**
+   * @brief This member provides an optional measurement begin time point.
+   */
+  T_ticks begin;
+
+  /**
+   * @brief This member provides an optional measurement end time point.
+   */
+  T_ticks end;
 } Rtm_Context;
 
 static Rtm_Context

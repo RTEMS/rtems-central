@@ -899,6 +899,14 @@ class _RuntimeMeasurementTestItem(_TestItem):
         content.add_description_block(
             "This member provides the measure runtime request.", None)
         content.add("T_measure_runtime_request request;")
+        content.add_description_block(
+            "This member provides an optional measurement begin time point.",
+            None)
+        content.add("T_ticks begin;")
+        content.add_description_block(
+            "This member provides an optional measurement end time point.",
+            None)
+        content.add("T_ticks end;")
 
     def _add_requests(self, content: CContent) -> CContent:
         requests = CContent()
