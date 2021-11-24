@@ -295,6 +295,7 @@ test-action: |
 
   if ( ctx->use_helping_scheduler ) {
     SetSelfScheduler( SCHEDULER_A_ID, PRIO_ULTRA_HIGH );
+    WaitForHeir( 1, ctx->tq_ctx->worker_id[ TQ_HELPER_A ] );
   }
 
   if ( ctx->suspended ) {
@@ -468,7 +469,7 @@ test-teardown:
     SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
   description: null
 text: |
-  When the thread queue enqueue operation timed out.
+  When the thread queue is surrendered.
 transition-map:
 - enabled-by: true
   post-conditions:
