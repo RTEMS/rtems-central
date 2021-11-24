@@ -7,8 +7,8 @@ links:
   uid: /req/usage-constraints
 rationale: null
 text: |
-  A value of zero is required for the application configuration option for the
+  A value of zero for the application configuration option is mandatory for the
   pre-qualified feature set of RTEMS.  Applications which are restricted to
   only use interfaces of the pre-qualified feature set of RTEMS shall define
-  the application configuration option to a value equal to zero.
+  the application configuration option to zero.
 type: constraint

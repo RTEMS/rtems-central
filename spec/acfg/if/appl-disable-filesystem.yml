@@ -17,6 +17,8 @@ links:
   uid: ../req/appl-disable-filesystem
 - role: appl-config-group-member
   uid: group-filesystem
+- role: constraint
+  uid: ../constraint/option-pre-qualified-mandatory
 name: CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
 notes: |
   Filesystems shall be initialized to support file descriptor based device

@@ -9,6 +9,6 @@ rationale: null
 text: |
   The application configuration option is mandatory for the pre-qualified
   feature set of RTEMS.  Applications which are restricted to only use
-  interfaces of the pre-qualified feature set of RTEMS shall use the
+  interfaces of the pre-qualified feature set of RTEMS shall define the
   application configuration option.
 type: constraint
