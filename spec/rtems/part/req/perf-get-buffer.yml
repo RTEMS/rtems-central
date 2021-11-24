@@ -58,9 +58,9 @@ test-teardown:
     return tic == toc;
   description: null
 text: |
-  When a partition has exactly ${../val/perf:/params/buffer-count} free
-  buffers, the ${.:/limit-kind} runtime of exactly
-  ${../val/perf:/params/sample-count} successful calls to
-  ${../if/get-buffer:/name} in the ${.:/environment} shall be
-  ${.:/limit-condition}.
+  While the execution environment is ${.:/environment}, while a partition has
+  exactly ${../val/perf:/params/buffer-count} free buffers, while the
+  measurement sample is the runtime of exactly one successful call to
+  ${../if/get-buffer:/name}, when exactly ${../val/perf:/params/sample-count}
+  samples are collected, the ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement
