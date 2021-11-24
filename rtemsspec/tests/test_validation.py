@@ -1184,6 +1184,26 @@ static void Rpr_Cleanup( Rtm_Context *ctx )
   /* Cleanup code */
 }
 
+#if defined(FOOBAR)
+/**
+ * @brief Body brief.
+ *
+ * Body description.
+ */
+static void Rpr2_Body( Rtm_Context *ctx )
+{
+  /* Body code */
+}
+
+static void Rpr2_Body_Wrap( void *arg )
+{
+  Rtm_Context *ctx;
+
+  ctx = arg;
+  Rpr2_Body( ctx );
+}
+#endif
+
 /**
  * @fn void T_case_body_Rtm( void )
  */
@@ -1200,6 +1220,15 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
   T_measure_runtime( ctx->context, &ctx->request );
   Rpr_Cleanup( ctx );
   Rtm_Cleanup( ctx );
+
+  #if defined(FOOBAR)
+  ctx->request.name = "Rpr2";
+  ctx->request.setup = NULL;
+  ctx->request.body = Rpr2_Body_Wrap;
+  ctx->request.teardown = NULL;
+  T_measure_runtime( ctx->context, &ctx->request );
+  Rtm_Cleanup( ctx );
+  #endif
 }
 
 /** @} */

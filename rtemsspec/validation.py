@@ -32,9 +32,10 @@ import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from rtemsspec.content import CContent, CInclude, \
-    GenericContent, get_integer_type, get_value_params, get_value_plural, \
-    get_value_doxygen_group, get_value_doxygen_function, to_camel_case
+from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
+    ExpressionMapper, GenericContent, get_integer_type, get_value_params, \
+    get_value_plural, get_value_doxygen_group, get_value_doxygen_function, \
+    to_camel_case
 from rtemsspec.items import Item, ItemCache, \
     ItemGetValueContext, ItemMapper
 from rtemsspec.transitionmap import TransitionMap
@@ -921,6 +922,14 @@ class _RuntimeMeasurementTestItem(_TestItem):
         for item in self.item.children("runtime-measurement-request"):
             req = _RuntimeMeasurementRequestItem(item, self.context)
             requests.add_blank_line()
+            enabled_by = item["enabled-by"]
+            use_enabled_by = not isinstance(enabled_by, bool) or not enabled_by
+            if use_enabled_by:
+                exp = enabled_by_to_exp(enabled_by, ExpressionMapper())
+                if_exp = f"#if {exp}"
+                requests.add(if_exp)
+                content.add(if_exp)
+                content.gap = False
             _add_call_method(requests, prepare)
             name = req.add_support_method(content,
                                           "test-prepare",
@@ -955,6 +964,9 @@ class _RuntimeMeasurementTestItem(_TestItem):
                                           do_wrap=False)
             _add_call_method(requests, name)
             _add_call_method(requests, cleanup)
+            if use_enabled_by:
+                requests.append("#endif")
+                content.append("#endif")
         return requests
 
     def generate(self, content: CContent, base_directory: str,

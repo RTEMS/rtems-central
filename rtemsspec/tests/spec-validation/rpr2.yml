@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: FOOBAR
+limits: {}
+links:
+- role: runtime-measurement-request
+  uid: rtm
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Body brief.
+  code: |
+    /* Body code */
+  description: |
+    Body description.
+test-cleanup: null
+test-prepare: null
+test-setup: null
+test-teardown: null
+text: |
+  Text.
+type: requirement
