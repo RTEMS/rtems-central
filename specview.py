@@ -91,6 +91,17 @@ def _info(item: Item) -> str:
         return ""
 
 
+_TEXT_ATTRIBUTES = [
+    "brief",
+    "description",
+    "notes",
+    "rationale",
+    "test-brief",
+    "test-description",
+    "text",
+]
+
+
 def _visit_item(item: Item, level: int, role: Optional[str],
                 validated_filter: str) -> bool:
     validated = item.get("_validated", True)
@@ -101,7 +112,7 @@ def _visit_item(item: Item, level: int, role: Optional[str],
     role_info = "" if role is None else f", role={role}"
     print(
         f"{'  ' * level}{item.uid} (type={item.type}{role_info}{_info(item)})")
-    for name in ["text", "brief", "description", "notes", "rationale"]:
+    for name in _TEXT_ATTRIBUTES:
         if name in item:
             _MAPPER.substitute(item[name], item)
     try:
