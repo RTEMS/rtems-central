@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+limits: {}
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Send a message.
+  code: |
+    uint64_t message;
+
+    ctx->status = rtems_message_queue_send(
+      ctx->queue_id,
+      &message,
+      sizeof( message )
+    );
+  description: null
+test-cleanup: null
+test-prepare: null
+test-setup:
+  brief: |
+    Let the worker wait on the message queue.
+  code: |
+    Send( ctx, EVENT_RECEIVE );
+    SetPriority( ctx->worker_id, PRIO_LOW );
+  description: null
+test-teardown:
+  brief: |
+    Restore the worker priority.  Discard samples interrupted by a clock tick.
+  code: |
+    T_quiet_rsc_success( ctx->status );
+
+    SetPriority( ctx->worker_id, PRIO_HIGH );
+
+    return tic == toc;
+  description: null
+text: |
+  While the execution environment is ${.:/environment}, while a message queue
+  is empty, while exactly one task waits on the message queue, while the
+  measurement sample is the runtime of exactly one successful call to
+  ${../if/send:/name} which does not preempt the caller, when exactly
+  ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement

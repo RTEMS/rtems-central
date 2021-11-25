@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+limits: {}
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Try to receive a message.
+  code: |
+    uint64_t message;
+    size_t   size;
+
+    ctx->status = rtems_message_queue_receive(
+      ctx->queue_id,
+      &message,
+      &size,
+      RTEMS_NO_WAIT,
+      0
+    );
+  description: null
+test-cleanup: null
+test-prepare: null
+test-setup: null
+test-teardown:
+  brief: |
+    Discard samples interrupted by a clock tick.
+  code: |
+    T_quiet_rsc( ctx->status, RTEMS_UNSATISFIED );
+
+    return tic == toc;
+  description: null
+text: |
+  While the execution environment is ${.:/environment}, while a message queue
+  is empty, while the measurement sample is the runtime of exactly one
+  unsatisfied call to ${../if/send:/name}, when exactly
+  ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement

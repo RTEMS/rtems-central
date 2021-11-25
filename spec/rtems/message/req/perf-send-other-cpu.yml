@@ -15,9 +15,16 @@ references: []
 requirement-type: non-functional
 test-body:
   brief: |
-    Release the mutex.
+    Send a message.
   code: |
-    ctx->status = rtems_semaphore_release( ctx->mutex_id );
+    uint64_t message;
+
+    ctx->begin = T_tick();
+    ctx->status = rtems_message_queue_send(
+      ctx->queue_id,
+      &message,
+      sizeof( message )
+    );
   description: null
 test-cleanup:
   brief: |
@@ -33,10 +40,9 @@ test-prepare:
   description: null
 test-setup:
   brief: |
-    Let one task wait on the mutex.
+    Let the worker wait on the message queue.
   code: |
-    ObtainMutex( ctx->mutex_id );
-    Send( ctx, EVENT_OBTAIN | EVENT_OBTAIN_END | EVENT_RELEASE );
+    Send( ctx, EVENT_RECEIVE | EVENT_RECEIVE_END );
     WaitForNextTask( 1, ctx->worker_id );
   description: null
 test-teardown:
@@ -44,7 +50,7 @@ test-teardown:
     Set the measured runtime.  Make sure the worker waits for the next event.
     Discard samples interrupted by a clock tick.
   code: |
-    T_quiet_rsc( ctx->status, RTEMS_SUCCESSFUL );
+    T_quiet_rsc_success( ctx->status );
 
     *delta = ctx->end - ctx->begin;
     WaitForNextTask( 1, ctx->worker_id );
@@ -53,14 +59,14 @@ test-teardown:
   description: null
 text: |
   Let ``U` and `V`` be two tasks with distinct home schedulers.  Let :math:`B`
-  be a time point measured by ``U`` right before a call to
-  ${../if/release:/name} which unblocks task ``V`` which is scheduled on
-  another processor.  Let :math:`E` be a time point measured by ``V`` right
-  after the first context switch after :math:`B`.
-  
-  While the execution environment is ${.:/environment}, while the semaphore is
-  a priority inheritance mutex, while exactly task ``V`` waits on the mutex,
-  while the measurement sample is :math:`E - B`, when exactly
+  be a time point measured by ``U`` right before a call to ${../if/send:/name}
+  which unblocks the waiting task ``V`` which is scheduled on another
+  processor.  Let :math:`E` be a time point measured by ``V`` right after the
+  first context switch after :math:`B`.
+
+  While the execution environment is ${.:/environment}, while a message queue
+  is empty, while only task ``V`` waits on the message queue, while the
+  measurement sample is :math:`E - B`, when exactly
   ${../val/perf:/params/sample-count} samples are collected, the
   ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement

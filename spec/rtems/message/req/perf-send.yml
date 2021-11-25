@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+limits: {}
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Send a message.
+  code: |
+    uint64_t message;
+
+    ctx->status = rtems_message_queue_send(
+      ctx->queue_id,
+      &message,
+      sizeof( message )
+    );
+  description: null
+test-cleanup: null
+test-prepare: null
+test-setup: null
+test-teardown:
+  brief: |
+    Flush the message queue.  Discard samples interrupted by a clock tick.
+  code: |
+    rtems_status_code sc;
+    uint32_t          count;
+
+    T_quiet_rsc_success( ctx->status );
+
+    sc = rtems_message_queue_flush( ctx->queue_id, &count );
+    T_quiet_rsc_success( sc );
+    T_quiet_eq_u32( count, 1 );
+
+    return tic == toc;
+  description: null
+text: |
+  While the execution environment is ${.:/environment}, while a message queue
+  is empty, while no task waits on the message queue, while the measurement
+  sample is the runtime of exactly one successful call to ${../if/send:/name},
+  when exactly ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement

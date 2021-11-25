@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+limits: {}
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Send two events.  Satisfy the event condition.
+  code: |
+    ctx->status = rtems_event_send( ctx->worker_id, EVENT_END | EVENT_OTHER );
+  description: null
+test-cleanup: null
+test-prepare: null
+test-setup:
+  brief: |
+    Lower the worker priority.
+  code: |
+    SetPriority( ctx->worker_id, PRIO_LOW );
+  description: null
+test-teardown:
+  brief: |
+    Restore the worker priority.  Discard samples interrupted by a clock tick.
+  code: |
+    T_quiet_rsc_success( ctx->status );
+
+    SetPriority( ctx->worker_id, PRIO_HIGH );
+
+    return tic == toc;
+  description: null
+text: |
+  While the execution environment is ${.:/environment}, while a task waits for
+  events, while the measurement sample is the runtime of exactly one successful
+  call to ${../if/send:/name} which does satisfy the event condition of the
+  waiting task which does not preempt the caller, when exactly
+  ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement
