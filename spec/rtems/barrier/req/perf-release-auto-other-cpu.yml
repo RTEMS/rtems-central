@@ -48,19 +48,17 @@ test-prepare:
     ctx->worker_id = CreateTask( "WORK", PRIO_NORMAL );
     SetScheduler( ctx->worker_id, SCHEDULER_B_ID, PRIO_NORMAL );
     StartTask( ctx->worker_id, BarrierWaitWorker, ctx );
-  description: null
-test-setup:
-  brief: |
-    Make sure the worker task is fully blocked on the barrier.
-  code: |
     WaitForNextTask( 1, ctx->worker_id );
   description: null
+test-setup: null
 test-teardown:
   brief: |
-    Set the measured runtime.  Discard samples interrupted by a clock tick.
+    Make sure the worker waits for the next event.  Set the measured runtime.
+    Discard samples interrupted by a clock tick.
   code: |
     T_quiet_rsc_success( ctx->status );
 
+    WaitForNextTask( 1, ctx->worker_id );
     *delta = ctx->end - ctx->begin;
 
     return tic == toc;

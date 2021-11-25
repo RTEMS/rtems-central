@@ -20,6 +20,7 @@ test-body:
     uint64_t message;
     size_t   size;
 
+    ctx->begin = T_tick();
     ctx->status = rtems_message_queue_receive(
       ctx->queue_id,
       &message,

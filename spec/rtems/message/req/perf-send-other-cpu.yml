@@ -47,13 +47,13 @@ test-setup:
   description: null
 test-teardown:
   brief: |
-    Set the measured runtime.  Make sure the worker waits for the next event.
+    Make sure the worker waits for the next event.  Set the measured runtime.
     Discard samples interrupted by a clock tick.
   code: |
     T_quiet_rsc_success( ctx->status );
 
-    *delta = ctx->end - ctx->begin;
     WaitForNextTask( 1, ctx->worker_id );
+    *delta = ctx->end - ctx->begin;
 
     return tic == toc;
   description: null

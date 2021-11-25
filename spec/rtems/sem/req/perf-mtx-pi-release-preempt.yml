@@ -17,6 +17,7 @@ test-body:
   brief: |
     Release the mutex.
   code: |
+    ctx->begin = T_tick();
     ctx->status = rtems_semaphore_release( ctx->mutex_id );
   description: null
 test-cleanup: null

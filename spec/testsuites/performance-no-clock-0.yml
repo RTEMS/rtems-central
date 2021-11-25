@@ -13,6 +13,8 @@ test-code: |
 
   #define CONFIGURE_MAXIMUM_PROCESSORS 4
 
+  #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
   #include "ts-default.h"
 test-description: |
   In SMP configurations, up to three scheduler instances using the SMP EDF
@@ -20,6 +22,6 @@ test-description: |
 test-includes:
 - rtems/test-info.h
 test-local-includes: []
-test-suite-name: Performance0
-test-target: testsuites/validation/ts-performance-0.c
+test-suite-name: PerformanceNoClock0
+test-target: testsuites/validation/ts-performance-no-clock-0.c
 type: test-suite
