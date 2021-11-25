@@ -15,8 +15,8 @@ references:
   type: file
 text: |
   Inspection of the referenced ${/glossary/sourcecode:/term} files showed that
-  the ${../if/fatal-halt:/name} directive is implemented as specified.  In
-  addition, the instruction sequence of the directive was executed in assembler
-  single step mode under control of a debugger on the SPARC/RISCV instruction
-  simulator version 2.29 to validate that its function is as specified.
+  the function is implemented as specified.  In addition, the instruction
+  sequence of the directive was executed in assembler single step mode under
+  control of a debugger on the SPARC/RISCV instruction simulator version 2.29
+  to validate that its function is as specified.
 type: validation
