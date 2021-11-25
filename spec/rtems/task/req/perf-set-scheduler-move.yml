@@ -1,7 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
+enabled-by: RTEMS_SMP
 limits: {}
 links:
 - role: requirement-refinement
@@ -15,27 +15,41 @@ references: []
 requirement-type: non-functional
 test-body:
   brief: |
-    Construct a worker task.
+    Set the scheduler of the runner.
   code: |
-    ctx->status = rtems_task_construct( &config, &ctx->worker_id );
+    ctx->status = rtems_task_set_scheduler(
+      RTEMS_SELF,
+      SCHEDULER_B_ID,
+      PRIO_NORMAL
+    );
   description: null
-test-cleanup: null
-test-prepare: null
+test-cleanup:
+  brief: |
+    Restore the runner affinity.
+  code: |
+    SetSelfAffinityOne( 0 );
+  description: null
+test-prepare:
+  brief: |
+    Set the runner affinity.
+  code: |
+    SetSelfAffinityAll();
+  description: null
 test-setup: null
 test-teardown:
   brief: |
-    Delete the worker.  Discard samples interrupted by a clock tick.
+    Discard samples interrupted by a clock tick.
   code: |
     T_quiet_rsc_success( ctx->status );
 
-    DeleteTask( ctx->worker_id );
-    KillZombies();
+    SetSelfScheduler( SCHEDULER_A_ID, PRIO_NORMAL );
 
     return tic == toc;
   description: null
 text: |
   While the execution environment is ${.:/environment}, while the measurement
   sample is the runtime of exactly one successful call to
-  ${../if/construct:/name}, when exactly ${../val/perf:/params/sample-count}
-  samples are collected, the ${.:/limit-kind} shall be ${.:/limit-condition}.
+  ${../if/set-scheduler:/name} which changes the scheduler of the caller, when
+  exactly ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement

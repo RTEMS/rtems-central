@@ -15,27 +15,29 @@ references: []
 requirement-type: non-functional
 test-body:
   brief: |
-    Construct a worker task.
+    Set the scheduler of the runner.
   code: |
-    ctx->status = rtems_task_construct( &config, &ctx->worker_id );
+    ctx->status = rtems_task_set_scheduler(
+      RTEMS_SELF,
+      SCHEDULER_A_ID,
+      PRIO_NORMAL
+    );
   description: null
 test-cleanup: null
 test-prepare: null
 test-setup: null
 test-teardown:
   brief: |
-    Delete the worker.  Discard samples interrupted by a clock tick.
+    Discard samples interrupted by a clock tick.
   code: |
     T_quiet_rsc_success( ctx->status );
-
-    DeleteTask( ctx->worker_id );
-    KillZombies();
 
     return tic == toc;
   description: null
 text: |
   While the execution environment is ${.:/environment}, while the measurement
   sample is the runtime of exactly one successful call to
-  ${../if/construct:/name}, when exactly ${../val/perf:/params/sample-count}
-  samples are collected, the ${.:/limit-kind} shall be ${.:/limit-condition}.
+  ${../if/set-scheduler:/name} which does not change the scheduler or priority,
+  when exactly ${../val/perf:/params/sample-count} samples are collected, the
+  ${.:/limit-kind} shall be ${.:/limit-condition}.
 type: requirement

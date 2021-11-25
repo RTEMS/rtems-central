@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+limits: {}
+links:
+- role: requirement-refinement
+  uid: perf-runtime
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Restart the worker task.
+  code: |
+    ctx->begin = T_tick();
+    ctx->status = rtems_task_restart(
+      ctx->worker_id,
+      (rtems_task_argument) ctx
+    );
+  description: null
+test-cleanup:
+  brief: |
+    Delete the worker task.
+  code: |
+    DeleteTask( ctx->worker_id );
+  description: null
+test-prepare:
+  brief: |
+    Create and start a worker task.
+  code: |
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, Worker, ctx );
+  description: null
+test-setup: null
+test-teardown:
+  brief: |
+    Set the measured runtime.  Discard samples interrupted by a clock tick.
+  code: |
+    T_quiet_rsc_success( ctx->status );
+
+    *delta = ctx->end - ctx->begin;
+
+    return tic == toc;
+  description: null
+text: |
+  Let ``U` and `V`` be two tasks with the same home scheduler.  Let :math:`B`
+  be a time point measured by ``U`` right before a call to
+  ${../if/restart:/name} which starts task ``V`` which preempts the caller.
+  Let :math:`E` be a time point measured by ``V`` right after the first context
+  switch after :math:`B`.
+
+  While the execution environment is ${.:/environment}, while the measurement
+  sample is :math:`E - B`, the ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement
