@@ -191,16 +191,16 @@ def _validation_count(item: Item, enabled: List[str]) -> int:
 
 
 def _validate(item: Item, enabled: List[str]) -> bool:
-    if not item.is_enabled(enabled):
-        return True
     count = _validation_count(item, enabled)
     validated = True
     for child in item.children(_CHILD_ROLES):
-        validated = _validate(child, enabled) and validated
-        count += 1
+        if child.is_enabled(enabled):
+            validated = _validate(child, enabled) and validated
+            count += 1
     for parent in item.parents(_PARENT_ROLES):
-        validated = _validate(parent, enabled) and validated
-        count += 1
+        if parent.is_enabled(enabled):
+            validated = _validate(parent, enabled) and validated
+            count += 1
     pre_qualified = _is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     if count == 0:
