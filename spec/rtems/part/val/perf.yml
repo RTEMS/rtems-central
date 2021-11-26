@@ -7,7 +7,7 @@ links:
   uid: ../req/perf-runtime
 params:
   buffer-count: 100
-  sample-count: 1000
+  sample-count: 100
 test-brief: |
   This test case provides a context to run ${../if/group:/name} performance
   tests.
