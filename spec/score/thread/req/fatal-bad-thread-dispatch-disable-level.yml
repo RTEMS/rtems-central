@@ -5,6 +5,8 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/fatal-error
+- role: requirement-refinement
+  uid: ../if/group
 functional-type: function
 rationale: null
 references: []

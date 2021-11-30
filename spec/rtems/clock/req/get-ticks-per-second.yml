@@ -3,7 +3,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
-- role: requirement-refinement
+- role: interface-function
   uid: ../if/get-ticks-per-second
 non-functional-type: interface
 rationale: null

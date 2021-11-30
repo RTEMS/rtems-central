@@ -5,6 +5,8 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: /req/fine-grained-locking
+- role: requirement-refinement
+  uid: ../if/group
 non-functional-type: design
 rationale: null
 references: []

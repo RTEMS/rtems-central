@@ -5,6 +5,8 @@ enabled-by: true
 links:
 - role: requirement-refinement
   uid: ../../req/perf-runtime
+- role: requirement-refinement
+  uid: group
 non-functional-type: performance
 rationale: null
 references: []

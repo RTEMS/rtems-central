@@ -5,6 +5,8 @@ enabled-by: sparc/gr712rc
 links:
 - role: requirement-refinement
   uid: /req/errata
+- role: requirement-refinement
+  uid: ../if/group
 non-functional-type: design
 rationale: null
 references:
