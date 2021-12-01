@@ -19,9 +19,9 @@ test-actions:
       T_eq_u32( RTEMS_MAXIMUM_PRIORITY, 127 );
     links:
     - role: validation
-      uid: ../if/max-priority
+      uid: ../req/max-priority
     - role: validation
-      uid: ../if/scheduler-priority
+      uid: ../req/scheduler-priority
     - role: validation
       uid: /rtems/task/req/maximum-priority
   - brief: |
@@ -34,7 +34,7 @@ test-actions:
       T_rsc_success( sc );
     links:
     - role: validation
-      uid: ../if/scheduler-name
+      uid: ../req/scheduler-name
   links: []
 test-brief: |
   Tests the effect of application configuration options.

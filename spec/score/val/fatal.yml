@@ -155,7 +155,7 @@ test-actions:
   - role: validation
     uid: /rtems/fatal/req/fatal
   - role: validation
-    uid: /acfg/if/initial-extensions
+    uid: /acfg/req/initial-extensions
 test-brief: |
   Tests some fatal errors.
 test-context:

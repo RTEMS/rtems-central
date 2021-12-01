@@ -12,8 +12,6 @@ index-entries:
 - task stack allocator
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/task-stack-from-alloc
 - role: appl-config-group-member
   uid: group-stackalloc
 - role: constraint

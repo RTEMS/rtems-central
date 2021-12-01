@@ -1,14 +1,16 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
+enabled-by: false
+functional-type: function
 links:
+- role: interface-function
+  uid: ../if/appl-needs-rtc-driver
 - role: requirement-refinement
-  uid: /req/applconfig
-non-functional-type: interface-requirement
+  uid: group
 rationale: null
 references: []
-requirement-type: non-functional
+requirement-type: functional
 text: |
   The system shall provide an application configuration option which enables
   the initialization of the Real-Time Clock Driver during system

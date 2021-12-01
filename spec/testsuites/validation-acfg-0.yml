@@ -6,17 +6,17 @@ links:
 - role: requirement-refinement
   uid: /req/test-suites
 - role: validation
-  uid: /acfg/if/appl-does-not-need-clock-driver
+  uid: /acfg/req/appl-does-not-need-clock-driver
 - role: validation
-  uid: /acfg/if/max-file-descriptors
+  uid: /acfg/req/max-file-descriptors
 - role: validation
-  uid: /acfg/if/disable-newlib-reentrancy
+  uid: /acfg/req/disable-newlib-reentrancy
 - role: validation
-  uid: /acfg/if/appl-disable-filesystem
+  uid: /acfg/req/appl-disable-filesystem
 - role: validation
-  uid: /acfg/if/idle-task-init-appl
+  uid: /acfg/req/idle-task-init-appl
 - role: validation
-  uid: /acfg/if/idle-task-body
+  uid: /acfg/req/idle-task-body
 - role: validation
   uid: /acfg/req/init
 test-brief: |

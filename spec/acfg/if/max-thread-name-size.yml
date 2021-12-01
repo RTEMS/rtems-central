@@ -11,8 +11,6 @@ index-entries:
 - maximum thread name size
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/max-thread-name-size
 - role: appl-config-group-member
   uid: group-general
 - role: constraint

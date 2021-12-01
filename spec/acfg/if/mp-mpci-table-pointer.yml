@@ -10,8 +10,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/mp-mpci-table-pointer
 - role: appl-config-group-member
   uid: group-mpci
 - role: constraint

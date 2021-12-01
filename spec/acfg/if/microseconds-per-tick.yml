@@ -27,8 +27,6 @@ index-entries:
 - tick quantum
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/microseconds-per-tick
 - role: appl-config-group-member
   uid: group-general
 - role: constraint

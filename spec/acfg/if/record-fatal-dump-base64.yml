@@ -17,8 +17,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/record-fatal-dump-base64
 - role: appl-config-group-member
   uid: group-eventrecord
 - role: constraint

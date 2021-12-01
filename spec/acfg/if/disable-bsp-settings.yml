@@ -28,8 +28,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/disable-bsp-settings
 - role: appl-config-group-member
   uid: group-general
 name: CONFIGURE_DISABLE_BSP_SETTINGS

@@ -1,17 +1,17 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: true
+enabled-by: false
 functional-type: function
 links:
 - role: interface-function
-  uid: ../if/max-file-descriptors
+  uid: ../if/exception-to-signal-mapping
 - role: requirement-refinement
   uid: group
 rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the maximum number of file like objects that can be concurrently open.
+  The system shall provide an application configuration option which enables
+  that exceptions are mapped to POSIX signals.
 type: requirement

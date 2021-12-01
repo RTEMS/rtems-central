@@ -10,8 +10,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/imfs-memfile-bytes-per-block
 - role: appl-config-group-member
   uid: group-filesystem
 - role: constraint

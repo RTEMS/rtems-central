@@ -9,8 +9,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/ata-driver-task-priority
 - role: appl-config-group-member
   uid: group-devdrv
 - role: constraint

@@ -9,8 +9,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/task-stack-no-workspace
 - role: appl-config-group-member
   uid: group-stackalloc
 name: CONFIGURE_TASK_STACK_ALLOCATOR_AVOIDS_WORK_SPACE

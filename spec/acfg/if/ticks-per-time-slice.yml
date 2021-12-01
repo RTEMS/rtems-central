@@ -11,8 +11,6 @@ index-entries:
 - ticks per timeslice
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/ticks-per-time-slice
 - role: appl-config-group-member
   uid: group-general
 - role: constraint

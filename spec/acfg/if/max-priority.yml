@@ -26,8 +26,6 @@ index-entries:
 - number of priority levels
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/max-priority
 - role: appl-config-group-member
   uid: group-schedgeneral
 - role: constraint

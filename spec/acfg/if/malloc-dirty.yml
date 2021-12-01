@@ -10,8 +10,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/malloc-dirty
 - role: appl-config-group-member
   uid: group-general
 - role: constraint

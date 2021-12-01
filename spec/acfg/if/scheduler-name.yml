@@ -27,8 +27,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/scheduler-name
 - role: appl-config-group-member
   uid: group-schedgeneral
 - role: constraint

@@ -9,8 +9,6 @@ enabled-by: true
 index-entries: []
 interface-type: appl-config-option
 links:
-- role: requirement-refinement
-  uid: ../req/posix-init-thread-table
 - role: appl-config-group-member
   uid: group-posixinit
 - role: constraint

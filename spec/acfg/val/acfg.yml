@@ -24,9 +24,9 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/idle-task-body
+      uid: ../req/idle-task-body
     - role: validation
-      uid: ../if/disable-bsp-settings
+      uid: ../req/disable-bsp-settings
   - brief: |
       Check the configured ${/acfg/if/init-task-arguments:/name}.  This
       validates also the effect of ${/acfg/if/init-task-entrypoint:/name} and
@@ -35,18 +35,18 @@ test-actions:
       T_eq_ulong( test_runner_argument, TEST_RUNNER_ARGUMENT );
     links:
     - role: validation
-      uid: ../if/init-task-arguments
+      uid: ../req/init-task-arguments
     - role: validation
-      uid: ../if/init-task-entrypoint
+      uid: ../req/init-task-entrypoint
     - role: validation
-      uid: ../if/rtems-init-tasks-table
+      uid: ../req/rtems-init-tasks-table
   - brief: |
       Check the configured ${/acfg/if/init-task-initial-modes:/name}.
     code: |
       T_eq_u32( test_runner_initial_modes, TEST_RUNNER_INITIAL_MODES );
     links:
     - role: validation
-      uid: ../if/init-task-initial-modes
+      uid: ../req/init-task-initial-modes
   - brief: |
       Check the configured ${/acfg/if/init-task-name:/name}.
     code: |
@@ -55,7 +55,7 @@ test-actions:
       T_eq_u32( id, rtems_task_self() );
     links:
     - role: validation
-      uid: ../if/init-task-name
+      uid: ../req/init-task-name
   - brief: |
       Check the configured ${/acfg/if/init-task-priority:/name}.  A priority of
       zero can only be set for system tasks.  This validates also
@@ -64,9 +64,9 @@ test-actions:
       T_eq_u32( test_runner_initial_priority, 0 );
     links:
     - role: validation
-      uid: ../if/init-task-priority
+      uid: ../req/init-task-priority
     - role: validation
-      uid: ../if/init-task-attributes
+      uid: ../req/init-task-attributes
   - brief: |
       Check that the configured
       ${/acfg/if/min-tasks-with-user-provided-storage:/name} value reduced the
@@ -78,7 +78,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/min-tasks-with-user-provided-storage
+      uid: ../req/min-tasks-with-user-provided-storage
   - brief: |
       Check the configured ${/acfg/if/max-barriers:/name} value.
     code: |
@@ -88,7 +88,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-barriers
+      uid: ../req/max-barriers
     - role: validation
       uid: /rtems/config/req/get-maximum-barriers
   - brief: |
@@ -100,7 +100,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-user-extensions
+      uid: ../req/max-user-extensions
     - role: validation
       uid: /rtems/config/req/get-maximum-extensions
   - brief: |
@@ -112,7 +112,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-message-queues
+      uid: ../req/max-message-queues
     - role: validation
       uid: /rtems/config/req/get-maximum-message-queues
   - brief: |
@@ -124,7 +124,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-partitions
+      uid: ../req/max-partitions
     - role: validation
       uid: /rtems/config/req/get-maximum-partitions
   - brief: |
@@ -136,7 +136,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-periods
+      uid: ../req/max-periods
     - role: validation
       uid: /rtems/config/req/get-maximum-periods
   - brief: |
@@ -152,7 +152,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-processors
+      uid: ../req/max-processors
     - role: validation
       uid: /rtems/config/req/get-maximum-processors
   - brief: |
@@ -164,7 +164,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-semaphores
+      uid: ../req/max-semaphores
     - role: validation
       uid: /rtems/config/req/get-maximum-semaphores
   - brief: |
@@ -176,7 +176,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-tasks
+      uid: ../req/max-tasks
     - role: validation
       uid: /rtems/config/req/get-maximum-tasks
   - brief: |
@@ -188,7 +188,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/max-timers
+      uid: ../req/max-timers
     - role: validation
       uid: /rtems/config/req/get-maximum-timers
   - brief: |
@@ -201,7 +201,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/microseconds-per-tick
+      uid: ../req/microseconds-per-tick
     - role: validation
       uid: /rtems/config/req/get-microseconds-per-tick
   - brief: |
@@ -214,7 +214,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/microseconds-per-tick
+      uid: ../req/microseconds-per-tick
     - role: validation
       uid: /rtems/config/req/get-milliseconds-per-tick
   - brief: |
@@ -227,7 +227,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/microseconds-per-tick
+      uid: ../req/microseconds-per-tick
     - role: validation
       uid: /rtems/config/req/get-nanoseconds-per-tick
   - brief: |
@@ -248,11 +248,11 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/task-stack-allocator
+      uid: ../req/task-stack-allocator
     - role: validation
-      uid: ../if/init-task-construct-storage-size
+      uid: ../req/init-task-construct-storage-size
     - role: validation
-      uid: ../if/min-task-stack-size
+      uid: ../req/min-task-stack-size
     - role: validation
       uid: /rtems/config/req/get-stack-allocate-hook
   - brief: |
@@ -261,7 +261,7 @@ test-actions:
       T_true( rtems_configuration_get_stack_allocator_avoids_work_space() );
     links:
     - role: validation
-      uid: ../if/task-stack-no-workspace
+      uid: ../req/task-stack-no-workspace
     - role: validation
       uid: /rtems/config/req/get-stack-allocator-avoids-work-space
   - brief: |
@@ -273,7 +273,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/task-stack-deallocator
+      uid: ../req/task-stack-deallocator
     - role: validation
       uid: /rtems/config/req/get-stack-free-hook
   - brief: |
@@ -285,7 +285,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/task-stack-allocator-for-idle
+      uid: ../req/task-stack-allocator-for-idle
     - role: validation
       uid: /rtems/config/req/get-stack-allocate-for-idle-hook
   - brief: |
@@ -297,7 +297,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/idle-task-stack-size
+      uid: ../req/idle-task-stack-size
     - role: validation
       uid: /rtems/config/req/get-idle-task-stack-size
   - brief: |
@@ -309,7 +309,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/interrupt-stack-size
+      uid: ../req/interrupt-stack-size
     - role: validation
       uid: /rtems/config/req/get-interrupt-stack-size
   - brief: |
@@ -321,7 +321,7 @@ test-actions:
       );
     links:
     - role: validation
-      uid: ../if/ticks-per-time-slice
+      uid: ../req/ticks-per-time-slice
     - role: validation
       uid: /rtems/config/req/get-ticks-per-timeslice
   links: []
