@@ -232,8 +232,13 @@ def _no_validation(item: Item, path: List[str],
     return path_2[:-1]
 
 
+_REFINEMENTS = ["interface-function", "requirement-refinement"]
+
+_GROUPS = ["requirement/non-functional/design-group", "interface/group"]
+
+
 def _is_refinement(item: Item, other: Item) -> bool:
-    for parent in item.parents(["interface-function", "requirement-refinement"]):
+    for parent in item.parents(_REFINEMENTS):
         if parent == other:
             return True
         if _is_refinement(parent, other):
@@ -241,14 +246,11 @@ def _is_refinement(item: Item, other: Item) -> bool:
     return False
 
 
-_GROUPS = ["requirement/non-functional/design-group", "interface/group"]
-
-
-def _gather_design_components(item: Item, components: List[str]) -> bool:
+def _gather_design_components(item: Item, components: List[Item]) -> bool:
     if item.type in _GROUPS:
         components.append(item)
         return True
-    elif item.type.startswith("requirement"):
+    if item.type.startswith("requirement"):
         for parent in item.parents("interface-function"):
             components.append(parent)
         for parent in item.parents("requirement-refinement"):
@@ -261,17 +263,17 @@ def _design(item_cache: ItemCache, enabled: List[str]) -> None:
     for item in item_cache.all.values():
         if not item.is_enabled(enabled):
             continue
-        components = []
+        components = []  # type: List[Item]
         if not _gather_design_components(item, components):
             continue
-        compact = set()
+        compact = set()  # type: Set[Item]
         for component in components:
             for component_2 in components:
                 if component != component_2:
                     if _is_refinement(component_2, component):
                         break
             else:
-                 compact.add(component)
+                compact.add(component)
         if compact:
             text = ", ".join(component.uid for component in compact)
         else:
@@ -403,7 +405,7 @@ def _gather_api_names(item: Item, names: List[str]) -> None:
 
 
 def _list_api(item_cache: ItemCache) -> None:
-    names = []  # List[str]
+    names = []  # type: List[str]
     _gather_api_names(item_cache["/if/domain"], names)
     _gather_api_names(item_cache["/acfg/if/domain"], names)
     for name in sorted(names):
