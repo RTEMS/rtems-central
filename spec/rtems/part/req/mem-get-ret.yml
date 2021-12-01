@@ -4,6 +4,8 @@ copyrights:
 enabled-by: true
 links:
 - role: requirement-refinement
+  uid: group
+- role: requirement-refinement
   uid: ../../req/mem-basic
 non-functional-type: quality
 rationale: null

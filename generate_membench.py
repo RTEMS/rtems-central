@@ -214,9 +214,9 @@ RTEMS_SCHEDULER_EDF_SMP( d );
 
 """ + _CONFIG_DEFAULT),
     _Test(
-        "dev/clock",
-        "driver",
-        ["/rtems/req/mem-basic"],
+        "bsp",
+        "clock",
+        ["../if/group-clock", "/rtems/req/mem-basic"],
         """a basic application configuration with the clock driver enabled
 (${/acfg/if/appl-needs-clock-driver:/name})""",
         None,
@@ -295,7 +295,7 @@ and ${../if/receive:/name}""",
     _Test(
         "rtems/fatal",
         "fatal",
-        _LINKS_BASIC,
+        ["../../req/group"] + _LINKS_BASIC,
         """a basic application configuration with a call to
 ${../if/fatal:/name}""",
         None,
@@ -412,7 +412,7 @@ ${../if/delete:/name}""",
     _Test(
         "rtems/scheduler",
         "add-cpu",
-        ["../../req/mem-smp-1"],
+        ["../../req/group", "../../req/mem-smp-1"],
         """a basic application configuration with a
 call to ${../if/add-processor:/name}""",
         None,
@@ -421,7 +421,7 @@ call to ${../if/add-processor:/name}""",
     _Test(
         "rtems/scheduler",
         "rm-cpu",
-        ["../../req/mem-smp-1"],
+        ["../../req/group", "../../req/mem-smp-1"],
         """a basic application configuration with a
 call to ${../if/remove-processor:/name}""",
         None,
@@ -729,6 +729,11 @@ def _block(lines: Optional[str], level: int = 2) -> str:
 
 def _links(links: List[str]) -> str:
     text = []  # type: List[str]
+    for link in links:
+        if "group" in link:
+            break
+    else:
+        links.insert(0, "group")
     for link in links:
         text.append(f"""- role: requirement-refinement
   uid: {link}""")
