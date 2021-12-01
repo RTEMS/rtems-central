@@ -4,7 +4,7 @@ copyrights:
 enabled-by: true
 identifier: RTEMSImplClassicSemaphore
 links:
-- role: interface-ingroup
+- role: requirement-refinement
   uid: ../../req/group
 non-functional-type: design-group
 rationale: null
