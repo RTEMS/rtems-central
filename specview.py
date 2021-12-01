@@ -232,6 +232,53 @@ def _no_validation(item: Item, path: List[str],
     return path_2[:-1]
 
 
+def _is_refinement(item: Item, other: Item) -> bool:
+    for parent in item.parents(["interface-function", "requirement-refinement"]):
+        if parent == other:
+            return True
+        if _is_refinement(parent, other):
+            return True
+    return False
+
+
+_GROUPS = ["requirement/non-functional/design-group", "interface/group"]
+
+
+def _gather_design_components(item: Item, components: List[str]) -> bool:
+    if item.type in _GROUPS:
+        components.append(item)
+        return True
+    elif item.type.startswith("requirement"):
+        for parent in item.parents("interface-function"):
+            components.append(parent)
+        for parent in item.parents("requirement-refinement"):
+            _gather_design_components(parent, components)
+        return True
+    return False
+
+
+def _design(item_cache: ItemCache, enabled: List[str]) -> None:
+    for item in item_cache.all.values():
+        if not item.is_enabled(enabled):
+            continue
+        components = []
+        if not _gather_design_components(item, components):
+            continue
+        compact = set()
+        for component in components:
+            for component_2 in components:
+                if component != component_2:
+                    if _is_refinement(component_2, component):
+                        break
+            else:
+                 compact.add(component)
+        if compact:
+            text = ", ".join(component.uid for component in compact)
+        else:
+            text = "N/A"
+        print(f"{item.uid}\t{text}")
+
+
 def _gather_interface_placement(item: Item, spec: Set) -> None:
     for child in item.children("interface-placement"):
         spec.add(child)
@@ -369,7 +416,7 @@ def main() -> None:
     parser.add_argument('--filter',
                         choices=[
                             "none", "api", "orphan", "no-validation",
-                            "action-table", "action-list"
+                            "action-table", "action-list", "design"
                         ],
                         type=str.lower,
                         default="none",
@@ -417,6 +464,8 @@ def main() -> None:
     elif args.filter == "api":
         _validate(root, enabled)
         _list_api(item_cache)
+    elif args.filter == "design":
+        _design(item_cache, enabled)
 
 
 if __name__ == "__main__":
