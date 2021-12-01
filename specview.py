@@ -333,13 +333,43 @@ def _action_list(enabled: List[str], item: Item) -> None:
             print("    * " + ", ".join(entries))
 
 
+_API_INTERFACES = [
+    "interface/appl-config-option/feature",
+    "interface/appl-config-option/initializer",
+    "interface/appl-config-option/integer",
+    "interface/function",
+    "interface/macro",
+]
+
+_API_ROLES = [
+    "requirement-refinement",
+    "interface-placement",
+    "appl-config-group-member",
+]
+
+
+def _gather_api_names(item: Item, names: List[str]) -> None:
+    if item.type in _API_INTERFACES and _is_pre_qualified(item):
+        names.append(item["name"])
+    for child in item.children(_API_ROLES):
+        _gather_api_names(child, names)
+
+
+def _list_api(item_cache: ItemCache) -> None:
+    names = []  # List[str]
+    _gather_api_names(item_cache["/if/domain"], names)
+    _gather_api_names(item_cache["/acfg/if/domain"], names)
+    for name in sorted(names):
+        print(name)
+
+
 def main() -> None:
     """ Views the specification. """
     parser = argparse.ArgumentParser()
     parser.add_argument('--filter',
                         choices=[
-                            "none", "orphan", "no-validation", "action-table",
-                            "action-list"
+                            "none", "api", "orphan", "no-validation",
+                            "action-table", "action-list"
                         ],
                         type=str.lower,
                         default="none",
@@ -384,6 +414,9 @@ def main() -> None:
     elif args.filter == "no-validation":
         _validate(root, enabled)
         _no_validation(root, [], enabled)
+    elif args.filter == "api":
+        _validate(root, enabled)
+        _list_api(item_cache)
 
 
 if __name__ == "__main__":
