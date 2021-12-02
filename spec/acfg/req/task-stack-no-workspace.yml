@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which informs
-  the system that the task stack allocator does not use the RTEMS Workspace.
+  The application configuration option shall indicate that the task stack
+  allocator does not use the RTEMS Workspace.
 type: requirement

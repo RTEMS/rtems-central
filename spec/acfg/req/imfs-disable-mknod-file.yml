@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which disables
-  the support to make regular files in the root IMFS.
+  The application configuration option shall disable the support to make
+  regular files in the root IMFS.
 type: requirement

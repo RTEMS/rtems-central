@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which enables
-  that exactly one Classic API initialization task is configured.
+  The application configuration option shall enable that exactly one Classic
+  API initialization task is configured.
 type: requirement

@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the maximum number of POSIX API Keys that can be concurrently active.
+  The application configuration option shall define the maximum number of POSIX
+  API Keys that can be concurrently active.
 type: requirement

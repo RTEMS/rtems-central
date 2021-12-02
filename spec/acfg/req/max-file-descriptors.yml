@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the maximum number of file like objects that can be concurrently open.
+  The application configuration option shall define the maximum number of file
+  like objects that can be concurrently open.
 type: requirement

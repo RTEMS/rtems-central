@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the block size for in-memory files managed by the IMFS.
+  The application configuration option shall define the block size for
+  in-memory files managed by the IMFS.
 type: requirement

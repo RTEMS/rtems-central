@@ -12,7 +12,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which disables
-  the support to unmount file systems from the root IMFS (no support for
+  The application configuration option shall disable the support to unmount
+  file systems from the root IMFS (no support for
   ${/rtems/io/if/unmount:/name}).
 type: requirement

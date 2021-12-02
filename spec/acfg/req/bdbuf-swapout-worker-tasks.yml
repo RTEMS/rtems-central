@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the Block Device Cache swapout worker task count.
+  The application configuration option shall define the Block Device Cache
+  swapout worker task count.
 type: requirement

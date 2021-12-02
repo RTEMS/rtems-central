@@ -12,7 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the number of bytes reserved for message queue buffers in the RTEMS
-  Workspace.
+  The application configuration option shall define the number of bytes
+  reserved for message queue buffers in the RTEMS Workspace.
 type: requirement

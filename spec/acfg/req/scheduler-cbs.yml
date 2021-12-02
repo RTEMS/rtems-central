@@ -12,7 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which enables
-  that the ${/doc/if/scheduler-cbs:/name} algorithm is made available
-  to the application.
+  The application configuration option shall make the
+  ${/doc/if/scheduler-cbs:/name} algorithm available to the application.
 type: requirement

@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which disables
-  the system initialization of the ${/glossary/clock-driver:/term}.
+  The application configuration option shall disable the system initialization
+  of the ${/glossary/clock-driver:/term}.
 type: requirement

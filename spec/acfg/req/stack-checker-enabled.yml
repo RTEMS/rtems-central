@@ -12,6 +12,5 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which enables
-  the stack checker.
+  The application configuration option shall enable the stack checker.
 type: requirement

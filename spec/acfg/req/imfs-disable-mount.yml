@@ -12,7 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which disables
-  the support to mount file systems in the root IMFS.  (no support for
-  ${/rtems/io/if/mount:/name}).
+  The application configuration option shall disable the support to mount file
+  systems in the root IMFS.  (no support for ${/rtems/io/if/mount:/name}).
 type: requirement

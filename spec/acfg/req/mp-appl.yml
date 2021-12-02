@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which indicates
-  that the application intends to be part of a multiprocessing configuration.
+  The application configuration option shall indicate that the application
+  intends to be part of a multiprocessing configuration.
 type: requirement

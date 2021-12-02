@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which enables an
-  IMFS with a reduced feature set for the base file system.
+  The application configuration option shall enable an IMFS with a reduced
+  feature set for the base file system.
 type: requirement

@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which is used to
-  initialize the table of initial user extensions.
+  The application configuration option shall add the value to the
+  ${/glossary/initial-extension-sets:/term}.
 type: requirement

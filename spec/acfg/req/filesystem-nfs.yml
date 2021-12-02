@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which registers
-  the Network File System (NFS) client during system initialization.
+  The application configuration option shall register the Network File System
+  (NFS) client during system initialization.
 type: requirement

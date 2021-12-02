@@ -12,7 +12,7 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which disables
-  the use of ${/glossary/bsp:/term}-provided default values for application
-  configuration options.
+  The application configuration option shall disable the use of
+  ${/glossary/bsp:/term}-provided default values for application configuration
+  options.
 type: requirement

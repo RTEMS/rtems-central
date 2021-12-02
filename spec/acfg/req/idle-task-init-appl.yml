@@ -12,8 +12,8 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which indicates
-  that the user has configured **no** user initialization tasks or threads and
-  that the user provided IDLE task will perform application initialization and
-  then transform itself into an IDLE task.
+  The application configuration option shall indicate that the user has
+  configured **no** user initialization tasks or threads and that the
+  user-provided ${/glossary/idletask:/term} will perform application
+  initialization and then transform itself into an ${/glossary/idletask:/term}.
 type: requirement

@@ -12,6 +12,6 @@ rationale: null
 references: []
 requirement-type: functional
 text: |
-  The system shall provide an application configuration option which defines
-  the minimum stack size in bytes for every user task or thread in the system.
+  The application configuration option shall define the minimum stack size in
+  bytes for every user task or thread in the system.
 type: requirement
