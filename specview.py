@@ -28,7 +28,7 @@
 import argparse
 import itertools
 import sys
-from typing import Any, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext, Link
@@ -384,32 +384,39 @@ def _action_list(enabled: List[str], item: Item) -> None:
 
 _API_INTERFACES = [
     "interface/appl-config-option/feature",
+    "interface/appl-config-option/feature-enable",
     "interface/appl-config-option/initializer",
     "interface/appl-config-option/integer",
     "interface/function",
     "interface/macro",
+    "interface/unspecified-function",
 ]
 
 _API_ROLES = [
     "requirement-refinement",
-    "interface-placement",
+    "interface-ingroup",
     "appl-config-group-member",
 ]
 
 
-def _gather_api_names(item: Item, names: List[str]) -> None:
+def _gather_api_names(item: Item, names: Dict[str, List[str]]) -> None:
     if item.type in _API_INTERFACES and _is_pre_qualified(item):
-        names.append(item["name"])
+        group = names.setdefault(item.parent(_API_ROLES)["name"], [])
+        group.append(item["name"])
     for child in item.children(_API_ROLES):
         _gather_api_names(child, names)
 
 
 def _list_api(item_cache: ItemCache) -> None:
-    names = []  # type: List[str]
-    _gather_api_names(item_cache["/if/domain"], names)
-    _gather_api_names(item_cache["/acfg/if/domain"], names)
-    for name in sorted(names):
-        print(name)
+    names = {}  # type: Dict[str, List[str]]
+    _gather_api_names(item_cache["/req/applconfig"], names)
+    _gather_api_names(item_cache["/if/group"], names)
+    _gather_api_names(item_cache["/c/if/group"], names)
+    _gather_api_names(item_cache["/newlib/if/group"], names)
+    for group in sorted(names.keys()):
+        print(group)
+        for name in sorted(names[group]):
+            print(f"\t{name}")
 
 
 def main() -> None:
