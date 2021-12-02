@@ -20,7 +20,7 @@ index-entries: []
 interface-type: function
 links:
 - role: interface-placement
-  uid: ../../task/if/header
+  uid: header
 - role: interface-ingroup
   uid: group
 - role: constraint

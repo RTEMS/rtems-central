@@ -22,7 +22,7 @@ index-entries: []
 interface-type: group
 links:
 - role: interface-placement
-  uid: ../../task/if/header
+  uid: header
 - role: interface-ingroup
   uid: ../../if/group
 - role: placement-order
