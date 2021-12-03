@@ -2,7 +2,95 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: RTEMS_SMP
-limits: {}
+limits:
+  sparc/gr712rc/smp/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
+    DirtyCache:
+      max-upper-bound: 1.5119999999999999e-06
+      median-lower-bound: 9.92e-07
+      median-upper-bound: 1.488e-06
+      min-lower-bound: 9.76e-07
+    FullCache:
+      max-upper-bound: 1.4639999999999999e-06
+      median-lower-bound: 9.76e-07
+      median-upper-bound: 1.4639999999999999e-06
+      min-lower-bound: 9.6e-07
+    HotCache:
+      max-upper-bound: 1.488e-06
+      median-lower-bound: 9.76e-07
+      median-upper-bound: 1.4639999999999999e-06
+      min-lower-bound: 9.76e-07
+    Load/1:
+      max-upper-bound: 1.608e-06
+      median-lower-bound: 1.072e-06
+      median-upper-bound: 1.608e-06
+      min-lower-bound: 1.0560000000000001e-06
+    Load/2:
+      max-upper-bound: 1.608e-06
+      median-lower-bound: 1.0560000000000001e-06
+      median-upper-bound: 1.584e-06
+      min-lower-bound: 1.04e-06
+  sparc/gr712rc/smp/qual-only/LDe0OENspSb4U2hhl9QK2R3q4ntkBdYP_JLnD_-aZ34=:
+    DirtyCache:
+      max-upper-bound: 2.4e-06
+      median-lower-bound: 1.5800000000000001e-06
+      median-upper-bound: 2.37e-06
+      min-lower-bound: 1.5800000000000001e-06
+    FullCache:
+      max-upper-bound: 1.5e-06
+      median-lower-bound: 6.296000000000001e-07
+      median-upper-bound: 9.444e-07
+      min-lower-bound: 6.296000000000001e-07
+    HotCache:
+      max-upper-bound: 9.143999999999999e-07
+      median-lower-bound: 6.000000000000001e-07
+      median-upper-bound: 9.0e-07
+      min-lower-bound: 6.000000000000001e-07
+    Load/1:
+      max-upper-bound: 2.3544e-06
+      median-lower-bound: 1.56e-06
+      median-upper-bound: 2.34e-06
+      min-lower-bound: 1.56e-06
+    Load/2:
+      max-upper-bound: 2.7444e-06
+      median-lower-bound: 1.82e-06
+      median-upper-bound: 2.7299999999999997e-06
+      min-lower-bound: 1.8096000000000002e-06
+  sparc/gr740/smp/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
+    DirtyCache:
+      max-upper-bound: 7.151999999999999e-05
+      median-lower-bound: 4.7648e-05
+      median-upper-bound: 7.1472e-05
+      min-lower-bound: 4.7472e-05
+    FullCache:
+      max-upper-bound: 7.075199999999999e-05
+      median-lower-bound: 4.6944e-05
+      median-upper-bound: 7.0416e-05
+      min-lower-bound: 4.6320000000000004e-05
+    HotCache:
+      max-upper-bound: 6.969599999999999e-05
+      median-lower-bound: 4.6464e-05
+      median-upper-bound: 6.969599999999999e-05
+      min-lower-bound: 4.6448000000000007e-05
+    Load/1:
+      max-upper-bound: 7.545599999999999e-05
+      median-lower-bound: 5.0112e-05
+      median-upper-bound: 7.5168e-05
+      min-lower-bound: 4.9984e-05
+    Load/2:
+      max-upper-bound: 7.5336e-05
+      median-lower-bound: 5.0032e-05
+      median-upper-bound: 7.504799999999999e-05
+      min-lower-bound: 4.9904e-05
+    Load/3:
+      max-upper-bound: 7.5336e-05
+      median-lower-bound: 5.0224000000000006e-05
+      median-upper-bound: 7.5336e-05
+      min-lower-bound: 5.0032e-05
+    Load/4:
+      max-upper-bound: 7.5288e-05
+      median-lower-bound: 5.0032e-05
+      median-upper-bound: 7.504799999999999e-05
+      min-lower-bound: 4.9904e-05
 links:
 - role: requirement-refinement
   uid: perf-runtime
@@ -58,7 +146,7 @@ text: |
   ${../if/release:/name} which unblocks task ``V`` which is scheduled on
   another processor.  Let :math:`E` be a time point measured by ``V`` right
   after the first context switch after :math:`B`.
-  
+
   While the execution environment is ${.:/environment}, while the semaphore is
   a priority inheritance mutex, while exactly task ``V`` waits on the mutex,
   while the measurement sample is :math:`E - B`, when exactly

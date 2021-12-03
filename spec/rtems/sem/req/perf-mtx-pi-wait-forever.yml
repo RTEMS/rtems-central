@@ -2,7 +2,137 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
-limits: {}
+limits:
+  sparc/gr712rc/smp/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
+    DirtyCache:
+      max-upper-bound: 1.32e-06
+      median-lower-bound: 8.8e-07
+      median-upper-bound: 1.32e-06
+      min-lower-bound: 8.640000000000001e-07
+    FullCache:
+      max-upper-bound: 1.296e-06
+      median-lower-bound: 8.640000000000001e-07
+      median-upper-bound: 1.296e-06
+      min-lower-bound: 8.480000000000001e-07
+    HotCache:
+      max-upper-bound: 1.296e-06
+      median-lower-bound: 8.640000000000001e-07
+      median-upper-bound: 1.296e-06
+      min-lower-bound: 8.480000000000001e-07
+    Load/1:
+      max-upper-bound: 1.488e-06
+      median-lower-bound: 9.92e-07
+      median-upper-bound: 1.488e-06
+      min-lower-bound: 9.76e-07
+    Load/2:
+      max-upper-bound: 1.488e-06
+      median-lower-bound: 9.92e-07
+      median-upper-bound: 1.488e-06
+      min-lower-bound: 9.92e-07
+  sparc/gr712rc/smp/qual-only/LDe0OENspSb4U2hhl9QK2R3q4ntkBdYP_JLnD_-aZ34=:
+    DirtyCache:
+      max-upper-bound: 2.0844e-06
+      median-lower-bound: 1.3800000000000001e-06
+      median-upper-bound: 2.07e-06
+      min-lower-bound: 1.3696000000000002e-06
+    FullCache:
+      max-upper-bound: 1.1844e-06
+      median-lower-bound: 6.2e-07
+      median-upper-bound: 9.3e-07
+      min-lower-bound: 6.2e-07
+    HotCache:
+      max-upper-bound: 8.844e-07
+      median-lower-bound: 5.800000000000001e-07
+      median-upper-bound: 8.7e-07
+      min-lower-bound: 5.800000000000001e-07
+    Load/1:
+      max-upper-bound: 2.1443999999999997e-06
+      median-lower-bound: 1.42e-06
+      median-upper-bound: 2.13e-06
+      min-lower-bound: 1.42e-06
+    Load/2:
+      max-upper-bound: 2.5344e-06
+      median-lower-bound: 1.6696e-06
+      median-upper-bound: 2.5044e-06
+      min-lower-bound: 1.6696e-06
+  sparc/gr712rc/uni/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
+    DirtyCache:
+      max-upper-bound: 2.4e-06
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 2.4e-06
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 2.4e-06
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 2.4e-06
+      median-lower-bound: 1.6e-06
+      median-upper-bound: 2.4e-06
+      min-lower-bound: 0.0
+  sparc/gr740/smp/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
+    DirtyCache:
+      max-upper-bound: 6.3e-05
+      median-lower-bound: 4.2000000000000004e-05
+      median-upper-bound: 6.3e-05
+      min-lower-bound: 4.2000000000000004e-05
+    FullCache:
+      max-upper-bound: 6.1776e-05
+      median-lower-bound: 4.1088000000000004e-05
+      median-upper-bound: 6.1632e-05
+      min-lower-bound: 4.1024e-05
+    HotCache:
+      max-upper-bound: 6.1752e-05
+      median-lower-bound: 4.1168e-05
+      median-upper-bound: 6.1752e-05
+      min-lower-bound: 4.0976e-05
+    Load/1:
+      max-upper-bound: 7.0992e-05
+      median-lower-bound: 4.7328000000000005e-05
+      median-upper-bound: 7.0992e-05
+      min-lower-bound: 4.6944e-05
+    Load/2:
+      max-upper-bound: 7.0896e-05
+      median-lower-bound: 4.7264e-05
+      median-upper-bound: 7.0896e-05
+      min-lower-bound: 4.7136000000000004e-05
+    Load/3:
+      max-upper-bound: 7.0992e-05
+      median-lower-bound: 4.7328000000000005e-05
+      median-upper-bound: 7.0992e-05
+      min-lower-bound: 4.6944e-05
+    Load/4:
+      max-upper-bound: 7.0992e-05
+      median-lower-bound: 4.7328000000000005e-05
+      median-upper-bound: 7.0992e-05
+      min-lower-bound: 4.6944e-05
+  sparc/gr740/uni/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
+    DirtyCache:
+      max-upper-bound: 4.4376e-05
+      median-lower-bound: 2.9584000000000003e-05
+      median-upper-bound: 4.4376e-05
+      min-lower-bound: 2.9584000000000003e-05
+    FullCache:
+      max-upper-bound: 4.3152e-05
+      median-lower-bound: 2.8768000000000003e-05
+      median-upper-bound: 4.3152e-05
+      min-lower-bound: 2.8224000000000003e-05
+    HotCache:
+      max-upper-bound: 4.2648e-05
+      median-lower-bound: 2.8432e-05
+      median-upper-bound: 4.2648e-05
+      min-lower-bound: 2.8368000000000004e-05
+    Load/1:
+      max-upper-bound: 4.9152e-05
+      median-lower-bound: 3.2768e-05
+      median-upper-bound: 4.9152e-05
+      min-lower-bound: 3.2768e-05
 links:
 - role: requirement-refinement
   uid: perf-runtime
@@ -53,7 +183,7 @@ text: |
   ${../if/obtain:/name} which blocks on the mutex with no timeout.  Let
   :math:`E` be a time point measured by ``V`` right after the first context
   switch after :math:`B`.
-  
+
   While the execution environment is ${.:/environment}, while the semaphore is
   a priority inheritance mutex, while the measurement sample is :math:`E - B`,
   when exactly ${../val/perf:/params/sample-count} samples are collected, the
