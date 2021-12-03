@@ -12,7 +12,7 @@ index-entries: []
 interface-type: define
 links:
 - role: interface-placement
-  uid: header-2
+  uid: header
 - role: interface-ingroup
   uid: group
 - role: constraint

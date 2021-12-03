@@ -10,7 +10,7 @@ index-entries: []
 interface-type: enum
 links:
 - role: interface-placement
-  uid: header-2
+  uid: header
 - role: interface-ingroup
   uid: group
 - role: interface-enumerator
