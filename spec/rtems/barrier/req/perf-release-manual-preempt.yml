@@ -195,10 +195,10 @@ test-teardown:
     return tic == toc;
   description: null
 text: |
-  Let ``U` and `V`` be two tasks with the same home scheduler.  Let :math:`B`
-  be a time point measured by ``U`` right before a call to
+  Let U and V be two tasks with the same home scheduler.  Let :math:`B`
+  be a time point measured by U right before a call to
   ${../if/release:/name} which preempts the caller.  Let :math:`E` be a time
-  point measured by ``V`` right after a call to ${../if/wait:/name} returns
+  point measured by V right after a call to ${../if/wait:/name} returns
   successfully due to the ${../if/release:/name} call associated with
   :math:`B`.
 
