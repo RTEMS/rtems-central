@@ -96,6 +96,25 @@ pre-conditions:
       While the thread is scheduled on a ${/glossary/scheduler-helping:/term}.
   test-epilogue: null
   test-prologue: null
+- name: HomeSchedulerState
+  states:
+  - name: Blocked
+    test-code: |
+      ctx->ready = false;
+    text: |
+      The thread shall be blocked in its ${/glossary/scheduler-home:/term}.
+  - name: Scheduled
+    test-code: |
+      ctx->ready = false;
+    text: |
+      The thread shall be scheduled in its ${/glossary/scheduler-home:/term}.
+  - name: Ready
+    test-code: |
+      ctx->ready = true;
+    text: |
+      The thread shall be ready in its ${/glossary/scheduler-home:/term}.
+  test-epilogue: null
+  test-prologue: null
 - name: Sticky
   states:
   - name: 'Yes'
@@ -110,22 +129,20 @@ pre-conditions:
       While the thread not sticky.
   test-epilogue: null
   test-prologue: null
-- name: OtherReady
+- name: Other
   states:
   - name: 'Yes'
     test-code: |
       ctx->other_ready = true;
     text: |
-      While at least one other thread is ready in the
-      ${/glossary/scheduler-home:/term} of the thread,
-      while the priority of the other thread with respect to the scheduler is
-      equal to the priority of the thread.
+      While at least one ready thread with a priority equal to the priority of
+      the thread exists in the ${/glossary/scheduler-home:/term} of the thread.
   - name: 'No'
     test-code: |
       ctx->other_ready = false;
     text: |
-      While no other non-idle thread is ready in the
-      ${/glossary/scheduler-home:/term} of the thread.
+      While no ready thread with a priority equal to the priority of the thread
+      exists in the ${/glossary/scheduler-home:/term} of the thread.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -140,8 +157,14 @@ skip-reasons:
   StickyNeedsSMP: |
     A thread may be sticky only where the system was built with SMP support
     enabled.
+  Sticky: |
+    Sticky threads are never blocked in their home scheduler.  Only sticky
+    threads may be scheduled on two schedulers at the same time.
+  HomeNeedsScheduled: |
+    While a thread uses its home scheduler, it is scheduled in the home scheduler.
 test-action: |
   const Per_CPU_Control *cpu;
+  bool                   other_busy;
 
   if ( ctx->has_helping ) {
     TQMutexObtain( &ctx->tq_ctx, TQ_MUTEX_A );
@@ -156,13 +179,21 @@ test-action: |
     MoveToHelping( ctx );
   }
 
+  TQResetCounter( &ctx->tq_ctx );
+
+  if ( ctx->use_helping && ctx->ready ) {
+    ctx->tq_ctx.busy_wait[ COUNTER ] = true;
+    TQSend( &ctx->tq_ctx, COUNTER, TQ_EVENT_COUNT | TQ_EVENT_BUSY_WAIT );
+    other_busy = true;
+  } else {
+    other_busy = false;
+  }
+
   if ( ctx->sticky ) {
     ObtainMutex( ctx->sticky_mutex );
   }
 
-  TQResetCounter( &ctx->tq_ctx );
-
-  if ( ctx->other_ready ) {
+  if ( ctx->other_ready && !other_busy ) {
     TQSend( &ctx->tq_ctx, COUNTER, TQ_EVENT_COUNT );
   }
 
@@ -174,6 +205,8 @@ test-action: |
   TQSchedulerRecordStop( &ctx->tq_ctx );
 
   #if defined(RTEMS_SMP)
+  ctx->tq_ctx.busy_wait[ COUNTER ] = false;
+
   while ( cpu->heir == ctx->tq_ctx.worker_tcb[ COUNTER ] ) {
     RTEMS_COMPILER_MEMORY_BARRIER();
   }
@@ -223,13 +256,19 @@ test-context:
   member: |
     bool use_helping
 - brief: |
+    If this member is true, then the runner shall be ready in its home
+    scheduler.
+  description: null
+  member: |
+    bool ready
+- brief: |
     If this member is true, then the runner shall be sticky.
   description: null
   member: |
     bool sticky
 - brief: |
     If this member is true, then another ready task in the home scheduler of
-    the runner shall exist.
+    the runner shall be ready with an equal priority.
   description: null
   member: |
     bool other_ready
@@ -324,19 +363,36 @@ transition-map:
     - if:
         pre-conditions:
           UsedScheduler: Home
-          OtherReady: 'No'
+          HomeSchedulerState: Scheduled
+          Other: 'No'
       then: Scheduled
+    - if:
+        pre-conditions:
+          UsedScheduler: Home
+          HomeSchedulerState: Scheduled
+          Other: 'Yes'
+      then: Ready
     - if:
         pre-conditions:
           EligibleScheduler: Helping
           UsedScheduler: Helping
+          HomeSchedulerState: Scheduled
           Sticky: 'Yes'
-          OtherReady: 'No'
+          Other: 'No'
       then: Idle
     - if:
         pre-conditions:
           EligibleScheduler: Helping
           UsedScheduler: Helping
+          HomeSchedulerState: Scheduled
+          Sticky: 'Yes'
+          Other: 'Yes'
+      then: Ready
+    - if:
+        pre-conditions:
+          EligibleScheduler: Helping
+          UsedScheduler: Helping
+          HomeSchedulerState: Blocked
           Sticky: 'No'
       then: Blocked
     - else: Ready
@@ -345,14 +401,16 @@ transition-map:
         pre-conditions:
           EligibleScheduler: Helping
           UsedScheduler: Home
-          OtherReady: 'Yes'
+          HomeSchedulerState: Scheduled
+          Other: 'Yes'
       then: 'Yes'
     - else: 'No'
   pre-conditions:
     EligibleScheduler: all
     UsedScheduler: all
+    HomeSchedulerState: all
     Sticky: all
-    OtherReady: all
+    Other: all
 - enabled-by: true
   post-conditions: HelpingNeedsHelping
   pre-conditions:
@@ -360,8 +418,9 @@ transition-map:
     - Home
     UsedScheduler:
     - Helping
+    HomeSchedulerState: all
     Sticky: all
-    OtherReady: all
+    Other: all
 - enabled-by:
     not: RTEMS_SMP
   post-conditions: HelpingNeedsSMP
@@ -369,15 +428,51 @@ transition-map:
     EligibleScheduler:
     - Helping
     UsedScheduler: all
+    HomeSchedulerState: all
     Sticky: all
-    OtherReady: all
+    Other: all
 - enabled-by:
     not: RTEMS_SMP
   post-conditions: StickyNeedsSMP
   pre-conditions:
     EligibleScheduler: all
     UsedScheduler: all
+    HomeSchedulerState: all
     Sticky:
     - 'Yes'
-    OtherReady: all
+    Other: all
+- enabled-by: true
+  post-conditions: Sticky
+  pre-conditions:
+    EligibleScheduler:
+    - Helping
+    UsedScheduler:
+    - Helping
+    HomeSchedulerState:
+    - Scheduled
+    - Ready
+    Sticky:
+    - 'No'
+    Other: all
+- enabled-by: true
+  post-conditions: Sticky
+  pre-conditions:
+    EligibleScheduler: all
+    UsedScheduler: all
+    HomeSchedulerState:
+    - Blocked
+    Sticky:
+    - 'Yes'
+    Other: all
+- enabled-by: true
+  post-conditions: HomeNeedsScheduled
+  pre-conditions:
+    EligibleScheduler: all
+    UsedScheduler:
+    - Home
+    HomeSchedulerState:
+    - Blocked
+    - Ready
+    Sticky: all
+    Other: all
 type: requirement
