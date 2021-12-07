@@ -31,7 +31,7 @@ limits:
       min-lower-bound: 7.84e-07
   sparc/gr712rc/smp/qual-only/LDe0OENspSb4U2hhl9QK2R3q4ntkBdYP_JLnD_-aZ34=:
     DirtyCache:
-      max-upper-bound: 1.59e-06
+      max-upper-bound: 1.6044e-06
       median-lower-bound: 1.0496e-06
       median-upper-bound: 1.5744000000000001e-06
       min-lower-bound: 1.04e-06
@@ -43,7 +43,7 @@ limits:
     HotCache:
       max-upper-bound: 5.399999999999999e-07
       median-lower-bound: 3.496e-07
-      median-upper-bound: 5.244e-07
+      median-upper-bound: 5.399999999999999e-07
       min-lower-bound: 3.496e-07
     Load/1:
       max-upper-bound: 1.56e-06
@@ -76,6 +76,27 @@ limits:
       median-lower-bound: 0.0
       median-upper-bound: 0.0
       min-lower-bound: 0.0
+  sparc/gr712rc/uni/qual-only/LDe0OENspSb4U2hhl9QK2R3q4ntkBdYP_JLnD_-aZ34=:
+    DirtyCache:
+      max-upper-bound: 8.7e-07
+      median-lower-bound: 5.696e-07
+      median-upper-bound: 8.544e-07
+      min-lower-bound: 5.696e-07
+    FullCache:
+      max-upper-bound: 4.644e-07
+      median-lower-bound: 2.2960000000000002e-07
+      median-upper-bound: 3.444e-07
+      min-lower-bound: 2.2e-07
+    HotCache:
+      max-upper-bound: 3.1439999999999996e-07
+      median-lower-bound: 2.0e-07
+      median-upper-bound: 3.0e-07
+      min-lower-bound: 2.0e-07
+    Load/1:
+      max-upper-bound: 9.143999999999999e-07
+      median-lower-bound: 6.096000000000001e-07
+      median-upper-bound: 9.143999999999999e-07
+      min-lower-bound: 6.000000000000001e-07
   sparc/gr740/smp/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
     DirtyCache:
       max-upper-bound: 5.124e-05
@@ -112,6 +133,42 @@ limits:
       median-lower-bound: 3.7504e-05
       median-upper-bound: 5.6256e-05
       min-lower-bound: 3.7504e-05
+  sparc/gr740/smp/qual-only/qpmWME3Tk2kfoQL1kmgyerzkvLKkrfPY7xWIWGfY0Fg=:
+    DirtyCache:
+      max-upper-bound: 4.929119999999999e-05
+      median-lower-bound: 3.09472e-05
+      median-upper-bound: 4.6420799999999994e-05
+      min-lower-bound: 3.0835200000000006e-05
+    FullCache:
+      max-upper-bound: 3.09648e-05
+      median-lower-bound: 1.46112e-05
+      median-upper-bound: 2.19168e-05
+      min-lower-bound: 1.45504e-05
+    HotCache:
+      max-upper-bound: 1.00992e-05
+      median-lower-bound: 6.729600000000001e-06
+      median-upper-bound: 1.00944e-05
+      min-lower-bound: 6.729600000000001e-06
+    Load/1:
+      max-upper-bound: 6.28272e-05
+      median-lower-bound: 2.85344e-05
+      median-upper-bound: 4.2801599999999994e-05
+      min-lower-bound: 2.7628800000000002e-05
+    Load/2:
+      max-upper-bound: 0.000297984
+      median-lower-bound: 0.0001980832
+      median-upper-bound: 0.0002971248
+      min-lower-bound: 0.0001942496
+    Load/3:
+      max-upper-bound: 0.00046962239999999997
+      median-lower-bound: 0.000312384
+      median-upper-bound: 0.000468576
+      min-lower-bound: 0.0003081312
+    Load/4:
+      max-upper-bound: 0.0005601888
+      median-lower-bound: 0.000371936
+      median-upper-bound: 0.000557904
+      min-lower-bound: 0.0003658112
   sparc/gr740/uni/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
     DirtyCache:
       max-upper-bound: 3.252e-05
@@ -133,6 +190,27 @@ limits:
       median-lower-bound: 2.4608e-05
       median-upper-bound: 3.6911999999999995e-05
       min-lower-bound: 2.4544e-05
+  sparc/gr740/uni/qual-only/qpmWME3Tk2kfoQL1kmgyerzkvLKkrfPY7xWIWGfY0Fg=:
+    DirtyCache:
+      max-upper-bound: 2.8344e-05
+      median-lower-bound: 1.82688e-05
+      median-upper-bound: 2.74032e-05
+      min-lower-bound: 1.816e-05
+    FullCache:
+      max-upper-bound: 1.7952e-05
+      median-lower-bound: 9.968e-06
+      median-upper-bound: 1.4951999999999998e-05
+      min-lower-bound: 9.9136e-06
+    HotCache:
+      max-upper-bound: 5.0832e-06
+      median-lower-bound: 3.3888e-06
+      median-upper-bound: 5.0832e-06
+      min-lower-bound: 3.3888e-06
+    Load/1:
+      max-upper-bound: 2.94768e-05
+      median-lower-bound: 1.9264e-05
+      median-upper-bound: 2.8896e-05
+      min-lower-bound: 1.92096e-05
 links:
 - role: requirement-refinement
   uid: perf-runtime

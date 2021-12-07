@@ -36,7 +36,7 @@ limits:
       median-upper-bound: 1.0644e-06
       min-lower-bound: 7.096000000000001e-07
     FullCache:
-      max-upper-bound: 7.643999999999999e-07
+      max-upper-bound: 7.8e-07
       median-lower-bound: 2.496e-07
       median-upper-bound: 3.7439999999999996e-07
       min-lower-bound: 2.4e-07
@@ -76,6 +76,27 @@ limits:
       median-lower-bound: 0.0
       median-upper-bound: 0.0
       min-lower-bound: 0.0
+  sparc/gr712rc/uni/qual-only/LDe0OENspSb4U2hhl9QK2R3q4ntkBdYP_JLnD_-aZ34=:
+    DirtyCache:
+      max-upper-bound: 5.699999999999999e-07
+      median-lower-bound: 3.8e-07
+      median-upper-bound: 5.699999999999999e-07
+      min-lower-bound: 3.6960000000000003e-07
+    FullCache:
+      max-upper-bound: 3.3e-07
+      median-lower-bound: 8.960000000000001e-08
+      median-upper-bound: 1.3439999999999999e-07
+      min-lower-bound: 8.960000000000001e-08
+    HotCache:
+      max-upper-bound: 1.3439999999999999e-07
+      median-lower-bound: 8.960000000000001e-08
+      median-upper-bound: 1.3439999999999999e-07
+      min-lower-bound: 8.0e-08
+    Load/1:
+      max-upper-bound: 6.744e-07
+      median-lower-bound: 4.4e-07
+      median-upper-bound: 6.6e-07
+      min-lower-bound: 4.4e-07
   sparc/gr740/smp/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
     DirtyCache:
       max-upper-bound: 3.1248e-05
@@ -112,6 +133,42 @@ limits:
       median-lower-bound: 2.5536e-05
       median-upper-bound: 3.8304e-05
       min-lower-bound: 2.5472000000000003e-05
+  sparc/gr740/smp/qual-only/qpmWME3Tk2kfoQL1kmgyerzkvLKkrfPY7xWIWGfY0Fg=:
+    DirtyCache:
+      max-upper-bound: 3.43728e-05
+      median-lower-bound: 2.21152e-05
+      median-upper-bound: 3.31728e-05
+      min-lower-bound: 2.17984e-05
+    FullCache:
+      max-upper-bound: 1.9694400000000002e-05
+      median-lower-bound: 7.7632e-06
+      median-upper-bound: 1.16448e-05
+      min-lower-bound: 7.724800000000001e-06
+    HotCache:
+      max-upper-bound: 6.5999999999999995e-06
+      median-lower-bound: 4.1472e-06
+      median-upper-bound: 6.2208e-06
+      min-lower-bound: 4.1472e-06
+    Load/1:
+      max-upper-bound: 5.7451199999999996e-05
+      median-lower-bound: 2.2723200000000003e-05
+      median-upper-bound: 3.40848e-05
+      min-lower-bound: 2.23296e-05
+    Load/2:
+      max-upper-bound: 0.00019739999999999997
+      median-lower-bound: 0.0001293632
+      median-upper-bound: 0.00019404480000000002
+      min-lower-bound: 0.0001276096
+    Load/3:
+      max-upper-bound: 0.000296088
+      median-lower-bound: 0.00019713920000000003
+      median-upper-bound: 0.0002957088
+      min-lower-bound: 0.00019260480000000003
+    Load/4:
+      max-upper-bound: 0.00035003519999999997
+      median-lower-bound: 0.0002325632
+      median-upper-bound: 0.00034884479999999996
+      min-lower-bound: 0.00022506240000000002
   sparc/gr740/uni/qual-only/3Y1G8SMm2FRTpZB5_0NhbpDnatbEYmbDLLW58d-wXuY=:
     DirtyCache:
       max-upper-bound: 1.7496e-05
@@ -133,6 +190,27 @@ limits:
       median-lower-bound: 1.6112e-05
       median-upper-bound: 2.4168e-05
       min-lower-bound: 1.5952e-05
+  sparc/gr740/uni/qual-only/qpmWME3Tk2kfoQL1kmgyerzkvLKkrfPY7xWIWGfY0Fg=:
+    DirtyCache:
+      max-upper-bound: 2.1465599999999997e-05
+      median-lower-bound: 1.3695999999999999e-05
+      median-upper-bound: 2.0544e-05
+      min-lower-bound: 1.3616e-05
+    FullCache:
+      max-upper-bound: 1.7376e-05
+      median-lower-bound: 4.3712e-06
+      median-upper-bound: 6.5568e-06
+      min-lower-bound: 4.3616e-06
+    HotCache:
+      max-upper-bound: 3.0528000000000002e-06
+      median-lower-bound: 1.8400000000000002e-06
+      median-upper-bound: 2.76e-06
+      min-lower-bound: 1.8400000000000002e-06
+    Load/1:
+      max-upper-bound: 2.49408e-05
+      median-lower-bound: 1.5852800000000002e-05
+      median-upper-bound: 2.37792e-05
+      min-lower-bound: 1.57088e-05
 links:
 - role: requirement-refinement
   uid: perf-runtime
