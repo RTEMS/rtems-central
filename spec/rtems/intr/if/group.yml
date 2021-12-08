@@ -70,6 +70,8 @@ links:
 - role: placement-order
   uid: is-replace
 - role: placement-order
+  uid: handler
+- role: placement-order
   uid: entry
 - role: placement-order
   uid: entry-initializer
@@ -112,9 +114,9 @@ links:
 - role: placement-order
   uid: server-default
 - role: placement-order
-  uid: server-config
-- role: placement-order
   uid: server-control
+- role: placement-order
+  uid: server-config
 - role: placement-order
   uid: server-initialize
 - role: placement-order
