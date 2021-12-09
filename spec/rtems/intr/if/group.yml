@@ -34,6 +34,10 @@ links:
 - role: placement-order
   uid: is-in-progress
 - role: placement-order
+  uid: lock
+- role: placement-order
+  uid: lock-context
+- role: placement-order
   uid: lock-initialize
 - role: placement-order
   uid: lock-destroy
