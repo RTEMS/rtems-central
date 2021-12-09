@@ -20,8 +20,6 @@ links:
   uid: header-2
 - role: interface-ingroup
   uid: group
-- role: constraint
-  uid: /constraint/directive-not-pre-qualified
 name: rtems_configuration_get_maximum_ports
 notes: |
   See ${/acfg/if/max-ports:/name}.

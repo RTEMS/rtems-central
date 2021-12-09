@@ -140,6 +140,16 @@ test-actions:
     - role: validation
       uid: /rtems/config/req/get-maximum-periods
   - brief: |
+      Check the default ${/acfg/if/max-ports:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_ports(),
+        0
+      );
+    links:
+    - role: validation
+      uid: /rtems/config/req/get-maximum-ports
+  - brief: |
       Check the configured ${/acfg/if/max-processors:/name} value.
     code: |
       T_eq_u32(
@@ -155,6 +165,16 @@ test-actions:
       uid: ../req/max-processors
     - role: validation
       uid: /rtems/config/req/get-maximum-processors
+  - brief: |
+      Check the default ${/acfg/if/max-regions:/name} value.
+    code: |
+      T_eq_u32(
+        rtems_configuration_get_maximum_regions(),
+        0
+      );
+    links:
+    - role: validation
+      uid: /rtems/config/req/get-maximum-regions
   - brief: |
       Check the configured ${/acfg/if/max-semaphores:/name} value.
     code: |
