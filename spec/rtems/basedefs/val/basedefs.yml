@@ -1030,82 +1030,20 @@ test-actions:
       uid: ../req/string-0
   links: []
 - action-brief: |
-    Use the ${../if/symbol-name:/name} macro on examples.
+    Use the ${../if/symbol-name:/name} macro with an example object.
   action-code: |
-    const int symbol_name = 321;
-    int symbol_name_0_var;
-    int symbol_name_1_var;
-    int prefixed_symbol_name_var;
-    int prefixed_symbol_id_var;
-    int prefixed_upper_symbol_name_var;
-    symbol_name_0_var = RTEMS_SYMBOL_NAME( symbol_name );
-    symbol_name_1_var = RTEMS_SYMBOL_NAME( SYMBOL_NAME );
-    prefixed_symbol_name_var = basedefs_use_prefixed_symbol_name();
-    prefixed_symbol_id_var = basedefs_use_prefixed_symbol_id();
-    prefixed_upper_symbol_name_var = basedefs_use_prefixed_upper_symbol_name();
+    /* Nothing to do */
   checks:
   - brief: |
-      Case ``__USER_LABEL_PREFIX__`` undefined.
-      Check that the ${../if/symbol-name:/name} macro
-      without any pre-processor substitutions applicable results
-      in its literal argument.
+      Check that the ${../if/symbol-name:/name} macro expands to the expected
+      symbol name.
     code: |
-      T_step_eq_int( ${step}, symbol_name_0_var, 321 );
+      T_step_eq_ptr( ${step}, &global_object, &address_of_global_object );
     links:
     - role: validation
-      uid: ../req/symbol-name-3
-  - brief: |
-      Case ``__USER_LABEL_PREFIX__`` undefined.
-      Check that the ${../if/symbol-name:/name} macro
-      applies pre-processor substitutions to its argument
-      and its result.
-    code: |
-      T_step_eq_int( ${step}, symbol_name_1_var, 321 );
-    links:
+      uid: ../req/symbol-name
     - role: validation
-      uid: ../req/symbol-name-0
-    - role: validation
-      uid: ../req/symbol-name-3
-    - role: validation
-      uid: ../req/symbol-name-5
-  - brief: |
-      Case ``__USER_LABEL_PREFIX__`` defined.
-      Check that the ${../if/symbol-name:/name} macro
-      without any pre-processor substitutions applicable results
-      in the literal prefix and argument.
-    code: |
-      T_step_eq_int( ${step}, prefixed_symbol_name_var, 124 );
-    links:
-    - role: validation
-      uid: ../req/symbol-name-1
-    - role: validation
-      uid: ../req/symbol-name-2
-  - brief: |
-      Case ``__USER_LABEL_PREFIX__`` defined.
-      Check that the ${../if/symbol-name:/name} macro
-      applies pre-processor substitutions to its argument.
-    code: |
-      T_step_eq_int( ${step}, prefixed_upper_symbol_name_var, 125 );
-    links:
-    - role: validation
-      uid: ../req/symbol-name-1
-    - role: validation
-      uid: ../req/symbol-name-2
-    - role: validation
-      uid: ../req/symbol-name-6
-  - brief: |
-      Case ``__USER_LABEL_PREFIX__`` defined.
-      Check that the ${../if/symbol-name:/name} macro
-      applies pre-processor substitutions to its result.
-    code: |
-      T_step_eq_int( ${step}, prefixed_symbol_id_var, 126 );
-    links:
-    - role: validation
-      uid: ../req/symbol-name-4
-    - role: validation
-      uid: ../req/symbol-name-5
-    - role: validation
-      uid: ../req/symbol-name-6
+      uid: ../req/symbol-name-expand
   links: []
 - action-brief: |
     Invoke the  ${../if/true:/name} macro on an example.
@@ -1441,8 +1379,6 @@ test-context-support: null
 test-description: null
 test-header: null
 test-includes:
-- stddef.h
-- stdarg.h
 - rtems.h
 test-local-includes:
 - tc-basedefs-pendant.h
@@ -1461,10 +1397,18 @@ test-support: |
   #define SECTION_NAME ".rtemsroset.test"
   #define STATIC_ASSERT_COND 0 +
   #define STRING_PREFIX str
-  #define SYMBOL_NAME SYMBOL_name
-  #define SYMBOL_name symbol_name
+  #define SYMBOL_NAME global_object
   #define _TO_STR2( _text ) #_text
   #define _TO_STR( _text ) _TO_STR2( _text )
+
+  int global_object;
+
+  extern int address_of_global_object;
+
+  __asm__(
+    "\n\t.set " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( address_of_global_object ) )
+    ", " RTEMS_XSTRING( RTEMS_SYMBOL_NAME( SYMBOL_NAME ) ) "\n"
+  );
 
   /*
    * For some reasons - which I fail to fully understand - _TO_STR()
