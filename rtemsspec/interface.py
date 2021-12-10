@@ -734,7 +734,7 @@ class _HeaderFile:
 
         # Create a queue with all nodes with no incoming edges
         queue = []  # type: List[Node]
-        for node in self._nodes.values():
+        for node in sorted(self._nodes.values()):
             if in_degree[node.item.uid] == 0:
                 queue.append(node)
 
@@ -743,7 +743,7 @@ class _HeaderFile:
             node = queue.pop(0)
             nodes_in_dependency_order.insert(0, node)
 
-            for other in node.depends_on:
+            for other in sorted(node.depends_on):
                 in_degree[other.item.uid] -= 1
                 if in_degree[other.item.uid] == 0:
                     queue.append(other)
