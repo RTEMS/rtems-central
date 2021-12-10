@@ -554,7 +554,7 @@ test-support: |
     ctx->status = CallPeriodFunction( ctx, ctx->id_param, ctx->length_param );
   }
 
-  static void WorkerTask( unsigned int argument )
+  static void WorkerTask( rtems_task_argument argument )
   {
     RtemsRatemonReqPeriod_Context *ctx =
       (RtemsRatemonReqPeriod_Context *) argument;
