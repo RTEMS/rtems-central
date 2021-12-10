@@ -20,6 +20,14 @@ links:
 - role: interface-ingroup
   uid: ../../if/group
 - role: placement-order
+  uid: vector-number
+- role: placement-order
+  uid: level
+- role: placement-order
+  uid: isr
+- role: placement-order
+  uid: isr-entry
+- role: placement-order
   uid: catch
 - role: placement-order
   uid: disable
@@ -75,6 +83,8 @@ links:
   uid: is-replace
 - role: placement-order
   uid: handler
+- role: placement-order
+  uid: per-handler-routine
 - role: placement-order
   uid: entry
 - role: placement-order
