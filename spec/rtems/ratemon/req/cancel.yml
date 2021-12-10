@@ -348,7 +348,7 @@ test-support: |
     ctx->status = rtems_rate_monotonic_cancel( ctx->id_param );
   }
 
-  RTEMS_INLINE_ROUTINE void WorkerTask( unsigned int argument )
+  static void WorkerTask( unsigned int argument )
   {
     RtemsRatemonReqCancel_Context *ctx =
       (RtemsRatemonReqCancel_Context *) argument;
@@ -361,7 +361,7 @@ test-support: |
     T_rsc_success( rtems_task_suspend( RTEMS_SELF ) );
   }
 
-  RTEMS_INLINE_ROUTINE void WorkerTaskAction( void *ctx_in )
+  static void WorkerTaskAction( void *ctx_in )
   {
     rtems_status_code status;
     rtems_event_set event_set;

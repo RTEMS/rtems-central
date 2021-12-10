@@ -344,7 +344,7 @@ test-support: |
     T_rsc_success( rtems_clock_set( &tod_fire ) );
   }
 
-  RTEMS_INLINE_ROUTINE void TimerServiceRoutine(
+  static void TimerServiceRoutine(
     rtems_id timer_id,
     void *user_data
   )

@@ -521,7 +521,7 @@ test-support: |
     return ticks_fired;
   }
 
-  RTEMS_INLINE_ROUTINE void TimerServiceRoutineA(
+  static void TimerServiceRoutineA(
     rtems_id timer_id,
     void *user_data
   )
@@ -532,7 +532,7 @@ test-support: |
     ctx->routine_user_data = user_data;
   }
 
-  RTEMS_INLINE_ROUTINE void TimerServiceRoutineB(
+  static void TimerServiceRoutineB(
     rtems_id timer_id,
     void *user_data
   )

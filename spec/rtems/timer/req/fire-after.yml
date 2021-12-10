@@ -524,7 +524,7 @@ test-support: |
     return ticks_fired;
   }
 
-  RTEMS_INLINE_ROUTINE void TimerServiceRoutine(
+  static void TimerServiceRoutine(
     rtems_id timer_id,
     void *user_data
   )

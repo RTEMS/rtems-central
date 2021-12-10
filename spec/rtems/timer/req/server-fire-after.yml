@@ -580,7 +580,7 @@ test-support: |
     return ticks_fired;
   }
 
-  RTEMS_INLINE_ROUTINE void TimerServiceRoutine(
+  static void TimerServiceRoutine(
     rtems_id timer_id,
     void *user_data
   )
@@ -594,7 +594,7 @@ test-support: |
    * This service routine is used reach branch coverage in an if-statement
    * which only serves performance optimization.
    */
-  RTEMS_INLINE_ROUTINE void TimerServiceRoutineCover(
+  static void TimerServiceRoutineCover(
     rtems_id timer_cover_id,
     void *user_data
   )
