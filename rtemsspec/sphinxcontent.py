@@ -224,6 +224,8 @@ def _get_value_sphinx_function(ctx: ItemGetValueContext) -> Any:
 
 
 def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
+    if ctx.item.get("definition-kind", "") == "struct-only":
+        return f"``struct {ctx.value[ctx.key]}``"
     return f":c:type:`{ctx.value[ctx.key]}`"
 
 
