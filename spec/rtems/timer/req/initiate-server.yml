@@ -43,19 +43,20 @@ post-conditions:
       ${../../status/if/unsatisfied:/name}.
   test-epilogue: null
   test-prologue: null
-- name: Server
+- name: Started
   states:
-  - name: Running
+  - name: 'Yes'
     test-code: |
       T_true( ExistTimerServer() );
     text: |
-      The Timer Server task shall be initialized and existing after the
+      The Timer Server task shall be started after the
       ${../if/initiate-server:/name} call.
-  - name: NoExist
+  - name: 'No'
     test-code: |
       T_false( ExistTimerServer() );
     text: |
-      The Timer Server task shall not exist.
+      The Timer Server task shall not be started after the
+      ${../if/initiate-server:/name} call.
   test-epilogue: null
   test-prologue: null
 - name: TaskPrio
@@ -68,14 +69,14 @@ post-conditions:
         T_eq_u32( GetTimerServerPriority(), ctx->priority );
       }
     text: |
-      The Timer Server task shall have the priority
-      specified by the ${../if/initiate-server:/params[0]/name}
-      parameter in the ${../if/initiate-server:/name} call.
-  - name: Unchanged
+      The priority of the Timer Server task shall be equal to the priority
+      specified by the ${../if/initiate-server:/params[0]/name} parameter in
+      the ${../if/initiate-server:/name} call.
+  - name: Nop
     test-code: |
       T_eq_u32( GetTimerServerPriority(), ctx->before_priority );
     text: |
-      The priority of the Timer Server task shall be unchanged
+      The priority of the Timer Server task shall not be modified
       by the ${../if/initiate-server:/name} call.
   test-epilogue: null
   test-prologue: null
@@ -85,39 +86,32 @@ post-conditions:
     test-code: |
       T_ge_sz( GetTimerServerStackSize(), ctx->stack_size );
     text: |
-      The Timer Server task shall have the same or larger stack size
-      than specified by the ${../if/initiate-server:/params[1]/name}
+      The stack size of the Timer Server task shall be greater than or equal to
+      the stack size specified by the ${../if/initiate-server:/params[1]/name}
       parameter in the ${../if/initiate-server:/name} call.
-  - name: Unchanged
+  - name: Nop
     test-code: |
       T_ge_sz( GetTimerServerStackSize(), ctx->before_stack_size );
     text: |
-      The stack size of the Timer Server task shall be unchanged
+      The stack size of the Timer Server task shall not be modified
       by the ${../if/initiate-server:/name} call.
   test-epilogue: null
   test-prologue: null
 - name: TaskAttr
   states:
-  - name: NoFloat
+  - name: Set
     test-code: |
-      T_true( HasTimerServerFloatingPoint() ==
-        ( ( ctx->attribute_set & RTEMS_FLOATING_POINT ) != 0 ) );
+      T_true( HasTimerServerFloatingPoint() );
     text: |
-      The task attribute ${../../attr/if/floating-point:/name}
-      shall be unset for the Timer Server task.
-  - name: Float
-    test-code: |
-      T_true( HasTimerServerFloatingPoint() ==
-        ( ( ctx->attribute_set & RTEMS_FLOATING_POINT ) != 0 ) );
-    text: |
-      The task attribute ${../../attr/if/floating-point:/name}
-      shall be set for the Timer Server task.
-  - name: Unchanged
+      The task attributes of the Timer Server task shall be specified by the
+      ${../if/initiate-server:/params[2]/name} parameter in the
+      ${../if/initiate-server:/name} call.
+  - name: Nop
     test-code: |
       T_true( HasTimerServerFloatingPoint() == ctx->before_has_floating_point );
     text: |
-      The task attributes of the Timer Server task shall be unchanged
-      by the ${../if/initiate-server:/name} call.
+      The task attributes of the Timer Server task shall not be modified by the
+      ${../if/initiate-server:/name} call.
   test-epilogue: null
   test-prologue: null
 pre-conditions:
@@ -132,8 +126,8 @@ pre-conditions:
     test-code: |
       ctx->priority = RTEMS_TIMER_SERVER_DEFAULT_PRIORITY;
     text: |
-      While the ${../if/initiate-server:/params[0]/name} parameter has
-      the value ${../if/server-default-priority:/name}.
+      While the ${../if/initiate-server:/params[0]/name} parameter is equal to
+      ${../if/server-default-priority:/name}.
   - name: Invalid
     test-code: |
       ctx->priority = PRIO_INVALID;
@@ -143,39 +137,23 @@ pre-conditions:
   test-prologue: null
 - name: Stack
   states:
-  - name: RtemsMin
+  - name: Allocatable
     test-code: |
       ctx->stack_size = RTEMS_MINIMUM_STACK_SIZE;
     text: |
-      While the ${../if/initiate-server:/params[1]/name} parameter
-      has the value ${../../task/if/minimum-stack-size:/name}.
+      While the ${../if/initiate-server:/params[1]/name} parameter specifies a
+      task stack size which is allocatable by the system.
   - name: TooLarge
     test-code: |
       ctx->stack_size = SIZE_MAX;
     text: |
-      While the ${../if/initiate-server:/params[1]/name} parameter
-      has a value which exceeds the size of the available memory.
+      While the ${../if/initiate-server:/params[1]/name} parameter specifies a
+      task stack size which is not allocatable by the system.
   test-epilogue: null
   test-prologue: null
-- name: Attr
+- name: Started
   states:
-  - name: Default
-    test-code: |
-      ctx->attribute_set = RTEMS_DEFAULT_ATTRIBUTES;
-    text: |
-      While the ${../if/initiate-server:/params[2]/name} parameter has
-      the value ${../../attr/if/default:/name}.
-  - name: Float
-    test-code: |
-      ctx->attribute_set = RTEMS_FLOATING_POINT;
-    text: |
-      While the ${../if/initiate-server:/params[2]/name} parameter has
-      the value ${../../attr/if/floating-point:/name}.
-  test-epilogue: null
-  test-prologue: null
-- name: Server
-  states:
-  - name: Running
+  - name: 'Yes'
     test-code: |
       rtems_status_code status;
 
@@ -188,14 +166,12 @@ pre-conditions:
         T_rsc_success( status );
       }
     text: |
-      While the ${../if/initiate-server:/name} has been invoked before
-      (i.e. the time server task has already been started).
-  - name: NoExist
+      While the Timer Server task is started.
+  - name: 'No'
     test-code: |
       DeleteTimerServer();
     text: |
-      While the ${../if/initiate-server:/name} has not been invoked
-      before.
+      While the Timer Server task is not started.
   test-epilogue: null
   test-prologue: null
 - name: TaskObj
@@ -204,7 +180,7 @@ pre-conditions:
     test-code: |
       /* The test clean up ensures that all tasks objects are free. */
     text: |
-      While there is at least one free task object.
+      While the system has at least one inactive task object available.
   - name: Unavailable
     test-code: |
       ctx->task_objects = T_seize_objects(
@@ -212,7 +188,7 @@ pre-conditions:
         NULL
       );
     text: |
-      While there is no free task object.
+      While the system has no inactive task object available.
   test-epilogue: null
   test-prologue: null
 rationale: null
@@ -229,7 +205,7 @@ test-action: |
   ctx->status = rtems_timer_initiate_server(
     ctx->priority,
     ctx->stack_size,
-    ctx->attribute_set
+    RTEMS_FLOATING_POINT
   );
 test-brief: null
 test-cleanup: |
@@ -265,12 +241,6 @@ test-context:
   description: null
   member: |
     size_t stack_size
-- brief: |
-    The ${../if/initiate-server:/params[2]/name}
-    parameter for the action.
-  description: null
-  member: |
-    rtems_attribute attribute_set
 - brief: |
     The status value returned by the action ${../if/initiate-server:/name}.
   description: null
@@ -355,59 +325,37 @@ transition-map:
 - enabled-by: true
   post-conditions:
     Status: Ok
-    Server: Running
+    Started: 'Yes'
     TaskPrio: Set
     TaskStack: Set
-    TaskAttr: NoFloat
+    TaskAttr: Set
   pre-conditions:
     Priority:
       - Valid
       - Default
     Stack:
-      - RtemsMin
-    Attr:
-      - Default
-    Server:
-      - NoExist
-    TaskObj:
-      - Available
-- enabled-by: true
-  post-conditions:
-    Status: Ok
-    Server: Running
-    TaskPrio: Set
-    TaskStack: Set
-    TaskAttr: Float
-  pre-conditions:
-    Priority:
-      - Valid
-      - Default
-    Stack:
-      - RtemsMin
-    Attr:
-      - Float
-    Server:
-      - NoExist
+      - Allocatable
+    Started:
+      - 'No'
     TaskObj:
       - Available
 - enabled-by: true
   post-conditions:
     Status: IncStat
-    Server: Running
-    TaskPrio: Unchanged
-    TaskStack: Unchanged
-    TaskAttr: Unchanged
+    Started: 'Yes'
+    TaskPrio: Nop
+    TaskStack: Nop
+    TaskAttr: Nop
   pre-conditions:
     Priority: all
     Stack: all
-    Attr: all
-    Server:
-      - Running
+    Started:
+      - 'Yes'
     TaskObj: all
 - enabled-by: true
   post-conditions:
     Status: InvPrio
-    Server: NoExist
+    Started: 'No'
     TaskPrio: "N/A"
     TaskStack: "N/A"
     TaskAttr: "N/A"
@@ -415,14 +363,13 @@ transition-map:
     Priority:
       - Invalid
     Stack: all
-    Attr: all
-    Server:
-      - NoExist
+    Started:
+      - 'No'
     TaskObj: all
 - enabled-by: true
   post-conditions:
     Status: TooMany
-    Server: NoExist
+    Started: 'No'
     TaskPrio: "N/A"
     TaskStack: "N/A"
     TaskAttr: "N/A"
@@ -431,15 +378,14 @@ transition-map:
       - Valid
       - Default
     Stack: all
-    Attr: all
-    Server:
-      - NoExist
+    Started:
+      - 'No'
     TaskObj:
       - Unavailable
 - enabled-by: true
   post-conditions:
     Status: Unsat
-    Server: NoExist
+    Started: 'No'
     TaskPrio: "N/A"
     TaskStack: "N/A"
     TaskAttr: "N/A"
@@ -449,9 +395,8 @@ transition-map:
       - Default
     Stack:
       - TooLarge
-    Attr: all
-    Server:
-      - NoExist
+    Started:
+      - 'No'
     TaskObj:
       - Available
 type: requirement
