@@ -691,6 +691,12 @@ test-context:
   member: |
     rtems_id mutex_id
 - brief: |
+    This member provides an event set used to set up the blocking conditions of
+    the task to restart.
+  description: null
+  member: |
+    rtems_event_set events
+- brief: |
     This member contains the identifier of the worker task.
   description: null
   member: |
@@ -1012,7 +1018,7 @@ test-support: |
     }
   }
 
-  static void Block( const Context *ctx )
+  static void Block( Context *ctx )
   {
     rtems_interval ticks;
 
@@ -1025,7 +1031,16 @@ test-support: |
     if ( ctx->enqueued ) {
       ObtainMutexTimed( ctx->mutex_id, ticks );
     } else {
-      (void) ReceiveAnyEventsTimed( ticks );
+      /*
+       * Do not use a stack variable for the event set, since we may jump out
+       * of the directive call.
+       */
+      (void) rtems_event_receive(
+        RTEMS_ALL_EVENTS,
+        RTEMS_EVENT_ANY | RTEMS_WAIT,
+        ticks,
+        &ctx->events
+      );
     }
   }
 

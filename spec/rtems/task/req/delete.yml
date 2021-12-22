@@ -512,6 +512,12 @@ test-context:
   member: |
     rtems_id mutex_id
 - brief: |
+    This member provides an event set used to set up the blocking conditions of
+    the task to delete.
+  description: null
+  member: |
+    rtems_event_set events
+- brief: |
     This member contains the identifier of the worker task.
   description: null
   member: |
@@ -901,7 +907,16 @@ test-support: |
       ObtainMutexTimed( ctx->mutex_id, ticks );
       ctx->worker_is_mutex_owner = true;
     } else {
-      (void) ReceiveAnyEventsTimed( ticks );
+      /*
+       * Do not use a stack variable for the event set, since we may jump out
+       * of the directive call.
+       */
+      (void) rtems_event_receive(
+        RTEMS_ALL_EVENTS,
+        RTEMS_EVENT_ANY | RTEMS_WAIT,
+        ticks,
+        &ctx->events
+      );
     }
   }
 
