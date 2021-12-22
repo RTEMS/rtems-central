@@ -471,17 +471,8 @@ test-local-includes:
 - tr-tq-enqueue-fifo.h
 - tr-tq-enqueue-priority.h
 test-prepare: |
-  rtems_status_code status;
-  rtems_event_set   event_set;
-
   /* Clean away pending events - happens after RTEMS_WAIT + RTEMS_NO_TIMEOUT */
-  status = rtems_event_receive(
-    RTEMS_ALL_EVENTS,
-    RTEMS_NO_WAIT | RTEMS_EVENT_ANY,
-    RTEMS_NO_TIMEOUT,
-    &event_set
-  );
-  T_true( status == RTEMS_SUCCESSFUL || status == RTEMS_UNSATISFIED );
+  (void) PollAnyEvents();
 
   ctx->send_msg_counter = 0;
   ctx->receive_size     = SIZE_MAX;
@@ -489,8 +480,6 @@ test-prepare: |
 test-setup:
   brief: null
   code: |
-    rtems_status_code status;
-
     memset( ctx, 0, sizeof( *ctx ) );
     ctx->magic                  = magic;
     ctx->tq_ctx.enqueue         = ReceiveMsg;
@@ -516,22 +505,8 @@ test-setup:
     ctx->task_id                = rtems_task_self();
 
     /* Note: TQInitialize() will assign the "main" task priority PRIO_NORMAL */
-    status = rtems_task_create(
-      rtems_build_name( 'W', 'O', 'R', 'K' ),
-      PRIO_HIGH,
-      RTEMS_MINIMUM_STACK_SIZE,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      &ctx->worker_id
-    );
-    T_rsc_success( status );
-
-    status = rtems_task_start(
-      ctx->worker_id,
-      WorkerTask,
-      (rtems_task_argument) NULL
-    );
-    T_rsc_success( status );
+    ctx->worker_id = CreateTask( "WORK", PRIO_HIGH );
+    StartTask( ctx->worker_id, WorkerTask, NULL );
   description: null
 test-stop: null
 test-support: |
@@ -832,8 +807,9 @@ test-target: testsuites/validation/tc-message-receive.c
 test-teardown:
   brief: null
   code: |
-    T_rsc_success( rtems_task_delete( ctx->worker_id ) );
+    DeleteTask( ctx->worker_id );
     TQDestroy( &ctx->tq_ctx );
+    (void) PollAnyEvents();
   description: null
 text: ${.:text-template}
 transition-map:
