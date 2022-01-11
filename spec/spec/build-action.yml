@@ -195,6 +195,13 @@ spec-info:
           If no such variable exists in the configuration file, then the
           default value is used.  The value is converted to a string.
         spec-type: none
+      get-string-command-line:
+        description: |
+          The action gets the action value for subsequent actions from the
+          value of a command line option named by the items ``name`` attribute.
+          If no such command line option is present, then the attribute value
+          is used.  The value is converted to a string.
+        spec-type: str
       script:
         description: |
           The action executes the attribute value with the Python ``eval()``
