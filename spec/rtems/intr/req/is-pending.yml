@@ -285,8 +285,14 @@ test-support: |
     } else if ( !attr->is_maskable ) {
       /* We can only safely test maskable interrupts */
       T_false( IsPending( ctx ) );
+    } else if ( IsPending( ctx ) ) {
+      /*
+       * If there is already an interrupt pending, then it is probably raised
+       * by a peripheral which we cannot control.
+       */
     } else if (
-      attr->can_disable && ( attr->can_clear || attr->cleared_by_acknowledge )
+      attr->can_raise && attr->can_disable &&
+      ( attr->can_clear || attr->cleared_by_acknowledge )
     ) {
       rtems_interrupt_entry entry;
       rtems_interrupt_level level;
@@ -302,19 +308,21 @@ test-support: |
       T_rsc_success( sc );
 
       if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
-        if ( attr->can_disable ) {
-          Disable( ctx );
-          Raise( ctx );
-          T_true( IsPending( ctx ) );
+        Disable( ctx );
+        Raise( ctx );
 
-          sc = rtems_interrupt_vector_enable( ctx->vector );
-          T_rsc_success( sc );
+        /*
+         * Some interrupt controllers will signal a pending interrupt if it is
+         * disabled (for example ARM GIC), others will not signal a pending
+         * interrupt if it is disabled (for example Freescale/NXP MPIC).
+         */
+        (void) IsPending( ctx );
 
-          while ( ctx->interrupt_count < 1 ) {
-            /* Wait */
-          }
-        } else {
-          ++ctx->interrupt_count;
+        sc = rtems_interrupt_vector_enable( ctx->vector );
+        T_rsc_success( sc );
+
+        while ( ctx->interrupt_count < 1 ) {
+          /* Wait */
         }
 
         rtems_interrupt_local_disable( level );

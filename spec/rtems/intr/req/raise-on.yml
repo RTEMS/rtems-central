@@ -343,21 +343,21 @@ test-support: |
       T_rsc_success( sc );
 
       if ( !IsPending( ctx) && ( attr->can_enable || IsEnabled( ctx ) ) ) {
-        T_false( IsPending( ctx ) );
+        Disable( ctx );
+        RaiseOn( ctx );
 
-        if ( attr->can_disable ) {
-          Disable( ctx );
-          RaiseOn( ctx );
-          T_true( IsPending( ctx ) );
+        /*
+         * Some interrupt controllers will signal a pending interrupt if it is
+         * disabled (for example ARM GIC), others will not signal a pending
+         * interrupt if it is disabled (for example Freescale/NXP MPIC).
+         */
+        (void) IsPending( ctx );
 
-          sc = rtems_interrupt_vector_enable( ctx->vector );
-          T_rsc_success( sc );
+        sc = rtems_interrupt_vector_enable( ctx->vector );
+        T_rsc_success( sc );
 
-          while ( ctx->interrupt_count < 1 ) {
-            /* Wait */
-          }
-        } else {
-          ++ctx->interrupt_count;
+        while ( ctx->interrupt_count < 1 ) {
+          /* Wait */
         }
 
         T_false( IsPending( ctx ) );
