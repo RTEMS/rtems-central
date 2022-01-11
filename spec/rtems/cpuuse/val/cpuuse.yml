@@ -59,7 +59,7 @@ test-actions:
   links: []
 test-brief: |
   Tests the CPU usage reporting and reset.
-test-context: null
+test-context: []
 test-context-support: null
 test-description: null
 test-header: null
