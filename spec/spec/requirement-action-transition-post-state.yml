@@ -16,7 +16,7 @@ spec-info:
   str:
     assert:
       or:
-      - re: ^[A-Z][a-zA-Z0-9]+$
+      - re: ^[A-Z][a-zA-Z0-9]*$
       - eq: N/A
     description: |
       It shall be the name of a state of the corresponding post-condition or
