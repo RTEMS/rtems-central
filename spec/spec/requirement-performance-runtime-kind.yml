@@ -15,6 +15,8 @@ spec-info:
       - max-upper-bound
       - mean-lower-bound
       - mean-upper-bound
+      - median-lower-bound
+      - median-upper-bound
       - min-lower-bound
       - min-upper-bound
     description: |
