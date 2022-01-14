@@ -125,7 +125,9 @@ test-actions:
     rtems_interrupt_level level;
 
     rtems_interrupt_local_disable(level);
+    rtems_cache_disable_data();
     rtems_cache_invalidate_entire_data();
+    rtems_cache_enable_data();
     rtems_interrupt_local_enable(level);
   checks: []
   links:
