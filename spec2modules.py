@@ -26,19 +26,46 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import argparse
+import difflib
 import sys
 
 import rtemsspec
 
 
+def _diff(obj: rtemsspec.content.Content, path: str) -> None:
+    from_file = f"a/{path}"
+    to_file = f"b/{path}"
+    try:
+        file_lines = open(path).read().splitlines()
+    except FileNotFoundError:
+        file_lines = []
+    diff_lines = list(
+        difflib.unified_diff(file_lines,
+                             str(obj).splitlines(),
+                             fromfile=from_file,
+                             tofile=to_file,
+                             n=3,
+                             lineterm=""))
+    if diff_lines:
+        print(f"diff -u {from_file} {to_file}")
+        print("\n".join(diff_lines))
+
+
 def main() -> None:
     """ Generates files of the modules from the specification. """
     parser = argparse.ArgumentParser()
+    parser.add_argument("-u",
+                        "--diff",
+                        action="store_true",
+                        help="print the unified difference from the original"
+                        " file content to the new generated content")
     parser.add_argument("targets",
                         metavar="TARGET",
                         nargs="*",
                         help="a target file of a specification item")
     args = parser.parse_args(sys.argv[1:])
+    if args.diff:
+        rtemsspec.content.Content.write = _diff  # type: ignore
     config = rtemsspec.util.load_config("config.yml")
     item_cache = rtemsspec.items.ItemCache(config["spec"])
     rtemsspec.validation.generate(config["validation"], item_cache,
