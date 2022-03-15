@@ -395,7 +395,7 @@ class Node:
                 ctx.reg_counts[alias] += 1
 
     def _add_register_members(self, ctx: _RegisterMemberContext) -> None:
-        default_padding = min(ctx.sizes.values())
+        default_padding = min(min(ctx.sizes.values()), 8)
         with self.content.doxygen_block():
             self.content.add_brief_description(
                 self.substitute_text(self.item["brief"]))
