@@ -27,7 +27,8 @@
 import os
 import pytest
 
-from rtemsspec.items import EmptyItemCache, Item, ItemCache, Link
+from rtemsspec.items import EmptyItemCache, Item, ItemCache, \
+    ItemGetValueContext, Link
 
 
 def test_to_abs_uid():
@@ -263,3 +264,11 @@ def test_save_and_load(tmpdir):
     item2.load()
     assert item2["k"] == "v"
     assert item.file == item_file
+
+
+def test_item_get_value_arg():
+    item = Item(EmptyItemCache(), "i", {})
+    ctx = ItemGetValueContext(item, "", None, "", 0, "k=v,k2=v2")
+    assert ctx.arg("k") == "v"
+    assert ctx.arg("k2") == "v2"
+    assert ctx.arg("k3", "v3") == "v3"

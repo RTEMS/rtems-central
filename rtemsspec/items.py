@@ -44,6 +44,15 @@ class ItemGetValueContext(NamedTuple):
     index: Any  # should be int, but this triggers a mypy error
     args: Optional[str]
 
+    def arg(self, name: str, value: Optional[str] = None) -> str:
+        """ Get argument value by name. """
+        args = dict(
+            kv.split("=")  # type: ignore
+            for kv in self.args.split(","))  # type: ignore
+        if value:
+            return args.get(name, value)
+        return args[name]
+
 
 ItemMap = Dict[str, "Item"]
 ItemGetValue = Callable[[ItemGetValueContext], Any]
