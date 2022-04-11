@@ -78,21 +78,21 @@ def run_command(args: List[str],
     exit status of the subprocess.
     """
     logging.info("run in '%s': %s", cwd, " ".join(f"'{arg}'" for arg in args))
-    task = subprocess.Popen(args,
-                            stdin=subprocess.PIPE,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT,
-                            cwd=cwd,
-                            env=env)
-    assert task.stdout is not None
-    while True:
-        raw_line = task.stdout.readline()
-        if raw_line:
-            line = raw_line.decode("utf-8").rstrip()
-            if stdout is None:
-                logging.debug("%s", line)
-            else:
-                stdout.append(line)
-        elif task.poll() is not None:
-            break
-    return task.wait()
+    with subprocess.Popen(args,
+                          stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT,
+                          cwd=cwd,
+                          env=env) as task:
+        assert task.stdout is not None
+        while True:
+            raw_line = task.stdout.readline()
+            if raw_line:
+                line = raw_line.decode("utf-8").rstrip()
+                if stdout is None:
+                    logging.debug("%s", line)
+                else:
+                    stdout.append(line)
+            elif task.poll() is not None:
+                break
+        return task.wait()
