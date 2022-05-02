@@ -363,7 +363,7 @@ class Node:
                         bits,
                         functools.partial(Node._get_register_bits_definition,
                                           reg_name=name)))
-            self.content.close_add_to_group()
+            self.content.add_close_group()
         return ctx
 
     def _add_register_block_includes(self,
@@ -435,7 +435,7 @@ class Node:
         self._add_register_block_includes(ctx)
         self._get_register_member_info(ctx)
         self._add_register_members(ctx)
-        self.content.close_add_to_group()
+        self.content.add_close_group()
 
     def generate_typedef(self) -> None:
         """ Generates a typedef. """

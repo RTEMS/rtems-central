@@ -776,8 +776,8 @@ class CContent(Content):
         with self.doxygen_block():
             self.append([f"@addtogroup {group}", "", "@{"])
 
-    def close_add_to_group(self) -> None:
-        """ Closes an add to group. """
+    def add_close_group(self) -> None:
+        """ Closes a group. """
         self.add("/** @} */")
 
     @contextmanager
@@ -785,7 +785,7 @@ class CContent(Content):
         """ Opens an add to group context. """
         self.open_add_to_group(group)
         yield
-        self.close_add_to_group()
+        self.add_close_group()
 
     def open_for_loop(self, begin: str, end: str, step: str) -> None:
         """ Opens a for loop. """
