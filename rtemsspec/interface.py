@@ -350,9 +350,10 @@ class Node:
             ctx.regs[name]["size"] = width // 8
             ctx.regs[name]["type"] = f"uint{width}_t"
             ctx.regs[name]["group"] = group_ident
-            with self.content.defgroup_block(group_ident, name):
+            brief = self.substitute_text(register["brief"])
+            with self.content.defgroup_block(group_ident, f"{brief} ({name})"):
                 self.content.add_brief_description(
-                    self.substitute_text(register["brief"]))
+                    "This group contains register bit definitions.")
                 self.content.doxyfy(
                     self.substitute_text(register["description"]))
                 self.content.add("@{")

@@ -253,9 +253,10 @@ void Function6( int Param0 );
  */
 
 /**
- * @defgroup IrqampTimestampITCNT ITCNT
+ * @defgroup IrqampTimestampITCNT \\
+ *   Interrupt timestamp counter n register (ITCNT)
  *
- * @brief Interrupt timestamp counter n register
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
@@ -269,9 +270,10 @@ void Function6( int Param0 );
 /** @} */
 
 /**
- * @defgroup IrqampTimestampITSTMPC ITSTMPC
+ * @defgroup IrqampTimestampITSTMPC \\
+ *   Interrupt timestamp n control register (ITSTMPC)
  *
- * @brief Interrupt timestamp n control register
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
@@ -297,9 +299,10 @@ void Function6( int Param0 );
 /** @} */
 
 /**
- * @defgroup IrqampTimestampITSTMPAS ITSTMPAS
+ * @defgroup IrqampTimestampITSTMPAS \\
+ *   Interrupt Assertion Timestamp n register (ITSTMPAS)
  *
- * @brief Interrupt Assertion Timestamp n register
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
@@ -313,9 +316,10 @@ void Function6( int Param0 );
 /** @} */
 
 /**
- * @defgroup IrqampTimestampITSTMPAC ITSTMPAC
+ * @defgroup IrqampTimestampITSTMPAC \\
+ *   Interrupt Acknowledge Timestamp n register (ITSTMPAC)
  *
- * @brief Interrupt Acknowledge Timestamp n register
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
@@ -367,9 +371,9 @@ typedef struct irqamp_timestamp {
  */
 
 /**
- * @defgroup IrqampILEVEL ILEVEL
+ * @defgroup IrqampILEVEL Interrupt level register (ILEVEL)
  *
- * @brief Interrupt level register
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
@@ -383,9 +387,9 @@ typedef struct irqamp_timestamp {
 /** @} */
 
 /**
- * @defgroup IrqampIPEND8 IPEND8
+ * @defgroup IrqampIPEND8 Interrupt pending register (IPEND8)
  *
- * @brief Interrupt pending register
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
@@ -495,9 +499,9 @@ typedef struct irqamp {
  */
 
 /**
- * @defgroup RBNSR R
+ * @defgroup RBNSR Brief. (R)
  *
- * @brief Brief.
+ * @brief This group contains register bit definitions.
  *
  * @{
  */
