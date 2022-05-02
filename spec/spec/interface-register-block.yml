@@ -43,9 +43,9 @@ spec-info:
         spec-type: str
       register-block-size:
         description: |
-          It shall be the size of the register block in units of the address
-          space granule.
-        spec-type: int
+          If the value is present, then it shall be the size of the register
+          block in units of the address space granule.
+        spec-type: optional-int
       register-prefix:
         description: |
           If the value is present, then it will be used to prefix register bit

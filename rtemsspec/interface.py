@@ -394,13 +394,30 @@ class Node:
                     assert ctx.sizes[index] == ctx.regs[name]["size"] * count
                 ctx.reg_counts[alias] += 1
 
-    def _add_register_members(self, ctx: _RegisterMemberContext) -> None:
-        default_padding = min(min(ctx.sizes.values()), 8)
+    def _add_register_defines(self, ctx: _RegisterMemberContext) -> None:
+        with self.content.doxygen_block():
+            self.content.add("@name Registers")
+            self.content.add_brief_description(
+                self.substitute_text(self.item["brief"]))
+            self.content.doxyfy(self.substitute_text(self.item["description"]))
+            self.content.add("@{")
+        for index, member in enumerate(self.item["definition"]):
+            self.content.add(
+                _add_definition(
+                    self, self.item, f"definition[{index}]", member,
+                    functools.partial(Node._get_register_define_definition,
+                                      ctx=ctx,
+                                      offset=member["offset"])))
+        self.content.add_close_group()
+
+    def _add_register_struct(self, ctx: _RegisterMemberContext,
+                             size: int) -> None:
         with self.content.doxygen_block():
             self.content.add_brief_description(
                 self.substitute_text(self.item["brief"]))
             self.content.doxyfy(self.substitute_text(self.item["description"]))
         self.content.append(f"typedef struct {self.item['name']} {{")
+        default_padding = min(min(ctx.sizes.values()), 8)
         offset = 0
         with self.content.indent():
             for index, member in enumerate(self.item["definition"]):
@@ -413,10 +430,16 @@ class Node:
                         functools.partial(Node._get_register_member_definition,
                                           ctx=ctx)))
                 offset = member_offset + ctx.sizes[index]
-            size = self.item["register-block-size"]
             assert offset <= size
             _add_register_padding(self.content, size, offset, default_padding)
         self.content.add(f"}} {self.item['name']};")
+
+    def _add_register_members(self, ctx: _RegisterMemberContext) -> None:
+        size = self.item["register-block-size"]
+        if size is None:
+            self._add_register_defines(ctx)
+        else:
+            self._add_register_struct(ctx, size)
 
     def generate_register_block(self) -> None:
         """ Generates a register block. """
@@ -568,6 +591,20 @@ class Node:
                     f"{define}( _val ) ( ( _val ) << {start} )"
                 ])
         return lines
+
+    def _get_register_define_definition(self, item: Item, definition: Any,
+                                        ctx: _RegisterMemberContext,
+                                        offset: int) -> Lines:
+        # pylint: disable=no-self-use
+        name, alias = _get_register_name(definition)
+        count = definition["count"]
+        assert count == 1
+        content = CContent()
+        with content.doxygen_block():
+            content.add(f"@brief See @ref {ctx.regs[name]['group']}.")
+        content.append(
+            f"#define {item['name'].upper()}_{alias.upper()} {offset:#x}")
+        return content.lines
 
     def _get_register_member_definition(self, _item: Item, definition: Any,
                                         ctx: _RegisterMemberContext) -> Lines:

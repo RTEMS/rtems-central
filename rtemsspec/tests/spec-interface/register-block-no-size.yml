@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Brief.
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+description: null
+enabled-by: true
+identifier: RBNS
+index-entries: []
+interface-type: register-block
+links:
+- role: interface-placement
+  uid: h
+definition:
+- default:
+    count: 1
+    name: R
+  offset: 0
+  variants: []
+register-prefix: null
+register-block-group: RBNS
+register-block-size: null
+registers:
+- bits:
+  - default: []
+    variants: []
+  brief: |
+    Brief.
+  description: null
+  name: R
+  width: 32
+name: rbns
+notes: null
+type: interface

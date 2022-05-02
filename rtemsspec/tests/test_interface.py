@@ -61,7 +61,7 @@ def test_interface(tmpdir):
  */
 
 /*
- * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -483,6 +483,43 @@ typedef struct irqamp {
 #else
   #define MACRO( Param0 ) ( ( Param0 ) + 1 )
 #endif
+
+/* Generated from spec:/register-block-no-size */
+
+/**
+ * @defgroup RBNS RBNS
+ *
+ * @brief This group contains the RBNS interfaces.
+ *
+ * @{
+ */
+
+/**
+ * @defgroup RBNSR R
+ *
+ * @brief Brief.
+ *
+ * @{
+ */
+
+/** @} */
+
+/**
+ * @name Registers
+ *
+ * @brief Brief.
+ *
+ * @{
+ */
+
+/**
+ * @brief See @ref RBNSR.
+ */
+#define RBNS_R 0x0
+
+/** @} */
+
+/** @} */
 
 /* Generated from spec:/s */
 
