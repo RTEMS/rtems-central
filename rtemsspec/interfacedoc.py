@@ -30,7 +30,8 @@ import functools
 import os
 from typing import Any, Dict, List, Tuple
 
-from rtemsspec.content import CContent
+from rtemsspec.content import CContent, get_value_compound, \
+     get_value_forward_declaration
 from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
      SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
@@ -44,24 +45,17 @@ def _sanitize_name(name: str) -> str:
     return name.lstrip("_")
 
 
-def _forward_declaration(item: Item) -> str:
-    target = item.parent("interface-target")
-    return f"{target['interface-type']} {target['name']}"
-
-
 def _get_reference(name: str) -> str:
     return get_reference(get_label(f"{INTERFACE} {name}"))
-
-
-def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
-    return _forward_declaration(ctx.item)
 
 
 class _CodeMapper(ItemMapper):
     def __init__(self, item: Item):
         super().__init__(item)
         self.add_get_value("interface/forward-declaration:/name",
-                           _get_value_forward_declaration)
+                           get_value_forward_declaration)
+        self.add_get_value("interface/struct:/name", get_value_compound)
+        self.add_get_value("interface/union:/name", get_value_compound)
 
 
 def _get_param(ctx: ItemGetValueContext) -> Any:

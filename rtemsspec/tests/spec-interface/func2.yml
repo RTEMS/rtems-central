@@ -13,8 +13,8 @@ definition:
     params:
     - int ${.:/params[0]/name}
     - const ${forward-decl:/name} *${.:/params[1]/name}
-    - ${forward-decl:/name} *( *${.:/params[2]/name} )( void )
-    - ${forward-decl:/name} *${.:/params[3]/name}
+    - ${u:/name} *( *${.:/params[2]/name} )( void )
+    - ${s:/name} *${.:/params[3]/name}
     return: int
   variants: []
 description: |

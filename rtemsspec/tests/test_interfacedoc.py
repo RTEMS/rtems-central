@@ -184,7 +184,7 @@ Very long function brief description.
     int VeryLongFunction(
       int                  VeryLongParam0,
       const struct Struct *VeryLongParam1,
-      struct Struct    *( *VeryLongParam2 )( void ),
+      Union            *( *VeryLongParam2 )( void ),
       struct Struct       *VeryLongParam3
     );
 

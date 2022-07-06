@@ -1052,6 +1052,24 @@ def get_value_plural(ctx: ItemGetValueContext) -> Any:
         return f"{term}s"
 
 
+def forward_declaration(item: Item) -> str:
+    """ Gets the forward declare for the item. """
+    target = item.parent("interface-target")
+    return f"{target['interface-type']} {target['name']}"
+
+
+def get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value as a forward declaration. """
+    return forward_declaration(ctx.item)
+
+
+def get_value_compound(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value as a compound (struct or union). """
+    if ctx.item["definition-kind"] in ["struct-only", "union-only"]:
+        return f"{ctx.item['interface-type']} {ctx.item['name']}"
+    return ctx.item['name']
+
+
 class ExpressionMapper:
     """ Maps symbols and operations to form a C expression. """
 

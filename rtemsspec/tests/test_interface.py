@@ -155,11 +155,6 @@ extern "C" {
     ((float_t) 123)
 #endif
 
-/* Generated from spec:/forward-decl */
-
-/* Forward declaration */
-struct Struct;
-
 /* Generated from spec:/enum */
 
 /**
@@ -199,6 +194,11 @@ typedef enum EnumB {
    */
   ENUMERATOR_B = ENUMERATOR_A
 } EnumB;
+
+/* Generated from spec:/forward-decl */
+
+/* Forward declaration */
+struct Struct;
 
 /* Generated from spec:/func */
 
@@ -594,6 +594,23 @@ typedef uint32_t Integer /* Some comment. */;
   typedef uint32_t Integer3;
 #endif
 
+/* Generated from spec:/u */
+
+/**
+ * @ingroup GroupC
+ */
+typedef union Union {
+  /**
+   * @brief Brief member 0 description.
+   */
+  int m_0;
+
+  /**
+   * @brief Brief member 1 description.
+   */
+  long m_1;
+} Union;
+
 #if !defined(ASM)
   /* Generated from spec:/var */
 
@@ -639,7 +656,7 @@ typedef uint32_t Integer /* Some comment. */;
 __attribute__((__const__)) static inline int VeryLongFunction(
   int                  VeryLongParam0,
   const struct Struct *VeryLongParam1,
-  struct Struct    *( *VeryLongParam2 )( void ),
+  Union            *( *VeryLongParam2 )( void ),
   struct Struct       *VeryLongParam3
 )
 {

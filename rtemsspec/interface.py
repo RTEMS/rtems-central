@@ -33,11 +33,11 @@ from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Optional, \
     Union, Set, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
-    ExpressionMapper, get_value_double_colon, get_value_doxygen_function, \
-    get_value_doxygen_group, get_value_hash, get_value_params, \
-    get_value_plural, to_camel_case
-from rtemsspec.items import Item, ItemCache, ItemGetValueContext, \
-    ItemGetValueMap, ItemMapper
+    ExpressionMapper, forward_declaration, get_value_compound, \
+    get_value_double_colon, get_value_doxygen_function, \
+    get_value_doxygen_group, get_value_forward_declaration, get_value_hash, \
+    get_value_params, get_value_plural, to_camel_case
+from rtemsspec.items import Item, ItemCache, ItemGetValueMap, ItemMapper
 
 ItemMap = Dict[str, Item]
 Lines = Union[str, List[str]]
@@ -55,25 +55,18 @@ def _get_group_identifiers(groups: ItemMap) -> List[str]:
     return [item["identifier"] for item in groups.values()]
 
 
-def _forward_declaration(item: Item) -> str:
-    target = item.parent("interface-target")
-    return f"{target['interface-type']} {target['name']}"
-
-
-def _get_value_forward_declaration(ctx: ItemGetValueContext) -> Any:
-    return _forward_declaration(ctx.item)
-
-
 class _InterfaceMapper(ItemMapper):
     def __init__(self, node: "Node"):
         super().__init__(node.item)
         self._node = node
         self._code_or_doc = "doc"
+        self.add_get_value("interface/struct/code:/name", get_value_compound)
+        self.add_get_value("interface/union/code:/name", get_value_compound)
         self.add_get_value("glossary/term/doc:/plural", get_value_plural)
         self.add_get_value("interface/forward-declaration/code:/name",
-                           _get_value_forward_declaration)
+                           get_value_forward_declaration)
         self.add_get_value("interface/forward-declaration/doc:/name",
-                           _get_value_forward_declaration)
+                           get_value_forward_declaration)
         self.add_get_value("interface/function/doc:/name",
                            get_value_doxygen_function)
         self.add_get_value("interface/function/doc:/params/name",
@@ -320,7 +313,7 @@ class Node:
         """ Generates a forward declaration. """
         self.content.append([
             "", "/* Forward declaration */",
-            _forward_declaration(self.item) + ";"
+            forward_declaration(self.item) + ";"
         ])
 
     def generate_function(self) -> None:

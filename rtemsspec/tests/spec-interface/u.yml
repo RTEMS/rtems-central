@@ -1,0 +1,32 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)
+definition:
+- default:
+    brief: Brief member 0 description.
+    definition: int ${.:name}
+    description: null
+    kind: member
+    name: m_0
+  variants: []
+- default:
+    brief: Brief member 1 description.
+    definition: long ${.:name}
+    description: null
+    kind: member
+    name: m_1
+  variants: []
+definition-kind: typedef-and-union
+description: null
+enabled-by: true
+index-entries: []
+interface-type: union
+links:
+- role: interface-placement
+  uid: h
+- role: interface-ingroup
+  uid: gc
+name: Union
+notes: null
+type: interface
