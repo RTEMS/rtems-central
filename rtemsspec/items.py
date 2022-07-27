@@ -673,18 +673,25 @@ class ItemCache:
         """ Returns the types of the items. """
         return self._types
 
-    def add_volatile_item(self, path: str, uid: str) -> Item:
+    def add_volatile_item(self, uid: str, data: Any) -> Item:
         """
-        Adds an item stored in the specified file to the cache and returns it.
+        Adds an item with the specified data to the cache and returns it.
 
         The item is not added to the persistent cache storage.
         """
-        data = _load_item(path, uid)
         item = self._add_item(uid, data)
         item.init_parents(self)
         item.init_children()
         self._set_type(item)
         return item
+
+    def add_volatile_item_from_file(self, uid: str, path: str) -> Item:
+        """
+        Adds an item stored in the specified file to the cache and returns it.
+
+        The item is not added to the persistent cache storage.
+        """
+        return self.add_volatile_item(uid, _load_item(path, uid))
 
     def _add_item(self, uid: str, data: Any) -> Item:
         item = Item(self, uid, data)

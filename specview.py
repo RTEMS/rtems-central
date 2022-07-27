@@ -32,9 +32,10 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext, Link
+from rtemsspec.rtems import is_pre_qualified
 from rtemsspec.sphinxcontent import SphinxContent
-from rtemsspec.util import load_config
 from rtemsspec.transitionmap import Transition, TransitionMap
+from rtemsspec.util import load_config
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
@@ -171,18 +172,6 @@ _VALIDATION_LEAF = [
     "validation",
 ]
 
-_NOT_PRE_QUALIFIED = set([
-    "/acfg/constraint/option-not-pre-qualified",
-    "/constraint/constant-not-pre-qualified",
-    "/constraint/directive-not-pre-qualified",
-])
-
-
-def _is_pre_qualified(item: Item) -> bool:
-    return not bool(
-        set(parent.uid for parent in item.parents("constraint")).intersection(
-            _NOT_PRE_QUALIFIED))
-
 
 def _validation_count(item: Item, enabled: List[str]) -> int:
     return len(
@@ -201,7 +190,7 @@ def _validate(item: Item, enabled: List[str]) -> bool:
         if parent.is_enabled(enabled):
             validated = _validate(parent, enabled) and validated
             count += 1
-    pre_qualified = _is_pre_qualified(item)
+    pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     if count == 0:
         if not pre_qualified:
@@ -400,7 +389,7 @@ _API_ROLES = [
 
 
 def _gather_api_names(item: Item, names: Dict[str, List[str]]) -> None:
-    if item.type in _API_INTERFACES and _is_pre_qualified(item):
+    if item.type in _API_INTERFACES and is_pre_qualified(item):
         group = names.setdefault(item.parent(_API_ROLES)["name"], [])
         group.append(item["name"])
     for child in item.children(_API_ROLES):

@@ -71,8 +71,8 @@ def test_load(tmpdir):
     item_cache_3 = ItemCache(config)
     assert item_cache_3.updates
     assert item_cache_3["/d/c"]["v"] == "x"
-    item = item_cache_3.add_volatile_item(
-        os.path.join(os.path.dirname(__file__), "spec/root.yml"), "/foo/bar")
+    item = item_cache_3.add_volatile_item_from_file(
+        "/foo/bar", os.path.join(os.path.dirname(__file__), "spec/root.yml"))
     assert item.uid == "/foo/bar"
     assert item.type == ""
     assert item["type"] == "spec"
