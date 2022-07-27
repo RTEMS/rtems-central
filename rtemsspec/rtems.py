@@ -43,6 +43,7 @@ def is_pre_qualified(item: Item) -> bool:
 def _add_link(item_cache: ItemCache, child: Item, link: Link) -> None:
     parent = item_cache[child.to_abs_uid(link["uid"])]
     parent.add_link_to_child(Link(child, link))
+    child.add_link_to_parent(Link(parent, link))
 
 
 def augment_with_test_links(item_cache: ItemCache) -> None:

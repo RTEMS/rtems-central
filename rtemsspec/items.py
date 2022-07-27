@@ -382,8 +382,12 @@ class Item:
         for link in self.links_to_parents():
             link.item.add_link_to_child(Link.create(link, self))
 
+    def add_link_to_parent(self, link: Link):
+        """ Adds the link as a parent item link to this item. """
+        self._links_to_parents.append(link)
+
     def add_link_to_child(self, link: Link):
-        """ Adds a link to a child item of this items. """
+        """ Adds the link as a child item link to this item. """
         self._links_to_children.append(link)
 
     def is_enabled(self, enabled: List[str]):

@@ -60,3 +60,4 @@ def test_augment_with_test_links():
     test_case.data["_type"] = "test-case"
     augment_with_test_links(item_cache)
     assert item.child("validation") == test_case
+    assert test_case.parent("validation") == item
