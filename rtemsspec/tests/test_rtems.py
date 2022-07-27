@@ -27,7 +27,7 @@
 import pytest
 
 from rtemsspec.items import EmptyItemCache, Item
-from rtemsspec.rtems import is_pre_qualified
+from rtemsspec.rtems import augment_with_test_links, is_pre_qualified
 
 
 def test_is_pre_qualified():
@@ -41,3 +41,22 @@ def test_is_pre_qualified():
             "uid": uid
         }]})
     assert not is_pre_qualified(item)
+
+
+def test_augment_with_test_links():
+    item_cache = EmptyItemCache()
+    item = item_cache.add_volatile_item("/i", {"links": []})
+    link = {"role": "validation", "uid": "/i"}
+    test_case = item_cache.add_volatile_item(
+        "/t", {
+            "links": [],
+            "test-actions": [{
+                "checks": [{
+                    "links": [link]
+                }],
+                "links": [link]
+            }]
+        })
+    test_case.data["_type"] = "test-case"
+    augment_with_test_links(item_cache)
+    assert item.child("validation") == test_case

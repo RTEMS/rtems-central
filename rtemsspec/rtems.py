@@ -24,7 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rtemsspec.items import Item
+from rtemsspec.items import Item, ItemCache, Link
 
 _NOT_PRE_QUALIFIED = set([
     "/acfg/constraint/option-not-pre-qualified",
@@ -38,3 +38,20 @@ def is_pre_qualified(item: Item) -> bool:
     return not bool(
         set(parent.uid for parent in item.parents("constraint")).intersection(
             _NOT_PRE_QUALIFIED))
+
+
+def _add_link(item_cache: ItemCache, child: Item, link: Link) -> None:
+    parent = item_cache[child.to_abs_uid(link["uid"])]
+    parent.add_link_to_child(Link(child, link))
+
+
+def augment_with_test_links(item_cache: ItemCache) -> None:
+    """ Augments links of test case items with links from their actions. """
+    for item in item_cache.all.values():
+        if item.type == "test-case":
+            for actions in item["test-actions"]:
+                for checks in actions["checks"]:
+                    for link in checks["links"]:
+                        _add_link(item_cache, item, link)
+                for link in actions["links"]:
+                    _add_link(item_cache, item, link)

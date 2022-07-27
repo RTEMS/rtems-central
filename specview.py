@@ -31,8 +31,8 @@ import sys
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
-    ItemGetValueContext, Link
-from rtemsspec.rtems import is_pre_qualified
+    ItemGetValueContext
+from rtemsspec.rtems import augment_with_test_links, is_pre_qualified
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.transitionmap import Transition, TransitionMap
 from rtemsspec.util import load_config
@@ -287,22 +287,6 @@ def _gather(item: Item, spec: Set) -> None:
         _gather(parent, spec)
 
 
-def _add_link(item_cache: ItemCache, child: Item, link: Link) -> None:
-    parent = item_cache[child.to_abs_uid(link["uid"])]
-    parent.add_link_to_child(Link(child, link))
-
-
-def _process_test_cases(item_cache: ItemCache) -> None:
-    for item in item_cache.all.values():
-        if item.type == "test-case":
-            for actions in item["test-actions"]:
-                for checks in actions["checks"]:
-                    for link in checks["links"]:
-                        _add_link(item_cache, item, link)
-                for link in actions["links"]:
-                    _add_link(item_cache, item, link)
-
-
 def _make_row(transition_map: TransitionMap, map_idx: int,
               variant: Transition) -> Tuple[str, ...]:
     return tuple(
@@ -436,7 +420,7 @@ def main() -> None:
     enabled = args.enabled.split(",") if args.enabled else []
     config = load_config("config.yml")
     item_cache = ItemCache(config["spec"])
-    _process_test_cases(item_cache)
+    augment_with_test_links(item_cache)
     root = item_cache["/req/root"]
 
     if args.filter == "none":
