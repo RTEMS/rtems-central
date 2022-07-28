@@ -27,8 +27,8 @@
 import os
 import pytest
 
-from rtemsspec.items import EmptyItemCache, Item, ItemCache, \
-    ItemGetValueContext, Link
+from rtemsspec.items import EmptyItemCache, Item, ItemGetValueContext, \
+    JSONItemCache, Link
 
 
 def test_to_abs_uid():
@@ -264,6 +264,33 @@ def test_save_and_load(tmpdir):
     item2.load()
     assert item2["k"] == "v"
     assert item.file == item_file
+
+
+def test_save_and_load_json(tmpdir):
+    spec_dir = os.path.join(os.path.dirname(__file__), "spec-json")
+    config = {"paths": [spec_dir], "spec-type-root-uid": None}
+    item_cache = JSONItemCache(config)
+    item = item_cache["/d/b"].parent("b")
+    file = os.path.join(tmpdir, "file")
+    item.file = file
+    assert item["enabled-by"]
+    item["enabled-by"] = False
+    item.save()
+    with open(file, "r") as src:
+        assert src.read() == """{
+  "SPDX-License-Identifier": "CC-BY-SA-4.0 OR BSD-2-Clause",
+  "copyrights": [
+    "Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)"
+  ],
+  "enabled-by": false,
+  "links": [],
+  "type": "a"
+}"""
+    item.load()
+    with open(file, "w") as dst:
+        dst.write("invalid")
+    with pytest.raises(IOError):
+        item.load()
 
 
 def test_item_get_value_arg():

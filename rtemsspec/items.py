@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides specification items and an item cache. """
 
-# Copyright (C) 2019, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2019, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -31,7 +31,8 @@ import pickle
 import string
 import stat
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, \
-    Optional, Set, Tuple, Union
+    Optional, Set, TextIO, Tuple, Union
+import json
 import yaml
 
 
@@ -416,20 +417,11 @@ class Item:
 
     def save(self):
         """ Saves the item to the corresponding file. """
-        with open(self.file, "w") as dst:
-            data = {}
-            for key, value in self._data.items():
-                if not key.startswith("_"):
-                    data[key] = value
-            dst.write(
-                yaml.dump(data, default_flow_style=False, allow_unicode=True))
+        self._cache.save_data(self.file, self._data)
 
     def load(self):
         """ Loads the item from the corresponding file. """
-        filename = self.file
-        with open(filename, "r") as src:
-            self._data = yaml.safe_load(src.read())
-            self._data["_file"] = filename
+        self._data = self._cache.load_data(self.file, self._uid)
 
 
 class ItemTemplate(string.Template):
@@ -619,12 +611,25 @@ def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
     return new_type
 
 
-def _load_item(path: str, uid: str) -> Any:
+def _load_yaml_data(path: str, uid: str) -> Any:
     with open(path, "r") as src:
         try:
             data = yaml.safe_load(src.read())
         except yaml.YAMLError as err:
             msg = ("YAML error while loading specification item file "
+                   f"'{path}': {str(err)}")
+            raise IOError(msg) from err
+        data["_file"] = os.path.abspath(path)
+        data["_uid"] = uid
+    return data
+
+
+def _load_json_data(path: str, uid: str) -> Any:
+    with open(path, "r") as src:
+        try:
+            data = json.load(src)
+        except json.JSONDecodeError as err:
+            msg = ("JSON error while loading specification item file "
                    f"'{path}': {str(err)}")
             raise IOError(msg) from err
         data["_file"] = os.path.abspath(path)
@@ -641,9 +646,7 @@ class ItemCache:
         self._items = {}  # type: ItemMap
         self._types = set()  # type: Set[str]
         self._updates = 0
-        cache_dir = os.path.abspath(config["cache-directory"])
-        for index, path in enumerate(config["paths"]):
-            self._load_items_recursive(str(index), path, path, cache_dir)
+        self._load_items(config)
         if post_process_load:
             post_process_load(self._items)
         self._init_parents()
@@ -695,7 +698,7 @@ class ItemCache:
 
         The item is not added to the persistent cache storage.
         """
-        return self.add_volatile_item(uid, _load_item(path, uid))
+        return self.add_volatile_item(uid, self.load_data(path, uid))
 
     def _add_item(self, uid: str, data: Any) -> Item:
         item = Item(self, uid, data)
@@ -712,7 +715,7 @@ class ItemCache:
                 if name.endswith(".yml") and not name.startswith("."):
                     uid = "/" + os.path.relpath(path2, base).replace(
                         ".yml", "")
-                    data_by_uid[uid] = _load_item(path2, uid)
+                    data_by_uid[uid] = _load_yaml_data(path2, uid)
             os.makedirs(os.path.dirname(cache_file), exist_ok=True)
             with open(cache_file, "wb") as out:
                 pickle.dump(data_by_uid, out)
@@ -744,6 +747,31 @@ class ItemCache:
                     self._load_items_recursive(index, base, path2, cache_dir)
         self._load_items_in_dir(base, path, cache_file, update_cache)
 
+    def _load_items(self, config: Any):
+        cache_dir = os.path.abspath(config["cache-directory"])
+        for index, path in enumerate(config["paths"]):
+            self._load_items_recursive(str(index), path, path, cache_dir)
+
+    def load_data(self, path: str, uid: str) -> Any:
+        """ Loads the item data from the file specified by path. """
+        # pylint: disable=no-self-use
+        return _load_yaml_data(path, uid)
+
+    def _save_data(self, file: TextIO, data: Any) -> None:
+        # pylint: disable=no-self-use
+        file.write(
+            yaml.dump(data, default_flow_style=False, allow_unicode=True))
+
+    def save_data(self, path: str, data: Any) -> None:
+        """ Saves the item data to the file specified by path. """
+        print('save-data', path, data)
+        with open(path, "w") as file:
+            data2 = {}
+            for key, value in data.items():
+                if not key.startswith("_"):
+                    data2[key] = value
+            self._save_data(file, data2)
+
     def _init_parents(self) -> None:
         for item in self._items.values():
             item.init_parents(self)
@@ -773,6 +801,31 @@ class EmptyItemCache(ItemCache):
             "paths": [],
             "spec-type-root-uid": None
         })
+
+
+class JSONItemCache(ItemCache):
+    """ This class provides a cache of specification items using JSON. """
+    def _load_json_items(self, base: str, path: str) -> None:
+        for name in os.listdir(path):
+            path2 = os.path.join(path, name)
+            if name.endswith(".json") and not name.startswith("."):
+                uid = "/" + os.path.relpath(path2, base).replace(".json", "")
+                self._add_item(uid, _load_json_data(path2, uid))
+            else:
+                if stat.S_ISDIR(os.lstat(path2).st_mode):
+                    self._load_json_items(base, path2)
+
+    def _load_items(self, config: Any):
+        for path in config["paths"]:
+            self._load_json_items(path, path)
+
+    def load_data(self, path: str, uid: str) -> Any:
+        # pylint: disable=no-self-use
+        return _load_json_data(path, uid)
+
+    def _save_data(self, file: TextIO, data: Any) -> None:
+        # pylint: disable=no-self-use
+        json.dump(data, file, sort_keys=True, indent=2)
 
 
 class EmptyItem(Item):
