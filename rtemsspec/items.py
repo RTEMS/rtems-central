@@ -171,6 +171,13 @@ def _hash_data(data, state) -> None:
         state.update(str(data).encode("utf-8"))
 
 
+def data_digest(data: Any) -> str:
+    """ Returns a digest of the data. """
+    state = hashlib.sha512()
+    _hash_data(data, state)
+    return state.hexdigest()
+
+
 class Item:
     """ Objects of this class represent a specification item. """
 
@@ -212,9 +219,7 @@ class Item:
     @property
     def digest(self) -> str:
         """ Returns the digest of the item data. """
-        state = hashlib.sha512()
-        _hash_data(self._data, state)
-        return state.hexdigest()
+        return data_digest(self._data)
 
     def get(self, key: str, default: Any) -> Any:
         """
