@@ -742,9 +742,8 @@ class ItemCache:
             if name.endswith(".yml") and not name.startswith("."):
                 if not update_cache:
                     update_cache = mtime <= os.path.getmtime(path2)
-            else:
-                if stat.S_ISDIR(os.lstat(path2).st_mode):
-                    self._load_items_recursive(index, base, path2, cache_dir)
+            elif stat.S_ISDIR(os.lstat(path2).st_mode):
+                self._load_items_recursive(index, base, path2, cache_dir)
         self._load_items_in_dir(base, path, cache_file, update_cache)
 
     def _load_items(self, config: Any):
@@ -811,9 +810,8 @@ class JSONItemCache(ItemCache):
             if name.endswith(".json") and not name.startswith("."):
                 uid = "/" + os.path.relpath(path2, base).replace(".json", "")
                 self._add_item(uid, _load_json_data(path2, uid))
-            else:
-                if stat.S_ISDIR(os.lstat(path2).st_mode):
-                    self._load_json_items(base, path2)
+            elif stat.S_ISDIR(os.lstat(path2).st_mode):
+                self._load_json_items(base, path2)
 
     def _load_items(self, config: Any):
         for path in config["paths"]:
