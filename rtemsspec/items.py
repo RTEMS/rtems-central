@@ -763,7 +763,6 @@ class ItemCache:
 
     def save_data(self, path: str, data: Any) -> None:
         """ Saves the item data to the file specified by path. """
-        print('save-data', path, data)
         with open(path, "w") as file:
             data2 = {}
             for key, value in data.items():
