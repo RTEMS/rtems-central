@@ -25,6 +25,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from contextlib import contextmanager
+import base64
 import hashlib
 import os
 import pickle
@@ -173,9 +174,9 @@ def _hash_data(data, state) -> None:
 
 def data_digest(data: Any) -> str:
     """ Returns a digest of the data. """
-    state = hashlib.sha512()
+    state = hashlib.sha256()
     _hash_data(data, state)
-    return state.hexdigest()
+    return base64.urlsafe_b64encode(state.digest()).decode("ascii")
 
 
 class Item:
