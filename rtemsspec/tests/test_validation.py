@@ -27,7 +27,8 @@
 import os
 import pytest
 
-from rtemsspec.validation import generate, TransitionMap
+from rtemsspec.validation import augment_with_test_case_links, generate, \
+    TransitionMap
 from rtemsspec.items import EmptyItemCache, Item, ItemCache
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
@@ -41,6 +42,7 @@ def test_validation(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-validation", with_spec_types=True)
     item_cache = ItemCache(item_cache_config)
+    augment_with_test_case_links(item_cache)
 
     transition_map = TransitionMap(item_cache["/directive"])
     assert transition_map.pre_co_idx_to_co_name(0) == "Name"

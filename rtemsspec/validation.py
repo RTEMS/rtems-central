@@ -37,10 +37,10 @@ from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     get_value_plural, get_value_doxygen_group, get_value_doxygen_function, \
     to_camel_case
 from rtemsspec.items import Item, ItemCache, \
-    ItemGetValueContext, ItemMapper
+    ItemGetValueContext, ItemMapper, Link
 from rtemsspec.transitionmap import TransitionMap
 
-ItemMap = Dict[str, Item]
+_CaseToSuite = Dict[str, List["_TestItem"]]
 
 _STEPS = re.compile(r"^steps/([0-9]+)$")
 
@@ -193,9 +193,8 @@ class _TestItem:
         """
         return self._mapper.substitute(text, prefix=prefix)
 
-    def add_test_case_description(
-            self, content: CContent,
-            test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
+    def add_test_case_description(self, content: CContent,
+                                  test_case_to_suites: _CaseToSuite) -> None:
         """ Adds the test case description. """
         with content.defgroup_block(self.group_identifier, self.name):
             try:
@@ -444,7 +443,7 @@ class _TestItem:
             epilogue.add("T_pop_fixture();")
 
     def generate(self, content: CContent, base_directory: str,
-                 test_case_to_suites: Dict[str, List["_TestItem"]]) -> None:
+                 test_case_to_suites: _CaseToSuite) -> None:
         """ Generates the content. """
         self.add_test_case_description(content, test_case_to_suites)
         instance = self.add_context(content)
@@ -499,7 +498,7 @@ class _TestSuiteItem(_TestItem):
         return f"RTEMSTestSuite{self.ident}"
 
     def generate(self, content: CContent, _base_directory: str,
-                 _test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+                 _test_case_to_suites: _CaseToSuite) -> None:
         with content.defgroup_block(self.group_identifier, self.name):
             content.add("@ingroup RTEMSTestSuites")
             content.add_brief_description(self.brief)
@@ -822,7 +821,7 @@ class _ActionRequirementTestItem(_TestItem):
         super().add_header_body(content, header)
 
     def generate(self, content: CContent, base_directory: str,
-                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+                 test_case_to_suites: _CaseToSuite) -> None:
         self.add_test_case_description(content, test_case_to_suites)
         header = self["test-header"]
         if header:
@@ -970,7 +969,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
         return requests
 
     def generate(self, content: CContent, base_directory: str,
-                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+                 test_case_to_suites: _CaseToSuite) -> None:
         self.add_test_case_description(content, test_case_to_suites)
         instance = self.add_context(content)
         content.add(self.substitute_code(self["test-support"]))
@@ -1051,7 +1050,7 @@ class _SourceFile:
         self._test_cases.append(_RuntimeMeasurementTestItem(item))
 
     def generate(self, base_directory: str,
-                 test_case_to_suites: Dict[str, List[_TestItem]]) -> None:
+                 test_case_to_suites: _CaseToSuite) -> None:
         """
         Generates the source file and the corresponding build specification.
         """
@@ -1160,6 +1159,28 @@ _GATHER = {
 }
 
 
+def _gather(
+        item_cache: ItemCache) -> Tuple[Dict[str, _SourceFile], _CaseToSuite]:
+    source_files = {}  # type: Dict[str, _SourceFile]
+    test_programs = []  # type: List[_TestProgram]
+    for item in item_cache.all.values():
+        _GATHER.get(item.type, _gather_default)(item, source_files,
+                                                test_programs)
+
+    test_case_to_suites = {}  # type: _CaseToSuite
+    for test_program in test_programs:
+        test_program.add_source_files(source_files)
+        test_suites = []  # type: List[_TestItem]
+        for source_file in test_program.source_files:
+            test_suites.extend(source_file.test_suites)
+        for source_file in test_program.source_files:
+            for test_case in source_file.test_cases:
+                test_case_to_suites.setdefault(test_case.uid,
+                                               []).extend(test_suites)
+
+    return source_files, test_case_to_suites
+
+
 def generate(config: dict,
              item_cache: ItemCache,
              targets: Optional[List[str]] = None) -> None:
@@ -1171,22 +1192,7 @@ def generate(config: dict,
     :param item_cache: The specification item cache containing the validation
                        test suites and test cases.
     """
-    source_files = {}  # type: Dict[str, _SourceFile]
-    test_programs = []  # type: List[_TestProgram]
-    for item in item_cache.all.values():
-        _GATHER.get(item.type, _gather_default)(item, source_files,
-                                                test_programs)
-
-    test_case_to_suites = {}  # type: Dict[str, List[_TestItem]]
-    for test_program in test_programs:
-        test_program.add_source_files(source_files)
-        test_suites = []  # type: List[_TestItem]
-        for source_file in test_program.source_files:
-            test_suites.extend(source_file.test_suites)
-        for source_file in test_program.source_files:
-            for test_case in source_file.test_cases:
-                test_case_to_suites.setdefault(test_case.uid,
-                                               []).extend(test_suites)
+    source_files, test_case_to_suites = _gather(item_cache)
 
     if not targets:
         for src in source_files.values():
@@ -1195,3 +1201,18 @@ def generate(config: dict,
         for target in targets:
             source_files[target].generate(config["base-directory"],
                                           test_case_to_suites)
+
+
+def augment_with_test_case_links(item_cache: ItemCache) -> None:
+    """
+    Augments the test case items with links to the associated test suites and
+    vice versa.
+    """
+    _, test_case_to_suites = _gather(item_cache)
+    for test_case_uid, test_suites in test_case_to_suites.items():
+        child = item_cache[test_case_uid]
+        for test_suite in test_suites:
+            parent = item_cache[test_suite.item.uid]
+            link = {"role": "test-case", "uid": parent.uid}
+            parent.add_link_to_child(Link(child, link))
+            child.add_link_to_parent(Link(parent, link))
