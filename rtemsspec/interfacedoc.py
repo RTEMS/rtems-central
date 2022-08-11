@@ -160,7 +160,8 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
 
 
 def _generate_directive(content: SphinxContent, mapper: _Mapper,
-                        code_mapper: _CodeMapper, item: Item) -> None:
+                        code_mapper: _CodeMapper, item: Item,
+                        enabled: List[str]) -> None:
     content.wrap(mapper.substitute(item["brief"]))
     content.add(".. rubric:: CALLING SEQUENCE:")
     with content.directive("code-block", "c"):
@@ -198,7 +199,7 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
         content.wrap(mapper.substitute(item["notes"]))
     constraints = [
         mapper.substitute(parent["text"], parent)
-        for parent in item.parents("constraint")
+        for parent in item.parents("constraint") if parent.is_enabled(enabled)
     ]
     if constraints:
         content.add(".. rubric:: CONSTRAINTS:")
@@ -207,7 +208,7 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
 
 
 def _generate_directives(target: str, group: Item, group_uids: List[str],
-                         items: List[Item]) -> None:
+                         items: List[Item], enabled: List[str]) -> None:
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
     content.add_automatically_generated_warning()
@@ -230,7 +231,8 @@ def _generate_directives(target: str, group: Item, group_uids: List[str],
             directive = f"{name}()"
             content.add_index_entries([directive] + item["index-entries"])
             with content.section(directive, "Interface"):
-                _generate_directive(content, mapper, code_mapper, item)
+                _generate_directive(content, mapper, code_mapper, item,
+                                    enabled)
     content.add_licence_and_copyrights()
     content.write(target)
 
@@ -243,7 +245,7 @@ def _directive_key(order: List[Item], item: Item) -> Tuple[int, str]:
     return (index, item.uid)
 
 
-def generate(config: list, item_cache: ItemCache) -> None:
+def generate(config: list, enabled: List[str], item_cache: ItemCache) -> None:
     """
     Generates interface documentation according to the configuration.
 
@@ -263,4 +265,4 @@ def generate(config: list, item_cache: ItemCache) -> None:
         _generate_introduction(doc_config["introduction-target"], group,
                                group_uids, items)
         _generate_directives(doc_config["directives-target"], group,
-                             group_uids, items)
+                             group_uids, items, enabled)

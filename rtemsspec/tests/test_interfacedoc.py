@@ -49,7 +49,7 @@ def test_interfacedoc(tmpdir):
 
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-interface", with_spec_types=True)
-    generate([doc_config, doc_config_2], ItemCache(item_cache_config))
+    generate([doc_config, doc_config_2], [], ItemCache(item_cache_config))
 
     with open(introduction_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
