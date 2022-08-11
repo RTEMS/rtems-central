@@ -109,6 +109,7 @@ appl-config:
 validation:
   base-directory: modules/rtems
 interface:
+  enabled: []
   item-level-interfaces:
   - /build-options/if/container
   - /compiler/if/container

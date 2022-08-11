@@ -38,6 +38,7 @@ def test_interface(tmpdir):
     base_directory = os.path.join(tmpdir, "base")
     interface_domains = {"/domain-abc": base_directory}
     interface_config["domains"] = interface_domains
+    interface_config["enabled"] = []
 
     generate(interface_config, EmptyItemCache())
 

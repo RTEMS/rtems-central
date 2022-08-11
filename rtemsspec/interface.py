@@ -646,6 +646,7 @@ class Node:
             constraints = [
                 self.substitute_text(parent["text"], parent)
                 for parent in item.parents("constraint")
+                if parent.is_enabled(self.header_file.enabled)
             ]
             if constraints:
                 constraint_content = CContent()
@@ -708,7 +709,8 @@ def _bubble_sort(nodes: List[Node]) -> List[Node]:
 
 class _HeaderFile:
     """ A header file. """
-    def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
+    def __init__(self, item: Item, enabled_by_defined: Dict[str, str],
+                 enabled: List[str]):
         self._item = item
         self._content = CContent()
         self._content.register_license_and_copyrights_of_item(item)
@@ -716,6 +718,7 @@ class _HeaderFile:
         self._includes = []  # type: List[Item]
         self._nodes = {}  # type: Dict[str, Node]
         self.enabled_by_defined = enabled_by_defined
+        self.enabled = enabled
 
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
@@ -816,13 +819,14 @@ class _HeaderFile:
 
 
 def _generate_header_file(item: Item, domains: Dict[str, str],
-                          enabled_by_defined: Dict[str, str]) -> None:
+                          enabled_by_defined: Dict[str, str],
+                          enabled: List[str]) -> None:
     domain = item.parent("interface-placement")
     assert domain["interface-type"] == "domain"
     domain_path = domains.get(domain.uid, None)
     if domain_path is None:
         return
-    header_file = _HeaderFile(item, enabled_by_defined)
+    header_file = _HeaderFile(item, enabled_by_defined, enabled)
     header_file.generate_nodes()
     header_file.finalize()
     header_file.write(domain_path)
@@ -846,8 +850,9 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the interfaces.
     """
     domains = config["domains"]
+    enabled = config["enabled"]
     enabled_by_defined = _gather_enabled_by_defined(
         config["item-level-interfaces"], item_cache)
     for item in item_cache.all.values():
         if item.type == "interface/header-file":
-            _generate_header_file(item, domains, enabled_by_defined)
+            _generate_header_file(item, domains, enabled_by_defined, enabled)
