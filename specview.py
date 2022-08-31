@@ -172,17 +172,13 @@ _VALIDATION_LEAF = [
     "validation",
 ]
 
-
-def _validation_count(item: Item, enabled: List[str]) -> int:
-    return len(
-        list(child for child in item.children("validation")
-             if child.is_enabled(enabled)))
+_VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
 
 
 def _validate(item: Item, enabled: List[str]) -> bool:
-    count = _validation_count(item, enabled)
     validated = True
-    for child in item.children(_CHILD_ROLES):
+    count = 0
+    for child in item.children(_VALIDATION_ROLES):
         if child.is_enabled(enabled):
             validated = _validate(child, enabled) and validated
             count += 1
@@ -193,12 +189,15 @@ def _validate(item: Item, enabled: List[str]) -> bool:
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     if count == 0:
-        if not pre_qualified:
-            validated = True
-        else:
-            validated = item.type in _VALIDATION_LEAF
+        validated = (not pre_qualified) or (item.type in _VALIDATION_LEAF)
     item["_validated"] = validated
     return validated
+
+
+def _validation_count(item: Item, enabled: List[str]) -> int:
+    return len(
+        list(child for child in item.children("validation")
+             if child.is_enabled(enabled)))
 
 
 def _no_validation(item: Item, path: List[str],
