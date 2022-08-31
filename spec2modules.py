@@ -77,7 +77,6 @@ def main() -> None:
         rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
         rtemsspec.glossary.generate(config["glossary"], item_cache)
         rtemsspec.interfacedoc.generate(config["interface-documentation"],
-                                        config["interface"]["enabled"],
                                         item_cache)
 
 

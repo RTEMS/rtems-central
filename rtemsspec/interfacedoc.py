@@ -245,15 +245,17 @@ def _directive_key(order: List[Item], item: Item) -> Tuple[int, str]:
     return (index, item.uid)
 
 
-def generate(config: list, enabled: List[str], item_cache: ItemCache) -> None:
+def generate(config: dict, item_cache: ItemCache) -> None:
     """
     Generates interface documentation according to the configuration.
 
     :param config: A dictionary with configuration entries.
     :param item_cache: The specification item cache containing the interfaces.
     """
-    group_uids = [doc_config["group"] for doc_config in config]
-    for doc_config in config:
+    groups = config["groups"]
+    enabled = config["enabled"]
+    group_uids = [doc_config["group"] for doc_config in groups]
+    for doc_config in groups:
         items = []  # type: List[Item]
         group = item_cache[doc_config["group"]]
         assert group.type == "interface/group"

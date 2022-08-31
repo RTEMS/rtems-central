@@ -78,7 +78,9 @@ glossary:
     target: modules/rtems-docs/eng/glossary.rst
 appl-config:
   doxygen-target: modules/rtems/cpukit/doxygen/appl-config.h
-  enabled: []
+  enabled-source:
+  - RTEMS_QUAL
+  enabled-documentation: []
   groups:
   - uid: /acfg/if/group-bdbuf
     target: modules/rtems-docs/c-user/config/bdbuf.rst
@@ -109,7 +111,8 @@ appl-config:
 validation:
   base-directory: modules/rtems
 interface:
-  enabled: []
+  enabled:
+  - RTEMS_QUAL
   item-level-interfaces:
   - /build-options/if/container
   - /compiler/if/container
@@ -118,72 +121,74 @@ interface:
     /if/domain: modules/rtems
     /dev/if/domain: modules/rtems
 interface-documentation:
-- directives-target: modules/rtems-docs/c-user/barrier/directives.rst
-  group: /rtems/barrier/if/group
-  introduction-target: modules/rtems-docs/c-user/barrier/introduction.rst
-- directives-target: modules/rtems-docs/c-user/cache/directives.rst
-  group: /rtems/cache/if/group
-  introduction-target: modules/rtems-docs/c-user/cache/introduction.rst
-- directives-target: modules/rtems-docs/c-user/dual-ported-memory/directives.rst
-  group: /rtems/dpmem/if/group
-  introduction-target: modules/rtems-docs/c-user/dual-ported-memory/introduction.rst
-- directives-target: modules/rtems-docs/c-user/fatal-error/directives.rst
-  group: /rtems/fatal/if/group
-  introduction-target: modules/rtems-docs/c-user/fatal-error/introduction.rst
-- directives-target: modules/rtems-docs/c-user/timer/directives.rst
-  group: /rtems/timer/if/group
-  introduction-target: modules/rtems-docs/c-user/timer/introduction.rst
-- directives-target: modules/rtems-docs/c-user/initialization/directives.rst
-  group: /rtems/init/if/group
-  introduction-target: modules/rtems-docs/c-user/initialization/introduction.rst
-- directives-target: modules/rtems-docs/c-user/io/directives.rst
-  group: /rtems/io/if/group
-  introduction-target: modules/rtems-docs/c-user/io/introduction.rst
-- directives-target: modules/rtems-docs/c-user/kernel-character-io/directives.rst
-  group: /rtems/io/if/group-3
-  introduction-target: modules/rtems-docs/c-user/kernel-character-io/introduction.rst
-- directives-target: modules/rtems-docs/c-user/region/directives.rst
-  group: /rtems/region/if/group
-  introduction-target: modules/rtems-docs/c-user/region/introduction.rst
-- directives-target: modules/rtems-docs/c-user/multiprocessing/directives.rst
-  group: /rtems/mp/if/group
-  introduction-target: modules/rtems-docs/c-user/multiprocessing/introduction.rst
-- directives-target: modules/rtems-docs/c-user/semaphore/directives.rst
-  group: /rtems/sem/if/group
-  introduction-target: modules/rtems-docs/c-user/semaphore/introduction.rst
-- directives-target: modules/rtems-docs/c-user/event/directives.rst
-  group: /rtems/event/if/group
-  introduction-target: modules/rtems-docs/c-user/event/introduction.rst
-- directives-target: modules/rtems-docs/c-user/partition/directives.rst
-  group: /rtems/part/if/group
-  introduction-target: modules/rtems-docs/c-user/partition/introduction.rst
-- directives-target: modules/rtems-docs/c-user/task/directives.rst
-  group: /rtems/task/if/group
-  introduction-target: modules/rtems-docs/c-user/task/introduction.rst
-- directives-target: modules/rtems-docs/c-user/message/directives.rst
-  group: /rtems/message/if/group
-  introduction-target: modules/rtems-docs/c-user/message/introduction.rst
-- directives-target: modules/rtems-docs/c-user/object-services/directives.rst
-  group: /rtems/object/if/group
-  introduction-target: modules/rtems-docs/c-user/object-services/introduction.rst
-- directives-target: modules/rtems-docs/c-user/signal/directives.rst
-  group: /rtems/signal/if/group
-  introduction-target: modules/rtems-docs/c-user/signal/introduction.rst
-- directives-target: modules/rtems-docs/c-user/user-extensions/directives.rst
-  group: /rtems/userext/if/group
-  introduction-target: modules/rtems-docs/c-user/user-extensions/introduction.rst
-- directives-target: modules/rtems-docs/c-user/scheduling-concepts/directives.rst
-  group: /rtems/scheduler/if/group
-  introduction-target: modules/rtems-docs/c-user/scheduling-concepts/introduction.rst
-- directives-target: modules/rtems-docs/c-user/clock/directives.rst
-  group: /rtems/clock/if/group
-  introduction-target: modules/rtems-docs/c-user/clock/introduction.rst
-- directives-target: modules/rtems-docs/c-user/interrupt/directives.rst
-  group: /rtems/intr/if/group
-  introduction-target: modules/rtems-docs/c-user/interrupt/introduction.rst
-- directives-target: modules/rtems-docs/c-user/rate-monotonic/directives.rst
-  group: /rtems/ratemon/if/group
-  introduction-target: modules/rtems-docs/c-user/rate-monotonic/introduction.rst
+  enabled: []
+  groups:
+  - directives-target: modules/rtems-docs/c-user/barrier/directives.rst
+    group: /rtems/barrier/if/group
+    introduction-target: modules/rtems-docs/c-user/barrier/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/cache/directives.rst
+    group: /rtems/cache/if/group
+    introduction-target: modules/rtems-docs/c-user/cache/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/dual-ported-memory/directives.rst
+    group: /rtems/dpmem/if/group
+    introduction-target: modules/rtems-docs/c-user/dual-ported-memory/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/fatal-error/directives.rst
+    group: /rtems/fatal/if/group
+    introduction-target: modules/rtems-docs/c-user/fatal-error/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/timer/directives.rst
+    group: /rtems/timer/if/group
+    introduction-target: modules/rtems-docs/c-user/timer/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/initialization/directives.rst
+    group: /rtems/init/if/group
+    introduction-target: modules/rtems-docs/c-user/initialization/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/io/directives.rst
+    group: /rtems/io/if/group
+    introduction-target: modules/rtems-docs/c-user/io/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/kernel-character-io/directives.rst
+    group: /rtems/io/if/group-3
+    introduction-target: modules/rtems-docs/c-user/kernel-character-io/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/region/directives.rst
+    group: /rtems/region/if/group
+    introduction-target: modules/rtems-docs/c-user/region/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/multiprocessing/directives.rst
+    group: /rtems/mp/if/group
+    introduction-target: modules/rtems-docs/c-user/multiprocessing/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/semaphore/directives.rst
+    group: /rtems/sem/if/group
+    introduction-target: modules/rtems-docs/c-user/semaphore/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/event/directives.rst
+    group: /rtems/event/if/group
+    introduction-target: modules/rtems-docs/c-user/event/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/partition/directives.rst
+    group: /rtems/part/if/group
+    introduction-target: modules/rtems-docs/c-user/partition/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/task/directives.rst
+    group: /rtems/task/if/group
+    introduction-target: modules/rtems-docs/c-user/task/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/message/directives.rst
+    group: /rtems/message/if/group
+    introduction-target: modules/rtems-docs/c-user/message/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/object-services/directives.rst
+    group: /rtems/object/if/group
+    introduction-target: modules/rtems-docs/c-user/object-services/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/signal/directives.rst
+    group: /rtems/signal/if/group
+    introduction-target: modules/rtems-docs/c-user/signal/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/user-extensions/directives.rst
+    group: /rtems/userext/if/group
+    introduction-target: modules/rtems-docs/c-user/user-extensions/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/scheduling-concepts/directives.rst
+    group: /rtems/scheduler/if/group
+    introduction-target: modules/rtems-docs/c-user/scheduling-concepts/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/clock/directives.rst
+    group: /rtems/clock/if/group
+    introduction-target: modules/rtems-docs/c-user/clock/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/interrupt/directives.rst
+    group: /rtems/intr/if/group
+    introduction-target: modules/rtems-docs/c-user/interrupt/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/rate-monotonic/directives.rst
+    group: /rtems/ratemon/if/group
+    introduction-target: modules/rtems-docs/c-user/rate-monotonic/introduction.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:

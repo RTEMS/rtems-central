@@ -324,7 +324,6 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     with doxygen_content.content.defgroup_block(
             "RTEMSApplConfig", "Application Configuration Options"):
         doxygen_content.content.add("@ingroup RTEMSAPI")
-    enabled = config["enabled"]
     for group_config in config["groups"]:
         group = item_cache[group_config["uid"]]
         assert group.type == "interface/appl-config-group"
@@ -333,9 +332,10 @@ def generate(config: dict, item_cache: ItemCache) -> None:
             assert child.type.startswith("interface/appl-config-option")
             options[child.uid] = child
         sphinx_content = _SphinxContentAdaptor(sphinx_mapper)
-        _generate(group, options, enabled, sphinx_content)
+        _generate(group, options, config["enabled-documentation"],
+                  sphinx_content)
         sphinx_content.write(group_config["target"])
-        _generate(group, options, enabled, doxygen_content)
+        _generate(group, options, config["enabled-source"], doxygen_content)
     doxygen_content.content.prepend_copyrights_and_licenses()
     doxygen_content.content.prepend_spdx_license_identifier()
     doxygen_content.write(config["doxygen-target"])
