@@ -182,7 +182,9 @@ _VALIDATION_LEAF = [
     "runtime-measurement-test",
     "test-case",
     "test-suite",
-    "validation",
+    "validation/by-analysis",
+    "validation/by-inspection",
+    "validation/by-review-of-design",
 ]
 
 _VALIDATION_ROLES = _CHILD_ROLES + ["validation"]

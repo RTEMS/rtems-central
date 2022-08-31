@@ -16,8 +16,10 @@ spec-info:
     attributes:
       method:
         description: |
-          Validation by test is done through ${test-case:/spec-name} items.
-        spec-type: requirement-validation-method
+          It shall specify the requirement validation method (except validation
+          by test).  Validation by test is done through ${test-case:/spec-name}
+          items.
+        spec-type: name
       references:
         description: null
         spec-type: external-reference-list
