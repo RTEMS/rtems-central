@@ -430,6 +430,19 @@ class Item:
         self._data = self._cache.load_data(self.file, self._uid)
 
 
+def create_unique_link(child: Item, parent: Item, data: Any) -> None:
+    """
+    Creates a unique link from the child to the parent item and vice versa
+    using the data for the link.
+    """
+    for item in parent.children(data["role"]):
+        if item.uid == child.uid:
+            break
+    else:
+        parent.add_link_to_child(Link(child, data))
+        child.add_link_to_parent(Link(parent, data))
+
+
 class ItemTemplate(string.Template):
     """ String template for item mapper identifiers. """
     idpattern = "[a-zA-Z0-9._/-]+(:[a-zA-Z0-9._/-]+)?(:[^${}]*)?"

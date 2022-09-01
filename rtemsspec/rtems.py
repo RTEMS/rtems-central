@@ -24,7 +24,9 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rtemsspec.items import Item, ItemCache, Link
+from typing import Any
+
+from rtemsspec.items import create_unique_link, Item, ItemCache
 
 _NOT_PRE_QUALIFIED = set([
     "/acfg/constraint/option-not-pre-qualified",
@@ -40,10 +42,9 @@ def is_pre_qualified(item: Item) -> bool:
             _NOT_PRE_QUALIFIED))
 
 
-def _add_link(item_cache: ItemCache, child: Item, link: Link) -> None:
-    parent = item_cache[child.to_abs_uid(link["uid"])]
-    parent.add_link_to_child(Link(child, link))
-    child.add_link_to_parent(Link(parent, link))
+def _add_link(item_cache: ItemCache, child: Item, data: Any) -> None:
+    parent = item_cache[child.to_abs_uid(data["uid"])]
+    create_unique_link(child, parent, data)
 
 
 def augment_with_test_links(item_cache: ItemCache) -> None:

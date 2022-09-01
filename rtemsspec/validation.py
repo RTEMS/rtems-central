@@ -36,8 +36,8 @@ from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, GenericContent, get_integer_type, get_value_params, \
     get_value_plural, get_value_doxygen_group, get_value_doxygen_function, \
     to_camel_case
-from rtemsspec.items import Item, ItemCache, \
-    ItemGetValueContext, ItemMapper, Link
+from rtemsspec.items import create_unique_link, Item, ItemCache, \
+    ItemGetValueContext, ItemMapper
 from rtemsspec.transitionmap import TransitionMap
 
 _CaseToSuite = Dict[str, List["_TestItem"]]
@@ -1213,6 +1213,5 @@ def augment_with_test_case_links(item_cache: ItemCache) -> None:
         child = item_cache[test_case_uid]
         for test_suite in test_suites:
             parent = item_cache[test_suite.item.uid]
-            link = {"role": "test-case", "uid": parent.uid}
-            parent.add_link_to_child(Link(child, link))
-            child.add_link_to_parent(Link(parent, link))
+            data = {"role": "test-case", "uid": parent.uid}
+            create_unique_link(child, parent, data)
