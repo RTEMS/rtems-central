@@ -36,10 +36,12 @@ from rtemsspec.rtems import augment_with_test_links, is_pre_qualified
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.transitionmap import Transition, TransitionMap
 from rtemsspec.util import load_config
+from rtemsspec.validation import augment_with_test_case_links
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
-    "interface-function", "appl-config-group-member", "glossary-member"
+    "interface-function", "appl-config-group-member", "glossary-member",
+    "test-case"
 ]
 
 _PARENT_ROLES = ["function-implementation", "interface-enumerator"]
@@ -424,6 +426,7 @@ def main() -> None:
     config = load_config("config.yml")
     item_cache = ItemCache(config["spec"])
     augment_with_test_links(item_cache)
+    augment_with_test_case_links(item_cache)
     root = item_cache["/req/root"]
 
     if args.filter == "none":
