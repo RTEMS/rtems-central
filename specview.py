@@ -157,13 +157,17 @@ _VALIDATION_LEAF = [
     "interface/domain",
     "interface/enum",
     "interface/enumerator",
+    "interface/forward-declaration",
     "interface/header-file",
     "interface/register-block",
     "interface/struct",
     "interface/typedef",
     "interface/union",
+    "interface/unspecified",
     "interface/unspecified-define",
     "interface/unspecified-function",
+    "interface/unspecified-group",
+    "interface/unspecified-type",
     "requirement/functional/action",
     "requirement/non-functional/performance-runtime",
     "runtime-measurement-test",
@@ -432,12 +436,11 @@ def main() -> None:
         for uid in args.UIDs:
             _action_list(enabled, item_cache[uid])
     elif args.filter == "orphan":
-        spec = set()  # type: Set[Item]
-        _gather(root, spec)
+        _validate(root, enabled)
         for item in item_cache.all.values():
-            if item["type"] in ["build", "glossary", "spec"]:
+            if item["type"] in ["build", "spec"]:
                 continue
-            if item not in spec:
+            if item.is_enabled(enabled) and "_validated" not in item:
                 print(item.uid)
     elif args.filter == "no-validation":
         _validate(root, enabled)
