@@ -114,9 +114,9 @@ interface:
   enabled:
   - RTEMS_QUAL
   item-level-interfaces:
-  - /build-options/if/container
-  - /compiler/if/container
-  - /user/if/container
+  - /build-options/if/group
+  - /compiler/if/group
+  - /user/if/group
   domains:
     /if/domain: modules/rtems
     /dev/if/domain: modules/rtems

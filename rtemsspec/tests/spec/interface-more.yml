@@ -19,10 +19,6 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: container
-  uid: interface
-- role: spec-refinement
-  spec-key: interface-type
   spec-value: define
   uid: interface
 - role: spec-refinement

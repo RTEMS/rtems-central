@@ -723,8 +723,7 @@ class _HeaderFile:
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
         for parent in item.parents("interface-placement"):
-            if parent.type == "interface/header-file":
-                self._includes.append(parent)
+            self._includes.append(parent)
 
     def _add_child(self, item: Item) -> None:
         self._nodes[item.uid] = Node(self, item)
@@ -836,9 +835,10 @@ def _gather_enabled_by_defined(item_level_interfaces: List[str],
                                item_cache: ItemCache) -> Dict[str, str]:
     enabled_by_defined = {}  # type: Dict[str, str]
     for uid in item_level_interfaces:
-        for child in item_cache[uid].children("interface-placement"):
-            define = f"defined(${{{child.uid}:/name}})"
-            enabled_by_defined[child["name"]] = define
+        for child in item_cache[uid].children("interface-ingroup"):
+            if child.type == "interface/unspecified-define":
+                define = f"defined(${{{child.uid}:/name}})"
+                enabled_by_defined[child["name"]] = define
     return enabled_by_defined
 
 

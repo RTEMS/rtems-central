@@ -3,9 +3,9 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 index-entries: []
-interface-type: define
+interface-type: unspecified-define
 links:
-- role: interface-placement
+- role: interface-ingroup
   uid: command-line
 name: RTEMS_SMP
 type: interface

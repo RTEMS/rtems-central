@@ -24,9 +24,8 @@ spec-info:
         spec-type: str
     description: |
       This set of attributes specifies an interface domain.  Items of the types
-      ${interface-container:/spec-name} and ${interface-header-file:/spec-name}
-      are placed into domains through links with the
-      ${interface-placement:/spec-name}.
+      ${interface-header-file:/spec-name} are placed into domains through links
+      with the ${interface-placement:/spec-name}.
     mandatory-attributes: all
 spec-name: Interface Domain Item Type
 spec-type: interface-domain
