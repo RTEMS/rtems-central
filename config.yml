@@ -92,6 +92,8 @@ appl-config:
     target: modules/rtems-docs/c-user/config/device-driver.rst
   - uid: /acfg/if/group-eventrecord
     target: modules/rtems-docs/c-user/config/event-record.rst
+  - uid: /acfg/if/group-face
+    target: modules/rtems-docs/c-user/config/face-technical-standard.rst
   - uid: /acfg/if/group-filesystem
     target: modules/rtems-docs/c-user/config/filesystem.rst
   - uid: /acfg/if/group-general
