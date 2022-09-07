@@ -7,11 +7,19 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: unspecified
+  spec-value: unspecified-define
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: unspecified-define
+  spec-value: unspecified-define-or-object
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-enum
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-enumerator
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
@@ -23,7 +31,27 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: unspecified-type
+  spec-value: unspecified-macro
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-macro-or-function
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-object
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-struct
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-typedef
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-union
   uid: interface
 spec-description: null
 spec-example: null

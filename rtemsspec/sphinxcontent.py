@@ -290,11 +290,19 @@ class SphinxMapper(ItemMapper):
         self.add_get_value("interface/union:/name", _get_value_sphinx_type)
         self.add_get_value("interface/unspecified-define:/name",
                            _get_value_sphinx_unspecified_define)
+        self.add_get_value("interface/unspecified-enumerator:/name",
+                           _get_value_sphinx_unspecified_define)
         self.add_get_value("interface/unspecified-function:/name",
                            _get_value_sphinx_unspecified_function)
         self.add_get_value("interface/unspecified-group:/name",
                            _get_value_sphinx_unspecified_group)
-        self.add_get_value("interface/unspecified-type:/name",
+        self.add_get_value("interface/unspecified-enum:/name",
+                           _get_value_sphinx_unspecified_type)
+        self.add_get_value("interface/unspecified-struct:/name",
+                           _get_value_sphinx_unspecified_type)
+        self.add_get_value("interface/unspecified-typedef:/name",
+                           _get_value_sphinx_unspecified_type)
+        self.add_get_value("interface/unspecified-union:/name",
                            _get_value_sphinx_unspecified_type)
 
 

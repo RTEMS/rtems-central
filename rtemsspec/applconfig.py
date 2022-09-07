@@ -303,7 +303,13 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
                          get_value_doxygen_function)
     mapper.add_get_value("interface/unspecified-group:/name",
                          _get_value_doxygen_unspecified_group)
-    mapper.add_get_value("interface/unspecified-type:/name",
+    mapper.add_get_value("interface/unspecified-enum:/name",
+                         _get_value_doxygen_unspecfied_type)
+    mapper.add_get_value("interface/unspecified-struct:/name",
+                         _get_value_doxygen_unspecfied_type)
+    mapper.add_get_value("interface/unspecified-typedef:/name",
+                         _get_value_doxygen_unspecfied_type)
+    mapper.add_get_value("interface/unspecified-union:/name",
                          _get_value_doxygen_unspecfied_type)
 
 
