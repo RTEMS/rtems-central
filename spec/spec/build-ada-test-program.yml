@@ -23,6 +23,7 @@ spec-example: |
   copyrights:
   - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
   cppflags: []
+  cxxflags: []
   enabled-by: true
   includes: []
   ldflags: []
@@ -59,6 +60,9 @@ spec-info:
       cppflags:
         description: null
         spec-type: build-cppflags
+      cxxflags:
+        description: null
+        spec-type: build-cxxflags
       includes:
         description: null
         spec-type: build-includes

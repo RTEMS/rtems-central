@@ -13,8 +13,11 @@ spec-description: null
 spec-example: |
   SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
   build-type: group
+  cflags: []
   copyrights:
   - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  cppflags: []
+  cxxflags: []
   enabled-by:
   - BUILD_TESTS
   - BUILD_SAMPLES
@@ -34,6 +37,15 @@ spec-example: |
 spec-info:
   dict:
     attributes:
+      cflags:
+        description: null
+        spec-type: build-cflags
+      cppflags:
+        description: null
+        spec-type: build-cppflags
+      cxxflags:
+        description: null
+        spec-type: build-cxxflags
       includes:
         description: null
         spec-type: build-includes
