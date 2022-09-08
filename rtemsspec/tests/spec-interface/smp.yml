@@ -5,6 +5,8 @@ enabled-by: true
 index-entries: []
 interface-type: unspecified-define
 links:
+- role: interface-placement
+  uid: domain-command-line
 - role: interface-ingroup
   uid: command-line
 name: RTEMS_SMP

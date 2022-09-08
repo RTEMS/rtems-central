@@ -723,7 +723,8 @@ class _HeaderFile:
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
         for parent in item.parents("interface-placement"):
-            self._includes.append(parent)
+            if parent.type == "interface/header-file":
+                self._includes.append(parent)
 
     def _add_child(self, item: Item) -> None:
         self._nodes[item.uid] = Node(self, item)
