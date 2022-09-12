@@ -131,6 +131,9 @@ interface-documentation:
   - directives-target: modules/rtems-docs/c-user/cache/directives.rst
     group: /rtems/cache/if/group
     introduction-target: modules/rtems-docs/c-user/cache/introduction.rst
+  - directives-target: modules/rtems-docs/c-user/config/directives.rst
+    group: /rtems/config/if/group
+    introduction-target: modules/rtems-docs/c-user/config/introduction.rst
   - directives-target: modules/rtems-docs/c-user/dual-ported-memory/directives.rst
     group: /rtems/dpmem/if/group
     introduction-target: modules/rtems-docs/c-user/dual-ported-memory/introduction.rst
