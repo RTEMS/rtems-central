@@ -1152,6 +1152,7 @@ def _gather_default(_item: Item, _source_files: Dict[str, _SourceFile],
 
 _GATHER = {
     "build/test-program": _gather_test_program,
+    "memory-benchmark": _gather_test_suite,
     "requirement/functional/action": _gather_action_requirement_test,
     "runtime-measurement-test": _gather_runtime_measurement_test,
     "test-case": _gather_test_case,

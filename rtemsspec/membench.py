@@ -76,7 +76,7 @@ _SECTION_MAP = {
 
 
 def _do_gather_test_suites(items: List[Item], item: Item) -> None:
-    if item.type == "test-suite":
+    if item.type == "memory-benchmark":
         items.append(item)
     for child in item.children("validation"):
         _do_gather_test_suites(items, child)
@@ -84,7 +84,7 @@ def _do_gather_test_suites(items: List[Item], item: Item) -> None:
         _do_gather_test_suites(items, child)
 
 
-def gather_test_suites(root: Item) -> List[Item]:
+def gather_benchmarks(root: Item) -> List[Item]:
     """ Gather all test suite items related to the root item. """
     items = []  # type: List[Item]
     _do_gather_test_suites(items, root)
@@ -161,7 +161,7 @@ def generate(content: SphinxContent, root: Item, mapper: ItemMapper,
     item and executables in the path.
     """
     for pivot in table_pivots:
-        items = gather_test_suites(root.map(pivot))
+        items = gather_benchmarks(root.map(pivot))
         _generate_table(content, items, path)
-    items = gather_test_suites(root)
+    items = gather_benchmarks(root)
     _generate_paragraphs(content, items, mapper)

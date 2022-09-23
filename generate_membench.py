@@ -816,7 +816,7 @@ test-includes:
 test-local-includes: []
 test-suite-name: {test_suite_name}
 test-target: {source}
-type: test-suite
+type: memory-benchmark
 """)
 
 

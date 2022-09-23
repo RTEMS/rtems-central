@@ -7,6 +7,10 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: type
+  spec-value: memory-benchmark
+  uid: root
+- role: spec-refinement
+  spec-key: type
   spec-value: test-suite
   uid: root
 spec-description: null

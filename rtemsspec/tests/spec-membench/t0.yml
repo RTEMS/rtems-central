@@ -17,4 +17,4 @@ test-includes:
 test-local-includes:
 - green.h
 test-target: t0.c
-type: test-suite
+type: memory-benchmark
