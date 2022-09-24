@@ -664,6 +664,7 @@ class ItemCache:
                                                       None]] = None):
         self._items = {}  # type: ItemMap
         self._types = set()  # type: Set[str]
+        self.items_by_type = {}  # type: Dict[str, List[Item]]
         self._updates = 0
         self._load_items(config)
         if post_process_load:
@@ -808,6 +809,7 @@ class ItemCache:
         the_type = "/".join(path)
         item["_type"] = the_type
         self._types.add(the_type)
+        self.items_by_type.setdefault(the_type, []).append(item)
 
 
 class EmptyItemCache(ItemCache):
