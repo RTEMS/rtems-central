@@ -184,13 +184,10 @@ _VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
 def _validate(item: Item, enabled: List[str]) -> bool:
     validated = True
     count = 0
-    for child in item.children(_VALIDATION_ROLES):
-        if child.is_enabled(enabled):
-            validated = _validate(child, enabled) and validated
-            count += 1
-    for parent in item.parents(_PARENT_ROLES):
-        if parent.is_enabled(enabled):
-            validated = _validate(parent, enabled) and validated
+    for link in itertools.chain(item.links_to_children(_VALIDATION_ROLES),
+                                item.links_to_parents(_PARENT_ROLES)):
+        if link.item.is_enabled(enabled):
+            validated = _validate(link.item, enabled) and validated
             count += 1
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
