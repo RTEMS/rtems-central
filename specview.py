@@ -40,8 +40,7 @@ from rtemsspec.validation import augment_with_test_case_links
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
-    "interface-function", "appl-config-group-member", "glossary-member",
-    "test-case"
+    "interface-function", "glossary-member", "test-case"
 ]
 
 _PARENT_ROLES = ["function-implementation", "interface-enumerator"]
@@ -379,7 +378,6 @@ _API_INTERFACES = [
 _API_ROLES = [
     "requirement-refinement",
     "interface-ingroup",
-    "appl-config-group-member",
 ]
 
 

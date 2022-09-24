@@ -38,6 +38,6 @@ copyrights:
 enabled-by: true
 interface-type: appl-config-option
 links:
-- role: appl-config-group-member
+- role: interface-ingroup
   uid: g
 type: interface

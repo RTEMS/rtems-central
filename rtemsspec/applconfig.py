@@ -334,9 +334,9 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         group = item_cache[group_config["uid"]]
         assert group.type == "interface/appl-config-group"
         options = {}  # type: ItemMap
-        for child in group.children("appl-config-group-member"):
-            assert child.type.startswith("interface/appl-config-option")
-            options[child.uid] = child
+        for child in group.children("interface-ingroup"):
+            if child.type.startswith("interface/appl-config-option"):
+                options[child.uid] = child
         sphinx_content = _SphinxContentAdaptor(sphinx_mapper)
         _generate(group, options, config["enabled-documentation"],
                   sphinx_content)

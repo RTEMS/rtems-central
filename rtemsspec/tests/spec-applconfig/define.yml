@@ -10,5 +10,7 @@ description: null
 name: DEFINE
 notes: null
 interface-type: define
-links: []
+links:
+- role: interface-ingroup
+  uid: g
 type: interface
