@@ -49,11 +49,10 @@ def _add_link(item_cache: ItemCache, child: Item, data: Any) -> None:
 
 def augment_with_test_links(item_cache: ItemCache) -> None:
     """ Augments links of test case items with links from their actions. """
-    for item in item_cache.all.values():
-        if item.type == "test-case":
-            for actions in item["test-actions"]:
-                for checks in actions["checks"]:
-                    for link in checks["links"]:
-                        _add_link(item_cache, item, link)
-                for link in actions["links"]:
+    for item in item_cache.items_by_type["test-case"]:
+        for actions in item["test-actions"]:
+            for checks in actions["checks"]:
+                for link in checks["links"]:
                     _add_link(item_cache, item, link)
+            for link in actions["links"]:
+                _add_link(item_cache, item, link)
