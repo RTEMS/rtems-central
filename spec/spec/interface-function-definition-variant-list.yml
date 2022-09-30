@@ -11,6 +11,6 @@ spec-info:
   list:
     description: null
     spec-type: interface-function-definition-variant
-spec-name: Interface Function Definition Variant List
+spec-name: Interface Function or Macro Definition Variant List
 spec-type: interface-function-definition-variant-list
 type: spec

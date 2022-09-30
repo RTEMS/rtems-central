@@ -19,8 +19,9 @@ spec-info:
         description: null
         spec-type: interface-function-definition-variant-list
     description: |
-      This set of attributes specifies a function definition directive.
+      This set of attributes specifies a function or macro definition
+      directive.
     mandatory-attributes: all
-spec-name: Interface Function Definition Directive
+spec-name: Interface Function or Macro Definition Directive
 spec-type: interface-function-definition-directive
 type: spec

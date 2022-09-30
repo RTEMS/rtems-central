@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
 - role: spec-member
@@ -8,6 +8,10 @@ links:
 - role: spec-refinement
   spec-key: interface-type
   spec-value: function
+  uid: interface
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: macro
   uid: interface
 spec-description: null
 spec-example: null
@@ -25,7 +29,7 @@ spec-info:
         spec-type: interface-description
       name:
         description: |
-          It shall be the name of the function.
+          It shall be the name of the function or macro.
         spec-type: str
       notes:
         description: null
@@ -37,8 +41,8 @@ spec-info:
         description: null
         spec-type: interface-return-directive
     description: |
-      This set of attributes specifies a function.
+      This set of attributes specifies a function or a macro.
     mandatory-attributes: all
-spec-name: Interface Function Item Type
+spec-name: Interface Function or Macro Item Type
 spec-type: interface-function
 type: spec

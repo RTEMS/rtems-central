@@ -20,8 +20,8 @@ spec-info:
         description: null
         spec-type: interface-enabled-by
     description: |
-      This set of attributes specifies a function definition variant.
+      This set of attributes specifies a function or macro definition variant.
     mandatory-attributes: all
-spec-name: Interface Function Definition Variant
+spec-name: Interface Function or Macro Definition Variant
 spec-type: interface-function-definition-variant
 type: spec

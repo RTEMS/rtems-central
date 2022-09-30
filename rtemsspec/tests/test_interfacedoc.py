@@ -263,12 +263,12 @@ Very long macro brief description.
 
 .. code-block:: c
 
-    #define VERY_LONG_MACRO(
+    VERY_LONG_MACRO(
       VeryLongParam0,
       VeryLongParam1,
       VeryLongParam2,
       VeryLongParam3
-    )
+    );
 
 .. rubric:: PARAMETERS:
 
@@ -314,7 +314,7 @@ Short macro brief description.
 
 .. code-block:: c
 
-    #define MACRO( Param0 )
+    MACRO( Param0 );
 
 .. rubric:: PARAMETERS:
 
@@ -344,7 +344,7 @@ Macro without parameters.
 
 .. code-block:: c
 
-    #define MACRO()
+    MACRO( void );
 """
         assert content == src.read()
 

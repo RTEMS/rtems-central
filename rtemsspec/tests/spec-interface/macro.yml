@@ -3,13 +3,21 @@ brief: Very long macro brief description.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: |
-    do {
-      (void) ${.:/params[1]/name};
-      (void) ${.:/params[2]/name};
-      (void) ${.:/params[3]/name};
-    } while ( 0 );
-    ${.:/params[0]/name} + 1;
+  default:
+    attributes: null
+    body: |
+      do {
+        (void) ${.:/params[1]/name};
+        (void) ${.:/params[2]/name};
+        (void) ${.:/params[3]/name};
+      } while ( 0 );
+      ${.:/params[0]/name} + 1;
+    params:
+    - ${.:/params[0]/name}
+    - ${.:/params[1]/name}
+    - ${.:/params[2]/name}
+    - ${.:/params[3]/name}
+    return: null
   variants: []
 description: null
 enabled-by: true

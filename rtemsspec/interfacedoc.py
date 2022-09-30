@@ -49,6 +49,10 @@ def _get_reference(name: str) -> str:
     return get_reference(get_label(f"{INTERFACE} {name}"))
 
 
+def _get_code_param(ctx: ItemGetValueContext) -> Any:
+    return _sanitize_name(ctx.value[ctx.key])
+
+
 class _CodeMapper(ItemMapper):
     def __init__(self, item: Item):
         super().__init__(item)
@@ -56,6 +60,7 @@ class _CodeMapper(ItemMapper):
                            get_value_forward_declaration)
         self.add_get_value("interface/struct:/name", get_value_compound)
         self.add_get_value("interface/union:/name", get_value_compound)
+        self.add_get_value("interface/macro:/params/name", _get_code_param)
 
 
 def _get_param(ctx: ItemGetValueContext) -> Any:
@@ -125,23 +130,13 @@ def _add_function_definition(content: CContent, mapper: ItemMapper, item: Item,
                              value: Dict[str, Any]) -> None:
     ret = mapper.substitute(value["return"])
     name = item["name"]
-    params = [
-        mapper.substitute(_sanitize_name(param)) for param in value["params"]
-    ]
+    params = [mapper.substitute(param) for param in value["params"]]
     content.declare_function(ret, name, params)
-
-
-def _add_macro_definition(content: CContent, _mapper: ItemMapper, item: Item,
-                          _value: Dict[str, Any]) -> None:
-    ret = "#define"
-    name = item["name"]
-    params = [_sanitize_name(param["name"]) for param in item["params"]]
-    content.call_function(ret, name, params, semicolon="")
 
 
 _ADD_DEFINITION = {
     "interface/function": _add_function_definition,
-    "interface/macro": _add_macro_definition,
+    "interface/macro": _add_function_definition,
 }
 
 

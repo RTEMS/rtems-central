@@ -547,9 +547,10 @@ class Node:
         if len(line) > 79:
             param_block = ", \\\n  ".join(params)
             line = f"#define {name}( \\\n  {param_block} \\\n)"
-        if not definition:
+        body = definition["body"]
+        if not body:
             return line
-        body_lines = self.substitute_code(definition).split("\n")
+        body_lines = self.substitute_code(body).split("\n")
         if len(body_lines) == 1 and len(line + body_lines[0]) <= 79:
             body = " "
         else:

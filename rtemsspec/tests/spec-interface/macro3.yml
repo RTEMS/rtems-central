@@ -3,7 +3,11 @@ brief: Macro without parameters.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 definition:
-  default: '0'
+  default:
+    attributes: null
+    body: '0'
+    params: []
+    return: null
   variants: []
 description: null
 enabled-by: true
