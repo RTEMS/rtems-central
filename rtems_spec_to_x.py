@@ -32,10 +32,7 @@ import string
 import rtemsspec.applconfig
 import rtemsspec.build
 from rtemsspec.items import ItemCache
-import rtemsspec.glossary
-import rtemsspec.interface
 import rtemsspec.util
-import rtemsspec.validation
 
 
 def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
@@ -76,10 +73,6 @@ def main() -> None:
     logging.basicConfig(level="DEBUG")
     config = rtemsspec.util.load_config("config.yml")
     item_cache = ItemCache(config["spec"])
-    rtemsspec.glossary.generate(config["glossary"], item_cache)
-    rtemsspec.applconfig.generate(config["appl-config"], item_cache)
-    rtemsspec.interface.generate(config["interface"], item_cache)
-    rtemsspec.validation.generate(config["validation"], item_cache)
     _run_pre_qualified_only_build(config["build"], item_cache)
     _run_pre_qualified_doxygen(config["build"])
 

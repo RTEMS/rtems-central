@@ -43,7 +43,7 @@ def test_applconfig(tmpdir):
     applconfig_config["groups"] = [{"uid": "/g", "target": g_rst}]
     doxygen_h = os.path.join(tmpdir, "doxygen.h")
     applconfig_config["doxygen-target"] = doxygen_h
-    generate(applconfig_config, item_cache)
+    generate(applconfig_config, [], item_cache)
 
     with open(g_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0

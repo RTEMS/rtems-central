@@ -306,10 +306,23 @@ class SphinxMapper(ItemMapper):
                            _get_value_sphinx_unspecified_type)
 
 
+def sanitize_name(name: str) -> str:
+    """ Removes leading underscores from the name. """
+    return name.lstrip("_")
+
+
+def _get_param(ctx: ItemGetValueContext) -> Any:
+    return f"``{sanitize_name(ctx.value[ctx.key])}``"
+
+
 class SphinxInterfaceMapper(SphinxMapper):
     """ Sphinx item mapper for the interface documentation. """
-    def __init__(self, item: Item, recursive: bool = False):
+    def __init__(self,
+                 item: Item,
+                 group_uids: List[str],
+                 recursive: bool = False):
         super().__init__(item, recursive)
+        self._group_uids = set(group_uids)
         self.add_get_value("interface/appl-config-option/feature-enable:/name",
                            _get_appl_config_option)
         self.add_get_value("interface/appl-config-option/feature:/name",
@@ -318,3 +331,20 @@ class SphinxInterfaceMapper(SphinxMapper):
                            _get_appl_config_option)
         self.add_get_value("interface/appl-config-option/integer:/name",
                            _get_appl_config_option)
+        self.add_get_value("interface/function:/name", self._get_function)
+        self.add_get_value("interface/function:/params/name", _get_param)
+        self.add_get_value("interface/group:/name", self._get_group)
+        self.add_get_value("interface/macro:/name", self._get_function)
+        self.add_get_value("interface/macro:/params/name", _get_param)
+
+    def _get_function(self, ctx: ItemGetValueContext) -> Any:
+        name = ctx.value[ctx.key]
+        for group in ctx.item.parents("interface-ingroup"):
+            if group.uid in self._group_uids:
+                return get_reference(get_label(f"Interface {name}"))
+        return f":c:func:`{name}`"
+
+    def _get_group(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.item.uid in self._group_uids:
+            return get_reference(ctx.value["identifier"])
+        return ctx.value[ctx.key]

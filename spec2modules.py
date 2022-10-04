@@ -72,10 +72,14 @@ def main() -> None:
                                   args.targets)
 
     if not args.targets:
+        group_uids = [
+            doc["group"] for doc in config["interface-documentation"]["groups"]
+        ]
         rtemsspec.interface.generate(config["interface"], item_cache)
-        rtemsspec.applconfig.generate(config["appl-config"], item_cache)
+        rtemsspec.applconfig.generate(config["appl-config"], group_uids,
+                                      item_cache)
         rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
-        rtemsspec.glossary.generate(config["glossary"], item_cache)
+        rtemsspec.glossary.generate(config["glossary"], group_uids, item_cache)
         rtemsspec.interfacedoc.generate(config["interface-documentation"],
                                         item_cache)
 

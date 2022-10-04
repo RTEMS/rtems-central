@@ -37,7 +37,7 @@ def test_empty_glossary():
     glossary_config["project-header"] = None
     glossary_config["project-target"] = None
     glossary_config["documents"] = []
-    generate(glossary_config, EmptyItemCache())
+    generate(glossary_config, [], EmptyItemCache())
 
 
 def test_glossary(tmpdir):
@@ -56,7 +56,7 @@ def test_glossary(tmpdir):
     document_glossary = os.path.join(tmpdir, "document", "glossary.rst")
     doc["target"] = document_glossary
     glossary_config["documents"] = [doc]
-    generate(glossary_config, item_cache)
+    generate(glossary_config, [], item_cache)
 
     with open(project_glossary, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0

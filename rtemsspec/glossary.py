@@ -26,7 +26,7 @@
 
 import glob
 import re
-from typing import Any, Dict, NamedTuple
+from typing import Any, Dict, List, NamedTuple
 
 from rtemsspec.sphinxcontent import SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
@@ -50,8 +50,8 @@ def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
         glossary.term_to_item[term] = item
 
 
-def _generate_glossary_content(terms: ItemMap, header: str,
-                               target: str) -> None:
+def _generate_glossary_content(terms: ItemMap, header: str, target: str,
+                               group_uids: List[str]) -> None:
     content = SphinxContent()
     content.add_header(header, level=1)
     content.add(".. glossary::")
@@ -59,7 +59,8 @@ def _generate_glossary_content(terms: ItemMap, header: str,
         content.add(":sorted:")
         for item in sorted(terms.values(), key=lambda x: x["term"].lower()):
             content.register_license_and_copyrights_of_item(item)
-            text = SphinxInterfaceMapper(item).substitute(item["text"])
+            text = SphinxInterfaceMapper(item,
+                                         group_uids).substitute(item["text"])
             content.add_definition_item(item["term"], text)
     content.add_licence_and_copyrights()
     content.write(target)
@@ -104,22 +105,25 @@ def _resolve_glossary_terms(document_terms: ItemMap) -> None:
         _GlossaryMapper(term, document_terms).substitute(term["text"])
 
 
-def _generate_project_glossary(glossary: _Glossary, header: str,
-                               target: str) -> None:
+def _generate_project_glossary(glossary: _Glossary, header: str, target: str,
+                               group_uids: List[str]) -> None:
     if target:
-        _generate_glossary_content(glossary.uid_to_item, header, target)
+        _generate_glossary_content(glossary.uid_to_item, header, target,
+                                   group_uids)
 
 
-def _generate_document_glossary(config: dict, glossary: _Glossary) -> None:
+def _generate_document_glossary(config: dict, group_uids: List[str],
+                                glossary: _Glossary) -> None:
     document_terms = {}  # type: ItemMap
     for path in config["rest-source-paths"]:
         _find_glossary_terms(path, document_terms, glossary)
     _resolve_glossary_terms(document_terms)
     _generate_glossary_content(document_terms, config["header"],
-                               config["target"])
+                               config["target"], group_uids)
 
 
-def generate(config: dict, item_cache: ItemCache) -> None:
+def generate(config: dict, group_uids: List[str],
+             item_cache: ItemCache) -> None:
     """
     Generates glossaries of terms according to the configuration.
 
@@ -137,7 +141,8 @@ def generate(config: dict, item_cache: ItemCache) -> None:
         _gather_glossary_terms(groups[group], project_glossary)
 
     _generate_project_glossary(project_glossary, config["project-header"],
-                               config["project-target"])
+                               config["project-target"], group_uids)
 
     for document_config in config["documents"]:
-        _generate_document_glossary(document_config, project_glossary)
+        _generate_document_glossary(document_config, group_uids,
+                                    project_glossary)

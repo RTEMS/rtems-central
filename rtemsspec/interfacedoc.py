@@ -31,26 +31,20 @@ import os
 from typing import Any, Dict, List, Tuple
 
 from rtemsspec.content import CContent, get_value_compound, \
-     get_value_forward_declaration
-from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent, \
-     SphinxInterfaceMapper
+    get_value_forward_declaration
+from rtemsspec.sphinxcontent import get_label, get_reference, sanitize_name, \
+    SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
 
-INTERFACE = "Interface"
-
-
-def _sanitize_name(name: str) -> str:
-    return name.lstrip("_")
-
 
 def _get_reference(name: str) -> str:
-    return get_reference(get_label(f"{INTERFACE} {name}"))
+    return get_reference(get_label(f"Interface {name}"))
 
 
 def _get_code_param(ctx: ItemGetValueContext) -> Any:
-    return _sanitize_name(ctx.value[ctx.key])
+    return sanitize_name(ctx.value[ctx.key])
 
 
 class _CodeMapper(ItemMapper):
@@ -61,33 +55,6 @@ class _CodeMapper(ItemMapper):
         self.add_get_value("interface/struct:/name", get_value_compound)
         self.add_get_value("interface/union:/name", get_value_compound)
         self.add_get_value("interface/macro:/params/name", _get_code_param)
-
-
-def _get_param(ctx: ItemGetValueContext) -> Any:
-    return f"``{_sanitize_name(ctx.value[ctx.key])}``"
-
-
-class _Mapper(SphinxInterfaceMapper):
-    def __init__(self, item: Item, group_uids: List[str]):
-        super().__init__(item)
-        self._group_uids = set(group_uids)
-        self.add_get_value("interface/function:/name", self._get_function)
-        self.add_get_value("interface/function:/params/name", _get_param)
-        self.add_get_value("interface/group:/name", self._get_group)
-        self.add_get_value("interface/macro:/name", self._get_function)
-        self.add_get_value("interface/macro:/params/name", _get_param)
-
-    def _get_function(self, ctx: ItemGetValueContext) -> Any:
-        name = ctx.value[ctx.key]
-        for group in ctx.item.parents("interface-ingroup"):
-            if group.uid in self._group_uids:
-                return _get_reference(name)
-        return f":c:func:`{name}`"
-
-    def _get_group(self, ctx: ItemGetValueContext) -> Any:
-        if ctx.item.uid in self._group_uids:
-            return get_reference(ctx.value["identifier"])
-        return ctx.value[ctx.key]
 
 
 def _generate_introduction(target: str, group: Item, group_uids: List[str],
@@ -106,7 +73,7 @@ def _generate_introduction(target: str, group: Item, group_uids: List[str],
 
         content.append("")
         content.gap = False
-        mapper = _Mapper(group, group_uids)
+        mapper = SphinxInterfaceMapper(group, group_uids)
         content.wrap(mapper.substitute(group["brief"]))
         content.wrap(mapper.substitute(group["description"]))
         content.paste(f"The directives provided by the {group_name} are:")
@@ -114,7 +81,7 @@ def _generate_introduction(target: str, group: Item, group_uids: List[str],
         for item in items:
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
-            mapper = _Mapper(item, group_uids)
+            mapper = SphinxInterfaceMapper(item, group_uids)
             brief = mapper.substitute(item["brief"])
             if brief:
                 brief = f" - {brief}"
@@ -154,7 +121,7 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
         add_definition(content, mapper, item, definition)
 
 
-def _generate_directive(content: SphinxContent, mapper: _Mapper,
+def _generate_directive(content: SphinxContent, mapper: SphinxInterfaceMapper,
                         code_mapper: _CodeMapper, item: Item,
                         enabled: List[str]) -> None:
     content.wrap(mapper.substitute(item["brief"]))
@@ -170,7 +137,7 @@ def _generate_directive(content: SphinxContent, mapper: _Mapper,
             description = param["description"]
             if description:
                 content.add_definition_item(
-                    f"``{_sanitize_name(param['name'])}``",
+                    f"``{sanitize_name(param['name'])}``",
                     mapper.substitute(f"This parameter {description}"),
                     wrap=True)
     if item["description"]:
@@ -219,7 +186,7 @@ def _generate_directives(target: str, group: Item, group_uids: List[str],
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
             code_mapper = _CodeMapper(item)
-            mapper = _Mapper(item, group_uids)
+            mapper = SphinxInterfaceMapper(item, group_uids)
             content.add(f".. Generated from spec:{item.uid}")
             with content.directive("raw", "latex"):
                 content.add("\\clearpage")

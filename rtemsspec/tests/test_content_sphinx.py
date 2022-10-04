@@ -301,3 +301,4 @@ def test_substitute(tmpdir):
     mapper.add_get_value("other:/name", lambda ctx: ctx.value[ctx.key])
     assert mapper.substitute("${y:/name}") == "foobar"
     assert mapper.substitute("${a:/name}") == ":c:data:`a`"
+    assert mapper.substitute("${f:/name}") == ":c:func:`f`"

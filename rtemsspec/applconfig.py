@@ -313,7 +313,8 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
                          _get_value_doxygen_unspecfied_type)
 
 
-def generate(config: dict, item_cache: ItemCache) -> None:
+def generate(config: dict, group_uids: List[str],
+             item_cache: ItemCache) -> None:
     """
     Generates application configuration documentation sources according to the
     configuration.
@@ -322,7 +323,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     :param item_cache: The specification item cache containing the application
                        configuration groups and options.
     """
-    sphinx_mapper = SphinxInterfaceMapper(EmptyItem())
+    sphinx_mapper = SphinxInterfaceMapper(EmptyItem(), group_uids)
     doxygen_mapper = ItemMapper(EmptyItem())
     _add_doxygen_get_values(doxygen_mapper)
     doxygen_content = _DoxygenContentAdaptor(doxygen_mapper)
