@@ -27,7 +27,8 @@
 from typing import Any, Dict, List, Optional
 
 from rtemsspec.content import Content, CContent, get_value_double_colon, \
-    get_value_doxygen_function, get_value_doxygen_group, get_value_hash
+    get_value_doxygen_function, get_value_doxygen_group, get_value_hash, \
+    get_value_plural
 from rtemsspec.sphinxcontent import GenericContent, SphinxContent, \
     SphinxInterfaceMapper
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
@@ -289,6 +290,7 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     for opt in ["feature-enable", "feature", "initializer", "integer"]:
         name = f"interface/appl-config-option/{opt}:/name"
         mapper.add_get_value(name, get_value_hash)
+    mapper.add_get_value("glossary/term:/plural", get_value_plural)
     mapper.add_get_value("interface/define:/name", get_value_hash)
     mapper.add_get_value("interface/function:/name",
                          get_value_doxygen_function)
