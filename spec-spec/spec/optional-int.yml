@@ -8,9 +8,9 @@ links:
 spec-description: null
 spec-example: null
 spec-info:
-  none: null
   int:
     description: null
+  none: null
 spec-name: Optional Integer
 spec-type: optional-int
 type: spec
