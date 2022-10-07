@@ -9,72 +9,131 @@ spec-description: null
 spec-example: null
 spec-info:
   str:
-    assert:
-      not:
-        contains:
-        - acceptable
-        - adequate
-        - almost always
-        - and/or
-        - appropriate
-        - approximately
-        - as far as possible
-        - as much as practicable
-        - best
-        - best possible
-        - easy
-        - efficient
-        - e.g.
-        - enable
-        - enough
-        - etc.
-        - few
-        - first rate
-        - flexible
-        - generally
-        - goal
-        - graceful
-        - great
-        - greatest
-        - ideally
-        - i.e.
-        - if possible
-        - in most cases
-        - large
-        - many
-        - maximize
-        - minimize
-        - most
-        - multiple
-        - necessary
-        - numerous
-        - optimize
-        - ought to
-        - probably
-        - quick
-        - rapid
-        - reasonably
-        - relevant
-        - robust
-        - satisfactory
-        - several
-        - shall be included but not limited to
-        - simple
-        - small
-        - some
-        - state of the art
-        - sufficient
-        - suitable
-        - support
-        - systematically
-        - transparent
-        - typical
-        - user friendly
-        - usually
-        - versatile
-        - when necessary
     description: |
-      It shall state a requirement or constraint.
+      It shall state a requirement or constraint.  The text should not use one
+      of the following words or phrases:
+
+      * acceptable
+
+      * adequate
+
+      * almost always
+
+      * and/or
+
+      * appropriate
+
+      * approximately
+
+      * as far as possible
+
+      * as much as practicable
+
+      * best
+
+      * best possible
+
+      * easy
+
+      * efficient
+
+      * e.g.
+
+      * enable
+
+      * enough
+
+      * etc.
+
+      * few
+
+      * first rate
+
+      * flexible
+
+      * generally
+
+      * goal
+
+      * graceful
+
+      * great
+
+      * greatest
+
+      * ideally
+
+      * i.e.
+
+      * if possible
+
+      * in most cases
+
+      * large
+
+      * many
+
+      * maximize
+
+      * minimize
+
+      * most
+
+      * multiple
+
+      * necessary
+
+      * numerous
+
+      * optimize
+
+      * ought to
+
+      * probably
+
+      * quick
+
+      * rapid
+
+      * reasonably
+
+      * relevant
+
+      * robust
+
+      * satisfactory
+
+      * several
+
+      * shall be included but not limited to
+
+      * simple
+
+      * small
+
+      * some
+
+      * state of the art
+
+      * sufficient
+
+      * suitable
+
+      * support
+
+      * systematically
+
+      * transparent
+
+      * typical
+
+      * user friendly
+
+      * usually
+
+      * versatile
+
+      * when necessary
 spec-name: Requirement Text
 spec-type: requirement-text
 type: spec
