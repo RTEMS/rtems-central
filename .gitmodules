@@ -3,7 +3,7 @@
 	url = git://git.rtems.org/sebh/rtems.git
 [submodule "external/rtems-docs"]
 	path = modules/rtems-docs
-	url = git://git.rtems.org/rtems-docs.git
+	url = ../rtems-docs.git
 [submodule "external/rtems-source-builder"]
 	path = modules/rsb
-	url = git://git.rtems.org/rtems-source-builder.git
+	url = ../rtems-source-builder.git
