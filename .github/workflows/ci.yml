@@ -59,3 +59,19 @@ jobs:
       id: cache-virtualenv
     - run: coverage run --branch -m pytest -vv rtemsspec/tests
     - run: coverage report -m --fail-under=100 --include=$(echo *.py rtemsspec/*.py | sed 's/ /,/g')
+  spec2modules:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: ./spec2modules.py
+    - run: cd modules/rtems && test -z "$(git status -s)"
+    - if: failure()
+      run: cd modules/rtems && git diff
