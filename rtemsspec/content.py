@@ -503,7 +503,7 @@ class Content:
         directory = os.path.dirname(path)
         if directory:
             os.makedirs(directory, exist_ok=True)
-        with open(path, "w+") as out:
+        with open(path, "w+", encoding="utf-8") as out:
             out.write(str(self))
 
 

@@ -75,7 +75,7 @@ def _find_glossary_terms(path: str, document_terms: ItemMap,
     for src in glob.glob(path + "/**/*.rst", recursive=True):
         if src.endswith("glossary.rst"):
             continue
-        with open(src, "r") as out:
+        with open(src, "r", encoding="utf-8") as out:
             for term in _TERM.findall(out.read()):
                 match = _TERM_2.search(term)
                 if match:

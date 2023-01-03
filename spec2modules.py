@@ -36,7 +36,8 @@ def _diff(obj: rtemsspec.content.Content, path: str) -> None:
     from_file = f"a/{path}"
     to_file = f"b/{path}"
     try:
-        file_lines = open(path).read().splitlines()
+        with open(path, encoding="utf-8") as src:
+            file_lines = src.read().splitlines()
     except FileNotFoundError:
         file_lines = []
     diff_lines = list(

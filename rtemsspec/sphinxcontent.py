@@ -51,12 +51,11 @@ def get_label(name: str) -> str:
 
 
 def _simple_sep(maxi: Iterable[int]) -> str:
-    return " ".join(f"{'=' * val}" for val in maxi)
+    return " ".join(f"{'=' * width}" for width in maxi)
 
 
 def _simple_row(row: Iterable[str], maxi: Iterable[int]) -> str:
-    line = " ".join("{0:{width}}".format(cell, width=val)
-                    for cell, val in zip(row, maxi))
+    line = " ".join(f"{cell:{width}}" for cell, width in zip(row, maxi))
     return line.rstrip()
 
 

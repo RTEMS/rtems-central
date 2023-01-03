@@ -748,7 +748,7 @@ def _generate_files() -> None:
         base = f"testsuites/membench/mem-{module}-{test.name}"
         source = f"{base}.c"
         build_spec = f"modules/rtems/spec/build/{base}.yml"
-        with open(build_spec, "w") as out:
+        with open(build_spec, "w", encoding="utf-8") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: test-program
 cflags: []
@@ -771,7 +771,7 @@ use-before: []
 """)
         req_spec = f"/{test.path}/req/mem-{test.name}"
         text = _text(f"{_TEXT} {test.topic}.")
-        with open(f"spec{req_spec}.yml", "w") as out:
+        with open(f"spec{req_spec}.yml", "w", encoding="utf-8") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
@@ -789,7 +789,7 @@ type: requirement
         val_spec = f"spec/{test.path}/val/mem-{test.name}.yml"
         brief = _text(f"{_TEST} {test.topic}.")
         test_suite_name = to_camel_case(f"Mem {test.name}")
-        with open(val_spec, "w") as out:
+        with open(val_spec, "w", encoding="utf-8") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)

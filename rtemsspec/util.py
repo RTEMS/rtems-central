@@ -58,13 +58,13 @@ def load_config(config_filename: str) -> Any:
             dirname = os.path.dirname(container)
             filename = os.path.join(dirname, self.construct_scalar(node))
             IncludeLoader._filenames.insert(0, filename)
-            with open(filename, "r") as included_file:
+            with open(filename, "r", encoding="utf-8") as included_file:
                 data = yaml.load(included_file, IncludeLoader)
             IncludeLoader._filenames.pop()
             return data
 
     IncludeLoader.add_constructor("!include", IncludeLoader.include)
-    with open(config_filename, "r") as config_file:
+    with open(config_filename, "r", encoding="utf-8") as config_file:
         return yaml.load(config_file.read(), Loader=IncludeLoader)
 
 

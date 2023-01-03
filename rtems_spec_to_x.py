@@ -40,7 +40,8 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
     source_dir = config["source-directory"]
     workspace_dir = config["workspace-directory"]
     rtemsspec.util.copy_files(source_dir, workspace_dir, files)
-    with open(os.path.join(workspace_dir, "config.ini"), "w") as config_ini:
+    with open(os.path.join(workspace_dir, "config.ini"), "w",
+              encoding="utf-8") as config_ini:
         content = string.Template(config["config-ini"]).substitute(config)
         config_ini.write(content)
     specs = os.path.relpath(os.path.join(source_dir, "spec"), workspace_dir)
@@ -53,7 +54,8 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
 
 def _run_pre_qualified_doxygen(config: dict) -> None:
     workspace_dir = config["workspace-directory"]
-    with open(config["doxyfile-template"], "r") as doxyfile_template:
+    with open(config["doxyfile-template"], "r",
+              encoding="utf-8") as doxyfile_template:
 
         class Template(string.Template):
             """ Template class with custom delimiter. """
@@ -63,7 +65,9 @@ def _run_pre_qualified_doxygen(config: dict) -> None:
         doxyfile_vars["project_name"] = "RTEMS"
         doxyfile_vars["output_directory"] = "doc"
         content = Template(doxyfile_template.read()).substitute(doxyfile_vars)
-        with open(os.path.join(workspace_dir, "Doxyfile"), "w") as doxyfile:
+        with open(os.path.join(workspace_dir, "Doxyfile"),
+                  "w",
+                  encoding="utf-8") as doxyfile:
             doxyfile.write(content)
     rtemsspec.util.run_command(["doxygen"], workspace_dir)
 

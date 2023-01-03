@@ -635,7 +635,7 @@ def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
 
 
 def _load_yaml_data(path: str, uid: str) -> Any:
-    with open(path, "r") as src:
+    with open(path, "r", encoding="utf-8") as src:
         try:
             data = yaml.safe_load(src.read())
         except yaml.YAMLError as err:
@@ -648,7 +648,7 @@ def _load_yaml_data(path: str, uid: str) -> Any:
 
 
 def _load_json_data(path: str, uid: str) -> Any:
-    with open(path, "r") as src:
+    with open(path, "r", encoding="utf-8") as src:
         try:
             data = json.load(src)
         except json.JSONDecodeError as err:
@@ -788,7 +788,7 @@ class ItemCache:
 
     def save_data(self, path: str, data: Any) -> None:
         """ Saves the item data to the file specified by path. """
-        with open(path, "w") as file:
+        with open(path, "w", encoding="utf-8") as file:
             data2 = {}
             for key, value in data.items():
                 if not key.startswith("_"):
