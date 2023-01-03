@@ -50,7 +50,8 @@ _OPTION_DEFAULT_CONFIG = {
     lambda item: item["default"],
     "feature-enable":
     lambda item:
-    """If this configuration option is undefined, then the described feature is not
+    """If this configuration option is undefined, then the described feature \
+is not
 enabled."""
 }
 
