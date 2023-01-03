@@ -1,0 +1,61 @@
+name: CI
+on: [push]
+jobs:
+  create-virtualenv:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - uses: syphar/restore-pip-download-cache@v1
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+    - run: pip install -r requirements.txt
+      if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+  flake8:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: flake8 *.py rtemsspec/*.py
+  mypy:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: mypy *.py rtemsspec/*.py
+  pylint:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: pylint *.py rtemsspec/*.py
+  tests:
+    needs: create-virtualenv
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - uses: syphar/restore-virtualenv@v1
+      id: cache-virtualenv
+    - run: coverage run --branch -m pytest -vv rtemsspec/tests
+    - run: coverage report -m --fail-under=100 --include=$(echo *.py rtemsspec/*.py | sed 's/ /,/g')
