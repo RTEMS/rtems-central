@@ -264,7 +264,7 @@ class _Documenter:
         self._info_map = item["spec-info"]
         self._item = item
         self._documenter_map = documenter_map
-        self.used_by = set()  # type: Set[str]
+        self.used_by: Set[str] = set()
         self._label_prefix = config["label-prefix"]
         self._mapper = SphinxMapper(item)
         self._mapper.add_get_value("spec:/spec-name",
@@ -540,7 +540,7 @@ def document(config: dict, item_cache: ItemCache) -> None:
     :param config: A dictionary with configuration entries.
     :param item_cache: The specification item cache.
     """
-    documenter_map = {}  # type: _DocumenterMap
+    documenter_map: _DocumenterMap = {}
     root_item = item_cache[config["root-type"]]
     _create_str_documenter(
         item_cache, "Name", "A string is a valid name if it matches with the "

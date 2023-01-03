@@ -730,7 +730,7 @@ def _block(lines: Optional[str], level: int = 2) -> str:
 
 
 def _links(links: List[str]) -> str:
-    text = []  # type: List[str]
+    text: List[str] = []
     for link in links:
         if "group" in link:
             break

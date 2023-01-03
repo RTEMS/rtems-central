@@ -56,7 +56,7 @@ class _TransitionEntry:
 
     def __init__(self):
         self.key = ""
-        self.variants = []  # type: List[Transition]
+        self.variants: List[Transition] = []
 
     def __bool__(self):
         return bool(self.variants)
@@ -288,7 +288,7 @@ class TransitionMap:
         self._skip_name_to_idx = dict(
             (key, skip_idx + 1)
             for skip_idx, key in enumerate(item["skip-reasons"].keys()))
-        self._entries = {}  # type: Dict[str, List[Any]]
+        self._entries: Dict[str, List[Any]] = {}
         self._map = self._build_map()
         self._post_process()
 
@@ -329,7 +329,7 @@ class TransitionMap:
         pre-condition and provides a list of corresponding pre-condition state
         indices.
         """
-        entries = {}  # type: Dict[PostCond, PreCondsOfPostCond]
+        entries: Dict[PostCond, PreCondsOfPostCond] = {}
         for map_idx, variant in self.get_variants(enabled):
             key = (variant.skip, ) + variant.post_cond
             entry = entries.setdefault(key, [])
@@ -652,7 +652,7 @@ class TransitionMap:
                 entries.append(self._get_entry(ident, transitions[0]))
             else:
                 ifelse = "#if "
-                enumerators = []  # type: List[str]
+                enumerators: List[str] = []
                 for variant in transitions[1:]:
                     enumerators.append(
                         ifelse + enabled_by_to_exp(variant.enabled_by, mapper))

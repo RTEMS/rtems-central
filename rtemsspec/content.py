@@ -185,7 +185,7 @@ class Content:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-public-methods
     def __init__(self, the_license: str, pop_indent_gap: bool):
-        self._lines = []  # type: List[str]
+        self._lines: List[str] = []
         self._license = the_license
         self._copyrights = Copyrights()
         self._gap = False
@@ -264,7 +264,7 @@ class Content:
             wrapper.break_long_words = False
             wrapper.break_on_hyphens = False
             wrapper.width = 79 - len(self._indent)
-            gap = []  # type: List[str]
+            gap: List[str] = []
             blocks = collections.deque(text.split("\n\n"))
             while blocks:
                 block = blocks.popleft()
@@ -545,8 +545,8 @@ class CInclude(NamedTuple):
 
 def _split_includes(
         includes: List[CInclude]) -> Tuple[Set[str], Dict[str, Set[str]]]:
-    includes_unconditional = set()  # type: Set[str]
-    includes_enabled_by = {}  # type: Dict[str, Set[str]]
+    includes_unconditional: Set[str] = set()
+    includes_enabled_by: Dict[str, Set[str]] = {}
     for inc in list(dict.fromkeys(includes)):
         if inc.enabled_by and inc.enabled_by != "1":
             try:
@@ -689,7 +689,7 @@ class CContent(Content):
 
     def _add_includes_enabled_by(self, includes: Dict[str, Set[str]],
                                  local: bool) -> None:
-        enabled_by_includes = {}  # type: Dict[str, Set[str]]
+        enabled_by_includes: Dict[str, Set[str]] = {}
         for inc, enabled_bys in iter(includes.items()):
             enabled_by_includes.setdefault(" && ".join(sorted(enabled_bys)),
                                            set()).add(inc)

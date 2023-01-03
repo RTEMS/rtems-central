@@ -262,10 +262,10 @@ def _design(item_cache: ItemCache, enabled: List[str]) -> None:
     for item in item_cache.all.values():
         if not item.is_enabled(enabled):
             continue
-        components = []  # type: List[Item]
+        components: List[Item] = []
         if not _gather_design_components(item, components):
             continue
-        compact = set()  # type: Set[Item]
+        compact: Set[Item] = set()
         for component in components:
             for component_2 in components:
                 if component != component_2:
@@ -339,7 +339,7 @@ def _action_list(enabled: List[str], item: Item) -> None:
         if post_cond[0]:
             print(transition_map.skip_idx_to_name(post_cond[0]))
         else:
-            names = []  # type: List[str]
+            names: List[str] = []
             for co_idx, st_idx in enumerate(post_cond[1:]):
                 st_name = transition_map.post_co_idx_st_idx_to_st_name(
                     co_idx, st_idx)
@@ -390,7 +390,7 @@ def _gather_api_names(item: Item, names: Dict[str, List[str]]) -> None:
 
 
 def _list_api(item_cache: ItemCache) -> None:
-    names = {}  # type: Dict[str, List[str]]
+    names: Dict[str, List[str]] = {}
     _gather_api_names(item_cache["/req/applconfig"], names)
     _gather_api_names(item_cache["/if/group"], names)
     _gather_api_names(item_cache["/c/if/group"], names)

@@ -537,7 +537,7 @@ class _ActionRequirementTestItem(_TestItem):
         self._mapper.add_get_value(("requirement/functional/action:"
                                     "/pre-conditions/states/test-code/skip"),
                                    self._skip_pre_condition)
-        self._pre_co_skip = {}  # type: Dict[int, bool]
+        self._pre_co_skip: Dict[int, bool] = {}
         self._pre_co_count = len(item["pre-conditions"])
         self._pre_co_idx_to_enum = _to_enum(f"{self.ident}_Pre",
                                             item["pre-conditions"])
@@ -1026,8 +1026,8 @@ class _SourceFile:
     def __init__(self, filename: str):
         """ Initializes a test source file. """
         self._file = filename
-        self._test_suites = []  # type: List[_TestItem]
-        self._test_cases = []  # type: List[_TestItem]
+        self._test_suites: List[_TestItem] = []
+        self._test_cases: List[_TestItem] = []
 
     @property
     def test_suites(self) -> List[_TestItem]:
@@ -1061,8 +1061,8 @@ class _SourceFile:
         Generates the source file and the corresponding build specification.
         """
         content = CContent()
-        includes = []  # type: List[CInclude]
-        local_includes = []  # type: List[CInclude]
+        includes: List[CInclude] = []
+        local_includes: List[CInclude] = []
         for item in itertools.chain(self._test_suites, self._test_cases):
             includes.extend(map(CInclude, item.includes))
             local_includes.extend(map(CInclude, item.local_includes))
@@ -1096,8 +1096,8 @@ class _TestProgram:
     def __init__(self, item: Item):
         """ Initializes a test program. """
         self._item = item
-        self._source_files = []  # type: List[_SourceFile]
-        self._build_source_files = []  # type: List[str]
+        self._source_files: List[_SourceFile] = []
+        self._build_source_files: List[str] = []
         _gather_build_source_files(item, self._build_source_files)
 
     @property
@@ -1169,16 +1169,16 @@ _GATHER = {
 
 def _gather(
         item_cache: ItemCache) -> Tuple[Dict[str, _SourceFile], _CaseToSuite]:
-    source_files = {}  # type: Dict[str, _SourceFile]
-    test_programs = []  # type: List[_TestProgram]
+    source_files: Dict[str, _SourceFile] = {}
+    test_programs: List[_TestProgram] = []
     for item in item_cache.all.values():
         _GATHER.get(item.type, _gather_default)(item, source_files,
                                                 test_programs)
 
-    test_case_to_suites = {}  # type: _CaseToSuite
+    test_case_to_suites: _CaseToSuite = {}
     for test_program in test_programs:
         test_program.add_source_files(source_files)
-        test_suites = []  # type: List[_TestItem]
+        test_suites: List[_TestItem] = []
         for source_file in test_program.source_files:
             test_suites.extend(source_file.test_suites)
         for source_file in test_program.source_files:

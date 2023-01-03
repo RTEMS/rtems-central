@@ -47,7 +47,7 @@ class _Filter(logging.Filter):
 
     def __init__(self):
         super().__init__()
-        self._counts = {}  # type: Dict[int, int]
+        self._counts: Dict[int, int] = {}
 
     def filter(self, record: logging.LogRecord) -> bool:
         count = self._counts.get(record.levelno, 0)
@@ -283,7 +283,7 @@ class _ItemVerifier(_Verifier):
         self._info_map = info_map
         self._item = item
         self._subtype_key = ""
-        self._subtype_verifiers = {}  # type: _VerifierMap
+        self._subtype_verifiers: _VerifierMap = {}
 
     def verify_bool(self, path: _Path, value: Any, type_info: Any) -> Set[str]:
         """ Verifies a boolean value. """
@@ -361,7 +361,7 @@ class _ItemVerifier(_Verifier):
         keys = sorted(filter(lambda key: not key.startswith("_"), value))
         attr_info = type_info["attributes"]
         self._assert_mandatory_keys(path, type_info, attr_info, keys)
-        verified_keys = set()  # type: Set[str]
+        verified_keys: Set[str] = set()
         for key in keys:
             if key in attr_info:
                 self._verify_key(path, value, attr_info[key]["spec-type"], key)
@@ -501,7 +501,7 @@ class SpecVerifier:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, item_cache: ItemCache, root_uid: str):
-        verifier_map = {}  # type: _VerifierMap
+        verifier_map: _VerifierMap = {}
         _AnyVerifier("any", verifier_map)
         _NameVerifier("name", verifier_map)
         _UIDVerifier("uid", verifier_map)

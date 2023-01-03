@@ -219,7 +219,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     enabled = config["enabled"]
     group_uids = [doc_config["group"] for doc_config in groups]
     for doc_config in groups:
-        items = []  # type: List[Item]
+        items: List[Item] = []
         group = item_cache[doc_config["group"]]
         assert group.type == "interface/group"
         for child in group.children("interface-ingroup"):

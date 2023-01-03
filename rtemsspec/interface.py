@@ -45,7 +45,7 @@ GetLines = Callable[["Node", Item, Any], Lines]
 
 
 def _get_ingroups(item: Item) -> ItemMap:
-    ingroups = {}  # type: ItemMap
+    ingroups: ItemMap = {}
     for group in item.parents("interface-ingroup"):
         ingroups[group.uid] = group
     return ingroups
@@ -230,8 +230,8 @@ class Node:
         self.header_file = header_file
         self.item = item
         self.ingroups = _get_ingroups(item)
-        self.dependents = set()  # type: Set["Node"]
-        self.depends_on = set()  # type: Set["Node"]
+        self.dependents: Set[Node] = set()
+        self.depends_on: Set[Node] = set()
         self.content = CContent()
         self.mapper = _InterfaceMapper(self)
         try:
@@ -292,7 +292,7 @@ class Node:
     def generate_enum(self) -> None:
         """ Generates an enum. """
         with self._enum_struct_or_union():
-            enumerators = []  # type: List[CContent]
+            enumerators: List[CContent] = []
             for parent in self.item.parents("interface-enumerator"):
                 enumerator = self._get_description(parent, {})
                 enumerator.append(
@@ -719,8 +719,8 @@ class _HeaderFile:
         self._content = CContent()
         self._content.register_license_and_copyrights_of_item(item)
         self._ingroups = _get_ingroups(item)
-        self._includes = []  # type: List[Item]
-        self._nodes = {}  # type: Dict[str, Node]
+        self._includes: List[Item] = []
+        self._nodes: Dict[str, Node] = {}
         self.enabled_by_defined = enabled_by_defined
         self.enabled = enabled
 
@@ -763,15 +763,15 @@ class _HeaderFile:
         do this, however, if you experience run time problems due to this
         method, then maybe you should reconsider your header file organization.
         """
-        nodes_in_dependency_order = []  # type: List[Node]
+        nodes_in_dependency_order: List[Node] = []
 
         # Get incoming edge degrees for all nodes
-        in_degree = {}  # type: Dict[str, int]
+        in_degree: Dict[str, int] = {}
         for node in self._nodes.values():
             in_degree[node.item.uid] = len(node.dependents)
 
         # Create a queue with all nodes with no incoming edges
-        queue = []  # type: List[Node]
+        queue: List[Node] = []
         for node in sorted(self._nodes.values()):
             if in_degree[node.item.uid] == 0:
                 queue.append(node)
@@ -838,7 +838,7 @@ def _generate_header_file(item: Item, domains: Dict[str, str],
 
 def _gather_enabled_by_defined(item_level_interfaces: List[str],
                                item_cache: ItemCache) -> Dict[str, str]:
-    enabled_by_defined = {}  # type: Dict[str, str]
+    enabled_by_defined: Dict[str, str] = {}
     for uid in item_level_interfaces:
         for child in item_cache[uid].children("interface-ingroup"):
             if child.type == "interface/unspecified-define":

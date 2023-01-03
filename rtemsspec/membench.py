@@ -86,7 +86,7 @@ def _do_gather_test_suites(items: List[Item], item: Item) -> None:
 
 def gather_benchmarks(root: Item) -> List[Item]:
     """ Gather all test suite items related to the root item. """
-    items = []  # type: List[Item]
+    items: List[Item] = []
     _do_gather_test_suites(items, root)
     return items
 
@@ -100,10 +100,10 @@ def get_path_to_test_suite_elf_file(item: Item, path: str) -> str:
 
 def _get_sections(item: Item, path: str) -> Dict[str, Tuple[int, int]]:
     elf = get_path_to_test_suite_elf_file(item, path)
-    stdout = []  # type: List[str]
+    stdout: List[str] = []
     status = run_command(["objdump", "-h", elf], stdout=stdout)
     assert status == 0
-    sections = {}  # type: Dict[str, Tuple[int, int]]
+    sections: Dict[str, Tuple[int, int]] = {}
     for line in stdout:
         match = _SECTION.search(line)
         if match:
@@ -124,7 +124,7 @@ def _get_label(item: Item) -> str:
 
 def _generate_table(content: SphinxContent, items: List[Item],
                     path: str) -> None:
-    rows = []  # type: List[Tuple[str, ...]]
+    rows: List[Tuple[str, ...]] = []
     for index, item in enumerate(items):
         sections = _get_sections(item, path)
         name = (get_reference(_get_label(item), item.uid), )

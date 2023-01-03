@@ -188,8 +188,8 @@ class Item:
         self._cache = item_cache
         self._uid = uid
         self._data = data
-        self._links_to_parents = []  # type: List[Link]
-        self._links_to_children = []  # type: List[Link]
+        self._links_to_parents: List[Link] = []
+        self._links_to_children: List[Link] = []
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Item):
@@ -486,7 +486,7 @@ class ItemMapper:
         self._item = item
         self._recursive = recursive
         self._prefix = [""]
-        self._get_value_map = {}  # type: Dict[str, ItemGetValueMap]
+        self._get_value_map: Dict[str, ItemGetValueMap] = {}
 
     @property
     def item(self) -> Item:
@@ -622,7 +622,7 @@ class _SpecType(NamedTuple):
 
 
 def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
-    new_type = None  # type: Optional[_SpecType]
+    new_type: Optional[_SpecType] = None
     for link in item.links_to_children():
         if link.role == "spec-refinement":
             key = link["spec-key"]
@@ -667,9 +667,9 @@ class ItemCache:
                  config: Any,
                  post_process_load: Optional[Callable[[ItemMap],
                                                       None]] = None):
-        self._items = {}  # type: ItemMap
-        self._types = set()  # type: Set[str]
-        self.items_by_type = {}  # type: Dict[str, List[Item]]
+        self._items: ItemMap = {}
+        self._types: Set[str] = set()
+        self.items_by_type: Dict[str, List[Item]] = {}
         self._updates = 0
         self._load_items(config)
         if post_process_load:
@@ -732,7 +732,7 @@ class ItemCache:
 
     def _load_items_in_dir(self, base: str, path: str, cache_file: str,
                            update_cache: bool) -> None:
-        data_by_uid = {}  # type: Dict[str, Any]
+        data_by_uid: Dict[str, Any] = {}
         if update_cache:
             self._updates += 1
             for name in os.listdir(path):
@@ -804,7 +804,7 @@ class ItemCache:
     def _set_type(self, item: Item) -> None:
         spec_type = self._root_type
         value = item.data
-        path = []  # type: List[str]
+        path: List[str] = []
         while spec_type is not None:
             type_name = value[spec_type.key]
             path.append(type_name)

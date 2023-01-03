@@ -89,12 +89,12 @@ def gather_files(config: dict,
                  item_cache: ItemCache,
                  test_header: bool = True) -> List[str]:
     """ Generates a list of files form the build specification. """
-    bsps = {}  # type: BSPMap
+    bsps: BSPMap = {}
     for item in item_cache.all.values():
         if item["type"] == "build" and item["build-type"] == "bsp":
             arch_bsps = bsps.setdefault(item["arch"].strip(), {})
             arch_bsps[item["bsp"].strip()] = item
-    source_files = list(config["sources"])  # type: List[str]
+    source_files: List[str] = list(config["sources"])
     arch = config["arch"]
     bsp = config["bsp"]
     enabled = [arch, arch + "/" + bsp] + config["enabled"]

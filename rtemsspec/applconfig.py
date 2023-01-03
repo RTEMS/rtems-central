@@ -212,7 +212,7 @@ def _generate_feature(content: _ContentAdaptor, item: Item,
 
 def _get_constraints(content: _ContentAdaptor, item: Item,
                      enabled: List[str]) -> List[str]:
-    constraints = []  # type: List[str]
+    constraints: List[str] = []
     for parent in item.parents("constraint"):
         if not parent.is_enabled(enabled):
             continue
@@ -339,7 +339,7 @@ def generate(config: dict, group_uids: List[str],
     for group_config in config["groups"]:
         group = item_cache[group_config["uid"]]
         assert group.type == "interface/appl-config-group"
-        options = {}  # type: ItemMap
+        options: ItemMap = {}
         for child in group.children("interface-ingroup"):
             if child.type.startswith("interface/appl-config-option"):
                 options[child.uid] = child

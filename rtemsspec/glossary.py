@@ -115,7 +115,7 @@ def _generate_project_glossary(glossary: _Glossary, header: str, target: str,
 
 def _generate_document_glossary(config: dict, group_uids: List[str],
                                 glossary: _Glossary) -> None:
-    document_terms = {}  # type: ItemMap
+    document_terms: ItemMap = {}
     for path in config["rest-source-paths"]:
         _find_glossary_terms(path, document_terms, glossary)
     _resolve_glossary_terms(document_terms)
@@ -132,7 +132,7 @@ def generate(config: dict, group_uids: List[str],
     :param item_cache: The specification item cache containing the glossary
                        groups and terms.
     """
-    groups = {}  # type: ItemMap
+    groups: ItemMap = {}
     for uid, item in item_cache.all.items():
         if item.type == "glossary/group":
             groups[uid] = item
