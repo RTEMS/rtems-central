@@ -47,6 +47,7 @@ def copy_files(src_dir: str, dst_dir: str, files: List[str]) -> None:
 
 def load_config(config_filename: str) -> Any:
     """ Loads the configuration file with recursive includes. """
+
     class IncludeLoader(yaml.SafeLoader):  # pylint: disable=too-many-ancestors
         """ YAML loader customization to process custom include tags. """
         _filenames = [config_filename]

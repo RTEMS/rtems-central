@@ -53,6 +53,7 @@ def _variant_to_key(variant: Transition) -> str:
 
 
 class _TransitionEntry:
+
     def __init__(self):
         self.key = ""
         self.variants = []  # type: List[Transition]

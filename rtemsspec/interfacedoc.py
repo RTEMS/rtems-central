@@ -48,6 +48,7 @@ def _get_code_param(ctx: ItemGetValueContext) -> Any:
 
 
 class _CodeMapper(ItemMapper):
+
     def __init__(self, item: Item):
         super().__init__(item)
         self.add_get_value("interface/forward-declaration:/name",

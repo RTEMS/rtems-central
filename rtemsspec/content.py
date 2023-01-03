@@ -50,6 +50,7 @@ class Copyright:
     This class represents a copyright holder with its years of substantial
     contributions.
     """
+
     def __init__(self, holder):
         self._holder = holder
         self._years = set()
@@ -88,6 +89,7 @@ class Copyright:
 
 class Copyrights:
     """ This class represents a set of copyright holders. """
+
     def __init__(self):
         self.copyrights = {}
 
@@ -659,8 +661,10 @@ class CContent(Content):
         self.add(["#ifdef HAVE_CONFIG_H", "#include \"config.h\"", "#endif"])
 
     def _add_includes(self, includes: Set[str], local: bool) -> None:
+
         class IncludeKey:  # pylint: disable=too-few-public-methods
             """ Provides a key to sort includes. """
+
             def __init__(self, inc: str):
                 self._inc = inc
 

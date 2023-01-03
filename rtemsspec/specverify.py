@@ -44,6 +44,7 @@ class VerifyStatus(NamedTuple):
 
 
 class _Filter(logging.Filter):
+
     def __init__(self):
         super().__init__()
         self._counts = {}  # type: Dict[int, int]
@@ -221,6 +222,7 @@ def _prefix(prefix: _Path) -> str:
 
 
 class _Verifier:
+
     def __init__(self, name: str, verifier_map: _VerifierMap):
         self._name = name
         self._verifier_map = verifier_map
@@ -242,6 +244,7 @@ class _Verifier:
 
 
 class _AnyVerifier(_Verifier):
+
     def verify(self, path: _Path, _value: Any) -> Set[str]:
         """ Does not verify the value. """
         self.verify_info(path)
@@ -249,6 +252,7 @@ class _AnyVerifier(_Verifier):
 
 
 class _NameVerifier(_Verifier):
+
     def verify(self, path: _Path, value: Any) -> Set[str]:
         """ Verifies a name. """
         self.verify_info(path)
@@ -258,6 +262,7 @@ class _NameVerifier(_Verifier):
 
 
 class _UIDVerifier(_Verifier):
+
     def verify(self, path: _Path, value: Any) -> Set[str]:
         """ Verifies an attribute key. """
         self.verify_info(path)
@@ -271,6 +276,7 @@ class _UIDVerifier(_Verifier):
 
 
 class _ItemVerifier(_Verifier):
+
     def __init__(self, name: str, verifier_map: _VerifierMap,
                  info_map: Dict[str, Any], item: Item):
         super().__init__(name, verifier_map)

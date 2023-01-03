@@ -85,6 +85,7 @@ def _find_glossary_terms(path: str, document_terms: ItemMap,
 
 
 class _GlossaryMapper(ItemMapper):
+
     def __init__(self, item: Item, document_terms: ItemMap):
         super().__init__(item)
         self._document_terms = document_terms

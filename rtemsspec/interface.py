@@ -56,6 +56,7 @@ def _get_group_identifiers(groups: ItemMap) -> List[str]:
 
 
 class _InterfaceMapper(ItemMapper):
+
     def __init__(self, node: "Node"):
         super().__init__(node.item)
         self._node = node
@@ -119,6 +120,7 @@ class _InterfaceMapper(ItemMapper):
 
 
 class _InterfaceExpressionMapper(ExpressionMapper):
+
     def __init__(self, mapper: _InterfaceMapper):
         super().__init__()
         self._mapper = mapper
@@ -129,6 +131,7 @@ class _InterfaceExpressionMapper(ExpressionMapper):
 
 
 class _ItemLevelExpressionMapper(ExpressionMapper):
+
     def __init__(self, mapper: _InterfaceMapper):
         super().__init__()
         self._mapper = mapper
@@ -140,6 +143,7 @@ class _ItemLevelExpressionMapper(ExpressionMapper):
 
 
 class _HeaderExpressionMapper(ExpressionMapper):
+
     def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
         super().__init__()
         self._mapper = ItemMapper(item)
@@ -710,6 +714,7 @@ def _bubble_sort(nodes: List[Node]) -> List[Node]:
 
 class _HeaderFile:
     """ A header file. """
+
     def __init__(self, item: Item, enabled_by_defined: Dict[str, str],
                  enabled: List[str]):
         self._item = item

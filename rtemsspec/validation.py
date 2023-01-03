@@ -58,6 +58,7 @@ def _get_test_run(ctx: ItemGetValueContext) -> Any:
 
 
 class _Mapper(ItemMapper):
+
     def __init__(self, item: Item):
         super().__init__(item)
         self._step = 0
@@ -493,6 +494,7 @@ class _TestItem:
 
 class _TestSuiteItem(_TestItem):
     """ A test suite item. """
+
     @property
     def group_identifier(self) -> str:
         return f"RTEMSTestSuite{self.ident}"
@@ -529,6 +531,7 @@ def _add_condition_enum(content: CContent, co_idx_to_enum: _IdxToX) -> None:
 
 class _ActionRequirementTestItem(_TestItem):
     """ An action requirement test item. """
+
     def __init__(self, item: Item):
         super().__init__(item)
         self._mapper.add_get_value(("requirement/functional/action:"
@@ -876,6 +879,7 @@ class _ActionRequirementTestItem(_TestItem):
 
 class _RuntimeMeasurementRequestItem(_TestItem):
     """ A runtime measurement request item. """
+
     def __init__(self, item: Item, context: str):
         super().__init__(item)
         self._context = context
@@ -889,6 +893,7 @@ def _add_call_method(content: CContent, name: str) -> None:
 
 class _RuntimeMeasurementTestItem(_TestItem):
     """ A runtime measurement test item. """
+
     def add_test_case_action_description(self, _content: CContent) -> None:
         pass
 
@@ -1017,6 +1022,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
 
 class _SourceFile:
     """ A test source file. """
+
     def __init__(self, filename: str):
         """ Initializes a test source file. """
         self._file = filename
@@ -1086,6 +1092,7 @@ def _gather_build_source_files(item: Item, files: List[str]):
 
 class _TestProgram:
     """ A test program. """
+
     def __init__(self, item: Item):
         """ Initializes a test program. """
         self._item = item

@@ -61,6 +61,7 @@ class _ContentAdaptor:
 
     By default, Sphinx content is generated.
     """
+
     def __init__(self, mapper: ItemMapper, content: Any) -> None:
         self.mapper = mapper
         self.content = content
@@ -137,6 +138,7 @@ class _ContentAdaptor:
 
 
 class _SphinxContentAdaptor(_ContentAdaptor):
+
     def __init__(self, mapper: ItemMapper) -> None:
         super().__init__(mapper, SphinxContent())
 

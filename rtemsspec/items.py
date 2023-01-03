@@ -109,6 +109,7 @@ yaml.add_representer(str, _str_representer)
 
 class Link:
     """ A link to an item. """
+
     def __init__(self, item: "Item", data: Any):
         self._item = item
         self._data = data
@@ -450,6 +451,7 @@ class ItemTemplate(string.Template):
 
 class _ItemMapperContext(dict):
     """ Context to map identifiers to items and attribute values. """
+
     def __init__(self, mapper: "ItemMapper", item: Optional[Item],
                  prefix: Optional[str], recursive: bool):
         super().__init__()
@@ -468,6 +470,7 @@ class _ItemMapperContext(dict):
 
 
 class _GetValueDictionary(dict):
+
     def __init__(self, get_value: ItemGetValue):
         super().__init__()
         self._get_value = get_value
@@ -478,6 +481,7 @@ class _GetValueDictionary(dict):
 
 class ItemMapper:
     """ Maps identifiers to items and attribute values. """
+
     def __init__(self, item: Item, recursive: bool = False):
         self._item = item
         self._recursive = recursive
@@ -658,6 +662,7 @@ def _load_json_data(path: str, uid: str) -> Any:
 
 class ItemCache:
     """ This class provides a cache of specification items. """
+
     def __init__(self,
                  config: Any,
                  post_process_load: Optional[Callable[[ItemMap],
@@ -814,6 +819,7 @@ class ItemCache:
 
 class EmptyItemCache(ItemCache):
     """ This class provides a empty cache of specification items. """
+
     def __init__(self):
         super().__init__({
             "cache-directory": ".",
@@ -824,6 +830,7 @@ class EmptyItemCache(ItemCache):
 
 class JSONItemCache(ItemCache):
     """ This class provides a cache of specification items using JSON. """
+
     def _load_json_items(self, base: str, path: str) -> None:
         for name in os.listdir(path):
             path2 = os.path.join(path, name)
@@ -848,5 +855,6 @@ class JSONItemCache(ItemCache):
 
 class EmptyItem(Item):
     """ Objects of this class represent empty items. """
+
     def __init__(self):
         super().__init__(EmptyItemCache(), "", {})

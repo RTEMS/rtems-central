@@ -68,6 +68,7 @@ def _a_or_an(value: str) -> str:
 
 class _AssertContext:
     """ This class provides a context to document assert expressions. """
+
     def __init__(self, content: SphinxContent, ops: Dict[str, Any]):
         self.content = content
         self.ops = ops

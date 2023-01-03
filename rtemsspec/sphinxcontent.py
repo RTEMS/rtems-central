@@ -62,6 +62,7 @@ def _simple_row(row: Iterable[str], maxi: Iterable[int]) -> str:
 
 class SphinxContent(Content):
     """ This class builds Sphinx content. """
+
     def __init__(self, section_level: int = 2):
         super().__init__("CC-BY-SA-4.0", True)
         self._tab = "    "
@@ -100,6 +101,7 @@ class SphinxContent(Content):
                             definition: GenericContent,
                             wrap: bool = False) -> None:
         """ Adds a definition item the content. """
+
         @contextmanager
         def _definition_item_context(content: Content) -> Iterator[None]:
             content.append(name)
@@ -266,6 +268,7 @@ def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
 
 class SphinxMapper(ItemMapper):
     """ Sphinx item mapper. """
+
     def __init__(self, item: Item, recursive: bool = False):
         super().__init__(item, recursive)
         self.add_get_value("glossary/term:/term", _get_ref_term)
@@ -317,6 +320,7 @@ def _get_param(ctx: ItemGetValueContext) -> Any:
 
 class SphinxInterfaceMapper(SphinxMapper):
     """ Sphinx item mapper for the interface documentation. """
+
     def __init__(self,
                  item: Item,
                  group_uids: List[str],
