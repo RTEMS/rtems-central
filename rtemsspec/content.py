@@ -1077,12 +1077,10 @@ def get_value_compound(ctx: ItemGetValueContext) -> Any:
 class ExpressionMapper:
     """ Maps symbols and operations to form a C expression. """
 
-    # pylint: disable=no-self-use
     def map_bool(self, value: bool) -> str:
         """ Maps a boolean value to build an expression. """
         return str(int(value))
 
-    # pylint: disable=no-self-use
     def map_symbol(self, symbol: str) -> str:
         """ Maps a symbol to build an expression. """
         if symbol.startswith("CPU_"):
@@ -1105,11 +1103,9 @@ class ExpressionMapper:
 class PythonExpressionMapper(ExpressionMapper):
     """ Maps symbols and operations to form a Python expression. """
 
-    # pylint: disable=no-self-use
     def map_bool(self, value: bool) -> str:
         return str(value)
 
-    # pylint: disable=no-self-use
     def map_symbol(self, symbol: str) -> str:
         return symbol
 

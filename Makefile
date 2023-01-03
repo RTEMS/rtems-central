@@ -12,7 +12,7 @@ format: $(PY_ALL_FILES) | check-env
 analyse: $(PY_SRC_FILES) | check-env
 	flake8 $^
 	mypy $^
-	pylint $^
+	pylint --disable=no-self-use $^
 
 check-env:
 	test -n "$$VIRTUAL_ENV"

@@ -594,7 +594,6 @@ class Node:
     def _get_register_define_definition(self, item: Item, definition: Any,
                                         ctx: _RegisterMemberContext,
                                         offset: int) -> Lines:
-        # pylint: disable=no-self-use
         name, alias = _get_register_name(definition)
         count = definition["count"]
         assert count == 1
@@ -607,7 +606,6 @@ class Node:
 
     def _get_register_member_definition(self, _item: Item, definition: Any,
                                         ctx: _RegisterMemberContext) -> Lines:
-        # pylint: disable=no-self-use
         name, alias = _get_register_name(definition)
         count = definition["count"]
         array = f"[ {count} ]" if count > 1 else ""

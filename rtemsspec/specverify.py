@@ -287,7 +287,6 @@ class _ItemVerifier(_Verifier):
 
     def verify_bool(self, path: _Path, value: Any, type_info: Any) -> Set[str]:
         """ Verifies a boolean value. """
-        # pylint: disable=no-self-use
         if type_info and "assert" in type_info:
             expected = type_info["assert"]
             if expected != value:
@@ -402,7 +401,6 @@ class _ItemVerifier(_Verifier):
     def verify_int_or_float(self, path: _Path, value: Any,
                             type_info: Any) -> Set[str]:
         """ Verifies an integer or float value. """
-        # pylint: disable=no-self-use
         if not _assert_int_or_float(path, value, type_info):
             logging.error("%s invalid value: %s", _prefix(path), str(value))
         return set()
@@ -418,12 +416,10 @@ class _ItemVerifier(_Verifier):
     def verify_none(self, _path: _Path, _value: Any,
                     _type_info: Any) -> Set[str]:
         """ Verifies a none value. """
-        # pylint: disable=no-self-use
         return set()
 
     def verify_str(self, path: _Path, value: Any, type_info: Any) -> Set[str]:
         """ Verifies a string value. """
-        # pylint: disable=no-self-use
         if not _assert_str(path, value, type_info):
             logging.error("%s invalid value: %s", _prefix(path), value)
         return set()

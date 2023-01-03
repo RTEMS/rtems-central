@@ -778,11 +778,9 @@ class ItemCache:
 
     def load_data(self, path: str, uid: str) -> Any:
         """ Loads the item data from the file specified by path. """
-        # pylint: disable=no-self-use
         return _load_yaml_data(path, uid)
 
     def _save_data(self, file: TextIO, data: Any) -> None:
-        # pylint: disable=no-self-use
         file.write(
             yaml.dump(data, default_flow_style=False, allow_unicode=True))
 
@@ -845,11 +843,9 @@ class JSONItemCache(ItemCache):
             self._load_json_items(path, path)
 
     def load_data(self, path: str, uid: str) -> Any:
-        # pylint: disable=no-self-use
         return _load_json_data(path, uid)
 
     def _save_data(self, file: TextIO, data: Any) -> None:
-        # pylint: disable=no-self-use
         json.dump(data, file, sort_keys=True, indent=2)
 
 
