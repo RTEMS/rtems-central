@@ -1,0 +1,202 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+LANGUAGE: C
+
+SEGNAMEPFX: TestSegment{} # segnumber
+SEGARG: Context* ctx
+SEGDECL: static void {}( {} )  # segnamepf{segnumber}, segarg,
+SEGBEGIN: " {"
+SEGEND: "}"
+
+NAME: |
+  /* Test Name is defined in the Test Case code (tc-model-msg-mgr.c) */
+
+semaphore_DCL: rtems_id {0}[SEMA_MAX];
+
+sendrc_DCL: rtems_status_code
+
+recrc_DCL: rtems_status_code
+
+qrc_DCL: rtems_status_code
+
+queue_buffer_DCL: RTEMS_MESSAGE_QUEUE_BUFFER( MAX_MESSAGE_SIZE ) {0} [MAX_PENDING_MESSAGES];
+
+receive_buffer_DCL: uint8_t {0} [ MAX_MESSAGE_SIZE ];
+
+send_buffer_DCL: uint8_t {0} [ MAX_MESSAGE_SIZE ];
+
+send_counter_DCL: uint8_t
+
+INIT: |
+  initialise_semaphore( ctx, semaphore );
+
+Runner: |
+  checkTaskIs( ctx->runner_id );
+
+Worker1: |
+  checkTaskIs( ctx->worker1_id );
+
+Worker2: |
+  checkTaskIs( ctx->worker2_id );
+
+SIGNAL: |
+  Wakeup( semaphore[{}] );
+
+WAIT: |
+  Wait( semaphore[{}] );
+
+message_queue_construct: |
+  T_log( T_NORMAL, "Calling construct(%d,%d,%d,%d,%d)");
+
+  rtems_message_queue_config config;
+  config.name = {3};
+  config.maximum_pending_messages = MAX_PENDING_MESSAGES;
+  config.maximum_message_size = MAX_MESSAGE_SIZE;
+  config.storage_area = queue_buffer;
+  config.storage_size = sizeof( queue_buffer );
+  config.storage_free = NULL;
+  config.attributes = RTEMS_DEFAULT_ATTRIBUTES;
+  
+  {5} = rtems_message_queue_construct(
+    &config,
+    &ctx->queue_id
+  );
+  T_log(T_NORMAL, "Queue id 0x%x", ctx->queue_id);
+  T_log( T_NORMAL, "Returned 0x%x from construct", {5} );
+
+  
+
+message_queue_send: |
+  T_log( T_NORMAL, "Calling Send(%d,%d)");
+
+  memset( send_buffer, {2}, {3} );
+  
+  {4} = rtems_message_queue_send(
+    idNull(ctx, {1}),
+    {2} ? send_buffer : NULL,
+    {3}
+  );
+
+  T_log( T_NORMAL, "Returned 0x%x from send", {4} );
+
+message_queue_receive: |
+  T_log( T_NORMAL, "Calling Receive(%d,%d)");
+  size_t receive_size;
+  {4} = rtems_message_queue_receive(
+  idNull(ctx, {1}),
+  receive_buffer,
+  &receive_size,
+  mergeopts({2}),
+  getTimeout({3})
+  );
+  T_log( T_NORMAL, "Returned 0x%x from receive", {4} );
+
+sendrc:
+  T_rsc( sendrc, {0} );
+
+recrc:
+  T_rsc( recrc, {0} );
+
+qrc:
+  T_rsc( qrc, {0} );
+
+recout:
+  T_eq_int( recout[{0}], {1} );
+
+Ready: |
+   /* We (Task {0}) must have been recently ready because we are running */
+
+Zombie:
+  /* Code to check that Task {0} has terminated */
+
+EventWait:
+  /* Code to check that Task {0} is waiting on events */
+
+TimeWait:
+  /* Code to check that Task {0} is waiting on a timer */
+
+OtherWait:
+  /* Code to check that Task {0} is waiting (after pre-emption) */
+
+SUSPEND:
+  /* SWITCH[{0}] Suspension of proc{1} in favour of proc{2} */
+
+WAKEUP:
+  /* SWITCH[{0}] Wakeup of proc{1} (sometime) after proc{2} */
+  
+LowerPriority: |
+  SetSelfPriority( PRIO_LOW );
+  rtems_task_priority prio;
+  rtems_status_code sc;
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
+  T_eq_u32( prio, PRIO_LOW );
+
+EqualPriority: |
+  SetSelfPriority( PRIO_NORMAL );
+  rtems_task_priority prio;
+  rtems_status_code sc;
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
+  T_eq_u32( prio, PRIO_NORMAL );
+
+HigherPriority: |
+  SetSelfPriority( PRIO_HIGH );
+  rtems_task_priority prio;
+  rtems_status_code sc;
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
+  T_eq_u32( prio, PRIO_HIGH );
+
+  StartLog: |
+  T_thread_switch_log *log;
+  log = T_thread_switch_record_4( &ctx->thread_switch_log );
+
+CheckPreemption: |
+  log = &ctx->thread_switch_log;
+  T_eq_sz( log->header.recorded, 2 );
+  T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
+  T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
+
+CheckNoPreemption: |
+  log = &ctx->thread_switch_log;
+  T_le_sz( log->header.recorded, 1 );
+  for ( size_t i = 0; i < log->header.recorded; ++i ) {
+    T_ne_u32( log->events[ i ].executing, ctx->worker_id );
+    T_eq_u32( log->events[ i ].heir, ctx->runner_id );
+  }
+
+RunnerScheduler: |
+  uint32_t processor = {};
+  rtems_status_code sc1;
+  rtems_id current_sched;
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+  sc1 = rtems_scheduler_ident_by_processor( processor, &ctx->runner_sched );
+  T_rsc_success( sc1 );
+  T_log( T_NORMAL, "runner scheduler id: %d", &ctx->runner_sched);
+  sc1 = rtems_task_set_scheduler(RTEMS_SELF, &ctx->runner_sched, RTEMS_CURRENT_PRIORITY);
+  T_rsc_success( sc1 );
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+
+OtherScheduler: |
+  uint32_t processor = {};
+  rtems_status_code sc1;
+  rtems_id current_sched;
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+  sc1 = rtems_scheduler_ident_by_processor( processor, &ctx->other_sched );
+  T_rsc_success( sc1 );
+  T_log( T_NORMAL, "other scheduler id: %d", &ctx->other_sched);
+  sc1 = rtems_task_set_scheduler(RTEMS_SELF, &ctx->other_sched, RTEMS_CURRENT_PRIORITY);
+  T_rsc_success( sc1 );
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+
+SetProcessor: |
+  T_eq_u32( rtems_scheduler_get_processor_maximum(), 2 );
+  uint32_t processor = {};
+  cpu_set_t cpuset;
+  CPU_ZERO(&cpuset);
+  CPU_SET(processor, &cpuset);
