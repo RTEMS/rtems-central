@@ -1,0 +1,624 @@
+ ##############################################################################
+ # TestGen
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+from src.library import *
+from src import refine_command
+from src import syntax_ml
+from src.syntax_ml import token_ident, token_antiquotation
+from src import syntax_pml
+from src.syntax_pml import arg_pml, arg_pml_file, arg_annotation, arg_annotation_file, src_directive, binding_refine_uniform, find_annot, find_annot0, find_annot_bool, find_annot_list, find_annot_list1, find_annot_list2
+from src import syntax_yaml
+from src.modules.promela_yacc.promela import ast
+from src.modules.promela_yacc.promela import lex
+from src.modules.promela_yacc.promela import yacc
+
+#
+
+import copy
+import errno
+from itertools import groupby
+import os
+import random
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import traceback
+
+##
+# parse
+
+def parse_refine_generic (l_refine_generic):
+    toks = ''.join (l_refine_generic)
+    dic = syntax_yaml.safe_load (toks) if toks else {}
+    if not syntax_yaml.isinst_dict ((syntax_yaml.isinst_str, syntax_yaml.isinst_str), dic):
+        input_continue (f'Type error: {dic}')
+        dic = {}
+    return dic
+
+##
+# 'assert' analyses
+
+def tl (l):
+    if l:
+        _, *l = l
+        return l
+    else:
+        return []
+
+def get_forest_ass (node):
+    if type node is ast.Assert:
+        return [ (node, ast.Assert (ast.Unary ('!', node.expr), pos = node.pos)) ]
+    else:
+        def get_forest_ass00 (cons_pair, dest_pair, node, cons_node):
+            ts_pred = []
+            ts_succ = tl node
+            ts_res = []
+            for tt0 in node:
+                t_t = dest_pair tt0
+                ts_pred0 = list (reversed ts_pred)
+                ts_res = [ list (map ((msg_t_ass -> (cons_pair ((msg_t_ass[0], t_t[1])), cons_node (ts_pred0 + [cons_pair ((msg_t_ass[1], t_t[1]))] + ts_succ))), get_forest_ass (t_t[0]))) ] + ts_res
+                ts_pred = [cons_pair ((t_t[0], t_t[1]))] + ts_pred
+                ts_succ = tl ts_succ
+            return list (flatten (reversed ts_res))
+        def get_forest_ass0 (node, cons_node):
+            return get_forest_ass00 ((t_t -> t_t[0]), (t_t -> (t_t, None)), node, cons_node)
+        def get_forest_ass0_proc_inl (cons_node):
+            return list (map ((msg_t_ass -> ((node.name, msg_t_ass[0]), msg_t_ass[1])), get_forest_ass0 ([node.body], cons_node <.. (node -> node[0]))))
+
+        if type node is ast.Sequence:
+            return get_forest_ass0 (node, (node0 -> ast.Sequence (node0, context = node.context, is_option = node.is_option)))
+        elif type node is ast.Options:
+            return get_forest_ass0 (node.options, (node0 -> ast.Options (node.type, node0)))
+        elif type node is ast.Program:
+            return get_forest_ass00 ((t_t -> t_t), (t_t -> t_t), node, ast.Program)
+        elif isinstance (node, ast.Proctype) and not node.disable_negation:
+            return get_forest_ass0_proc_inl ((node0 -> ast.Proctype (node.name, node0, node.args, node.active, node.d_proc, node.priority, node.provided)) if type node is ast.Proctype else (node0 -> ast.Init (node.name, node0, node.args, node.active, node.d_proc, node.priority, node.provided)))
+        elif type node is ast.InlineDef and not node.disable_negation:
+            return get_forest_ass0_proc_inl (node0 -> ast.InlineDef (node.name, node.decl, node0))
+        else:
+            return []
+
+##
+# main
+
+def fold_prog (args):
+    node_file = 0
+    promela_parser = yacc.Parser (ast, lex.Lexer ())
+    for arg_ty, arg in args:
+        parsed = []
+        try:
+            case arg_ty:
+                match arg_pml ():
+                    parsed = promela_parser.parse (arg, None)
+                match arg_pml_file ():
+                    parsed = promela_parser.parse (None, arg)
+        except Exception:
+            input_continue_err (traceback.format_exc ())
+        for node in parsed:
+            yield (node_file, node)
+        node_file += 1
+
+def iter_files (iter_source, dict_refine_uniform0, sys_args):
+    arg_cpt = 0
+    for lines in sys_args:
+        match [(pos_file, subst_lines)] + xs in dict_refine_uniform0 if pos_file == arg_cpt:
+            dict_refine_uniform0 = xs
+        else:
+            subst_lines = []
+        iter_source (arg_cpt, subst_lines, lines)
+        arg_cpt += 1
+
+def write_unlink (f):
+    tmp = tempfile.NamedTemporaryFile (delete = False)
+    try:
+        f tmp
+    finally:
+        os.unlink tmp.name
+
+def subprocess_exec (print_stdout, print_stderr, exec_name, exec_args):
+    exec_cmd = [exec_name] + exec_args
+    try:
+        with subprocess.Popen (exec_cmd,
+                               stdin=subprocess.PIPE,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               universal_newlines = True) as proc:
+            stdout, stderr = proc.communicate ()
+            returncode = proc.returncode
+    except Exception as e:
+        stdout = ''
+        stderr = traceback.format_exc () + f'{exec_name}: ' + ('command not found' if isinstance (e, OSError) and e.errno == errno.ENOENT else 'Subprocess error')
+        if print_stderr:
+            returncode = 1
+        else:
+            input_continue_err stderr
+            returncode = 0
+    
+    print ('+', ' '.join (exec_cmd))
+    p_stdout = print_stdout and stdout
+    p_stderr = print_stderr and stderr
+    if p_stdout:
+        print (stdout.strip ())
+    if p_stdout and p_stderr:
+        print ('+')
+    if p_stderr:
+        print (stderr.strip ())
+    
+    if returncode != 0:
+        input_continue_warn (f'return code = {returncode}')
+    return stdout
+
+def mkdir (dir0):
+    try:
+        os.makedirs (dir0, exist_ok = True)
+    except FileExistsError:
+        input_continue (f'File exists and is not a directory: {dir0}')
+    except NotADirectoryError:
+        input_continue (f'Not a directory for an ancestor: {dir0}')
+
+def copy_i (src, dst):
+    if os.path.exists dst:
+        src_cts = fileinput_input0 src
+        dst_cts = fileinput_input0 dst
+        print ('Content of source file:')
+        print src_cts
+        if src_cts == dst_cts:
+            print (f'Destination file exists with the same content: {dst}')
+        else:
+            print ('Content of destination file:')
+            print dst_cts
+            input_continue (f'Destination file exists with a different content: {dst}')
+    else:
+        # note: in a concurrent setting, the type and content of dst could have been changed meanwhile
+        try:
+            shutil.copy (src, dst)
+        except NotADirectoryError:
+            input_continue (f'Not a directory: {os.path.dirname dst}\n(parent of {os.path.basename dst})')
+        except FileNotFoundError:
+            input_continue (f'Either not a file: {src}\n    or not a directory: {os.path.dirname dst}\n(parent of {os.path.basename dst})')
+        except IsADirectoryError:
+            input_continue (f'Is a directory: {src}')
+
+def partition_pml_ast (f_ty, promelas):
+    promelas_ty, promelas_no_ty = [], []
+    for pos_file, (promela, pos_line) in promelas:
+        (promelas_ty if f_ty promela else promelas_no_ty).append((pos_file, (promela, pos_line)))
+
+    return (ast.Program (map ((promela -> promela[1]), promelas_no_ty)).__str__ ().encode (), promelas_no_ty, promelas_ty)
+
+def split_arg (split_arg0, l):
+    for fic in l:
+        match [args] :: _ in split_arg0 fic if args:
+            for arg in args:
+                yield arg
+        else:
+            yield fic
+
+export_yml_ext = (dir0, fic) -> dir0 + fic + '.yml' if fic else dir0
+
+class read_eval_print:
+    def __init__ (self, seed, argv, input_output_yaml):
+        random.seed seed
+        self.hash_cmd_uniform = random.random ().__str__ ()
+        self.hash_cmd_generic = random.random ().__str__ ()
+        self.cwd = os.getcwd ()
+        self.parse_commands = syntax_yaml.parse_commands if input_output_yaml else syntax_ml.parse_commands
+        self.parse_directive = syntax_yaml.parse_directive if input_output_yaml else syntax_ml.parse_directive
+        self.unparse_annotation_cmd = syntax_yaml.unparse_annotation_cmd if input_output_yaml else syntax_ml.unparse_annotation_cmd
+        
+        options_pml = ['-p', '--promela']
+        options0 = ['-a', '--annotation'] + options_pml
+        options_annotation_file = ['-af', '--annotation_file']
+        options = options_annotation_file + options0
+        def map_arg (l):
+            case l:
+                match [option, cts] + xs if option in options0 or option in options_annotation_file:
+                    yield (  arg_pml () if option in options_pml else
+                             arg_annotation () if option in options0 else
+                             arg_annotation_file ()
+                           , cts)
+                    yield from map_arg xs
+                match [fic] + xs:
+                    if fic.find ('-') == 0:
+                        if fic in options:
+                            input_continue (f'Missing parameter: {fic} {xs}')
+                        else:
+                            input_continue (f'Unknown option: {fic} {xs}')
+                    elif os.path.isfile fic:
+                        yield (arg_pml_file (), fic)
+                    else:
+                        input_continue (f'Expecting an existing file: {fic}')
+                    yield from map_arg xs
+        def split_arg0 (fic):
+            for opt in options:
+                match [''] + args in fic.split opt:
+                    arg = opt.join args
+                    yield [opt, arg] if arg else None
+        self.argv = list (map_arg (list (split_arg (split_arg0, argv))))
+
+    ##
+    # printf insertion
+
+    def insert_printf_node (self, node, node_args, node_pos, no_atomic, print_first):
+        printf = ast.Printf <| ast.Node ()
+        dict_print_ty = { 'int' : '%d' }
+        print_default = ('%d', '0', 1)
+        proc_args = list (map ((x -> ((dict_print_ty[x[1][0]], x[1][1] if x[1][1] else 1) if x[1][0] in dict_print_ty else (None, print_default[2]), x[0])), node_args))
+        printf.s = self.unparse_annotation_cmd (self.hash_cmd_uniform, list (map (str, [node_pos[0], node_pos[1]])) + list (map ((x -> map ((_ -> x[0][0]), range (x[0][1])) if x[0][0] else [print_default[0]]), proc_args) |> flatten)) |> syntax_pml.unparse_string
+
+        if proc_args:
+            printf.args = ast.Sequence (map ((x -> (map ((index -> ast.VarRef (x[1], index = index)), range (x[0][1])) if x[0][1] > 1 else [ast.VarRef (x[1])]) if x[0][0] else [ast.VarRef (print_default[1])]), proc_args) |> flatten)
+        atomic = 'atomic'
+        
+        def insert_printf_node0 ():
+            sequence = ast.Sequence ([printf] + node.body if print_first else node.body + [printf])
+            if not no_atomic:
+                sequence.context = atomic
+            node.body = sequence
+        match [seq] in node.body:
+            if type seq is ast.Sequence:
+                if not no_atomic and seq.context != atomic:
+                    seq.context = atomic
+                if print_first:
+                    seq.insert 0 printf
+                else:
+                    seq.append printf
+            else:
+                insert_printf_node0 ()
+        else:
+            insert_printf_node0 ()
+        return (node.name, proc_args)
+
+    ##
+    #
+
+    def init_top_elems (self, programs, sys_args, l_check_unparse_parse = False):
+        annots = [ syntax_pml.parse_annotations
+                     (self.parse_commands,
+                      self.hash_cmd_generic,
+                      (arg_ty, arg_cts),
+                      pos_file,
+                      os.path.dirname (os.path.abspath arg_cts) if arg_ty == arg_pml_file () or arg_ty == arg_annotation_file () else self.cwd)
+                  for (pos_file, (arg_ty, arg_cts)) in mapi (args -> args, sys_args) ]
+        dict_top_elem = {}
+        
+        for (node_file, (node, node_line)) in programs:
+            if isinstance (node, ast.Proctype) or type node is ast.InlineDef or type node is ast.LTL:
+                dict_top_elem[node.name] = (node_file, node_line)
+
+        def check_binding (binding):
+            dic = find_annot ((annots, dict_top_elem), binding)
+            return (pos -> pos in dic)
+
+        binding_no_printf = 'no_printf'
+        check_no_printf = check_binding binding_no_printf
+        binding_no_atomic = 'no_atomic'
+        check_no_atomic = check_binding binding_no_atomic
+        binding_print_first = 'print_first'
+        check_print_first = check_binding binding_print_first
+        binding_disable_negation = 'disable_negation'
+        check_disable_negation = check_binding binding_disable_negation
+        
+        l_refine_uniform_strip = find_annot_bool ((annots, dict_top_elem), 'refine_uniform_strip')
+        def strip (s):
+            if l_refine_uniform_strip:
+                l = s.split ('\n')
+                while l and l[0].strip () == '':
+                    l = l[1:]
+                return '\n'.join (l).rstrip ()
+            else:
+                return s
+
+        dict_refine_uniform0 = syntax_pml.parse_annotations_directives (self.parse_directive, strip, find_annot0 ((annots, dict_top_elem), binding_refine_uniform))
+        dict_refine_uniform = { pos2 : cmds |> map $ (pos_cmds -> pos_cmds[1]) |> flatten |> list
+                               for pos2, cmds in dict_refine_uniform0.items () }
+        l_refine_uniform_force = find_annot_bool ((annots, dict_top_elem), 'refine_uniform_force')
+        l_check_unparse_parse = l_check_unparse_parse or find_annot_bool ((annots, dict_top_elem), 'check_unparse_parse')
+        l_export_input_yaml = find_annot_list2 ((annots, dict_top_elem), 'export_input_yaml')
+
+        if l_check_unparse_parse or l_export_input_yaml:
+            def group_max (dict_refine_uniform0):
+                def group (f_next, xs):
+                    for key, xs in groupby (xs, key = (val -> val[0][0])):
+                        yield (key, list <| f_next (map ((val -> (val[0][1:], val[1])), xs)))
+                return list (sorted (dict_refine_uniform0.values ()
+                                     |> flatten
+                                     |> map $ (pos4_lines -> (pos4_lines[0][0], (pos4_lines[0][1], pos4_lines[1]))),
+                                     key = (pos_lines -> pos_lines[0]))
+                             |> group $ (group $ (map $ (val -> (val[0][0], val[1])))))
+            dict_refine_uniform0 = group_max dict_refine_uniform0
+            if l_check_unparse_parse:
+                def check_source (arg_cpt, subst_lines, lines):
+                    def check_annotation (*args):
+                        args0 = ((annots -> (strip, find_annot0 ((annots, dict_top_elem), binding_refine_uniform))), group_max) + args
+                        syntax_ml.check_annotation <*| args0
+                        syntax_yaml.check_annotation <*| args0
+                        yield
+                    consume <| syntax_pml.map_source (check_annotation, self.parse_commands, False, subst_lines, lines)
+                iter_files (check_source, dict_refine_uniform0, sys_args)
+        else:
+            dict_refine_uniform0 = None
+
+        procs_args = {}
+        for (node_file, (node, node_line)) in programs:
+            type_inst_proctype = isinstance (node, ast.Proctype)
+            type_is_ltl = type node is ast.LTL
+            if type_inst_proctype or type node is ast.InlineDef or type_is_ltl:
+                node_pos = (node_file, node_line)
+
+                if check_no_printf node_pos:
+                    del dict_top_elem[node.name]
+                elif not type_is_ltl:
+                    node.disable_negation = check_disable_negation node_pos
+                    node_in_dict_refine = node_pos in dict_refine_uniform
+                    if node_in_dict_refine or l_refine_uniform_force:
+                        node_args = {}
+                        def add_dic (node_args, name, ty_arit):
+                            if name in node_args:
+                                input_continue (f'Duplicated parameters: {name}')
+                            node_args[name] = ty_arit
+                            return node_args
+                            
+                        if type_inst_proctype:
+                            for arg in node.args if node.args else []:
+                                node_args = add_dic (node_args, arg[0].name, (arg[0].type, None))
+                        else:
+                            for name in node.decl if node.decl else []:
+                                node_args = add_dic (node_args, name, (None, None))
+
+                        node_args0 = { name : False for name in node_args.keys () }
+
+                        if node_in_dict_refine:
+                            for src in dict_refine_uniform[node_pos]:
+                                match src_directive (_, ty_arit, name) in src:
+                                    if name in node_args:
+                                        def redef_direc (msg):
+                                            if name not in node_args0 or node_args0[name]:
+                                                input_continue ('Redefinition of directive' + msg)
+                                        msg0 = f': Overwriting the old type ({node_args[name]}) for {name} with {ty_arit}'
+                                        if node_args[name] != (None, None):
+                                            if ty_arit != (None, None) and node_args[name] != ty_arit:
+                                                input_continue ('Type error' + msg0)
+                                                overwrite = True
+                                            else:
+                                                redef_direc ('')
+                                                overwrite = False
+                                        elif ty_arit != (None, None):
+                                            redef_direc (msg0)
+                                            overwrite = True
+                                        else:
+                                            redef_direc ('')
+                                            overwrite = False
+                                    else:
+                                        overwrite = True
+                                    node_args0[name] = True
+                                    if overwrite:
+                                        node_args[name] = ty_arit
+                        
+                        if node_pos in procs_args:
+                            input_continue (f'Duplicated positions: {node_pos}')
+                        procs_args[node_pos] = self.insert_printf_node (node, node_args.items (), node_pos, check_no_atomic node_pos, check_print_first node_pos)
+        return (programs, (annots, dict_top_elem), procs_args, dict_refine_uniform0, dict_refine_uniform, l_refine_uniform_force, l_check_unparse_parse, l_export_input_yaml)
+
+    ##
+    #
+
+    def write_promela (self, (promelas, annots, procs_args, dict_refine_uniform0, dict_refine_uniform, l_refine_uniform_force, l_check_unparse_parse, l_export_input_yaml)):
+        def exec_input (print_stdout, print_stderr, binding, args):
+            for cmd in find_annot_list1 (annots, binding):
+                cmd = list cmd
+                if cmd:
+                    yield subprocess_exec (print_stdout, print_stderr, cmd[0], cmd[1:] + args)
+                else:
+                    input_continue (f'Empty command: {binding}')
+        
+        promelas_no_ltl_str, promelas_no_ltl, promelas_ltl = partition_pml_ast ((promela -> type promela is ast.LTL), promelas)
+        l_refine_uniform_log = find_annot_bool (annots, 'refine_uniform_log')
+        l_enclose = find_annot_list1 (annots, 'enclose') |> map $ (args -> (args[0], args[1])) |> list
+        l_enclose_uniform = find_annot_list1 (annots, 'enclose_uniform') |> map $ (args -> (args[0], args[1])) |> list
+        l_export_dir = find_annot_list (annots, 'export_dir') |> flatten |> map $ (args -> args[0] + '/' + args[1]) |> list
+        l_export_pml = find_annot_list2 (annots, 'export_pml')
+        l_export_trail = find_annot_list2 (annots, 'export_trail')
+        l_export_code = find_annot_list2 (annots, 'export_code')
+        l_refine_generic = find_annot_list2 (annots, 'refine_generic')
+        dic_refine_generic = parse_refine_generic l_refine_generic
+        l_export_trail_num = find_annot_list2 (annots, 'export_trail_num')
+
+        if l_export_dir:
+            def copy_cat0 (ltl_dirname):
+                def copy_cat (src, dir1, dst):
+                    src.close ()
+                    for dir0 in l_export_dir:
+                        dir0 = dir0 + '/' + ltl_dirname + ('/' + '/'.join (dir1) if dir1 else '')
+                        mkdir dir0
+                        copy_i (src.name, dir0 + '/' + ''.join (dst))
+                return copy_cat
+        else:
+            def copy_cat0 (ltl_dirname):
+                def copy_cat (src, dir1, dst):
+                    src.close ()
+                    subprocess_exec (True, True, 'cat', [src.name])
+                return copy_cat
+
+        if l_export_input_yaml:
+            l_export_input_only_content = find_annot_bool (annots, 'export_input_only_content')
+            for dir_yaml in l_export_input_yaml:
+                copy_cat = copy_cat0 (dir_yaml)
+                def write_source (arg_cpt, subst_lines, lines):
+                    def write_unlink0 (fic):
+                        for toks in syntax_pml.map_source (syntax_yaml.unparse_annotation, self.parse_commands, l_export_input_only_content, subst_lines, lines):
+                            fic.write (toks.encode ())
+                        copy_cat (fic, [], [export_yml_ext ('', str arg_cpt)])
+                    write_unlink (write_unlink0)
+                iter_files (write_source, dict_refine_uniform0, self.argv)
+
+        pml_name = 'pan.pml'
+        if l_export_trail_num:
+            add_num = (num, l) -> list <| map (fic -> fic + num, l)
+            trails = list <| map ((num -> (pml_name + num + '.trail', add_num (num, l_export_trail), add_num (num, l_export_code))), l_export_trail_num)
+            model_checker_exec = 'model_checker_exec_all'
+        else:
+            trails = [(pml_name + '.trail', l_export_trail, l_export_code)]
+            model_checker_exec = 'model_checker_exec_one'
+
+        with tempfile.TemporaryDirectory () as dir_test:
+            def write_promela0 (ltl_cpt, write_promela_fic, get_dirname, ltl_pos, ltl_name):
+                def write_unlink0 (ltl_dirname0, fic_pml):
+                    ltl_dirname = get_dirname ltl_dirname0
+                    copy_cat = copy_cat0 ltl_dirname
+                    def copy_cat_or_close (src, dir1, dst):
+                        if dst:
+                            copy_cat (src, dir1, dst)
+                        else:
+                            src.close ()
+                    dir_test_ltl = dir_test + '/' + ltl_dirname
+                    mkdir dir_test_ltl
+                    write_promela_fic fic_pml
+                    copy_cat_or_close (fic_pml, [], l_export_pml)
+                    os.symlink (fic_pml.name, dir_test_ltl + '/' + pml_name)
+                    os.chdir dir_test_ltl
+                    
+                    consume <| exec_input (True, True, 'model_checker_verifier', [pml_name])
+                    consume <| exec_input (True, True, 'model_checker_compile', [])
+                    pattern_vectorsz = 'VECTORSZ'
+                    warn_lines = [ line for lines in exec_input (True, True, model_checker_exec, []) for line in lines.splitlines () if pattern_vectorsz in line ]
+                    if warn_lines:
+                        for line in warn_lines:
+                            print line
+                        input_continue_warn ('A trail file has been generated, but it might be not yet exploitable. To obtain a possibly different trail file with more information, one can try increase "'+ pattern_vectorsz +'" (using e.g. "gcc -D'+ pattern_vectorsz +'=4096" or higher values).')
+                    
+                    for trail_name, l_export_trail, l_export_code in trails:
+                        if os.path.exists trail_name:
+                            trail = self.unparse_annotation_cmd ('add_cmd', [self.hash_cmd_uniform]) + '\n' + ''.join (exec_input (False, True, 'model_checker_trail', [trail_name, pml_name]))
+                            if l_export_trail:
+                                def write_unlink01 (fic_trail):
+                                    fic_trail.write (trail.encode ())
+                                    copy_cat (fic_trail, [], l_export_trail)
+                                write_unlink write_unlink01
+
+                            l_refine_uniform = dict_refine_uniform or l_refine_uniform_force
+                            if l_refine_uniform or l_refine_generic:
+                                _, annots_trail, _, _, _, _, _, _ = self.init_top_elems ([], [(arg_pml (), trail)], l_check_unparse_parse)
+                                def write_c (refine_line, l_refine_other, dir0):
+                                    def write_unlink00 (fic_c):
+                                        def write_nl (lines):
+                                            for line in lines:
+                                                if line:
+                                                    fic_c.write (line.encode ())
+                                                fic_c.write ('\n'.encode ())
+                                        def write_nl_dic (name, dic, expand_directive):
+                                            if l_refine_uniform_log:
+                                                write_nl ([self.unparse_annotation_cmd ('promela_term', [name])])
+                                            write_nl (syntax_pml.unparse_source_directive (expand_directive, dic))
+                                            if l_refine_uniform_log:
+                                                write_nl ([''])
+                                        write_nl (map (x -> x[0], l_enclose))
+                                        refine_line (find_annot_list1 $ annots_trail, write_nl, write_nl_dic)
+                                        write_nl (map (x -> x[1], reversed l_enclose))
+                                        copy_cat_or_close (fic_c, [dir0] if l_refine_other else [], l_export_code)
+                                    write_unlink write_unlink00
+
+                                if l_refine_uniform:
+                                    def refine_line (find_annot_l, write_nl, write_nl_dic):
+                                        write_nl (map (x -> x[0], l_enclose_uniform))
+                                        for spin_atomic in find_annot_l self.hash_cmd_uniform:
+                                            pos_proc = (int (spin_atomic[0]), int (spin_atomic[1]))
+                                            c_print = dict_refine_uniform[pos_proc] if pos_proc in dict_refine_uniform else []
+                                            proc_name, proc_args = procs_args[pos_proc]
+                                            spin_atomic = spin_atomic[2:]
+                                            dict_args = {}
+                                            for (ty, alias_pml) in proc_args:
+                                                dict_args[alias_pml] = (ty[0], ty[1], spin_atomic[: ty[1] ])
+                                                spin_atomic = spin_atomic[ ty[1] :]
+                                            # note: from this point, spin_atomic should have been fully consumed
+                                            def expand_directive (cvar_pvar):
+                                                # note: cvar_pvar[1] is in dict_args
+                                                ty_val = dict_args[cvar_pvar[1]]
+                                                if ty_val[0] == None:
+                                                    input_continue (f'Not serializable type: printing the content of {cvar_pvar[1]} with a default value')
+                                                pos = 'pos'
+                                                concat_str = '_'
+                                                def def_name (nb):
+                                                    return '{}{}{}'.format (cvar_pvar[0], concat_str, nb)
+                                                def define_undef (pat, var, *args):
+                                                    return (('#define ' + pat).format (var, *args), '#undef ' + var)
+                                                
+                                                if ty_val[1] == 1:
+                                                    lines = [define_undef ('{} {}', cvar_pvar[0], ty_val[2][0])]
+                                                else:
+                                                    lines = [define_undef ('{} ""', def_name 0)] + list (map ((ind_val -> define_undef ('{} {} " {}"', def_name (ind_val[0] + 1), def_name (ind_val[0]), ind_val[1])), zip (range (ty_val[1]), ty_val[2]))) + [define_undef ('{}({}) {}{} ## {}', cvar_pvar[0], pos, cvar_pvar[0], concat_str, pos)]
+                                                lines = list (zip (* lines))
+                                                return (list (lines[0]), list (lines[1]))
+                                            write_nl_dic (proc_name, c_print, expand_directive)
+                                        if ltl_pos in dict_refine_uniform:
+                                            write_nl_dic (ltl_name, dict_refine_uniform[ltl_pos], (_ -> ([], [])))
+                                        write_nl (map (x -> x[1], reversed l_enclose_uniform))
+                                    write_c (refine_line, l_refine_generic, 'uniform')
+
+                                if l_refine_generic:
+                                    def refine_line (find_annot_l, write_nl, write_nl_dic):
+                                        cmd = refine_command.command dic_refine_generic
+                                        for spin_atomic in find_annot_l self.hash_cmd_generic:
+                                            cmd.refineSPINLine_main (list spin_atomic)
+                                        write_nl (''.join (cmd.test_body ()).splitlines ()) # LTL support for the 'generic' style is not yet supported. The writing would have to be performed inside this instruction.
+                                    write_c (refine_line, l_refine_uniform, 'generic')
+                        else:
+                            input_continue (f'No trail file for {fic_pml.name} ({dir_test_ltl}/{pml_name})')
+                write_unlink (write_unlink0 $ (str ltl_cpt))
+                return ltl_cpt + 1
+
+            ltl_cpt = 0
+            for ltl_pos_file, (ltl, ltl_pos_line) in promelas_ltl:
+                def write_promela_fic (fic_pml):
+                    fic_pml.write promelas_no_ltl_str
+                    fic_pml.write (ast.LTL (ast.Unary ('!', ltl.formula), name = ltl.name).__str__ ().encode ())
+                ltl_cpt = write_promela0 (ltl_cpt, write_promela_fic, (ltl_dirname0 -> 'ltl' + '_' + (ltl.name if ltl.name else ltl_dirname0)), (ltl_pos_file, ltl_pos_line), ltl.name if ltl.name else ltl.formula.__str__ ())
+
+            promelas_ass = get_forest_ass (ast.Program (map ((promela -> (promela[1][0], (promela[0], promela[1][1]))), promelas_no_ltl)))
+            dic_dirname = {}
+            for ((ltl_name, _), _), _ in promelas_ass:
+                dic_dirname[ltl_name] = dic_dirname[ltl_name] + 1 if ltl_name in dic_dirname else 0
+            for ((ltl_name, ltl), (ltl_pos_file, _)), promelas_ass0 in promelas_ass:
+                def write_promela_fic (fic_pml):
+                    fic_pml.write (promelas_ass0.__str__ ().encode ())
+                ltl_cpt = write_promela0 (ltl_cpt, write_promela_fic, (ltl_dirname0 -> 'assert' + '_' + ('' if dic_dirname[ltl_name] == 0 else ltl_dirname0 + '_') + ltl_name), (ltl_pos_file, ltl.pos), ltl.expr.__str__ ())
+            os.chdir self.cwd
+
+def main (*args):
+    st = read_eval_print (*args)
+    st.write_promela (st.init_top_elems (list (fold_prog st.argv), st.argv))

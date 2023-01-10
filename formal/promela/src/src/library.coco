@@ -1,0 +1,94 @@
+ ##############################################################################
+ # Library
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+import fileinput
+import ply.yacc
+import sys
+
+#
+
+def input0 ():
+    input ('Continue? (ENTER/CTRL+C): ')
+
+def input_continue (msg):
+    print msg
+    input0 ()
+
+input_continue_logger = ply.yacc.PlyLogger (sys.stderr)
+
+def input_continue_warn (msg):
+    input_continue_logger.warning (msg)
+    input0 ()
+
+def input_continue_err (msg):
+    input_continue_logger.error (msg)
+    input0 ()
+
+#
+
+def isinst (ty, f_get, f_check, toks):
+    return isinstance (toks, ty) and all ([ f_check tok for tok in f_get toks ])
+def isinst_list (f_check, toks):
+    return isinst (list, (toks -> toks), f_check, toks)
+def isinst_dict (check1_check2, toks):
+    return isinst (dict, (toks -> toks.items ()), (toks -> check1_check2[0] (toks[0]) and check1_check2[1] (toks[1])), toks)
+def isinst_str (toks):
+    return isinstance (toks, str)
+
+#
+
+def mapi (f, l):
+    n = 0
+    for x in l:
+        yield f ((n, x))
+        n += 1
+
+def flatten (l): return (x for xs in l for x in xs)
+
+def update_dic (dic, pos, cmds):
+    dic[pos] = dic[pos] + cmds if pos in dic else cmds
+
+def fileinput_input (path):
+    try:
+        with fileinput.input path as lines:
+            for line in lines:
+                yield line
+    except FileNotFoundError:
+        input_continue (f'File not found: {path}')
+    except IsADirectoryError:
+        input_continue (f'Is a directory: {path}')
+
+fileinput_input0 = ''.join <.. fileinput_input
