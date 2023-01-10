@@ -1,0 +1,154 @@
+ # SPDX-License-Identifier: BSD-2-Clause 
+ 
+ ##############################################################################
+ # Library Test
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+from src.library import *
+from src import testgen
+
+#
+
+import os
+import random
+
+#
+
+cwd = os.getcwd () + '/'
+cons_cwd = path -> cwd + path
+app_cwd = f -> f cwd
+
+models = '../../../models/'
+models_chains = models + 'chains/src/'
+models_events = models + 'events/src/'
+
+model_checker = '../examples/model_checker/spin.pml'
+
+not_exist_command = 'not_exist_command_' + str (random.random ())
+
+name_b = check_unparse_parse -> '1' if check_unparse_parse else '0'
+name_ml = (fic, check_unparse_parse) -> f'pytest_{name_b (check_unparse_parse)}_ml_{fic}.auto_output'
+name_yaml = (fic, check_unparse_parse) -> f'pytest_{name_b (check_unparse_parse)}_yaml_{fic}.auto_output'
+
+def gen_main (argv, check_unparse_parse, input_output_yaml):
+    testgen.main ( 0
+                 , argv + ([ '--promela', r' /*@ check_unparse_parse'
+                                          r' */' ]
+                           if check_unparse_parse else [])
+                 , input_output_yaml )
+
+def main_ml_promela0 (model_checker, refine, check_unparse_parse, dir0, fic, fic_out):
+    cfg = fileinput_input0 (cons_cwd (dir0 + 'testsuites.cfg'))
+    assert (r'export_dir \<open>_\<close>' in cfg)
+    assert not os.path.exists ('_')
+    gen_main ( list (map (app_cwd, [ model_checker
+                                   , cwd -> cwd + dir0 + fic + '.pml'
+                                   , refine dir0 fic ]))
+               + [ '--promela', cfg ]
+             , check_unparse_parse
+             , False)
+    os.rename ('_', name_ml (fic_out, check_unparse_parse))
+
+main_ml_promela_arg_model_checker = cwd -> cwd + model_checker
+main_ml_promela_arg_refine = (dir0, fic) -> cwd -> cwd + dir0 + fic + '.rfn'
+main_ml_promela = (check_unparse_parse, dir0, fic) -> main_ml_promela0 (main_ml_promela_arg_model_checker, main_ml_promela_arg_refine, check_unparse_parse, dir0, fic, fic)
+
+def symlink (dir0, dir1, fic):
+    os.symlink (dir0 + fic, dir1 + fic)
+    
+def main_yaml_promela (check_unparse_parse, dir0, fic):
+    rfn = fileinput_input0 (cons_cwd (dir0 + fic + '.rfn'))
+    assert r'export_input_yaml \<open>_\<close>' in rfn
+    assert r'export_input_only_content' in rfn
+    dir1 = name_ml (fic, check_unparse_parse) + '/_/'
+    assert all <| map (os.path.exists <.. testgen.export_yml_ext $ dir1, ['', '0', '1', '2', '3'])
+    if r'enclose_file \<open>enclose_1_head.c\<close>' in rfn and r'\<open>enclose_2_foot.c\<close>' in rfn:
+        symlink (cons_cwd dir0, dir1, 'enclose_1_head.c')
+        symlink (cons_cwd dir0, dir1, 'enclose_2_foot.c')
+    else:
+        assert r'enclose_file \<open>enclose_1_head.yml\<close>' in rfn and r'\<open>enclose_2_foot.yml\<close>' in rfn
+        symlink (cons_cwd dir0, dir1, 'enclose_1_head.yml')
+        symlink (cons_cwd dir0, dir1, 'enclose_2_foot.yml')
+    if r'refine_generic_file \<open>../examples/only_generic/chains-rfn.yml\<close>' in rfn:
+        symlink (cons_cwd (dir0 + '../'), dir1 + '../', 'examples')
+    else:
+        assert r'refine_generic_file' not in rfn # not yet implemented: regular expression to match the file name
+    if r'enclose_uniform_file \<open>enclose_init_1_head.c\<close>' in rfn and r'\<open>enclose_init_2_foot.c\<close>' in rfn:
+        symlink (cons_cwd dir0, dir1, 'enclose_init_1_head.c')
+        symlink (cons_cwd dir0, dir1, 'enclose_init_2_foot.c')
+    else:
+        assert r'enclose_uniform_file' not in rfn # not yet implemented: regular expression to match the file name
+    gen_main ( [ '--annotation_file', cons_cwd (testgen.export_yml_ext (dir1, '0'))
+               , cons_cwd (dir0 + fic + '.pml')
+               , '--annotation_file', cons_cwd (testgen.export_yml_ext (dir1, '2'))
+               , '--annotation', fileinput_input0 (cons_cwd (testgen.export_yml_ext (dir1, '3'))) ]
+             , check_unparse_parse
+             , True)
+    os.rename ('_', name_yaml (fic, check_unparse_parse))
+
+def main_promela0 (check_unparse_parse, dir0, fic):
+    main_ml_promela (check_unparse_parse, dir0, fic)
+    main_yaml_promela (check_unparse_parse, dir0, fic)
+
+def main_promela (dir0, fic):
+    main_promela0 (False, dir0, fic)
+    main_promela0 (True, dir0, fic)
+
+def main_promela_events (fic):
+    main_promela (models_events, fic)
+
+def main_ram (arg1, arg2):
+    gen_main ( list (map (cons_cwd, arg1))
+               + arg2
+             , False
+             , False)
+
+def main0 (arg):
+    main_ram ([model_checker], ['-p' + arg])
+
+def main1 (arg):
+    main_ram ([], [arg])
+
+def main2 (arg):
+    main1 ('-p' + arg)
+
+def main3 (arg):
+    main0 (arg + r' ltl { true }')
+
+#
+
+def test_anonymous_not_exec ():
+    # this empty test is only present for coverage reasons (it can then be used as an 'anonymous' function, in situations where the function is not expected to be executed)
+    return
