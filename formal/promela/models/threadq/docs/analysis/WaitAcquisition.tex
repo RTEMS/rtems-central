@@ -1,0 +1,135 @@
+\section{Wait Acquisition}\label{sec:waitacq}
+
+Here we unfold function calls in \verb"_Thread_Wait_acquire_critical"
+to expose its behaviour.
+
+For now, here is the given code:
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Thread_queue_Queue *queue;
+
+  _Thread_Wait_acquire_default_critical(
+    the_thread,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  queue = the_thread->Wait.queue;
+  queue_context->Lock_context.Wait.queue = queue;
+
+  if ( queue != NULL ) {
+    _Thread_queue_Gate_add(
+      &the_thread->Wait.Lock.Pending_requests,
+      &queue_context->Lock_context.Wait.Gate
+    );
+    _Thread_Wait_release_default_critical(
+      the_thread,
+      &queue_context->Lock_context.Lock_context
+    );
+    _Thread_Wait_acquire_queue_critical( queue, &queue_context->Lock_context );
+
+    if ( queue_context->Lock_context.Wait.queue == NULL ) {
+      _Thread_Wait_release_queue_critical(
+        queue,
+        &queue_context->Lock_context
+      );
+      _Thread_Wait_acquire_default_critical(
+        the_thread,
+        &queue_context->Lock_context.Lock_context
+      );
+      _Thread_Wait_remove_request_locked(
+        the_thread,
+        &queue_context->Lock_context
+      );
+      _Assert( the_thread->Wait.queue == NULL );
+    }
+  }
+}
+
+\end{nicec}
+
+\newpage
+\subsection{Semantics of TWadc}
+
+\verb"_Thread_Wait_acquire_default_critical"
+
+Unfolded:
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  // _ISR_Get_level() != 0
+  {
+    (void) lock_context;
+    {
+      unsigned int my_ticket;
+      unsigned int now_serving;
+
+      my_ticket =
+        _Atomic_Fetch_add_uint(
+           & ( & ( & ( & the_thread->Wait.Lock.Default )->Lock )->Ticket_lock )->next_ticket,
+           1U,
+           ATOMIC_ORDER_RELAXED
+        );
+      do {
+        now_serving =
+          _Atomic_Load_uint(
+            &(&(&( &the_thread->Wait.Lock.Default )->Lock)->Ticket_lock)->now_serving,
+            ATOMIC_ORDER_ACQUIRE
+          );
+      } while ( now_serving != my_ticket );
+    }
+
+  }
+}
+\end{nicec}
+We note that \verb"Lock" and \verb"Ticket_lock" are the sole field
+in their given struct, and so can be considered the pointer equivalent
+of a no-op.
+This means that (given the obvious shorthand):
+\begin{eqnarray*}
+   \& p \to Lck  &=& p
+\\ \& q \to Tlck &=& q
+\end{eqnarray*}
+
+So we can simplify the long pointer expressions above as follows:
+\begin{eqnarray*}
+   &      & \& (\& (\&  (\&t \to W.L.D) \to Lck) \to Tlck) \to nt
+\\ &\equiv& \& (\& (\&t \to W.L.D) \to Tlck) \to nt
+\\ &\equiv& \& (\&t \to W.L.D) \to nt
+\\ &\equiv& \& (\&((*t).W.L.D)) \to nt
+\\ &\equiv& \& ((*(\&((*t).W.L.D))).nt)
+\\ &\equiv& \& ( (*t).W.L.D.nt )
+\\ &\equiv& \& t \to W.L.D.nt
+\end{eqnarray*}
+
+We get the following code:
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
+  Thread_Control   *the_thread,
+)
+{
+  // _ISR_Get_level() != 0
+  unsigned int my_ticket;
+  unsigned int now_serving;
+
+  my_ticket =
+    _Atomic_Fetch_add_uint(
+       & the_thread->Wait.Lock.Default.next_ticket, // Lock.Ticket_lock
+       1U,
+       ATOMIC_ORDER_RELAXED
+    );
+  do {
+    now_serving =
+      _Atomic_Load_uint(
+        & the_thread->Wait.Lock.Default.now_serving, // Lock.Ticket_lock
+        ATOMIC_ORDER_ACQUIRE
+      );
+  } while ( now_serving != my_ticket );
+}
+\end{nicec}

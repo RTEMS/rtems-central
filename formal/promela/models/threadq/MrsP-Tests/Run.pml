@@ -1,0 +1,440 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/******************************************************************************
+ * Run.pml
+ *
+ * Copyright (C) 2021 Trinity College Dublin (www.tcd.ie)
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *
+ *     * Redistributions in binary form must reproduce the above
+ *       copyright notice, this list of conditions and the following
+ *       disclaimer in the documentation and/or other materials provided
+ *       with the distribution.
+ *
+ *     * Neither the name of the copyright holders nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ******************************************************************************/
+
+/******************************************************************************
+ * We provide multiple copies of the same process
+ *
+ * Each process will obtain its semaphores in a standard order,
+ * and then release them in the opposite order
+ ******************************************************************************/
+
+/******************************************************************************
+ * Waiting for a semaphores is done using a FIFO queue. We have a known upper
+ * bound for the queue size, being the total number of tasks present minus 1.
+ * (The minus 1 is for the task that has obtained the semaphore)
+ * We will go with an array one size larger, so that head/tail queue pointer
+ * equality will denote an empty queue.
+ ******************************************************************************/
+#define FIFO_SIZE MAX_TASKS
+
+typedef FIFO {
+  byte buf[FIFO_SIZE];
+  byte head; // points to next free slot, just beyond last item
+  byte tail; // points at first item
+  // head == tail means empty
+}
+
+#define FIFO_EMPTY( fifo ) ( fifo.head == fifo.tail )
+
+#define FIFO_FULL( fifo )  ( ( fifo.head + 1 ) == fifo.tail )
+
+inline enqueueItem( item, fifo ) {
+  atomic{
+    if
+    ::  FIFO_FULL( fifo ) ->
+        printf("@@@ %d LOG Semaphore FIFO queue is full\n", _pid);
+        assert(false);
+    ::  else ->
+        fifo.buf[fifo.head] = item;
+        fifo.head = (fifo.head+1) % FIFO_SIZE;
+    fi
+  }
+}
+
+inline dequeueItem( fifo, item ) {
+  atomic{
+    if
+    ::  FIFO_EMPTY( fifo ) ->
+        printf("@@@ %d LOG Semaphore FIFO queue is empty\n", _pid);
+        assert(false);
+    ::  else ->
+        item = fifo.buf[fifo.tail];
+        fifo.tail = (fifo.tail+1) % FIFO_SIZE;
+    fi
+  }
+}
+
+byte q;
+
+inline showQueue( fifo ) {
+
+  printf( "Queue, head=%d, tail=%d, empty?%d, full?%d\n",
+          fifo.head, fifo.tail, FIFO_EMPTY( fifo ), FIFO_FULL( fifo )
+        );
+  printf("Items:");
+  q = fifo.tail;
+  do
+  ::  q == fifo.head -> break;
+  ::  else ->
+      printf(" %d",fifo.buf[q]);
+      q = ( q + 1 ) % FIFO_SIZE ;
+  od
+  printf( " .\n" );
+}
+
+/******************************************************************************
+ * A task can only run when it is ready, and its priority is highest of the
+ * ready tasks on its core
+ *
+ * We have the following state machine:
+ *
+ *  All priority comparisons are restricted to tasks on the same core.
+ *
+ *  NotInUse    - task not yet started, or terminated
+ *    START -> Ready
+ *  Ready    - task ready to run, but not yet scheduled
+ *    DISPATCH -> Running  - when prio >= current Running task prio
+ *  Running    - task is scheduled, and prio > current Ready task prios
+ *    PREEMPT   -> Ready     - a higher priority task has become Ready
+ *    BLOCK     -> Blocked   - task blocks on semaphore obtain
+ *    TERMINATE -> NotInUse  - task signals that it is done.
+ *  Blocked    - task is blocked waiting to obtain a semaphore
+ *    UNBLOCK -> Ready  - task has obtained a semaphore
+ *
+ *  Transitions BLOCK and TERMINATE are generated by the Running task
+ *
+ *  Transition UNBLOCK is caused when another Running task releases a semaphore.
+ *
+ *  Transitions PREEMPT and DISPATCH occurs as a result of some other Running
+ *  task performing a START or UNBLOCK
+ *
+ * While all priority comparisons are restricted to one core, an UNBLOCK may
+ * be the result of a semaphore being released on another core.
+ *
+ * The current highest ready priority needs to be re-calculated whenever
+ * one of the following transitions occur: START, BLOCK, UNBLOCK, TERMINATE
+ * (see updateCoreReadyPriority).
+ ******************************************************************************/
+mtype = { NotInUse, Ready, Running, Blocked }
+mtype runState[MAX_TASKS];
+
+byte coreHiPrio[MAX_CORES];
+byte tix;
+
+#define ON_THIS_CORE(tno, cno) (taskConfig[tno].taskCore == cno)
+
+// This only needs to be done w.r.t one given core at a time
+inline updateCoreReadyPriority( coreno ) {
+  atomic{
+    tix = 0;
+    coreHiPrio[coreno] = 0;
+    do
+    ::  tix == task_count -> break;
+    ::  else ->
+        if
+        ::  ( ON_THIS_CORE( tix, coreno) && runState[tix] == Ready ) ->
+            if
+            ::  taskConfig[tix].taskPrio > coreHiPrio[coreno] ->
+                coreHiPrio[coreno] = taskConfig[tix].taskPrio
+            ::  else
+            fi
+        :: else
+        fi
+        tix++;
+    od
+    tix = 0;
+  }
+}
+
+// Called when we have up to date core ready priorities.
+inline updateTaskRRState( coreno, taskno ) {
+  atomic {
+    if
+    ::  runState[taskno] == Ready && taskConfig[taskno].taskPrio == coreHiPrio[coreno] ->
+        runState[taskno] = Running; // DISPATCH
+        printf("@@@ %d LOG Task %d prio:%d cpu:%d -DISPATCH-> %e\n", _pid,
+               taskno, runPrio[taskno], coreno, runState[taskno]);
+        printf("@@@ %d STATE %d %e\n", _pid, taskno, runState[taskno]);
+    ::  runState[taskno] == Running && taskConfig[taskno].taskPrio < coreHiPrio[coreno] ->
+        runState[taskno] = Ready; // PREEMPT
+        printf("@@@ %d LOG Task %d prio:%d cpu:%d -PREEMPT-> %e\n", _pid,
+               taskno, runPrio[taskno], coreno, runState[taskno]);
+        printf("@@@ %d STATE %d %e\n", _pid, taskno, runState[taskno]);
+    // TERMINATE, BLOCK and UNBLOCK performed elsewhere by  code
+    ::  else // no change
+    fi
+  }
+}
+
+inline contextSwitch( coreno ) {
+  atomic{
+    updateCoreReadyPriority( coreno ) ;
+    // printf("Core %d priority is %d\n", coreno, coreHiPrio[coreno]);
+    tix = 0;
+    do
+    ::  tix == task_count -> break;
+    ::  else ->
+        if
+        ::  taskConfig[tix].taskCore == coreno ->
+            // printf("Updating RR State for task %d on core %d\n",tix[coreno],coreno);
+            updateTaskRRState( coreno, tix );
+            // printf("Context Switch on core %d for task %d?\n",coreno,tix[coreno]);
+        ::  else
+        fi
+        tix++;
+    od
+    tix = 0;
+  }
+}
+
+/******************************************************************************
+ * A semaphore for a resource has an availability flag and a task queue
+ * and a note of its ownership
+ ******************************************************************************/
+typedef Semaphore {
+  bool inuse;
+  byte owner;
+  FIFO q;
+}
+Semaphore semaphores[MAX_RES];
+
+/******************************************************************************
+ * When obtaining a semaphore, a task's priority is raised to that of the
+ * semaphore. When that semaphore is released, the task priority is restored to
+ * its previous level.
+ *
+ * We model these two changes as a single action that sets a task's priority
+ * to the correct value.
+ *
+ * We say that a task is "using" a semaphore if it is either its owner,
+ * or it is Blocked, waiting to obtain it (see TASK_USING_SEMA below).
+ *
+ * The relevant semaphore priority is that on the same core as the task (see
+ * SEMA_PRIO_FOR_TASK below).
+ *
+ * A task's running priority should always be the maximum of its baseline
+ * priority and that of any semaphore it is using.
+ ******************************************************************************/
+byte runPrio[MAX_TASKS]; // current priority of task
+byte waitingFor[MAX_TASKS]; // when Blocked holds number of sema being obtained
+
+#define TASK_USING_SEMA( tno, sno ) \
+  ( ( semaphores[sno].inuse && semaphores[sno].owner == tno ) \
+   || \
+   ( runState[tno] == Blocked && waitingFor[tno] == sno ) )
+
+#define SEMA_PRIO_FOR_TASK( sno, tno) \
+ ( resSetup[sno].resPrio[taskConfig[tno].taskCore] )
+
+inline setTaskPriority( tno ) {
+  atomic{
+    printf("@@@ %d CALL setTaskPriority %d %d", _pid, tno, runPrio[tno] );
+    runPrio[tno] = taskConfig[tno].taskPrio;
+    resIx = 0;
+    do
+    :: resIx == res_count -> break;
+    :: else ->
+       if
+       ::  TASK_USING_SEMA(tno,resIx) &&
+              ( SEMA_PRIO_FOR_TASK(resIx,tno) > runPrio[tno] )  ->
+           runPrio[tno] = SEMA_PRIO_FOR_TASK(resIx,tno);
+       ::  else
+       fi
+       resIx++;
+    od
+    printf(" %d\n", runPrio[tno] );
+  }
+}
+
+/******************************************************************************
+ * An obtain action raises a task priority to that of the local semaphore
+ * ceiling regardless of whether it immediately obtains it or ends up waiting
+ ******************************************************************************/
+inline obtain( tno, rno ) {
+  if
+  ::  rno >= res_count || !taskConfig[tno].taskRes[rno] ->
+      printf("No resource %d for task %d to obtain\n", rno, tno );
+      assert(false);
+  ::  else ->
+      atomic{
+        printf("@@@ %d CALL obtain %d %d\n", _pid, tno, rno);
+        // raise priority should be here, but deferred below
+        if
+        :: semaphores[rno].inuse ->
+           enqueueItem(tno,semaphores[rno].q);
+           waitingFor[tno] = rno;
+           runState[tno] = Blocked; // BLOCK
+           printf("@@@ %d LOG Task %d prio:%d cpu:%d -BLOCK-> %e\n", _pid,
+                  tno, runPrio[tno], taskConfig[tno].taskCore, runState[tno]);
+           printf("@@@ %d STATE %d %e\n", _pid, tno, runState[tno]);
+           printf("@@@ %d LOG semaphore %d in use\n", _pid, rno);
+        :: else ->
+           semaphores[rno].inuse = true;
+           semaphores[rno].owner = tno;
+           printf("@@@ %d LOG semaphore %d was free\n", _pid, rno);
+        fi
+        // we can set priority here because of atomic wrapper
+        setTaskPriority( tno );
+        printf("@@@ %d TASK %d USING SEMA %d is %d\n",
+              _pid, tno, rno, TASK_USING_SEMA( tno, rno) );
+      }
+  fi
+}
+
+
+/******************************************************************************
+ * An release action lowers a task priority back to what its was when it
+ * started to obtain that task.
+ ******************************************************************************/
+inline release( tno, rno, freed ) {
+  if
+  ::  rno >= res_count || !taskConfig[tno].taskRes[rno] ->
+      printf("No resource %d for task %d to release\n", rno, tno );
+      assert(false);
+  ::  else ->
+      atomic{
+        printf("@@@ %d CALL release %d %d\n", _pid, tno, rno);
+        if
+        :: FIFO_EMPTY(semaphores[rno].q) ->
+           semaphores[rno].inuse = false;
+           printf("@@@ %d LOG semaphore %d was freed\n", _pid, rno);
+        :: else ->
+           dequeueItem(semaphores[rno].q,freed);
+           semaphores[rno].owner = freed;
+           runState[freed] = Ready; // UNBLOCK
+           printf("@@@ %d LOG Task %d prio:%d cpu:%d -UNBLOCK-> %e\n", _pid,
+                  freed, runPrio[freed], taskConfig[freed].taskCore,
+                  runState[freed]);
+           printf("@@@ %d STATE %d %e\n", _pid, freed, runState[freed]);
+           printf("@@@ %d LOG semaphore %d still in use\n", _pid, rno);
+           setTaskPriority( freed );
+           contextSwitch( taskConfig[freed].taskCore );
+        fi
+        setTaskPriority( tno );
+      }
+  fi
+}
+
+
+
+/******************************************************************************
+ * Task behaviour
+ ******************************************************************************/
+
+
+#define WAIT_TO_RUN( taskno)  ( runState[taskno] == Running )
+
+inline tryObtain( tno, rno ) {
+  if
+  :: taskConfig[tno].taskRes[rno] -> obtain( tno, rno );
+  :: else
+  fi
+}
+
+inline tryRelease( tno, rno, freed ) {
+  if
+  :: taskConfig[tno].taskRes[rno] -> release( tno, rno, freed );
+  :: else
+  fi
+}
+
+proctype Task( byte tno ) {
+  byte freed;
+
+  printf("@@@ %d TASK %d\n", _pid, tno);
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryObtain( tno, 0 );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryObtain( tno, 1 );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryObtain( tno, 2 );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryObtain( tno, 3 );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  printf("Task %d has all its resources\n",tno);
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryRelease( tno, 3, freed );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryRelease( tno, 2, freed );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryRelease( tno, 1, freed );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  tryRelease( tno, 0, freed );
+  contextSwitch( taskConfig[tno].taskCore );
+  WAIT_TO_RUN( tno );
+  runState[tno] = NotInUse // TERMINATE
+  printf("@@@ %d LOG Task %d prio:%d cpu:%d -TERMINATE-> %e\n", _pid,
+         tno, runPrio[tno], taskConfig[tno].taskCore, runState[tno]);
+  printf("@@@ %d STATE %d %e\n", _pid, tno, runState[tno]);
+  contextSwitch( taskConfig[tno].taskCore );
+}
+
+
+/******************************************************************************
+ * Initialise and start Tasks
+ ******************************************************************************/
+
+byte runi;
+
+inline Run() {
+
+  printf("\nRun - task_count = %d\n", task_count);
+
+  do // initialise all tasks as not (yet) in use.
+  ::  runi == task_count -> break;
+  ::  else ->
+      runState[runi] = NotInUse ;
+      runi++;
+  od
+
+  printf("\nRunning Tasks....\n\n");
+  runi = 0;
+  do
+  ::  runi == task_count -> break;
+  ::  else ->
+      runPrio[runi] = taskConfig[runi].taskPrio;
+      runState[runi] = Ready; // START
+      printf("@@@ %d LOG Task %d, prio:%d cpu:%d -START-> %e\n", _pid,
+             runi, runPrio[runi], taskConfig[runi].taskCore, runState[runi]);
+      printf("@@@ %d STATE %d %e\n", _pid, runi, runState[runi]);
+      contextSwitch( taskConfig[runi].taskCore )
+      // printf("Running task %d...\n",runi);
+      run Task( runi );
+      runi++
+  od
+  printf(".. all tasks launched\n");
+}

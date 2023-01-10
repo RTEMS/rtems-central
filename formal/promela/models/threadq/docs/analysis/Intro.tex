@@ -1,0 +1,70 @@
+\section{Introduction}
+
+Here we perform an analyis of the RTEMS-SMP Thread Queue implementation
+\cite{Burns:2013:MrsP,Catellani:2015:MrsP},
+in order to develop Promela models of same.
+
+Our focus is on two functions:
+\begin{description}
+  \item [Wait Acquisition] \verb"_Thread_Wait_acquire_critical"
+    \\ include/rtems/score/threadimpl.h:1795
+  \item [Queue Path Acquisition] \verb"_Thread_queue_Path_acquire_critical"
+    \\ cpukit/score/src/threadqenqueue.c:262
+\end{description}
+
+Code snippets are provided for the above,
+and their dependencies,
+in Appendix \ref{sec:snippets}.
+We also list all the key data-structure definitions in play
+in Appendix \ref{sec:datatypes}.
+
+In addition,
+we are basing our high-level plan on recent publications regarding MrsP,
+two in 2017 by Burns and Wellings
+\cite{Zhao:2017:MrsP,Garrido:2017:MrsP},
+and a CISTER thesis from 2019 by Gomes
+\cite{Gomes:2019:MrsP}.
+
+Perhaps \cite{Zhao:2020:MrsP,Zhao:2021:MrsP}
+are relevant?
+
+
+We plan to use the following key techniques to describe semantics:
+\begin{itemize}
+  \item Z/UTP-stype predicate calculus (pre/post/rely/guarantee)
+  \item Separation Logic
+  \item State machines (B\"{u}chi automata)
+\end{itemize}
+
+\subsection{Unfolding}
+
+We use the term ``unfolding'' to describe the process of working through
+the source code to get the true underlying behaviour.
+This involves:
+\begin{itemize}
+  \item
+    Implementing all \verb"#ifdef" and \verb"#ifndef" macros
+  \item
+    Replacing some function calls with their bodies
+  \item
+    Expanding code-generating macros.
+    This may require:
+    \begin{itemize}
+      \item
+        Replacing any occurrence of \verb"do { code } while ( 0 )"
+        by \verb"code".
+     \item
+       Flattening out deeply left-nested usage of the address operator \verb"&"
+    \end{itemize}
+\end{itemize}
+
+\subsection{The Plan}
+
+We are going to model the behaviour of MrsP semaphore obtain and release,
+with multiple processors, tasks and resources,
+over a range of priority allocations.
+We take the implementation description in
+\cite[Sec VIII, pp288--9]{Burns:2013:MrsP}
+as a high-level description of the lock/unlock protocol,
+and lower level design from
+\cite[Chp. 5, App. 2]{Gomes:2019:MrsP}.

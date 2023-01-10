@@ -1,0 +1,43 @@
+\subsection{Code Index}
+
+All paths are relative to \texttt{rtems/cpukit}.
+
+
+\def\ditto{~~~~~''}
+
+\begin{tabular}{lr@{ : }l}
+   \verb"go_ahead" &  120 & \threadqH
+\\ \ditto          &  470 & \threadqimplH
+\\ \ditto          &  496 & \threadqimplH
+\\ \ditto          &  510 & \threadqimplH
+\\ \verb"rtems_semaphore_create"            &  218 & \semH
+\\ \ditto                                   &   35 & \semcreateH
+\\ \verb"rtems_semaphore_obtain"            &   53 & \semobtainC
+\\ \verb"rtems_semaphore_release"           &   26 & \semreleaseC
+\\ \verb"_Thread_queue_Enqueue"             &  387 & \threadqenqueueC
+\\ \verb"_Thread_queue_Surrender"           &  667 & \threadqenqueueC
+\\ \verb"_Thread_Wait_acquire_critical"     & 1795 & \threadimplH
+\\ \verb"_Thread_Add_timeout_ticks"         & 2388 & \threadimplH
+\\ \verb"_Thread_queue_Gate_add"            &  479 & \threadqimplH
+\\ \verb"_Thread_queue_Gate_wait"           &  506 & \threadqimplH
+\\ \verb"_Thread_queue_Gate_open"           &  492 & \threadqimplH
+\\ \verb"_Thread_queue_Do_acquire_critical" &  663 & \threadqimplH
+\\ \verb"_Thread_queue_Acquire_critical"    &  679 & \threadqimplH
+\\ \verb"_Thread_Resource_count_increment"  & 1322 & \threadimplH
+\\ \verb"Thread_queue_Gate"                 &  121 & \threadqH
+\\ \verb"THREAD_QUEUE_OBJECT_ASSERT"        & 1452 & \threadqimplH
+\\ \verb"RTEMS_STATIC_ASSERT"               &  759 & \basedefsH
+\\ \verb"_CORE_recursive_mutex_Initialize"  &  182 & \coremuteximplH
+\\ \verb"_CORE_recursive_mutex_Seize"       &  220 & \coremuteximplH
+\\ \verb"_CORE_mutex_Acquire_critical"      &   72 & \coremuteximplH
+\\ \verb"_CORE_mutex_Get_owner"             &  101 & \coremuteximplH
+\\ \verb"_CORE_mutex_Set_owner"             &  152 & \coremuteximplH
+\\ \verb"_Thread_queue_Add_timeout_ticks"   &   28 & \threadqtimeoutC
+\\ \verb"_CORE_mutex_Release"               &   86 & \coremutexseizeC
+\\ \verb"_CORE_mutex_Seize_slow"            &  138 & \coremuteximplH
+\\ \ditto                                   &   28 & \coremutexseizeC
+\\ \verb"_Thread_queue_Context_set_thread_state" &  176 & \threadqimplH
+\\ \verb" _Thread_queue_Context_set_deadlock_callout" &  322 & \threadqimplH
+\\ \verb"_Thread_queue_Enqueue" &  387 & \threadqenqueueC
+\\ \verb"_Thread_Wait_get_status" & 2337 & \threadimplH
+\end{tabular}

@@ -1,0 +1,228 @@
+\section{C11 Atomics}
+
+\subsection{Introduction}
+
+The code uses C11 Atomics for synchronisation,
+with particular emphasis given to the use of an atomic integer
+called \verb"go_ahead" when acquiring thread queue resources.
+
+Here we focus on the semantics of the C11 Atomics features used in this
+part of the RTEMS code.
+
+We find them as follows:
+\begin{verbatim}
+cpukit/include/rtems/score/threadqimpl.h
+470:  _Atomic_Store_uint( &gate->go_ahead, 0, ATOMIC_ORDER_RELAXED );
+496:  _Atomic_Store_uint( &gate->go_ahead, 1, ATOMIC_ORDER_RELAXED );
+510:  while ( _Atomic_Load_uint( &gate->go_ahead, ATOMIC_ORDER_RELAXED ) == 0 ) {
+
+cpukit/include/rtems/score/smplockticket.h
+42:  Atomic_Uint next_ticket;
+43:  Atomic_Uint now_serving;
+66:  _Atomic_Init_uint( &lock->next_ticket, 0U );
+67:  _Atomic_Init_uint( &lock->now_serving, 0U );
+108:    _Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_RELAXED );
+112:    _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE );
+120:        _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE );
+169:    _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_RELAXED );
+176:  _Atomic_Store_uint( &lock->now_serving, next_ticket, ATOMIC_ORDER_RELEASE );
+
+cpukit/include/rtems/score/threadimpl.h
+2185:  _Atomic_Store_uint( &the_thread->Wait.flags, flags, ATOMIC_ORDER_RELAXED );
+2203:  return _Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_RELAXED );
+2221:  return _Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_ACQUIRE );
+2252:  return _Atomic_Compare_exchange_uint(
+2290:  return _Atomic_Compare_exchange_uint(
+
+cpukit/include/rtems/score/threadq.h
+120:  Atomic_Uint go_ahead;
+\end{verbatim}
+
+We initially focus on the use of type \verb"Atomic_Uint",
+functions \verb"_Atomic_Store_uint",
+and \verb"_Atomic_Load_uint",
+and mode \verb"ATOMIC_ORDER_RELAXED",
+as used with \verb"go_ahead".
+
+\newpage
+\subsection{RTEMS Atomic Usage Mapping}
+
+We notice that the types and calls in the RTEMS sources
+are not those in the C11 standard.
+They are implemented as follows:
+
+\subsubsection{Atomic uint}
+
+\begin{verbatim}
+include/rtems/score/atomic.h
+38:typedef CPU_atomic_Uint Atomic_Uint;
+
+include/rtems/score/cpustdatomic.h
+56:typedef std::atomic_uint CPU_atomic_Uint; // THIS ONE
+86:typedef atomic_uint CPU_atomic_Uint;
+116:typedef unsigned int CPU_atomic_Uint;
+\end{verbatim}
+
+So, \verb"Atomic_Uint"  is (std::)\verb"atomic_uint".
+
+\subsubsection{ATOMIC ORDER RELAXED}
+
+\begin{verbatim}
+include/rtems/score/atomic.h
+48:#define ATOMIC_ORDER_RELAXED CPU_ATOMIC_ORDER_RELAXED
+
+include/rtems/score/cpustdatomic.h
+66:#define CPU_ATOMIC_ORDER_RELAXED std::memory_order_relaxed // THIS ONE
+96:#define CPU_ATOMIC_ORDER_RELAXED memory_order_relaxed
+126:#define CPU_ATOMIC_ORDER_RELAXED 0
+\end{verbatim}
+
+So, \verb"ATOMIC_ORDER_RELAXED"  is (std::)\verb"memory_order_relaxed".
+
+\subsubsection{Atomic Store uint}
+
+\begin{verbatim}
+include/rtems/score/atomic.h
+86:#define _Atomic_Store_uint( obj, desr, order ) \
+      _CPU_atomic_Store_uint( obj, desr, order )
+
+include/rtems/score/cpustdatomic.h
+296:
+static inline void _CPU_atomic_Store_uint(
+            CPU_atomic_Uint *obj, unsigned int desired, CPU_atomic_Order order )
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  obj->store( desired );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  atomic_store_explicit( obj, desired, order );
+#else
+  (void) order;
+  RTEMS_COMPILER_MEMORY_BARRIER();
+  *obj = desired;
+#endif
+\end{verbatim}
+
+So, \verb"_Atomic_Store_uint"  is probably \verb"atomic_store_explicit".
+
+\subsubsection{Atomic Load uint}
+
+\begin{verbatim}
+include/rtems/score/atomic.h
+77:
+#define _Atomic_Load_uint( obj, order ) \
+  _CPU_atomic_Load_uint( obj, order )
+
+include/rtems/score/cpustdatomic.h
+222:static inline unsigned int _CPU_atomic_Load_uint(
+                            const CPU_atomic_Uint *obj, CPU_atomic_Order order )
+{
+#if defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC)
+  return obj->load( order );
+#elif defined(_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC)
+  return atomic_load_explicit( obj, order );
+#else
+  unsigned int val;
+
+  (void) order;
+  val = *obj;
+  RTEMS_COMPILER_MEMORY_BARRIER();
+
+  return val;
+#endif
+}
+\end{verbatim}
+
+So, \verb"_Atomic_Load_uint"  is probably \verb"atomic_load_explicit".
+
+
+\newpage
+\subsection{C11 Memory Models}
+
+\newpage
+\subsection{C11 Atomics}
+
+Main reference: \url{https://en.cppreference.com/w/c/atomic}.
+
+
+\subsubsection{Memory Ordering}
+
+From \url{https://en.cppreference.com/w/c/atomic/memory_order#Relaxed_ordering}
+we have:
+\begin{quote}
+  ``
+  Atomic operations tagged \verb"memory_order_relaxed"
+  are not synchronization operations;
+  they do not impose an order among concurrent memory accesses.
+  They only guarantee atomicity and modification order consistency.
+  ''
+\end{quote}
+and
+\begin{quote}
+  ``Typical use for relaxed memory ordering is incrementing counters,
+  such as the reference counters,
+  since this only requires atomicity,
+  but not ordering or synchronization
+  (note that decrementing the \verb"shared_ptr" counters
+  requires acquire-release synchronization with the destructor)''
+\end{quote}
+
+From \url{https://en.cppreference.com/w/c/atomic/memory_order#Release-Acquire_ordering}
+we have:
+\begin{quote}
+  ``If an atomic store in thread A is tagged \verb"memory_order_release"
+  and an atomic load in thread B from the same variable
+  is tagged \verb"memory_order_acquire",
+  all memory writes (non-atomic and relaxed atomic) that happened-before
+  the atomic store from the point of view of thread A,
+  become visible side-effects in thread B.
+  That is, once the atomic load is completed,
+  thread B is guaranteed to see everything thread A wrote to memory.''
+\end{quote}
+and
+\begin{quote}
+  ``On strongly-ordered systems
+  — x86, SPARC TSO, IBM mainframe, etc.
+  — release-acquire ordering is automatic for the majority of operations.
+  No additional CPU instructions are issued for this synchronization mode;
+  only certain compiler optimizations are affected
+  (e.g., the compiler is prohibited from moving non-atomic stores
+  past the atomic store-release
+  or performing non-atomic loads earlier than the atomic load-acquire). ''
+\end{quote}
+
+See also
+\url{https://en.cppreference.com/w/cpp/language/memory_model#Threads_and_data_races}.
+
+
+\subsubsection{Atomic Types}
+
+\url{https://en.cppreference.com/w/c/language/atomic}.
+
+Typedef name \verb"atomic_uint" is short for \verb"_Atomic unsigned int".
+
+\subsubsection{Atomic Operations}
+
+
+\paragraph{Atomic Store Explicit}
+
+\url{https://en.cppreference.com/w/c/atomic/atomic_store}.
+
+\begin{nicec}
+void atomic_store_explicit( volatile A* obj, C desired, memory_order order );
+\end{nicec}
+Atomically replaces the value of the atomic variable pointed to by \texttt{obj}
+with \texttt{desired}.
+The operation is atomic write operation,
+and orders memory accesses according to \texttt{order}.
+
+
+\paragraph{Atomic Load Explicit}
+
+\url{https://en.cppreference.com/w/c/atomic/atomic_load}.
+
+\begin{nicec}
+C atomic_load_explicit( const volatile A* obj, memory_order order );
+\end{nicec}
+Atomically loads and returns the current value of
+the atomic variable pointed to by \texttt{obj}.
+The operation is atomic read operation,
+and  orders memory accesses according to \texttt{order}.

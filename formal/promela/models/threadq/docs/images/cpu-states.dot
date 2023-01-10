@@ -1,0 +1,15 @@
+
+digraph states {
+  i [label="PER_CPU_STATE_INITIAL"];
+  rdy [label="PER_CPU_STATE_READY_TO_START_MULTITASKING"];
+  reqsm [label="PER_CPU_STATE_REQUEST_START_MULTITASKING"];
+  u [label="PER_CPU_STATE_UP"];
+  s [label="PER_CPU_STATE_SHUTDOWN"];
+  i -> rdy [label="processor\ncompleted initialization"];
+  rdy -> reqsm [label="boot processor\ncompleted initialization"];
+  reqsm -> u [label="processor\nstarts multitasking"];
+  i -> s;
+  rdy -> s;
+  reqsm -> s;
+  u -> s;
+}

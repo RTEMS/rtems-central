@@ -1,0 +1,529 @@
+\section{Code Notes}
+
+Wanted: call sequence paths from
+\verb"rtems_semaphore_obtain()"
+and
+\verb"rtems_semaphore_release()",
+via
+\verb"_Thread_queue_Enqueue()"
+and
+\verb"_Thread_queue_Surrender()"
+to
+\verb"_Thread_Wait_acquire_critical".
+
+The routing may also involve:
+\verb"_Thread_queue_Gate_add",
+\verb"_Thread_queue_Gate_wait",
+and
+\verb"_Thread_queue_Gate_open".
+
+\subsection{Creating a Semaphore}
+
+This is setup by a call to \verb"rtems_semaphore_create"
+with options for
+\begin{description}
+  \item [queue discipline] \verb"RTEMS_PRIORITY"
+  \item [semaphore class] \verb"RTEMS_BINARY_SEMAPHORE"
+  \item [locking protocol] \verb"RTEMS_INHERIT_PRIORITY"
+\end{description}
+There is a \verb"SEMAPHORE_KIND_MASK"
+that contains \verb"RTEMS_INHERIT_PRIORITY".
+\begin{nicec}
+attr = RTEMS_BINARY_SEMAPHORE |  RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY ;
+rc = rtems_semaphore_create( "SEMA", 1, attr, _ &semId );
+\end{nicec}
+Internally:
+\begin{nicec}
+#define RTEMS_SEMAPHORE_CLASS 0x00000030 // (incl. RTEMS_BINARY_SEMAPHORE )
+#define SEMAPHORE_KIND_MASK ( RTEMS_SEMAPHORE_CLASS | RTEMS_INHERIT_PRIORITY \
+  | RTEMS_PRIORITY_CEILING | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
+
+  maybe_global = RTEMS_INHERIT_PRIORITY; // attribute_set & SEMAPHORE_KIND_MASK
+  mutex_with_protocol =  attr ;
+    // attribute_set & ( SEMAPHORE_KIND_MASK | RTEMS_GLOBAL | RTEMS_PRIORITY )
+
+  } else if (
+    mutex_with_protocol
+      == ( RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY )
+  ) {
+    variant = SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY;  // ... }
+
+  the_semaphore = _Semaphore_Allocate();
+  // include/rtems/rtems/semimpl.h
+  flags = SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY;
+         // _Semaphore_Set_variant( 0, variant );
+  if ( _Attributes_Is_priority( attribute_set ) ) {
+    flags = _Semaphore_Set_discipline( flags, SEMAPHORE_DISCIPLINE_PRIORITY );
+  _Semaphore_Set_flags( the_semaphore, flags );
+  executing = _Thread_Get_executing();
+  switch ( variant ) {
+    case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
+      _CORE_recursive_mutex_Initialize(
+        &the_semaphore->Core_control.Mutex.Recursive
+      );
+      if ( count == 0 ) {
+        _CORE_mutex_Set_owner(
+          &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+          executing
+        );
+        _Thread_Resource_count_increment( executing );
+      }
+      status = STATUS_SUCCESSFUL;
+      break;
+  }
+  _Objects_Open(
+    &_Semaphore_Information,
+    &the_semaphore->Object,
+    (Objects_Name) name
+  );
+  *id = the_semaphore->Object.id;
+  _Objects_Allocator_unlock();
+  return RTEMS_SUCCESSFUL;
+}
+\end{nicec}
+
+So
+ variable \verb"maybe_global" will contain \verb"RTEMS_INHERIT_PRIORITY",
+ and \verb"mutex_with_protocol" will contain \verb"RTEMS_PRIORITY".
+
+ Given these, then we set \verb"variant"
+ to \verb"SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY".
+
+
+From \texttt{coremuteximpl.h}:
+\begin{nicec}
+// 49:
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
+  CORE_mutex_Control *the_mutex
+)
+{
+  _Thread_queue_Object_initialize( &the_mutex->Wait_queue );
+}
+
+// 182:
+RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Initialize(
+  CORE_recursive_mutex_Control *the_mutex
+)
+{
+  _CORE_mutex_Initialize( &the_mutex->Mutex );
+  the_mutex->nest_level = 0;
+}
+\end{nicec}
+
+From: \texttt{threadq.c}:
+\begin{nicec}
+// 144:
+void _Thread_queue_Initialize(
+  Thread_queue_Control *the_thread_queue,
+  const char           *name
+)
+{
+  _Thread_queue_Queue_initialize( &the_thread_queue->Queue, name );
+#if defined(RTEMS_SMP)
+  _SMP_lock_Stats_initialize( &the_thread_queue->Lock_stats, "Thread Queue" );
+#endif
+}
+// 155:
+void _Thread_queue_Object_initialize( Thread_queue_Control *the_thread_queue )
+{
+  _Thread_queue_Initialize( the_thread_queue, _Thread_queue_Object_name );
+}
+\end{nicec}
+
+From \texttt{threadqimpl.h}:
+\begin{nicec}
+// 545:
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
+  Thread_queue_Queue *queue,
+  const char         *name
+)
+{
+#if defined(RTEMS_SMP)
+  _SMP_ticket_lock_Initialize( &queue->Lock );
+#endif
+  queue->heads = NULL;
+  queue->owner = NULL;
+  queue->name = name;
+}
+\end{nicec}
+
+\subsection{Obtaining a Semaphore}
+
+We assume a binary, priority inherit semaphore,
+as created above.
+
+We consider a call to obtain a semaphore that will wait (forever)
+\begin{nicec}
+rc = rtems_semaphore_obtain( semId, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+\end{nicec}
+Internally:
+\begin{nicec}
+  the_semaphore = _Semaphore_Get( semId, &queue_context );
+  executing = _Thread_Executing;
+  // cpukit/include/rtems/rtems/optionsimpl.h
+  wait = true; // !_Options_Is_no_wait( RTEMS_WAIT );
+  if ( wait ) {
+    // _Thread_queue_Context_set_enqueue_timeout_ticks( &queue_context, timeout );
+    queue_context->Timeout.ticks = ticks;
+    queue_context->enqueue_callout = _Thread_queue_Add_timeout_ticks;
+
+  flags = _Semaphore_Get_flags( the_semaphore );
+  variant = SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
+            // _Semaphore_Get_variant( flags );
+
+  switch ( variant ) {
+    case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
+      status = _CORE_recursive_mutex_Seize(
+        &the_semaphore->Core_control.Mutex.Recursive,
+        CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
+        executing,
+        wait,
+        _CORE_recursive_mutex_Seize_nested,
+        &queue_context
+      );
+      break;
+  }
+  return _Status_Get( status );
+\end{nicec}
+
+Now, seizing that mutex:
+\begin{nicec}
+/**
+ * @brief Seizes the recursive mutex.
+ *
+ * @param[in, out] the_mutex The recursive mutex to seize.
+ * @param operations The thread queue operations.
+ * @param[out] executing The executing thread.
+ * @param wait Indicates whether the calling thread is willing to wait.
+ * @param nested Returns the status of a recursive mutex.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The owner of the mutex was NULL, successful
+ *      seizing of the mutex.
+ * @retval _Thread_Wait_get_status The status of the executing thread.
+ * @retval STATUS_UNAVAILABLE The calling thread is not willing to wait.
+ */
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
+  CORE_recursive_mutex_Control  *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  bool                           wait,
+  Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
+  Thread_queue_Context          *queue_context
+)
+{
+  Thread_Control *owner;
+
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+
+  owner = _CORE_mutex_Get_owner( &the_mutex->Mutex );
+
+  if ( owner == NULL ) {
+    _CORE_mutex_Set_owner( &the_mutex->Mutex, executing );
+    _Thread_Resource_count_increment( executing );
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_SUCCESSFUL;
+  }
+
+  if ( owner == executing ) {
+    Status_Control status;
+
+    status = ( *nested )( the_mutex );
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return status;
+  }
+
+  return _CORE_mutex_Seize_slow(
+    &the_mutex->Mutex,
+    operations,
+    executing,
+    wait,
+    queue_context
+  );
+}
+\end{nicec}
+
+
+\coremutexseizeC:
+\begin{nicec}
+Status_Control _CORE_mutex_Seize_slow(
+  CORE_mutex_Control            *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  bool                           wait,
+  Thread_queue_Context          *queue_context
+)
+{
+  if ( wait ) {
+    _Thread_queue_Context_set_thread_state(
+      queue_context,
+      STATES_WAITING_FOR_MUTEX
+    );
+    _Thread_queue_Context_set_deadlock_callout(
+      queue_context,
+      _Thread_queue_Deadlock_status
+    );
+    _Thread_queue_Enqueue(
+      &the_mutex->Wait_queue.Queue,
+      operations,
+      executing,
+      queue_context
+    );
+    return _Thread_Wait_get_status( executing );
+  } else {
+    _CORE_mutex_Release( the_mutex, queue_context );
+    return STATUS_UNAVAILABLE;
+  }
+}
+\end{nicec}
+
+\threadqenqueueC:
+\begin{nicec}
+void _Thread_queue_Enqueue(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  Thread_queue_Context          *queue_context
+)
+{
+  Per_CPU_Control *cpu_self;
+  bool             success;
+
+  _Assert( queue_context->enqueue_callout != NULL );
+
+  _Thread_Wait_claim( the_thread, queue );
+
+  if ( !_Thread_queue_Path_acquire_critical( queue, the_thread, queue_context ) ) {
+    _Thread_queue_Path_release_critical( queue_context );
+    _Thread_Wait_restore_default( the_thread );
+    _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
+    _Thread_Wait_tranquilize( the_thread );
+    _Assert( queue_context->deadlock_callout != NULL );
+    ( *queue_context->deadlock_callout )( the_thread );
+    return;
+  }
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_claim_finalize( the_thread, operations );
+  ( *operations->enqueue )( queue, the_thread, queue_context );
+
+  _Thread_queue_Path_release_critical( queue_context );
+
+  the_thread->Wait.return_code = STATUS_SUCCESSFUL;
+  _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
+  _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
+
+  ( *queue_context->enqueue_callout )(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
+
+  /*
+   *  Set the blocking state for this thread queue in the thread.
+   */
+  _Thread_Set_state( the_thread, queue_context->thread_state );
+
+  /*
+   * At this point thread dispatching is disabled, however, we already released
+   * the thread queue lock.  Thus, interrupts or threads on other processors
+   * may already changed our state with respect to the thread queue object.
+   * The request could be satisfied or timed out.  This situation is indicated
+   * by the thread wait flags.  Other parties must not modify our thread state
+   * as long as we are in the THREAD_QUEUE_INTEND_TO_BLOCK thread wait state,
+   * thus we have to cancel the blocking operation ourself if necessary.
+   */
+  success = _Thread_Wait_flags_try_change_acquire(
+    the_thread,
+    THREAD_QUEUE_INTEND_TO_BLOCK,
+    THREAD_QUEUE_BLOCKED
+  );
+  if ( !success ) {
+    _Thread_Remove_timer_and_unblock( the_thread, queue );
+  }
+
+  _Thread_Priority_update( queue_context );
+  _Thread_Dispatch_direct( cpu_self );
+}
+\end{nicec}
+The loop whose termination  is an issue can be found in
+\verb"_Thread_queue_Path_acquire_critical",
+also in the same file.
+
+\begin{nicec}
+#if !defined(RTEMS_SMP)
+static
+#endif
+bool _Thread_queue_Path_acquire_critical(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Thread_Control     *owner;
+#if defined(RTEMS_SMP)
+  Thread_queue_Link  *link;
+  Thread_queue_Queue *target;
+
+  /*
+   * For an overview please look at the non-SMP part below.  We basically do
+   * the same on SMP configurations.  The fact that we may have more than one
+   * executing thread and each thread queue has its own SMP lock makes the task
+   * a bit more difficult.  We have to avoid deadlocks at SMP lock level, since
+   * this would result in an unrecoverable deadlock of the overall system.
+   */
+
+  _Chain_Initialize_empty( &queue_context->Path.Links );
+
+  owner = queue->owner;
+
+  if ( owner == NULL ) {
+    return true;
+  }
+
+  if ( owner == the_thread ) {
+    return false;
+  }
+
+  _Chain_Initialize_node(
+    &queue_context->Path.Start.Lock_context.Wait.Gate.Node
+  );
+  link = &queue_context->Path.Start;
+  _RBTree_Initialize_node( &link->Registry_node );
+  _Chain_Initialize_node( &link->Path_node );
+
+  do {
+    _Chain_Append_unprotected( &queue_context->Path.Links, &link->Path_node );
+    link->owner = owner;
+
+    _Thread_Wait_acquire_default_critical(
+      owner,
+      &link->Lock_context.Lock_context
+    );
+
+    target = owner->Wait.queue;
+    link->Lock_context.Wait.queue = target;
+
+    if ( target != NULL ) {
+      if ( _Thread_queue_Link_add( link, queue, target ) ) {
+        _Thread_queue_Gate_add(
+          &owner->Wait.Lock.Pending_requests,
+          &link->Lock_context.Wait.Gate
+        );
+        _Thread_Wait_release_default_critical(
+          owner,
+          &link->Lock_context.Lock_context
+        );
+        _Thread_Wait_acquire_queue_critical( target, &link->Lock_context );
+
+        if ( link->Lock_context.Wait.queue == NULL ) {
+          _Thread_queue_Link_remove( link );
+          _Thread_Wait_release_queue_critical( target, &link->Lock_context );
+          _Thread_Wait_acquire_default_critical(
+            owner,
+            &link->Lock_context.Lock_context
+          );
+          _Thread_Wait_remove_request_locked( owner, &link->Lock_context );
+          _Assert( owner->Wait.queue == NULL );
+          return true;
+        }
+      } else {
+        link->Lock_context.Wait.queue = NULL;
+        _Thread_queue_Path_append_deadlock_thread( owner, queue_context );
+        return false;
+      }
+    } else {
+      return true;
+    }
+
+    link = &owner->Wait.Link;
+    queue = target;
+    owner = queue->owner;
+  } while ( owner != NULL );
+#else
+  do {
+    owner = queue->owner;
+
+    if ( owner == NULL ) {
+      return true;
+    }
+
+    if ( owner == the_thread ) {
+      return false;
+    }
+
+    queue = owner->Wait.queue;
+  } while ( queue != NULL );
+#endif
+
+  return true;
+}  
+\end{nicec}
+
+
+\subsection{Lower down\dots}
+
+The code mentioned by Sebastian, from \threadimplH:
+\begin{nicec}
+/**
+ * @brief Acquires the thread wait lock inside a critical section (interrupts
+ * disabled).
+ *
+ * @param[in, out] the_thread The thread.
+ * @param[in, out] queue_context The thread queue context for the corresponding
+ *   _Thread_Wait_release_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+#if defined(RTEMS_SMP)
+  Thread_queue_Queue *queue;
+
+  _Thread_Wait_acquire_default_critical(
+    the_thread,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  queue = the_thread->Wait.queue;
+  queue_context->Lock_context.Wait.queue = queue;
+
+  if ( queue != NULL ) {
+    _Thread_queue_Gate_add(
+      &the_thread->Wait.Lock.Pending_requests,
+      &queue_context->Lock_context.Wait.Gate
+    );
+    _Thread_Wait_release_default_critical(
+      the_thread,
+      &queue_context->Lock_context.Lock_context
+    );
+    _Thread_Wait_acquire_queue_critical( queue, &queue_context->Lock_context );
+
+    if ( queue_context->Lock_context.Wait.queue == NULL ) {
+      _Thread_Wait_release_queue_critical(
+        queue,
+        &queue_context->Lock_context
+      );
+      _Thread_Wait_acquire_default_critical(
+        the_thread,
+        &queue_context->Lock_context.Lock_context
+      );
+      _Thread_Wait_remove_request_locked(
+        the_thread,
+        &queue_context->Lock_context
+      );
+      _Assert( the_thread->Wait.queue == NULL );
+    }
+  }
+#else
+  (void) the_thread;
+  (void) queue_context;
+#endif
+}
+
+\end{nicec}
+
+\newpage\input{code/code-index}

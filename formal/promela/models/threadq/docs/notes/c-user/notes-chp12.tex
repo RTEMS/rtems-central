@@ -1,0 +1,125 @@
+\subsection{Chapter 12 Semaphore Manager}
+
+\subsubsection{Introduction}
+
+p206:
+
+The semaphore manager utilizes standard Dijkstra counting semaphores
+to provide synchronization and mutual exclusion capabilities.
+
+\subsubsection{Background}
+
+p207:
+
+A binary semaphore (not a simple binary semaphore)
+can be used to control access to a single resource.
+\dots
+In this instance, the semaphore would be created with an initial count of one to
+indicate that no task is executing the critical section of code.
+
+A binary semaphore must be released by the task that obtained it.
+
+A counting semaphore can be used to control access
+to a pool of two or more resources.
+\dots
+access to three printers could be administered by a semaphore
+created with an initial count of three.
+
+Task synchronization may be achieved by creating a semaphore
+with an initial count of zero.
+
+Simple binary semaphores do not allow nested access
+and so can be used for task synchronization.
+
+p208:
+
+\verb"RTEMS_SIMPLE_BINARY_SEMAPHORE":
+restrict values to 0 and 1,
+do not allow nested access,
+allow deletion of locked semaphore.
+
+p209:
+
+Some combinatinos\emph{(sic.)} of these attributes are invalid.
+
+The following tree figure illustrates the valid combinations.
+
+Classic Semaphore
+$\mapsto \{$
+ Counting Semaphore; Simple Binary; Binary (Mutex)
+$\}$
+
+Counting Semaphore
+$\mapsto \{$
+ FIFO; Priority
+$\}$
+
+Simple Binary
+$\mapsto \{$
+ FIFO; Priority
+$\}$
+
+Binary (Mutex)
+$\mapsto \{$
+ FIFO; Priority
+$\}$
+
+Binary (Mutex)
+$\mapsto \{$
+ Priority
+ $\mapsto \{$
+   No Protocol; Priority Inheritance Protocol; Priority Ceiling Protocol
+ $\}$
+$\}$
+
+\subsubsection{Operations}
+
+\paragraph{Creating a Semaphore}
+
+p210:
+
+If a binary semaphore is created with a count of zero (0)
+to indicate that it has been allocated,
+then the task creating the semaphore
+is considered the current holder of the semaphore.
+
+RTEMS allocates a Semaphore Control Block (SMCB) from the SMCB free list.
+
+\paragraph{Obtaining Semaphore IDs}
+
+\paragraph{Acquiring a Semaphore}
+
+If the semaphore’s count is greater than zero
+then decrement the semaphore’s count
+else wait for release of semaphore then return SUCCESSFUL.
+
+If the task blocked waiting for a binary semaphore
+using priority inheritance
+and the task’s priority is greater than that of
+the task currently holding the semaphore,
+then the holding task will inherit the priority of the blocking task.
+
+When a task successfully obtains a semaphore using priority ceiling
+and the priority ceiling for this semaphore is greater than that of the holder,
+then the holder’s priority will be elevated.
+
+\paragraph{Releasing a Semaphore}
+
+p211:
+
+If there are no tasks are waiting on this semaphore
+then increment the semaphore’s count
+else assign semaphore to a waiting task and return SUCCESSFUL.
+
+If this is the outermost release of a binary semaphore
+that uses priority inheritance or priority ceiling
+and the task does not currently hold any other binary semaphores,
+then the task performing the \verb"rtems_semaphore_release"
+will have its priority restored to its normal value.
+
+\paragraph{Deleting a Semaphore}
+
+As a result of this directive,
+all tasks blocked waiting to acquire the semaphore
+will be readied
+and returned a status code which indicates that the semaphore was deleted.

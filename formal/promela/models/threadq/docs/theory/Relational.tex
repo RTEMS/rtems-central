@@ -1,0 +1,31 @@
+\section{Relational Techniques}
+
+Here we present a formalisation based on relations between starting
+and finishing states.
+
+\subsection{Unifying Theories of Programming}
+
+We use un-dashed variable $x$ ($s$)
+to represent the values of program variable $x$ (program state $s$)
+before the program runs.
+We use dashed variable $x'$ ($s'$)
+to represent the values of program variable $x$ (program state $s$)
+after the program terminates.
+
+
+Partial correctness semantics:
+\begin{eqnarray*}
+   x := e      &\defs& x' = e \land \nu' = \nu
+\\ Skip        &\defs& \nu' = \nu
+\\ P ; Q       &\defs& \exists \nu_0 \bullet P[\nu_0/\nu'] \land Q[\nu_0/\nu]
+\\ P \cond c Q &\defs& c \land P \lor \lnot c \land Q
+\\ c \whl P    &\defs& \mu L \bullet (P;L \cond c Skip)
+\\ P \ndc Q    &\defs& P \lor Q
+\end{eqnarray*}
+Here $\nu$ and $\nu'$ refer to all variables not explicitly
+mentioned in the rule.
+
+
+For total correctness we need to
+use special variable $ok:\Bool$ to assert that a program has started properly,
+and $ok':\Bool$ to assert that it has terminated.

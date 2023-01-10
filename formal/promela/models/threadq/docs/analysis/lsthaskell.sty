@@ -1,0 +1,74 @@
+% lsthaskell.sty
+%
+% (c) Andrew Butterfield 2014
+%
+\lstdefinelanguage{haskell2010}%
+  {basicstyle=\ttfamily\small\color{blue},
+   identifierstyle=\color{red!40!blue},
+   morecomment=[l]--,%
+   morecomment=[n]{\{-}{-\}},%
+   commentstyle={\color{red}},
+   otherkeywords={[],:,(),=},%
+   morekeywords={
+      abstype,if,then,else,case,class,data,default,deriving,%
+      hiding,if,in,infix,infixl,infixr,import,instance,let,module,
+      newtype,of,qualified,type,where,do
+   },
+   keywordstyle=\color{black},
+   morekeywords=[2]{
+     Bool,False,True,
+     Maybe,Nothing,Just,
+     Either,Left,Right,
+     Ordering,LT,EQ,GT,
+     Char, String, Int, Integer, Float, Double, Rational, IO,
+     Eq,
+     Ord,compare,max,min,
+     Enum,succ,pred, toEnum, fromEnum, enumFrom, enumFromThen,enumFromTo, enumFromThenTo,
+     Bounded,minBound, maxBound,
+     Num, negate, abs, signum, fromInteger,
+     Real,toRational ,
+     Integral,quot, rem, div, mod, quotRem, divMod, toInteger ,
+     Fractional,, recip, fromRational ,
+     Floating,pi, exp, log, sqrt, , logBase, sin, cos, tan,
+     asin, acos, atan, sinh, cosh, tanh, asinh, acosh, atanh ,
+     RealFrac,properFraction, truncate, round, ceiling, floor ,
+     RealFloat,floatRadix, floatDigits, floatRange, decodeFloat,
+     encodeFloat, exponent, significand, scaleFloat, isNaN,
+     isInfinite, isDenormalized, isIEEE, isNegativeZero, atan2 ,
+     Monad, return, fail ,
+     Functor,fmap ,
+     mapM, mapM_, sequence, sequence_,
+     maybe, either,
+     not, otherwise,
+     subtract, even, odd, gcd, lcm,
+     fromIntegral, realToFrac,
+     fst, snd, curry, uncurry, id, const, flip, until,
+     asTypeOf, error, undefined,
+     seq,
+     map, filter, concat, concatMap,
+     head, last, tail, init, null, length,
+     foldl, foldl1, scanl, scanl1, foldr, foldr1, scanr, scanr1,
+     iterate, repeat, replicate, cycle,
+     take, drop, splitAt, takeWhile, dropWhile, span, break,
+     lines, words, unlines, unwords, reverse, and, or,
+     any, all, elem, notElem, lookup,
+     sum, product, maximum, minimum,
+     zip, zip3, zipWith, zipWith3, unzip, unzip3,
+     ReadS, ShowS,
+     Read, readsPrec, readList,
+     Show,showsPrec, show, showList,
+     reads, shows, read, lex,
+     showChar, showString, readParen, showParen,
+     FilePath, IOError, ioError, userError, catch,
+     putChar, putStr, putStrLn, print,
+     getChar, getLine, getContents, interact,
+     readFile, writeFile, appendFile, readIO, readLn
+   },%
+   keywordstyle=[2]{\color{green!30!black}},
+   classoffset=1,
+   sensitive,%
+   morestring=[b]",
+   showstringspaces=false%
+  }%
+
+\lstnewenvironment{haskell}{\lstset{language=haskell2010,frame=lines}} {}

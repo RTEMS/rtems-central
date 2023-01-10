@@ -1,0 +1,124 @@
+\subsection{Chapter 7 Task Manager}
+
+\subsubsection{Introduction}
+
+
+\subsubsection{Background}
+
+p79:
+
+From RTEMS’ perspective,
+a task is the smallest thread of execution
+which can compete on its own for system resources.
+A task is manifested by the existence of a task control block (TCB).
+
+A TCB is allocated upon creation of the task and is returned to
+the TCB free list upon deletion of the task.
+
+The TCB’s elements are modified as a result of system calls
+made by the application in response to external and internal stimuli.
+
+The TCB contains a task’s name,
+ID, current priority, current and starting states, execution mode, TCB user extension pointer,
+scheduling control structures, as well as data required by a blocked task.
+
+A task’s context is stored in the TCB when a task switch occurs.
+\dots
+When a task is restarted,
+the initial state of the task is restored
+from the starting context area in the task’s TCB.
+
+The system uses two separate memory areas to manage a task. TCB, and
+the other memory area is allocated from the stack space or provided
+by the user and contains
+\begin{itemize}
+  \item
+    the task stack,
+  \item
+    the thread-local storage (TLS), and
+  \item
+    an optional architecture-specific floating-point context.
+\end{itemize}
+
+p80:
+
+A task may exist in one of the following five states:
+\begin{itemize}
+  \item
+    executing - Currently scheduled to the CPU
+  \item
+    ready - May be scheduled to the CPU
+  \item
+    blocked - Unable to be scheduled to the CPU
+  \item
+    dormant - Created task that is not started
+  \item
+    non-existent - Uncreated or deleted task
+\end{itemize}
+
+RTEMS supports 255 levels of priority ranging from 1 to 255.
+1 is highest priority.
+
+p81:
+
+A task’s execution mode is a combination of the following four components:
+\begin{itemize}
+  \item
+    preemption
+  \item
+    ASR processing
+  \item
+    timeslicing
+  \item
+    interrupt level
+\end{itemize}
+
+The data type \verb"rtems_task_mode" is used to manage the task execution mode.
+
+If preemption is enabled (\verb"RTEMS_PREEMPT")
+and a higher priority task is made ready,
+then the processor will be taken away from the current task immediately
+and given to the higher priority task.
+
+The timeslicing component is used by the RTEMS scheduler to determine how the processor is
+allocated to tasks of equal priority.
+
+The asynchronous signal processing component is used
+to determine when received signals are to be processed by the task.
+
+The interrupt level component is used to determine
+which interrupts will be enabled when the task is executing.
+
+\subsubsection{Operations}
+
+p85:
+
+Newly created tasks are initially placed in the dormant state.
+All RTEMS tasks execute in the most privileged mode of the processor
+
+The \verb"rtems_task_start" directive is used
+to place a dormant task in the ready state.
+
+A task cannot be restarted unless it has previously been started
+(i.e. dormant tasks cannot be restarted).
+All restarted tasks are placed in the ready state.
+
+This implies that a task may be suspended as well as blocked waiting
+either to acquire a resource or for the expiration of a timer.
+
+p85--86:
+
+The \verb"rtems_task_resume" directive is used to remove another task
+from the suspended state.
+If the task is not also blocked,
+resuming it will place it in the ready state,
+allowing it to once again compete for the processor and resources.
+If the task was blocked as well as suspended,
+this directive clears the suspension and leaves the task in the blocked state.
+
+p86:
+
+The \verb"rtems_task_wake_when" directive creates a sleep timer
+which allows a task to go to sleep until a specified date and time.
+The calling task is blocked until the specified date and time has occurred,
+at which time the task is unblocked.

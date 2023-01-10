@@ -1,0 +1,128 @@
+\subsection{Chapter 3 Key Concepts}
+
+\subsubsection{Thread Queues}
+
+p28:
+
+Binary semaphores may utilize the optional priority
+inheritance algorithm to avoid the problem of priority inversion.
+
+p29:
+
+RTEMS supports the four locking protocols (ICPP,PIP,MrsP,OMIP)
+for synchronization objects providing mutual-exclusion (mutex).
+
+One aim of the
+locking protocols is to avoid priority inversion.
+
+priority updates due to the locking protocols take place immediately and are
+propagated recursively.
+The mutex owner and wait for mutex relationships define a directed
+acyclic graph (DAG).
+The run-time of the mutex obtain, release and timeout operations depend
+on the complexity of this resource dependency graph.
+
+Priority inversion occurs when a high priority tasks
+requests access to shared resource
+which is currently allocated to a low priority task.
+
+\dots
+the low priority task is prevented from executing by one or more medium priority
+tasks.
+
+Although the priority ceiling protocol is
+more efficient than the priority inheritance protocol
+with respect to the maximum number of
+thread priority changes which may occur
+while a thread owns a particular mutex,
+the priority inheritance protocol is more forgiving
+in that it does not require this apriori information.
+
+p30:
+
+priority updates due to the priority
+inheritance protocol take place immediately and are propagated recursively.
+
+This means the
+priority inheritance is transitive
+
+If a task A owning a priority inheritance
+mutex blocks on another priority inheritance mutex, then the owner of this mutex inherits the
+priority of the task A.
+
+Threads that wait for mutex ownership are not blocked
+with respect to the scheduler and instead
+perform a busy wait.
+
+The complex part of the implementation is contained in the thread
+queues and shared with the MrsP support.
+
+p31:
+
+Threads can wait in FIFO or priority order.
+
+It makes
+no sense to compare the priority values of two different scheduler instances.
+
+The top-level queue provides FIFO ordering
+and contains priority queues.
+Each priority queue is associated with a scheduler instance and
+contains only threads of this scheduler instance.
+Threads are enqueued in the priority queues
+corresponding to their scheduler instances.
+To dequeue a thread, the highest priority thread of
+the first priority queue is selected.
+Once this is done, the first priority queue is appended to the
+top-level FIFO queue.
+
+\textbf{The following excerpt is a bit head-wrecking and needs some thought}
+
+\begin{quote}
+``
+Such a two-level queue needs a considerable amount of memory
+if fast enqueue and dequeue
+operations are desired.
+Providing this storage per thread queue would waste a lot of memory
+in typical applications.
+Instead, each thread has a queue attached which resides in a dedicated
+memory space independent of other memory
+used for the thread (this approach was borrowed
+from FreeBSD).
+In case a thread needs to block, there are two options
+\begin{itemize}
+  \item
+    the object already has a queue,
+    then the thread enqueues itself to this already present queue
+    and the queue of the thread is added to
+    a list of free queues for this object, or
+  \item
+    otherwise,
+    the queue of the thread is given to the object
+    and the thread enqueues itself to this queue.
+\end{itemize}
+In case the thread is dequeued, there are two options
+\begin{itemize}
+  \item
+    the thread is the last thread in the queue,
+    then it removes this queue from the object and
+    reclaims it for its own purpose, or
+  \item
+    otherwise,
+    the thread removes one queue from the free list of the object
+    and reclaims it for its own purpose.
+\end{itemize}
+Since there are usually more objects than threads, this actually reduces the memory demands.
+In addition the objects only contain a pointer to the queue structure. This helps to hide implementation
+details. Inter-cluster priority queues are available since RTEMS 5.1.
+''
+\end{quote}
+
+A doubly-linked list (chain) is used to implement the FIFO queues
+yielding a $O(1)$ worst-case
+time complexity for enqueue and dequeue operations.
+
+A red-black tree is used to implement the priority queues
+yielding a $O(\log(n))$ worst-case time
+complexity for enqueue and dequeue operations
+with $n$ being the count of threads already on
+the queue.

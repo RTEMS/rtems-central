@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Event Manager: Promela to RTEMS Refinement
+
+# Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+NAME: |
+  const char rtems_test_name[] = "Model_MrsP_Thread_Q";
+
+memory_DCL: item {0}[{1}];
+
+nptr_DCL: item *
+
+chain_DCL: rtems_chain_control
+
+INIT: rtems_chain_initialize_empty( &chain );
+
+append: |
+  memory[{1}].val = {0};
+  rtems_chain_append_unprotected( &chain, (rtems_chain_node*)&memory[{1}] );
+
+getNonNull: |
+  nptr = get_item( &chain );
+  T_eq_ptr( nptr, &memory[{0}] );
+
+nptr: T_eq_ptr( nptr, &memory[{0}] );
+
+nptr_PTR: |
+  T_eq_ptr( nptr, NULL );
+  T_eq_ptr( nptr, &memory[{0}] );
+
+itm_FSCALAR:   T_eq_int( {0}->val, {1} );
+
+nxt_FPTR: |
+  T_eq_ptr( {0}->node.next->next, NULL );
+  T_eq_ptr( {0}->node.next, &memory[{1}] );
+
+prv_FPTR: |
+  T_eq_ptr( {0}->node.previous->previous, NULL );
+  T_eq_ptr( {0}->node.previous, &memory[{1}] );
+
+chain_SEQ: |
+  show_chain( &chain, ctx->buffer );
+  T_eq_str( ctx->buffer, "{0} 0" );

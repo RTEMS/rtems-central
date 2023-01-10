@@ -1,0 +1,145 @@
+\subsection{Chapter 5 Scheduling Concepts}
+
+\subsubsection{Introduction}
+
+p42:
+
+The scheduler’s sole purpose is to allocate
+the  all important resource of processor time
+to the various tasks competing for attention.
+
+\subsubsection{Background}
+
+p43:
+
+Priority based scheduling algorithms will always select
+the highest priority task that is ready to run
+when allocating the processor to a task.
+
+There are a few common methods of accomplishing the mechanics of this algorithm.
+These ways involve a list or chain of tasks in the ready state.
+
+p43--44:
+
+Another mechanism is to maintain a list of FIFOs per priority.
+When a task is readied,
+it is placed on the rear of the FIFO for its priority.
+This method is often used with a bitmap to assist in locating
+which FIFOs have ready tasks on them.
+This data structure has $O(1)$ insert, extract
+and find highest ready run-time complexities.
+
+p44:
+
+A red-black tree may be used for the ready queue with the priority as the key.
+This data structure has $O(\log(n))$ insert, extract
+and find highest ready run-time complexities
+while $n$ is the count of tasks in the ready queue.
+
+RTEMS provides four mechanisms which allow the user to alter the task scheduling decisions:
+\begin{itemize}
+  \item
+    user-selectable task priority level
+  \item
+    task preemption control
+  \item
+    task timeslicing control
+  \item
+    manual round-robin selection
+\end{itemize}
+
+The evaluation order for scheduling characteristics is always
+priority, preemption mode, and timeslicing.
+
+A lower priority level means higher priority (higher importance).
+
+Note that the preemption setting has no effect
+on the manner in which a task is scheduled.
+It only applies once a task has control of the processor.
+
+p46:
+
+Tasks in an RTEMS system must always be in
+one of the five allowable task states.
+These states are: executing, ready, blocked, dormant, and non-existent.
+
+State Diagram:
+\begin{eqnarray*}
+   NonExistent  &\defs&  create      \then Dormant
+\\ Dormant      &\defs&  deleting    \then NonExistent
+                         \extc
+                         starting    \then Ready
+\\ Ready       &\defs&   deleting    \then NonExistent
+                         \extc
+                         dispatching \then Executing
+                         \extc
+                         blocking    \then Blocked
+\\ Executing   &\defs&   deleting    \then NonExistent
+                         \extc
+                         yielding    \then Ready
+                         \extc
+                         blocking    \then Blocked
+\\ Blocked     &\defs&   deleting    \then NonExistent
+                         \extc
+                         readying    \then Ready
+\end{eqnarray*}
+
+p47:
+
+A blocked task may also be suspended.
+Therefore,
+both the suspension and the blocking condition must be removed
+before the task becomes ready to run again.
+
+\subsubsection{Uniprocessor Schedulers}
+
+p49:
+
+5.3.1 Deterministic Priority Scheduler
+\dots
+It schedules tasks using a priority based algorithm
+which takes into account preemption.
+\dots
+an array of FIFOs with a FIFO per priority.
+a bitmap which is used to track which priorities have ready tasks.
+\dots
+deterministic (e.g., predictable and fixed) in execution time.
+
+\textit{More single-core scheduler descriptions follow\dots}
+
+\subsubsection{SMP Schedulers}
+
+p51:
+
+All SMP schedulers included in RTEMS are priority based.
+
+\paragraph{Earliest Deadline First SMP Scheduler}
+
+job-level fixed-priority scheduler using the Earliest Deadline First
+
+supports \emph{task processor affinities}
+of one-to-one and one-to-all, e.g., a task can execute on exactly one processor
+or all processors managed by the scheduler instance.
+
+The processor affinity set of a task must
+contain all online processors to select the one-to-all affinity.
+
+supports \emph{thread pinning}
+
+ready queues use a red-black tree with the task priority as the key.
+
+\paragraph{Deterministic Priority SMP Scheduler}
+
+A fixed-priority scheduler which uses a table of chains
+with one chain per priority level for the ready tasks.
+
+\paragraph{Simple Priority SMP Scheduler}
+
+A fixed-priority scheduler which uses a sorted chain for the ready tasks.
+
+\paragraph{Arbitrary Processor Affinity Priority SMP Scheduler}
+
+A fixed-priority scheduler which uses a table of chains with one chain per priority level for the
+ready tasks.
+
+This scheduler supports arbitrary task processor affinities

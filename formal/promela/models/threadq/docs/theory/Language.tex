@@ -1,0 +1,124 @@
+\section{Program Abstract Syntex}
+
+We present here an abstract syntax of the subset of C in use
+with the RTEMS-SMP Thread Queue implementation.
+
+
+\subsection{Basic Syntax}
+
+This is the basic ``While'' language used as a basis for most semantics
+work in this area.
+
+\begin{eqnarray*}
+   P,Q \in While
+   &::=&  x := e       \quad\mbox{--- Assignment}
+\\ & | &  P ; Q        \quad\mbox{--- Sequential Composition}
+\\ & | &  P \cond c Q  \quad\mbox{--- Conditional Statement}
+\\ & | &  c \whl P     \quad\mbox{--- While Loop}
+\\ & | &  Skip         \quad\mbox{--- No-op}
+\\ & | &  P \ndc Q     \quad\mbox{--- Demonic Non-determinism}
+\end{eqnarray*}
+The latter two constructs play a useful role in the theory.
+
+\subsubsection{Derived Constructs}
+
+Here we add other common language constructs onto the basic language above,
+and show how they map to those above.
+
+\begin{eqnarray*}
+   While &::=& \dots
+\\ & | & P \dowhile c   \quad\mbox{--- Do-While loop}
+\end{eqnarray*}
+
+
+\begin{eqnarray*}
+    P \dowhile c &\defs&  P ; c \whl P
+\end{eqnarray*}
+
+A common idiom used
+when a CPP macro is producing  block-structured code $P$,
+is to generate $P \dowhile false$.
+This is done as a workaround for the limitations of the C preprocessor,
+and not because there is some mysterious difference in its behaviour,
+as compared to just $P$.
+So we will always simplify such usage when modelling.
+
+$$ P \dowhile false \equiv P$$
+
+
+\newpage
+\subsection{Modelling Atomicity}
+
+The ``While'' language is too coarse.
+We need to break expression evaluation down, and separate out loads and stores.
+
+\begin{eqnarray*}
+   && x:=e
+\\ &\equiv& x := f(v_1,\dots,v_n)
+\\ &\equiv& load(v_1);\dots;load(v_n);apply(f);store(x)
+\\
+\\ && P \cond c Q
+\\ &\equiv& P \cond{f(v_1,\dots,v_n)} Q
+\\ &\equiv& load(v_1);\dots;load(v_n);c_0:=apply(f);P \cond{c_0} Q
+\\
+\\ && c \whl P
+\\ &\equiv& P; c \whl P \cond{c} Skip
+\\ &\equiv& P; c \whl P \cond{f(v_1,\dots,v_n)} Skip
+\\ &\equiv& load(v_1);\dots;load(v_n);c_0:=apply(f);(P; c \whl P) \cond{c_0} Skip
+\end{eqnarray*}
+
+We also need to recognise that loads and stores
+(other than atomic ones)
+are not atomic, but can involve a number of phases.
+
+This strongly supports the idea of using Promela!
+
+\newpage
+\subsection{Modelling Pointers}
+
+RTEMS code makes essential use of pointers.
+We need an appropriate abstraction of these.
+
+The following key roles have been identified for pointers
+in the thread queue implementation:
+\begin{itemize}
+  \item
+    Pointing to relevant RTEMS objects,
+    such as thread control blocks, semaphores, or locks
+  \item
+    Forming the implementation structure of FIFO queues
+    (a.k.a. chains).
+  \item
+    Forming the implementation structure of priority queues
+    (a.k.a. red-black trees).
+\end{itemize}
+The issue is,
+do we assume symbolic queues,
+or do we model their behaviour down at the pointer manipulation level?
+
+The simplest model is one that imagines memory as a mapping
+from location to value. A pointer is simply a location.
+\begin{eqnarray*}
+   \ell \in Loc &=& \mbox{finite set of memory locations}
+\\ d \in Datum &=& \mbox{finite set of data values}
+\\ n \in Mem &=& Loc \fun Datum
+\end{eqnarray*}
+We can define registers, memory and (atomic) load/store as follows:
+\begin{eqnarray*}
+   a \in Addr &=& Loc \mbox{ ---Available RAM address space}
+\\   MEM &=& Addr \fun Datum
+\\  ram &:& MEM
+\\ r \in Reg  &=& Loc \mbox{ ---Available CPU registers}
+\\  REG &=& Reg \fun Datum
+\\  reg &:& REG
+\\  (reg,ram), state \in State &=& REG \times MEM
+\\  load &:& (Reg \times Addr) \fun State \fun State
+\\  load[r,a](reg,mem) &\defs& (reg\override\maplet r {ram(a)},ram)
+\\  store &:& (Reg \times Addr) \fun State \fun State
+\\  store[r,a](reg,mem) &\defs& (reg,ram\override\maplet a {reg(r)})
+\end{eqnarray*}
+Pointers are now easy:
+\begin{eqnarray*}
+   p \in Ptr &=& Addr
+\\ 0 &:& Ptr \mbox{ ---The null pointer}
+\end{eqnarray*}

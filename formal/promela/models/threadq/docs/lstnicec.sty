@@ -1,0 +1,22 @@
+% lstnicec.sty
+%
+% (c) Andrew Butterfield 2021
+%
+\ProvidesPackage{lstnicec}[2021/02/22 Nice C definition for listings.sty]
+\RequirePackage{xcolor}
+\RequirePackage{listings}
+\RequirePackage[smallscripts]{moresize}
+
+\lstdefinelanguage{nicec}%
+  {language=C,
+   basicstyle=\ttfamily\small\color{blue},
+   identifierstyle=\color{red!40!blue},
+   commentstyle={\color{red}},
+   keywordstyle=\color{black},
+   classoffset=1,
+   sensitive,%
+   morestring=[b]",
+   showstringspaces=false%
+  }%
+
+\lstnewenvironment{nicec}{\lstset{language=nicec,linewidth=160mm,frame=lines}} {}

@@ -1,0 +1,182 @@
+\section{Call Trees}\label{sec:calltrees}
+
+Here we produce call trees for all the top-level
+calls to set task priorities and schedulers,
+and to create and use semaphores,
+all done in a MrsP context.
+
+We assume the following regarding key CPP macros:
+\begin{description}
+  \item [defined:]~
+    \\ \verb"RTEMS_SMP"
+    \\ \verb"_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC"
+  \item [not defined:]~
+    \\ \verb"RTEMS_DEBUG"
+    \\ \verb"RTEMS_PROFILING"
+    \\ \verb"RTEMS_SMP_LOCK_DO_NOT_INLINE"
+      (outcome the same if defined or not, this is simplest)
+\end{description}
+All trees are as a result of the above settings being applied.
+
+Unless otherwise stated,
+all paths are relative to \texttt{modules/rtems/cpukit}
+
+Key source directories:
+
+\begin{tabular}{|c|l|}
+\hline
+ Shorthand & Path
+\\\hline
+ irr & include/rtems/rtems
+\\\hline
+ irs & include/rtems/score
+\\\hline
+ rs & rtems/src
+\\\hline
+ ss & score/src
+\\\hline
+ scs & score/cpu/sparc
+\\\hline
+ scsirs & score/cpu/sparc/include/rtems/score
+\\\hline
+\end{tabular}
+
+We will ignore certain low-level calls,
+for example,
+the call to \verb"_Semaphore_Allocate"
+made by \verb"rtems_semaphore_create".
+
+\newpage
+\subsection{Create MRSP Semaphore}
+
+We are only interested in semaphores with the following settings:
+\begin{verbatim}
+RTEMS_PRIORITY
+RTEMS_BINARY_SEMAPHORE
+RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+\end{verbatim}
+
+Call point: rs/semcreate.c:35 \verb"rtems_semaphore_create"
+\begin{verbatim}
+208: _Thread_Scheduler_get_home        --  irs/threadimpl.h
+209: _RTEMS_Priority_To_core           --  irr/tasksimpl.h
+212: _MRSP_Initialize                  --  irs/mrspimpl.h:290
+    313: _Scheduler_Map_priority           --  irs/schedulerimpl.h:480
+    319: _Thread_queue_Object_initialize   --  ss/threadq.c:155
+        157: _Thread_queue_initialize          --  ss/threadq.c:144
+            149: _Thread_queue_Queue_initialize    --  irs/threadqimpl.h:563
+            151: _SMP_lock_Stats_initialize
+
+    if initially_locked - this will not be the norm....
+    325: _Thread_queue_Context_initialize
+    326: _Thread_queue_Context_ISR_disable
+    327: _Thread_queue_Context_set_ISR_level
+    328: _MRSP_Acquire_critical   -- irs/mrspimpl.h:54
+         59: _Thread_queue_Acquire_critical   -- irs/threadqimpl.h:697
+             702: _Thread_queue_Do_acquire_critical  -- ss/threadq.c:79
+                 84: _Thread_queue_Queue_acquire_critical  -- irs/threadqimpl.h:609
+                     610: _Thread_queue_Queue_do_acquire_critical -- irs/threadqimpl.h:583
+                         592: _SMP_ticket_lock_Acquire  -- irs/smplockticket.h:150
+                            151: _SMP_ticket_lock_Do_acquire  -- irs/smplockticket.h:89
+    329: _MRSP_Claim_ownership
+    if ownership not successful
+    332: _Thread_queue_Destroy
+\end{verbatim}
+
+\newpage
+\subsection{Set MRSP Semaphore Priority Ceiling}
+
+Call point: rs/semsetpriority.c:132 \verb"rtems_semaphore_set_priority"
+\begin{verbatim}
+147: _Scheduler_Get_by_id
+152: _Semaphore_Get
+164: _Semaphore_Set_priority        --  rs/semsetpriority.c:32
+     46: _RTEMS_Priority_To_core
+     52: _Thread_queue_Context_clear_priority_updates
+     53: _Thread_queue_Acquire_critical   -- chase this
+     57: _Semaphore_Get_variant
+     90: _MRSP_Get_priority  -- irs/mrspimpl.h:112
+         119: _Scheduler_Get_index
+     96: _MRSP_Set_priority  -- irs/mrspimpl.h:130
+         138: _Scheduler_Get_index
+    120: _Thread_queue_Dispatch_disable
+    121: _Thread_queue_Release  -- ss/threadq.c:125
+        134: _Thread_queue_Queue_release_critical  ***
+        138: _ISR_lock_ISR_enable
+    125: _Thread_Priority_update  -- ss/threadchangepriority.c:343
+    126: _Thread_Dispatch_enable
+    128: _RTEMS_Priority_From_core
+\end{verbatim}
+
+\subsection{Obtain MRSP Semaphore}
+
+Call point: rs/semobtain.c:53 \verb"rtems_semaphore_obtain"
+\begin{verbatim}
+ 67: _Semaphore_Get
+ 87: _Semaphore_Get_variant
+121: _MRSP_Seize  -- irs/mrspimpl.h:430
+    440: _MRSP_Acquire_critical     -- irs/mrspimpl.h:54  -- see above
+    442: _MRSP_Get_owner
+    445: _MRSP_Claim_ownership      -- irs/mrspimpl.h:247
+        256: _MRSP_Raise_priority       -- irs/mrspimpl.h:155
+            168: _Thread_queue_Context_clear_priority_updates
+            169: _Thread_Wait_acquire_default_critical   ***
+            171: _Thread_Scheduler_get_home
+            172: _Thread_Scheduler_get_home_node
+            173: _MRSP_Get_priority
+            179: _Priority_Node_initialize
+            180: _Thread_Priority_add
+            186: _Thread_Wait_release_default_critical
+        268: _MRSP_Set_owner
+        269: _Thread_queue_Dispatch_disable
+        270: _MRSP_Release
+        271: _Thread_Priority_and_sticky_update
+        272: _Thread_Dispatch_enable
+    447: _MRSP_Release
+    450: _MRSP_Wait_for_ownership   -- irs/mrspimpl.h:351
+        360: _MRSP_Raise_priority  -- see above
+        372: _Thread_queue_Context_set_deadlock_callout
+        376: _Thread_queue_Enqueue_sticky
+        384: _MRSP_Replace_priority
+        395: _ISR_lock_ISR_disable
+        396: _MRSP_Remove_priority
+        397: _Thread_Dispatch_disable_critical
+        400: _ISR_lock_ISR_enable
+        401: _Thread_Priority_and_sticky_update
+        402: _Thread_Dispatch_enable
+    452: _MRSP_Release              -- irs/mrspimpl.h:68
+         70: _Thread_queue_Release      -- ss/threadq.c:121 -- see above
+\end{verbatim}
+
+\subsection{Release MRSP Semaphore}
+
+Call point: rs/semrelease.c:26 \verb"rtems_semaphore_release"
+\begin{verbatim}
+ 35: _Semaphore_Get
+ 47: _Thread_queue_Context_set_MP_callout
+ 52: _Semaphore_Get_variant
+ 93: _MRSP_Surrender  -- irs/mrspimpl.h:469
+     477: _MRSP_Get_owner
+     482: _MRSP_Acquire_critical
+     484: _MRSP_Set_owner
+     485: _MRSP_Remove_priority
+     492: _Thread_Dispatch_disable_critical
+     495: _MRSP_Release
+     496: _Thread_Priority_and_sticky_update
+     497: _Thread_Dispatch_enable
+     501: _Thread_queue_Surrender_sticky  -- ss/threadqenqueue.c:824
+        837: _Thread_queue_Context_clear_priority_updates
+        838: *operations->surrender
+        851: _Thread_queue_Make_ready_again
+        853: _Thread_queue_Dispatch_disable
+        854: _Thread_queue_Queue_release
+        858: _Thread_Priority_and_sticky_update
+        859: _Thread_Priority_and_sticky_update
+        860: _Thread_Dispatch_enable
+\end{verbatim}
+
+\subsection{Task Set Priority}
+
+\subsection{Task Set Priority}
+
+\subsection{Task Set Scheduler}

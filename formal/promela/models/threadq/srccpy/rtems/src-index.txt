@@ -1,0 +1,97 @@
+go_ahead
+    Atomic_Uint
+    defd: cpukit/include/rtems/score/threadq.h 120
+    used:
+        cpukit/include/rtems/score/threadqimpl.h 470,496,510
+
+Thread_queue_Gate
+    typedef struct { Chain_Node, Atomic_Uint }
+    defd: include/rtems/score/threadq.h 117--121
+    used:
+        include/rtems/score/threadq.h 141
+        include/rtems/score/threadqimpl.h 467,481,493,507
+        include/rtems/score/thread.h 463
+        include/rtems/score/threadimpl.h 1747
+
+
+**** From Top down ....
+
+From rtems_semaphore_obtain() we get down to...
+
+_Thread_queue_Enqueue
+    void ( Thread_queue_Queue*, Thread_queue_Operations*,
+           Thread_Control*, Thread_queue_Context* )
+    hdr: include/rtems/score/threadqimpl.h 924
+    defd: score/src/threadqenqueue.c 387--460
+    used:
+        include/rtems/score/coresemimpl.h 226
+        score/src/coremutexseize.c 45:
+        score/src/semaphore.c 76,110
+        score/src/threadrestart.c 446
+
+_Thread_queue_Path_acquire_critical
+    bool (  Thread_queue_Queue*, Thread_Control*, Thread_queue_Context* )
+    hdr: include/rtems/score/threadqimpl.h 1425
+    defd: score/src/threadqenqueue.c 262--365
+    used:
+        score/src/threadqenqueue.c 407,476
+        score/src/threadqops.c 1199
+        score/src/threadchangepriority.c 272
+
+??? What fits in here?
+
+***  ... down through...
+
+rtems_task_set_scheduler
+    used:
+        librtemscxx/thread.cpp 223
+        rtems/src/tasksetscheduler.c 7,32
+        libtest/t-test-rtems-measure.c 257
+
+rtems_task_set_priority
+    rtems_status_code ( rtems_id, rtems_task_priority, rtems_task_priority* )
+    hdr: include/rtems/rtems/tasks.h 1036
+    defd: rtems/src/tasksetpriority.c 63--110
+    used:
+        rtems/src/taskmp.c 294  (_RTEMS_tasks_MP_Process_packet)
+        libfs/src/nfsclient/src/nfs.c 3139
+        score/cpu/i386/sse_test.c 649
+        libtest/testparallel.c 145
+        libtest/t-test-rtems-context.c 55,92
+        libmisc/cpuuse/cpuusagetop.c 538
+
+rtems_task_get_priority
+    used:  (nowhere in cpukit)
+        ../testsuites/sptests/spscheduler01/init.c
+        ../testsuites/smptests/smpmutex01/init.c
+
+_Scheduler_EDF_Release_job
+    used:
+        score/src/schedulercbsreleasejob.c 46 (_Scheduler_CBS_Release_job)
+
+_Scheduler_EDF_Cancel_job
+    used:
+        score/src/schedulercbsreleasejob.c 70 (_Scheduler_CBS_Cancel_job)
+
+_Thread_Wait_acquire_critical ( Thread_Control*, Thread_queue_Context* )
+    RTEMS_INLINE_ROUTINE void
+    defd: cpukit/include/rtems/score/threadimpl.h  1795--1868
+    used:
+        rtems/src/tasksetscheduler.c 71   (rtems_task_set_scheduler)
+        rtems/src/tasksetpriority.c 91    (rtems_task_set_priority)
+        rtems/src/taskgetpriority.c 73    (rtems_task_get_priority)
+        score/src/scheduleredfreleasejob.c 52,88
+              (_Scheduler_EDF_Release_job) (_Scheduler_EDF_Cancel_job)
+
+
+_Thread_queue_Gate_add
+    RTEMS_INLINE_ROUTINE void ( Chain_Control*, Thread_queue_Gate* )
+    defd: cpukit/include/rtems/score/threadqimpl.h 479
+    used:
+        cpukit/include/rtems/score/threadimpl.h 1812,2036
+        cpukit/score/src/threadqenqueue.c 314
+
+
+
+Searches in modules/rtems/cpukit
+========

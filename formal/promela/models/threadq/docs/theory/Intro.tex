@@ -1,0 +1,20 @@
+\section{Introduction}
+
+Here we collect relevant theory
+for the formal analysis of the RTEMS-SMP Thread Queue implementation.
+
+Our focus is on two functions:
+\begin{description}
+  \item [Wait Acquisition] \verb"_Thread_Wait_acquire_critical"
+    \\ include/rtems/score/threadimpl.h:1795
+  \item [Queue Path Acquisition] \verb"_Thread_queue_Path_acquire_critical"
+    \\ cpukit/score/src/threadqenqueue.c:262
+\end{description}
+
+
+We plan to use the following key techniques to describe semantics:
+\begin{itemize}
+  \item Z/UTP-stype predicate calculus (pre/post/rely/guarantee)
+  \item Separation Logic
+  \item State machines (B\"{u}chi automata)
+\end{itemize}

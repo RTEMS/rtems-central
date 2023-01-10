@@ -1,0 +1,9 @@
+\section{C Code Template}
+
+
+\begin{nicec}
+// ----- standard code width ------------------------------------------------->|
+int main() {
+  printf("Hello World %d\n",42);
+}
+\end{nicec}

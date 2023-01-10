@@ -1,0 +1,390 @@
+\section{Specifying MrsP}\label{sec:MrsP}
+
+Here we are going to generate a specification of MrsP.
+References include
+\cite{Bloom:2020:RTEMS}.
+
+\subsection{MrsP State}
+
+We have processors, resource semaphores, and tasks.
+We have one or more schedulers.
+Tasks and semaphores have priorities.
+
+\subsection{MrsP Invariants}
+
+For a given scheduler,
+a semaphore's priority is at least as high
+as the that of the highest priority task accessing that semaphore
+\cite{Bloom:2020:RTEMS}.
+
+When a task obtains a semaphore,
+its priority is raised to that of the semaphore
+\cite{Bloom:2020:RTEMS}.
+
+When a task releases a semaphore, its priority returns to its usual value
+\cite{Bloom:2020:RTEMS}.
+
+Tasks waiting to obtain a semaphore do a spin wait
+\cite{Bloom:2020:RTEMS},
+at the local ceiling priority of the resource
+\cite{Burns:2013:MrsP}.
+
+Any waiting (spinning) task must be able to do computation
+on behalf of another waiting task
+\cite{Burns:2013:MrsP}.
+It must handle such outstanding requests in the original FIFO order.
+\cite{Burns:2013:MrsP}.
+
+A process that migrates gets a priority one higher
+than the helping (spinning) task
+\cite{Burns:2013:MrsP}.
+
+Three indispensable operations:
+ask a scheduler node for help;
+reconsider help request;
+withdraw a scheduler node
+\cite{Gomes:2019:MrsP}.
+
+Semaphores must be release in reverse order of their acquisition
+\cite{Bloom:2020:RTEMS}.
+
+Semaphores should not be taken from an interrupt context,
+or when thread dispatch is disabled
+\cite{Bloom:2020:RTEMS}.
+
+Accesses to a resource are dealt with in FIFO order
+\cite{Burns:2013:MrsP}.
+
+Most relevant operations of a MrsP semaphore in RTEMS:
+the creation of a semaphore;
+changing its priority ceiling;
+the resource release;
+resource obtainment;
+the semaphore deletion
+\cite{Gomes:2019:MrsP}.
+
+A MrsP semaphore must be composed of
+a global FIFO queue to manage the access to the resource
+and a set of priority ceiling values
+used by each scheduler instance of the system
+\cite{Gomes:2019:MrsP}.
+
+Since each MrsP resource may have a different priority ceiling
+for each scheduler of the system,
+when the helping mechanism is needed,
+the helping task must execute with the helper’s priority.
+This priority is the ceiling priority on the remote processor
+and the helped task priority cannot be changed while it is being helped,
+or else the progress on the remote processor
+may be affected by that priority change
+\cite{Gomes:2019:MrsP}.
+
+It is possible for the helper and helped task to be on the same processor.
+While being helped,
+a task must be able to be re-dispatched on its own host processor.
+Lower priority tasks must not execute on the helped task’s host processor
+while it is being executed on a remote one,
+under the helping mechanism.
+\cite{Gomes:2019:MrsP}.
+
+\subsection{MrsP Initialization}
+
+\subsubsection{Create MrsP Semaphore}
+
+Manages access to resource using \emph{global} FIFO queue
+\cite{Gomes:2019:MrsP}.
+
+The set of priority ceiling values are used
+to manage local access to the FIFO queue
+\cite{Gomes:2019:MrsP}.
+
+The following algorithm,
+corresponding to \verb"_MRSP_Initialize"
+ comes from \cite[Fig. 13, p42]{Gomes:2019:MrsP}:
+\begin{eqnarray*}
+   \lefteqn{MrsPInit(sem,sched,ceil,exec,locked)~\defs}
+\\ && \FOR index \in \textrm{dom }scheds
+\\ && \quad \IF scheds[index] = sched
+\\ && \qquad sem.ceilPrio[index] := ceil
+\\ && \quad \ELSE
+\\ && \qquad sem.ceilPrio[index] = SchMapPrio(scheds[index],0)
+\\ && \quad \END
+\\ && \END
+\\ && TqOInit(sem.waitQ)
+\end{eqnarray*}
+Here $locked$ is always false, for MrsP.
+
+
+\subsection{MrsP Actions}
+
+At the top-level, there are just two actions,
+namely obtaining and releasing \emph{resource} semaphores.
+
+
+However,
+there are aspects of MrsP that produce potentially complex
+``knock-on'' effects:
+\begin{itemize}
+  \item
+    Task priority changes can themselves result in queue semaphore accesses.
+  \item
+    The FIFO queue
+  \item
+    A low priority task holding a resource
+    can be preempted by a higher priority task on its own processor
+    (which it self is not using or looking for that resource.).
+  \item
+    A Helper protocol can ``move'' a task from one processor to another.
+\end{itemize}
+
+We present the prototype algorithms in \cite{Burns:2013:MrsP},
+but using better notation.
+
+\begin{eqnarray*}
+   p &:& Processor
+\\ t &:& Task
+\\ R &:& Resource
+\\ A &:& Affinities =  \Map{(Resource|Task)}{\Set Processor}
+\\ U &:& User = \Map{Resource}{[Task]}
+\end{eqnarray*}
+Here $U$ is the task, if any, using the resource.
+
+\subsubsection{Obtain Resource Semaphore}
+
+\begin{eqnarray*}
+   \lefteqn{Lock(R,t,p) \defs {}}
+\\ && prio(t) := prio(R,p)
+\\ && A(R) := A(R) \cup \setof p
+\\ && \IF U(R) \neq \NULL
+\\ && \quad A(U(R)) := A(R);
+\\ && \quad \textrm{obtain FIFO lock on }R\textrm{ and spin.}
+\\ && \!\ELSE
+\\ && \quad A(t) := A(R)
+\\ && \END
+\\ && U(R) := t
+\\ && prio(t) := prio(t)+1
+\\ && \langle \textrm{ use } R \rangle
+\end{eqnarray*}
+Protocol overhead \cite{Burns:2013:MrsP}:
+a priority change to the ceiling;
+a spinlock to gain access to the resource’s data structure;
+the setting of two affinity masks
+(one for the locking holding task, the other for the resource);
+spinning in a FIFO queue if the resource is locked.
+
+From \cite[pp43--44]{Gomes:2019:MrsP} we get the following high level overvew:
+\begin{eqnarray*}
+   \lefteqn{SemObtain(sem) ~ \defs}
+\\ && Seize(sem)
+\\ && \IF locked(sem) \quad \textrm{``has owner''}
+\\ && \THEN Wait(sem)  \quad \textrm{``for ownership''}
+\\ && \ELSE
+\\ && \quad Claim(sem) \quad \textrm{``ownership''}
+\\ && \quad RaisePrio(ceil)
+\\ && \quad SetOwner(self)
+\\ && \quad StickyUpd(self,1)
+\\ && \END
+\end{eqnarray*}
+The $StickyChg(self,1)$ call
+grants that when the task is executing in any scheduler instance
+other than its original one,
+lower priority tasks may not execute on its host scheduler
+\cite{Gomes:2019:MrsP}.
+
+Waiting is complicated ($q$ is queue context)
+\cite[Appendix 2]{Gomes:2019:MrsP}:
+\begin{eqnarray*}
+   \lefteqn{Wait(sem,self,q,ceil)~\defs}
+\\&& RaisePrio(sem,self,ceil,q)
+\\&& st := TQEnqSticky(sem.waitQ,\mathsf{TQOPS},self,q)
+\\&& \IF st = \mathsf{success}
+\\&& \THEN
+\\&& \quad PrioRepl(self,ceil,sem.ceil)
+\\&& \ELSE
+\\&& \quad \IF st = \mathsf{deadlock}
+\\&& \quad \THEN
+\\&& \qquad stickyChange := 0
+\\&& \quad \ELSE
+\\&& \qquad stickyChange := 1
+\\&& \quad \END
+\\&& \quad StickyUpd(self,stickyChange)
+\\&& \END
+\end{eqnarray*}
+
+The call to \verb"_Thread_queue_Enqueue_sticky()" does the following:
+\begin{eqnarray*}
+   \lefteqn{TQEnqSticky(sem.waitQ,\mathsf{TQOPS},self,q)~\defs}
+\\&& ret := TQPatchAcQCrit(sem.waitQ,self,q)
+\\&& \IF ~\lnot ret ~\THEN
+\\&& \quad DeadLock(self)
+\\&& \ELSE
+\\&& \quad Enqueue(sem.waitQ,self,q)
+\\&& \quad ThPrioUpdate(q)
+\\&& \quad StickyUpd(self,1)
+\\&& \quad \WHILE TWFlagsGetAcQ(self) = IntendToBlock ~\DO \SKIP
+\\&& \END
+\\&& TWGetStatus(self)
+\end{eqnarray*}
+
+\subsubsection{Release Resource Semaphore}
+
+\begin{eqnarray*}
+   \lefteqn{Unlock(R,t,p) \defs {}}
+\\ && A(R) := A(R) \setminus \setof p
+\\ && \textrm{release next task in FIFO queue, if any.}
+      \quad
+      U(R) \neq t
+\\ && A(t) := p
+\\ && prio(t) := baseprio(t)
+\end{eqnarray*}
+Protocol overhead \cite{Burns:2013:MrsP}:
+a spinlock to gain access to the resource’s data structure;
+releasing any queued task;
+the setting of two affinity masks
+(one for the locking holding task, the other for the resource);
+priority change to base priority.
+
+From \cite[pp45--46, Fig. 16]{Gomes:2019:MrsP} we get
+\begin{eqnarray*}
+   \lefteqn{Surrender(sem,self,q) ~ \defs}
+\\ && SetOwner(\NULL)
+\\ && RemPrio(self,ceil,q)
+\\ && heads := sem.waitQ.heads
+\\ && \IF null(heads)
+\\ && \quad StickyUpd(self,-1)
+\\ && \ELSE
+\\ && \quad TQSurrenderSticky(sem.waitQ.heads,self,q)
+\\ && \quad TQRdyAgain(heads)
+\\ && \quad StickyUpd(owner,-1)
+\\ && \quad StickyUpd(heads,-0)
+\\ && \END
+\end{eqnarray*}
+The ``affinities'' seem to implemented in $q$ (queue context),
+and particularly in $TQRdyAgain$.
+
+\subsubsection{Set Semaphore Priority}
+
+\emph{Setting} priority is very simple:
+\begin{eqnarray*}
+   \lefteqn{SetPrio(sem,sched,prio)~\defs}
+\\&& index = getIndex(sched)
+\\ && sem.ceil[index] := prio
+\end{eqnarray*}
+
+
+\subsubsection{Change Task Priority}
+
+\emph{Raising} and \emph{Removing} priority is more complex,
+involving thread Qs.
+
+For now we show the code here:
+
+\newpage
+\begin{nicec}
+/**
+ * @brief Adds the priority to the given thread.
+ *
+ * @param mrsp The MrsP control for the operation.
+ * @param[in, out] thread The thread to add the priority node to.
+ * @param[out] priority_node The priority node to initialize and add to
+ *      the thread.
+ * @param queue_context The thread queue context.
+ *
+ * @retval STATUS_SUCCESSFUL The operation succeeded.
+ * @retval STATUS_MUTEX_CEILING_VIOLATED The wait priority of the thread
+ *      exceeds the ceiling priority.
+ */
+RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
+  MRSP_Control         *mrsp,
+  Thread_Control       *thread,
+  Priority_Node        *priority_node,
+  Thread_queue_Context *queue_context
+)
+{
+  Status_Control           status;
+  ISR_lock_Context         lock_context;
+  const Scheduler_Control *scheduler;
+  Priority_Control         ceiling_priority;
+  Scheduler_Node          *scheduler_node;
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_acquire_default_critical( thread, &lock_context );
+
+  scheduler = _Thread_Scheduler_get_home( thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( thread );
+  ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
+
+  if (
+    ceiling_priority
+      <= _Priority_Get_priority( &scheduler_node->Wait.Priority )
+  ) {
+    _Priority_Node_initialize( priority_node, ceiling_priority );
+    _Thread_Priority_add( thread, priority_node, queue_context );
+    status = STATUS_SUCCESSFUL;
+  } else {
+    status = STATUS_MUTEX_CEILING_VIOLATED;
+  }
+
+  _Thread_Wait_release_default_critical( thread, &lock_context );
+  return status;
+}
+\end{nicec}
+
+\newpage
+\begin{nicec}
+/**
+ * @brief Removes the priority from the given thread.
+ *
+ * @param[in, out] The thread to remove the priority from.
+ * @param priority_node The priority node to remove from the thread
+ * @param queue_context The thread queue context.
+ */
+RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
+  Thread_Control       *thread,
+  Priority_Node        *priority_node,
+  Thread_queue_Context *queue_context
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_acquire_default_critical( thread, &lock_context );
+  _Thread_Priority_remove( thread, priority_node, queue_context );
+  _Thread_Wait_release_default_critical( thread, &lock_context );
+}
+\end{nicec}
+
+\newpage
+\begin{nicec}
+/**
+ * @brief Replaces the given priority node with the ceiling priority of
+ *      the MrsP control.
+ *
+ * @param mrsp The mrsp control for the operation.
+ * @param[out] thread The thread to replace the priorities.
+ * @param ceiling_priority The node to be replaced.
+ */
+RTEMS_INLINE_ROUTINE void _MRSP_Replace_priority(
+  MRSP_Control   *mrsp,
+  Thread_Control *thread,
+  Priority_Node  *ceiling_priority
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Thread_Wait_acquire_default( thread, &lock_context );
+  _Thread_Priority_replace(
+    thread,
+    ceiling_priority,
+    &mrsp->Ceiling_priority
+  );
+  _Thread_Wait_release_default( thread, &lock_context );
+}
+\end{nicec}
+
+
+\subsubsection{FIFO Queueing}
+
+\subsubsection{Preemption}
+
+\subsubsection{Migrate Task}

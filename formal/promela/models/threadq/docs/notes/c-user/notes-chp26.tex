@@ -1,0 +1,124 @@
+\subsection{Chapter 26 Multiprocessing Manager}
+
+\textbf{Note:}
+\textsf{
+At the weekly meeting of 16th March 2021,
+Sebastian Huber said that this Manager is to be
+considered deprecated,
+and that the ``node'' concept no longer really applies,
+and has been replaced in the SMP enhancements by the
+notion of ``processor''.
+}
+
+\subsubsection{Introduction}
+
+p514:
+
+RTEMS allows the entire system,
+both hardware and software,
+to be viewed logically as a single system.
+
+\subsubsection{Background}
+
+p515:
+
+In keeping with RTEMS philosophy
+of providing transparent physical node boundaries,
+the minimal heterogeneous processing required is isolated in the MPCI layer.
+
+A processor in a RTEMS system is referred to as a node.
+Each node is assigned a unique nonzero node number by the application designer.
+RTEMS assumes that node numbers are assigned consecutively
+from one to the \verb"maximum_nodes" configuration parameter.
+
+RTEMS assumes that node numbers are assigned
+consecutively from one to the \verb"maximum_nodes" configuration parameter.
+
+The Multiprocessor Communications Interface Layer (MPCI)
+must be able to route messages based on the node number.
+
+All RTEMS objects which are created with the GLOBAL attribute
+will be known on all other nodes.
+
+A task does not have to be global
+to perform operations involving remote objects.
+
+The distribution of tasks to processors is performed
+during the application design phase.
+Dynamic task relocation is not supported by RTEMS.
+
+p516:
+
+RTEMS maintains two tables containing object information
+on every node in a multiprocessor system:
+a local object table and a global object table.
+The local object table on each node is unique
+and contains information for all objects created on this node
+whether those objects are local or global.
+The global object table contains information regarding
+all global objects in the system and, consequently, is the same on every node.
+
+To maintain consistency among the table copies,
+every node in the system must be informed
+of the creation or deletion of a global object.
+
+When an application performs an operation on a remote global object,
+RTEMS must generate a Remote Request (RQ) message
+and send it to the appropriate node.
+After completing the requested operation,
+the remote node will build a Remote Response (RR) message
+and send it to the originating node.
+Messages generated as a side-effect of a directive
+(such as deleting a global task)
+are known as Remote Processes (RP)
+and do not require the receiving node to respond.
+
+p517:
+
+If an uncorrectable error occurs in the user-provided MPCI layer,
+the fatal error handler should be invoked.
+RTEMS assumes the reliable transmission and reception of messages
+by the MPCI and makes no attempt to detect or correct errors.
+
+A proxy is an RTEMS data structure which resides on a remote node
+and is used to represent a task which must block as part of a remote operation.
+This action can occur as part of the \verb"rtems_semaphore_obtain"
+and \verb"rtems_message_queue_receive" directives.
+If the object were local,
+the task’s control block would be available for modification
+to indicate it was blocking on a message queue or semaphore.
+However,
+the task’s control block resides only on the same node as the task.
+As a result,
+the remote node must allocate a proxy to represent the task
+until it can be readied.
+
+\subsubsection{Multiprocessor Communications Interface Layer}
+
+p518:
+
+The Multiprocessor Communications Interface Layer (MPCI)
+is a set of user-provided procedures
+which enable the nodes in a multiprocessor system
+to communicate with one another.
+
+A packet is sent by RTEMS in each of the following situations:
+\begin{itemize}
+  \item an RQ is generated on an originating node;
+  \item an RR is generated on a destination node;
+  \item a global object is created;
+  \item a global object is deleted;
+  \item a local task blocked on a remote object is deleted;
+  \item during system initialization to check for system consistency.
+\end{itemize}
+
+\subsubsection{Operations}
+
+
+p522:
+
+The \verb"rtems_multiprocessing_announce" directive is called by the MPCI layer
+to inform RTEMS that a packet has arrived from another node.
+This directive can be called from
+an interrupt service routine
+or from within a polling routine.

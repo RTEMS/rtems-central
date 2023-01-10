@@ -1,0 +1,163 @@
+We assume the following regarding macros:
+  defined:
+    RTEMS_SMP
+    _RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC
+  undefined:
+    RTEMS_DEBUG
+    RTEMS_PROFILING
+    _RTEMS_SCORE_CPUSTDATOMIC_USE_ATOMIC
+
+the <sys/tree.h> is provided by Newlib.
+It is shipped with the tool chain built by the RSB.
+
+/opt/rtems/6/sparc-rtems6/include/sys/tree.h
+(local copy in .../threadq/sparc-rtems6/include)
+
+================================================================================
+
+Here we look at callers to _Thread_Wait_acquire_critical
+
+rtems_task_set_scheduler   --  rtems/src/tasksetscheduler.c:71
+rtems_task_set_priority    --  rtems/src/tasksetpriority.c:91
+rtems_task_get_priority    --  rtems/src/taskgetpriority.c:73
+_Scheduler_EDF_Release_job --  score/src/scheduleredfreleasejob.c:52
+_Scheduler_EDF_Cancel_job  --  score/src/scheduleredfreleasejob.c:88
+
+Here we look at calls from _Thread_Wait_acquire_critical
+
+_Thread_Wait_acquire_critical -- include/rtems/score/threadimpl.h:1795
+
+  _Thread_Wait_acquire_default_critical
+                                 -- include/rtems/score/threadimpl.h:1641
+    _ISR_lock_Acquire -- include/rtems/score/isrlock.h:287,296
+      _SMP_lock_Acquire -- score/src/smplock.c:47
+        _SMP_lock_Acquire_inline -- include/rtems/score/smplock.h:233
+          _SMP_ticket_lock_Acquire -- include/rtems/score/smplockticket.h:150
+            _SMP_ticket_lock_Do_acquire
+                                       -- include/rtems/score/smplockticket.h:89
+              _Atomic_Fetch_add_uint (atomic_fetch_add_explicit)
+              _Atomic_Load_uint (atomic_load_explicit)
+
+
+    _Thread_queue_Gate_add -- include/rtems/score/threadqimpl.h:479
+      _Chain_Append_unprotected -- include/rtems/score/chainimpl.h:664
+
+  _Thread_Wait_release_default_critical -- include/rtems/score/threadimpl.h:1701
+    _ISR_lock_Release -- include/rtems/score/isrlock.h:313
+      _SMP_lock_Release -- score/src/smplock.c:56
+        _SMP_lock_Release_inline -- include/rtems/score/smplock.h:275
+          _SMP_ticket_lock_Release -- include/rtems/score/smplockticket.h:189
+            _SMP_ticket_lock_Do_release
+                                      -- include/rtems/score/smplockticket.h:160
+              _Atomic_Load_uint (atomic_load_explicit)
+              _Atomic_Store_uint (atomic_store_explicit)
+
+  _Thread_Wait_acquire_queue_critical -- include/rtems/score/threadimpl.h:1757
+    _Thread_queue_Queue_acquire_critical
+                                        -- include/rtems/score/threadqimpl.h:591
+      _Thread_queue_Queue_do_acquire_critical
+                                        -- include/rtems/score/threadqimpl.h:565
+        _SMP_ticket_lock_Acquire -- include/rtems/score/smplockticket.h:150
+            _SMP_ticket_lock_Do_acquire
+                                       -- include/rtems/score/smplockticket.h:89
+              _Atomic_Fetch_add_uint (atomic_fetch_add_explicit)
+              _Atomic_Load_uint (atomic_load_explicit)
+
+  _Thread_Wait_release_queue_critical-- include/rtems/score/threadimpl.h:1775
+    _Thread_queue_Queue_release_critical
+                                        -- include/rtems/score/threadqimpl.h:601
+      _SMP_ticket_lock_Release -- include/rtems/score/smplockticket.h:189
+        _SMP_ticket_lock_Do_release
+                                      -- include/rtems/score/smplockticket.h:160
+          _Atomic_Load_uint (atomic_load_explicit)
+          _Atomic_Store_uint (atomic_store_explicit)
+
+  _Thread_Wait_acquire_default_critical **
+
+  _Thread_Wait_remove_request_locked -- include/rtems/score/threadimpl.h:1736
+    _Chain_Extract_unprotected -- include/rtems/score/chainimpl.h:542
+    _Chain_First -- include/rtems/score/chainimpl.h:244
+      _Chain_Immutable_head  -- include/rtems/score/chainimpl.h:195
+    _Chain_Tail -- include/rtems/score/chainimpl.h:211
+    _Thread_queue_Gate_open -- include/rtems/score/threadqimpl.h:492
+      _Atomic_Store_uint (atomic_store_explicit)
+
+
+
+
+================================================================================
+Here we look at callers to _Thread_queue_Path_acquire_critical
+
+        score/src/threadqenqueue.c 407,476
+        score/src/threadqops.c 1199
+        score/src/threadchangepriority.c 272
+
+Here we look at calls from _Thread_queue_Path_acquire_critical
+
+_Thread_queue_Path_acquire_critical -- score/src/threadqenqueue.c:262
+
+  _Chain_Initialize_empty -- include/rtems/score/chainimpl.h:489
+
+  _Chain_Initialize_node **
+
+  _RBTree_Initialize_node -- include/rtems/score/rbtree.h:128
+
+  _Chain_Initialize_node **
+
+  _Chain_Append_unprotected **
+
+  _Thread_Wait_acquire_default_critical **
+
+  _Thread_queue_Link_add -- score/src/threadqenqueue.c:115
+    _ISR_lock_Acquire **
+    _Thread_queue_Link_find -- score/src/threadqenqueue.c:101
+      _RBTree_Find_inline -- include/rtems/score/rbtree.h:556
+        _RBTree_Root_const_reference -- include/rtems/score/rbtree.h:275
+          RB_ROOT -- .../sparc-rtems6/include/tree.h:324
+        _RBTree_Left_reference -- include/rtems/score/rbtree.h:325
+          RB_LEFT -- .../sparc-rtems6/include/tree.h:320
+        _RBTree_Right_reference -- include/rtems/score/rbtree.h:356
+          RB_RIGHT -- .../sparc-rtems6/include/tree.h:321
+    _ISR_lock_Release **
+    _RBTree_Insert_inline -- include/rtems/score/rbtree.h:507
+      _RBTree_Root_reference -- include/rtems/score/rbtree.h:260
+        RB_ROOT **
+      _RBTree_Left_reference **
+      _RBTree_Right_reference **
+      _RBTree_Add_child -- include/rtems/score/rbtree.h:144
+        RB_SET -- .../sparc-rtems6/include/tree.h:327
+      _RBTree_Insert_color -- score/src/rbtreeinsert.c:26
+        RBTree_Control_RB_INSERT_COLOR  -- .../sparc-rtems6/include/tree.h:398
+    _ISR_lock_Release **
+
+  _Thread_queue_Gate_add **
+
+  _Thread_Wait_release_default_critical **
+
+  _Thread_Wait_acquire_queue_critical **
+
+  _Thread_queue_Link_remove -- cpukit/score/src/threadqenqueue.c:161
+    _ISR_lock_Acquire **
+    _RBTree_Extract -- score/src/rbtreeextract.c:44
+      _RBTree_Find_root -- score/src/rbtreeextract.c:29
+        _RBTree_Parent -- include/rtems/score/rbtree.h:294
+          RB_PARENT -- .../sparc-rtems6/include/tree.h:322
+      _RBTree_Root -- include/rtems/score/rbtree.h:245
+        RB_ROOT **
+      RB_REMOVE .../sparc-rtems6/include/tree.h:765
+      _RBTree_Initialize_node -- include/rtems/score/rbtree.h:128
+
+    _ISR_lock_Release **
+
+
+  _Thread_Wait_release_queue_critical **
+
+  _Thread_Wait_acquire_default_critical **
+
+  _Thread_Wait_remove_request_locked **
+
+  _Thread_queue_Path_append_deadlock_thread
+                                        -- cpukit/score/src/threadqenqueue.c:218
+    _Chain_Initialize_node **
+    _Chain_Append_unprotected **
+    _Thread_Wait_acquire_default_critical **

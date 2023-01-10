@@ -1,0 +1,38 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=0.5in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,latexsym}
+\usepackage{mathpartir}
+\usepackage{../lstnicec}
+\usepackage{../threadq}
+\usepackage{hyperref}
+
+\parindent=0pt % I hate first line indentation
+\parskip=3pt   % I like a visual white gap between paragraphs
+% \def\rulebefore{\vspace{-6pt}\\\rule{\textwidth}{0.1pt}\vspace{-10pt}}
+% \def\ruleafter{\vspace{-16pt}\rule{\textwidth}{0.1pt}\\}
+% \newenvironment{code}%
+%   {~\rulebefore\small\verbatim}%
+%   {\endverbatim\normalsize\ruleafter}
+
+
+\author{Andrew Butterfield}
+\title{Notes: RTEMS-SMP Thread Queues}
+\date\today
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage\input{Intro}
+\newpage\input{C-User}
+\newpage\input{MemoryModels}
+\newpage\input{Atomics}
+\newpage\input{Code}
+\newpage\input{ThreadQ}
+
+\appendix
+
+% \newpage\input{../template.lc}
+
+\end{document}

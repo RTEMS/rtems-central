@@ -1,0 +1,334 @@
+\subsection{Chapter 27 SYMMETRIC MULTIPROCESSING (SMP)}
+
+\subsubsection{Introduction}
+
+p526:
+
+The RTEMS interpretation of real-time on SMP
+is the support for Clustered Scheduling
+with priority based schedulers and adequate locking protocols.
+
+\subsubsection{Background}
+
+pp527--8:
+
+In an SMP system with N processors,
+these are the new execution characteristics.
+\begin{itemize}
+  \item N tasks execute in parallel
+  \item hardware events result in interrupts
+\end{itemize}
+There is true parallelism with a task executing on each processor
+and the possibility of interrupts occurring on each processor.
+Thus in contrast to their being one task and one interrupt
+to consider on a uniprocessor,
+there are N tasks and potentially N simultaneous interrupts
+to consider on an SMP system.
+
+p528:
+
+Affinity is used to specify the subset of processors
+in an SMP system on which a particular task can execute.
+
+Only a subset of the available schedulers support affinity.
+
+The scheduler with support for arbitary processor affinities
+uses a proof of concept implementation.
+See \url{https://devel.rtems.org/ticket/2510}
+(this ticket is worth re-reading at some stage!).
+
+With more than one processor in the system tasks can migrate from one processor to another.
+There are four reasons why tasks migrate in RTEMS.
+\begin{itemize}
+  \item
+    The scheduler changes explicitly
+    via \verb"rtems_task_set_scheduler()" or similar directives.
+  \item
+    The task processor affinity changes explicitly
+    via \verb"rtems_task_set_affinity()" or similar directives.
+  \item
+    The task resumes execution after a blocking operation.
+    On a priority based scheduler it will evict
+    the lowest priority task
+    currently assigned to a processor in the processor set
+    managed by the scheduler instance.
+  \item
+    The task moves temporarily to another scheduler instance
+    due to locking protocols like
+    the \emph{Multiprocessor Resource Sharing Protocol (MrsP)}
+    or the \emph{O(m) Independence-Preserving Protocol (OMIP)}.
+\end{itemize}
+
+p529:
+
+We have clustered scheduling in case
+the set of processors of a system is partitioned
+into nonempty pairwise-disjoint subsets of processors.
+These subsets are called clusters.
+Clusters with a cardinality of one are partitions.
+Each cluster is owned by exactly one scheduler instance.
+In case the cluster size equals the processor count,
+it is called global scheduling.
+
+Clustered scheduling was implemented for RTEMS SMP
+to best use the cache topology of a system
+and to keep the worst-case latencies under control.
+The low-level SMP locks use FIFO ordering.
+
+The problem is to provide synchronization primitives
+for inter-cluster synchronization
+(more than one cluster is involved in the synchronization process).
+In RTEMS there are currently some means available
+\begin{itemize}
+  \item events,
+  \item message queues,
+  \item mutexes using the \emph{O(m) Independence-Preserving Protocol (OMIP)},
+  \item
+    mutexes using the \emph{Multiprocessor Resource Sharing Protocol (MrsP)},
+    and
+  \item binary and counting semaphores.
+\end{itemize}
+The clustered scheduling approach enables separation of functions
+with real-time requirements
+and functions that profit from fairness and high throughput
+provided the scheduler instances are fully decoupled
+and adequate inter-cluster synchronization primitives are used.
+
+p531:
+
+There is no public RTEMS API for atomic operations.
+It is recommended to use the standard C
+\href{https://en.cppreference.com/w/c/atomic}{$<$stdatomic.h$>$}
+or C++ \href{https://en.cppreference.com/w/cpp/atomic/atomic}{$<$atomic$>$}
+APIs in applications.
+
+\subsubsection{Application Issues}
+
+p532:
+
+27.3.3 Disabling of Thread Preemption
+A thread which disables preemption prevents
+that a higher priority thread gets hold of its processor involuntarily.
+In uniprocessor configurations,
+this can be used to ensure mutual exclusion at thread level.
+In SMP configurations,
+however,
+more than one executing thread may exist.
+Thus,
+it is impossible to ensure mutual exclusion using this mechanism.
+In order to prevent that applications using preemption for this purpose,
+would show inappropriate behaviour,
+this feature is disabled in SMP configurations
+and its use would case(\emph{s.i.c.}) run-time errors.
+
+p533:
+
+27.3.4 Disabling of Interrupts
+In SMP configurations,
+however,
+disabling the interrupts on one processor has no effect on other processors.
+So,
+this is insufficient to ensure system-wide mutual exclusion.
+The macros
+\begin{itemize}
+  \item \verb"rtems_interrupt_disable()",
+  \item \verb"rtems_interrupt_enable()", and
+  \item \verb"rtems_interrupt_flash()".
+\end{itemize}
+are disabled in SMP configurations
+and its use will cause compile-time warnings and link-time errors.
+In the unlikely case that interrupts must be disabled on the current processor,
+the
+\begin{itemize}
+  \item \verb"rtems_interrupt_local_disable()", and
+  \item \verb"rtems_interrupt_local_enable()".
+\end{itemize}
+macros are now available in all configurations.
+
+A new low-level synchronization primitive was added – interrupt locks.
+The interrupt locks are a simple API layer
+on top of the SMP locks used for low-level synchronization
+in the operating system core.
+Currently,
+they are implemented as a ticket lock.
+In uniprocessor configurations,
+they degenerate to simple interrupt disable/enable sequences
+by means of the C pre-processor.
+It is disallowed to acquire a single interrupt lock in a nested way.
+This will result in an infinite loop with interrupts disabled.
+While converting legacy code to interrupt locks,
+care must be taken to avoid this situation to happen.
+
+p534:
+
+In contrast to POSIX spinlock implementation on Linux or FreeBSD,
+it is not allowed to call blocking operating system services
+inside the critical section.
+A recursive lock attempt is a severe usage error resulting in an infinite loop
+with interrupts disabled.
+Nesting of different locks is allowed.
+The user must ensure that no deadlock can occur.
+
+Interrupt service routines must take this into account
+and use proper locking mechanisms
+to protect critical sections
+from interference by threads
+(interrupt locks or POSIX spinlocks).
+
+In SMP configurations,
+the timer service routine may already run
+and wait on an SMP lock owned by the thread which is about to stop the timer.
+This opens the door to subtle synchronization issues.
+During destruction of objects,
+special care must be taken to ensure that
+timer service routines cannot access (partly or fully) destroyed objects.
+
+27.3.7 False Sharing of Cache Lines Due to Objects Table
+\dots
+High-performance SMP applications need full control of the object storage.
+Therefore,
+self-contained synchronization objects are now available for RTEMS.
+
+\subsubsection{Implementation Details}
+
+p535:
+
+\emph{27.4.1 Low-Level Synchronization}
+
+All low-level synchronization primitives are implemented
+using C11 atomic operations.
+
+Four synchronization primitives are currently available
+\begin{itemize}
+  \item ticket locks (mutual exclusion),
+  \item MCS locks (mutual exclusion),
+  \item barriers, implemented as a sense barrier, and
+  \item sequence locks
+\end{itemize}
+
+A vital requirement for low-level mutual exclusion is FIFO fairness
+since we are interested in a predictable system and not maximum throughput.
+
+p536:
+
+\emph{27.4.2 Internal Locking}
+
+In SMP configurations, the operating system uses non-recursive SMP locks for low-level mutual
+exclusion. The locking domains are roughly
+\begin{itemize}
+  \item a particular data structure,
+  \item the thread queue operations,
+  \item the thread state changes, and
+  \item the scheduler operations.
+\end{itemize}
+
+For a good average-case performance it is vital that every high-level
+synchronization object,
+e.g. mutex,
+has its own SMP lock.
+In the average-case,
+only this SMP lock should be involved to carry out a specific operation,
+e.g. obtain/release a mutex.
+In general,
+the high-level synchronization objects have a thread queue embedded and use its
+SMP lock.
+
+In case a thread must block on a thread queue,
+then things get complicated.
+The executing thread first acquires the SMP lock of the thread queue
+and then figures out that it needs to block.
+The procedure to block the thread on this particular thread queue
+involves state changes of the thread itself
+and for this thread-specific SMP locks must be used.
+
+In order to determine if a thread is blocked on a thread queue or not
+thread-specific SMP locks must be used.
+A thread priority change must propagate this to the thread queue
+(possibly recursively).
+Care must be taken to not have a lock order reversal between
+thread queue and thread-specific SMP locks.
+
+Each scheduler instance has its own SMP lock.
+For the scheduler helping protocol
+multiple scheduler instances may be in charge of a thread.
+It is not possible to acquire two scheduler instance SMP locks at the same time,
+otherwise deadlocks would happen.
+A thread-specific SMP lock is used to synchronize the thread data
+shared by different scheduler instances.
+The thread state SMP lock protects various things,
+e.g. the thread state,
+join operations,
+signals,
+post-switch actions,
+the home scheduler instance, etc.
+
+p538:
+
+\emph{27.4.4 Scheduler Helping Protocol}
+
+Each thread has a scheduler node for each scheduler instance in
+the system which are located in its TCB.
+A thread has exactly one home scheduler instance
+which is set during thread creation.
+
+Due to the locking protocols a thread may gain access
+to scheduler nodes of other scheduler instances.
+This allows the thread to temporarily migrate
+to another scheduler instance in case of preemption.
+
+For the scheduler helping protocol the following
+operations must be implemented by an SMP-aware scheduler
+\begin{itemize}
+  \item ask a scheduler node for help,
+  \item reconsider the help request of a scheduler node,
+  \item withdraw a schedule node.
+\end{itemize}
+
+In case a thread is allowed to use more than one scheduler node
+it will ask these nodes for help
+\begin{itemize}
+  \item in case of preemption, or
+  \item an unblock did not schedule the thread, or
+  \item a yield was successful.
+\end{itemize}
+
+The actual ask for help scheduler operations are carried out
+as a side-effect of the thread dispatch procedure.
+
+After a thread dispatch
+the reconsider help request operation is used
+to clean up stale help registrations in the scheduler contexts.
+
+p539:
+
+\emph{27.4.5 Thread Dispatch Details}
+
+The thread context is protected by a TTAS lock
+embedded in the context to ensure that
+it is used on at most one processor at a time.
+\dots
+This implementation turned out to be quite efficient
+and no lock contention was observed in the testsuite.
+
+The context-switch is performed with interrupts enabled.
+During the transition from the executing to the heir thread
+neither the stack of the executing nor the heir thread must be used
+during interrupt processing.
+For this purpose a temporary per-processor stack is set up
+which may be used by the interrupt prologue
+before the stack is switched to the interrupt stack.
+
+p540:
+
+\emph{27.4.7 Thread Pinning}
+
+Thread pinning ensures that a thread is only dispatched to the processor
+on which it is pinned.
+It may be used to access per-processor data structures
+in critical sections with enabled thread dispatching,
+e.g. a pinned thread is allowed to block.
+
+Thread pinning must be used with care,
+since it prevents help through the locking protocols.
+This makes the \textit{OMIP} and \textit{MrsP} locking protocols ineffective 
+if pinned threads are involved.

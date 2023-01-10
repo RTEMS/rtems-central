@@ -1,0 +1,28 @@
+\section{The MrsP Test}\label{sec:MrsPTest}
+
+Here we look at the setup for the MrsP testsuite,
+based on \verb"testsuites/smptests/smpmrsp01/init.c".
+
+
+
+\subsection{Points of interest}
+
+Compare before/after snapshot of system!
+\begin{nicec}
+rtems_resource_snapshot_take(&snapshot);
+...
+rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
+\end{nicec}
+
+
+Key call points:
+
+\begin{tabular}{|r|l|}
+  \hline
+    Line & Name
+\\\hline
+    1731 & \verb"Init"
+\\\hline
+    247 & \verb"create_mrsp_sema"
+\\\hline
+\end{tabular}

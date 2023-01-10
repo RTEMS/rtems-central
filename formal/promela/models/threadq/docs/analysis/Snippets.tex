@@ -1,0 +1,1103 @@
+\section{Snippets}\label{sec:snippets}
+
+Here we list all the relevant code snippets.
+We assume the following regarding key CPP macros:
+\begin{description}
+  \item [defined:]~
+    \\ \verb"RTEMS_SMP"
+    \\ \verb"_RTEMS_SCORE_CPUSTDATOMIC_USE_STDATOMIC"
+  \item [not defined:]~
+    \\ \verb"RTEMS_DEBUG"
+    \\ \verb"RTEMS_PROFILING"
+    \\ \verb"RTEMS_SMP_LOCK_DO_NOT_INLINE"
+      (outcome the same if defined or not, this is simplest)
+\end{description}
+All snippets are as a result of the above settings being applied.
+
+Unless otherwise stated,
+all paths are relative to \texttt{modules/rtems/cpukit}
+
+\newpage
+\subsection{Atomics}
+
+\subsubsection{Atomic Fetch Add}
+
+From \texttt{include/rtems/score/atomic.h:95}
+\begin{nicec}
+#define _Atomic_Fetch_add_uint( obj, arg, order ) \
+  _CPU_atomic_Fetch_add_uint( obj, arg, order )
+\end{nicec}
+and \texttt{include/rtems/score/cpustdatomic.h:358}
+\begin{nicec}
+/**
+ * @brief Fetches current value of Ulong and adds a value to the stored value.
+ *
+ * @param[in, out] obj The CPU atomic Ulong to get the value from and add @a arg to.
+ * @param arg The value to add to @a obj.
+ * @param order The atomic order for the operation.
+ *
+ * @return The value of @a obj prior to the addition of @a arg.
+ */
+static inline unsigned long _CPU_atomic_Fetch_add_ulong(
+  CPU_atomic_Ulong *obj,
+  unsigned long arg,
+  CPU_atomic_Order order
+)
+{
+  return atomic_fetch_add_explicit( obj, arg, order );
+}
+\end{nicec}
+
+
+\subsubsection{Atomic Load}
+
+From \texttt{include/rtems/score/atomic.h:77}
+\begin{nicec}
+#define _Atomic_Load_uint( obj, order ) \
+  _CPU_atomic_Load_uint( obj, order )
+\end{nicec}
+From \texttt{include/rtems/score/cpustdatomic.h:222}
+\begin{nicec}
+/**
+ * @brief Loads value of Uint considering the order.
+ *
+ * @param obj The CPU atomic Uint to get the value from.
+ * @param order The atomic order for getting the value.
+ *
+ * @return The value of @a obj considering the @a order.
+ */
+static inline unsigned int _CPU_atomic_Load_uint(
+  const CPU_atomic_Uint *obj,
+  CPU_atomic_Order order
+)
+{
+  return atomic_load_explicit( obj, order );
+}
+\end{nicec}
+
+\newpage
+\subsubsection{Atomic Store}
+%
+From \texttt{include/rtems/score/atomic.h:86}
+\begin{nicec}
+#define _Atomic_Store_uint( obj, desr, order ) \
+  _CPU_atomic_Store_uint( obj, desr, order )
+\end{nicec}
+From \texttt{include/rtems/score/cpustdatomic.h:296}
+\begin{nicec}
+/**
+ * @brief Stores a value to Uint considering the order.
+ *
+ * @param[out] obj The CPU atomic Uint to store a value in.
+ * @param desired The desired value for @a obj.
+ * @param order The atomic order for storing the value.
+ */
+static inline void _CPU_atomic_Store_uint(
+  CPU_atomic_Uint *obj,
+  unsigned int desired,
+  CPU_atomic_Order order
+)
+{
+  atomic_store_explicit( obj, desired, order );
+}
+\end{nicec}
+
+
+\newpage
+\subsection{Chains}
+
+\begin{verbatim}
+_Chain_Append_unprotected   -- include/rtems/score/chainimpl.h:664
+_Chain_Extract_unprotected  -- include/rtems/score/chainimpl.h:542
+_Chain_First                -- include/rtems/score/chainimpl.h:244
+_Chain_Immutable_head       -- include/rtems/score/chainimpl.h:195
+_Chain_Tail                 -- include/rtems/score/chainimpl.h:211
+_Chain_Initialize_empty     -- include/rtems/score/chainimpl.h:489
+\end{verbatim}
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Tail(
+  Chain_Control *the_chain
+)
+{
+  return &the_chain->Tail.Node;
+}
+\end{nicec}
+
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+)
+{
+  Chain_Node *tail;
+  Chain_Node *old_last;
+
+  // _Chain_Is_node_off_chain( the_node )
+
+  tail = _Chain_Tail( the_chain );
+  old_last = tail->previous;
+
+  the_node->next = tail;
+  tail->previous = the_node;
+  old_last->next = the_node;
+  the_node->previous = old_last;
+}
+\end{nicec}
+
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Chain_Extract_unprotected(
+  Chain_Node *the_node
+)
+{
+  Chain_Node *next;
+  Chain_Node *previous;
+
+  _Assert( !_Chain_Is_node_off_chain( the_node ) );
+
+  next           = the_node->next;
+  previous       = the_node->previous;
+  next->previous = previous;
+  previous->next = next;
+}
+\end{nicec}
+
+\newpage
+\subsection{Red-Black Trees}
+
+Paths starting with \texttt{/sparc-rtems6} are relative
+to wherever an RTEMS6 installation is likely to be found
+(for example: \texttt{/opt/rtems/6}).
+\begin{verbatim}
+_RBTree_Initialize_node         -- include/rtems/score/rbtree.h:128
+_RBTree_Find_inline             -- include/rtems/score/rbtree.h:556
+_RBTree_Root_const_reference    -- include/rtems/score/rbtree.h:275
+RB_ROOT                         -- /sparc-rtems6/include/tree.h:324
+_RBTree_Left_reference          -- include/rtems/score/rbtree.h:325
+RB_LEFT                         -- /sparc-rtems6/include/tree.h:320
+_RBTree_Right_reference         -- include/rtems/score/rbtree.h:356
+RB_RIGHT                        -- /sparc-rtems6/include/tree.h:321
+_RBTree_Insert_inline           -- include/rtems/score/rbtree.h:507
+_RBTree_Root_reference          -- include/rtems/score/rbtree.h:260
+_RBTree_Add_child               -- include/rtems/score/rbtree.h:144
+RB_SET                          -- /sparc-rtems6/include/tree.h:327
+_RBTree_Insert_color            -- score/src/rbtreeinsert.c:26
+RBTree_Control_RB_INSERT_COLOR  -- /sparc-rtems6/include/tree.h:398
+_RBTree_Extract                 -- score/src/rbtreeextract.c:44
+_RBTree_Find_root               -- score/src/rbtreeextract.c:29
+_RBTree_Parent                  -- include/rtems/score/rbtree.h:294
+RB_PARENT                       -- /sparc-rtems6/include/tree.h:322
+_RBTree_Root                    -- include/rtems/score/rbtree.h:245
+RB_REMOVE                       -- /sparc-rtems6/include/tree.h:765
+_RBTree_Initialize_node         -- include/rtems/score/rbtree.h:128
+\end{verbatim}
+
+\newpage
+\subsection{Gates}
+
+\begin{verbatim}
+_Thread_queue_Gate_add   -- include/rtems/score/threadqimpl.h:479
+_Thread_queue_Gate_open  -- include/rtems/score/threadqimpl.h:492
+\end{verbatim}
+
+\subsubsection{Thread Queue Gate Add}
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_add(
+  Chain_Control     *chain,
+  Thread_queue_Gate *gate
+)
+{
+  _Chain_Append_unprotected( chain, &gate->Node );
+}
+\end{nicec}
+
+\begin{nicec}
+    _Thread_queue_Gate_add(
+      &the_thread->Wait.Lock.Pending_requests,
+      &queue_context->Lock_context.Wait.Gate
+    );
+\end{nicec}
+
+\subsubsection{Unfolded: Thread Queue Gate Add}
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
+  Chain_Control *chain,
+  Chain_Node    *gate
+)
+{
+  Chain_Node *tail;
+  Chain_Node *old_last;
+
+  // _Chain_Is_node_off_chain( gate )
+
+  tail = _Chain_Tail( chain );
+  old_last = tail->previous;
+
+  the_node->next = tail;
+  tail->previous = gate;
+  old_last->next = gate;
+  the_node->previous = old_last;
+}
+\end{nicec}
+
+\newpage
+\subsection{Locks}
+
+\begin{verbatim}
+_ISR_lock_Acquire            -- include/rtems/score/isrlock.h:287,296
+_SMP_lock_Acquire            -- score/src/smplock.c:47
+_SMP_lock_Acquire_inline     -- include/rtems/score/smplock.h:233
+_SMP_ticket_lock_Acquire     -- include/rtems/score/smplockticket.h:150
+_SMP_ticket_lock_Do_acquire  -- include/rtems/score/smplockticket.h:89
+\end{verbatim}
+
+\begin{verbatim}
+_ISR_lock_Release            -- include/rtems/score/isrlock.h:313
+_SMP_lock_Release            -- score/src/smplock.c:56
+_SMP_lock_Release_inline     -- include/rtems/score/smplock.h:275
+_SMP_ticket_lock_Release     -- include/rtems/score/smplockticket.h:189
+_SMP_ticket_lock_Do_release  -- include/rtems/score/smplockticket.h:160
+\end{verbatim}
+
+\subsubsection{ISR Acquire}
+
+\begin{nicec}
+/**
+ * @brief Acquires an ISR lock inside an ISR disabled section.
+ *
+ * The interrupt status will remain unchanged.  On SMP configurations this
+ * function acquires an SMP lock.
+ *
+ * In case the executing context can be interrupted by higher priority
+ * interrupts and these interrupts enter the critical section protected by this
+ * lock, then the result is unpredictable.
+ *
+ * @param[in] _lock The ISR lock control.
+ * @param[in] _context The local ISR lock context for an acquire and release
+ * pair.
+ *
+ * @see _ISR_lock_Release().
+ */
+  #define _ISR_lock_Acquire( _lock, _context ) \
+    do { \
+      _Assert( _ISR_Get_level() != 0 ); \
+      _SMP_lock_Acquire( \
+        &( _lock )->Lock, \
+        &( _context )->Lock_context \
+      ); \
+    } while ( 0 )
+\end{nicec}
+
+\newpage
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+// #define _ISR_lock_Acquire( _lock, _context )
+
+{
+  // _ISR_Get_level() != 0
+  (void) context;
+  _SMP_ticket_lock_Do_acquire( &(&( _lock )->Lock)->Ticket_lock );
+  {
+    unsigned int                   my_ticket;
+    unsigned int                   now_serving;
+
+    my_ticket =
+      _Atomic_Fetch_add_uint(
+         &(&(&( _lock )->Lock)->Ticket_lock)->next_ticket,
+         1U,
+         ATOMIC_ORDER_RELAXED
+      );
+    do {
+      now_serving =
+        _Atomic_Load_uint(
+          &(&(&( _lock )->Lock)->Ticket_lock)->now_serving,
+          ATOMIC_ORDER_ACQUIRE
+        );
+    } while ( now_serving != my_ticket );
+  }
+}
+\end{nicec}
+
+
+\newpage
+\subsubsection{SMP Acquire}
+
+\begin{nicec}
+void _SMP_lock_Acquire(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  _SMP_lock_Acquire_inline( lock, context );
+}
+\end{nicec}
+
+\begin{nicec}
+/**
+ * @brief Acquires the lock inline.
+ *
+ * @param[in, out] lock The lock to acquire.
+ * @param[in, out] context The lock context.
+ */
+static inline void _SMP_lock_Acquire_inline(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  (void) context;
+  _SMP_ticket_lock_Acquire(
+    &lock->Ticket_lock,
+    &lock->Stats,
+    &context->Stats_context
+  );
+}
+\end{nicec}
+
+\begin{nicec}
+/**
+ * @brief Acquires an SMP ticket lock.
+ *
+ * This function will not disable interrupts.  The caller must ensure that the
+ * current thread of execution is not interrupted indefinite once it obtained
+ * the SMP ticket lock.
+ *
+ * @param[in] lock The SMP ticket lock control.
+ */
+  #define _SMP_ticket_lock_Acquire( lock, stats, stats_context ) \
+    _SMP_ticket_lock_Do_acquire( lock )
+\end{nicec}
+
+\newpage
+\begin{nicec}
+/**
+ * @brief Acquires the SMP ticket lock.
+ *
+ * @param[in, out] lock The lock to acquire.
+ * @param stats The SMP lock statistics.
+ * @param[out] stats_context The context for the statistics.
+ */
+static inline void _SMP_ticket_lock_Do_acquire(
+  SMP_ticket_lock_Control *lock
+)
+{
+  unsigned int                   my_ticket;
+  unsigned int                   now_serving;
+
+  my_ticket =
+    _Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_RELAXED );
+  do {
+    now_serving =
+      _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE );
+  } while ( now_serving != my_ticket );
+}
+\end{nicec}
+
+\newpage
+\subsubsection{ISR Lock Release}
+
+\begin{nicec}
+/**
+ * @brief Releases an ISR lock inside an ISR disabled section.
+ *
+ * The interrupt status will remain unchanged.  On SMP configurations this
+ * function releases an SMP lock.
+ *
+ * @param[in] _lock The ISR lock control.
+ * @param[in] _context The local ISR lock context for an acquire and release
+ * pair.
+ *
+ * @see _ISR_lock_Acquire().
+ */
+  #define _ISR_lock_Release( _lock, _context ) \
+    _SMP_lock_Release( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
+\end{nicec}
+
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+// #define _ISR_lock_Release( _lock, _context )
+{
+  unsigned int current_ticket =
+    _Atomic_Load_uint( &(&(&( _lock )->Lock)->Ticket_lock)->now_serving,
+                       ATOMIC_ORDER_RELAXED );
+  unsigned int next_ticket = current_ticket + 1U;
+
+  _Atomic_Store_uint( &(&(&( _lock )->Lock)->Ticket_lock)->now_serving,
+                      next_ticket,
+                      ATOMIC_ORDER_RELEASE );
+}
+\end{nicec}
+
+
+
+\subsubsection{SMP Release}
+
+\begin{nicec}
+/**
+ * @brief Releases an SMP lock.
+ *
+ * @param[in, out] lock The SMP lock control.
+ * @param[in, out] context The local SMP lock context for an acquire and release
+ * pair.
+ */
+#define _SMP_lock_Release( lock, context ) \
+  _SMP_lock_Release_inline( lock, context )
+\end{nicec}
+
+\begin{nicec}
+/**
+ * @brief Releases an SMP lock.
+ *
+ * @param[in, out] lock The lock to release.
+ * @param[in, out] context The lock context.
+ */
+static inline void _SMP_lock_Release_inline(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+  (void) context;
+  _SMP_ticket_lock_Release(
+    &lock->Ticket_lock,
+    &context->Stats_context
+  );
+}
+\end{nicec}
+
+\begin{nicec}
+/**
+ * @brief Releases an SMP ticket lock.
+ *
+ * @param[in] lock The SMP ticket lock control.
+ * @param[in] stats_context The SMP lock statistics context.
+ */
+  #define _SMP_ticket_lock_Release( lock, stats_context ) \
+    _SMP_ticket_lock_Do_release( lock )
+\end{nicec}
+
+\begin{nicec}
+/**
+ * @brief Releases the SMP ticket lock.
+ *
+ * @param[in, out] lock The SMP ticket lock to release.
+ * @param[out] stats_context The SMP lock statistics context.
+ */
+static inline void _SMP_ticket_lock_Do_release(
+  SMP_ticket_lock_Control *lock
+)
+{
+  unsigned int current_ticket =
+    _Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_RELAXED );
+  unsigned int next_ticket = current_ticket + 1U;
+
+  _Atomic_Store_uint( &lock->now_serving, next_ticket, ATOMIC_ORDER_RELEASE );
+}
+
+\end{nicec}
+
+\newpage
+\subsection{Thread Waits}
+
+
+\begin{verbatim}
+_Thread_Wait_acquire_default_critical  -- include/rtems/score/threadimpl.h:1641
+_Thread_Wait_release_default_critical  -- include/rtems/score/threadimpl.h:1701
+_Thread_Wait_acquire_queue_critical    -- include/rtems/score/threadimpl.h:1757
+_Thread_Wait_release_queue_critical    -- include/rtems/score/threadimpl.h:1775
+_Thread_Wait_remove_request_locked     -- include/rtems/score/threadimpl.h:1736
+\end{verbatim}
+
+\subsubsection{Acquire Default Critical}
+
+\begin{nicec}
+/**
+ * @brief Acquires the thread wait default lock inside a critical section
+ * (interrupts disabled).
+ *
+ * @param[in, out] the_thread The thread.
+ * @param lock_context The lock context used for the corresponding lock
+ *   release.
+ *
+ * @see _Thread_Wait_release_default_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Acquire( &the_thread->Wait.Lock.Default, lock_context );
+}
+\end{nicec}
+
+\newpage
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+// #define _ISR_lock_Acquire( _lock, _context  )
+  do {
+    // _ISR_Get_level() != 0
+    {
+      (void) lock_context;
+      {
+        unsigned int                   my_ticket;
+        unsigned int                   now_serving;
+
+        my_ticket =
+          _Atomic_Fetch_add_uint(
+             &(&(&( &the_thread->Wait.Lock.Default )->Lock)->Ticket_lock)->next_ticket,
+             1U,
+             ATOMIC_ORDER_RELAXED
+          );
+        do {
+          now_serving =
+            _Atomic_Load_uint(
+              &(&(&( &the_thread->Wait.Lock.Default )->Lock)->Ticket_lock)->now_serving,
+              ATOMIC_ORDER_ACQUIRE
+            );
+        } while ( now_serving != my_ticket );
+      }
+    }
+  } while ( 0 )
+}
+\end{nicec}
+
+\newpage
+\paragraph{OPTIMISED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
+  Thread_Control   *the_thread,
+)
+{
+  // _ISR_Get_level() != 0
+  unsigned int my_ticket;
+  unsigned int now_serving;
+
+  my_ticket =
+    _Atomic_Fetch_add_uint(
+       & the_thread->Wait.Lock.Default.next_ticket, // Lock.Ticket_lock
+       1U,
+       ATOMIC_ORDER_RELAXED
+    );
+  do {
+    now_serving =
+      _Atomic_Load_uint(
+        & the_thread->Wait.Lock.Default.now_serving, // Lock.Ticket_lock
+        ATOMIC_ORDER_ACQUIRE
+      );
+  } while ( now_serving != my_ticket );
+}
+\end{nicec}
+
+\newpage
+\subsubsection{Release Default Critical}
+
+\begin{nicec}
+/**
+ * @brief Releases the thread wait default lock inside a critical section
+ * (interrupts disabled).
+ *
+ * The previous interrupt status is not restored.
+ *
+ * @param[in, out] the_thread The thread.
+ * @param lock_context The lock context used for the corresponding lock
+ *   acquire.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release( &the_thread->Wait.Lock.Default, lock_context );
+}
+\end{nicec}
+
+\newpage
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  unsigned int current_ticket =
+    _Atomic_Load_uint(
+      &(&(&( (&the_thread->Wait.Lock.Default) )->Lock)->Ticket_lock)->now_serving,
+      ATOMIC_ORDER_RELAXED
+    );
+  unsigned int next_ticket = current_ticket + 1U;
+
+  _Atomic_Store_uint(
+    &(&(&( (&the_thread->Wait.Lock.Default) )->Lock)->Ticket_lock)->now_serving,
+    next_ticket,
+    ATOMIC_ORDER_RELEASE
+  );
+}
+\end{nicec}
+
+\paragraph{OPTIMISED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  unsigned int current_ticket =
+    _Atomic_Load_uint( & the_thread->Wait.Lock.Default.now_serving,
+                       ATOMIC_ORDER_RELAXED );
+  unsigned int next_ticket = current_ticket + 1U;
+
+  _Atomic_Store_uint( & the_thread->Wait.Lock.Default.now_serving,
+                      next_ticket, ATOMIC_ORDER_RELEASE );
+}
+\end{nicec}
+
+\newpage
+\subsubsection{Acquire Queue Critical}
+
+\begin{nicec}
+/**
+ * @brief Acquires the wait queue inside a critical section.
+ *
+ * @param queue The queue that acquires.
+ * @param queue_lock_context The queue lock context.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  _Thread_queue_Queue_acquire_critical(
+    queue,
+    &_Thread_Executing->Potpourri_stats,
+    &queue_lock_context->Lock_context
+  );
+}
+\end{nicec}
+
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  unsigned int my_ticket;
+  unsigned int now_serving;
+
+  my_ticket =
+    _Atomic_Fetch_add_uint(
+      &(&queue->Lock)->next_ticket,
+      1U,
+      ATOMIC_ORDER_RELAXED
+    );
+  do {
+    now_serving =
+      _Atomic_Load_uint( &(&queue->Lock)->now_serving, ATOMIC_ORDER_ACQUIRE );
+  } while ( now_serving != my_ticket );
+}
+\end{nicec}
+
+\newpage
+\paragraph{OPTIMISED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
+  Thread_queue_Queue        *queue
+)
+{
+  unsigned int my_ticket;
+  unsigned int now_serving;
+
+  my_ticket =
+    _Atomic_Fetch_add_uint( &queue->Lock.next_ticket, 1U, ATOMIC_ORDER_RELAXED );
+  do {
+    now_serving =
+      _Atomic_Load_uint( &queue->Lock.now_serving, ATOMIC_ORDER_ACQUIRE );
+  } while ( now_serving != my_ticket );
+\end{nicec}
+
+\newpage
+\subsubsection{Release Queue Critical}
+
+\begin{nicec}
+/**
+ * @brief Releases the wait queue inside a critical section.
+ *
+ * @param queue The queue that releases.
+ * @param queue_lock_context The queue lock context.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  _Thread_queue_Queue_release_critical(
+    queue,
+    &queue_lock_context->Lock_context
+  );
+}
+\end{nicec}
+
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  unsigned int current_ticket =
+    _Atomic_Load_uint( &(&queue->Lock)->now_serving, ATOMIC_ORDER_RELAXED );
+  unsigned int next_ticket = current_ticket + 1U;
+  _Atomic_Store_uint( &(&queue->Lock)->now_serving, next_ticket, ATOMIC_ORDER_RELEASE );
+}
+\end{nicec}
+
+\paragraph{OPTIMISED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  unsigned int current_ticket =
+    _Atomic_Load_uint( &queue->Lock.now_serving, ATOMIC_ORDER_RELAXED );
+  unsigned int next_ticket = current_ticket + 1U;
+  _Atomic_Store_uint(
+    &queue->Lock.now_serving,
+    next_ticket,
+    ATOMIC_ORDER_RELEASE
+  );
+}
+\end{nicec}
+
+
+\newpage
+\subsubsection{Remove Request Locked}
+
+\begin{nicec}
+/**
+ * @brief Removes the first pending wait lock request.
+ *
+ * @param the_thread The thread to remove the request from.
+ * @param queue_lock_context The queue lock context.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
+  Thread_Control            *the_thread,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  Chain_Node *first;
+
+  _Chain_Extract_unprotected( &queue_lock_context->Wait.Gate.Node );
+  first = _Chain_First( &the_thread->Wait.Lock.Pending_requests );
+
+  if ( first != _Chain_Tail( &the_thread->Wait.Lock.Pending_requests ) ) {
+    _Thread_queue_Gate_open( (Thread_queue_Gate *) first );
+  }
+}
+\end{nicec}
+
+\paragraph{UNFOLDED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
+  Thread_Control            *the_thread,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  Chain_Node *first;
+  Chain_Node *next;
+  Chain_Node *previous;
+
+  // !_Chain_Is_node_off_chain( &queue_lock_context->Wait.Gate.Node )
+
+  next           = (&queue_lock_context->Wait.Gate.Node)->next;
+  previous       = (&queue_lock_context->Wait.Gate.Node)->previous;
+  next->previous = previous;
+  previous->next = next;
+
+  first = (&((&the_thread->Wait.Lock.Pending_requests))->Head.Node)->next;
+  // Pending_requests contains Thread_queue_Gate !!
+
+  if ( first != &(&the_thread->Wait.Lock.Pending_requests)->Tail.Node ) {
+    _Atomic_Store_uint(
+      &((Thread_queue_Gate *) first)->go_ahead,
+      1,
+      ATOMIC_ORDER_RELAXED
+    );
+  }
+}
+\end{nicec}
+
+\paragraph{OPTIMISED}~
+
+\begin{nicec}
+RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
+  Thread_Control            *the_thread,
+  Thread_queue_Lock_context *queue_lock_context
+)
+{
+  Chain_Node *first;
+  Chain_Node *next;
+  Chain_Node *previous;
+
+  // !_Chain_Is_node_off_chain( &queue_lock_context->Wait.Gate.Node )
+
+  next           = (&queue_lock_context->Wait.Gate.Node)->next;
+  previous       = (&queue_lock_context->Wait.Gate.Node)->previous;
+  next->previous = previous;
+  previous->next = next;
+
+  first = (&((&the_thread->Wait.Lock.Pending_requests))->Head.Node)->next;
+
+  if ( first != &(&the_thread->Wait.Lock.Pending_requests)->Tail.Node ) {
+    _Atomic_Store_uint(
+      &((Thread_queue_Gate *) first)->go_ahead,
+      1,
+      ATOMIC_ORDER_RELAXED
+    );
+  }
+}
+\end{nicec}
+\newpage
+\subsection{Thread Queues}
+
+\begin{verbatim}
+_Thread_queue_Queue_acquire_critical    -- include/rtems/score/threadqimpl.h:591
+_Thread_queue_Queue_release_critical    -- include/rtems/score/threadqimpl.h:601
+_Thread_queue_Queue_do_acquire_critical -- include/rtems/score/threadqimpl.h:565
+_Thread_queue_Link_add                  -- score/src/threadqenqueue.c:115
+_Thread_queue_Link_find                 -- score/src/threadqenqueue.c:101
+_Thread_queue_Link_remove               -- cpukit/score/src/threadqenqueue.c:161
+_Thread_queue_Path_append_deadlock_thread
+                                        -- cpukit/score/src/threadqenqueue.c:218
+\end{verbatim}
+
+
+\subsubsection{Queue Acquire Critical}
+
+\begin{nicec}
+  #define \
+    _Thread_queue_Queue_acquire_critical( queue, lock_stats, lock_context ) \
+    _Thread_queue_Queue_do_acquire_critical( queue, lock_context )
+\end{nicec}
+
+\begin{nicec}
+/**
+ * @brief Acquires the thread queue queue in a critical section.
+ *
+ * @param queue The thread queue queue to acquire in a critical section.
+ * @param lock_stats The lock statistics.
+ * @param[out] lock_context The interrupt lock context.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  _SMP_ticket_lock_Acquire(
+    &queue->Lock,
+    lock_stats,
+    &lock_context->Lock_context.Stats_context
+  );
+}
+\end{nicec}
+
+\newpage
+\subsubsection{Queue Release Critical}
+
+\begin{nicec}
+/**
+ * @brief Releases the thread queue queue in a critical section.
+ *
+ * @param queue The thread queue queue to release in a critical section.
+ * @param[out] lock_context The interrupt lock context.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release_critical(
+  Thread_queue_Queue *queue,
+  ISR_lock_Context   *lock_context
+)
+{
+  _SMP_ticket_lock_Release(
+    &queue->Lock,
+    &lock_context->Lock_context.Stats_context
+  );
+}
+\end{nicec}
+
+
+\newpage
+\subsection{Wait Acquisition}
+
+From \texttt{include/rtems/score/threadimpl.h:1795}
+\begin{nicec}
+/**
+ * @brief Acquires the thread wait lock inside a critical section (interrupts
+ * disabled).
+ *
+ * @param[in, out] the_thread The thread.
+ * @param[in, out] queue_context The thread queue context for the corresponding
+ *   _Thread_Wait_release_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Thread_queue_Queue *queue;
+
+  _Thread_Wait_acquire_default_critical(  // OPTIMISED above
+    the_thread,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  queue = the_thread->Wait.queue;
+  queue_context->Lock_context.Wait.queue = queue;
+
+  if ( queue != NULL ) {
+    _Thread_queue_Gate_add(  // UNFOLDED above
+      &the_thread->Wait.Lock.Pending_requests,
+      &queue_context->Lock_context.Wait.Gate
+    );
+    _Thread_Wait_release_default_critical( // OPTIMISED above
+      the_thread,
+      &queue_context->Lock_context.Lock_context
+    );
+    _Thread_Wait_acquire_queue_critical( queue, &queue_context->Lock_context );
+     // OPTIMISED above
+
+    if ( queue_context->Lock_context.Wait.queue == NULL ) {
+      _Thread_Wait_release_queue_critical( // OPTIMISED above
+        queue,
+        &queue_context->Lock_context
+      );
+      _Thread_Wait_acquire_default_critical( // OPTIMISED above
+        the_thread,
+        &queue_context->Lock_context.Lock_context
+      );
+      _Thread_Wait_remove_request_locked( // UNFOLDED, awaiting OPTIMISED
+        the_thread,
+        &queue_context->Lock_context
+      );
+      _Assert( the_thread->Wait.queue == NULL );
+    }
+  }
+}
+\end{nicec}
+
+\newpage
+\subsection{Queue Path Acquisition}
+
+From: \texttt{score/src/threadqenqueue.c:262}
+\begin{nicec}
+bool _Thread_queue_Path_acquire_critical(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Thread_Control     *owner;
+  Thread_queue_Link  *link;
+  Thread_queue_Queue *target;
+
+  /*
+   * For an overview please look at the non-SMP part below.  We basically do
+   * the same on SMP configurations.  The fact that we may have more than one
+   * executing thread and each thread queue has its own SMP lock makes the task
+   * a bit more difficult.  We have to avoid deadlocks at SMP lock level, since
+   * this would result in an unrecoverable deadlock of the overall system.
+   */
+
+  _Chain_Initialize_empty( &queue_context->Path.Links );
+
+  owner = queue->owner;
+
+  if ( owner == NULL ) {
+    return true;
+  }
+
+  if ( owner == the_thread ) {
+    return false;
+  }
+
+  _Chain_Initialize_node(
+    &queue_context->Path.Start.Lock_context.Wait.Gate.Node
+  );
+  link = &queue_context->Path.Start;
+  _RBTree_Initialize_node( &link->Registry_node );
+  _Chain_Initialize_node( &link->Path_node );
+
+  do {
+    _Chain_Append_unprotected( &queue_context->Path.Links, &link->Path_node );
+    link->owner = owner;
+
+    _Thread_Wait_acquire_default_critical( // OPTIMISED above
+      owner,
+      &link->Lock_context.Lock_context
+    );
+
+    target = owner->Wait.queue;
+    link->Lock_context.Wait.queue = target;
+
+    if ( target != NULL ) {
+      if ( _Thread_queue_Link_add( link, queue, target ) ) {
+        _Thread_queue_Gate_add( // UNFOLDED above
+          &owner->Wait.Lock.Pending_requests,
+          &link->Lock_context.Wait.Gate
+        );
+        _Thread_Wait_release_default_critical( // OPTIMISED above
+          owner,
+          &link->Lock_context.Lock_context
+        );
+        _Thread_Wait_acquire_queue_critical( target, &link->Lock_context );
+        // OPTIMISED above
+
+        if ( link->Lock_context.Wait.queue == NULL ) {
+          _Thread_queue_Link_remove( link );
+          _Thread_Wait_release_queue_critical( target, &link->Lock_context );
+          // OPTIMISED above
+          _Thread_Wait_acquire_default_critical( // OPTIMISED above
+            owner,
+            &link->Lock_context.Lock_context
+          );
+          _Thread_Wait_remove_request_locked( owner, &link->Lock_context );
+          // UNFOLDED, awaiting OPTIMISED
+          _Assert( owner->Wait.queue == NULL );
+          return true;
+        }
+      } else {
+        link->Lock_context.Wait.queue = NULL;
+        _Thread_queue_Path_append_deadlock_thread( owner, queue_context );
+        return false;
+      }
+    } else {
+      return true;
+    }
+
+    link = &owner->Wait.Link;
+    queue = target;
+    owner = queue->owner;
+  } while ( owner != NULL );
+
+  return true;
+}
+\end{nicec}

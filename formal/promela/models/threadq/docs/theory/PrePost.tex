@@ -1,0 +1,170 @@
+\section{Pre/Post Techniques}
+
+Here we present formalisations based on pre- and post-conditions,
+most notably Hoare Triples and Weakest precondition.
+
+\subsection{Hoare Triples}
+
+Hoare triple $p \{Q\} r$ means that if program $Q$
+starts running when $p$ is true,
+then it terminates in a state where $r$ is true.
+
+In UTP we can define Hoare triples as
+$$
+  p \{Q\} r  \defs  [Q \implies (p \implies r')]
+$$
+
+Proof rules for language constructs:
+\begin{eqnarray*}
+   &\vdash& r[e/x] \{ x:= e\} r
+\\ (p\land b)\{P\}r , (p\land \lnot b)\{Q\}r
+   &\vdash&
+   p\{P \cond b Q\}r
+\\ p\{P\}s , s\{Q\}r &\vdash& p\{P;Q\}r
+\\ b \land c\{P\}c &\vdash& c\{b \whl P\}(\lnot b \land c)
+\\ &\vdash& p \{Skip\} p
+\\ p\{P\}r , p \{Q\} r &\vdash& p \{ P \ndc Q\} r
+\end{eqnarray*}
+Note---the following always hold: $false\{P\}r$ and $p\{P\}true$.
+
+
+\newpage
+\subsection{Weakest Precondition}
+
+Weakest precondition $prog \WP post$
+means the weakest pre-condition under which running \m{prog}
+will guarantee outcome (condition) \m{post}.
+
+
+In UTP we can define $\WP$ as
+$$
+  Q \WP r \defs \lnot(Q;\lnot r')
+$$
+
+It can be shown to obey the following laws:
+\begin{eqnarray*}
+      x:=e \WP r &\equiv& r[e/x]
+   \\ P;Q \WP r &\equiv& P \WP ( Q \WP r)
+   \\ (P \cond c Q) \WP r &\equiv& (P \WP r) \cond c (Q \WP r)
+   \\ (P \ndc Q) \WP r &\equiv& (P \WP r) \land (Q \WP r)
+\end{eqnarray*}
+
+If we define an Invariant \m{inv} and variant \m V,
+then we can define \m{c*P \WP r}.
+The variant \m V\ is an expression defined over all the state variables
+whose type has an associated well-founded ordering ($<$).
+The most common type is is natural numbers under standard numeric order.
+
+If we ignore termination, we can define the following
+(the weakest liberal precondition)
+\begin{eqnarray*}
+      (c \whl P ) \WLP r
+      &\defs&
+      inv
+    \\ && {} \land (c \land inv \implies P \WLP inv)
+    \\ && {} \land (\lnot c \land inv \implies r)
+\end{eqnarray*}
+
+For WP, we need to say that the variant $V$ decreases w.r.t $<$
+every time the loop body executes:
+\begin{eqnarray*}
+      (c \whl P ) \WP r
+      &\defs&
+      inv
+    \\ && {} \land (c \land inv \implies P \WP (inv \land V' < V))
+    \\ && {} \land (\lnot c \land inv \implies r)
+\end{eqnarray*}
+
+In practice, we use WLP,
+and factor termination reasoning out as a separate step.
+
+
+
+We can automatically put in placeholder names for \m{inv}
+and \m V,
+but at some stage the user will have to decide what they should be.
+
+\newpage
+\subsection{Verification Condition Generation}
+
+An assertion \m{\assrt c} is a (specification)
+statement that a condition holds.
+\begin{eqnarray*}
+   \assrt c &\defs& Skip \cond c Chaos
+\\ \assrt b ; \assrt c &=& \assrt{(b \land c)}
+\end{eqnarray*}
+
+A program is appropriately annotated if
+\begin{itemize}
+  \item
+    in a sequence \m{P_1;P_2;\cdots;P_n}
+    there is an assertion before every statement that is
+    \emph{not} an assignment or \m{Skip}.
+  \item
+    in every while-loop there is an (invariant) assertion
+    at the start of the loop body
+  \item
+    The first assertion should be a consequence of
+    the  pre-condition from the specification
+  \item
+    The last assertion should imply the specification post-condition.
+  \item
+    Note: this approach works for post-conditions that are \emph{conditions}
+    (i.e. snapshots of state, and not before-after relations).
+\end{itemize}
+
+\begin{itemize}
+  \item VCs are generated for all the program statements
+  \item We shall define VC generation recursively over program structure
+  \item
+    Given that the last statement is an assignment
+    \begin{eqnarray*}
+          \lefteqn{genVC( \assrt p; P_1;\ldots;P_{n-1};v:=e;\assrt q)}
+        \\ &=& genVC( p_\bot; P_1;\ldots;P_{n-1};q[e/v]_\bot)
+    \end{eqnarray*}
+    We drop the assignment and replace all free occurrences of \m v
+    in the last assertion by \m e.
+  \item
+    Given that the last statement is an \emph{not} an assignment
+    \begin{eqnarray*}
+      \lefteqn{genVC( \assrt p; P_1;\ldots;P_{n-1};\assrt r;P_n;\assrt q)}
+    \\ &=& genVC(\assrt r;P_n;\assrt q)
+    \\ && {} \cup genVC( \assrt p; P_1;\ldots;P_{n-1};\assrt r)
+    \end{eqnarray*}
+    We process the last statement
+    and the recursively treat the rest of the sequence.
+\end{itemize}
+
+\paragraph{VC generation (\m{:=})}
+
+The pre-condition must imply the post-condition with \m v replaced by \m e.
+$$genVC(\assrt p;x:=e;\assrt q) \defs \setof{ p \implies q[e/x] }$$
+
+
+\paragraph{VC generation (\m{\cond{}})}
+
+\begin{eqnarray*}
+      \lefteqn{genVC(\assrt p; P_1 \cond c P_2 ; \assrt q)}
+    \\ &=& genVC( \assrt{(p \land c)};P_1;\assrt q )
+    \\ && {} \cup {}
+    \\ && genVC( \assrt{(p \land \lnot c)};P_2;\assrt q )
+\end{eqnarray*}
+
+\paragraph{VC generation (\m{\whl})}
+
+\begin{eqnarray*}
+  \lefteqn{genVC( \assrt p ; c * ( \assrt i ; P ) ; \assrt q ) }
+\\&=& \setof{ p \implies i, i \land \lnot c \implies q }
+\\ && \cup
+\\&& genVC( \assrt{(i \land c)}; P ; \assrt i)
+\end{eqnarray*}
+
+These correspond closely to our proof technique for loops:
+\begin{itemize}
+  \item \m{p \implies i}
+   \\--- pre-condition sets up invariant
+  \item \m{i \land \lnot c \implies q}
+   \\--- invariant and termination satisfies postcondition
+  \item \m{ \assrt{(i \land c)}; P ; \assrt i}
+    \\--- invariant and loop-condition preserve the invariant
+\end{itemize}

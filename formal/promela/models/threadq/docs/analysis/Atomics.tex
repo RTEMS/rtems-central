@@ -1,0 +1,120 @@
+\section{Atomics}\label{sec:atomics}
+
+Here we perform an analysis of C11 Atomics to support their modelling
+and consequent testing.
+
+We will look at the following C11 atomics:
+\begin{description}
+  \item [Fetch-Add] \verb"obj' = atomic_fetch_add_explicit( obj, arg, order )"
+  \item [Load] \verb"obj' = atomic_load_explicit( obj, order )"
+  \item [Store] \verb"atomic_store_explicit( obj, desired, order )"
+\end{description}
+Note that the first two return a revised value for \verb"obj",
+while the third has no return value.
+
+The only memory model in scope is total-store order (TSO),
+as per the SPARC architecture (sparcv8.pdf).
+
+From \url{https://docs.oracle.com/cd/E23824_01/html/819-3196/hwovr-15.html},
+we get:
+\begin{quote}
+``
+TSO guarantees that the sequence in which store, FLUSH,
+and atomic load-store instructions appear in memory for a given processor
+is identical to the sequence in which they were issued by the processor.
+''
+\end{quote}
+We note that FLUSH instructions are out-of-scope,
+as their only relevance seems to be to the use of self-modifying code.
+
+Their relevant usage is as follows:
+
+\begin{tabular}{|c|c|}
+  \hline
+  Atomic Action & Memory Model(s)
+\\\hline
+  Load & Relaxed, Acquire
+\\\hline
+  Store & Relaxed, Release
+\\\hline
+  Fetch-Add & Relaxed
+\\\hline
+\end{tabular}
+
+Given that we are working with TSO,
+we find that all of the above memory models are effectively satisfied
+(see
+\url{https://en.cppreference.com/w/c/atomic/memory_order#Release-Acquire_ordering}
+).
+
+\subsection{Atomic Load Explicit}
+
+Given atomic object type \texttt{A} and value type \texttt{C}:
+\begin{nicec}
+C atomic_load_explicit( const volatile A* obj, memory_order order )
+\end{nicec}
+then, with TSO, and \texttt{order} being relaxed, acquire or release,
+we have:
+\begin{nicec}
+result = atomic_load_explicit( obj, order );
+\end{nicec}
+is equivalent to:
+\begin{nicec}
+atomic{ result = *obj  }
+\end{nicec}
+
+Usage:
+\begin{nicec}
+_Atomic_Load_uint( &gate->go_ahead, ATOMIC_ORDER_RELAXED )
+_Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_ACQUIRE )
+_Atomic_Load_uint( &lock->now_serving, ATOMIC_ORDER_RELAXED )
+_Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_RELAXED )
+_Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_ACQUIRE )
+\end{nicec}
+
+
+\subsection{Store Load Explicit}
+
+Given atomic object type \texttt{A} and value type \texttt{C}:
+\begin{nicec}
+void atomic_store_explicit( volatile A* obj, C desired, memory_order order )
+\end{nicec}
+then, with TSO, and \texttt{order} being relaxed, acquire or release,
+we have:
+\begin{nicec}
+atomic_store_explicit( obj, desired, order );
+\end{nicec}
+is equivalent to:
+\begin{nicec}
+atomic{ *obj = desired }
+\end{nicec}
+
+Usage:
+\begin{nicec}
+_Atomic_Store_uint( &gate->go_ahead, 0, ATOMIC_ORDER_RELAXED )
+_Atomic_Store_uint( &gate->go_ahead, 1, ATOMIC_ORDER_RELAXED )
+_Atomic_Store_uint( &lock->now_serving, next_ticket, ATOMIC_ORDER_RELEASE )
+_Atomic_Store_uint( &the_thread->Wait.flags, flags, ATOMIC_ORDER_RELAXED )
+\end{nicec}
+
+\subsection{Atomic Fetch-Add}
+
+Given atomic object type \texttt{A}, value \texttt{C},
+and value or pointer-difference type \texttt{M}:
+\begin{nicec}
+C atomic_fetch_add_explicit( volatile A* obj, M arg, memory_order order )
+\end{nicec}
+then, with TSO, and \texttt{order} being relaxed, acquire or release,
+we have:
+\begin{nicec}
+result = atomic_fetch_add_explicit( obj, arg, order )
+\end{nicec}
+is equivalent to:
+\begin{nicec}
+atomic{ result = *obj ; *obj = *obj + arg }
+\end{nicec}
+
+Usage:
+\begin{nicec}
+_Atomic_Fetch_add_uint( &lock->next_ticket, 1U, ATOMIC_ORDER_RELAXED )
+\end{nicec}
