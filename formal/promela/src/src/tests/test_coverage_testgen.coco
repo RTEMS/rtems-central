@@ -1,0 +1,394 @@
+ # SPDX-License-Identifier: BSD-2-Clause 
+ 
+ ##############################################################################
+ # Test Coverage TestGen
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+from src.library import *
+from src import syntax_ml
+from src import syntax_pml
+from src.syntax_pml import src_comment, src_annotation, src_directive, arg_pml, arg_annotation
+from src import syntax_yaml
+from src import testgen
+from src.tests.library import *
+
+#
+
+import os
+import pytest
+import tempfile
+
+#
+
+def test_syntax_ml ():
+    with pytest.raises Exception:
+        syntax_ml.not_string ('', 0).parse ('')
+    syntax_ml.enclose_flat ('', '').parse ('')
+    syntax_ml.antiquotation.parse (r'\<ant>')
+    syntax_ml.parse_directive (r'# refine var_c \<^promela>\<open>var_pml\<close> remaining parsed tokens')
+    consume <| syntax_ml.unparse_annotation (None, None, None, None)
+
+def test_syntax_pml ():
+    with pytest.raises Exception:
+        syntax_pml.find_annot0 None
+    with pytest.raises Exception:
+        syntax_pml.find_annot0 ((1, 2), 3, zz = None)
+    consume <| syntax_pml.parse_comment ((arg_pml (), r'/**//*'
+                                                      '\n'
+                                                           r'*/'))
+    consume <| syntax_pml.parse_comment ((arg_pml (), r'/*'
+                                                      '\n'
+                                                       r'*//*'
+                                                      '\n'
+                                                           r'*/'))
+    syntax_pml.directives_refine.parse (r'#r c pml')
+    consume <| syntax_pml.unparse_source_directive (test_anonymous_not_exec, [None])
+
+    #
+    
+    def map_source ( map_annotation = syntax_yaml.unparse_annotation
+                   , parse_commands = syntax_ml.parse_commands
+                   , only_content = False
+                   , subst_lines = []
+                   , lines = (arg_pml (), r'/*@*/')):
+        consume <| syntax_pml.map_source (map_annotation, parse_commands, only_content, subst_lines, lines)
+    map_source (subst_lines = [(2, [(1, ('', []))])])
+    map_source (subst_lines = [(0, [(1, ('', []))])])
+    def map_source2 (only_content):
+        map_source (parse_commands = (_ -> None), only_content = only_content, lines = (arg_annotation (), ''))
+    map_source2 False
+    map_source2 True
+
+    #
+    
+    def parse (_):
+        yield None
+    consume <| syntax_pml.map_source0 (parse, syntax_yaml.unparse_annotation, test_anonymous_not_exec, False, [], (arg_annotation (), r''))
+
+def test_syntax_pml1 ():
+    main0 (r' /*@ no_printf_at */')
+
+def test_syntax_pml2 ():
+    main0 (r' /*@ no_printf_at \<open>zzz\<close> */')
+
+def test_syntax_pml3 ():
+    main0 (r' /*@ refine_uniform_at \<open>prop\<close>'
+           r' */'
+           r' init { true }'
+           r' ltl prop { true }')
+
+def test_syntax_yaml ():
+    syntax_yaml.safe_load (r':')
+    syntax_yaml.parse_directive (r'#refine a []')
+    syntax_yaml.parse_directive (r'#refine a [[1,2],3]')
+    consume <| syntax_pml.map_source (syntax_yaml.unparse_annotation, syntax_ml.parse_commands, False, [(1, [(1, ('', [src_directive, src_annotation ()]))])], (arg_pml (), r'/*@*/'))
+    with pytest.raises Exception:
+        consume <| syntax_yaml.unparse_annotation (src_annotation, None, None, None)
+    consume <| syntax_pml.map_source (syntax_yaml.unparse_annotation, syntax_ml.parse_commands, False, None, (arg_pml (), r'/*@*/'))
+    with pytest.raises Exception:
+        consume <| syntax_yaml.check_annotation (test_anonymous_not_exec, test_anonymous_not_exec, None, False, [], (arg_pml (), r''))
+
+def test_syntax_yaml_check ():
+    def unparse_annotation0 (cmds_generic, cmt_enclose, _, subst_bloc, cmds):
+        yield from syntax_yaml.unparse_annotation (cmt_enclose, cmds_generic, subst_bloc, cmds)
+
+    strip_find_annot1 = (_ -> ((x -> x), {}))
+    src_cmt = cmt_begin -> (src_comment (), ((41, cmt_begin), (41, '\n')))
+    bloc1 = []
+    bloc2 = [(0, [(1, [])])]
+
+    def check_annotation0 ( unparse_annotation = syntax_yaml.unparse_annotation
+                          , parse_commands = syntax_yaml.parse_commands
+                          , strip_find_annot = test_anonymous_not_exec
+                          , group_max = test_anonymous_not_exec
+                          , cmt_enclose = src_cmt ('//')
+                          , cmds_generic = False
+                          , subst_bloc = bloc1
+                          , cmds = [('0.8444218515250481', ['1', '41', '0'])]):
+        syntax_yaml.check_annotation0 (unparse_annotation, parse_commands, strip_find_annot, group_max, cmt_enclose, cmds_generic, subst_bloc, cmds)
+
+    def unparse_annotation1 (*args):
+        yield from unparse_annotation0 <*| (True,) + args
+    check_annotation0 ( unparse_annotation = unparse_annotation1
+                      , cmt_enclose = src_cmt ('@@')
+                      , cmds = ['0', 'CALL', 'append', '21', '6'])
+    
+    def unparse_annotation2 (*args):
+        yield from unparse_annotation0 <*| (False,) + args
+    check_annotation0 (unparse_annotation = unparse_annotation2, cmds_generic = True)
+
+    check_annotation0 (strip_find_annot = strip_find_annot1, group_max = (_ -> bloc2))
+
+    def unparse_annotation3 (cmt_enclose, cmds_generic, _, cmds):
+        yield from syntax_yaml.unparse_annotation (cmt_enclose, cmds_generic, bloc1, cmds)
+    check_annotation0 ( unparse_annotation = unparse_annotation3
+                      , strip_find_annot = strip_find_annot1
+                      , group_max = (_ -> bloc1)
+                      , subst_bloc = bloc2)
+
+#
+
+def test_chains1 ():
+    main_promela0 (True, models_chains, 'testsuites_spfreechain01')
+
+def test_chains2 ():
+    # covering: the path without refine_uniform
+    dir0 = models_chains
+    dir1 = './'
+    cwd = os.getcwd ()
+    with tempfile.TemporaryDirectory () as dir_test:
+        os.chdir dir_test
+        def write_unlink0 (fic):
+            toks = (r'-p'
+                    r' /*@ export_code \<open>init.c\<close>'
+                        r' enclose_file \<open>enclose_1_head.c\<close>'
+                                     r' \<open>enclose_2_foot.c\<close>'
+                        r' refine_generic_file \<open>chains-rfn.yml\<close>'
+                    r' */')
+            fic.write (toks.encode ())
+            fic.close ()
+            symlink (cons_cwd dir0, dir1, 'enclose_1_head.c')
+            symlink (cons_cwd dir0, dir1, 'enclose_2_foot.c')
+            os.symlink (cons_cwd dir0 + '../examples/only_generic/chains-rfn.yml', dir1 + 'chains-rfn.yml')
+            fic0 = dir1 + os.path.basename fic.name
+            os.symlink (fic.name, fic0)
+            main_ml_promela0 ( main_ml_promela_arg_model_checker
+                             , ((_1, _2) -> _0 -> fic0)
+                             , False
+                             , dir0
+                             , 'testsuites_spfreechain01'
+                             , 'testsuites_spfreechain01_no_uniform')
+        testgen.write_unlink (write_unlink0)
+        os.chdir cwd
+
+def test_events ():
+    main_promela_events ('testsuites_validation')
+
+def test_events_exec_all ():
+    main_ml_promela0 ( (_ -> r'-p'
+                             r' /*@ model_checker_verifier \<open>spin\<close> \<open>-a\<close>'
+                                 r' model_checker_compile \<open>gcc\<close> \<open>-DVECTORSZ=4096\<close> \<open>-o\<close> \<open>pan\<close> \<open>pan.c\<close>'
+                                 r' model_checker_exec_one \<open>./pan\<close> \<open>-a\<close> \<open>-n\<close>'
+                                 r' model_checker_exec_all \<open>./pan\<close> \<open>-a\<close> \<open>-n\<close> \<open>-e\<close>'
+                                 r' model_checker_trail \<open>spin\<close> \<open>-p\<close> \<open>-T\<close> \<open>-t\<close> \<open>-k\<close>'
+                                 r' export_trail_num \<open>1\<close>'
+                                 r' export_trail_num \<open>4\<close>'
+                             r' */')
+                     , main_ml_promela_arg_refine
+                     , False
+                     , models_events
+                     , 'testsuites_validation'
+                     , 'testsuites_validation_exec_all')
+
+#
+
+def test_fail_fileinput ():
+    fic = 'not_exist_fic'
+    assert not os.path.exists fic
+    consume <| fileinput_input fic
+    
+    assert os.path.isdir ('.')
+    consume <| fileinput_input ('.')
+
+def test_fail_mkdir ():
+    def write_unlink0 (fic):
+        fic.close ()
+        testgen.mkdir fic.name
+        testgen.mkdir (fic.name + '/_')
+    testgen.write_unlink write_unlink0
+
+def test_fail_copy1 ():
+    def write_unlink0 (fic1):
+        fic1.write('_'.encode())
+        fic1.close ()
+        testgen.copy_i fic1.name fic1.name
+        def write_unlink1 (fic2):
+            fic2.close ()
+            testgen.copy_i fic1.name fic2.name
+        testgen.write_unlink write_unlink1
+        with tempfile.TemporaryDirectory () as dir_test:
+            dir_test1 = dir_test + '/a'
+            fic2 = dir_test1 + '/' + os.path.basename fic1.name
+            testgen.copy_i (fic1.name, fic2)
+            os.symlink (fic1.name, dir_test1)
+            testgen.copy_i (fic1.name, fic2)
+            testgen.copy_i (dir_test, fic2)
+    testgen.write_unlink write_unlink0
+
+def test_fail_split_arg ():
+    consume <| testgen.split_arg ((_ -> None), [''])
+
+def test_fail_write_promela ():
+    st = testgen.read_eval_print (0, [], False)
+    with pytest.raises Exception:
+        st.write_promela (())
+    with pytest.raises Exception:
+        st.write_promela (st.init_top_elems (list (testgen.fold_prog st.argv), st.argv), a = '')
+
+#
+
+def test_fail_parse_syntax_yaml_refine_generic ():
+    main0 (r' /*@ refine_generic \<open>-\<close>'
+           r' */')
+
+def test_fail_parse_syntax_pml ():
+    main0 (r' -')
+
+def test_fail_command_not_found0 ():
+    main2 (r' /*@ model_checker_verifier \<open>' + not_exist_command + r'\<close>'
+           r' */'
+           r' ltl { true }')
+
+def test_fail_command_not_found1 ():
+    testgen.subprocess_exec (True, False, not_exist_command, [])
+
+def test_fail_command_empty ():
+    main2 (r' /*@ model_checker_verifier'
+           r' */'
+           r' ltl { true }')
+
+def test_fail_arg_missing_param ():
+    main2 ('')
+
+def test_fail_arg_unknown ():
+    main1 (r'--' + not_exist_command)
+
+def test_fail_arg_not_exist_fic ():
+    fic = 'not_exist_fic'
+    assert not os.path.exists fic
+    main1 fic
+
+def test_fail_vectorsz ():
+    main_ml_promela0 ( (_ -> r'-p'
+                             r' /*@ model_checker_verifier \<open>spin\<close> \<open>-a\<close>'
+                                 r' model_checker_compile \<open>gcc\<close> \<open>-o\<close> \<open>pan\<close> \<open>pan.c\<close>'
+                                 r' model_checker_exec_one \<open>./pan\<close> \<open>-a\<close> \<open>-n\<close>'
+                                 r' model_checker_trail \<open>spin\<close> \<open>-p\<close> \<open>-T\<close> \<open>-t\<close> \<open>-k\<close>'
+                             r' */')
+                     , main_ml_promela_arg_refine
+                     , False
+                     , models_events
+                     , 'testsuites_validation'
+                     , 'testsuites_validation_vectorsz')
+
+def test_insert_print_non_seq1 ():
+    # covering: print_first (when combined with normal, 'sequence' or 'atomic')
+    #           refine_uniform_strip, particularly when there is at least one newline in the refinement code
+    main3 (r' proctype f () { true }'
+           r' proctype g () { { int a = 0; int b = 0 } }'
+           r' proctype h () { atomic { int a = 0; int b = 0 } }'
+           r' /*@ export_code \<open>init.c\<close>'
+               r' refine_uniform_at \<open>f\<close>'
+                                 r' \<open>'
+                                    '\n' r'//\<close>'
+               r' refine_uniform_at \<open>g\<close> \<open>//\<close>'
+               r' refine_uniform_at \<open>h\<close> \<open>//\<close>'
+               r' print_first'
+               r' refine_uniform_strip'
+           r' */'
+           r' init { run f () }')
+
+def test_insert_print_non_seq2 ():
+    # covering: insertion of printf with print_first deactivated (when combined with normal, 'sequence' or 'atomic')
+    main3 (r' proctype f () { true }'
+           r' proctype g () { { int a = 0; int b = 0 } }'
+           r' proctype h () { atomic { int a = 0; int b = 0 } }'
+           r' /*@ export_code \<open>init.c\<close>'
+               r' refine_uniform_at \<open>g\<close> \<open>//\<close>'
+               r' refine_uniform_at \<open>h\<close> \<open>//\<close>'
+           r' */'
+           r' init { run f () }')
+
+def test_insert_print_non_seq3 ():
+    # covering: insertion of printf with print_first deactivated (when combined with normal, 'sequence' or 'atomic')
+    #           no_printf for all proctypes (as it is written in the same line as all proctypes)
+    main3 (r' proctype f () { true }'
+           r' proctype g () { { int a = 0; int b = 0 } }'
+           r' proctype h () { atomic { int a = 0; int b = 0; true } }'
+           r' /*@ export_code \<open>init.c\<close>'
+               r' no_printf'
+               r' refine_uniform_at \<open>g\<close> \<open>//\<close>'
+               r' refine_uniform_at \<open>h\<close> \<open>//\<close>'
+           r' */'
+           r' init { run f () }')
+
+def test_toplevel_constructs ():
+    # covering: the use of different types of constructs at toplevel
+    main3 (r' int a = 0;'
+           r' proctype f () { true }'
+           r' init { true }')
+
+def test_refine_arg_similar ():
+    # covering: refine_uniform_force
+    #           the use of similar parameters in proctype and inline
+    main3 (r' int a = 0;'
+           r' proctype f (int a; int a) { true }'
+           r' inline g (b, b) { true }'
+           r' /*@ refine_uniform_force'
+           r' */'
+           r' init { true }')
+
+def test_refine_not_serial_ty ():
+    # covering: not serializable type
+    main0 (r' int a = 0;'
+           r' proctype f (int b) { a = b }'
+           '\n'
+           r' /*@ refine_uniform_at \<open>f\<close> \<open>#refine aa\<close>'
+           r' */'
+           '\n'
+           r' init { run f (1) }'
+           r' ltl { <> ([] (a == 1)) }')
+
+def t_refine_redef_direct (arg):
+    main3 (r' proctype f (int a) { true }'
+           r' inline g (b) { true }' # note: removing this inline will decrease the coverage
+           r' /*@ refine_uniform_at \<open>f\<close>'
+                  + arg +
+           r' */'
+           r' init { true }')
+
+def test_refine_redef_direct1 ():
+    # covering: redefinition of directives
+    t_refine_redef_direct (r' \<open>#refine a'
+                              '\n' r'#refine a\<close>')
+
+def test_refine_redef_direct2 ():
+    # covering: definition of directives with a different type
+    t_refine_redef_direct (r' \<open>#refine a @{promela [bool]}\<close>')
+
+def test_refine_redef_direct3 ():
+    # covering: redefinition of directives with an array type
+    t_refine_redef_direct (r' \<open>#refine a'
+                              '\n' r'#refine a @{promela ["int[8]"]}\<close>')

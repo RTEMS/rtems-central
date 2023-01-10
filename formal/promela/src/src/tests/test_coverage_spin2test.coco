@@ -1,0 +1,144 @@
+# SPDX-License-Identifier: BSD-2-Clause
+"""Converts Annotated SPIN counter-examples to program test code"""
+
+# Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+import src.refine_command as refine
+from src import spin2test
+
+#
+
+from itertools import chain
+import pytest
+
+#
+
+def test_spin2test1 ():
+    spin2test.main (0, '../../../models/events/rqmts-spec-level/', 'model-events-mgr')
+
+def test_spin2test2 ():
+    task_name = 'task_name'
+    decl_name = 'decl_name'
+    dclarray_name = 'dclarray_name'
+    ptr_name = 'ptr_name'
+    call_name0 = 'call_name0'
+    call_name1 = 'call_name1'
+    call_name2 = 'call_name2'
+    call_name3 = 'call_name3'
+    call_name4 = 'call_name4'
+    call_name5 = 'call_name5'
+    call_name6 = 'call_name6'
+    call_name7 = 'call_name7'
+    end_name = 'end_name'
+    scalar_name0 = 'scalar_name0'
+    scalar_name1 = 'scalar_name1'
+    state_name = 'state_name'
+    cmd1 = refine.command ({}, outputLOG = True, annoteComments = False, outputSWITCH = True)
+    cmd1.refineSPINLine_main ([])
+    cmd2 = refine.command (dict (chain ({ 'SUSPEND' : '{}{}{}'
+                                        , 'WAKEUP' : '{}{}{}'
+                                        , ptr_name + '_PTR' : '\n{}'
+                                        , ptr_name + '_FPTR' : '{}\n{}{}'
+                                        , call_name1 : '{}'
+                                        , call_name2 : '{}{}'
+                                        , call_name3 : '{}{}{}'
+                                        , call_name4 : '{}{}{}{}'
+                                        , call_name5 : '{}{}{}{}{}'
+                                        , call_name6 : '{}{}{}{}{}{}'
+                                        , call_name7 : '{}{}{}{}{}{}{}'
+                                        , scalar_name1 + '_FSCALAR' : '{}{}' }.items (),
+                                        {x: '' for x in [ 'NAME'
+                                                        , 'INIT'
+                                                        , task_name
+                                                        , 'SIGNAL'
+                                                        , 'WAIT'
+                                                        , decl_name + '_DCL'
+                                                        , dclarray_name + '_DCL'
+                                                        , call_name0
+                                                        , end_name + '_SEQ'
+                                                        , scalar_name0
+                                                        , state_name ]}.items ())),
+                           outputSWITCH = True)
+    def cmd12 (cmds):
+        for cmd0 in cmds:
+            cmd = ['3'] + cmd0
+            cmd1.refineSPINLine_main cmd
+            cmd2.refineSPINLine_main cmd
+    cmd12 ([ ['LOG', 'Sender', '0', 'finished']
+           , ['NAME', '']
+           , ['INIT']
+           , ['TASK', task_name]
+           , ['SIGNAL', '']
+           , ['WAIT', '']
+           , ['DECL', '', decl_name]
+           , ['DCLARRAY', '', dclarray_name, '']
+           , ['PTR', ptr_name, '0']
+           , ['PTR', ptr_name, '1']
+           , ['PTR', ptr_name, '']
+           , ['END', '']
+           , ['STRUCT', '']
+           , ['PTR', ptr_name, '0']
+           , ['CALL', call_name0]
+           , ['CALL', call_name1, '']
+           , ['CALL', call_name2, '', '']
+           , ['CALL', call_name3, '', '', '']
+           , ['CALL', call_name4, '', '', '', '']
+           , ['CALL', call_name5, '', '', '', '', '']
+           , ['CALL', call_name6, '', '', '', '', '', '']
+           , ['CALL', call_name7, '', '', '', '', '', '', '']
+           , ['SCALAR', scalar_name1, '']
+           , ['SCALAR', scalar_name1, '', '']
+           , ['SEQ', '']
+           , ['END', end_name]
+           , ['SCALAR', '_', '']
+           , ['SCALAR', scalar_name0, '']
+           , ['SCALAR', scalar_name0, '', '']
+           , ['STATE', '', state_name]
+           , ['DON_T_KNOW_HOW_TO_REFINE']
+           , []])
+    
+def test_spin2test3 ():
+    pid, name, task_name, value, typ, index, tid, state = 0, 0, 0, 0, 0, 0, 0, 0
+    rest = []
+    cmd = refine.command ({})
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'LOG']+rest, test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'NAME',name], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'INIT'], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'TASK',task_name], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'SIGNAL',value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'WAIT',value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'DEF',name,value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'DECL',typ,name]+rest, test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'DCLARRAY',typ,name,value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'PTR',name,value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'CALL',name]+rest, test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'STRUCT',name], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'SEQ',name], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'END',name], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'SCALAR','_',value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'SCALAR',name,value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'SCALAR',name,index,value], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid,'STATE',tid,state], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([pid], test = 'test')
+    with pytest.raises Exception: cmd.refineSPINLine ([], test = 'test')
