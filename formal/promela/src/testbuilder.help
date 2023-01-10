@@ -1,0 +1,23 @@
+This tool can generate and remove RTEMS test files from a Promela model
+
+In order to generate test files the following input files are required:
+    `<model>.pml`
+    `<model>-rfn.yml`
+    `<model>-pre.h`
+    `<model>-post.h`
+    `<model>-run.h`
+where `<model>` is the name of the model.
+
+`all <model>` will run clean, spin, gentests, copy, compile and run
+`spin <model>` will run SPIN to find all scenarios
+`gentests <model>` will produce C tests
+`clean <model>` will remove generated files.
+`copy <model>`
+   - copies the generated  C files to the relevant RTEMS test source directory
+   - updates the relevant RTEMS configuration yaml file
+`archive <model>`` will copy generated spn, trail, C, and test log files
+   to the archive sub-directory of the current model directory.
+`compile` rebuilds the RTEMS test executable
+`run` runs the tests in the SIS simulator
+`zero` removes all generated C filenames from the RTEMS configuration yaml file
+  - it does NOT remove the test sources from the RTEMS test source directory
