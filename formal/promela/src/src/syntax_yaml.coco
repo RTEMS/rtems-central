@@ -1,0 +1,182 @@
+ ##############################################################################
+ # Syntax YAML
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+from src.library import *
+from src import syntax_pml
+from src.syntax_pml import src_code, src_comment, src_annotation, src_directive, arg_pml, arg_annotation
+
+#
+
+import json
+import yaml
+
+##
+# parse
+
+def safe_load (toks):
+    try:
+        dic = yaml.safe_load (toks)
+    except yaml.parser.ParserError:
+        input_continue (f'Parser error: {toks}')
+        dic = None
+    except yaml.scanner.ScannerError:
+        dic = None
+    return dic
+
+#
+
+def parse_commands (cmt):
+    match (pos_line, cmt0) in syntax_pml.parse_comment_annot cmt:
+        toks = safe_load cmt0
+        if isinst_str toks:
+            return (pos_line, True, toks.split (' ') |> filter $ (x -> x.strip ()) |> map $ (x -> x.strip ()) |> list)
+        elif isinst_list (isinst_str, toks):
+            return (pos_line, True, toks)
+        elif isinst_list (isinst_dict $ ((isinst_str, isinst_list $ (toks -> isinst_str toks or isinst_list (isinst_str, toks)))), toks):
+            def parse (toks):
+                for tok in toks:
+                    for cmd, args in tok.items ():
+                        yield (cmd, ['\n'.join(arg) if isinstance (arg, list) else arg for arg in args])
+            return (pos_line, False, [tok for tok in parse toks])
+        else:
+            return None
+    else:
+        return None
+
+def parse_directive (line):
+    match (var_c, arg) in syntax_pml.directives_refine.parse line:
+        match [[ty_name, ty_arity], var_pml] in safe_load arg if isinst_list (isinst_str, [ty_name, var_pml]) and (ty_arity is None or isinstance (ty_arity, int)):
+            return (var_c, (ty_name, int (ty_arity) if ty_arity else None), var_pml)
+        else:
+            return None
+    else:
+        return None
+
+##
+# unparse
+
+unparse_annotation_cmd = (cmd, args) -> syntax_pml.unparse_annotation_cmd (json.dumps ([{cmd : args}]))
+
+unparse_commands_inline = json.dumps # Note: Not expecting newlines in the output
+
+def unparse_command_refine (cmd):
+    def unparse_source_directive (lines):
+        for line in lines:
+            case line:
+                match src_code (code):
+                    yield code
+                match src_directive (var_c, ty, var_pml):
+                    yield (f'#refine {var_c} ' + unparse_commands_inline ([ty, var_pml]))
+    return (syntax_pml.command_at syntax_pml.binding_refine_uniform if cmd[0] else syntax_pml.binding_refine_uniform,
+            ([cmd[0]] if cmd[0] else []) + ['\n'.join (unparse_source_directive (cmd[1]))])
+
+def unparse_annotation (cmt_enclose, cmds_generic, subst_bloc, cmds):
+    case cmt_enclose:
+        match (src_comment (), (cmt_begin, cmt_end)):
+            inline = cmt_begin[0] == cmt_end[0]
+            cmt_begin = cmt_begin[1] + syntax_pml.delim_annot + (' ' if inline else '\n')
+            cmt_end = cmt_end[1]
+        match (src_annotation (), inline):
+            cmt_begin = None
+            cmt_end = None
+
+    if cmt_begin:
+        yield cmt_begin
+    if cmds_generic:
+        yield unparse_commands_inline cmds
+    else:
+        def unparse_commands (subst_bloc, cmds):
+            case (subst_bloc, cmds):
+                match ([(pos1, subst_cmd)] + subst_bloc0, [(cmd, (pos2, args))] + cmds0):
+                    if pos1 < pos2:
+                        subst_bloc = subst_bloc0
+                        yield unparse_command_refine subst_cmd
+                    else:
+                        cmds = cmds0
+                        yield (cmd, args)
+                    yield from unparse_commands (subst_bloc, cmds)
+                match ([_] + _, []):
+                    for _, subst_cmd in subst_bloc:
+                        yield unparse_command_refine subst_cmd
+                match ([], [_] + _):
+                    for cmd, (_, args) in cmds:
+                        yield (cmd, args)
+        def split (arg):
+            arg0 = arg.split ('\n')
+            return arg if len arg0 <= 1 else arg0
+        data0 = [{cmd: [split arg for arg in args]} for cmd, args in list (unparse_commands (subst_bloc, syntax_pml.discard_refine cmds))]
+        yield unparse_commands_inline data0 if inline else yaml.dump data0
+    if cmt_end:
+        yield cmt_end
+
+##
+# check
+
+def check_annotation0 (unparse_annotation, parse_commands, strip_find_annot, group_max, cmt_enclose, cmds_generic, subst_bloc, cmds):
+    def unparse_parse (cmt_enclose):
+        case cmt_enclose:
+            match (src_comment (), _):
+                arg_ty = arg_pml ()
+            match (src_annotation (), _):
+                arg_ty = arg_annotation ()
+        else:
+            input_continue ('Expecting a comment or an annotation')
+        cmds00 = list <| map (parse_commands, syntax_pml.parse_comment ((arg_ty, ''.join (unparse_annotation (cmt_enclose, cmds_generic, subst_bloc, cmds)))))
+        return None if any <| map ((cmd -> cmd is None), cmds00) else cmds00
+
+    cmds00 = unparse_parse cmt_enclose
+    match (None, (src_comment (), _)) in (cmds00, cmt_enclose):
+        # possibly in the situation where we were trying to parse nested C comments delimiters /* */, so we can try to parse again the content but this time without the outer /* */ delimiters
+        cmds00 = unparse_parse ((src_annotation (), False))
+    case cmds00:
+        match [(_, True, cmds0)] if cmds_generic == True and cmds == cmds0:
+            pass
+        match [(_, False, cmds0)] if cmds_generic == False and syntax_pml.discard_refine cmds == syntax_pml.discard_refine cmds0:
+            pos_file = 0
+            pos_line = 0
+            
+            case group_max (syntax_pml.parse_annotations_directives $ parse_directive <*| strip_find_annot ([syntax_pml.make_annotations (False, cmds0, pos_file, pos_line, '')])):
+                match [(pos_file0, [(pos_line0, subst_bloc0)])] if pos_file == pos_file0 and pos_line == pos_line0 and subst_bloc == subst_bloc0:
+                    pass
+                match [] if subst_bloc == []:
+                    pass
+            else:
+                input_continue ('Expecting similar substitution annotation bloc')
+    else:
+        input_continue ('Expecting similar annotations')
+
+def check_annotation (*args):
+    check_annotation0 <*| (unparse_annotation, parse_commands) + args

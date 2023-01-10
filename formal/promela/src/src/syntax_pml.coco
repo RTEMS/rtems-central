@@ -1,0 +1,396 @@
+ ##############################################################################
+ # Syntax PML
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+from src.library import *
+from src.modules.comment_filter.comment_filter import language
+from src.modules.comment_filter.comment_filter import rfc
+
+#
+
+from itertools import chain, groupby, islice, zip_longest
+import os
+from parsec import generate, many, many1, optional, regex, re, string # explicit listing for mypy
+from parsec import * # mainly for importing operators
+
+#
+
+group_nth = (xs, n) -> zip_longest (* [islice xs i None n for i in range n])
+
+#
+
+delim_comment = language.Lang (line_comment = ['//', '@@'],
+                               comment_bookends = language.c.comment_bookends,
+                               nested_comments = language.c.nested_comments)
+delim_annot = '@'
+delim_refine = 'refine'
+
+##
+# annot
+
+command_default = binding -> binding
+command_at = binding -> binding + '_at'
+command_file_at = binding -> binding + '_file_at'
+command_file = binding -> binding + '_file'
+
+binding_refine_uniform = 'refine_uniform'
+
+def find_not_annot (cmds, binding):
+    return list (filter ((cmd_args -> (cmd -> cmd != command_default binding and cmd != command_at binding and cmd != command_file_at binding and cmd != command_file binding) (cmd_args[0])), cmds))
+
+discard_refine = cmds -> find_not_annot (mapi ((i_cmd_arg -> (i_cmd_arg[1][0], (i_cmd_arg[0], i_cmd_arg[1][1]))), cmds), binding_refine_uniform)
+
+def find_annot0 ((annots, dict_top_elem), binding):
+    mk_cmd0 = (pos3, key, args) -> ((pos3, key), args)
+    
+    def filter_annot0 (annots, binding):
+        for annot in annots:
+            for pos2, cmds in annot.items ():
+                cmds = [ mk_cmd0 (pos3, None, args) for (pos3, (cmd, args)) in cmds if cmd == command_default binding ]
+                if cmds:
+                    yield (pos2, cmds)
+
+    def filter_annot (annots, binding):
+        for _, cmds in filter_annot0 annots binding:
+            for ((pos3, _), args) in cmds:
+                yield (pos3, args)
+
+    dic0 = { pos2 : cmds for pos2, cmds in filter_annot0 annots binding }
+
+    def update_annot (pos2, cmd):
+        update_dic (dic0, pos2, [cmd])
+
+    def update_annot_key (args, f_cmd):
+        if args:
+            key = args[0][1]
+            if key in dict_top_elem:
+                update_annot (dict_top_elem[key], f_cmd (key, args[1:]))
+            else:
+                input_continue (f'Key error: {key} not in {dict_top_elem}')
+        else:
+            input_continue ('No arguments provided')
+    
+    for pos3, args in filter_annot (annots, command_at binding):
+        update_annot_key (args, mk_cmd0 $ pos3)
+
+    def mk_cmd (pos3, key, args):
+        return mk_cmd0 (pos3, key, list (map ((dir_path -> (path -> (os.path.dirname path, fileinput_input0 path)) (os.path.abspath (dir_path[0] + '/' + dir_path[1]))), args)))
+
+    for pos3, args in filter_annot (annots, command_file_at binding):
+        update_annot_key (args, mk_cmd $ pos3)
+
+    for pos3, args in filter_annot (annots, command_file binding):
+        update_annot ((pos3[0], pos3[1]), mk_cmd pos3 None args)
+
+    return dic0
+
+def find_annot (annots, binding):
+    return {pos : list (map ((pos_cmds -> pos_cmds[1]), cmds)) for pos, cmds in find_annot0 (annots, binding).items ()}
+
+find_annot_bool = (annots, binding) -> (annots, binding) |*> find_annot |> bool
+find_annot_list = (annots, binding) -> (annots, binding) |*> find_annot |> .values () |> flatten
+find_annot_list1 = (annots, binding) -> (annots, binding) |*> find_annot_list |> map $ (map $ (dir_arg -> dir_arg[1]))
+find_annot_list2 = (annots, binding) -> (annots, binding) |*> find_annot_list1 |> flatten |> list
+
+##
+# parse
+
+data arg_pml
+data arg_pml_file
+data arg_annotation
+data arg_annotation_file
+
+data cmt_multi_begin
+data cmt_multi_begin_code
+data cmt_multi_body
+data cmt_multi_end
+data cmt_single
+data cmt_single_code
+
+data src_code (code)
+data src_comment
+data src_annotation
+data src_directive (var_c, ty, var_pml)
+
+rfc.clear_line = line -> line
+
+def parse_file (lines):
+    parse_comment_state = rfc.State ()
+    for line in fileinput_input (lines[1]) if lines[0] == arg_pml_file () else lines[1].splitlines True:
+        parse_comment_state.line = line
+        yield rfc.parse_line (delim_comment, parse_comment_state, code_only = False, keep_tokens = True)
+
+#
+
+split_cmt_bookends = (cmt, f) -> (map ((multi -> f (( cmt[: len (multi[0])  ]
+                                                    , cmt[  len (multi[0]) :]))
+                                                 if cmt.startswith (multi[0]) else None),
+                                       delim_comment.comment_bookends)
+                                  |> filter $ (x -> x != None)
+                                  |> flatten)
+
+def parse_comment1 (lines):
+    line_cpt = 1
+    def gen_single (line_cpt, line):
+        ret_single = l -> (cmt_single (), l |> map $ (x -> (line_cpt, x)) |> list)
+        for code, cmt2, cmt3, cmt4 in group_nth (line, 4):
+            if cmt2:
+                l1 = len ([ cmt for cmt in delim_comment.line_comment if cmt2.startswith cmt ][0])
+                l2 = - len (rfc.get_linesep cmt2)
+                yield ret_single ([ code
+                                  , cmt2 [: l1       ]
+                                  , cmt2 [  l1 : l2  ] if l2 != 0 else cmt2 [l1:]
+                                  , cmt2 [       l2 :] if l2 != 0 else '' ])
+            elif cmt3 and cmt4:
+                yield ret_single (split_cmt_bookends (cmt3, (c3 -> [code, c3[0], c3[1], cmt4])))
+            else:
+                yield (cmt_single_code (), [(line_cpt, code)])
+
+    def gen_multi_end (line_cpt, line):
+        return (cmt_multi_end (), ([(line_cpt, line[0])] if line[0] != '' else []) + [(line_cpt, line[1])])
+    
+    for is_multi, lines in groupby (parse_file lines, key = (x -> len (x[1].multi_end_stack) >= 1)):
+        if is_multi:
+            line, _ = lines.__next__ ()
+            def gen_multi_begin (line):
+                nonlocal line_cpt
+                yield from gen_single (line_cpt, line[2:-5])
+                yield (cmt_multi_begin_code (), [(line_cpt, line[-5])])
+                for line0 in split_cmt_bookends (line[-3], (x -> x)):
+                    yield (cmt_multi_begin (), [(line_cpt, line0)])
+                line_cpt += 1
+            yield from gen_multi_begin line
+            for multi_body, lines in groupby (lines, key = (x -> len (x[0]) == 1)):
+                if multi_body:
+                    for line, _ in lines:
+                        yield (cmt_multi_body (), [(line_cpt, line[0])])
+                        line_cpt += 1
+                else:
+                    for line, _ in lines:
+                        yield gen_multi_end (line_cpt, line)
+                        yield from gen_multi_begin line
+        else:
+            line, _ = lines.__next__ ()
+            yield gen_multi_end (line_cpt, line)
+            yield from gen_single (line_cpt, line[2:])
+            line_cpt += 1
+            for line, _ in lines:
+                yield from gen_single (line_cpt, line[2:])
+                line_cpt += 1
+
+def parse_comment0 (lines):
+    remove_pos = map $ (x -> x[1])
+    flat_list = list <.. flatten
+    flat_rm = flat_list <.. remove_pos
+
+    for is_single, lines in groupby (parse_comment1 lines, key = (x -> x[0] == cmt_single () or x[0] == cmt_single_code ())):
+        if is_single:
+            yield remove_pos lines
+        else:
+            lines0 = groupby (lines, key = (x -> x[0] == cmt_multi_end ()))
+            cmd1, line1 = lines0.__next__ ()
+            if cmd1:
+                line_head = flat_rm line1
+            else:
+                line1 = list line1 # WARNING: force one step of iteration before another __next__ operation
+                _, line2 = lines0.__next__ ()
+                line_head = flat_rm line1 + flat_rm line2
+            lines0 = map ((x -> remove_pos (x[1])), lines0)
+            yield [line_head] + [flat_list xs + flat_list (lines0.__next__ ()) for xs in lines0]
+
+def parse_comment (lines):
+    case lines:
+        match (arg_annotation (), annot):
+            yield (src_annotation (), annot)
+        match (arg_annotation_file (), annot):
+            yield (src_annotation (), fileinput_input0 annot)
+    else:
+        for xs in flatten (parse_comment0 lines):
+            if xs[0][1]:
+                yield (src_code (xs[0]))
+            if xs[1:]:
+                yield (src_comment (), (xs[1], xs[2:-1] if xs[2][1] else [], xs[-1]))
+
+def parse_comment_annot (cmt):
+    case cmt:
+        match (src_comment (), ((pos_line, _), cmt, _)):
+            cmt0 = map ((x -> x[1]), cmt) |> reduce $ (+) if cmt else ''
+            if cmt0 and cmt0.startswith delim_annot:
+                return (pos_line, cmt0.split (delim_annot, 1) [1])
+        match (src_annotation (), cmt0):
+            return (1, cmt0)
+    return None
+
+def parse_annotations_directives (parse_directive, strip, dic):
+    def parse_line (lines):
+        for line in lines |> strip |> .split ('\n'):
+            cmd = parse_directive line
+            yield (src_directive <*| cmd if cmd else src_code line)
+            
+    return { pos2 : [ (pos3_arg, list <| flatten ([ parse_line lines for _, lines in cmds ]) )
+                     for pos3_arg, cmds in cmds0 ]
+            for pos2, cmds0 in dic.items () }
+
+def parse_annotations (parse_commands, hash_cmd_generic, lines, pos_file, pos_dir):
+    annot = {}
+    for cmt in parse_comment lines:
+        match (pos_line, cmds_generic, cmds) in parse_commands cmt:
+            update_dic (annot,
+                        (pos_file, pos_line),
+                        [(hash_cmd_generic, list <| map ((arg -> (pos_dir, arg)), cmds))]
+                        if cmds_generic else
+                        [(cmd0, list <| map ((arg -> (pos_dir, arg)), cmd1)) for cmd0, cmd1 in cmds])
+
+    return { (pos_file, pos_line) : list <| mapi ((i_cmd -> ((pos_file, pos_line, i_cmd[0]), i_cmd[1])), cmds)
+            for (pos_file, pos_line), cmds in annot.items () }
+
+def make_annotations (cmds_generic0, cmds0, pos_file, pos_line, pos_dir):
+    cmds = [(hash_cmd_generic, list <| map ((arg -> (pos_dir, arg)), cmds0))] if cmds_generic0 else [(cmd0, list <| map ((arg -> (pos_dir, arg)), cmd1)) for cmd0, cmd1 in cmds0]
+    return { (pos_file, pos_line) : list <| mapi ((i_cmd -> ((pos_file, pos_line, i_cmd[0]), i_cmd[1])), cmds) }
+
+#
+
+spaces = regex (r'\s*', re.MULTILINE)
+ident = regex (r"[_'a-zA-Z][_'a-zA-Z0-9]*")
+
+@generate
+def typ ():
+    @generate
+    def arity ():
+        arit = yield (spaces >> string (r'[') >> spaces >> regex (r"[0-9]+") << spaces << string (r']'))
+        return (int arit)
+    ty = yield ident
+    arity = yield (optional arity)
+    return (ty, arity)
+
+def directive (parse_arg):
+    @generate
+    def directive0 ():
+        name = yield spaces >> string (r'#') >> spaces >> ident
+        arg = yield parse_arg
+        return (name, arg)
+    return directive0
+
+@generate
+def directive_refine ():
+    @generate
+    def cmd_args ():
+        cmd = yield spaces >> ident
+        args = yield spaces >> regex (r'.+')
+        return (cmd, args)
+    delim, cmd_args = yield directive cmd_args
+    if delim == delim_refine:
+        return cmd_args
+    else:
+        return None
+
+directives_refine = optional directive_refine
+
+##
+# unparse
+
+unparse_string = s -> (s.replace ('\\', r'\\')
+                        .replace ('"', r'\"')
+                       |> (s -> '"' + s + r'\n"'))
+
+unparse_annotation_cmd = toks -> delim_comment.line_comment[0] + delim_annot + ' ' + toks
+
+def unparse_source_directive (unparse_directive, lines):
+    lines_last = []
+    for line in lines:
+        case line:
+            match src_directive (cvar, _, pvar):
+                lines0 = unparse_directive ((cvar, pvar))
+                if lines0[0]:
+                    for line0 in lines0[0]:
+                        yield line0
+                else:
+                    input_continue ('Generating an empty line')
+                lines_last = lines_last + lines0[1]
+            match src_code (line):
+                yield line
+    for line in lines_last:
+        yield line
+
+def map_source0 (parse_comment, map_annotation, parse_commands, only_content, subst_lines, lines):
+    def map_annotation0 (command_ty, get_command):
+        yield from map_annotation ((src_annotation (), False), False, [], [(command_ty, get_command (()).split ('\n'))])
+    def map_source_annotation (command_ty, get_command, map_comment, cmt_enclose, cmt):
+        nonlocal subst_lines
+        match (pos_cmt, cmds_generic, cmds) in parse_commands cmt:
+            exec_loop = True
+            subst_bloc = []
+            while exec_loop:
+                match [(pos_line, subst_bloc)] + subst_lines0 in subst_lines:
+                    if pos_line <= pos_cmt:
+                        subst_lines = subst_lines0
+                    if pos_line != pos_cmt:
+                        subst_bloc = []
+                    if pos_line >= pos_cmt:
+                        exec_loop = False
+                else:
+                    exec_loop = False
+            yield from map_annotation (cmt_enclose, cmds_generic, subst_bloc, cmds)
+        else:
+            if only_content:
+                yield from map_annotation0 (command_ty, get_command)
+            else:
+                yield from map_comment ()
+    inline = cmt -> '\n' not in cmt
+    for src in parse_comment lines:
+        case src:
+            match (src_comment (), (cmt_begin, cmt, cmt_end)):
+                def map_comment ():
+                    for _, toks in chain ((cmt_begin,), cmt, (cmt_end,)):
+                        yield toks
+                yield from map_source_annotation ( 'comment'
+                                                 , (_ -> ''.join (map ((pos_line -> pos_line[1]), [cmt_begin] + cmt + [cmt_end])))
+                                                 , map_comment
+                                                 , (src_annotation (), all <| map (pos_line -> inline (pos_line[1]), cmt))
+                                                   if only_content else
+                                                   (src_comment (), (cmt_begin, cmt_end))
+                                                 , src )
+            match (src_annotation (), cmt):
+                def map_comment ():
+                    yield cmt
+                yield from map_source_annotation ('annotation', (_ -> cmt), map_comment, (src_annotation (), inline cmt), src)
+            match (src_code ((_, code))):
+                if only_content and len code > 1 and code[-1] == '\n':
+                    yield from map_annotation0 ('code', _ -> code[:-1])
+                else:
+                    yield code
+
+def map_source (*args):
+    yield from map_source0 <*| (parse_comment,) + args

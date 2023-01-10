@@ -1,0 +1,211 @@
+ ##############################################################################
+ # Syntax ML
+ #
+ # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ #
+ # All rights reserved.
+ #
+ # Redistribution and use in source and binary forms, with or without
+ # modification, are permitted provided that the following conditions are
+ # met:
+ #
+ #     * Redistributions of source code must retain the above copyright
+ #       notice, this list of conditions and the following disclaimer.
+ #
+ #     * Redistributions in binary form must reproduce the above
+ #       copyright notice, this list of conditions and the following
+ #       disclaimer in the documentation and/or other materials provided
+ #       with the distribution.
+ #
+ #     * Neither the name of the copyright holders nor the names of its
+ #       contributors may be used to endorse or promote products derived
+ #       from this software without specific prior written permission.
+ #
+ # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ##############################################################################
+
+from src.library import *
+from src import syntax_pml
+
+#
+
+from parsec import generate, many, many1, optional, regex, re, string # explicit listing for mypy
+from parsec import * # mainly for importing operators
+
+##
+# parse
+
+tok_open = r'\<open>'
+tok_close = r'\<close>'
+tok_open0 = '\\' + tok_open
+tok_close0 = '\\' + tok_close
+
+ant_open = r'\<'
+ant_open1 = r'\<^'
+ant_close = r'>'
+
+spaces = regex (r'\s*', re.MULTILINE)
+spaces1 = regex (r'\s+', re.MULTILINE)
+ident00 = regex (r"[._'a-zA-Z0-9]+")
+ident0 = regex (r"[\[\]._'a-zA-Z0-9]+")
+ident = regex (r"[_'a-zA-Z][_'a-zA-Z0-9]*")
+filename = regex (r"[./_'a-zA-Z0-9]+")
+
+#
+
+def not_string (s, matched):
+    @Parser
+    def not_string_parser (text, index = 0):
+        len_s = len s
+        if matched <= 0:
+            return Value.failure (index, 'a strictly positive number of characters')
+        elif matched <= len_s and text[index:index + len_s] != s:
+            return Value.success (index + matched, text[index:index + matched])
+        else:
+            return Value.failure (index, 'a different string')
+    return not_string_parser
+
+def enclose_flat (delim_beg, delim_end):
+    @generate
+    def enclose_flat0 ():
+        cts = yield spaces >> string delim_beg >> many (not_string (delim_end, 1)) << string delim_end
+        return ''.join cts
+    return enclose_flat0
+
+def enclose_nested0 (delim_beg, delim_end):
+    @generate
+    def enclose_nested00 ():
+        @generate
+        def enclose_nested1 ():
+            cts1, cts2, cts3 = yield enclose_nested00
+            return ''.join ([cts1, cts2, cts3])
+        
+        cts1 = yield string delim_beg
+        cts2 = yield many (enclose_nested1 ^ not_string (delim_end, 1))
+        cts3 = yield string delim_end
+        return (cts1, ''.join cts2, cts3)
+
+    @generate
+    def enclose_nested1 ():
+        _, cts2, _ = yield enclose_nested00
+        return cts2
+    
+    return enclose_nested1
+
+spaces_cmt = many (spaces1 ^ enclose_nested0 ('(*', '*)'))
+
+def enclose_nested (delim_beg, delim_end):
+    return spaces_cmt >> enclose_nested0 (delim_beg, delim_end)
+
+def quoted (scan):
+    @generate
+    def quoted0 ():
+        delim = r'"'
+        name = yield spaces_cmt >> string delim >> scan << string delim
+        return name
+    return quoted0
+
+quoted_ident0 = quoted ident0
+
+@generate
+def antiquotation ():
+    name = yield spaces_cmt >> string ant_open >> ident0 << string ant_close
+    return ant_open + name + ant_close
+
+@generate
+def antiquotation0 ():
+    name = yield spaces_cmt >> string ant_open1 >> ident0 << string ant_close
+    return name
+
+@generate
+def command ():
+    name = yield spaces_cmt >> ident0
+    arg = yield many (enclose_nested (tok_open, tok_close) ^ quoted_ident0 ^ quoted filename ^ antiquotation)
+    return (name, arg)
+
+commands = many command
+
+def parse_commands (cmt):
+    match (pos_line, cmt0) in syntax_pml.parse_comment_annot cmt:
+        toks = commands.parse cmt0
+        if len toks >= 2 and toks[1][0].isupper () and all ([args == [] for _, args in toks]): # TODO: at the time of writing, this parsing recognition is still approximate but seems to already cover enough execution cases
+            return (pos_line, True, [tok for tok, _ in toks])
+        else:
+            return (pos_line, False, [(cmd[0], cmd[1]) for cmd in commands.parse cmt0])
+    else:
+        return None
+
+#
+
+data token_ident (ident)
+data token_antiquotation (cmd, ty, name)
+
+@generate
+def directive ():
+    @generate
+    def p_ident ():
+        res = yield spaces >> ident
+        return (token_ident res)
+    typ = spaces >> syntax_pml.typ
+    @generate
+    def p_antiquotation_single ():
+        cmd = yield antiquotation0
+        arg = yield enclose_nested0 (tok_open, tok_close)
+        return (token_antiquotation cmd None arg)
+    @generate
+    def p_antiquotation_general ():
+        cmd = yield spaces >> string ("@{") >> ((spaces >> ident00) ^ quoted_ident0)
+        opt = yield optional (spaces >> string ("[") >> (typ ^ quoted typ) << spaces << string ("]"))
+        arg = yield optional (spaces >> enclose_nested0 (tok_open, tok_close)) << spaces << string ("}")
+        return (token_antiquotation cmd opt arg)
+
+    arg = yield syntax_pml.directive (many (p_antiquotation_general ^ p_antiquotation_single ^ p_ident))
+    return arg
+
+directives = optional directive
+
+def parse_directive (line):
+    match (delim, [token_ident (var1)] + toks) in directives.parse line if delim == syntax_pml.delim_refine:
+        match ([token_antiquotation ('promela', ty, var2)] + toks) in toks:
+            var2 = var2 if var2 else var1
+        else:
+            ty = None
+            var2 = var1
+        if toks != []:
+            input_continue(f'Remaining parsed tokens: {toks}')
+        return (var1, ty if ty else (None, None), var2)
+    else:
+        return None
+
+##
+# unparse
+
+unparse_cartouche = name -> tok_open + name + tok_close
+
+unparse_lambda = (s_fun, s_args) -> ' '.join ([s_fun] + s_args)
+
+unparse_lambda_cartouche = (s_fun, s_args) -> unparse_lambda (s_fun, list (map (unparse_cartouche, s_args)))
+
+unparse_annotation_cmd = (cmd, args) -> syntax_pml.unparse_annotation_cmd (unparse_lambda_cartouche (cmd, args))
+
+def unparse_annotation (cmt_enclose, cmds_generic, subst_bloc, cmds):
+    yield
+
+##
+# check
+
+def check_annotation0 (unparse_annotation, parse_commands, strip_find_annot, group_max, cmt_enclose, cmds_generic, subst_bloc, cmds):
+    input_continue ('Check on ML syntax not implemented')
+
+def check_annotation (*args):
+    check_annotation0 <*| (unparse_annotation, parse_commands) + args
