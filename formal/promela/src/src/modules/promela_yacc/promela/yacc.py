@@ -15,6 +15,7 @@ import os
 import subprocess
 import warnings
 import ply.yacc
+from sys import platform as _platform
 # inline
 #
 # import promela.ast as promela_ast
@@ -90,11 +91,11 @@ class Parser(object):
             debuglog=debuglog,
             errorlog=errorlog)
 
-    def parse(self, promela):
+    def parse(self, promela, fic):
         """Parse string of Promela code."""
-        s = cpp(promela)
+        s = cpp(promela, fic)
         program = self.parser.parse(
-            s, lexer=self.lexer.lexer, debug=self.logger)
+            s, lexer=self.lexer.lexer, debug=self.logger, tracking=True)
         return program
 
     def _iter(self, p):
@@ -115,6 +116,10 @@ class Parser(object):
         """program : units"""
         p[0] = self.ast.Program(p[1])
 
+    def p_program_empty(self, p):
+        """program : empty"""
+        p[0] = self.ast.Program([])
+
     def p_units_iter(self, p):
         """units : units unit"""
         p[0] = self._iter(p)
@@ -126,17 +131,18 @@ class Parser(object):
     # TODO: events, c_fcts, ns, error
     def p_unit_proc(self, p):
         """unit : proc
+                | inline
                 | init
                 | claim
                 | ltl
         """
-        p[0] = p[1]
+        p[0] = (p[1], p.lineno(1))
 
     def p_unit_decl(self, p):
         """unit : one_decl
                 | utype
         """
-        p[0] = p[1]
+        p[0] = (p[1], p.lineno(1))
 
     def p_unit_semi(self, p):
         """unit : semi"""
@@ -158,6 +164,13 @@ class Parser(object):
             name, body, args=args, priority=priority,
             provided=enabler, **inst)
 
+    def p_inline(self, p):
+        ("""inline : INLINE NAME"""
+         """         LPAREN var_list0 RPAREN"""
+         """         body
+         """)
+        p[0] = self.ast.InlineDef(name = p[2], decl = p[4], body = p[6])
+
     # instantiator
     def p_inst(self, p):
         """prefix_proctype : ACTIVE opt_index proctype"""
@@ -166,7 +179,7 @@ class Parser(object):
             n_active = self.ast.Integer('1')
         else:
             n_active = p[2]
-        d['active'] = n_active
+        d['active'] = int(n_active.value)
         p[0] = d
 
     def p_inactive_proctype(self, p):
@@ -197,7 +210,11 @@ class Parser(object):
         seq = self.ast.Sequence(p[4])
         p[0] = self.ast.TypeDef(p[2], seq)
 
-    def p_ltl(self, p):
+    def p_ltl1(self, p):
+        """ltl : LTL NAME LBRACE expr RBRACE"""
+        p[0] = self.ast.LTL(p[4], name = p[2])
+
+    def p_ltl2(self, p):
         """ltl : LTL LBRACE expr RBRACE"""
         p[0] = self.ast.LTL(p[3])
 
@@ -217,6 +234,21 @@ class Parser(object):
 
     def p_decl_lst_end(self, p):
         """decl_lst : one_decl"""
+        p[0] = [p[1]]
+
+    def p_decl0(self, p):
+        """decl0 : decl_lst0"""
+        p[0] = self.ast.Sequence(p[1])
+
+    def p_decl_empty0(self, p):
+        """decl0 : empty"""
+
+    def p_decl_lst_iter0(self, p):
+        """decl_lst0 : expr COMMA decl_lst0"""
+        p[0] = [p[1]] + p[3]
+
+    def p_decl_lst_end0(self, p):
+        """decl_lst0 : expr"""
         p[0] = [p[1]]
 
     def p_one_decl_visible(self, p):
@@ -251,7 +283,7 @@ class Parser(object):
 
     def p_one_decl_mtype(self, p):
         """one_decl : MTYPE asgn LBRACE name_list RBRACE"""
-        p[0] = self.ast.MessageType(p[3])
+        p[0] = self.ast.MessageType(p[4])
 
     def p_name_list_iter(self, p):
         """name_list : name_list COMMA NAME"""
@@ -270,7 +302,27 @@ class Parser(object):
         """var_list : ivar"""
         p[0] = [p[1]]
 
+    def p_var_list00_iter(self, p):
+        """var_list00 : ivar0 COMMA var_list00"""
+        p[0] = [p[1]] + p[3]
+
+    def p_var_list00_end(self, p):
+        """var_list00 : ivar0"""
+        p[0] = [p[1]]
+
+    def p_var_list0(self, p):
+        """var_list0 : var_list00"""
+        p[0] = p[1]
+
+    def p_var_list0_empty(self, p):
+        """var_list0 : empty"""
+        p[0] = []
+
     # TODO: vardcl asgn LBRACE c_list RBRACE
+
+    def p_ivar0(self, p):
+        """ivar0 : NAME"""
+        p[0] = p[1]
 
     # ivar = initialized variable
     def p_ivar(self, p):
@@ -342,7 +394,7 @@ class Parser(object):
 
     def p_cmpnd_iter(self, p):
         """cmpnd : cmpnd PERIOD cmpnd %prec DOT"""
-        p[0] = self.ast.VarRef(extension=p[3], **p[1])
+        p[0] = self.ast.VarRef(extension=p[3], name = p[1].name, index = p[1].index)
 
     def p_cmpnd_end(self, p):
         """cmpnd : pfld"""
@@ -467,7 +519,7 @@ class Parser(object):
 
     def p_statement_assert(self, p):
         """statement : ASSERT full_expr"""
-        p[0] = self.ast.Assert(p[2])
+        p[0] = self.ast.Assert(p[2], pos = p.lineno(1))
 
     def p_statement_fifo_receive(self, p):
         """statement : varref RCV rargs"""
@@ -486,7 +538,7 @@ class Parser(object):
         p[0] = self.ast.Receive(p[1], p[4])
 
     def p_statement_tx2(self, p):
-        """statement : varref TX2 margs"""
+        """statement : varref TX2 rargs"""
         p[0] = self.ast.Send(p[1], p[3])
 
     def p_statement_full_expr(self, p):
@@ -496,6 +548,19 @@ class Parser(object):
     def p_statement_else(self, p):
         """statement : ELSE"""
         p[0] = self.ast.Else()
+
+    def p_statement_for(self, p):
+        """statement : for"""
+        p[0] = p[1]
+
+    def p_for(self, p):
+        """for : FOR LPAREN NAME COLON full_expr PERIODS full_expr RPAREN LBRACE sequence os RBRACE"""
+        s = p[10]
+        s.context = 'for'
+        s.context_for_var = p[3]
+        s.context_for_begin = p[5]
+        s.context_for_end = p[7]
+        p[0] = s
 
     def p_statement_atomic(self, p):
         """statement : atomic"""
@@ -523,23 +588,27 @@ class Parser(object):
 
     # the stmt of line 696 in spin.y collects the inline ?
     def p_statement_call(self, p):
-        """statement : NAME LPAREN args RPAREN"""
+        """statement : NAME LPAREN decl0 RPAREN"""
         # NAME = INAME = inline
-        c = self.ast.Inline(p[1], p[3])
+        c = self.ast.Call(p[1], p[3])
         p[0] = self.ast.Sequence([c])
 
     def p_statement_assgn_call(self, p):
-        """statement : varref asgn NAME LPAREN args RPAREN statement"""
-        inline = self.ast.Inline(p[3], p[5])
+        """statement : varref asgn NAME LPAREN decl0 RPAREN statement"""
+        inline = self.ast.Call(p[3], p[5])
         p[0] = self.ast.Assignment(p[1], inline)
 
     def p_statement_return(self, p):
         """statement : RETURN full_expr"""
         p[0] = self.ast.Return(p[2])
 
-    def p_printf(self, p):
-        """statement : PRINT LPAREN STRING prargs RPAREN"""
-        p[0] = self.ast.Printf(p[3], p[4])
+    def p_printf1(self, p):
+        """statement : PRINT LPAREN STRING RPAREN"""
+        p[0] = self.ast.Printf(p[3])
+
+    def p_printf2(self, p):
+        """statement : PRINT LPAREN STRING COMMA decl0 RPAREN"""
+        p[0] = self.ast.Printf(p[3], p[5])
 
     # yet unimplemented for statement:
         # SET_P l_par two_args r_par
@@ -555,8 +624,8 @@ class Parser(object):
         p[0] = self.ast.Receive(p[1])
 
     def p_varref_lnot(self, p):
-        """special : varref LNOT margs"""
-        raise NotImplementedError
+        """special : varref LNOT rargs"""
+        p[0] = self.ast.Send(p[1], p[3])
 
     def p_break(self, p):
         """special : BREAK"""
@@ -609,17 +678,23 @@ class Parser(object):
         p[0] = self.ast.Expression(p[1])
 
     # probe expr = no negation allowed (positive)
-    def p_pexpr(self, p):
-        """pexpr : probe
-                 | LPAREN pexpr RPAREN
-                 | pexpr LAND pexpr
+    def p_pexpr_probe(self, p):
+        """pexpr : probe"""
+        p[0] = p[1]
+
+    def p_pexpr_paren(self, p):
+        """pexpr : LPAREN pexpr RPAREN"""
+        p[0] = p[2]
+
+    def p_pexpr_logical(self, p):
+        """pexpr : pexpr LAND pexpr
                  | pexpr LAND expr
                  | expr LAND pexpr
                  | pexpr LOR pexpr
                  | pexpr LOR expr
                  | expr LOR pexpr
         """
-        p[0] = 'pexpr'
+        p[0] = self.ast.Binary(p[2], p[1], p[3])
 
     def p_probe(self, p):
         """probe : FULL LPAREN varref RPAREN
@@ -627,7 +702,7 @@ class Parser(object):
                  | EMPTY LPAREN varref RPAREN
                  | NEMPTY LPAREN varref RPAREN
         """
-        p[0] = 'probe'
+        p[0] = self.ast.Call(p[1], self.ast.Sequence([p[3]]))
 
     def p_expr_paren(self, p):
         """expr : LPAREN expr RPAREN"""
@@ -676,8 +751,7 @@ class Parser(object):
         """expr : varref RCV LBRACKET rargs RBRACKET
                 | varref R_RCV LBRACKET rargs RBRACKET
         """
-        p[0] = p[1]
-        warnings.warn('not implemented')
+        p[0] = self.ast.ReceiveExpr(p[1], p[4])
 
     def p_expr_other(self, p):
         """expr : LPAREN expr ARROW expr COLON expr RPAREN
@@ -689,12 +763,15 @@ class Parser(object):
         warnings.warn('"{s}" not implemented'.format(s=p[1]))
 
     def p_expr_run(self, p):
-        """expr : RUN aname LPAREN args RPAREN opt_priority"""
+        """expr : RUN aname LPAREN decl0 RPAREN opt_priority"""
         p[0] = self.ast.Run(p[2], p[4], p[6])
 
+    def p_expr_other_1(self, p):
+        """expr : TIMEOUT"""
+        p[0] = self.ast.Timeout()
+
     def p_expr_other_2(self, p):
-        """expr : TIMEOUT
-                | NONPROGRESS
+        """expr : NONPROGRESS
                 | PC_VAL LPAREN expr RPAREN
         """
         raise NotImplementedError()
@@ -764,10 +841,10 @@ class Parser(object):
         p[0] = p[2]
 
     def p_const(self, p):
-        """const : boolean
+        """const : SKIP
+                 | boolean
                  | number
         """
-        # lex maps `skip` to `TRUE`
         p[0] = p[1]
 
     def p_bool(self, p):
@@ -783,47 +860,24 @@ class Parser(object):
     # Auxiliary
     # =========
 
-    def p_two_args(self, p):
-        """two_args : expr COMMA expr"""
-
-    def p_args(self, p):
-        """args : arg"""
-        p[0] = p[1]
-
-    def p_prargs(self, p):
-        """prargs : COMMA arg"""
-        p[0] = p[2]
-
-    def p_prargs_empty(self, p):
-        """prargs : empty"""
-
-    def p_args_empty(self, p):
-        """args : empty"""
-
-    def p_margs(self, p):
-        """margs : arg
-                 | expr LPAREN arg RPAREN
-        """
-
-    def p_arg(self, p):
-        """arg : expr
-               | expr COMMA arg
-        """
-        p[0] = 'arg'
-
     # TODO: CONST, MINUS CONST %prec UMIN
     def p_rarg(self, p):
-        """rarg : varref
+        """rarg : const
+                | varref
                 | EVAL LPAREN expr RPAREN
         """
-        p[0] = 'rarg'
+        # todo: support all cases
+        #       | rarg LPAREN rargs RPAREN
+        #       | LPAREN rargs RPAREN
+        p[0] = p[1]
 
-    def p_rargs(self, p):
-        """rargs : rarg
-                 | rarg COMMA rargs
-                 | rarg LPAREN rargs RPAREN
-                 | LPAREN rargs RPAREN
-        """
+    def p_rargs_iter(self, p):
+        """rargs : rarg COMMA rargs"""
+        p[0] = [p[1]] + p[3]
+
+    def p_rargs_end(self, p):
+        """rargs : rarg"""
+        p[0] = [p[1]]
 
     def p_proctype(self, p):
         """proctype : PROCTYPE
@@ -887,10 +941,14 @@ class Parser(object):
         raise Exception('syntax error at: {p}'.format(p=p))
 
 
-def cpp(s):
+def cpp(code, fic):
     """Call the C{C} preprocessor with input C{s}."""
     try:
-        p = subprocess.Popen(['cpp', '-E', '-x', 'c'],
+        if _platform == "darwin":
+            cppprog = 'clang'
+        else:
+            cppprog = 'cpp'
+        p = subprocess.Popen([cppprog, '-E', '-x', 'c', '-' if code is not None else fic], # NOTE: if code is empty, then '-' must be returned as well
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
@@ -900,10 +958,13 @@ def cpp(s):
             raise Exception('C preprocessor (cpp) not found in path.')
         else:
             raise
-    logger.debug('cpp input:\n' + s)
-    stdout, stderr = p.communicate(s)
+    if code:
+        logger.debug('cpp input:\n' + code)
+    stdout, stderr = p.communicate(code)
     logger.debug('cpp returned: {c}'.format(c=p.returncode))
     logger.debug('cpp stdout:\n {out}'.format(out=stdout))
+    if p.returncode != 0:
+        raise Exception('C preprocessor return code: {returncode}'.format(returncode=p.returncode))
     return stdout
 
 
