@@ -73,6 +73,7 @@ def parse_line(lang, state, code_only=False, keep_tokens=True):
     # If currently within a string literal or multi-line comment, first
     # complete parsing that declaration.  Store the result in 'rest_of_decl'.
     rest_of_decl = ''
+    rest_of_decl0 = ''
     if state.in_literal:
         # Parsing a string literal.
         cnts, state = finish_string_literal(state.in_literal, state)
@@ -83,17 +84,19 @@ def parse_line(lang, state, code_only=False, keep_tokens=True):
     elif state.multi_end_stack:
         # If there is state, we assume it is because we have parsed
         # the start of a multiline comment, but haven't found the end.
-        cmt, state = finish_multiline_comment(lang, state, keep_tokens)
+        cmt, cmt0, state = finish_multiline_comment(lang, state, keep_tokens)
         if code_only:
             rest_of_decl = clear_line(cmt)
+            rest_of_decl0 = clear_line(cmt0)
         else:
             rest_of_decl = cmt
+            rest_of_decl0 = cmt0
 
     if state.in_literal or state.multi_end_stack:
-        return rest_of_decl, state
+        return [rest_of_decl + rest_of_decl0], state
 
     decls, state = parse_declarations(lang, state, code_only, keep_tokens)
-    return rest_of_decl + decls, state
+    return [rest_of_decl, rest_of_decl0] + decls, state
 
 
 def parse_declarations(lang, state, code_only=False, keep_tokens=True):
@@ -120,24 +123,24 @@ def parse_declarations(lang, state, code_only=False, keep_tokens=True):
     """
     code, state = parse_code(lang, state)
     comment, state = parse_line_comment(lang, state, keep_tokens)
-    comment2, state = parse_multiline_comment(lang, state, keep_tokens)
+    comment2, comment2_0, state = parse_multiline_comment(lang, state, keep_tokens)
 
-    if comment or comment2:
-        line = state.line
+    if comment or comment2 or comment2_0:
+        line = [state.line]
         if not state.multi_end_stack:
             # Continue looking for declarations.
             line, state = parse_declarations(lang, state, code_only, keep_tokens)
         if code_only:
-            line = code + clear_line(comment) + clear_line(comment2) + line
+            line = [code, clear_line(comment), clear_line(comment2), clear_line(comment2_0)] + line
         else:
-            line = clear_line(code) + comment + comment2 + line
+            line = [clear_line(code), comment, comment2, comment2_0] + line
         return line, state
     else:
         state.line = ''
         if code_only:
-            return code, state
+            return [code], state
         else:
-            return clear_line(code), state
+            return [clear_line(code)], state
 
 
 def parse_code(lang, state):
@@ -157,15 +160,14 @@ def parse_code(lang, state):
     while True:
         line = state.line
         multi_start_tokens = [start for start, end in lang.comment_bookends]
-        tokens = multi_start_tokens + [
-            lang.line_comment,
+        tokens = multi_start_tokens + lang.line_comment + [
             lang.string_literal_start,
             lang.string_literal2_start]
         i = index_of_first_found(line, tokens)
         if i != -1:
             state.line = line[i:]
             code += line[:i]
-            if line.startswith(lang.line_comment, i) or \
+            if [ () for cmt in lang.line_comment if line.startswith(cmt, i) ] or \
                     index_of_first_found(line, multi_start_tokens) == i:
                 return code, state
             elif line.startswith(lang.string_literal_start, i):
@@ -271,15 +273,14 @@ def parse_line_comment(lang, state, keep_tokens=True):
       (string, State)
     """
     line = state.line
-    line_comment = lang.line_comment
-    if line.startswith(line_comment):
-        state.line = ''
-        i = len(line_comment)
-        if not keep_tokens:
-            line_comment = ' ' * i
-        return line_comment + line[i:], state
-    else:
-        return '', state
+    for line_comment in lang.line_comment:
+        if line.startswith(line_comment):
+            state.line = ''
+            i = len(line_comment)
+            if not keep_tokens:
+                line_comment = ' ' * i
+            return line_comment + line[i:], state
+    return '', state
 
 
 def parse_multiline_comment(lang, state, keep_tokens=True):
@@ -304,11 +305,11 @@ def parse_multiline_comment(lang, state, keep_tokens=True):
         if line.startswith(multi_start):
             state.multi_end_stack.append(multi_end)
             state.line = line[len(multi_start):]
-            cnts, state = finish_multiline_comment(lang, state, keep_tokens)
+            cnts, cnts0, state = finish_multiline_comment(lang, state, keep_tokens)
             if not keep_tokens:
                 multi_start = ' ' * len(multi_start)
-            return multi_start + cnts, state
-    return '', state
+            return multi_start + cnts, cnts0, state
+    return '', '', state
 
 
 def finish_multiline_comment(lang, state, keep_tokens=True):
@@ -332,9 +333,10 @@ def finish_multiline_comment(lang, state, keep_tokens=True):
 
     # Handle language supports nested comments.
     if lang.nested_comments:
-        cmt, state = parse_multiline_comment(lang, state, keep_tokens)
+        cmt, cmt0, state = parse_multiline_comment(lang, state, keep_tokens)
     else:
         cmt = ''
+        cmt0 = ''
 
     line = state.line
     if line:
@@ -344,12 +346,12 @@ def finish_multiline_comment(lang, state, keep_tokens=True):
             state.line = line[i:]
             if not keep_tokens:
                 multi_end = ' ' * len(multi_end)
-            return cnts + cmt + multi_end, state
+            return cnts + cmt + cmt0, multi_end, state
         else:
-            more_cnts, state = finish_multiline_comment(lang, state, keep_tokens)
-            return cnts + cmt + more_cnts, state
+            more_cnts, more_cnts0, state = finish_multiline_comment(lang, state, keep_tokens)
+            return cnts + cmt + cmt0 + more_cnts, more_cnts0, state
     else:
-        return cnts + cmt, state
+        return cnts + cmt + cmt0, '', state
 
 
 def parse_multiline_contents(lang, state):
