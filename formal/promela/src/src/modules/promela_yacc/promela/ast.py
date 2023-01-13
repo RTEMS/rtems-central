@@ -48,19 +48,20 @@ def to_str(x):
 class Proctype(object):
     def __init__(self, name, body, args=None,
                  active=None, d_proc=False,
-                 priority=None, provided=None):
+                 priority=None, provided=None,
+                 disable_negation=False):
         self.name = name
         self.body = body
         self.args = args
         if active is None:
             active = 0
-        else:
-            active = int(active.value)
+        self.d_proc = d_proc
         if priority is not None:
             priority = int(priority.value)
         self.active = active
         self.priority = priority
         self.provided = provided
+        self.disable_negation = disable_negation
 
     def __str__(self):
         return "Proctype('{name}')".format(name=self.name)
@@ -86,7 +87,7 @@ class Proctype(object):
         if self.args is None:
             args = ''
         else:
-            args = to_str(self.args)
+            args = '; '.join(to_str(xx) for x in self.args for xx in x)
         return args
 
     def to_pg(self, syntactic_else=False):
@@ -223,7 +224,7 @@ class Init(Proctype):
 
 class Program(list):
     def __str__(self):
-        return '\n'.join(to_str(x) for x in self)
+        return '\n'.join(to_str(x) for x, _ in self)
 
     def __repr__(self):
         c = super(Program, self).__repr__()
@@ -245,21 +246,25 @@ class Program(list):
 class LTL(object):
     """Used to mark strings as LTL blocks."""
 
-    def __init__(self, formula):
+    def __init__(self, formula, name = None):
         self.formula = formula
+        self.name = name
 
     def __repr__(self):
         return 'LTL({f})'.format(f=repr(self.formula))
 
     def __str__(self):
-        return 'ltl {' + str(self.formula) + '}'
+        return 'ltl ' + (self.name + ' ' if self.name else '') + '{' + str(self.formula) + '}'
 
 
 class Sequence(list):
-    def __init__(self, iterable, context=None, is_option=False):
+    def __init__(self, iterable, context=None, context_for_var=None, context_for_begin=None, context_for_end=None, is_option=False):
         super(Sequence, self).__init__(iterable)
-        # "atomic" or "dstep"
+        # "for" or "atomic" or "dstep"
         self.context = context
+        self.context_for_var = context_for_var
+        self.context_for_begin = context_for_begin
+        self.context_for_end = context_for_end
         self.is_option = is_option
 
     def to_str(self):
@@ -267,20 +272,22 @@ class Sequence(list):
             return '\n'.join(to_str(x) for x in self)
         else:
             return (
-                self.context + '{\n' +
-                _indent(to_str(self)) + '\n}\n')
+                self.context +
+                (' (' + self.context_for_var + ' : ' + to_str (self.context_for_begin) + ' .. ' + to_str (self.context_for_end) + ') ' if self.context == 'for' else '') +
+                '{\n' +
+                '\n'.join(_indent(to_str(x)) for x in self) + '\n}\n')
 
     def __repr__(self):
         l = super(Sequence, self).__repr__()
-        return 'Sequence({l}, context={c}, is_option={isopt})'.format(
-            l=l, c=self.context, isopt=self.is_option)
+        return 'Sequence({l}, context={c}, context_for_var={cfv}, context_for_begin={cfb}, context_for_end={cfe}, is_option={isopt})'.format(
+            l=l, c=self.context, cfv=self.context_for_var, cfb=self.context_for_begin, cfe=self.context_for_end, isopt=self.is_option)
 
     def to_pg(self, g, context=None, option_guard=None, **kw):
         # set context
         if context is None:
             context = self.context
         c = context
-        assert c in {'atomic', 'd_step', None}
+        assert c in {'atomic', 'd_step', None} # TODO: 'for'
         # atomic cannot appear inside d_step
         if context == 'd_step' and c == 'atomic':
             raise Exception('atomic inside d_step')
@@ -541,12 +548,13 @@ class VarDef(Node):
             assert isinstance(l, int), l
         self.length = l
         self.visible = visible
-        if bitwidth is not None:
-            self.bitwidth = int(bitwidth.value)
+        self.bitwidth = int(bitwidth.value) if bitwidth else None
         if vartype == 'bool':
             default_initval = Bool('false')
         else:
             default_initval = Integer('0')
+        self.msg_types = msg_types
+        self.initial_value0 = initval
         if initval is None:
             initval = Expression(default_initval)
         self.initial_value = initval
@@ -556,10 +564,13 @@ class VarDef(Node):
         return 'VarDef({t}, {v})'.format(t=self.type, v=self.name)
 
     def to_str(self):
-        s = '{type} {varname}{len}'.format(
+        s = '{type} {varname}{bitwidth}{len}{initval}{msg_types}'.format(
             type=self._type_str(),
             varname=self.name,
-            len='[{n}]'.format(n=self.len) if self.len else '')
+            bitwidth=' : {n}'.format(n =self.bitwidth) if self.bitwidth else '',
+            len=' [{n}]'.format(n=self.length) if self.length and not self.msg_types else '',
+            initval=' = {i}'.format(i=self.initial_value0) if self.initial_value0 else '',
+            msg_types=' = [{l}] of {{ {m} }}'.format(l=self.length, m=' , '.join(to_str(x) for x in self.msg_types)) if self.msg_types else '')
         return s
 
     def _type_str(self):
@@ -741,8 +752,8 @@ class TypeDef(Node):
         self.decls = decls
 
     def __str__(self):
-        return 'typedef {name} {\ndecls\n}'.format(
-            name=self.name, decls=to_str(self.decls))
+        return 'typedef {name} {{ {decls} }}'.format(
+            name=self.name, decls='; '.join(to_str(x) for x in self.decls))
 
     def exe(self, t):
         t.types[self.name] = self
@@ -752,8 +763,8 @@ class MessageType(Node):
     def __init__(self, values, visible=None):
         self.values = values
 
-    def __str__(self):
-        return 'mtype {{ {values} }}'.format(values=self.values)
+    def to_str(self):
+        return 'mtype = {{ {values} }}'.format(values=' , '.join(to_str(x) for x in self.values))
 
     def exe(self, t):
         t.types[self.name] = self
@@ -774,27 +785,40 @@ class Run(Node):
         self.priority = priority
 
     def __str__(self):
-        return 'run({f})'.format(f=self.func)
+        return 'run {f} ({args})'.format(f=self.func, args='' if self.args is None else ' , '.join(to_str(x) for x in self.args))
 
 
-class Inline(Node):
+class InlineDef(Node):
+    def __init__(self, name, decl, body, disable_negation=False):
+        self.name = name
+        self.decl = decl
+        self.body = body
+        self.disable_negation = disable_negation
+
+    def __str__(self):
+        return ('inline {name} ({decl}) {{\n'
+                '{body}\n'
+                '}}\n\n').format(
+                    name = self.name,
+                    decl = ', '.join(to_str(x) for x in self.decl) if self.decl else '',
+                    body = _indent(to_str(self.body)))
+
+class Call(Node):
     def __init__(self, name, args):
         self.name = name
         self.args = args
 
-
-class Call(Node):
-    def __init__(self, func, args):
-        self.func = func
-        self.args = args
+    def __str__(self):
+        return '{name} ({args})'.format(name = self.name, args = ', '.join(to_str(x) for x in self.args) if self.args else '')
 
 
 class Assert(Node):
-    def __init__(self, expr):
+    def __init__(self, expr, pos = None):
         self.expr = expr
+        self.pos = pos
 
-    def __repr__(self):
-        return 'assert({expr})'.format(expr=repr(self.expr))
+    def __str__(self):
+        return 'assert({expr})'.format(expr=to_str(self.expr))
 
 
 class Expression(Node):
@@ -872,32 +896,32 @@ class Assignment(Node):
 
 
 class Receive(Node):
-    def __init__(self, varref, args=None):
+    def __init__(self, varref, args):
         self.var = varref
         self.args = args
 
     def __str__(self):
         v = to_str(self.var)
-        return 'Rx({v})'.format(v=v)
+        return '{v} ? {args}'.format(v=v, args = ' , '.join(to_str(x) for x in self.args))
 
 
 class Send(Node):
-    def __init__(self, varref, args=None):
-        self.varref = varref
+    def __init__(self, varref, args):
+        self.var = varref
         self.args = args
 
     def __str__(self):
         v = to_str(self.var)
-        return 'Tx({v})'.format(v=v)
+        return '{v} ! {args}'.format(v=v, args = ' , '.join(to_str(x) for x in self.args))
 
 
 class Printf(Node):
-    def __init__(self, s, args):
+    def __init__(self, s, args=None):
         self.s = s
         self.args = args
 
     def __str__(self):
-        return 'printf()'.format(s=self.s, args=self.args)
+        return 'printf({s}{args})'.format(s=self.s, args='' if self.args is None else ' , ' + ' , '.join(to_str(x) for x in self.args))
 
 
 class Operator(object):
@@ -927,6 +951,14 @@ class Binary(Operator):
 class Unary(Operator):
     pass
 
+class ReceiveExpr(Node):
+    def __init__(self, varref, args):
+        self.var = varref
+        self.args = args
+
+    def __str__(self):
+        v = to_str(self.var)
+        return '({v} ? [{args}])'.format(v=v, args = ' , '.join(to_str(x) for x in self.args))
 
 class Terminal(object):
     def __init__(self, value):
@@ -967,7 +999,7 @@ class VarRef(Terminal):
         return '{name}{index}{ext}'.format(
             name=self.name,
             index=i,
-            ext='' if self.extension is None else self.extension)
+            ext=('.' + to_str(self.extension)) if self.extension else '' )
 
 
 class Integer(Terminal):
@@ -986,7 +1018,7 @@ class Bool(Terminal):
         return 'Bool({value})'.format(value=repr(self.value))
 
     def __str__(self):
-        return str(self.value)
+        return str('true' if self.value else 'false')
 
 
 class RemoteRef(Terminal):
@@ -1006,6 +1038,14 @@ class RemoteRef(Terminal):
             inst = '[{pid}]'.format(pid=self.pid)
         return '{proc} {inst} @ {label}'.format(
             proc=self.proctype, inst=inst, label=self.label)
+
+
+class Timeout(Node):
+    def __init__(self):
+        return
+
+    def __str__(self):
+        return 'timeout'
 
 
 def dump_graph(g, fname='a.pdf', node_label='label',

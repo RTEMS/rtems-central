@@ -1,7 +1,7 @@
 """Lexer for Promela, using Python Lex-Yacc (PLY)."""
 import logging
 import ply.lex
-
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -30,12 +30,14 @@ class Lexer(object):
         'enabled': 'ENABLED',
         'eval': 'EVAL',
         'fi': 'FI',
+        'for': 'FOR',
         'full': 'FULL',
         'get_priority': 'GET_P',
         'goto': 'GOTO',
         'hidden': 'HIDDEN',
         'if': 'IF',
         'init': 'INIT',
+        'inline': 'INLINE',
         'int': 'INT',
         'len': 'LEN',
         'local': 'ISLOCAL',
@@ -56,7 +58,7 @@ class Lexer(object):
         'return': 'RETURN',
         'run': 'RUN',
         'short': 'SHORT',
-        'skip': 'TRUE',
+        'skip': 'SKIP',
         'show': 'SHOW',
         'timeout': 'TIMEOUT',
         'typedef': 'TYPEDEF',
@@ -67,9 +69,9 @@ class Lexer(object):
         'xr': 'XR',
         'xs': 'XS',
         'W': 'WEAK_UNTIL'}
-    values = {'skip': 'true'}
+    values = {'': ''}
     delimiters = ['LPAREN', 'RPAREN', 'LBRACKET', 'RBRACKET',
-                  'LBRACE', 'RBRACE', 'COMMA', 'PERIOD',
+                  'LBRACE', 'RBRACE', 'COMMA', 'PERIODS', 'PERIOD',
                   'SEMI', 'COLONS', 'COLON', 'ELLIPSIS']
     # remember to check precedence
     operators = ['PLUS', 'INCR', 'MINUS', 'DECR', 'TIMES', 'DIVIDE',
@@ -159,6 +161,7 @@ class Lexer(object):
     t_LBRACE = r'\{'
     t_RBRACE = r'\}'
     t_COMMA = r','
+    t_PERIODS = r'\.\.'
     t_PERIOD = r'\.'
     t_SEMI = r';'
     t_COLONS = r'::'
@@ -184,6 +187,11 @@ class Lexer(object):
 
     t_INITIAL_ARROW = r'->'
 
+    def t_PREPROC_stdin(self, t):
+        r'\# .+ "<stdin>"[0-9 ]*' # WARNING: using '\d+' instead of '.+' does not necessarily result in the same matching
+        t.lexer.lineno = int (re.search (r'\# (\d+) "<stdin>"', t.value).group (1)) - 1
+        pass
+
     def t_PREPROC(self, t):
         r'\#.*'
         pass
@@ -204,7 +212,7 @@ class Lexer(object):
 
     def t_COMMENT(self, t):
         r' /\*(.|\n)*?\*/'
-        t.lineno += t.value.count('\n')
+        t.lexer.lineno += t.value.count('\n')
 
     def t_error(self, t):
         logger.error('Illegal character "{s}"'.format(s=t.value[0]))
