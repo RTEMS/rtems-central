@@ -7,37 +7,37 @@ class Lang:
         self.string_literal2_start = "'"
 
 c = Lang(
-    line_comment='//',
+    line_comment=['//'],
     comment_bookends=[('/*', '*/'), (';;', ';;')],
     nested_comments=False)
 
 haskell = Lang(
-    line_comment='--',
+    line_comment=['--'],
     comment_bookends=[('{-', '-}')],
     nested_comments=True)
 
 python = Lang(
-    line_comment='#',
+    line_comment=['#'],
     comment_bookends=[('"""', '"""'), ("'''", "'''")],
     nested_comments=False)
 
 ruby = Lang(
-    line_comment='#',
+    line_comment=['#'],
     comment_bookends=[("=begin", "=end")],
     nested_comments=False)
 
 lua = Lang(
-    line_comment='--',
+    line_comment=['--'],
     comment_bookends=[("--[[", "--]]")],
     nested_comments=False)
 
 perl = Lang(
-    line_comment='#',
+    line_comment=['#'],
     comment_bookends=[("=pod", "=cut")],
     nested_comments=False)
 
 java = Lang(
-    line_comment='//',
+    line_comment=['//'],
     comment_bookends=[('/*', '*/')],
     nested_comments=True)
 
