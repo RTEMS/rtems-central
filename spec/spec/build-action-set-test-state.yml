@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
 - role: spec-member
@@ -9,18 +9,28 @@ spec-description: null
 spec-example: null
 spec-info:
   dict:
-    attributes: {}
+    attributes:
+      reason:
+        description: |
+          If the value is present, then it shall be the reason for the test
+          state definition.
+        spec-type: optional-str
+      state:
+        description: |
+          It shall be the test state for the associated list of tests.
+        spec-type: build-test-state
+      tests:
+        description: |
+          It shall be the list of test program names associated with the test
+          state.  The names shall correspond to the name of a
+          ${build-test-program:/spec-name} or
+          ${build-ada-test-program:/spec-name} item.  Due to the processing
+          order of items, there is no way to check if a specified test program
+          name is valid.
+        spec-type: list-str
     description: |
-      This set of attributes specifies test states for a set of test programs.
-    generic-attributes:
-      description: |
-        The keys shall be test program names.  The names shall correspond to
-        the name of a ${build-test-program:/spec-name} or
-        ${build-ada-test-program:/spec-name} item.  Due to the processing order
-        of items, there is no way to check if the name specified by the
-        attribute key is valid.
-      key-spec-type: name
-      value-spec-type: build-test-state
+      This set of attributes specifies the test state for a set of test
+      programs with an optional reason.
     mandatory-attributes: all
 spec-name: Build Option Set Test State Action
 spec-type: build-action-set-test-state
