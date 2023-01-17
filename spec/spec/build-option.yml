@@ -17,17 +17,17 @@ spec-example: |
   - define: null
   build-type: option
   copyrights:
-  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-  default: 115200
-  default-by-variant:
-  - value: 9600
-    variants:
+  - Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+  default:
+  - enabled-by:
     - bsps/powerpc/motorola_powerpc
     - m68k/m5484FireEngine
     - powerpc/hsc_cm01
-  - value: 19200
-    variants:
-    - m68k/COBRA5475
+    value: 9600
+  - enabled-by: m68k/COBRA5475
+    value: 19200
+  - enabled-by: true
+    value: 115200
   description: |
     Default baud for console and other serial devices.
   enabled-by: true
@@ -48,19 +48,11 @@ spec-info:
         spec-type: build-action-list
       default:
         description: |
-          It shall be the default value of the option if no variant-specific
-          default value is specified.  Use ``null`` to specify that no default
-          value exits.  The variant-specific default values may be specified by
-          the ``default-by-variant`` attribute.
-        spec-type: build-option-value
-      default-by-variant:
-        description: |
-          The list is checked two times and processed from top to bottom.
-          Firstly, the base BSP name is used to match with a variant.
-          Secondly, the BSP family name prefixed by ``bsps/`` is used to match
-          with a variant.  If a matching variant is found, then the processing
-          stops.
-        spec-type: build-default-by-variant-list
+          It shall be the list of default values of the option.  When a default
+          value is needed, the first value on the list which is enabled
+          according to the enabled set is choosen.  If no value is enabled,
+          then the default value is ``null``.
+        spec-type: build-default-value-list
       description:
         description: |
           It shall be the description of the option.
@@ -79,7 +71,6 @@ spec-info:
     mandatory-attributes:
     - actions
     - default
-    - default-by-variant
     - description
 spec-name: Build Option Item Type
 spec-type: build-option

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      value:
+        description: |
+          Its value shall be the default value for the associated enabled-by
+          expression.
+        spec-type: build-option-value
+      enabled-by:
+        description: null
+        spec-type: enabled-by
+    description: |
+      This set of attributes specifies a build option default value.
+    mandatory-attributes: all
+spec-name: Build Option Default Value
+spec-type: build-default-value
+type: spec

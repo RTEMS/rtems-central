@@ -10,7 +10,7 @@ spec-example: null
 spec-info:
   list:
     description: null
-    spec-type: build-default-by-variant
-spec-name: Build Option Default by Variant List
-spec-type: build-default-by-variant-list
+    spec-type: build-default-value
+spec-name: Build Option Default Value List
+spec-type: build-default-value-list
 type: spec
