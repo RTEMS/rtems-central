@@ -54,7 +54,10 @@ spec-info:
         spec-type: build-source-list
     description: |
       This set of attributes specifies a set of object files used to build
-      static libraries or test programs.
+      static libraries or test programs. Objects Items must not be included on
+      multiple paths through the build dependency graph with identical build
+      options. Violating this can cause race conditions in the build system due
+      to duplicate installs and multiple instances of build tasks.
     mandatory-attributes: all
 spec-name: Build Objects Item Type
 spec-type: build-objects
