@@ -27,8 +27,8 @@
 from contextlib import contextmanager
 from typing import Any, Iterable, Iterator, List, Optional, Sequence, Union
 
-from rtemsspec.content import Content, get_value_plural, make_lines, \
-     to_camel_case
+from rtemsspec.content import Content, get_value_header_file, \
+     get_value_plural, make_lines, to_camel_case
 from rtemsspec.items import Item, ItemGetValue, ItemGetValueContext, ItemMapper
 
 GenericContent = Union[str, List[str], "Content"]
@@ -286,6 +286,8 @@ class SphinxMapper(ItemMapper):
                            _get_value_sphinx_macro)
         self.add_get_value("interface/function:/name",
                            _get_value_sphinx_function)
+        self.add_get_value("interface/header-file:/path",
+                           get_value_header_file)
         self.add_get_value("interface/macro:/name", _get_value_sphinx_function)
         self.add_get_value("interface/struct:/name", _get_value_sphinx_type)
         self.add_get_value("interface/typedef:/name", _get_value_sphinx_type)

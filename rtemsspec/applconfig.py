@@ -28,7 +28,8 @@ from typing import Any, Callable, Dict, List, Optional
 
 from rtemsspec.content import Content, CContent, get_value_double_colon, \
     get_value_doxygen_function, get_value_doxygen_group, \
-    get_value_doxygen_ref, get_value_hash, get_value_plural
+    get_value_doxygen_ref, get_value_hash, get_value_header_file, \
+    get_value_plural
 from rtemsspec.sphinxcontent import GenericContent, SphinxContent, \
     SphinxInterfaceMapper
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext, \
@@ -311,6 +312,7 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     mapper.add_get_value("interface/function:/name",
                          get_value_doxygen_function)
     mapper.add_get_value("interface/group:/name", get_value_doxygen_group)
+    mapper.add_get_value("interface/header-file:/path", get_value_header_file)
     mapper.add_get_value("interface/macro:/name", get_value_doxygen_function)
     mapper.add_get_value("interface/struct:/name", get_value_double_colon)
     mapper.add_get_value("interface/typedef:/name", get_value_double_colon)

@@ -15,7 +15,8 @@ definition:
       params: []
       return: NotSoVeryLongType
     enabled-by: true
-description: null
+description: |
+  I am defined in ${h4:/path}.
 enabled-by: true
 index-entries: []
 interface-type: function

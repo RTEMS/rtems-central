@@ -1040,6 +1040,11 @@ def get_value_double_colon(ctx: ItemGetValueContext) -> Any:
     return f"::{ctx.value[ctx.key]}"
 
 
+def get_value_header_file(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value formatted as a header file. """
+    return f"``<{ctx.value[ctx.key]}>``"
+
+
 def get_value_hash(ctx: ItemGetValueContext) -> Any:
     """ Gets a value with a # prefix. """
     return f"#{ctx.value[ctx.key]}"

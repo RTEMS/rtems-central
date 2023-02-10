@@ -155,6 +155,10 @@ Function brief description with very long return type.
     VeryLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongType
     VeryLongTypeFunction( void );
 
+.. rubric:: DESCRIPTION:
+
+I am defined in ``<h4.h>``.
+
 .. rubric:: RETURN VALUES:
 
 This function returns an object with a very long type.

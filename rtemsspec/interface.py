@@ -36,8 +36,8 @@ from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, forward_declaration, get_value_compound, \
     get_value_double_colon, get_value_doxygen_function, \
     get_value_doxygen_group, get_value_doxygen_ref, \
-    get_value_forward_declaration, get_value_hash, get_value_params, \
-    get_value_plural, to_camel_case
+    get_value_forward_declaration, get_value_hash, get_value_header_file, \
+    get_value_params, get_value_plural, to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueMap, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -81,6 +81,8 @@ class _InterfaceMapper(ItemMapper):
         self.add_get_value("interface/enum/doc:/name", get_value_hash)
         self.add_get_value("interface/group/doc:/name",
                            get_value_doxygen_group)
+        self.add_get_value("interface/header-file/doc:/path",
+                           get_value_header_file)
         self.add_get_value("interface/macro/doc:/name",
                            get_value_doxygen_function)
         self.add_get_value("interface/macro/doc:/params/name",
