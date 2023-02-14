@@ -35,8 +35,9 @@ from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Optional, \
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, forward_declaration, get_value_compound, \
     get_value_double_colon, get_value_doxygen_function, \
-    get_value_doxygen_group, get_value_forward_declaration, get_value_hash, \
-    get_value_params, get_value_plural, to_camel_case
+    get_value_doxygen_group, get_value_doxygen_ref, \
+    get_value_forward_declaration, get_value_hash, get_value_params, \
+    get_value_plural, to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueMap, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -87,7 +88,7 @@ class _InterfaceMapper(ItemMapper):
         self.add_get_value("interface/variable/doc:/name", get_value_hash)
         for opt in ["feature-enable", "feature", "initializer", "integer"]:
             name = f"interface/appl-config-option/{opt}/doc:/name"
-            self.add_get_value(name, get_value_hash)
+            self.add_get_value(name, get_value_doxygen_ref)
         self.add_get_value("interface/unspecified-function/doc:/name",
                            get_value_doxygen_function)
 

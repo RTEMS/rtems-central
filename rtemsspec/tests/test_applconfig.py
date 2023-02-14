@@ -512,6 +512,8 @@ description m
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor a
+ *
  * description a
  *
  * @par Default Configuration
@@ -523,7 +525,7 @@ description m
  *
  * references:
  *
- * * #b
+ * * @ref b
  *
  * * <a href="unspec-group.html">Unspec Group</a>
  *
@@ -555,6 +557,8 @@ description m
 /**
  * @brief This configuration option is a boolean feature define.
  *
+ * @anchor b
+ *
  * description b
  *
  * @par Default Configuration
@@ -567,6 +571,8 @@ description m
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor c
  *
  * description c
  *
@@ -586,6 +592,8 @@ description m
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor e
+ *
  * description e
  *
  * @par Default Value
@@ -597,6 +605,8 @@ description m
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor f
  *
  * description f
  *
@@ -610,6 +620,8 @@ description m
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor h
+ *
  * description h
  *
  * @par Default Value
@@ -622,6 +634,8 @@ description m
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor i
+ *
  * description i
  *
  * @par Default Value
@@ -633,6 +647,8 @@ description m
 
 /**
  * @brief This configuration option is an integer define.
+ *
+ * @anchor j
  *
  * description j
  *
@@ -649,6 +665,8 @@ description m
 /**
  * @brief This configuration option is an integer define.
  *
+ * @anchor k
+ *
  * description k
  *
  * @par Default Value
@@ -660,6 +678,8 @@ description m
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor l
  *
  * description l
  *
@@ -682,6 +702,8 @@ description m
 
 /**
  * @brief This configuration option is an initializer define.
+ *
+ * @anchor m
  *
  * description m
  *
