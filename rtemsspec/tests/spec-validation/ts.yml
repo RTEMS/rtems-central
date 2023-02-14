@@ -8,7 +8,7 @@ enabled-by: true
 links: []
 test-brief: The Blue Green brief description.
 test-code: |
-  /* Blue green code */
+  /* Blue green code for ${.:test-suite-name} */
 test-description: The Blue Green description.
 test-includes:
 - blue.h

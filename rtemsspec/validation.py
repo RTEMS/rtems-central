@@ -34,8 +34,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, GenericContent, get_integer_type, get_value_params, \
-    get_value_plural, get_value_doxygen_group, get_value_doxygen_function, \
-    to_camel_case
+    get_value_plural, get_value_doxygen_group, get_value_doxygen_function
 from rtemsspec.items import create_unique_link, Item, ItemCache, \
     ItemGetValueContext, ItemMapper
 from rtemsspec.transitionmap import TransitionMap
@@ -46,15 +45,19 @@ _STEPS = re.compile(r"^steps/([0-9]+)$")
 
 
 def _get_test_context_instance(ctx: ItemGetValueContext) -> Any:
-    return f"{to_camel_case(ctx.item.uid[1:])}_Instance"
+    return f"{ctx.item.ident}_Instance"
 
 
 def _get_test_context_type(ctx: ItemGetValueContext) -> Any:
-    return f"{to_camel_case(ctx.item.uid[1:])}_Context"
+    return f"{ctx.item.ident}_Context"
 
 
 def _get_test_run(ctx: ItemGetValueContext) -> Any:
-    return f"{to_camel_case(ctx.item.uid[1:])}_Run"
+    return f"{ctx.item.ident}_Run"
+
+
+def _get_test_suite_name(ctx: ItemGetValueContext) -> Any:
+    return ctx.item.ident
 
 
 class _Mapper(ItemMapper):
@@ -71,6 +74,8 @@ class _Mapper(ItemMapper):
         self.add_get_value("interface/macro:/params/name", get_value_params)
         self.add_get_value("interface/unspecified-function:/name",
                            get_value_doxygen_function)
+        self.add_get_value("memory-benchmark:/test-suite-name",
+                           _get_test_suite_name)
         self.add_get_value(
             "requirement/functional/action:/test-context-instance",
             _get_test_context_instance)
@@ -85,6 +90,7 @@ class _Mapper(ItemMapper):
         self.add_get_value("test-case:/test-context-type",
                            _get_test_context_type)
         self.add_get_value("test-case:/test-run", _get_test_run)
+        self.add_get_value("test-suite:/test-suite-name", _get_test_suite_name)
 
     @property
     def steps(self):
@@ -112,7 +118,7 @@ class _Mapper(ItemMapper):
 
 
 def _add_ingroup(content: CContent, items: List["_TestItem"]) -> None:
-    content.add_ingroup([item.group_identifier for item in items])
+    content.add_ingroup([item.ident for item in items])
 
 
 class _TestItem:
@@ -121,8 +127,7 @@ class _TestItem:
     # pylint: disable=too-many-public-methods
     def __init__(self, item: Item):
         self._item = item
-        self._ident = to_camel_case(item.uid[1:])
-        self._context = f"{self._ident}_Context"
+        self._context = f"{self.ident}_Context"
         self._mapper = _Mapper(item)
 
     def __getitem__(self, key: str):
@@ -141,7 +146,7 @@ class _TestItem:
     @property
     def ident(self) -> str:
         """ Returns the test identifier. """
-        return self._ident
+        return self._item.ident
 
     @property
     def context(self) -> str:
@@ -173,11 +178,6 @@ class _TestItem:
         """ Returns the substituted description. """
         return self.substitute_text(self["test-description"])
 
-    @property
-    def group_identifier(self) -> str:
-        """ Returns the group identifier. """
-        return f"RTEMSTestCase{self.ident}"
-
     def substitute_code(self,
                         text: Optional[str],
                         prefix: Optional[str] = None) -> str:
@@ -197,7 +197,7 @@ class _TestItem:
     def add_test_case_description(self, content: CContent,
                                   test_case_to_suites: _CaseToSuite) -> None:
         """ Adds the test case description. """
-        with content.defgroup_block(self.group_identifier, self.name):
+        with content.defgroup_block(self.ident, self.name):
             try:
                 test_suites = test_case_to_suites[self.uid]
             except KeyError as err:
@@ -227,7 +227,7 @@ class _TestItem:
     def _add_test_case_actions(self, content: CContent) -> CContent:
         actions = CContent()
         for index, action in enumerate(self["test-actions"]):
-            method = f"{self._ident}_Action_{index}"
+            method = f"{self.ident}_Action_{index}"
             if self.context == "void":
                 args = []
                 params = []
@@ -373,7 +373,7 @@ class _TestItem:
         content.register_license_and_copyrights_of_item(self._item)
         content.prepend_spdx_license_identifier()
         with content.file_block():
-            content.add_ingroup([self.group_identifier])
+            content.add_ingroup([self.ident])
         content.add_copyrights_and_licenses()
         content.add_automatically_generated_warning()
         with content.header_guard(os.path.basename(header["target"])):
@@ -381,7 +381,7 @@ class _TestItem:
             content.add_includes(list(map(CInclude, header["local-includes"])),
                                  local=True)
             with content.extern_c():
-                with content.add_to_group(self.group_identifier):
+                with content.add_to_group(self.ident):
                     self.add_header_body(content, header)
         content.write(os.path.join(base_directory, header["target"]))
 
@@ -495,13 +495,9 @@ class _TestItem:
 class _TestSuiteItem(_TestItem):
     """ A test suite item. """
 
-    @property
-    def group_identifier(self) -> str:
-        return f"RTEMSTestSuite{self.ident}"
-
     def generate(self, content: CContent, _base_directory: str,
                  _test_case_to_suites: _CaseToSuite) -> None:
-        with content.defgroup_block(self.group_identifier, self.name):
+        with content.defgroup_block(self.ident, self.name):
             content.add("@ingroup RTEMSTestSuites")
             content.add_brief_description(self.brief)
             content.wrap(self.description)

@@ -70,7 +70,7 @@ def test_validation(tmpdir):
 /**
  * @file
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  */
 
 /*
@@ -126,7 +126,7 @@ def test_validation(tmpdir):
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestSuiteTs spec:/ts
+ * @defgroup Ts spec:/ts
  *
  * @ingroup RTEMSTestSuites
  *
@@ -137,7 +137,7 @@ def test_validation(tmpdir):
  * @{
  */
 
-/* Blue green code */
+/* Blue green code for Ts */
 
 /** @} */
 """
@@ -148,9 +148,9 @@ def test_validation(tmpdir):
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseDirective
- * @ingroup RTEMSTestCaseTc
- * @ingroup RTEMSTestCaseTc2
+ * @ingroup Directive
+ * @ingroup Tc
+ * @ingroup Tc2
  */
 
 /*
@@ -209,9 +209,9 @@ def test_validation(tmpdir):
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseDirective spec:/directive
+ * @defgroup Directive spec:/directive
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test rtems_task_ident() brief description.
  *
@@ -753,9 +753,9 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc spec:/tc
+ * @defgroup Tc spec:/tc
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test case brief description.
  *
@@ -830,9 +830,9 @@ T_TEST_CASE( Tc )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc2 spec:/tc2
+ * @defgroup Tc2 spec:/tc2
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test case 2 brief description.
  *
@@ -940,13 +940,13 @@ T_TEST_CASE_FIXTURE( Tc2, &Tc2_Fixture )
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtm
- * @ingroup RTEMSTestCaseTc3
- * @ingroup RTEMSTestCaseTc4
- * @ingroup RTEMSTestCaseTc5
- * @ingroup RTEMSTestCaseTc6
- * @ingroup RTEMSTestCaseTc7
- * @ingroup RTEMSTestCaseTc8
+ * @ingroup Rtm
+ * @ingroup Tc3
+ * @ingroup Tc4
+ * @ingroup Tc5
+ * @ingroup Tc6
+ * @ingroup Tc7
+ * @ingroup Tc8
  */
 
 /*
@@ -1004,9 +1004,9 @@ T_TEST_CASE_FIXTURE( Tc2, &Tc2_Fixture )
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseRtm spec:/rtm
+ * @defgroup Rtm spec:/rtm
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test brief.
  *
@@ -1236,9 +1236,9 @@ T_TEST_CASE_FIXTURE( Rtm, &Rtm_Fixture )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc3 spec:/tc3
+ * @defgroup Tc3 spec:/tc3
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test case 3 brief description.
  *
@@ -1279,9 +1279,9 @@ T_TEST_CASE( Tc3 )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc4 spec:/tc4
+ * @defgroup Tc4 spec:/tc4
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test case 4 brief description.
  *
@@ -1300,9 +1300,9 @@ T_TEST_CASE( Tc4 )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc5 spec:/tc5
+ * @defgroup Tc5 spec:/tc5
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test case 5 brief description.
  *
@@ -1417,9 +1417,9 @@ void Tc5_Run( int *a, int b, int *c )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc6 spec:/tc6
+ * @defgroup Tc6 spec:/tc6
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @{
  */
@@ -1431,9 +1431,9 @@ void Tc6_Run( void )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc7 spec:/tc7
+ * @defgroup Tc7 spec:/tc7
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * This test case performs the following actions:
  *
@@ -1466,9 +1466,9 @@ void Tc7_Run( void )
 /** @} */
 
 /**
- * @defgroup RTEMSTestCaseTc8 spec:/tc8
+ * @defgroup Tc8 spec:/tc8
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * This test case performs the following actions:
  *
@@ -1527,7 +1527,7 @@ void Tc8_Run( void )
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseTc5
+ * @ingroup Tc5
  */
 
 /*
@@ -1584,7 +1584,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseTc5
+ * @addtogroup Tc5
  *
  * @{
  */
@@ -1617,7 +1617,7 @@ void Tc5_Run( int *a, int b, int *c );
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseTc6
+ * @ingroup Tc6
  */
 
 /*
@@ -1670,7 +1670,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseTc6
+ * @addtogroup Tc6
  *
  * @{
  */
@@ -1695,7 +1695,7 @@ void Tc6_Run( void );
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAction2
+ * @ingroup Action2
  */
 
 /*
@@ -1752,7 +1752,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup RTEMSTestCaseAction2
+ * @addtogroup Action2
  *
  * @{
  */
@@ -1820,7 +1820,7 @@ void Action2_Run( int *a, int b, int *c );
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseAction2
+ * @ingroup Action2
  */
 
 /*
@@ -1876,9 +1876,9 @@ void Action2_Run( int *a, int b, int *c );
 #include <rtems/test.h>
 
 /**
- * @defgroup RTEMSTestCaseAction2 spec:/action2
+ * @defgroup Action2 spec:/action2
  *
- * @ingroup RTEMSTestSuiteTs
+ * @ingroup Ts
  *
  * @brief Test brief.
  *

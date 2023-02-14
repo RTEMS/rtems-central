@@ -29,10 +29,11 @@ import base64
 import hashlib
 import os
 import pickle
+import re
 import string
 import stat
-from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, \
-    Optional, Set, TextIO, Tuple, Union
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Match, \
+    NamedTuple, Optional, Set, TextIO, Tuple, Union
 import json
 import yaml
 
@@ -180,12 +181,20 @@ def data_digest(data: Any) -> str:
     return base64.urlsafe_b64encode(state.digest()).decode("ascii")
 
 
+_UID_TO_UPPER = re.compile(r"[/_-]+(.)")
+
+
+def _match_to_upper(match: Match) -> str:
+    return match.group(1).upper()
+
+
 class Item:
     """ Objects of this class represent a specification item. """
 
     # pylint: disable=too-many-public-methods
     def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
         self._cache = item_cache
+        self._ident = _UID_TO_UPPER.sub(_match_to_upper, uid)
         self._uid = uid
         self._data = data
         self._links_to_parents: List[Link] = []
@@ -263,6 +272,11 @@ class Item:
     def uid(self) -> str:
         """ Returns the UID of the item. """
         return self._uid
+
+    @property
+    def ident(self) -> str:
+        """ Returns the identifier of the item. """
+        return self._ident
 
     @property
     def spec(self) -> str:
