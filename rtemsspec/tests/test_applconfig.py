@@ -533,7 +533,7 @@ description m
  *
  * * <a href="unspec-group-3.html">Unspec Group 3</a>
  *
- * * unspec_func()
+ * * <a href="unspec-func.html">unspec_func()</a>
  *
  * * func()
  *

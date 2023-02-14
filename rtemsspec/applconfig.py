@@ -271,15 +271,27 @@ def _generate(group: Item, options: ItemMap, enabled: List[str],
     content.add_licence_and_copyrights()
 
 
-def _get_value_doxygen_url(ctx: ItemGetValueContext) -> Optional[str]:
+def _get_value(ctx: ItemGetValueContext) -> str:
+    return ctx.value[ctx.key]
+
+
+def _get_value_doxygen_url(
+    ctx: ItemGetValueContext,
+    get_value: Callable[[ItemGetValueContext],
+                        str] = _get_value) -> Optional[str]:
     for ref in ctx.item["references"]:
         if ref["type"] == "url":
-            return f"<a href=\"{ref['identifier']}\">{ctx.value[ctx.key]}</a>"
+            return f"<a href=\"{ref['identifier']}\">{get_value(ctx)}</a>"
     return None
 
 
 def _get_value_doxygen_unspecified_define(ctx: ItemGetValueContext) -> Any:
     return _get_value_doxygen_url(ctx) or get_value_hash(ctx)
+
+
+def _get_value_doxygen_unspecified_function(ctx: ItemGetValueContext) -> Any:
+    return _get_value_doxygen_url(
+        ctx, get_value_doxygen_function) or get_value_doxygen_function(ctx)
 
 
 def _get_value_doxygen_unspecified_group(ctx: ItemGetValueContext) -> Any:
@@ -306,7 +318,7 @@ def _add_doxygen_get_values(mapper: ItemMapper) -> None:
     mapper.add_get_value("interface/unspecified-define:/name",
                          _get_value_doxygen_unspecified_define)
     mapper.add_get_value("interface/unspecified-function:/name",
-                         get_value_doxygen_function)
+                         _get_value_doxygen_unspecified_function)
     mapper.add_get_value("interface/unspecified-group:/name",
                          _get_value_doxygen_unspecified_group)
     mapper.add_get_value("interface/unspecified-enum:/name",
