@@ -1245,7 +1245,7 @@ registers:
       description: null
       name: 'PI'
       start: 0
-      width: 26
+      width: 16
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Device Vendor and Product ID
@@ -1265,7 +1265,7 @@ registers:
       description: null
       name: 'PI'
       start: 0
-      width: 26
+      width: 16
     variants: []
   brief: |
     SpaceWire Plug-and-Play - Unit Vendor and Product ID
