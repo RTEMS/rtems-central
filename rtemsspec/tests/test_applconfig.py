@@ -447,6 +447,14 @@ description m
     with open(doxygen_h, "r") as src:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup RTEMSImplDoxygen
+ *
+ * @brief This header file documents the application configuration options.
+ */
+
 /*
  * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
  *

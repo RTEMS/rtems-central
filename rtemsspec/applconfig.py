@@ -364,5 +364,10 @@ def generate(config: dict, group_uids: List[str],
         sphinx_content.write(group_config["target"])
         _generate(group, options, config["enabled-source"], doxygen_content)
     doxygen_content.content.prepend_copyrights_and_licenses()
+    doxygen_content.content.prepend([
+        "/**", " * @file", " *", " * @ingroup RTEMSImplDoxygen", " *",
+        " * @brief This header file documents "
+        "the application configuration options.", " */", ""
+    ])
     doxygen_content.content.prepend_spdx_license_identifier()
     doxygen_content.write(config["doxygen-target"])
