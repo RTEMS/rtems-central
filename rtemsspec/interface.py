@@ -418,7 +418,7 @@ class Node:
                 self.substitute_text(self.item["brief"]))
             self.content.doxyfy(self.substitute_text(self.item["description"]))
         self.content.append(f"typedef struct {self.item['name']} {{")
-        default_padding = min(min(ctx.sizes.values()), 8)
+        default_padding = min(*ctx.sizes.values(), 8)
         offset = 0
         with self.content.indent():
             for index, member in enumerate(self.item["definition"]):
