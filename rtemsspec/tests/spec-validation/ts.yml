@@ -5,7 +5,9 @@ copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
 description: The Blue Green description.
 enabled-by: true
-links: []
+links:
+- role: requirement-refinement
+  uid: group
 test-brief: The Blue Green brief description.
 test-code: |
   /* Blue green code for ${.:test-suite-name} */

@@ -795,6 +795,8 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
 enabled-by: true
 links:
+- role: requirement-refinement
+  uid: /testsuites/membench
 - role: validation
   uid: ../req/mem-{test.name}
 test-brief: |
@@ -816,7 +818,6 @@ test-description: {_block(test.desc)}
 test-includes:
 - rtems.h
 test-local-includes: []
-test-suite-name: {test_suite_name}
 test-target: {source}
 type: memory-benchmark
 """)

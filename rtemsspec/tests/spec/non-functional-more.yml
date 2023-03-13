@@ -7,6 +7,10 @@ links:
   uid: root
 - role: spec-refinement
   spec-key: non-functional-type
+  spec-value: design-group
+  uid: non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
   spec-value: performance-runtime
   uid: non-functional
 - role: spec-refinement

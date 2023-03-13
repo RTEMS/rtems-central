@@ -498,7 +498,8 @@ class _TestSuiteItem(_TestItem):
     def generate(self, content: CContent, _base_directory: str,
                  _test_case_to_suites: _CaseToSuite) -> None:
         with content.defgroup_block(self.ident, self.name):
-            content.add("@ingroup RTEMSTestSuites")
+            group = self.item.parent("requirement-refinement")["identifier"]
+            content.add(f"@ingroup {group}")
             content.add_brief_description(self.brief)
             content.wrap(self.description)
             content.add("@{")
