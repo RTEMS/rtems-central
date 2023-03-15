@@ -577,20 +577,21 @@ class Node:
             width = bit["width"]
             end = start + width
             sfx = "ULL" if end > 32 else "U"
-            define = f"#define {prefix.upper()}{bit['name'].upper()}"
+            base = f"{prefix.upper()}{bit['name'].upper()}"
             if index != 0:
                 lines.append("")
             if width == 1:
                 val = 1 << start
-                lines.append(f"{define} {val:#x}{sfx}")
+                lines.append(f"#define {base} {val:#x}{sfx}")
             else:
                 mask = ((1 << width) - 1) << start
-                get = (1 << width) - 1
                 lines.extend([
-                    f"{define}_SHIFT {start}", f"{define}_MASK {mask:#x}{sfx}",
-                    f"{define}_GET( _reg ) \\",
-                    f"  ( ( ( _reg ) >> {start} ) & {get:#x}{sfx} )",
-                    f"{define}( _val ) ( ( _val ) << {start} )"
+                    f"#define {base}_SHIFT {start}",
+                    f"#define {base}_MASK {mask:#x}{sfx}",
+                    f"#define {base}_GET( _reg ) \\",
+                    f"  ( ( ( _reg ) & {base}_MASK ) >> {base}_SHIFT )",
+                    f"#define {base}( _val ) \\",
+                    f"  ( ( _val ) << {base}_SHIFT )"
                 ])
         return lines
 
