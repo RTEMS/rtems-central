@@ -65,10 +65,6 @@ spec-info:
       the base address of the register block.  Register member offests and the
       register block size are specified in units of the address space granule.
       The address space granule is usually 8-bits also known as one byte.
-    generic-attributes:
-      description: null
-      key-spec-type: name
-      value-spec-type: any
     mandatory-attributes: all
 spec-name: Register Block Item Type
 spec-type: interface-register-block
