@@ -278,9 +278,15 @@ void Function6( int Param0 );
 #define IRQAMP_ITCNT_TCNT_SHIFT 0
 #define IRQAMP_ITCNT_TCNT_MASK 0xffffffffU
 #define IRQAMP_ITCNT_TCNT_GET( _reg ) \\
-  ( ( ( _reg ) & IRQAMP_ITCNT_TCNT_MASK ) >> IRQAMP_ITCNT_TCNT_SHIFT )
+  ( ( ( _reg ) & IRQAMP_ITCNT_TCNT_MASK ) >> \\
+    IRQAMP_ITCNT_TCNT_SHIFT )
+#define IRQAMP_ITCNT_TCNT_SET( _reg, _val ) \\
+  ( ( ( _reg ) & ~IRQAMP_ITCNT_TCNT_MASK ) | \\
+    ( ( ( _val ) << IRQAMP_ITCNT_TCNT_SHIFT ) & \\
+      IRQAMP_ITCNT_TCNT_MASK ) )
 #define IRQAMP_ITCNT_TCNT( _val ) \\
-  ( ( _val ) << IRQAMP_ITCNT_TCNT_SHIFT )
+  ( ( ( _val ) << IRQAMP_ITCNT_TCNT_SHIFT ) & \\
+    IRQAMP_ITCNT_TCNT_MASK )
 
 /** @} */
 
@@ -296,9 +302,15 @@ void Function6( int Param0 );
 #define IRQAMP_ITSTMPC_TSTAMP_SHIFT 27
 #define IRQAMP_ITSTMPC_TSTAMP_MASK 0xf8000000U
 #define IRQAMP_ITSTMPC_TSTAMP_GET( _reg ) \\
-  ( ( ( _reg ) & IRQAMP_ITSTMPC_TSTAMP_MASK ) >> IRQAMP_ITSTMPC_TSTAMP_SHIFT )
+  ( ( ( _reg ) & IRQAMP_ITSTMPC_TSTAMP_MASK ) >> \\
+    IRQAMP_ITSTMPC_TSTAMP_SHIFT )
+#define IRQAMP_ITSTMPC_TSTAMP_SET( _reg, _val ) \\
+  ( ( ( _reg ) & ~IRQAMP_ITSTMPC_TSTAMP_MASK ) | \\
+    ( ( ( _val ) << IRQAMP_ITSTMPC_TSTAMP_SHIFT ) & \\
+      IRQAMP_ITSTMPC_TSTAMP_MASK ) )
 #define IRQAMP_ITSTMPC_TSTAMP( _val ) \\
-  ( ( _val ) << IRQAMP_ITSTMPC_TSTAMP_SHIFT )
+  ( ( ( _val ) << IRQAMP_ITSTMPC_TSTAMP_SHIFT ) & \\
+    IRQAMP_ITSTMPC_TSTAMP_MASK )
 
 #define IRQAMP_ITSTMPC_S1 0x4000000U
 
@@ -309,9 +321,15 @@ void Function6( int Param0 );
 #define IRQAMP_ITSTMPC_TSISEL_SHIFT 0
 #define IRQAMP_ITSTMPC_TSISEL_MASK 0x1fU
 #define IRQAMP_ITSTMPC_TSISEL_GET( _reg ) \\
-  ( ( ( _reg ) & IRQAMP_ITSTMPC_TSISEL_MASK ) >> IRQAMP_ITSTMPC_TSISEL_SHIFT )
+  ( ( ( _reg ) & IRQAMP_ITSTMPC_TSISEL_MASK ) >> \\
+    IRQAMP_ITSTMPC_TSISEL_SHIFT )
+#define IRQAMP_ITSTMPC_TSISEL_SET( _reg, _val ) \\
+  ( ( ( _reg ) & ~IRQAMP_ITSTMPC_TSISEL_MASK ) | \\
+    ( ( ( _val ) << IRQAMP_ITSTMPC_TSISEL_SHIFT ) & \\
+      IRQAMP_ITSTMPC_TSISEL_MASK ) )
 #define IRQAMP_ITSTMPC_TSISEL( _val ) \\
-  ( ( _val ) << IRQAMP_ITSTMPC_TSISEL_SHIFT )
+  ( ( ( _val ) << IRQAMP_ITSTMPC_TSISEL_SHIFT ) & \\
+    IRQAMP_ITSTMPC_TSISEL_MASK )
 
 /** @} */
 
@@ -327,9 +345,15 @@ void Function6( int Param0 );
 #define IRQAMP_ITSTMPAS_TASSERTION_SHIFT 0
 #define IRQAMP_ITSTMPAS_TASSERTION_MASK 0xffffffffU
 #define IRQAMP_ITSTMPAS_TASSERTION_GET( _reg ) \\
-  ( ( ( _reg ) & IRQAMP_ITSTMPAS_TASSERTION_MASK ) >> IRQAMP_ITSTMPAS_TASSERTION_SHIFT )
+  ( ( ( _reg ) & IRQAMP_ITSTMPAS_TASSERTION_MASK ) >> \\
+    IRQAMP_ITSTMPAS_TASSERTION_SHIFT )
+#define IRQAMP_ITSTMPAS_TASSERTION_SET( _reg, _val ) \\
+  ( ( ( _reg ) & ~IRQAMP_ITSTMPAS_TASSERTION_MASK ) | \\
+    ( ( ( _val ) << IRQAMP_ITSTMPAS_TASSERTION_SHIFT ) & \\
+      IRQAMP_ITSTMPAS_TASSERTION_MASK ) )
 #define IRQAMP_ITSTMPAS_TASSERTION( _val ) \\
-  ( ( _val ) << IRQAMP_ITSTMPAS_TASSERTION_SHIFT )
+  ( ( ( _val ) << IRQAMP_ITSTMPAS_TASSERTION_SHIFT ) & \\
+    IRQAMP_ITSTMPAS_TASSERTION_MASK )
 
 /** @} */
 
@@ -345,9 +369,15 @@ void Function6( int Param0 );
 #define IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT 0
 #define IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK 0xffffffffU
 #define IRQAMP_ITSTMPAC_TACKNOWLEDGE_GET( _reg ) \\
-  ( ( ( _reg ) & IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK ) >> IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT )
+  ( ( ( _reg ) & IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK ) >> \\
+    IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT )
+#define IRQAMP_ITSTMPAC_TACKNOWLEDGE_SET( _reg, _val ) \\
+  ( ( ( _reg ) & ~IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK ) | \\
+    ( ( ( _val ) << IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT ) & \\
+      IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK ) )
 #define IRQAMP_ITSTMPAC_TACKNOWLEDGE( _val ) \\
-  ( ( _val ) << IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT )
+  ( ( ( _val ) << IRQAMP_ITSTMPAC_TACKNOWLEDGE_SHIFT ) & \\
+    IRQAMP_ITSTMPAC_TACKNOWLEDGE_MASK )
 
 /** @} */
 
@@ -400,9 +430,15 @@ typedef struct irqamp_timestamp {
 #define IRQAMP_ILEVEL_IL_15_1_SHIFT 1
 #define IRQAMP_ILEVEL_IL_15_1_MASK 0xfffeU
 #define IRQAMP_ILEVEL_IL_15_1_GET( _reg ) \\
-  ( ( ( _reg ) & IRQAMP_ILEVEL_IL_15_1_MASK ) >> IRQAMP_ILEVEL_IL_15_1_SHIFT )
+  ( ( ( _reg ) & IRQAMP_ILEVEL_IL_15_1_MASK ) >> \\
+    IRQAMP_ILEVEL_IL_15_1_SHIFT )
+#define IRQAMP_ILEVEL_IL_15_1_SET( _reg, _val ) \\
+  ( ( ( _reg ) & ~IRQAMP_ILEVEL_IL_15_1_MASK ) | \\
+    ( ( ( _val ) << IRQAMP_ILEVEL_IL_15_1_SHIFT ) & \\
+      IRQAMP_ILEVEL_IL_15_1_MASK ) )
 #define IRQAMP_ILEVEL_IL_15_1( _val ) \\
-  ( ( _val ) << IRQAMP_ILEVEL_IL_15_1_SHIFT )
+  ( ( ( _val ) << IRQAMP_ILEVEL_IL_15_1_SHIFT ) & \\
+    IRQAMP_ILEVEL_IL_15_1_MASK )
 
 /** @} */
 

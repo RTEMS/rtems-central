@@ -643,9 +643,14 @@ class Node:
                     f"#define {base}_SHIFT {start}",
                     f"#define {base}_MASK {mask:#x}{sfx}",
                     f"#define {base}_GET( _reg ) \\",
-                    f"  ( ( ( _reg ) & {base}_MASK ) >> {base}_SHIFT )",
-                    f"#define {base}( _val ) \\",
-                    f"  ( ( _val ) << {base}_SHIFT )"
+                    f"  ( ( ( _reg ) & {base}_MASK ) >> \\",
+                    f"    {base}_SHIFT )",
+                    f"#define {base}_SET( _reg, _val ) \\",
+                    f"  ( ( ( _reg ) & ~{base}_MASK ) | \\",
+                    f"    ( ( ( _val ) << {base}_SHIFT ) & \\",
+                    f"      {base}_MASK ) )", f"#define {base}( _val ) \\",
+                    f"  ( ( ( _val ) << {base}_SHIFT ) & \\",
+                    f"    {base}_MASK )"
                 ])
         return lines
 
