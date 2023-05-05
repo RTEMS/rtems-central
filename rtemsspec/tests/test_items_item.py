@@ -67,8 +67,9 @@ def test_uid():
 
 
 def test_spec():
-    item = Item(EmptyItemCache(), "x", {})
-    assert item.spec == "spec:x"
+    item = Item(EmptyItemCache(), "x/y/z", {})
+    assert item.spec == "spec:x/y/z"
+    assert item.spec_2 == "spec:x/\u200by/\u200bz"
 
 
 def test_contains():
