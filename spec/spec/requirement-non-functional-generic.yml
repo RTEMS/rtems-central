@@ -39,6 +39,10 @@ links:
   uid: requirement-non-functional
 - role: spec-refinement
   spec-key: non-functional-type
+  spec-value: performance-runtime-limits
+  uid: requirement-non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
   spec-value: portability
   uid: requirement-non-functional
 - role: spec-refinement

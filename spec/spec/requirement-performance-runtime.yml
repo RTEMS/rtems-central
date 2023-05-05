@@ -48,34 +48,11 @@ spec-description: |
 spec-example: |
   SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
   copyrights:
-  - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+  - Copyright (C) 2020 embedded brains GmbH & Co. KG
   enabled-by: true
   links:
   - role: runtime-measurement-request
     uid: ../val/perf
-  limits:
-    sparc/leon3:
-      DirtyCache:
-        max-upper-bound: 0.000005
-        mean-upper-bound: 0.000005
-      FullCache:
-        max-upper-bound: 0.000005
-        mean-upper-bound: 0.000005
-      HotCache:
-        max-upper-bound: 0.000005
-        mean-upper-bound: 0.000005
-      Load/1:
-        max-upper-bound: 0.00001
-        mean-upper-bound: 0.00001
-      Load/2:
-        max-upper-bound: 0.00001
-        mean-upper-bound: 0.00001
-      Load/3:
-        max-upper-bound: 0.00001
-        mean-upper-bound: 0.00001
-      Load/4:
-        max-upper-bound: 0.00001
-        mean-upper-bound: 0.00001
   params: {}
   rationale: null
   references: []
@@ -113,9 +90,6 @@ spec-example: |
 spec-info:
   dict:
     attributes:
-      limits:
-        description: null
-        spec-type: requirement-performance-runtime-limits
       params:
         description: null
         spec-type: requirement-performance-runtime-params

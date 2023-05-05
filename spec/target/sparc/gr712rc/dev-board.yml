@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: null
+enabled-by:
+  and:
+  - sparc/gr712rc
+  - target/evaluation-board
+links:
+- role: requirement-refinement
+  uid: ../gr712rc
+name: GR712RC Dual-Core LEON3-FT Development Board
+non-functional-type: design-target
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The ${.:/name} shall be a ${/glossary/target:/term}.
+type: requirement

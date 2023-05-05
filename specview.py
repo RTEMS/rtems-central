@@ -43,7 +43,10 @@ _CHILD_ROLES = [
     "interface-function", "glossary-member", "test-case"
 ]
 
-_PARENT_ROLES = ["function-implementation", "interface-enumerator"]
+_PARENT_ROLES = [
+    "function-implementation", "interface-enumerator",
+    "performance-runtime-limits"
+]
 
 
 def _get_value_dummy(_ctx: ItemGetValueContext) -> Any:
@@ -62,6 +65,9 @@ _MAPPER.add_get_value(
     _get_value_dummy)
 _MAPPER.add_get_value(
     "requirement/non-functional/performance-runtime:/environment",
+    _get_value_dummy)
+_MAPPER.add_get_value(
+    "requirement/non-functional/performance-runtime-limits:/text-template",
     _get_value_dummy)
 
 

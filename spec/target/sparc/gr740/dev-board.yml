@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: null
+enabled-by:
+  and:
+  - sparc/gr740
+  - target/evaluation-board
+links:
+- role: requirement-refinement
+  uid: ../gr740
+name: GR-CPCI-GR740 Quad-Core LEON4FT Development Board
+non-functional-type: design-target
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The ${.:/name} shall be a ${/glossary/target:/term}.
+type: requirement

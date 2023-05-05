@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: design-target
+  uid: requirement-non-functional
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      brief:
+        description: |
+          If the value is present, then it shall briefly describe the target.
+        spec-type: optional-str
+      description:
+        description: |
+          If the value is present, then it shall thoroughly describe the target.
+        spec-type: optional-str
+      name:
+        description: |
+          It shall be the target name.
+        spec-type: str
+    description: |
+      This set of attributes specifies a design ${/glossary/target:/term}.
+    mandatory-attributes: all
+spec-name: Design Target Item Type
+spec-type: requirement-design-target
+type: spec

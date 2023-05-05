@@ -1,0 +1,706 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by:
+  and:
+  - not: RTEMS_SMP
+  - target-hash/5zrudgccHYC6azWEU3SRYUnkVXCeq9MufBd5zmfMeEg=
+links:
+- role: requirement-refinement
+  uid: ../sis
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/barrier/req/perf-release-auto
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/barrier/req/perf-release-manual
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/barrier/req/perf-release-manual-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/event/req/perf-isr-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/event/req/perf-other
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/event/req/perf-other-not-satisfied
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/event/req/perf-other-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/message/req/perf-receive-try
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/message/req/perf-receive-wait-forever
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/message/req/perf-receive-wait-timed
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/message/req/perf-send
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/message/req/perf-send-other
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/message/req/perf-send-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/part/req/perf-get-buffer
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/part/req/perf-get-no-buffer
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/part/req/perf-return-buffer
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-obtain
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-release
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-release-one
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-release-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-try
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-wait-forever
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/sem/req/perf-mtx-pi-wait-timed
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-construct
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-restart
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-restart-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 5.0e-05
+      median-upper-bound: 0.0002
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-restart-self
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-set-scheduler-nop
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-start
+- limits:
+    DirtyCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    FullCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    HotCache:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+    Load/1:
+      max-upper-bound: 0.0002
+      median-lower-bound: 0.0
+      median-upper-bound: 0.0
+      min-lower-bound: 0.0
+  role: performance-runtime-limits
+  uid: /rtems/task/req/perf-start-preempt
+non-functional-type: performance-runtime-limits
+rationale: null
+references: []
+requirement-type: non-functional
+text: ${.:text-template}
+type: requirement

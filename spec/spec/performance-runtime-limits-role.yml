@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: performance-runtime-limits
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      limits:
+        description: null
+        spec-type: requirement-performance-runtime-envs
+    description: |
+      It defines the performance runtime limits role of links.
+    mandatory-attributes: all
+spec-name: Performance Runtime Limits Link Role
+spec-type: performance-runtime-limits-role
+type: spec
