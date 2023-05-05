@@ -32,7 +32,8 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext
-from rtemsspec.rtems import augment_with_test_links, is_pre_qualified
+from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
+    recursive_is_enabled
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.transitionmap import Transition, TransitionMap
 from rtemsspec.util import load_config
@@ -204,13 +205,6 @@ _VALIDATION_LEAF = [
 _VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
 
 
-def _is_enabled(item: Item) -> bool:
-    result = item.enabled
-    for parent in item.parents("interface-placement"):
-        result = result and _is_enabled(parent)
-    return result
-
-
 def _validate_tree(item: Item) -> bool:
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
@@ -231,7 +225,7 @@ def _validate_containers(item: Item) -> None:
             item.cache.items_by_type["interface/domain"],
             item.cache.items_by_type["interface/header-file"]):
         for item_3 in item_2.children("interface-placement"):
-            if _is_enabled(item_3) and not item_3["_validated"]:
+            if not item_3["_validated"]:
                 item_2["_validated"] = False
                 break
 
@@ -466,7 +460,7 @@ def main() -> None:
     args = parser.parse_args(sys.argv[1:])
     config = load_config("config.yml")["spec"]
     config["enabled"] = args.enabled.split(",") if args.enabled else []
-    item_cache = ItemCache(config)
+    item_cache = ItemCache(config, is_item_enabled=recursive_is_enabled)
     augment_with_test_links(item_cache)
     augment_with_test_case_links(item_cache)
     root = item_cache["/req/root"]

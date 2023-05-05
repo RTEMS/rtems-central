@@ -24,9 +24,9 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from typing import Any
+from typing import Any, List
 
-from rtemsspec.items import create_unique_link, Item, ItemCache
+from rtemsspec.items import create_unique_link, Item, ItemCache, Link
 
 _NOT_PRE_QUALIFIED = set([
     "/acfg/constraint/option-not-pre-qualified",
@@ -40,6 +40,32 @@ def is_pre_qualified(item: Item) -> bool:
     return not bool(
         set(parent.uid for parent in item.parents("constraint")).intersection(
             _NOT_PRE_QUALIFIED))
+
+
+_ENABLEMENT_ROLES = [
+    "interface-function", "interface-ingroup", "interface-ingroup-hidden",
+    "requirement-refinement", "validation"
+]
+
+
+def _link_is_enabled(_link: Link) -> bool:
+    return True
+
+
+def recursive_is_enabled(enabled: List[str], item: Item) -> bool:
+    """
+    Returns true, if the item is enabled and there exists a path to the root
+    item where each item on the path is enabled, otherwise false.
+    """
+    if not item.is_enabled(enabled):
+        return False
+    result = True
+    for parent in item.parents(_ENABLEMENT_ROLES,
+                               is_link_enabled=_link_is_enabled):
+        if recursive_is_enabled(enabled, parent):
+            return True
+        result = False
+    return result
 
 
 def _add_link(item_cache: ItemCache, child: Item, data: Any) -> None:

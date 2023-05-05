@@ -27,7 +27,8 @@
 import pytest
 
 from rtemsspec.items import EmptyItemCache, Item
-from rtemsspec.rtems import augment_with_test_links, is_pre_qualified
+from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
+    recursive_is_enabled
 
 
 def test_is_pre_qualified():
@@ -72,3 +73,47 @@ def test_augment_with_test_links():
     augment_with_test_links(item_cache)
     assert item.child("validation") == test_case
     assert test_case.parent("validation") == item
+
+
+def test_recursive_is_enabled():
+    item_cache = EmptyItemCache()
+    a = item_cache.add_volatile_item("/a", {"enabled-by": True, "links": []})
+    b = item_cache.add_volatile_item(
+        "/b", {
+            "enabled-by": False,
+            "links": [{
+                "role": "requirement-refinement",
+                "uid": "/a"
+            }]
+        })
+    c = item_cache.add_volatile_item(
+        "/c", {
+            "enabled-by": True,
+            "links": [{
+                "role": "requirement-refinement",
+                "uid": "/a"
+            }]
+        })
+    d = item_cache.add_volatile_item(
+        "/d", {
+            "enabled-by":
+            True,
+            "links": [{
+                "role": "requirement-refinement",
+                "uid": "/b"
+            }, {
+                "role": "requirement-refinement",
+                "uid": "/c"
+            }]
+        })
+    e = item_cache.add_volatile_item(
+        "/e", {
+            "enabled-by": True,
+            "links": [{
+                "role": "requirement-refinement",
+                "uid": "/b"
+            }]
+        })
+    item_cache.set_enabled([], recursive_is_enabled)
+    assert d.enabled
+    assert not e.enabled
