@@ -105,6 +105,18 @@ class SphinxContent(Content):
         """ Adds a rubric. """
         self.add(f".. rubric:: {name}")
 
+    def add_image(self, base: str, width: Optional[str] = None) -> None:
+        """
+        Adds an image associated with the base file name.
+
+        The image will have the optional width.
+        """
+        options = [":align: center"]
+        if width is not None:
+            options.append(f":width: {width}")
+        with self.directive("image", base, options):
+            pass
+
     def add_index_entries(self, entries) -> None:
         """ Adds a list of index entries the content. """
         self.add([".. index:: " + entry for entry in make_lines(entries)])

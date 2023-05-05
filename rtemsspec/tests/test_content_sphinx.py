@@ -191,6 +191,22 @@ def test_append():
 """
 
 
+def test_add_image():
+    content = SphinxContent()
+    content.add_image("abc")
+    assert str(content) == """.. image:: abc
+    :align: center
+"""
+    content.add_image("def", "50%")
+    assert str(content) == """.. image:: abc
+    :align: center
+
+.. image:: def
+    :align: center
+    :width: 50%
+"""
+
+
 def test_add_index_entries():
     content = SphinxContent()
     content.add_index_entries(["x", "y"])
