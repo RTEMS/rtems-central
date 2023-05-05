@@ -1,3 +1,5 @@
+enabled-by:
+  not: foobar
 links: []
 v: p
 x:

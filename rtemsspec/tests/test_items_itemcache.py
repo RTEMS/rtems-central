@@ -38,6 +38,7 @@ def test_config_error():
 
 def test_load(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
+    config["enabled"] = ["foobar"]
     item_count = 0
 
     def post_process_load(items):
@@ -45,6 +46,7 @@ def test_load(tmpdir):
         item_count = len(items)
 
     item_cache = ItemCache(config, post_process_load)
+    assert item_cache.enabled == ["foobar"]
     assert len(item_cache.types) == 1
     assert list(item_cache.types)[0] == ""
     assert item_count == len(item_cache.all)
@@ -56,6 +58,8 @@ def test_load(tmpdir):
     assert item_cache["/d/c"]["v"] == "c"
     assert item_cache["/p"]["v"] == "p"
     p = item_cache["/p"]
+    assert not p.enabled
+    assert p.is_enabled(["blub"])
     assert p["v"] == "p"
     assert p.map("/p") == p
     assert p.map("p") == p
@@ -63,11 +67,17 @@ def test_load(tmpdir):
     assert len(a) == 2
     assert a["/p"]["v"] == "p"
     assert a["/d/c"]["v"] == "c"
+    item_cache.set_enabled([])
+    assert p.enabled
     item_cache_2 = ItemCache(config)
     assert not item_cache_2.updates
     assert item_cache_2["/d/c"]["v"] == "c"
     with open(os.path.join(tmpdir, "spec", "d", "c.yml"), "w+") as out:
-        out.write("links:\n- role: null\n  uid: ../p\nv: x\n")
+        out.write("""enabled-by: true
+links:
+- role: null
+  uid: ../p
+v: x""")
     item_cache_3 = ItemCache(config)
     assert item_cache_3.updates
     assert item_cache_3["/d/c"]["v"] == "x"

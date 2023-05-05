@@ -8,6 +8,7 @@ a:
     - 4
     - 5
 dict: {}
+enabled-by: true
 links:
 - role: null
   uid: ../p

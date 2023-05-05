@@ -33,22 +33,32 @@ from rtemsspec.rtems import augment_with_test_links, is_pre_qualified
 def test_is_pre_qualified():
     item_cache = EmptyItemCache()
     uid = "/constraint/constant-not-pre-qualified"
-    constraint = item_cache.add_volatile_item(uid, {"links": []})
+    constraint = item_cache.add_volatile_item(uid, {
+        "enabled-by": True,
+        "links": []
+    })
     assert is_pre_qualified(constraint)
     item = item_cache.add_volatile_item(
-        "/i", {"links": [{
-            "role": "constraint",
-            "uid": uid
-        }]})
+        "/i", {
+            "enabled-by": True,
+            "links": [{
+                "role": "constraint",
+                "uid": uid
+            }]
+        })
     assert not is_pre_qualified(item)
 
 
 def test_augment_with_test_links():
     item_cache = EmptyItemCache()
-    item = item_cache.add_volatile_item("/i", {"links": []})
+    item = item_cache.add_volatile_item("/i", {
+        "enabled-by": True,
+        "links": []
+    })
     link = {"role": "validation", "uid": "/i"}
     test_case = item_cache.add_volatile_item(
         "/t", {
+            "enabled-by": True,
             "links": [],
             "test-actions": [{
                 "checks": [{

@@ -139,20 +139,20 @@ def _view_interface_placment(item: Item, level: int,
             _view_interface_placment(link.item, level + 1, validated_filter)
 
 
-def _view(item: Item, level: int, role: Optional[str], validated_filter: str,
-          enabled: List[str]) -> None:
-    if not item.is_enabled(enabled):
+def _view(item: Item, level: int, role: Optional[str],
+          validated_filter: str) -> None:
+    if not item.enabled:
         return
     if not _visit_item(item, level, role, validated_filter):
         return
     for child in item.children("validation"):
-        if child.is_enabled(enabled):
+        if child.enabled:
             _visit_item(child, level + 1, "validation", validated_filter)
     _view_interface_placment(item, level + 1, validated_filter)
     for link in item.links_to_children(_CHILD_ROLES):
-        _view(link.item, level + 1, link.role, validated_filter, enabled)
+        _view(link.item, level + 1, link.role, validated_filter)
     for link in item.links_to_parents(_PARENT_ROLES):
-        _view(link.item, level + 1, link.role, validated_filter, enabled)
+        _view(link.item, level + 1, link.role, validated_filter)
 
 
 _VALIDATION_LEAF = [
@@ -195,13 +195,13 @@ _VALIDATION_LEAF = [
 _VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
 
 
-def _validate(item: Item, enabled: List[str]) -> bool:
+def _validate(item: Item) -> bool:
     validated = True
     count = 0
     for link in itertools.chain(item.links_to_children(_VALIDATION_ROLES),
                                 item.links_to_parents(_PARENT_ROLES)):
-        if link.item.is_enabled(enabled):
-            validated = _validate(link.item, enabled) and validated
+        if link.item.enabled:
+            validated = _validate(link.item) and validated
             count += 1
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
@@ -211,23 +211,21 @@ def _validate(item: Item, enabled: List[str]) -> bool:
     return validated
 
 
-def _validation_count(item: Item, enabled: List[str]) -> int:
+def _validation_count(item: Item) -> int:
     return len(
-        list(child for child in item.children("validation")
-             if child.is_enabled(enabled)))
+        list(child for child in item.children("validation") if child.enabled))
 
 
-def _no_validation(item: Item, path: List[str],
-                   enabled: List[str]) -> List[str]:
+def _no_validation(item: Item, path: List[str]) -> List[str]:
     path_2 = path + [item.uid]
-    if not item.is_enabled(enabled):
+    if not item.enabled:
         return path_2[:-1]
-    leaf = _validation_count(item, enabled) == 0
+    leaf = _validation_count(item) == 0
     for child in item.children(_CHILD_ROLES):
-        path_2 = _no_validation(child, path_2, enabled)
+        path_2 = _no_validation(child, path_2)
         leaf = False
     for parent in item.parents(_PARENT_ROLES):
-        path_2 = _no_validation(parent, path_2, enabled)
+        path_2 = _no_validation(parent, path_2)
         leaf = False
     if leaf and not item.get("_validated", True):
         for index, component in enumerate(path_2):
@@ -264,9 +262,9 @@ def _gather_design_components(item: Item, components: List[Item]) -> bool:
     return False
 
 
-def _design(item_cache: ItemCache, enabled: List[str]) -> None:
+def _design(item_cache: ItemCache) -> None:
     for item in item_cache.all.values():
-        if not item.is_enabled(enabled):
+        if not item.enabled:
             continue
         components: List[Item] = []
         if not _gather_design_components(item, components):
@@ -316,7 +314,7 @@ def _make_row(transition_map: TransitionMap, map_idx: int,
              for co_idx, st_idx in enumerate(variant.post_cond))))
 
 
-def _action_table(enabled: List[str], item: Item) -> None:
+def _action_table(item: Item) -> None:
     rows = [
         tuple(
             itertools.chain(["Entry", "Descriptor"],
@@ -326,7 +324,7 @@ def _action_table(enabled: List[str], item: Item) -> None:
                              for condition in item["post-conditions"])))
     ]
     transition_map = TransitionMap(item)
-    for map_idx, variant in transition_map.get_variants(enabled):
+    for map_idx, variant in transition_map.get_variants(item.cache.enabled):
         rows.append(_make_row(transition_map, map_idx, variant))
     content = SphinxContent()
     content.add_simple_table(rows)
@@ -338,9 +336,10 @@ def _to_name(transition_map, co_idx: int, st_idx: int) -> str:
             f"{transition_map.post_co_idx_st_idx_to_st_name(co_idx, st_idx)}")
 
 
-def _action_list(enabled: List[str], item: Item) -> None:
+def _action_list(item: Item) -> None:
     transition_map = TransitionMap(item)
-    for post_cond, pre_conds in transition_map.get_post_conditions(enabled):
+    for post_cond, pre_conds in transition_map.get_post_conditions(
+            item.cache.enabled):
         print("")
         if post_cond[0]:
             print(transition_map.skip_idx_to_name(post_cond[0]))
@@ -436,37 +435,37 @@ def main() -> None:
                         nargs="*",
                         help="an UID of a specification item")
     args = parser.parse_args(sys.argv[1:])
-    enabled = args.enabled.split(",") if args.enabled else []
-    config = load_config("config.yml")
-    item_cache = ItemCache(config["spec"])
+    config = load_config("config.yml")["spec"]
+    config["enabled"] = args.enabled.split(",") if args.enabled else []
+    item_cache = ItemCache(config)
     augment_with_test_links(item_cache)
     augment_with_test_case_links(item_cache)
     root = item_cache["/req/root"]
 
     if args.filter == "none":
-        _validate(root, enabled)
-        _view(root, 0, None, args.validated, enabled)
+        _validate(root)
+        _view(root, 0, None, args.validated)
     elif args.filter == "action-table":
         for uid in args.UIDs:
-            _action_table(enabled, item_cache[uid])
+            _action_table(item_cache[uid])
     elif args.filter == "action-list":
         for uid in args.UIDs:
-            _action_list(enabled, item_cache[uid])
+            _action_list(item_cache[uid])
     elif args.filter == "orphan":
-        _validate(root, enabled)
+        _validate(root)
         for item in item_cache.all.values():
             if item["type"] in ["build", "spec"]:
                 continue
-            if item.is_enabled(enabled) and "_validated" not in item:
+            if item.enabled and "_validated" not in item:
                 print(item.uid)
     elif args.filter == "no-validation":
-        _validate(root, enabled)
-        _no_validation(root, [], enabled)
+        _validate(root)
+        _no_validation(root, [])
     elif args.filter == "api":
-        _validate(root, enabled)
+        _validate(root)
         _list_api(item_cache)
     elif args.filter == "design":
-        _design(item_cache, enabled)
+        _design(item_cache)
 
 
 if __name__ == "__main__":

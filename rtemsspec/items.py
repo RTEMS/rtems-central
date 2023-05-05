@@ -224,7 +224,7 @@ class Item:
 
     @property
     def cache(self) -> "ItemCache":
-        """ Returns the cache of the items. """
+        """ Returns the cache of the item. """
         return self._cache
 
     @property
@@ -384,8 +384,16 @@ class Item:
         self._links_to_children.append(link)
 
     def is_enabled(self, enabled: List[str]):
-        """ Returns true if the item is enabled by the specified enables. """
-        return is_enabled(enabled, self["enabled-by"])
+        """
+        Returns true if the item is enabled by the enabled set, otherwise
+        returns false.
+        """
+        return is_enabled(enabled, self._data["enabled-by"])
+
+    @property
+    def enabled(self) -> bool:
+        """ Returns true if the item is enabled, otherwise returns false. """
+        return self._data["_enabled"]
 
     @property
     def data(self) -> Any:
@@ -665,13 +673,18 @@ def _load_json_data(path: str, uid: str) -> Any:
     return data
 
 
+def _is_item_enabled(enabled: List[str], item: Item) -> bool:
+    return is_enabled(enabled, item["enabled-by"])
+
+
 class ItemCache:
     """ This class provides a cache of specification items. """
 
     def __init__(self,
                  config: Any,
-                 post_process_load: Optional[Callable[[ItemMap],
-                                                      None]] = None):
+                 post_process_load: Optional[Callable[[ItemMap], None]] = None,
+                 is_item_enabled: Callable[[List[str], Item],
+                                           bool] = _is_item_enabled):
         self._items: ItemMap = {}
         self._types: Set[str] = set()
         self.items_by_type: Dict[str, List[Item]] = {}
@@ -686,8 +699,11 @@ class ItemCache:
             self._root_type = _gather_spec_refinements(self[spec_root])
         else:
             self._root_type = None
+        self._enabled = config.get("enabled", [])
+        self._is_enabled = is_item_enabled
         for item in self._items.values():
             self._set_type(item)
+            item["_enabled"] = is_item_enabled(self._enabled, item)
 
     def __getitem__(self, uid: str) -> Item:
         return self._items[uid]
@@ -710,6 +726,24 @@ class ItemCache:
         """ Returns the types of the items. """
         return self._types
 
+    @property
+    def enabled(self) -> List[str]:
+        """ Returns the enabled set. """
+        return self._enabled
+
+    def set_enabled(self,
+                    enabled: List[str],
+                    is_item_enabled: Callable[[List[str], Item],
+                                              bool] = _is_item_enabled):
+        """
+        Sets the enabled status of all items according to the enabled set using
+        the is item enabled function.
+        """
+        self._enabled = enabled
+        self._is_enabled = is_item_enabled
+        for item in self._items.values():
+            item["_enabled"] = is_item_enabled(enabled, item)
+
     def add_volatile_item(self, uid: str, data: Any) -> Item:
         """
         Adds an item with the specified data to the cache and returns it.
@@ -720,6 +754,7 @@ class ItemCache:
         item.init_parents(self)
         item.init_children()
         self._set_type(item)
+        item["_enabled"] = self._is_enabled(self._enabled, item)
         return item
 
     def add_volatile_item_from_file(self, uid: str, path: str) -> Item:

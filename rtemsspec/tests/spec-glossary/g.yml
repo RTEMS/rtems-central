@@ -1,6 +1,7 @@
 SPDX-License-Identifier: CC-BY-SA-4.0
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
 glossary-type: group
 links: []
 name: G
