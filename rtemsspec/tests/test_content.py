@@ -28,7 +28,12 @@ import os
 import pytest
 
 from rtemsspec.content import Content, enabled_by_to_exp, \
-    ExpressionMapper, PythonExpressionMapper
+    ExpressionMapper, PythonExpressionMapper, to_camel_case
+
+
+def test_to_camel_case():
+    assert to_camel_case("/x") == "X"
+    assert to_camel_case("/ab cd?ef+") == "AbCdEfX"
 
 
 def test_tab():

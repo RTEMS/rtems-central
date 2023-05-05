@@ -1193,9 +1193,10 @@ _CAMEL_CASE_DISCARD = re.compile(r"[^ \t\n\r\f\va-zA-Z0-9]")
 
 def to_camel_case(name: str) -> str:
     """ Returns the name in CamelCase. """
-    return name[0].upper() + _CAMEL_CASE_TO_UPPER.sub(
+    name = _CAMEL_CASE_TO_UPPER.sub(
         lambda match: match.group(1).upper(),
-        _CAMEL_CASE_DISCARD.sub(" ", name[1:].replace("+", "X")))
+        _CAMEL_CASE_DISCARD.sub(" ", name.replace("+", "X")))
+    return f"{name[0].upper()}{name[1:]}"
 
 
 def get_integer_type(value: int) -> str:
