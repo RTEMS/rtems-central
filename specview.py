@@ -168,7 +168,6 @@ _VALIDATION_LEAF = [
     "interface/typedef",
     "interface/union",
     "interface/unspecified-define",
-    "interface/unspecified-define-or-object",
     "interface/unspecified-enum",
     "interface/unspecified-enumerator",
     "interface/unspecified-function",

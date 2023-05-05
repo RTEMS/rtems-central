@@ -11,10 +11,6 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: unspecified-define-or-object
-  uid: interface
-- role: spec-refinement
-  spec-key: interface-type
   spec-value: unspecified-enum
   uid: interface
 - role: spec-refinement
