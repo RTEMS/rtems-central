@@ -1129,6 +1129,12 @@ static void Rtm_Cleanup( Rtm_Context *ctx )
 }
 
 /**
+ * @defgroup Rpr spec:/rpr
+ *
+ * @{
+ */
+
+/**
  * @brief Body brief.
  *
  * Body description.
@@ -1186,7 +1192,15 @@ static void Rpr_Cleanup( Rtm_Context *ctx )
   /* Cleanup code */
 }
 
+/** @} */
+
 #if defined(FOOBAR)
+/**
+ * @defgroup Rpr2 spec:/rpr2
+ *
+ * @{
+ */
+
 /**
  * @brief Body brief.
  *
@@ -1204,6 +1218,8 @@ static void Rpr2_Body_Wrap( void *arg )
   ctx = arg;
   Rpr2_Body( ctx );
 }
+
+/** @} */
 #endif
 
 /**

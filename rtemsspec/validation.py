@@ -936,6 +936,8 @@ class _RuntimeMeasurementTestItem(_TestItem):
                 requests.add(if_exp)
                 content.add(if_exp)
                 content.gap = False
+            with content.defgroup_block(item.ident, item.spec):
+                content.add("@{")
             _add_call_method(requests, prepare)
             name = req.add_support_method(content,
                                           "test-prepare",
@@ -970,6 +972,7 @@ class _RuntimeMeasurementTestItem(_TestItem):
                                           do_wrap=False)
             _add_call_method(requests, name)
             _add_call_method(requests, cleanup)
+            content.add("/** @} */")
             if use_enabled_by:
                 requests.append("#endif")
                 content.append("#endif")
