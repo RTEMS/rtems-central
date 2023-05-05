@@ -755,8 +755,9 @@ class ItemCache:
         self._load_items(config)
         if post_process_load:
             post_process_load(self._items)
-        self._init_parents()
-        self._init_children()
+        if config.get("initialize-links", True):
+            self._init_parents()
+            self._init_children()
         spec_root = config["spec-type-root-uid"]
         if spec_root:
             self._root_type = _gather_spec_refinements(self[spec_root])

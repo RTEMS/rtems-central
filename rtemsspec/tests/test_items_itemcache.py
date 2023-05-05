@@ -96,6 +96,9 @@ v: x""")
 def test_load_link_error(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir,
                                                     "spec-item-cache-2")
+    config["initialize-links"] = False
+    ItemCache(config)
+    config["initialize-links"] = True
     with pytest.raises(
             KeyError,
             match=r"^\"item '/a' links to non-existing item 'nix'\"$"):
