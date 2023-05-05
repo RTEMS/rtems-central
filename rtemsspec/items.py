@@ -37,6 +37,11 @@ from typing import Any, Callable, Dict, Iterable, Iterator, List, Match, \
 import json
 import yaml
 
+try:
+    from yaml import CSafeLoader as SafeLoader
+except ImportError:  # pragma: no cover
+    from yaml import SafeLoader  # type: ignore
+
 
 class ItemGetValueContext(NamedTuple):
     """ Context used to get an item value. """
@@ -681,7 +686,7 @@ def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
 def _load_yaml_data(path: str, uid: str) -> Any:
     with open(path, "r", encoding="utf-8") as src:
         try:
-            data = yaml.safe_load(src.read())
+            data = yaml.load(src.read(), Loader=SafeLoader)
         except yaml.YAMLError as err:
             msg = ("YAML error while loading specification item file "
                    f"'{path}': {str(err)}")
