@@ -40,7 +40,8 @@ from rtemsspec.validation import augment_with_test_case_links
 
 _CHILD_ROLES = [
     "requirement-refinement", "interface-ingroup", "interface-ingroup-hidden",
-    "interface-function", "glossary-member", "test-case"
+    "interface-function", "glossary-member", "runtime-measurement-request",
+    "test-case"
 ]
 
 _PARENT_ROLES = [
