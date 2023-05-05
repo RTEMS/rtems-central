@@ -337,20 +337,32 @@ def _get_value_sphinx_type(ctx: ItemGetValueContext) -> Any:
     return f":c:type:`{ctx.value[ctx.key]}`"
 
 
-def _get_value_sphinx_ref(ctx: ItemGetValueContext, get_value: ItemGetValue,
-                          postfix: str) -> Any:
+def _compound_kind(ctx: ItemGetValueContext) -> str:
+    type_name = ctx.item.type
+    return f"{type_name[type_name.rfind('-') + 1:]} "
+
+
+def _get_value_sphinx_compound(ctx: ItemGetValueContext) -> Any:
+    return f"``{_compound_kind(ctx)}{ctx.value[ctx.key]}``"
+
+
+def _get_value_sphinx_ref(ctx: ItemGetValueContext,
+                          get_value: ItemGetValue,
+                          postfix: str = "",
+                          prefix: str = "") -> Any:
     for ref in ctx.item["references"]:
         ref_type = ref["type"]
         identifier = ref["identifier"]
+        name_ref = f"`{prefix}{ctx.value[ctx.key]}{postfix} <{identifier}>`"
         if ref_type == "document" and ref["name"] == "c-user":
-            return f":ref:`{ctx.value[ctx.key]}{postfix} <{identifier}>`"
+            return f":ref:{name_ref}"
         if ref_type == "url":
-            return f"`{ctx.value[ctx.key]}{postfix} <{identifier}>`_"
+            return f"{name_ref}_"
     return get_value(ctx)
 
 
 def _get_value_sphinx_unspecified_define(ctx: ItemGetValueContext) -> Any:
-    return _get_value_sphinx_ref(ctx, _get_value_sphinx_macro, "")
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_macro)
 
 
 def _get_value_sphinx_unspecified_function(ctx: ItemGetValueContext) -> Any:
@@ -369,7 +381,13 @@ def _get_value_sphinx_unspecified_group(ctx: ItemGetValueContext) -> Any:
 
 
 def _get_value_sphinx_unspecified_type(ctx: ItemGetValueContext) -> Any:
-    return _get_value_sphinx_ref(ctx, _get_value_sphinx_type, "")
+    return _get_value_sphinx_ref(ctx, _get_value_sphinx_type)
+
+
+def _get_value_sphinx_unspecified_compound(ctx: ItemGetValueContext) -> Any:
+    return _get_value_sphinx_ref(ctx,
+                                 _get_value_sphinx_compound,
+                                 prefix=_compound_kind(ctx))
 
 
 class SphinxMapper(ItemMapper):
@@ -412,11 +430,11 @@ class SphinxMapper(ItemMapper):
         self.add_get_value("interface/unspecified-enum:/name",
                            _get_value_sphinx_unspecified_type)
         self.add_get_value("interface/unspecified-struct:/name",
-                           _get_value_sphinx_unspecified_type)
+                           _get_value_sphinx_unspecified_compound)
         self.add_get_value("interface/unspecified-typedef:/name",
                            _get_value_sphinx_unspecified_type)
         self.add_get_value("interface/unspecified-union:/name",
-                           _get_value_sphinx_unspecified_type)
+                           _get_value_sphinx_unspecified_compound)
 
 
 def sanitize_name(name: str) -> str:
@@ -446,6 +464,7 @@ class SphinxInterfaceMapper(SphinxMapper):
                            _get_appl_config_option)
         self.add_get_value("interface/appl-config-option/integer:/name",
                            _get_appl_config_option)
+        self.add_get_value("interface/enum:/name", self._get_type)
         self.add_get_value("interface/function:/name", self._get_function)
         self.add_get_value("interface/function:/params/name",
                            get_value_sphinx_param)
@@ -453,13 +472,32 @@ class SphinxInterfaceMapper(SphinxMapper):
         self.add_get_value("interface/macro:/name", self._get_function)
         self.add_get_value("interface/macro:/params/name",
                            get_value_sphinx_param)
+        self.add_get_value("interface/struct:/name", self._get_compound)
+        self.add_get_value("interface/typedef:/name", self._get_type)
+        self.add_get_value("interface/union:/name", self._get_compound)
 
-    def _get_function(self, ctx: ItemGetValueContext) -> Any:
-        name = ctx.value[ctx.key]
+    def _get_reference(self, ctx: ItemGetValueContext, name: str,
+                       fallback: str) -> str:
         for group in ctx.item.parents("interface-ingroup"):
             if group.uid in self._group_uids:
                 return get_reference(make_label(f"Interface {name}"))
-        return f":c:func:`{name}`"
+        return fallback
+
+    def _get_compound(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.item["definition-kind"] in ["struct-only", "union-only"]:
+            prefix = f"{ctx.item['interface-type']} "
+        else:
+            prefix = ""
+        name = ctx.value[ctx.key]
+        return self._get_reference(ctx, name, f"``{prefix}{name}``")
+
+    def _get_function(self, ctx: ItemGetValueContext) -> Any:
+        name = ctx.value[ctx.key]
+        return self._get_reference(ctx, name, f":c:func:`{name}`")
+
+    def _get_type(self, ctx: ItemGetValueContext) -> Any:
+        name = ctx.value[ctx.key]
+        return self._get_reference(ctx, name, f":c:type:`{name}`")
 
     def _get_group(self, ctx: ItemGetValueContext) -> Any:
         if ctx.item.uid in self._group_uids:

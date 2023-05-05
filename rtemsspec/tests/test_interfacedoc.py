@@ -34,6 +34,11 @@ from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_interfacedoc(tmpdir):
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-interface", with_spec_types=True)
+    item_cache = ItemCache(item_cache_config)
+    augment_glossary_terms(item_cache["/glossary"], [])
+
     doc_config = {}
     doc_config["group"] = "/gb"
     introduction_rst = os.path.join(tmpdir, "introduction.rst")
@@ -48,17 +53,24 @@ def test_interfacedoc(tmpdir):
     directives_2_rst = os.path.join(tmpdir, "directives-2.rst")
     doc_config_2["directives-target"] = directives_2_rst
 
-    item_cache_config = create_item_cache_config_and_copy_spec(
-        tmpdir, "spec-interface", with_spec_types=True)
-    config = {"enabled": [], "groups": [doc_config, doc_config_2]}
-    item_cache = ItemCache(item_cache_config)
-    augment_glossary_terms(item_cache["/glossary"], [])
+    types_rst = os.path.join(tmpdir, "types.rst")
+    types_config = {
+        "domains": ["/domain-abc"],
+        "groups": [],
+        "target": types_rst
+    }
+
+    config = {
+        "enabled": [],
+        "groups": [doc_config, doc_config_2],
+        "types": types_config
+    }
     generate(config, item_cache)
 
     with open(introduction_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020 embedded brains GmbH & Co. KG
 
 .. This file is part of the RTEMS quality process and was automatically
 .. generated.  If you find something that needs to be fixed or
@@ -110,7 +122,7 @@ The directives provided by the Group B are:
     with open(directives_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020 embedded brains GmbH & Co. KG
 
 .. This file is part of the RTEMS quality process and was automatically
 .. generated.  If you find something that needs to be fixed or
@@ -223,7 +235,7 @@ VeryLongFunction description.
 ``2``
     is returned, in case B.
 
-:c:type:`Enum`
+:ref:`InterfaceEnum`
     is returned, in case C.
 
 Sometimes some value.  See :ref:`InterfaceFunction`.
@@ -358,7 +370,7 @@ Macro without parameters.
     with open(introduction_2_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020 embedded brains GmbH & Co. KG
 
 .. This file is part of the RTEMS quality process and was automatically
 .. generated.  If you find something that needs to be fixed or
@@ -396,7 +408,7 @@ Group A description. The directives provided by the Group A are:
     with open(directives_2_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020 embedded brains GmbH & Co. KG
 
 .. This file is part of the RTEMS quality process and was automatically
 .. generated.  If you find something that needs to be fixed or
@@ -466,10 +478,11 @@ Function brief description.
 .. rubric:: DESCRIPTION:
 
 Function description.  References to :term:`xs <x>`,
-:ref:`InterfaceVeryLongFunction`, :c:type:`Integer`, :c:type:`Enum`,
-:c:macro:`DEFINE`, :ref:`InterfaceVERYLONGMACRO`, Variable,
-:c:macro:`ENUMERATOR_0`, ``struct Struct``, :ref:`a`, interface, :ref:`GroupA`,
-and Group F.  Second parameter is ``Param1``. Mention :c:type:`US`.
+:ref:`InterfaceVeryLongFunction`, :ref:`InterfaceInteger`,
+:ref:`InterfaceEnum`, :c:macro:`DEFINE`, :ref:`InterfaceVERYLONGMACRO`,
+Variable, :c:macro:`ENUMERATOR_0`, ``struct Struct``, :ref:`a`, interface,
+:ref:`GroupA`, and Group F.  Second parameter is ``Param1``. Mention ``struct
+US``.
 
 .. code-block:
 
@@ -492,3 +505,186 @@ The following constraints apply to this directive:
 
     void VoidFunction( void );
 """
+
+    with open(types_rst, "r") as src:
+        content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+
+.. This file is part of the RTEMS quality process and was automatically
+.. generated.  If you find something that needs to be fixed or
+.. worded better please post a report or patch to an RTEMS mailing list
+.. or raise a bug report:
+..
+.. https://www.rtems.org/bugs.html
+..
+.. For information on updating and regenerating please refer to the How-To
+.. section in the Software Requirements Engineering chapter of the
+.. RTEMS Software Engineering manual.  The manual is provided as a part of
+.. a release.  For development sources please refer to the online
+.. documentation at:
+..
+.. https://docs.rtems.org
+
+.. index:: RTEMS Data Types
+.. index:: data types
+
+RTEMS Data Types
+****************
+
+.. _Introduction:
+
+Introduction
+============
+
+This chapter contains a complete list of the RTEMS primitive data types in
+alphabetical order.  This is intended to be an overview and the user is
+encouraged to look at the appropriate chapters in the manual for more
+information about the usage of the various data types.
+
+.. _ListOfDataTypes:
+
+List of Data Types
+==================
+
+The following is a complete list of the RTEMS primitive data types in
+alphabetical order:
+
+.. Generated from spec:/enum
+
+.. index:: Enum
+
+.. _InterfaceEnum:
+
+Enum
+----
+
+Enum brief description.
+
+.. rubric:: ENUMERATORS:
+
+ENUMERATOR_0
+    Enumerator 0 brief description.
+
+ENUMERATOR_1
+    Enumerator 1 brief description.
+
+ENUMERATOR_2
+    Enumerator 2 brief description.
+
+.. rubric:: DESCRIPTION:
+
+Enum description.
+
+.. Generated from spec:/enum2
+
+.. index:: EnumA
+
+.. _InterfaceEnumA:
+
+EnumA
+-----
+
+Enum A brief description.
+
+.. rubric:: ENUMERATORS:
+
+ENUMERATOR_A
+    Enumerator A brief description.
+
+.. Generated from spec:/enum3
+
+.. index:: EnumB
+
+.. _InterfaceEnumB:
+
+EnumB
+-----
+
+Enum B brief description.
+
+.. rubric:: ENUMERATORS:
+
+ENUMERATOR_B
+    Enumerator B brief description.
+
+.. Generated from spec:/td
+
+.. index:: Integer
+
+.. _InterfaceInteger:
+
+Integer
+-------
+
+Typedef Integer brief description.
+
+.. rubric:: DESCRIPTION:
+
+Typedef Integer description.
+
+.. Generated from spec:/td3
+
+.. index:: Integer3
+
+.. _InterfaceInteger3:
+
+Integer3
+--------
+
+.. Generated from spec:/s
+
+.. index:: Struct
+
+.. _InterfaceStruct:
+
+Struct
+------
+
+.. rubric:: MEMBERS:
+
+some_union
+    Brief union description. Union description.
+
+some_member_4
+    Brief member 4 description. Member 4 description.
+
+.. Generated from spec:/s2
+
+.. index:: Struct2
+
+.. _InterfaceStruct2:
+
+Struct2
+-------
+
+.. rubric:: MEMBERS:
+
+Members of the type shall not be accessed directly by the application.
+
+.. rubric:: DESCRIPTION:
+
+References: :ref:`InterfaceStruct2`
+
+.. rubric:: NOTES:
+
+Notes.
+
+.. Generated from spec:/u
+
+.. index:: Union
+
+.. _InterfaceUnion:
+
+Union
+-----
+
+.. rubric:: MEMBERS:
+
+m_0
+    Brief member 0 description.
+
+m_1
+    Brief member 1 description.
+"""
+        assert content == src.read()

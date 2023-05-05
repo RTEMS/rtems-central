@@ -63,7 +63,7 @@ def test_interface(tmpdir):
  */
 
 /*
- * Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -593,6 +593,34 @@ struct Struct {
    */
   Enum some_member_4;
 };
+
+/* Generated from spec:/s2 */
+
+/**
+ * @ingroup GroupA
+ *
+ * References: Struct2
+ *
+ * @par Notes
+ * Notes.
+ *
+ * @par Constraints
+ * @parblock
+ * The following constraints apply to this structure:
+ *
+ * * Some constraint.
+ *
+ * * Members of the type shall not be accessed directly by the application.
+ * @endparblock
+ */
+typedef struct {
+  /**
+   * @brief Brief member description.
+   *
+   * Member description.
+   */
+  uint32_t member;
+} Struct2;
 
 /* Generated from spec:/td */
 

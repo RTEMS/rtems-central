@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: null
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+definition:
+- default:
+    brief: Brief member description.
+    definition: ${/c/if/uint32_t:/name} ${.:name}
+    description: Member description.
+    kind: member
+    name: member
+  variants: []
+definition-kind: typedef-only
+description: |
+  References: ${.:/name}
+enabled-by: true
+index-entries: []
+interface-type: struct
+links:
+- role: interface-placement
+  uid: h
+- role: interface-ingroup
+  uid: ga
+- role: constraint
+  uid: constraint/other
+- role: constraint
+  uid: constraint/type-opaque
+name: Struct2
+notes: Notes.
+type: interface

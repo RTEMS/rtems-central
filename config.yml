@@ -195,6 +195,12 @@ interface-documentation:
   - directives-target: modules/rtems-docs/c-user/rate-monotonic/directives.rst
     group: /rtems/ratemon/if/group
     introduction-target: modules/rtems-docs/c-user/rate-monotonic/introduction.rst
+  types:
+    domains:
+    - /if/domain
+    groups:
+    - /rtems/type/if/group
+    target: modules/rtems-docs/c-user/rtems_data_types.rst
 spec-verification:
   root-type: /spec/root
 spec-documentation:

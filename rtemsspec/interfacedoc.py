@@ -28,7 +28,7 @@ This module provides functions for the generation of interface documentation.
 
 import functools
 import os
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from rtemsspec.content import CContent, get_value_compound, \
     get_value_forward_declaration, get_value_unspecified_type
@@ -128,6 +128,14 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
         add_definition(content, mapper, item, definition)
 
 
+def _add_text(content: SphinxContent, mapper: ItemMapper, item: Item,
+              key: str) -> None:
+    text = item[key]
+    if text:
+        content.add(f".. rubric:: {key.upper()}:")
+        content.wrap(mapper.substitute(text))
+
+
 def _document_directive(content: SphinxContent, mapper: ItemMapper,
                         code_mapper: CodeMapper, item: Item,
                         enabled: List[str]) -> None:
@@ -147,9 +155,7 @@ def _document_directive(content: SphinxContent, mapper: ItemMapper,
                     f"``{sanitize_name(param['name'])}``",
                     mapper.substitute(f"This parameter {description}"),
                     wrap=True)
-    if item["description"]:
-        content.add_rubric("DESCRIPTION:")
-        content.wrap(mapper.substitute(item["description"]))
+    _add_text(content, mapper, item, "description")
     ret = item["return"]
     if ret:
         content.add_rubric("RETURN VALUES:")
@@ -163,9 +169,7 @@ def _document_directive(content: SphinxContent, mapper: ItemMapper,
                                             retval["description"]),
                                         wrap=True)
         content.wrap(mapper.substitute(ret["return"]))
-    if item["notes"]:
-        content.add_rubric("NOTES:")
-        content.wrap(mapper.substitute(item["notes"]))
+    _add_text(content, mapper, item, "notes")
     constraints = [
         mapper.substitute(parent["text"], parent)
         for parent in item.parents("constraint") if parent.is_enabled(enabled)
@@ -227,6 +231,96 @@ def _directive_key(order: List[Item], item: Item) -> Tuple[int, str]:
     return (index, item.uid)
 
 
+def _add_type_definition(definition: Any, mapper: SphinxInterfaceMapper,
+                         content: SphinxContent) -> None:
+    text = definition["brief"].strip()
+    if definition["description"]:
+        text += "\n" + definition["description"].strip()
+    content.add_definition_item(definition["name"],
+                                mapper.substitute(text),
+                                wrap=True)
+
+
+def _type_compound(item: Item, mapper: SphinxInterfaceMapper,
+                   content: SphinxContent) -> None:
+    content.add(".. rubric:: MEMBERS:")
+    for member in item["definition"]:
+        _add_type_definition(member["default"], mapper, content)
+
+
+def _type_enum(item: Item, mapper: SphinxInterfaceMapper,
+               content: SphinxContent) -> None:
+    content.add(".. rubric:: ENUMERATORS:")
+    for enumerator in item.parents("interface-enumerator"):
+        _add_type_definition(enumerator, mapper, content)
+
+
+def _type_nop(_item: Item, _mapper: SphinxInterfaceMapper,
+              _content: SphinxContent) -> None:
+    pass
+
+
+_TYPE_GENERATORS = {
+    "interface/enum": _type_enum,
+    "interface/struct": _type_compound,
+    "interface/typedef": _type_nop,
+    "interface/union": _type_compound
+}
+
+
+def _gather_types(item: Item, types: List[Item]) -> None:
+    for child in item.children("interface-placement"):
+        if child.type in _TYPE_GENERATORS:
+            types.append(child)
+        _gather_types(child, types)
+
+
+def _is_opaque_type(item: Item) -> Optional[Item]:
+    for constraint in item.parents("constraint"):
+        if constraint.uid == "/constraint/type-opaque":
+            return constraint
+    return None
+
+
+def _generate_types(config: dict, group_uids: List[str],
+                    item_cache: ItemCache) -> None:
+    types: List[Item] = []
+    for domain in config["domains"]:
+        _gather_types(item_cache[domain], types)
+    content = SphinxContent()
+    content.add_automatically_generated_warning()
+    content.add_index_entries(["RTEMS Data Types", "data types"])
+    content.add_header("RTEMS Data Types", level=1)
+    with content.section("Introduction"):
+        content.wrap("""This chapter contains a complete list of the RTEMS
+primitive data types in alphabetical order.  This is intended to be an overview
+and the user is encouraged to look at the appropriate chapters in the manual
+for more information about the usage of the various data types.""")
+
+    with content.section("List of Data Types"):
+        content.wrap(
+            "The following is a complete list of the RTEMS primitive data "
+            "types in alphabetical order:")
+        for item in sorted(types, key=lambda x: x["name"]):
+            content.register_license_and_copyrights_of_item(item)
+            content.add(f".. Generated from spec:{item.uid}")
+            name = item["name"]
+            content.add_index_entries([name] + item["index-entries"])
+            with content.section(name, label=make_label(f"Interface {name}")):
+                mapper = SphinxInterfaceMapper(item, group_uids)
+                content.wrap(mapper.substitute(item["brief"]))
+                constraint = _is_opaque_type(item)
+                if constraint is None:
+                    _TYPE_GENERATORS[item.type](item, mapper, content)
+                else:
+                    content.add(".. rubric:: MEMBERS:")
+                    content.wrap(mapper.substitute(constraint["text"]))
+                _add_text(content, mapper, item, "description")
+                _add_text(content, mapper, item, "notes")
+    content.add_licence_and_copyrights()
+    content.write(config["target"])
+
+
 def generate(config: dict, item_cache: ItemCache) -> None:
     """
     Generates interface documentation according to the configuration.
@@ -237,6 +331,7 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     groups = config["groups"]
     enabled = config["enabled"]
     group_uids = [doc_config["group"] for doc_config in groups]
+    group_uids.extend(uid for uid in config["types"]["groups"])
     for doc_config in groups:
         items: List[Item] = []
         group = item_cache[doc_config["group"]]
@@ -250,3 +345,4 @@ def generate(config: dict, item_cache: ItemCache) -> None:
                                group_uids, items)
         _generate_directives(doc_config["directives-target"], group,
                              group_uids, items, enabled)
+    _generate_types(config["types"], group_uids, item_cache)
