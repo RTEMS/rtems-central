@@ -130,14 +130,14 @@ def _generate_directive(content: SphinxContent, mapper: SphinxInterfaceMapper,
                         code_mapper: _CodeMapper, item: Item,
                         enabled: List[str]) -> None:
     content.wrap(mapper.substitute(item["brief"]))
-    content.add(".. rubric:: CALLING SEQUENCE:")
+    content.add_rubric("CALLING SEQUENCE:")
     with content.directive("code-block", "c"):
         code = CContent()
         _add_definition(code, code_mapper, item, "definition",
                         item["definition"])
         content.add(code)
     if item["params"]:
-        content.add(".. rubric:: PARAMETERS:")
+        content.add_rubric("PARAMETERS:")
         for param in item["params"]:
             description = param["description"]
             if description:
@@ -146,11 +146,11 @@ def _generate_directive(content: SphinxContent, mapper: SphinxInterfaceMapper,
                     mapper.substitute(f"This parameter {description}"),
                     wrap=True)
     if item["description"]:
-        content.add(".. rubric:: DESCRIPTION:")
+        content.add_rubric("DESCRIPTION:")
         content.wrap(mapper.substitute(item["description"]))
     ret = item["return"]
     if ret:
-        content.add(".. rubric:: RETURN VALUES:")
+        content.add_rubric("RETURN VALUES:")
         for retval in ret["return-values"]:
             if isinstance(retval["value"], str):
                 value = mapper.substitute(str(retval["value"]))
@@ -162,14 +162,14 @@ def _generate_directive(content: SphinxContent, mapper: SphinxInterfaceMapper,
                                         wrap=True)
         content.wrap(mapper.substitute(ret["return"]))
     if item["notes"]:
-        content.add(".. rubric:: NOTES:")
+        content.add_rubric("NOTES:")
         content.wrap(mapper.substitute(item["notes"]))
     constraints = [
         mapper.substitute(parent["text"], parent)
         for parent in item.parents("constraint") if parent.is_enabled(enabled)
     ]
     if constraints:
-        content.add(".. rubric:: CONSTRAINTS:")
+        content.add_rubric("CONSTRAINTS:")
         content.add_list(constraints,
                          "The following constraints apply to this directive:")
 

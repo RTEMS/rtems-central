@@ -85,7 +85,7 @@ class _ContentAdaptor:
                     wrap: bool = False) -> None:
         if not text:
             return
-        self.content.add(f".. rubric:: {name}:")
+        self.content.add_rubric(f"{name}:")
         if wrap:
             self.content.wrap(text)
         else:

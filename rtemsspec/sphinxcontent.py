@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides classes for Sphinx content generation. """
 
-# Copyright (C) 2019, 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2019, 2022 embedded brains GmbH (http://www.embedded-brains.de)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -100,6 +100,10 @@ class SphinxContent(Content):
         self.add_label(label)
         self.add_header(name, level)
         return label
+
+    def add_rubric(self, name: str) -> None:
+        """ Adds a rubric. """
+        self.add(f".. rubric:: {name}")
 
     def add_index_entries(self, entries) -> None:
         """ Adds a list of index entries the content. """
