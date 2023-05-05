@@ -68,6 +68,7 @@ def _generate_glossary_content(terms: ItemMap, header: str, target: str,
 
 _TERM = re.compile(r":term:`([^`]+)`")
 _TERM_2 = re.compile(r"^[^<]+<([^>]+)>")
+_SPACE = re.compile(r"\s+")
 
 
 def _find_glossary_terms(path: str, document_terms: ItemMap,
@@ -80,6 +81,7 @@ def _find_glossary_terms(path: str, document_terms: ItemMap,
                 match = _TERM_2.search(term)
                 if match:
                     term = match.group(1)
+                term = _SPACE.sub(" ", term)
                 item = glossary.term_to_item[term]
                 document_terms[item.uid] = item
 
