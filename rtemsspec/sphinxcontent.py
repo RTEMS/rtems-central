@@ -78,6 +78,11 @@ class SphinxContent(Content):
         self._tab = "    "
         self._section_level = section_level
         self._label_stack = [""]
+        self._section_stack: List[str] = []
+
+    def get_sections(self) -> List[str]:
+        """ Gets the list of sections of the current scope. """
+        return self._section_stack
 
     @property
     def label(self) -> str:
@@ -200,14 +205,14 @@ class SphinxContent(Content):
         else:
             self.push_label(label)
         self.add_label(label)
-        self.add_header(name, self._section_level)
-        self._section_level += 1
+        self.add_header(name, self._section_level + len(self._section_stack))
+        self._section_stack.append(name)
         return label
 
     def close_section(self) -> None:
         """ Closes a section. """
-        self._section_level -= 1
         self.pop_label()
+        self._section_stack.pop()
 
     @contextmanager
     def section(self,

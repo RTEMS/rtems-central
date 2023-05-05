@@ -87,12 +87,19 @@ def test_make_label():
 
 def test_section():
     content = SphinxContent()
+    assert content.get_sections() == []
     with content.section("ab cd") as label:
+        assert content.get_sections() == ["ab cd"]
         content.add(label)
         with content.section("ef gh") as label2:
+            assert content.get_sections() == ["ab cd", "ef gh"]
             content.add(label2)
             with content.section("ij kl", "mn") as label2:
+                assert content.get_sections() == ["ab cd", "ef gh", "ij kl"]
                 content.add(label2)
+            assert content.get_sections() == ["ab cd", "ef gh"]
+        assert content.get_sections() == ["ab cd"]
+    assert content.get_sections() == []
     assert str(content) == """.. _AbCd:
 
 ab cd
