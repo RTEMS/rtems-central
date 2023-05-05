@@ -25,14 +25,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from rtemsspec.build import gather_files
-from rtemsspec.items import ItemCache
+from rtemsspec.items import ItemCache, item_is_enabled
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_build(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-build", with_spec_types=True)
-    item_cache = ItemCache(item_cache_config)
+    item_cache = ItemCache(item_cache_config, is_item_enabled=item_is_enabled)
 
     build_config = {}
     build_config["arch"] = "foo"

@@ -141,13 +141,10 @@ def _view_interface_placment(item: Item, level: int,
 
 def _view(item: Item, level: int, role: Optional[str],
           validated_filter: str) -> None:
-    if not item.enabled:
-        return
     if not _visit_item(item, level, role, validated_filter):
         return
     for child in item.children("validation"):
-        if child.enabled:
-            _visit_item(child, level + 1, "validation", validated_filter)
+        _visit_item(child, level + 1, "validation", validated_filter)
     _view_interface_placment(item, level + 1, validated_filter)
     for link in item.links_to_children(_CHILD_ROLES):
         _view(link.item, level + 1, link.role, validated_filter)
@@ -200,9 +197,8 @@ def _validate(item: Item) -> bool:
     count = 0
     for link in itertools.chain(item.links_to_children(_VALIDATION_ROLES),
                                 item.links_to_parents(_PARENT_ROLES)):
-        if link.item.enabled:
-            validated = _validate(link.item) and validated
-            count += 1
+        validated = _validate(link.item) and validated
+        count += 1
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     if count == 0:
@@ -212,14 +208,11 @@ def _validate(item: Item) -> bool:
 
 
 def _validation_count(item: Item) -> int:
-    return len(
-        list(child for child in item.children("validation") if child.enabled))
+    return len(list(child for child in item.children("validation")))
 
 
 def _no_validation(item: Item, path: List[str]) -> List[str]:
     path_2 = path + [item.uid]
-    if not item.enabled:
-        return path_2[:-1]
     leaf = _validation_count(item) == 0
     for child in item.children(_CHILD_ROLES):
         path_2 = _no_validation(child, path_2)

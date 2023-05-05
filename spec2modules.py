@@ -68,7 +68,8 @@ def main() -> None:
     if args.diff:
         rtemsspec.content.Content.write = _diff  # type: ignore
     config = rtemsspec.util.load_config("config.yml")
-    item_cache = rtemsspec.items.ItemCache(config["spec"])
+    item_cache = rtemsspec.items.ItemCache(
+        config["spec"], is_item_enabled=rtemsspec.items.item_is_enabled)
     rtemsspec.validation.generate(config["validation"], item_cache,
                                   args.targets)
 

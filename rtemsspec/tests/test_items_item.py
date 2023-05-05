@@ -131,8 +131,13 @@ def test_get():
 
 def test_children():
     child = Item(EmptyItemCache(), "c", {})
+    child["_enabled"] = True
+    child_2 = Item(EmptyItemCache(), "c2", {})
+    child_2["_enabled"] = False
     parent = Item(EmptyItemCache(), "p", {})
+    parent["_enabled"] = True
     parent.add_link_to_child(Link(child, {"a": "b", "role": "c"}))
+    parent.add_link_to_child(Link(child_2, {"a": "b", "role": "c2"}))
     children = [item for item in parent.children()]
     assert len(children) == 1
     assert children[0] == child
@@ -161,14 +166,25 @@ def test_children():
 
 def test_parents():
     item_cache = EmptyItemCache()
-    child = Item(item_cache, "c",
-                 {"links": [{
-                     "a": "b",
-                     "role": "c",
-                     "uid": "p"
-                 }]})
+    child = Item(
+        item_cache, "c", {
+            "links": [{
+                "a": "b",
+                "role": "c",
+                "uid": "p"
+            }, {
+                "a": "b",
+                "role": "c",
+                "uid": "p2"
+            }]
+        })
+    child["_enabled"] = True
     parent = Item(item_cache, "p", {"links": []})
+    parent["_enabled"] = True
     item_cache._items["p"] = parent
+    parent_2 = Item(EmptyItemCache(), "p2", {})
+    parent_2["_enabled"] = False
+    item_cache._items["p2"] = parent_2
     child.init_parents(item_cache)
     for link in child.links_to_parents():
         link.item.add_link_to_child(Link.create(link, child))

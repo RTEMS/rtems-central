@@ -188,6 +188,10 @@ def _match_to_upper(match: Match) -> str:
     return match.group(1).upper()
 
 
+def _is_link_enabled(link: Link) -> bool:
+    return link.item._data["_enabled"]  # pylint: disable=protected-access
+
+
 class Item:
     """ Objects of this class represent a specification item. """
 
@@ -274,87 +278,108 @@ class Item:
         return self._cache[self.to_abs_uid(abs_or_rel_uid)]
 
     def links_to_parents(
-            self,
-            role: Optional[Union[str,
-                                 Iterable[str]]] = None) -> Iterator[Link]:
+        self,
+        role: Optional[Union[str, Iterable[str]]] = None,
+        is_link_enabled: Callable[[Link], bool] = _is_link_enabled
+    ) -> Iterator[Link]:
         """ Yields the links to the parents of this items. """
         if role is None:
             for link in self._links_to_parents:
-                yield link
+                if is_link_enabled(link):
+                    yield link
         elif isinstance(role, str):
             for link in self._links_to_parents:
-                if link.role == role:
+                if link.role == role and is_link_enabled(link):
                     yield link
         else:
             for link in self._links_to_parents:
-                if link.role in role:
+                if link.role in role and is_link_enabled(link):
                     yield link
 
     def parents(
-            self,
-            role: Optional[Union[str,
-                                 Iterable[str]]] = None) -> Iterator["Item"]:
+        self,
+        role: Optional[Union[str, Iterable[str]]] = None,
+        is_link_enabled: Callable[[Link], bool] = _is_link_enabled
+    ) -> Iterator["Item"]:
         """ Yields the parents of this items. """
-        for link in self.links_to_parents(role):
+        for link in self.links_to_parents(role, is_link_enabled):
             yield link.item
 
-    def parent(self,
-               role: Optional[Union[str, Iterable[str]]] = None,
-               index: Optional[int] = 0) -> "Item":
+    def parent(
+            self,
+            role: Optional[Union[str, Iterable[str]]] = None,
+            index: Optional[int] = 0,
+            is_link_enabled: Callable[[Link],
+                                      bool] = _is_link_enabled) -> "Item":
         """ Returns the parent with the specified role and index. """
-        for item_index, item in enumerate(self.parents(role)):
+        for item_index, item in enumerate(self.parents(role, is_link_enabled)):
             if item_index == index:
                 return item
         raise IndexError
 
-    def parent_link(self,
-                    role: Optional[Union[str, Iterable[str]]] = None,
-                    index: Optional[int] = 0) -> Link:
+    def parent_link(
+            self,
+            role: Optional[Union[str, Iterable[str]]] = None,
+            index: Optional[int] = 0,
+            is_link_enabled: Callable[[Link],
+                                      bool] = _is_link_enabled) -> Link:
         """ Returns the parent link with the specified role and index. """
-        for link_index, link in enumerate(self.links_to_parents(role)):
+        for link_index, link in enumerate(
+                self.links_to_parents(role, is_link_enabled)):
             if link_index == index:
                 return link
         raise IndexError
 
     def links_to_children(
-            self,
-            role: Optional[Union[str,
-                                 Iterable[str]]] = None) -> Iterator[Link]:
+        self,
+        role: Optional[Union[str, Iterable[str]]] = None,
+        is_link_enabled: Callable[[Link], bool] = _is_link_enabled
+    ) -> Iterator[Link]:
         """ Yields the links to the children of this items. """
         if role is None:
             for link in self._links_to_children:
-                yield link
+                if is_link_enabled(link):
+                    yield link
         elif isinstance(role, str):
             for link in self._links_to_children:
-                if link.role == role:
+                if link.role == role and is_link_enabled(link):
                     yield link
         else:
             for link in self._links_to_children:
-                if link.role in role:
+                if link.role in role and is_link_enabled(link):
                     yield link
 
     def children(
-            self,
-            role: Optional[Union[str,
-                                 Iterable[str]]] = None) -> Iterator["Item"]:
+        self,
+        role: Optional[Union[str, Iterable[str]]] = None,
+        is_link_enabled: Callable[[Link], bool] = _is_link_enabled
+    ) -> Iterator["Item"]:
         """ Yields the children of this items. """
-        for link in self.links_to_children(role):
+        for link in self.links_to_children(role, is_link_enabled):
             yield link.item
 
-    def child(self,
-              role: Optional[Union[str, Iterable[str]]] = None,
-              index: Optional[int] = 0) -> "Item":
+    def child(
+            self,
+            role: Optional[Union[str, Iterable[str]]] = None,
+            index: Optional[int] = 0,
+            is_link_enabled: Callable[[Link],
+                                      bool] = _is_link_enabled) -> "Item":
         """ Returns the child with the specified role and index. """
-        for item_index, item in enumerate(self.children(role)):
+        for item_index, item in enumerate(self.children(role,
+                                                        is_link_enabled)):
             if item_index == index:
                 return item
         raise IndexError
 
-    def child_link(self,
-                   role: Optional[Union[str, Iterable[str]]] = None,
-                   index: Optional[int] = 0) -> Link:
+    def child_link(
+            self,
+            role: Optional[Union[str, Iterable[str]]] = None,
+            index: Optional[int] = 0,
+            is_link_enabled: Callable[[Link],
+                                      bool] = _is_link_enabled) -> Link:
         """ Returns the child link with the specified role and index. """
-        for link_index, link in enumerate(self.links_to_children(role)):
+        for link_index, link in enumerate(
+                self.links_to_children(role, is_link_enabled)):
             if link_index == index:
                 return link
         raise IndexError
@@ -372,7 +397,7 @@ class Item:
 
     def init_children(self) -> None:
         """ Initializes the list of links to children of this items. """
-        for link in self.links_to_parents():
+        for link in self._links_to_parents:
             link.item.add_link_to_child(Link.create(link, self))
 
     def add_link_to_parent(self, link: Link):
@@ -636,7 +661,7 @@ class _SpecType(NamedTuple):
 
 def _gather_spec_refinements(item: Item) -> Optional[_SpecType]:
     new_type: Optional[_SpecType] = None
-    for link in item.links_to_children():
+    for link in item._links_to_children:  # pylint: disable=protected-access
         if link.role == "spec-refinement":
             key = link["spec-key"]
             if new_type is None:
@@ -675,6 +700,11 @@ def _load_json_data(path: str, uid: str) -> Any:
 
 def _is_item_enabled(enabled: List[str], item: Item) -> bool:
     return is_enabled(enabled, item["enabled-by"])
+
+
+def item_is_enabled(_enabled: List[str], _item: Item) -> bool:
+    """ Returns true. """
+    return True
 
 
 class ItemCache:
