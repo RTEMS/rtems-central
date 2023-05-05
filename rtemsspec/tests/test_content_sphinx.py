@@ -207,6 +207,22 @@ def test_add_image():
 """
 
 
+def test_latex_tiny():
+    content = SphinxContent()
+    with content.latex_tiny():
+        content.add("abc")
+    assert str(content) == """.. raw:: latex
+
+    \\begin{tiny}
+
+abc
+
+.. raw:: latex
+
+    \\end{tiny}
+"""
+
+
 def test_add_index_entries():
     content = SphinxContent()
     content.add_index_entries(["x", "y"])

@@ -72,6 +72,7 @@ def _grid_row(row: Iterable[str], maxi: Iterable[int]) -> str:
 class SphinxContent(Content):
     """ This class builds Sphinx content. """
 
+    # pylint: disable=too-many-public-methods
     def __init__(self, section_level: int = 2):
         super().__init__("CC-BY-SA-4.0", True)
         self._tab = "    "
@@ -194,6 +195,23 @@ class SphinxContent(Content):
         """ Opens a section context. """
         yield self.open_section(name, label_prefix, label)
         self.close_section()
+
+    def open_latex_tiny(self, size: str = "tiny") -> None:
+        """ Opens a LaTeX tiny environment. """
+        with self.directive("raw", "latex"):
+            self.add(f"\\begin{{{size}}}")
+
+    def close_latex_tiny(self, size: str = "tiny") -> None:
+        """ Closes a LaTeX tiny environment. """
+        with self.directive("raw", "latex"):
+            self.add(f"\\end{{{size}}}")
+
+    @contextmanager
+    def latex_tiny(self, size: str = "tiny") -> Iterator[None]:
+        """ Opens a LaTeX tiny environment. """
+        self.open_latex_tiny(size)
+        yield
+        self.close_latex_tiny(size)
 
     def add_licence_and_copyrights(self) -> None:
         """
