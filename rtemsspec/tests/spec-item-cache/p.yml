@@ -1,6 +1,9 @@
 enabled-by:
   not: foobar
-links: []
+links:
+- role: proxy-member
+  uid: proxy
+type: other
 v: p
 x:
   y: z

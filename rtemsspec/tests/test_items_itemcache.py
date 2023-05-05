@@ -64,7 +64,7 @@ def test_load(tmpdir):
     assert p.map("/p") == p
     assert p.map("p") == p
     a = item_cache.all
-    assert len(a) == 2
+    assert len(a) == 7
     assert a["/p"]["v"] == "p"
     assert a["/d/c"]["v"] == "c"
     item_cache.set_enabled([])
@@ -125,7 +125,11 @@ def get_value_dict(ctx):
 
 
 def test_item_mapper(tmpdir):
-    config = create_item_cache_config_and_copy_spec(tmpdir, "spec-item-cache")
+    config = create_item_cache_config_and_copy_spec(tmpdir,
+                                                    "spec-item-cache",
+                                                    with_spec_types=True)
+    config["enabled"] = ["foobar"]
+    config["resolve-proxies"] = True
     item_cache = ItemCache(config)
     item = item_cache["/p"]
     base_mapper = ItemMapper(item)
@@ -146,10 +150,18 @@ def test_item_mapper(tmpdir):
         with mapper.prefix("y"):
             assert mapper[".:."] == "z"
     assert mapper["."] == "/p"
+    match = r"cannot get value for '/v' of spec:/proxy specified by 'proxy:/v"
+    with pytest.raises(ValueError, match=match):
+        mapper["proxy:/v"]
+    assert not item_cache["/proxy"].resolved_proxy
+    assert item_cache["/proxy2"].resolved_proxy
+    assert not item_cache["/r"].resolved_proxy
+    assert mapper["proxy2:/v"] == "s"
+    assert item_cache["/r"].child("xyz").uid == "/s"
     assert mapper["d/c"] == "/d/c"
     assert mapper["d/c:v"] == "c"
     assert mapper["d/c:a/b"] == "e"
-    mapper.add_get_value(":/a/x-to-b", get_x_to_b_value)
+    mapper.add_get_value("other:/a/x-to-b", get_x_to_b_value)
     assert mapper["d/c:a/x-to-b:args:0:%"] == "eargs:0:%"
     assert mapper["d/c:a/f[1]"] == 2
     assert mapper["d/c:a/../a/f[3]/g[0]"] == 4
@@ -157,7 +169,7 @@ def test_item_mapper(tmpdir):
     assert item_3 == item
     assert key_path_3 == "/v"
     assert value_3 == "p"
-    mapper.add_get_value_dictionary(":/dict", get_value_dict)
+    mapper.add_get_value_dictionary("other:/dict", get_value_dict)
     assert mapper["d/c:/dict/some-arbitrary-key"] == "some-arbitrary-key"
     recursive_mapper = ItemMapper(item, recursive=True)
     assert recursive_mapper.substitute("${.:/r1/r2/r3}") == "foobar"

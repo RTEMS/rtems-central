@@ -871,6 +871,5 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     enabled = config["enabled"]
     enabled_by_defined = _gather_enabled_by_defined(
         config["item-level-interfaces"], item_cache)
-    for item in item_cache.all.values():
-        if item.type == "interface/header-file":
-            _generate_header_file(item, domains, enabled_by_defined, enabled)
+    for item in item_cache.items_by_type.get("interface/header-file", []):
+        _generate_header_file(item, domains, enabled_by_defined, enabled)

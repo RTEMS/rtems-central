@@ -1,0 +1,6 @@
+enabled-by: foobar
+links:
+- role: proxy-member
+  uid: proxy2
+type: other
+v: s

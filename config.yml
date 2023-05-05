@@ -60,12 +60,13 @@ build:
   workspace-directory: workspace/rtems
 spec:
   cache-directory: cache
-  spec-type-root-uid: /spec/root
   paths:
   - spec-spec
   - spec
   - spec-glossary
   - modules/rtems/spec
+  resolve-proxies: true
+  spec-type-root-uid: /spec/root
 glossary:
   project-groups:
   - /glossary-general

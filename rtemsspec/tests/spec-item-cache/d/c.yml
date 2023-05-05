@@ -12,5 +12,8 @@ enabled-by: true
 links:
 - role: null
   uid: ../p
+- role: null
+  uid: ../r
+type: other
 v: c
 r6: ${../p:/r7}

@@ -203,6 +203,7 @@ class Item:
         self._data = data
         self._links_to_parents: List[Link] = []
         self._links_to_children: List[Link] = []
+        self._resolved_proxy = False
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Item):
@@ -419,6 +420,11 @@ class Item:
     def enabled(self) -> bool:
         """ Returns true if the item is enabled, otherwise returns false. """
         return self._data["_enabled"]
+
+    @property
+    def resolved_proxy(self) -> bool:
+        """ Is true if the item is a resolved proxy, otherwise false. """
+        return self._resolved_proxy
 
     @property
     def data(self) -> Any:
@@ -707,6 +713,33 @@ def item_is_enabled(_enabled: List[str], _item: Item) -> bool:
     return True
 
 
+def _resolve_proxy(proxy: Item, is_link_enabled: Callable[[Link],
+                                                          bool]) -> None:
+
+    # pylint: disable=protected-access
+    try:
+        member = proxy.child("proxy-member", is_link_enabled=is_link_enabled)
+    except IndexError:
+        pass
+    else:
+        member._links_to_parents.extend(proxy._links_to_parents)
+        member._links_to_children.extend(proxy._links_to_children)
+        proxy._data = member._data
+        proxy._ident = member._ident
+        proxy._resolved_proxy = True
+        proxy._uid = member._uid
+        for link in proxy._links_to_parents:
+            for link_2 in link.item._links_to_children:
+                if link_2.item == proxy:
+                    link_2._item = member
+        for link in proxy._links_to_children:
+            for link_2 in link.item._links_to_parents:
+                if link_2.item == proxy:
+                    link_2._item = member
+        proxy._links_to_children = member._links_to_children
+        proxy._links_to_parents = member._links_to_parents
+
+
 class ItemCache:
     """ This class provides a cache of specification items. """
 
@@ -734,6 +767,8 @@ class ItemCache:
         for item in self._items.values():
             self._set_type(item)
             item["_enabled"] = is_item_enabled(self._enabled, item)
+        if config.get("resolve-proxies", False):
+            self.resolve_proxies()
 
     def __getitem__(self, uid: str) -> Item:
         return self._items[uid]
@@ -773,6 +808,14 @@ class ItemCache:
         self._is_enabled = is_item_enabled
         for item in self._items.values():
             item["_enabled"] = is_item_enabled(enabled, item)
+
+    def resolve_proxies(
+            self,
+            is_link_enabled: Callable[[Link],
+                                      bool] = _is_link_enabled) -> None:
+        """ Resolves each proxy item to the its first enabled member. """
+        for item in self.items_by_type.get("proxy", []):
+            _resolve_proxy(item, is_link_enabled)
 
     def add_volatile_item(self, uid: str, data: Any) -> Item:
         """
