@@ -16,7 +16,7 @@ spec-info:
     attributes:
       identifier:
         description: null
-        spec-type: interface-group-identifier
+        spec-type: requirement-design-group-identifier
     description: |
       This set of attributes specifies a design group requirement.  Design group
       requirements have an explicit reference to the associated Doxygen group
