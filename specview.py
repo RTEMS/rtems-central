@@ -156,8 +156,6 @@ _VALIDATION_LEAF = [
     "constraint",
     "glossary/group",
     "glossary/term",
-    "interface/appl-config-group",
-    "interface/container",
     "interface/domain",
     "interface/enum",
     "interface/enumerator",
@@ -190,19 +188,34 @@ _VALIDATION_LEAF = [
 _VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
 
 
-def _validate(item: Item) -> bool:
+def _validate_tree(item: Item) -> bool:
+    pre_qualified = is_pre_qualified(item)
+    item["_pre_qualified"] = pre_qualified
     validated = True
     count = 0
     for link in itertools.chain(item.links_to_children(_VALIDATION_ROLES),
                                 item.links_to_parents(_PARENT_ROLES)):
-        validated = _validate(link.item) and validated
+        validated = _validate_tree(link.item) and validated
         count += 1
-    pre_qualified = is_pre_qualified(item)
-    item["_pre_qualified"] = pre_qualified
     if count == 0:
         validated = (not pre_qualified) or (item.type in _VALIDATION_LEAF)
     item["_validated"] = validated
     return validated
+
+
+def _validate_containers(item: Item) -> None:
+    for item_2 in itertools.chain(
+            item.cache.items_by_type["interface/domain"],
+            item.cache.items_by_type["interface/header-file"]):
+        for item_3 in item_2.children("interface-placement"):
+            if not item_3["_validated"]:
+                item_2["_validated"] = False
+                break
+
+
+def _validate(item: Item) -> None:
+    _validate_tree(item)
+    _validate_containers(item)
 
 
 def _validation_count(item: Item) -> int:
