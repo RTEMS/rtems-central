@@ -77,11 +77,12 @@ def _gather_source_files(item: Item, enabled: List[str],
     _EXTEND_SOURCE_FILES[item["build-type"]](item, source_files)
 
 
-def _gather_test_header(item_cache: ItemCache,
+def _gather_test_header(item_cache: ItemCache, enabled: List[str],
                         source_files: List[str]) -> None:
     for item in item_cache.all.values():
         tests = ["test-case", "requirement/functional/action"]
-        if item.type in tests and item["test-header"]:
+        if item.type in tests and item["test-header"] and item.is_enabled(
+                enabled):
             source_files.append(item["test-header"]["target"])
 
 
@@ -102,5 +103,5 @@ def gather_files(config: dict,
     for uid in config["build-uids"]:
         _gather_source_files(item_cache[uid], enabled, source_files)
     if test_header:
-        _gather_test_header(item_cache, source_files)
+        _gather_test_header(item_cache, enabled, source_files)
     return source_files
