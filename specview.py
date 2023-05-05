@@ -71,6 +71,21 @@ _MAPPER.add_get_value(
     "requirement/non-functional/performance-runtime-limits:/text-template",
     _get_value_dummy)
 
+_SPEC_TYPES = [
+    "requirement/functional/action",
+    "requirement/functional/capability",
+    "requirement/functional/function",
+    "requirement/non-functional/design",
+    "requirement/non-functional/design-group",
+    "requirement/non-functional/interface-requirement",
+    "requirement/non-functional/performance",
+    "requirement/non-functional/performance-runtime",
+    "requirement/non-functional/quality",
+]
+
+for type_name in _SPEC_TYPES:
+    _MAPPER.add_get_value(f"{type_name}:/spec", _get_value_dummy)
+
 
 def _visit_action_conditions(item: Item, name: str) -> None:
     for index, condition in enumerate(item[name]):
