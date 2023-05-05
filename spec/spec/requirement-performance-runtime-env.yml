@@ -1,22 +1,27 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 links:
 - role: spec-member
   uid: root
+- role: spec-refinement
+  spec-key: non-functional-type
+  spec-value: performance-runtime-environment
+  uid: requirement-non-functional
 spec-description: null
 spec-example: null
 spec-info:
-  str:
-    assert:
-    - in:
-      - FullCache
-      - HotCache
-      - DirtyCache
-    - re: ^Load/[1-9][0-9]*$
+  dict:
+    attributes:
+      name:
+        description: |
+          It shall be the runtime measurement environment name.  See also
+          ${requirement-performance-runtime-env-name:/spec-name}.
+        spec-type: str
     description: |
-      It specifies the runtime measurement environment.
-spec-name: Runtime Measurement Environment
-spec-type: requirement-performance-runtime-env
+      This set of attributes specifies a runtime measurement environment.
+    mandatory-attributes: all
+spec-name: Runtime Measurement Environment Item Type
+spec-type: requirement-performance-runtime-environment
 type: spec

@@ -15,7 +15,7 @@ spec-info:
       runtime measurement environments.
     generic-attributes:
       description: null
-      key-spec-type: requirement-performance-runtime-env
+      key-spec-type: requirement-performance-runtime-env-name
       value-spec-type: requirement-performance-runtime-values
     mandatory-attributes: all
 spec-name: Runtime Measurement Environment Table
