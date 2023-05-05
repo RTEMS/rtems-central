@@ -27,7 +27,7 @@
 import re
 from typing import Any, Dict, Iterator, List, Optional, Pattern, Set, Tuple
 
-from rtemsspec.sphinxcontent import get_reference, get_label, \
+from rtemsspec.sphinxcontent import get_reference, make_label, \
     SphinxContent, SphinxMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext
 from rtemsspec.specverify import NAME
@@ -275,7 +275,7 @@ class _Documenter:
 
     def _get_ref_specification_type(self, ctx: ItemGetValueContext) -> Any:
         return get_reference(self._label_prefix +
-                             get_label(ctx.value[ctx.key]))
+                             make_label(ctx.value[ctx.key]))
 
     def _substitute(self, text: str) -> str:
         if text:
@@ -284,7 +284,7 @@ class _Documenter:
 
     def get_section_reference(self) -> str:
         """ Returns the section reference. """
-        return get_reference(self._label_prefix + get_label(self.section))
+        return get_reference(self._label_prefix + make_label(self.section))
 
     def get_a_section_reference(self) -> str:
         """ Returns a section reference. """
@@ -440,7 +440,9 @@ class _Documenter:
         if self.get_list_element_type():
             return
         content.register_license_and_copyrights_of_item(self._item)
-        with content.section(self.section, self._label_prefix):
+        with content.section(
+                self.section,
+                label=f"{self._label_prefix}{make_label(self.section)}"):
             last = content.lines[-1]
             self._add_description(content)
             if len(self._info_map) == 1:
@@ -560,8 +562,9 @@ def document(config: dict, item_cache: ItemCache) -> None:
     for documenter in documenter_map.values():
         documenter.resolve_used_by()
     documenter_names = set(documenter_map)
-    content.section_label_prefix = config["section-label-prefix"]
+    content.push_label(config["section-label-prefix"])
     with content.section(config["section-name"]):
+        content.push_label(config["section-label-prefix"])
         with content.section(config["hierarchy-subsection-name"]):
             content.add(config["hierarchy-text"])
             root_documenter.hierarchy(content, ignore)

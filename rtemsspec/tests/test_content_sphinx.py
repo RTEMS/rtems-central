@@ -26,7 +26,7 @@
 
 import pytest
 
-from rtemsspec.sphinxcontent import get_reference, get_label, \
+from rtemsspec.sphinxcontent import get_reference, make_label, \
     SphinxContent, SphinxMapper
 from rtemsspec.items import Item, ItemCache, ItemMapper
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
@@ -76,36 +76,13 @@ yz
 """
 
 
-def test_add_header_with_label():
-    content = SphinxContent()
-    label = content.add_header_with_label("x", 1)
-    assert label == "SectionX"
-    assert str(content) == """.. _SectionX:
-
-x
-*
-"""
-    label = content.add_header_with_label("yz w", 2)
-    assert label == "SectionYzW"
-    assert str(content) == """.. _SectionX:
-
-x
-*
-
-.. _SectionYzW:
-
-yz w
-====
-"""
-
-
 def test_get_reference():
     assert get_reference("a") == ":ref:`a`"
     assert get_reference("a", "b") == ":ref:`b <a>`"
 
 
-def test_get_label():
-    assert get_label("ab cd") == "AbCd"
+def test_make_label():
+    assert make_label("ab cd") == "AbCd"
 
 
 def test_section():
@@ -114,19 +91,28 @@ def test_section():
         content.add(label)
         with content.section("ef gh") as label2:
             content.add(label2)
-    assert str(content) == """.. _SectionAbCd:
+            with content.section("ij kl", "mn") as label2:
+                content.add(label2)
+    assert str(content) == """.. _AbCd:
 
 ab cd
 =====
 
-SectionAbCd
+AbCd
 
-.. _SectionEfGh:
+.. _AbCdEfGh:
 
 ef gh
 -----
 
-SectionEfGh
+AbCdEfGh
+
+.. _AbCdEfGhmn:
+
+ij kl
+^^^^^
+
+AbCdEfGhmn
 """
 
 

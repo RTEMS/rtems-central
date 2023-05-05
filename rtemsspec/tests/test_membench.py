@@ -49,7 +49,7 @@ def test_membench(tmpdir, monkeypatch):
     root = item_cache["/r0"]
     content = SphinxContent()
     generate(content, root, ItemMapper(root), ["/r0"], "path")
-    assert str(content) == """.. _SectionBenchmarksBasedOnSpecT0:
+    assert str(content) == """.. _BenchmarksBasedOnSpecT0:
 
 Benchmarks Based on: spec:/t0
 =============================

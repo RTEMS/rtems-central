@@ -32,7 +32,7 @@ import re
 from typing import Dict, List, Tuple
 
 from rtemsspec.items import Item, ItemMapper
-from rtemsspec.sphinxcontent import get_label, get_reference, SphinxContent
+from rtemsspec.sphinxcontent import make_label, get_reference, SphinxContent
 from rtemsspec.util import run_command
 
 _SECTION = re.compile(
@@ -118,8 +118,8 @@ def _get_sections(item: Item, path: str) -> Dict[str, Tuple[int, int]]:
     return sections
 
 
-def _get_label(item: Item) -> str:
-    return get_label(f"MemBenchmark {item.uid[1:]}")
+def _make_label(item: Item) -> str:
+    return make_label(f"MemBenchmark {item.uid[1:]}")
 
 
 def _generate_table(content: SphinxContent, items: List[Item],
@@ -127,7 +127,7 @@ def _generate_table(content: SphinxContent, items: List[Item],
     rows: List[Tuple[str, ...]] = []
     for index, item in enumerate(items):
         sections = _get_sections(item, path)
-        name = (get_reference(_get_label(item), item.uid), )
+        name = (get_reference(_make_label(item), item.uid), )
         if index == 0:
             keys = ("spec", ) + tuple(sections.keys())
             base = {key: info[1] - info[0] for key, info in sections.items()}
@@ -141,7 +141,8 @@ def _generate_table(content: SphinxContent, items: List[Item],
     section = f"Benchmarks Based on: {pivot.spec}"
     with content.section(section):
         content.wrap(f"""The following memory benchmarks are based on the
-memory benchmark defined by {get_reference(_get_label(pivot), pivot.spec)}.""")
+memory benchmark defined by
+{get_reference(_make_label(pivot), pivot.spec)}.""")
         content.add_simple_table(rows)
 
 
@@ -149,7 +150,7 @@ def _generate_paragraphs(content: SphinxContent, items: List[Item],
                          mapper: ItemMapper) -> None:
     for item in items:
         section = f"Benchmark: {item.spec}"
-        with content.section(section, label=_get_label(item)):
+        with content.section(section, label=_make_label(item)):
             content.wrap(mapper.substitute(item["test-brief"], item))
             content.wrap(mapper.substitute(item["test-description"], item))
 

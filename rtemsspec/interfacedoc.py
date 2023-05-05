@@ -32,7 +32,7 @@ from typing import Any, Dict, List, Tuple
 
 from rtemsspec.content import CContent, get_value_compound, \
     get_value_forward_declaration, get_value_unspecified_type
-from rtemsspec.sphinxcontent import get_label, get_reference, sanitize_name, \
+from rtemsspec.sphinxcontent import make_label, get_reference, sanitize_name, \
     SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
@@ -40,7 +40,7 @@ ItemMap = Dict[str, Item]
 
 
 def _get_reference(name: str) -> str:
-    return get_reference(get_label(f"Interface {name}"))
+    return get_reference(make_label(f"Interface {name}"))
 
 
 def _get_code_param(ctx: ItemGetValueContext) -> Any:
@@ -67,9 +67,10 @@ def _generate_introduction(target: str, group: Item, group_uids: List[str],
     content = SphinxContent()
     content.register_license_and_copyrights_of_item(group)
     content.add_automatically_generated_warning()
-    group_name = group["name"]
     content.add(f".. Generated from spec:{group.uid}")
-    with content.section("Introduction", get_label(group_name)):
+    group_name = group["name"]
+    content.push_label(make_label(group_name))
+    with content.section("Introduction"):
         # This needs to be in front of the list since comment blocks have an
         # effect on the list layout in the HTML output
         content.add(".. The following list was generated from:")
@@ -180,7 +181,8 @@ def _generate_directives(target: str, group: Item, group_uids: List[str],
     content.register_license_and_copyrights_of_item(group)
     content.add_automatically_generated_warning()
     group_name = group["name"]
-    with content.section("Directives", get_label(group_name)):
+    content.push_label(make_label(group_name))
+    with content.section("Directives"):
         content.wrap([
             f"This section details the directives of the {group_name}.",
             "A subsection is dedicated to each of this manager's directives",
@@ -197,7 +199,8 @@ def _generate_directives(target: str, group: Item, group_uids: List[str],
                 content.add("\\clearpage")
             directive = f"{name}()"
             content.add_index_entries([directive] + item["index-entries"])
-            with content.section(directive, "Interface"):
+            with content.section(directive,
+                                 label=make_label(f"Interface {directive}")):
                 _generate_directive(content, mapper, code_mapper, item,
                                     enabled)
     content.add_licence_and_copyrights()

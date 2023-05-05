@@ -45,7 +45,7 @@ def get_reference(label: str, name: Optional[str] = None) -> str:
     return f":ref:`{label}`"
 
 
-def get_label(name: str) -> str:
+def make_label(name: str) -> str:
     """ Returns the label for the specified name. """
     return to_camel_case(name.strip())
 
@@ -77,7 +77,36 @@ class SphinxContent(Content):
         super().__init__("CC-BY-SA-4.0", True)
         self._tab = "    "
         self._section_level = section_level
-        self.section_label_prefix = "Section"
+        self._label_stack = [""]
+
+    @property
+    def label(self) -> str:
+        """ This is the top of the label stack. """
+        return self._label_stack[-1]
+
+    def get_label(self, label_tail: str = "") -> str:
+        """
+        Returns the concatenation of the top of the label stack and the label
+        tail.
+        """
+        return f"{self.label}{label_tail}"
+
+    def push_label(self, label: str) -> None:
+        """ Pushes the label to the label stack. """
+        self._label_stack.append(label)
+
+    def push_label_tail(self, label_tail: str) -> str:
+        """
+        Makes a label from the concatenation of the top of the label stack and
+        the label tail.  Pushes this label to the label stack and returns it.
+        """
+        label = self.get_label(label_tail)
+        self.push_label(label)
+        return label
+
+    def pop_label(self) -> None:
+        """ Pops the top from the label stack. """
+        self._label_stack.pop()
 
     def add_label(self, label: str) -> None:
         """ Adds a label. """
@@ -87,20 +116,6 @@ class SphinxContent(Content):
         """ Adds a header. """
         name = name.strip()
         self.add([name, _HEADER_LEVELS[level] * len(name)])
-
-    def add_header_with_label(self,
-                              name: str,
-                              level: int = 2,
-                              label_prefix: Optional[str] = None,
-                              label: Optional[str] = None) -> str:
-        """ Adds a header with label. """
-        if label is None:
-            if label_prefix is None:
-                label_prefix = self.section_label_prefix
-            label = label_prefix + get_label(name)
-        self.add_label(label)
-        self.add_header(name, level)
-        return label
 
     def add_rubric(self, name: str) -> None:
         """ Adds a rubric. """
@@ -175,25 +190,32 @@ class SphinxContent(Content):
 
     def open_section(self,
                      name: str,
-                     label_prefix: Optional[str] = None,
+                     label_tail: Optional[str] = None,
                      label: Optional[str] = None) -> str:
         """ Opens a section. """
-        label = self.add_header_with_label(name, self._section_level,
-                                           label_prefix, label)
+        if label is None:
+            if label_tail is None:
+                label_tail = make_label(name)
+            label = self.push_label_tail(label_tail)
+        else:
+            self.push_label(label)
+        self.add_label(label)
+        self.add_header(name, self._section_level)
         self._section_level += 1
         return label
 
     def close_section(self) -> None:
         """ Closes a section. """
         self._section_level -= 1
+        self.pop_label()
 
     @contextmanager
     def section(self,
                 name: str,
-                label_prefix: Optional[str] = None,
+                label_tail: Optional[str] = None,
                 label: Optional[str] = None) -> Iterator[str]:
         """ Opens a section context. """
-        yield self.open_section(name, label_prefix, label)
+        yield self.open_section(name, label_tail, label)
         self.close_section()
 
     def open_latex_tiny(self, size: str = "tiny") -> None:
@@ -427,7 +449,7 @@ class SphinxInterfaceMapper(SphinxMapper):
         name = ctx.value[ctx.key]
         for group in ctx.item.parents("interface-ingroup"):
             if group.uid in self._group_uids:
-                return get_reference(get_label(f"Interface {name}"))
+                return get_reference(make_label(f"Interface {name}"))
         return f":c:func:`{name}`"
 
     def _get_group(self, ctx: ItemGetValueContext) -> Any:
