@@ -189,6 +189,13 @@ _VALIDATION_LEAF = [
 _VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
 
 
+def _is_enabled(item: Item) -> bool:
+    result = item.enabled
+    for parent in item.parents("interface-placement"):
+        result = result and _is_enabled(parent)
+    return result
+
+
 def _validate_tree(item: Item) -> bool:
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
@@ -209,7 +216,7 @@ def _validate_containers(item: Item) -> None:
             item.cache.items_by_type["interface/domain"],
             item.cache.items_by_type["interface/header-file"]):
         for item_3 in item_2.children("interface-placement"):
-            if not item_3["_validated"]:
+            if _is_enabled(item_3) and not item_3["_validated"]:
                 item_2["_validated"] = False
                 break
 
