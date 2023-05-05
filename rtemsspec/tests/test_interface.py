@@ -28,7 +28,7 @@ import os
 import pytest
 
 from rtemsspec.interface import generate
-from rtemsspec.items import EmptyItemCache, ItemCache
+from rtemsspec.items import EmptyItemCache, ItemCache, item_is_enabled
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
@@ -46,7 +46,8 @@ def test_interface(tmpdir):
 
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-interface", with_spec_types=True)
-    generate(interface_config, ItemCache(item_cache_config))
+    generate(interface_config,
+             ItemCache(item_cache_config, is_item_enabled=item_is_enabled))
 
     with open(os.path.join(base_directory, "include", "h.h"), "r") as src:
         content = """/* SPDX-License-Identifier: BSD-2-Clause */
@@ -108,16 +109,23 @@ def test_interface(tmpdir):
 #ifndef _H_H
 #define _H_H
 
+#include <h2.h>
 #include <h3.h>
 #include <math.h>
 #include <stdint.h>
 
-#if !defined(ASM) && defined(RTEMS_SMP)
-  #include <h2.h>
+#if 0
+  #include <h5.h>
+  #include <h6.h>
+  #include <h7.h>
 #endif
 
-#if defined(ASM) && defined(RTEMS_SMP)
+#if defined(ASM)
   #include <h4.h>
+#endif
+
+#if defined(ASM) && defined(RTEMS_MULTIPROCESSING)
+  #include <h8.h>
 #endif
 
 #ifdef __cplusplus

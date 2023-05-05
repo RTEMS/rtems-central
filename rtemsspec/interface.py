@@ -39,7 +39,7 @@ from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     get_value_forward_declaration, get_value_hash, get_value_header_file, \
     get_value_params, get_value_plural, get_value_unspecified_type, \
     to_camel_case
-from rtemsspec.items import Item, ItemCache, ItemGetValueMap, ItemMapper
+from rtemsspec.items import Item, ItemCache, ItemGetValueMap, ItemMapper, Link
 
 ItemMap = Dict[str, Item]
 Lines = Union[str, List[str]]
@@ -723,6 +723,28 @@ def _bubble_sort(nodes: List[Node]) -> List[Node]:
     return nodes
 
 
+def _merge_enabled_by(link: Link) -> Any:
+    enabled_by = link["enabled-by"]
+    enabled_by_2 = link.item["enabled-by"]
+    if enabled_by == enabled_by_2:
+        return enabled_by
+    if isinstance(enabled_by, bool):
+        if enabled_by:
+            return enabled_by_2
+        return False
+    if isinstance(enabled_by_2, bool):
+        if enabled_by_2:
+            return enabled_by
+        return False
+    return {"and": [enabled_by, enabled_by_2]}
+
+
+def _combine_enabled_by(item: Item, enabled_by: Any) -> Any:
+    if enabled_by == item["enabled-by"]:
+        return True
+    return enabled_by
+
+
 class _HeaderFile:
     """ A header file. """
 
@@ -817,13 +839,20 @@ class _HeaderFile:
             exp_mapper = _HeaderExpressionMapper(self._item,
                                                  self.enabled_by_defined)
             includes = [
-                CInclude(item["path"],
-                         enabled_by_to_exp(item["enabled-by"], exp_mapper))
-                for item in self._includes if item != self._item
+                CInclude(
+                    item["path"],
+                    enabled_by_to_exp(
+                        _combine_enabled_by(self._item, item["enabled-by"]),
+                        exp_mapper)) for item in self._includes
+                if item != self._item
             ]
             includes.extend([
-                CInclude(link.item["path"],
-                         enabled_by_to_exp(link["enabled-by"], exp_mapper))
+                CInclude(
+                    link.item["path"],
+                    enabled_by_to_exp(
+                        _combine_enabled_by(self._item,
+                                            _merge_enabled_by(link)),
+                        exp_mapper))
                 for link in self._item.links_to_parents("interface-include")
             ])
             self._content.add_includes(includes)

@@ -1,13 +1,13 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: This header file defines X.
+brief: Multiprocessing.
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: RTEMS_MULTIPROCESSING
 index-entries: []
 interface-type: header-file
 links:
 - role: interface-placement
   uid: domain-abc
-path: h2.h
+path: h8.h
 prefix: include
 type: interface
