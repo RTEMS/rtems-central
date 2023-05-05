@@ -47,7 +47,8 @@ def _get_code_param(ctx: ItemGetValueContext) -> Any:
     return sanitize_name(ctx.value[ctx.key])
 
 
-class _CodeMapper(ItemMapper):
+class CodeMapper(ItemMapper):
+    """ Item mapper for code blocks. """
 
     def __init__(self, item: Item):
         super().__init__(item)
@@ -128,7 +129,7 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
 
 
 def _document_directive(content: SphinxContent, mapper: ItemMapper,
-                        code_mapper: _CodeMapper, item: Item,
+                        code_mapper: CodeMapper, item: Item,
                         enabled: List[str]) -> None:
     content.wrap(mapper.substitute(item["brief"]))
     content.add_rubric("CALLING SEQUENCE:")
@@ -182,7 +183,7 @@ def document_directive(item: Item, enabled: List[str],
     enabled set.
     """
     content = SphinxContent()
-    _document_directive(content, mapper, _CodeMapper(item), item, enabled)
+    _document_directive(content, mapper, CodeMapper(item), item, enabled)
     return content
 
 
@@ -203,7 +204,7 @@ def _generate_directives(target: str, group: Item, group_uids: List[str],
         for item in items:
             content.register_license_and_copyrights_of_item(item)
             name = item["name"]
-            code_mapper = _CodeMapper(item)
+            code_mapper = CodeMapper(item)
             mapper = SphinxInterfaceMapper(item, group_uids)
             content.add(f".. Generated from spec:{item.uid}")
             with content.directive("raw", "latex"):
