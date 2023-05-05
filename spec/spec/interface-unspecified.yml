@@ -31,10 +31,6 @@ links:
   uid: interface
 - role: spec-refinement
   spec-key: interface-type
-  spec-value: unspecified-macro-or-function
-  uid: interface
-- role: spec-refinement
-  spec-key: interface-type
   spec-value: unspecified-object
   uid: interface
 - role: spec-refinement

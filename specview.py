@@ -173,7 +173,6 @@ _VALIDATION_LEAF = [
     "interface/unspecified-function",
     "interface/unspecified-group",
     "interface/unspecified-macro",
-    "interface/unspecified-macro-or-function",
     "interface/unspecified-object",
     "interface/unspecified-struct",
     "interface/unspecified-typedef",
