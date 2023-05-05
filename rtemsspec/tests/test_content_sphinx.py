@@ -286,6 +286,42 @@ def test_simple_table():
 """
 
 
+def test_grid_table():
+    content = SphinxContent()
+    content.add_grid_table([], [])
+    assert str(content) == ""
+    content.add_grid_table([["a", "b"], ["cc", "ddd"]], [50, 50])
+    content.add_grid_table(
+        [["1", "2", "3"], ["aa", "bbb", "cccc"], ["ddd", "", "e"],
+         ["ff", "g", "h"], ["", "i", "j"]], [30, 30, 40])
+    assert str(content) == """.. table::
+    :class: longtable
+    :widths: 50,50
+
+    +----+-----+
+    | a  | b   |
+    +====+=====+
+    | cc | ddd |
+    +----+-----+
+
+.. table::
+    :class: longtable
+    :widths: 30,30,40
+
+    +-----+-----+------+
+    | 1   | 2   | 3    |
+    +=====+=====+======+
+    | aa  | bbb | cccc |
+    +-----+     +------+
+    | ddd |     | e    |
+    +-----+-----+------+
+    | ff  | g   | h    |
+    +     +-----+------+
+    |     | i   | j    |
+    +-----+-----+------+
+"""
+
+
 def test_substitute(tmpdir):
     config = create_item_cache_config_and_copy_spec(tmpdir,
                                                     "spec-sphinx",

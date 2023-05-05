@@ -59,6 +59,16 @@ def _simple_row(row: Iterable[str], maxi: Iterable[int]) -> str:
     return line.rstrip()
 
 
+def _grid_sep(maxi: Iterable[int], sep: str) -> str:
+    return f"+{sep}" + f"{sep}+{sep}".join(f"{sep * width}"
+                                           for width in maxi) + f"{sep}+"
+
+
+def _grid_row(row: Iterable[str], maxi: Iterable[int]) -> str:
+    line = " | ".join(f"{cell:{width}}" for cell, width in zip(row, maxi))
+    return f"| {line} |"
+
+
 class SphinxContent(Content):
     """ This class builds Sphinx content. """
 
@@ -197,6 +207,36 @@ class SphinxContent(Content):
         lines.extend(_simple_row(row, maxi) for row in rows[1:])
         lines.append(sep)
         with self.directive("table", options=[":class: longtable"]):
+            self.add(lines)
+
+    def add_grid_table(self, rows: Sequence[Iterable[str]],
+                       widths: List[int]) -> None:
+        """ Adds a grid table. """
+        if not rows:
+            return
+        maxi = tuple(map(len, rows[0]))
+        for row in rows:
+            row_lengths = tuple(map(len, row))
+            maxi = tuple(map(max, zip(maxi, row_lengths)))
+        begin_end = _grid_sep(maxi, "-")
+        lines = [begin_end, _grid_row(rows[0], maxi), _grid_sep(maxi, "=")]
+        for index, row in enumerate(rows[1:]):
+            if index > 0:
+                sep = ""
+                for cell, width in zip(row, maxi):
+                    if cell:
+                        sep += f"+{'-' * (width + 2)}"
+                    else:
+                        sep += f"+{' ' * (width + 2)}"
+                lines.append(sep + "+")
+            lines.append(_grid_row(row, maxi))
+        lines.append(begin_end)
+        with self.directive(
+                "table",
+                options=[
+                    ":class: longtable",
+                    f":widths: {','.join(str(width) for width in widths)}"
+                ]):
             self.add(lines)
 
 
