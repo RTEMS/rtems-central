@@ -389,7 +389,11 @@ _API_ROLES = [
 
 def _gather_api_names(item: Item, names: Dict[str, List[str]]) -> None:
     if item.type in _API_INTERFACES and is_pre_qualified(item):
-        group = names.setdefault(item.parent(_API_ROLES)["name"], [])
+        try:
+            name = item.parent(_API_ROLES)["name"]
+        except KeyError:
+            name = item.parent(_API_ROLES).spec
+        group = names.setdefault(name, [])
         group.append(item["name"])
     for child in item.children(_API_ROLES):
         _gather_api_names(child, names)
