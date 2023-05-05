@@ -26,6 +26,7 @@
 
 import pytest
 
+from rtemsspec.glossary import augment_glossary_terms
 from rtemsspec.sphinxcontent import get_reference, make_label, \
     SphinxContent, SphinxMapper
 from rtemsspec.items import Item, ItemCache, ItemMapper
@@ -352,6 +353,7 @@ def test_substitute(tmpdir):
                                                     "spec-sphinx",
                                                     with_spec_types=True)
     item_cache = ItemCache(config)
+    augment_glossary_terms(item_cache["/g"], [])
     mapper = SphinxMapper(item_cache["/x"])
     match = r"substitution for spec:/x using prefix '' failed for text: \${x:/y}"
     with pytest.raises(ValueError, match=match):

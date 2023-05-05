@@ -1,5 +1,7 @@
 enabled-by: true
 term: x
 glossary-type: term
-links: []
+links:
+- role: glossary-member
+  uid: glossary
 type: glossary

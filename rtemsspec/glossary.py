@@ -28,7 +28,7 @@ import glob
 import re
 from typing import Any, Dict, List, NamedTuple
 
-from rtemsspec.sphinxcontent import SphinxContent, SphinxInterfaceMapper
+from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -40,28 +40,38 @@ class _Glossary(NamedTuple):
     term_to_item: ItemMap
 
 
+def augment_glossary_terms(item: Item, path: List[str]) -> None:
+    """
+    Augments the glossary term items of the cache with a glossary path prefix.
+    """
+    for child in item.children("requirement-refinement"):
+        augment_glossary_terms(child, path + [child["name"]])
+    for child in item.children("glossary-member"):
+        term = " - ".join(path + [child["term"]])
+        child["_term"] = term
+
+
 def _gather_glossary_terms(item: Item, glossary: _Glossary) -> None:
-    for child in item.children():
+    for child in item.children("requirement-refinement"):
         _gather_glossary_terms(child, glossary)
-    if item["type"] == "glossary" and item["glossary-type"] == "term":
-        glossary.uid_to_item[item.uid] = item
-        term = item["term"]
+    for child in item.children("glossary-member"):
+        glossary.uid_to_item[child.uid] = child
+        term = child["_term"]
         assert term not in glossary.term_to_item
-        glossary.term_to_item[term] = item
+        glossary.term_to_item[term] = child
 
 
 def _generate_glossary_content(terms: ItemMap, header: str, target: str,
-                               group_uids: List[str]) -> None:
+                               mapper: ItemMapper) -> None:
     content = SphinxContent()
     content.add_header(header, level=1)
     content.add(".. glossary::")
     with content.indent():
         content.add(":sorted:")
-        for item in sorted(terms.values(), key=lambda x: x["term"].lower()):
+        for item in sorted(terms.values(), key=lambda x: x["_term"].lower()):
             content.register_license_and_copyrights_of_item(item)
-            text = SphinxInterfaceMapper(item,
-                                         group_uids).substitute(item["text"])
-            content.add_definition_item(item["term"], text)
+            text = mapper.substitute(item["text"], item)
+            content.add_definition_item(item["_term"], text)
     content.add_licence_and_copyrights()
     content.write(target)
 
@@ -109,24 +119,23 @@ def _resolve_glossary_terms(document_terms: ItemMap) -> None:
 
 
 def _generate_project_glossary(glossary: _Glossary, header: str, target: str,
-                               group_uids: List[str]) -> None:
+                               mapper: ItemMapper) -> None:
     if target:
         _generate_glossary_content(glossary.uid_to_item, header, target,
-                                   group_uids)
+                                   mapper)
 
 
-def _generate_document_glossary(config: dict, group_uids: List[str],
-                                glossary: _Glossary) -> None:
+def _generate_document_glossary(config: dict, glossary: _Glossary,
+                                mapper: ItemMapper) -> None:
     document_terms: ItemMap = {}
     for path in config["rest-source-paths"]:
         _find_glossary_terms(path, document_terms, glossary)
     _resolve_glossary_terms(document_terms)
     _generate_glossary_content(document_terms, config["header"],
-                               config["target"], group_uids)
+                               config["target"], mapper)
 
 
-def generate(config: dict, group_uids: List[str],
-             item_cache: ItemCache) -> None:
+def generate(config: dict, item_cache: ItemCache, mapper: ItemMapper) -> None:
     """
     Generates glossaries of terms according to the configuration.
 
@@ -134,18 +143,14 @@ def generate(config: dict, group_uids: List[str],
     :param item_cache: The specification item cache containing the glossary
                        groups and terms.
     """
-    groups: ItemMap = {}
-    for uid, item in item_cache.all.items():
-        if item.type == "glossary/group":
-            groups[uid] = item
-
     project_glossary = _Glossary({}, {})
-    for group in config["project-groups"]:
-        _gather_glossary_terms(groups[group], project_glossary)
+    for uid in config["project-groups"]:
+        group = item_cache[uid]
+        assert group.type == "glossary/group"
+        _gather_glossary_terms(group, project_glossary)
 
     _generate_project_glossary(project_glossary, config["project-header"],
-                               config["project-target"], group_uids)
+                               config["project-target"], mapper)
 
     for document_config in config["documents"]:
-        _generate_document_glossary(document_config, group_uids,
-                                    project_glossary)
+        _generate_document_glossary(document_config, project_glossary, mapper)

@@ -27,6 +27,7 @@
 import os
 import pytest
 
+from rtemsspec.glossary import augment_glossary_terms
 from rtemsspec.interfacedoc import document_directive, generate
 from rtemsspec.items import EmptyItemCache, ItemCache, ItemMapper
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
@@ -51,6 +52,7 @@ def test_interfacedoc(tmpdir):
         tmpdir, "spec-interface", with_spec_types=True)
     config = {"enabled": [], "groups": [doc_config, doc_config_2]}
     item_cache = ItemCache(item_cache_config)
+    augment_glossary_terms(item_cache["/glossary"], [])
     generate(config, item_cache)
 
     with open(introduction_rst, "r") as src:

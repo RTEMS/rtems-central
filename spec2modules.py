@@ -30,6 +30,8 @@ import difflib
 import sys
 
 import rtemsspec
+from rtemsspec.items import EmptyItem
+from rtemsspec.sphinxcontent import SphinxInterfaceMapper
 
 
 def _diff(obj: rtemsspec.content.Content, path: str) -> None:
@@ -70,18 +72,24 @@ def main() -> None:
     config = rtemsspec.util.load_config("config.yml")
     item_cache = rtemsspec.items.ItemCache(config["spec"])
     item_cache.set_enabled([], rtemsspec.items.item_is_enabled)
+    group_uids = [
+        doc["group"] for doc in config["interface-documentation"]["groups"]
+    ]
+    for uid in config["glossary"]["project-groups"]:
+        group = item_cache[uid]
+        assert group.type == "glossary/group"
+        rtemsspec.glossary.augment_glossary_terms(group, [])
     rtemsspec.validation.generate(config["validation"], item_cache,
                                   args.targets)
 
     if not args.targets:
-        group_uids = [
-            doc["group"] for doc in config["interface-documentation"]["groups"]
-        ]
         rtemsspec.interface.generate(config["interface"], item_cache)
         rtemsspec.applconfig.generate(config["appl-config"], group_uids,
                                       item_cache)
         rtemsspec.specdoc.document(config["spec-documentation"], item_cache)
-        rtemsspec.glossary.generate(config["glossary"], group_uids, item_cache)
+        rtemsspec.glossary.generate(
+            config["glossary"], item_cache,
+            SphinxInterfaceMapper(EmptyItem(), group_uids))
         rtemsspec.interfacedoc.generate(config["interface-documentation"],
                                         item_cache)
 

@@ -303,12 +303,16 @@ class SphinxContent(Content):
 
 def get_value_sphinx_glossary_term(ctx: ItemGetValueContext) -> Any:
     """ Gets a gossary term. """
-    return f":term:`{ctx.value[ctx.key]}`"
+    term = ctx.value[ctx.key]
+    term_2 = ctx.item["_term"]
+    if term == term_2:
+        return f":term:`{term}`"
+    return f":term:`{term} <{term_2}>`"
 
 
 def get_value_sphinx_glossary_plural(ctx: ItemGetValueContext) -> Any:
     """ Gets a gossary term in plural form. """
-    return f":term:`{get_value_plural(ctx)} <{ctx.value['term']}>`"
+    return f":term:`{get_value_plural(ctx)} <{ctx.item['_term']}>`"
 
 
 def _get_appl_config_option(ctx: ItemGetValueContext) -> Any:

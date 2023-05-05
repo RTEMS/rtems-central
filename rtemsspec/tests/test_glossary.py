@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Unit tests for the rtemsspec.glossary module. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -26,8 +26,9 @@
 
 import os
 
-from rtemsspec.glossary import generate
+from rtemsspec.glossary import augment_glossary_terms, generate
 from rtemsspec.items import EmptyItemCache, ItemCache
+from rtemsspec.sphinxcontent import SphinxMapper
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
@@ -56,18 +57,23 @@ def test_glossary(tmpdir):
     document_glossary = os.path.join(tmpdir, "document", "glossary.rst")
     doc["target"] = document_glossary
     glossary_config["documents"] = [doc]
-    generate(glossary_config, [], item_cache)
+    glossary_item = item_cache["/g"]
+    augment_glossary_terms(glossary_item, [])
+    generate(glossary_config, item_cache, SphinxMapper(glossary_item))
 
     with open(project_glossary, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
 
 Project Glossary
 ****************
 
 .. glossary::
     :sorted:
+
+    Not so General - x
+        Term text X.
 
     T
         Term text $:term:`U` :term:`T`
@@ -77,14 +83,14 @@ Project Glossary
         Term text U.
 
     V
-        Term text V.
+        Term text V.  See also :term:`x <Not so General - x>`.
 """
         assert content == src.read()
 
     with open(document_glossary, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020 embedded brains GmbH & Co. KG
 
 Glossary
 ********
