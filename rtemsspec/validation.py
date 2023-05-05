@@ -29,7 +29,6 @@
 import itertools
 import functools
 import os
-import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
@@ -41,8 +40,6 @@ from rtemsspec.items import create_unique_link, Item, ItemCache, \
 from rtemsspec.transitionmap import TransitionMap
 
 _CaseToSuite = Dict[str, List["_TestItem"]]
-
-_STEPS = re.compile(r"^steps/([0-9]+)$")
 
 
 def _get_test_context_instance(ctx: ItemGetValueContext) -> Any:
@@ -90,6 +87,7 @@ class _Mapper(ItemMapper):
                            _get_test_run)
         self.add_get_value("runtime-measurement-test:/test-context-type",
                            _get_test_context_type)
+        self.add_get_value("test-case:/step", self._get_step)
         self.add_get_value("test-case:/test-context-instance",
                            _get_test_context_instance)
         self.add_get_value("test-case:/test-context-type",
@@ -106,20 +104,16 @@ class _Mapper(ItemMapper):
         """ Resets the test step counter. """
         self._step = 0
 
-    def map(self,
-            identifier: str,
-            item: Optional[Item] = None,
-            prefix: Optional[str] = None) -> Tuple[Item, str, Any]:
-        if identifier == "step":
-            step = self._step
-            self._step = step + 1
-            return self._item, "step", str(step)
-        match = _STEPS.search(identifier)
-        if match:
-            inc = int(match.group(1))
-            self._step += inc
-            return self._item, "step", f"Accounts for {inc} test plan steps"
-        return super().map(identifier, item, prefix)
+    def _get_step(self, ctx: ItemGetValueContext) -> Any:
+        if ctx.args is None:
+            inc = 1
+        else:
+            inc = int(ctx.args)
+        step = self._step
+        self._step = step + inc
+        if ctx.args is None:
+            return str(step)
+        return f"Accounts for {inc} test plan steps"
 
 
 def _add_ingroup(content: CContent, items: List["_TestItem"]) -> None:

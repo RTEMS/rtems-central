@@ -12,7 +12,7 @@ test-actions:
   - brief: |
       Test case 3 action 0 check 0 description.
     code: |
-      /* Test case 3 action 0 check 0 code; step ${step} */
+      /* Test case 3 action 0 check 0 code; step ${.:/step} */
     links: []
   links: []
 test-brief: Test case 3 brief description.

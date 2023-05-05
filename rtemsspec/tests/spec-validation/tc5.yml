@@ -17,7 +17,7 @@ test-actions:
   - brief: |
       Test case action 0 check 1 description.
     code: |
-      /* Test case action 0 check 1 code; step ${step} */
+      /* Test case action 0 check 1 code; step ${.:/step} */
     links: []
   links: []
 - action-brief: |
@@ -28,7 +28,7 @@ test-actions:
   - brief: |
       Test case action 1 check 0 description.
     code: |
-      /* Test case action 1 check 0 code; step ${step} */
+      /* Test case action 1 check 0 code; step ${.:/step} */
     links: []
   - brief: |
       Test case action 1 check 1 description.
