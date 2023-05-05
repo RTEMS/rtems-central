@@ -1206,3 +1206,17 @@ def get_integer_type(value: int) -> str:
     """
     power = 2**max(math.ceil(math.log2(math.floor(math.log2(value)) + 1)), 3)
     return f"uint{power}_t"
+
+
+def duration(value: float) -> str:
+    """ Converts a duration in seconds into a value with unit string. """
+    assert value >= 0.0
+    if value == 0.0:
+        return "0s"
+    if value < 1e-6:
+        return f"{value * 1e9:.3f}ns"
+    if value < 1e-3:
+        return f"{value * 1e6:.3f}μs"
+    if value < 1.0:
+        return f"{value * 1e3:.3f}ms"
+    return f"{value:.3f}s"

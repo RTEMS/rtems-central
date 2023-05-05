@@ -27,7 +27,7 @@
 import os
 import pytest
 
-from rtemsspec.content import Content, enabled_by_to_exp, \
+from rtemsspec.content import Content, duration, enabled_by_to_exp, \
     ExpressionMapper, PythonExpressionMapper, to_camel_case
 
 
@@ -330,3 +330,11 @@ def test_enabled_by_to_python_exp():
         to_python_exp({"foo": "bar"})
     with pytest.raises(ValueError):
         to_python_exp({"foo": "bar", "bla": "blub"})
+
+
+def test_duration():
+    assert duration(1.0) == "1.000s"
+    assert duration(0.0) == "0s"
+    assert duration(0.001) == "1.000ms"
+    assert duration(0.0009) == "900.000μs"
+    assert duration(0.0000009) == "900.000ns"
