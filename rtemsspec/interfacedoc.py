@@ -127,7 +127,7 @@ def _add_definition(content: CContent, mapper: ItemMapper, item: Item,
         add_definition(content, mapper, item, definition)
 
 
-def _generate_directive(content: SphinxContent, mapper: SphinxInterfaceMapper,
+def _document_directive(content: SphinxContent, mapper: ItemMapper,
                         code_mapper: _CodeMapper, item: Item,
                         enabled: List[str]) -> None:
     content.wrap(mapper.substitute(item["brief"]))
@@ -175,6 +175,17 @@ def _generate_directive(content: SphinxContent, mapper: SphinxInterfaceMapper,
                          "The following constraints apply to this directive:")
 
 
+def document_directive(item: Item, enabled: List[str],
+                       mapper: ItemMapper) -> SphinxContent:
+    """
+    Documents the directive specified by the item using the item mapper and
+    enabled set.
+    """
+    content = SphinxContent()
+    _document_directive(content, mapper, _CodeMapper(item), item, enabled)
+    return content
+
+
 def _generate_directives(target: str, group: Item, group_uids: List[str],
                          items: List[Item], enabled: List[str]) -> None:
     content = SphinxContent()
@@ -201,7 +212,7 @@ def _generate_directives(target: str, group: Item, group_uids: List[str],
             content.add_index_entries([directive] + item["index-entries"])
             with content.section(directive,
                                  label=make_label(f"Interface {directive}")):
-                _generate_directive(content, mapper, code_mapper, item,
+                _document_directive(content, mapper, code_mapper, item,
                                     enabled)
     content.add_licence_and_copyrights()
     content.write(target)

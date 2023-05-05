@@ -27,8 +27,8 @@
 import os
 import pytest
 
-from rtemsspec.interfacedoc import generate
-from rtemsspec.items import EmptyItemCache, ItemCache
+from rtemsspec.interfacedoc import document_directive, generate
+from rtemsspec.items import EmptyItemCache, ItemCache, ItemMapper
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
@@ -50,7 +50,8 @@ def test_interfacedoc(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-interface", with_spec_types=True)
     config = {"enabled": [], "groups": [doc_config, doc_config_2]}
-    generate(config, ItemCache(item_cache_config))
+    item_cache = ItemCache(item_cache_config)
+    generate(config, item_cache)
 
     with open(introduction_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
@@ -480,3 +481,12 @@ The following constraints apply to this directive:
 * Constraint A for :ref:`InterfaceFunction`.
 """
         assert content == src.read()
+        directive_item = item_cache["/func3"]
+        directive_content = document_directive(directive_item, [],
+                                               ItemMapper(directive_item))
+        assert str(directive_content) == """.. rubric:: CALLING SEQUENCE:
+
+.. code-block:: c
+
+    void VoidFunction( void );
+"""
