@@ -114,6 +114,10 @@ def test_interface(tmpdir):
 #include <math.h>
 #include <stdint.h>
 
+#if !defined(ASM) || defined(RTEMS_SMP)
+  #include <h9.h>
+#endif
+
 #if 0
   #include <h5.h>
   #include <h6.h>

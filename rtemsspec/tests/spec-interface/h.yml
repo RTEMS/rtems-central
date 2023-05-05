@@ -2,11 +2,27 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 brief: This header file defines X.
 copyrights:
 - Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
-enabled-by: RTEMS_SMP
+enabled-by:
+- and:
+  - RTEMS_SMP
+  - blub
+- foobar
+- not:
+    and:
+    - foo
+    - bar
 index-entries: []
 interface-type: header-file
 links:
-- enabled-by: RTEMS_SMP
+- enabled-by:
+  - and:
+    - RTEMS_SMP
+    - blub
+  - foobar
+  - not:
+      and:
+      - foo
+      - bar
   role: interface-include
   uid: h2
 - enabled-by: []
@@ -35,6 +51,12 @@ links:
 - enabled-by: ASM
   role: interface-include
   uid: h8
+- enabled-by:
+  - not: ASM
+  - RTEMS_SMP
+  - blub
+  role: interface-include
+  uid: h9
 - role: interface-placement
   uid: domain-abc
 - role: interface-ingroup

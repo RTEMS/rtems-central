@@ -128,7 +128,7 @@ class _InterfaceMapper(ItemMapper):
         Maps an item-level enabled-by attribute value to the corresponding
         defined expression.
         """
-        return self._node.header_file.enabled_by_defined[enabled_by]
+        return self._node.header_file.options[enabled_by]
 
 
 class _InterfaceExpressionMapper(ExpressionMapper):
@@ -140,6 +140,47 @@ class _InterfaceExpressionMapper(ExpressionMapper):
     def map_symbol(self, symbol: str) -> str:
         with self._mapper.code():
             return self._mapper.substitute(symbol)
+
+
+def _filter_op_binary(op_name: str, options: Dict[str, str],
+                      enabled_by: Any) -> Any:
+    new_enabled_by = []
+    for next_enabled_by in enabled_by:
+        exp = _discard_non_options(options, next_enabled_by)
+        if exp is not None:
+            new_enabled_by.append(exp)
+    if len(new_enabled_by) == 0:
+        return None
+    if len(new_enabled_by) == 1:
+        return new_enabled_by[0]
+    return {op_name: new_enabled_by}
+
+
+def _filter_op_not(options: Dict[str, str], enabled_by: Any) -> Any:
+    exp = _discard_non_options(options, enabled_by)
+    if exp is None:
+        return None
+    return {"not": exp}
+
+
+_FILTER_OP = {
+    "and": functools.partial(_filter_op_binary, "and"),
+    "not": _filter_op_not,
+    "or": functools.partial(_filter_op_binary, "or")
+}
+
+
+def _discard_non_options(options: Dict[str, str], enabled_by: Any) -> Any:
+    if isinstance(enabled_by, bool):
+        return enabled_by
+    if isinstance(enabled_by, list):
+        return _filter_op_binary("or", options, enabled_by)
+    if isinstance(enabled_by, dict):
+        key, value = next(iter(enabled_by.items()))
+        return _FILTER_OP[key](options, value)  # type: ignore
+    if enabled_by in options:
+        return enabled_by
+    return None
 
 
 class _ItemLevelExpressionMapper(ExpressionMapper):
@@ -156,13 +197,13 @@ class _ItemLevelExpressionMapper(ExpressionMapper):
 
 class _HeaderExpressionMapper(ExpressionMapper):
 
-    def __init__(self, item: Item, enabled_by_defined: Dict[str, str]):
+    def __init__(self, item: Item, options: Dict[str, str]):
         super().__init__()
         self._mapper = ItemMapper(item)
-        self._enabled_by_defined = enabled_by_defined
+        self._options = options
 
     def map_symbol(self, symbol: str) -> str:
-        return self._mapper.substitute(self._enabled_by_defined[symbol])
+        return self._mapper.substitute(self._options[symbol])
 
 
 def _add_definition(node: "Node", item: Item, prefix: str,
@@ -283,8 +324,10 @@ class Node:
 
     def generate(self) -> None:
         """ Generates a node to generate the node content. """
-        enabled_by = self.item["enabled-by"]
-        if not isinstance(enabled_by, bool) or not enabled_by:
+        enabled_by = _discard_non_options(self.header_file.options,
+                                          self.item["enabled-by"])
+        if enabled_by is not None and (not isinstance(enabled_by, bool)
+                                       or not enabled_by):
             mapper = _ItemLevelExpressionMapper(self.mapper)
             self.content.add(f"#if {enabled_by_to_exp(enabled_by, mapper)}")
             with self.content.indent():
@@ -723,9 +766,9 @@ def _bubble_sort(nodes: List[Node]) -> List[Node]:
     return nodes
 
 
-def _merge_enabled_by(link: Link) -> Any:
-    enabled_by = link["enabled-by"]
-    enabled_by_2 = link.item["enabled-by"]
+def _merge_enabled_by(options: Dict[str, str], link: Link) -> Any:
+    enabled_by = _discard_non_options(options, link["enabled-by"])
+    enabled_by_2 = _discard_non_options(options, link.item["enabled-by"])
     if enabled_by == enabled_by_2:
         return enabled_by
     if isinstance(enabled_by, bool):
@@ -739,16 +782,10 @@ def _merge_enabled_by(link: Link) -> Any:
     return {"and": [enabled_by, enabled_by_2]}
 
 
-def _combine_enabled_by(item: Item, enabled_by: Any) -> Any:
-    if enabled_by == item["enabled-by"]:
-        return True
-    return enabled_by
-
-
 class _HeaderFile:
     """ A header file. """
 
-    def __init__(self, item: Item, enabled_by_defined: Dict[str, str],
+    def __init__(self, item: Item, options: Dict[str, str],
                  enabled: List[str]):
         self._item = item
         self._content = CContent()
@@ -756,7 +793,7 @@ class _HeaderFile:
         self._ingroups = _get_ingroups(item)
         self._includes: List[Item] = []
         self._nodes: Dict[str, Node] = {}
-        self.enabled_by_defined = enabled_by_defined
+        self.options = options
         self.enabled = enabled
 
     def add_includes(self, item: Item) -> None:
@@ -826,6 +863,13 @@ class _HeaderFile:
 
         return _bubble_sort(nodes_in_dependency_order)
 
+    def _combine_enabled_by(self, enabled_by: Any) -> Any:
+        enabled_by_2 = _discard_non_options(self.options,
+                                            self._item["enabled-by"])
+        if enabled_by == enabled_by_2 or enabled_by is None:
+            return True
+        return enabled_by
+
     def finalize(self) -> None:
         """ Finalizes the header file. """
         self._content.prepend_spdx_license_identifier()
@@ -836,13 +880,14 @@ class _HeaderFile:
         self._content.add_automatically_generated_warning()
         self._content.add(f"/* Generated from spec:{self._item.uid} */")
         with self._content.header_guard(self._item["path"]):
-            exp_mapper = _HeaderExpressionMapper(self._item,
-                                                 self.enabled_by_defined)
+            exp_mapper = _HeaderExpressionMapper(self._item, self.options)
             includes = [
                 CInclude(
                     item["path"],
                     enabled_by_to_exp(
-                        _combine_enabled_by(self._item, item["enabled-by"]),
+                        self._combine_enabled_by(
+                            _discard_non_options(self.options,
+                                                 item["enabled-by"])),
                         exp_mapper)) for item in self._includes
                 if item != self._item
             ]
@@ -850,8 +895,8 @@ class _HeaderFile:
                 CInclude(
                     link.item["path"],
                     enabled_by_to_exp(
-                        _combine_enabled_by(self._item,
-                                            _merge_enabled_by(link)),
+                        self._combine_enabled_by(
+                            _merge_enabled_by(self.options, link)),
                         exp_mapper))
                 for link in self._item.links_to_parents("interface-include")
             ])
@@ -868,28 +913,27 @@ class _HeaderFile:
 
 
 def _generate_header_file(item: Item, domains: Dict[str, str],
-                          enabled_by_defined: Dict[str, str],
-                          enabled: List[str]) -> None:
+                          options: Dict[str, str], enabled: List[str]) -> None:
     domain = item.parent("interface-placement")
     assert domain["interface-type"] == "domain"
     domain_path = domains.get(domain.uid, None)
     if domain_path is None:
         return
-    header_file = _HeaderFile(item, enabled_by_defined, enabled)
+    header_file = _HeaderFile(item, options, enabled)
     header_file.generate_nodes()
     header_file.finalize()
     header_file.write(domain_path)
 
 
-def _gather_enabled_by_defined(item_level_interfaces: List[str],
-                               item_cache: ItemCache) -> Dict[str, str]:
-    enabled_by_defined: Dict[str, str] = {}
+def _gather_options(item_level_interfaces: List[str],
+                    item_cache: ItemCache) -> Dict[str, str]:
+    options: Dict[str, str] = {}
     for uid in item_level_interfaces:
         for child in item_cache[uid].children("interface-ingroup"):
             if child.type == "interface/unspecified-define":
                 define = f"defined(${{{child.uid}:/name}})"
-                enabled_by_defined[child["name"]] = define
-    return enabled_by_defined
+                options[child["name"]] = define
+    return options
 
 
 def generate(config: dict, item_cache: ItemCache) -> None:
@@ -901,7 +945,6 @@ def generate(config: dict, item_cache: ItemCache) -> None:
     """
     domains = config["domains"]
     enabled = config["enabled"]
-    enabled_by_defined = _gather_enabled_by_defined(
-        config["item-level-interfaces"], item_cache)
+    options = _gather_options(config["item-level-interfaces"], item_cache)
     for item in item_cache.items_by_type.get("interface/header-file", []):
-        _generate_header_file(item, domains, enabled_by_defined, enabled)
+        _generate_header_file(item, domains, options, enabled)
