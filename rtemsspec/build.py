@@ -94,12 +94,12 @@ def gather_files(config: dict,
         if item["type"] == "build" and item["build-type"] == "bsp":
             arch_bsps = bsps.setdefault(item["arch"].strip(), {})
             arch_bsps[item["bsp"].strip()] = item
-    source_files: List[str] = list(config["sources"])
+    source_files: List[str] = list(config["extra-files"])
     arch = config["arch"]
     bsp = config["bsp"]
     enabled = [arch, arch + "/" + bsp] + config["enabled"]
     _gather_source_files(bsps[arch][bsp], enabled, source_files)
-    for uid in config["uids"]:
+    for uid in config["build-uids"]:
         _gather_source_files(item_cache[uid], enabled, source_files)
     if test_header:
         _gather_test_header(item_cache, source_files)

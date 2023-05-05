@@ -20,7 +20,7 @@ build:
   - RTEMS_SMP
   - sparc/gr712rc
   source-directory: modules/rtems
-  sources:
+  extra-files:
   - bsps/shared/doxygen.h
   - bsps/shared/cache/cacheimpl.h
   - bsps/shared/dev/clock/clockimpl.h
@@ -51,7 +51,7 @@ build:
   - testsuites/validation/tx-thread-queue.h
   - waf
   - wscript
-  uids:
+  build-uids:
   - /build/cpukit/librtemscpu
   - /build/cpukit/librtemstest
   - /build/testsuites/membench/grp
