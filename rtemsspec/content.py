@@ -576,12 +576,13 @@ def _get_align_pos(param: str) -> Tuple[int, int]:
     return match.start(1), match.start(1)
 
 
-def _align_params(params: List[str]) -> List[str]:
-    positions = list(map(_get_align_pos, params))
+def align_declarations(decls: List[str]) -> List[str]:
+    """ Aligns a list of C/C++ declarations. """
+    positions = list(map(_get_align_pos, decls))
     max_pos = max(positions)[1]
     return [
         param[:pos[0]] + (max_pos - pos[1]) * " " + param[pos[0]:]
-        for param, pos in zip(params, positions)
+        for param, pos in zip(decls, positions)
     ]
 
 
@@ -879,7 +880,7 @@ class CContent(Content):
         line = f"{ret}{space}{name}{param_line}{semicolon}"
         if len(self._indent) + len(line) > 79:
             if align:
-                params = _align_params(params)
+                params = align_declarations(params)
             self._function(ret, name, params, param_line, space, semicolon)
         else:
             self.add(line)
