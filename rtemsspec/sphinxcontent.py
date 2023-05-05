@@ -240,11 +240,13 @@ class SphinxContent(Content):
             self.add(lines)
 
 
-def _get_ref_term(ctx: ItemGetValueContext) -> Any:
+def get_value_sphinx_glossary_term(ctx: ItemGetValueContext) -> Any:
+    """ Gets a gossary term. """
     return f":term:`{ctx.value[ctx.key]}`"
 
 
-def _get_ref_term_plural(ctx: ItemGetValueContext) -> Any:
+def get_value_sphinx_glossary_plural(ctx: ItemGetValueContext) -> Any:
+    """ Gets a gossary term in plural form. """
     return f":term:`{get_value_plural(ctx)} <{ctx.value['term']}>`"
 
 
@@ -310,8 +312,10 @@ class SphinxMapper(ItemMapper):
 
     def __init__(self, item: Item, recursive: bool = False):
         super().__init__(item, recursive)
-        self.add_get_value("glossary/term:/term", _get_ref_term)
-        self.add_get_value("glossary/term:/plural", _get_ref_term_plural)
+        self.add_get_value("glossary/term:/term",
+                           get_value_sphinx_glossary_term)
+        self.add_get_value("glossary/term:/plural",
+                           get_value_sphinx_glossary_plural)
         self.add_get_value("interface/appl-config-option/feature-enable:/name",
                            _get_value_sphinx_data)
         self.add_get_value("interface/appl-config-option/feature:/name",
@@ -355,7 +359,8 @@ def sanitize_name(name: str) -> str:
     return name.lstrip("_")
 
 
-def _get_param(ctx: ItemGetValueContext) -> Any:
+def get_value_sphinx_param(ctx: ItemGetValueContext) -> Any:
+    """ Gets a function or macro parameter. """
     return f"``{sanitize_name(ctx.value[ctx.key])}``"
 
 
@@ -377,10 +382,12 @@ class SphinxInterfaceMapper(SphinxMapper):
         self.add_get_value("interface/appl-config-option/integer:/name",
                            _get_appl_config_option)
         self.add_get_value("interface/function:/name", self._get_function)
-        self.add_get_value("interface/function:/params/name", _get_param)
+        self.add_get_value("interface/function:/params/name",
+                           get_value_sphinx_param)
         self.add_get_value("interface/group:/name", self._get_group)
         self.add_get_value("interface/macro:/name", self._get_function)
-        self.add_get_value("interface/macro:/params/name", _get_param)
+        self.add_get_value("interface/macro:/params/name",
+                           get_value_sphinx_param)
 
     def _get_function(self, ctx: ItemGetValueContext) -> Any:
         name = ctx.value[ctx.key]
