@@ -10,6 +10,10 @@ links:
     not: false
   role: build-dependency-conditional
   uid: o
+- enabled-by:
+    not: A
+  role: build-dependency-conditional
+  uid: x
 - role: build-dependency
   uid: op
 - role: build-dependency

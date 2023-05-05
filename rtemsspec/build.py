@@ -26,7 +26,7 @@
 
 from typing import Dict, List
 
-from rtemsspec.items import is_enabled, Item, ItemCache
+from rtemsspec.items import is_enabled, Item, ItemCache, Link
 
 BSPMap = Dict[str, Dict[str, Item]]
 ItemMap = Dict[str, Item]
@@ -69,11 +69,16 @@ _BUILD_ROLES = ["build-dependency", "build-dependency-conditional"]
 
 def _gather_source_files(item: Item, enabled: List[str],
                          source_files: List[str]) -> None:
-    for link in item.links_to_parents(_BUILD_ROLES):
-        if (link.role == "build-dependency" or is_enabled(
-                enabled,
-                link["enabled-by"])) and link.item.is_enabled(enabled):
-            _gather_source_files(link.item, enabled, source_files)
+
+    def _is_enabled(link: Link) -> bool:
+        if not link.item.is_enabled(enabled):
+            return False
+        if link.role == "build-dependency":
+            return True
+        return is_enabled(enabled, link["enabled-by"])
+
+    for parent in item.parents(_BUILD_ROLES, is_link_enabled=_is_enabled):
+        _gather_source_files(parent, enabled, source_files)
     _EXTEND_SOURCE_FILES[item["build-type"]](item, source_files)
 
 
