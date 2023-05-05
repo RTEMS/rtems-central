@@ -39,7 +39,7 @@ test-actions:
 test-brief: Test case brief description.
 test-context: []
 test-context-support: null
-test-description: Test case description.
+test-description: Test case description. Is contained in ${ts:/spec}.
 test-header: null
 test-includes:
 - a.h

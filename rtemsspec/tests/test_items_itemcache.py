@@ -148,7 +148,6 @@ def test_item_mapper(tmpdir):
     with mapper.prefix("x"):
         with mapper.prefix("y"):
             assert mapper[".:."] == "z"
-    assert mapper["."] == "/p"
     match = r"cannot get value for '/v' of spec:/proxy specified by 'proxy:/v"
     with pytest.raises(ValueError, match=match):
         mapper["proxy:/v"]
@@ -157,7 +156,6 @@ def test_item_mapper(tmpdir):
     assert not item_cache["/r"].resolved_proxy
     assert mapper["proxy2:/v"] == "s"
     assert item_cache["/r"].child("xyz").uid == "/s"
-    assert mapper["d/c"] == "/d/c"
     assert mapper["d/c:v"] == "c"
     assert mapper["d/c:a/b"] == "e"
     mapper.add_get_value("other:/a/x-to-b", get_x_to_b_value)

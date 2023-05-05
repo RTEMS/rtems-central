@@ -42,6 +42,10 @@ from rtemsspec.transitionmap import TransitionMap
 _CaseToSuite = Dict[str, List["_TestItem"]]
 
 
+def _get_spec(ctx: ItemGetValueContext) -> Any:
+    return ctx.item.spec
+
+
 def _get_test_context_instance(ctx: ItemGetValueContext) -> Any:
     return f"{ctx.item.ident}_Instance"
 
@@ -94,6 +98,8 @@ class _Mapper(ItemMapper):
                            _get_test_context_type)
         self.add_get_value("test-case:/test-run", _get_test_run)
         self.add_get_value("test-suite:/test-suite-name", _get_test_suite_name)
+        for type_name in item.cache.items_by_type.keys():
+            self.add_get_value(f"{type_name}:/spec", _get_spec)
 
     @property
     def steps(self):

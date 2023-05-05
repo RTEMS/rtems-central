@@ -759,7 +759,7 @@ T_TEST_CASE_FIXTURE( Directive, &Directive_Fixture )
  *
  * @brief Test case brief description.
  *
- * Test case description.
+ * Test case description. Is contained in spec:/ts.
  *
  * This test case performs the following actions:
  *

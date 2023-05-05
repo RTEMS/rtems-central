@@ -475,7 +475,7 @@ def create_unique_link(child: Item, parent: Item, data: Any) -> None:
 
 class ItemTemplate(string.Template):
     """ String template for item mapper identifiers. """
-    idpattern = "[a-zA-Z0-9._/-]+(:[a-zA-Z0-9._/-]+)?(:[^${}]*)?"
+    idpattern = "[a-zA-Z0-9._/-]+:[\\[\\]a-zA-Z0-9._/-]+(:[^${}]*)?"
 
 
 class _ItemMapperContext(dict):
@@ -601,20 +601,15 @@ class ItemMapper:
         path, and attribute value.
         """
         colon = identifier.find(":")
-        if colon >= 0:
-            uid = identifier[:colon]
-            more = identifier[colon + 1:]
-            colon = more.find(":")
-            if colon < 0:
-                key_path = more
-                args = None
-            else:
-                key_path = more[:colon]
-                args = more[colon + 1:]
-        else:
-            uid = identifier
-            key_path = "/_uid"
+        uid = identifier[:colon]
+        more = identifier[colon + 1:]
+        colon = more.find(":")
+        if colon < 0:
+            key_path = more
             args = None
+        else:
+            key_path = more[:colon]
+            args = more[colon + 1:]
         if item is None:
             item = self._item
         if uid == ".":
