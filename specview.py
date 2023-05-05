@@ -403,11 +403,13 @@ def _list_api(item_cache: ItemCache) -> None:
 
 def main() -> None:
     """ Views the specification. """
+
+    # pylint: disable=too-many-branches
     parser = argparse.ArgumentParser()
     parser.add_argument('--filter',
                         choices=[
                             "none", "api", "orphan", "no-validation",
-                            "action-table", "action-list", "design"
+                            "action-table", "action-list", "design", "types"
                         ],
                         type=str.lower,
                         default="none",
@@ -457,6 +459,9 @@ def main() -> None:
         _list_api(item_cache)
     elif args.filter == "design":
         _design(item_cache)
+    elif args.filter == "types":
+        for name in sorted(item_cache.items_by_type.keys()):
+            print(name)
 
 
 if __name__ == "__main__":
