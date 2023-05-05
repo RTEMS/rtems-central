@@ -239,35 +239,6 @@ class Item:
         """
         return self._data.get(key, default)
 
-    def get_by_normalized_key_path(self, normalized_key_path: str,
-                                   args: Optional[str],
-                                   get_value_map: ItemGetValueMap) -> Any:
-        """
-        Gets the attribute value corresponding to the normalized key path.
-        """
-        path = "/"
-        value = self._data
-        for key in normalized_key_path.strip("/").split("/"):
-            parts = key.split("[")
-            try:
-                index = int(parts[1].split("]")[0])
-            except IndexError:
-                index = -1
-            ctx = ItemGetValueContext(self, path, value, parts[0], index, args)
-            get_value, get_value_map = get_value_map.get(
-                parts[0], (_get_value, {}))
-            value = get_value(ctx)
-            path = os.path.join(path, key)
-        return value
-
-    def get_by_key_path(self,
-                        key_path: str,
-                        prefix: str = "",
-                        args: Optional[str] = None) -> Any:
-        """ Gets the attribute value corresponding to the key path. """
-        return self.get_by_normalized_key_path(
-            normalize_key_path(key_path, prefix), args, {})
-
     @property
     def uid(self) -> str:
         """ Returns the UID of the item. """
@@ -556,13 +527,34 @@ class ItemMapper:
         """ Returns the get value map for the item. """
         return self._get_value_map.get(item.type, {})
 
+    def _get_by_normalized_key_path(self, item: Item, normalized_key_path: str,
+                                    args: Optional[str]) -> Any:
+        """
+        Gets the attribute value associated with the normalized key path.
+        """
+        get_value_map = self.get_value_map(item)
+        path = "/"
+        value = item.data
+        for key in normalized_key_path.strip("/").split("/"):
+            parts = key.split("[")
+            try:
+                index = int(parts[1].split("]")[0])
+            except IndexError:
+                index = -1
+            ctx = ItemGetValueContext(item, path, value, parts[0], index, args)
+            get_value, get_value_map = get_value_map.get(
+                parts[0], (_get_value, {}))
+            value = get_value(ctx)
+            path = os.path.join(path, key)
+        return value
+
     def map(self,
             identifier: str,
             item: Optional[Item] = None,
             prefix: Optional[str] = None) -> Tuple[Item, str, Any]:
         """
-        Maps an identifier with item and prefix to the corresponding item and
-        attribute value.
+        Maps the identifier with item and prefix to the associated item, key
+        path, and attribute value.
         """
         colon = identifier.find(":")
         if colon >= 0:
@@ -594,8 +586,7 @@ class ItemMapper:
                 raise ValueError(msg) from err
         key_path = normalize_key_path(key_path, prefix)
         try:
-            value = item.get_by_normalized_key_path(key_path, args,
-                                                    self.get_value_map(item))
+            value = self._get_by_normalized_key_path(item, key_path, args)
         except Exception as err:
             msg = (f"cannot get value for '{key_path}' of {item.spec} "
                    f"specified by '{identifier}'")

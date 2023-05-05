@@ -105,24 +105,6 @@ def test_digest():
     assert i.digest == "_sNRYXk0DTOp1lptrqqd2kb5hIlg-SGeynVVLGnbmKs="
 
 
-def test_get_key_path():
-    data = {}
-    data["a"] = {"b": "c", "d": [1, 2, 3]}
-    data["x"] = "y"
-    item = Item(EmptyItemCache(), "z", data)
-    assert item.get_by_key_path("x") == "y"
-    assert item.get_by_key_path("a/d[2]") == 3
-    assert item.get_by_key_path("a/b/../d[0]") == 1
-    assert item.get_by_key_path("/a/b/../d[0]") == 1
-    assert item.get_by_key_path("../d[0]", "a/b") == 1
-    with pytest.raises(KeyError):
-        assert item.get_by_key_path("y")
-    with pytest.raises(ValueError):
-        assert item.get_by_key_path("[")
-    with pytest.raises(ValueError):
-        assert item.get_by_key_path("x[y]")
-
-
 def test_getitem():
     data = {}
     data["x"] = "y"
