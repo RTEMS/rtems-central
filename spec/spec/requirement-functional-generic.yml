@@ -19,6 +19,10 @@ links:
   uid: requirement-functional
 - role: spec-refinement
   spec-key: functional-type
+  spec-value: interface-define-not-defined
+  uid: requirement-functional
+- role: spec-refinement
+  spec-key: functional-type
   spec-value: operational
   uid: requirement-functional
 - role: spec-refinement
