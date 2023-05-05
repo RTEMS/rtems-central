@@ -11,9 +11,11 @@ spec-info:
   none: null
   dict:
     attributes:
-      access:
+      properties:
         description: |
-          It shall be the list of access attributes.
+          It shall be the list of bit field properties.  Properties are for
+          example if the bit field can be read or written, or an access has
+          side-effects such as clearing a status.
         spec-type: list-str
       brief:
         description: null
@@ -35,7 +37,8 @@ spec-info:
           It shall be the width in bits of the bit field.
         spec-type: int
     description: |
-      This set of attributes specifies register bits.
+      This set of attributes specifies a register bit field.  Single bits are
+      bit fields with a width of one.
     mandatory-attributes: all
 spec-name: Register Bits Definition
 spec-type: interface-register-bits

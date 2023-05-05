@@ -21,7 +21,10 @@ spec-info:
         spec-type: interface-description
       name:
         description: |
-          It shall be the unique name to identify the register definition.
+          It shall be the name to identify the register definition.  The name
+          shall be unique within the scope of the
+          ${interface-register-block-include-role:/spec-name} links of the item
+          and the ${interface-register-list:/spec-name}.
         spec-type: str
       width:
         description: |

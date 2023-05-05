@@ -16,8 +16,9 @@ spec-info:
     attributes:
       name:
         description: |
-          It shall be the unique name to identify the included register block
-          within the item.
+          It shall be a name to identify the included register block within the
+          item.  The name shall be unique within the scope of the item links of
+          this role and the ${interface-register-list:/spec-name}.
         spec-type: str
     description: |
       It defines the register block include role of links.  Links of this role
