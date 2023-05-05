@@ -31,7 +31,7 @@ import os
 from typing import Any, Dict, List, Tuple
 
 from rtemsspec.content import CContent, get_value_compound, \
-    get_value_forward_declaration
+    get_value_forward_declaration, get_value_unspecified_type
 from rtemsspec.sphinxcontent import get_label, get_reference, sanitize_name, \
     SphinxContent, SphinxInterfaceMapper
 from rtemsspec.items import Item, ItemCache, ItemGetValueContext, ItemMapper
@@ -56,6 +56,10 @@ class _CodeMapper(ItemMapper):
         self.add_get_value("interface/struct:/name", get_value_compound)
         self.add_get_value("interface/union:/name", get_value_compound)
         self.add_get_value("interface/macro:/params/name", _get_code_param)
+        self.add_get_value("interface/unspecified-struct:/name",
+                           get_value_unspecified_type)
+        self.add_get_value("interface/unspecified-unione:/name",
+                           get_value_unspecified_type)
 
 
 def _generate_introduction(target: str, group: Item, group_uids: List[str],

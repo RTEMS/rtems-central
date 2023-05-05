@@ -37,7 +37,8 @@ from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     get_value_double_colon, get_value_doxygen_function, \
     get_value_doxygen_group, get_value_doxygen_ref, \
     get_value_forward_declaration, get_value_hash, get_value_header_file, \
-    get_value_params, get_value_plural, to_camel_case
+    get_value_params, get_value_plural, get_value_unspecified_type, \
+    to_camel_case
 from rtemsspec.items import Item, ItemCache, ItemGetValueMap, ItemMapper
 
 ItemMap = Dict[str, Item]
@@ -64,6 +65,14 @@ class _InterfaceMapper(ItemMapper):
         self._code_or_doc = "doc"
         self.add_get_value("interface/struct/code:/name", get_value_compound)
         self.add_get_value("interface/union/code:/name", get_value_compound)
+        self.add_get_value("interface/unspecified-struct/code:/name",
+                           get_value_unspecified_type)
+        self.add_get_value("interface/unspecified-struct/doc:/name",
+                           get_value_unspecified_type)
+        self.add_get_value("interface/unspecified-union/code:/name",
+                           get_value_unspecified_type)
+        self.add_get_value("interface/unspecified-union/doc:/name",
+                           get_value_unspecified_type)
         self.add_get_value("glossary/term/doc:/plural", get_value_plural)
         self.add_get_value("interface/forward-declaration/code:/name",
                            get_value_forward_declaration)

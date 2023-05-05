@@ -34,7 +34,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from rtemsspec.content import CContent, CInclude, enabled_by_to_exp, \
     ExpressionMapper, GenericContent, get_integer_type, get_value_params, \
-    get_value_plural, get_value_doxygen_group, get_value_doxygen_function
+    get_value_plural, get_value_doxygen_group, get_value_doxygen_function, \
+    get_value_unspecified_type
 from rtemsspec.items import create_unique_link, Item, ItemCache, \
     ItemGetValueContext, ItemMapper
 from rtemsspec.transitionmap import TransitionMap
@@ -74,6 +75,10 @@ class _Mapper(ItemMapper):
         self.add_get_value("interface/macro:/params/name", get_value_params)
         self.add_get_value("interface/unspecified-function:/name",
                            get_value_doxygen_function)
+        self.add_get_value("interface/unspecified-struct:/name",
+                           get_value_unspecified_type)
+        self.add_get_value("interface/unspecified-unione:/name",
+                           get_value_unspecified_type)
         self.add_get_value("memory-benchmark:/test-suite-name",
                            _get_test_suite_name)
         self.add_get_value(

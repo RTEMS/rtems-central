@@ -1084,6 +1084,11 @@ def get_value_compound(ctx: ItemGetValueContext) -> Any:
     return ctx.item['name']
 
 
+def get_value_unspecified_type(ctx: ItemGetValueContext) -> Any:
+    """ Gets a value as a compound (unspecified struct or union). """
+    return f"{ctx.item['interface-type'][12:]} {ctx.item['name']}"
+
+
 class ExpressionMapper:
     """ Maps symbols and operations to form a C expression. """
 

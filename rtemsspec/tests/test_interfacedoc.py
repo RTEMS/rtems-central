@@ -466,7 +466,7 @@ Function description.  References to :term:`xs <x>`,
 :ref:`InterfaceVeryLongFunction`, :c:type:`Integer`, :c:type:`Enum`,
 :c:macro:`DEFINE`, :ref:`InterfaceVERYLONGMACRO`, Variable,
 :c:macro:`ENUMERATOR_0`, ``struct Struct``, :ref:`a`, interface, :ref:`GroupA`,
-and Group F.  Second parameter is ``Param1``.
+and Group F.  Second parameter is ``Param1``. Mention :c:type:`US`.
 
 .. code-block:
 
