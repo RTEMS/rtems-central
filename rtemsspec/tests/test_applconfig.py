@@ -26,8 +26,8 @@
 
 import os
 
-from rtemsspec.applconfig import generate
-from rtemsspec.items import ItemCache
+from rtemsspec.applconfig import document_option, generate
+from rtemsspec.items import ItemCache, ItemMapper
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
@@ -723,3 +723,18 @@ description m
 /** @} */
 """
         assert content == src.read()
+        option_item = item_cache["/k"]
+        option_content = document_option(option_item, [],
+                                         ItemMapper(option_item))
+        assert str(option_content) == """.. rubric:: OPTION TYPE:
+
+This configuration option is an integer define.
+
+.. rubric:: DEFAULT VALUE:
+
+The default value is 1.
+
+.. rubric:: DESCRIPTION:
+
+description k
+"""

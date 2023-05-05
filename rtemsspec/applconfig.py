@@ -253,6 +253,27 @@ _OPTION_GENERATORS = {
 }
 
 
+def _document_option(item: Item, enabled: List[str],
+                     content: _ContentAdaptor) -> None:
+    option_type = item["appl-config-option-type"]
+    content.add_option_type(_OPTION_TYPES[option_type])
+    _OPTION_GENERATORS[option_type](content, item, option_type)
+    content.add_option_description(content.substitute(item["description"]))
+    content.add_option_notes(content.substitute(item["notes"]))
+    _generate_constraints(content, item, enabled)
+
+
+def document_option(item: Item, enabled: List[str],
+                    mapper: ItemMapper) -> SphinxContent:
+    """
+    Documents the option specified by the item using the item mapper and
+    enabled set.
+    """
+    adaptor = _SphinxContentAdaptor(mapper)
+    _document_option(item, enabled, adaptor)
+    return adaptor.content
+
+
 def _generate(group: Item, options: ItemMap, enabled: List[str],
               content: _ContentAdaptor) -> None:
     content.register_license_and_copyrights_of_item(group)
@@ -260,15 +281,9 @@ def _generate(group: Item, options: ItemMap, enabled: List[str],
                       content.substitute(group["description"]))
     for item in sorted(options.values(), key=lambda x: x["name"]):
         content.mapper.item = item
-        name = item["name"]
         content.register_license_and_copyrights_of_item(item)
-        content.add_option(item.uid, name, item["index-entries"])
-        option_type = item["appl-config-option-type"]
-        content.add_option_type(_OPTION_TYPES[option_type])
-        _OPTION_GENERATORS[option_type](content, item, option_type)
-        content.add_option_description(content.substitute(item["description"]))
-        content.add_option_notes(content.substitute(item["notes"]))
-        _generate_constraints(content, item, enabled)
+        content.add_option(item.uid, item["name"], item["index-entries"])
+        _document_option(item, enabled, content)
     content.add_licence_and_copyrights()
 
 
