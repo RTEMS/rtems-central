@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: interface-type
+  spec-value: unspecified-header-file
+  uid: interface
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      path:
+        description: |
+          It shall be the path used to include the header file.  For example
+          :file:`rtems/confdefs.h`.
+        spec-type: str
+      references:
+        description: null
+        spec-type: external-reference-list
+    description: |
+      This set of attributes specifies an unspecified header file.
+    mandatory-attributes: all
+spec-name: Interface Unspecified Header File Item Type
+spec-type: interface-unspecified-header-file
+type: spec

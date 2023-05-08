@@ -740,7 +740,10 @@ class _HeaderFile:
     def add_includes(self, item: Item) -> None:
         """ Adds the includes of the item to the header file includes. """
         for parent in item.parents("interface-placement"):
-            if parent.type == "interface/header-file":
+            if parent.type in [
+                    "interface/header-file",
+                    "interface/unspecified-header-file"
+            ]:
                 self._includes.append(parent)
 
     def _add_child(self, item: Item) -> None:
