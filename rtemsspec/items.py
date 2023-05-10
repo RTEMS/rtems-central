@@ -197,6 +197,11 @@ def _is_link_enabled(link: Link) -> bool:
     return link.item._data["_enabled"]  # pylint: disable=protected-access
 
 
+def link_is_enabled(_link: Link) -> bool:
+    """ Returns true. """
+    return True
+
+
 class Item:
     """ Objects of this class represent a specification item. """
 

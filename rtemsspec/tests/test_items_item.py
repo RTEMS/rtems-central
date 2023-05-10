@@ -28,7 +28,7 @@ import os
 import pytest
 
 from rtemsspec.items import EmptyItemCache, Item, ItemGetValueContext, \
-    JSONItemCache, Link
+    JSONItemCache, link_is_enabled, Link
 
 
 def test_to_abs_uid():
@@ -193,6 +193,8 @@ def test_parents():
     assert child["links"][0]["foo"] == "bar"
     parents = [item for item in child.parents()]
     assert len(parents) == 1
+    parents = [item for item in child.parents(is_link_enabled=link_is_enabled)]
+    assert len(parents) == 2
     assert parents[0] == parent
     parents = [item for item in child.parents("c")]
     assert len(parents) == 1
