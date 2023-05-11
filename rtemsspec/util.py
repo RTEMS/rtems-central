@@ -24,6 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import argparse
 import logging
 import os
 import shutil
@@ -97,3 +98,31 @@ def run_command(args: List[str],
             elif task.poll() is not None:
                 break
         return task.wait()
+
+
+def create_argument_parser(
+        default_log_level: str = "INFO") -> argparse.ArgumentParser:
+    """ Creates an argument parser with default logging options. """
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--log-level',
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        type=str.upper,
+        default=default_log_level,
+        help="log level")
+    parser.add_argument('--log-file',
+                        type=str,
+                        default=None,
+                        help="log to this file")
+    return parser
+
+
+def init_logging(args: argparse.Namespace) -> None:
+    """ Initializes the logging module. """
+    handlers: List[Any] = [logging.StreamHandler()]
+    if args.log_file is not None:
+        handlers.append(logging.FileHandler(args.log_file, mode="a"))
+    logging.basicConfig(level=args.log_level,
+                        datefmt="%Y-%m-%dT%H:%M:%S",
+                        format='%(asctime)s %(levelname)-8s %(message)s',
+                        handlers=handlers)

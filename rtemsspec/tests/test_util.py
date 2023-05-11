@@ -27,7 +27,8 @@
 import os
 import logging
 
-from rtemsspec.util import copy_files, load_config, run_command
+from rtemsspec.util import copy_files, create_argument_parser, init_logging, \
+    load_config, run_command
 from rtemsspec.tests.util import get_and_clear_log
 
 
@@ -59,3 +60,16 @@ DEBUG A"""
     assert stdout[0].strip() == "A"
     status = run_command(["sleep", "0.1"])
     assert status == 0
+
+
+def test_args():
+    parser = create_argument_parser()
+    args = parser.parse_args([])
+    init_logging(args)
+    assert args.log_level == "INFO"
+    assert args.log_file is None
+    log_file = "log.txt"
+    args = parser.parse_args(["--log-level=DEBUG", f"--log-file={log_file}"])
+    assert args.log_level == "DEBUG"
+    assert args.log_file == log_file
+    init_logging(args)

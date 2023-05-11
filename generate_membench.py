@@ -25,8 +25,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import argparse
-import logging
 import os
 import sys
 import textwrap
@@ -35,7 +33,7 @@ from typing import NamedTuple, List, Optional
 from rtemsspec.items import ItemCache
 from rtemsspec.membench import generate
 from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
-from rtemsspec.util import load_config
+from rtemsspec.util import create_argument_parser, init_logging, load_config
 
 
 class _Test(NamedTuple):
@@ -833,20 +831,10 @@ def _post_process(path: str) -> None:
 
 def main() -> None:
     """ Generates memory benchmarks. """
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--log-level',
-        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        type=str.upper,
-        default="ERROR",
-        help="log level")
-    parser.add_argument('--log-file',
-                        type=str,
-                        default=None,
-                        help="log to this file")
+    parser = create_argument_parser()
     parser.add_argument('--post-process', help="post-process the ELF files")
     args = parser.parse_args(sys.argv[1:])
-    logging.basicConfig(filename=args.log_file, level=args.log_level)
+    init_logging(args)
     if args.post_process:
         _post_process(args.post_process)
     else:
