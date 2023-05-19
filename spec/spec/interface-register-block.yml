@@ -62,7 +62,7 @@ spec-info:
       Registers consists of bit fields (see
       ${interface-register-bits:/spec-name}.  The register block members are
       placed into the address space of the device relative to the base address
-      of the register block.  Register member offests and the register block
+      of the register block.  Register member offsets and the register block
       size are specified in units of the address space granule.  The address
       space granule is usually 8-bits also known as one byte.
     mandatory-attributes: all
