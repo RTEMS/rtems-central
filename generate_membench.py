@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Generates memory benchmarks. """
 
-# Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2021 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -752,7 +752,7 @@ def _generate_files() -> None:
 build-type: test-program
 cflags: []
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
 enabled-by: true
@@ -773,7 +773,7 @@ use-before: []
         with open(f"spec{req_spec}.yml", "w", encoding="utf-8") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 enabled-by: true
 links:
 {_links(test.links)}
@@ -790,7 +790,7 @@ type: requirement
         with open(val_spec, "w", encoding="utf-8") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2021 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
 enabled-by: true
 links:
 - role: requirement-refinement
