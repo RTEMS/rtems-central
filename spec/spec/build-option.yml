@@ -1,6 +1,6 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 links:
 - role: spec-member
@@ -17,7 +17,7 @@ spec-example: |
   - define: null
   build-type: option
   copyrights:
-  - Copyright (C) 2020, 2022 embedded brains GmbH (http://www.embedded-brains.de)
+  - Copyright (C) 2020, 2022 embedded brains GmbH & Co. KG
   default:
   - enabled-by:
     - bsps/powerpc/motorola_powerpc

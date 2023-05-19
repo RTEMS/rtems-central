@@ -3,7 +3,7 @@ any-dict:
   a: b
 bool: true
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 dict: null
 enabled-by: true
 float: 123.567

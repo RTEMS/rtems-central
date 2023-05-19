@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides functions to document specification items. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -513,25 +513,18 @@ def _create_str_documenter(item_cache: ItemCache, name: str, description: str,
     _Documenter(
         Item(
             item_cache, f"/spec/{type_name}", {
-                "SPDX-License-Identifier":
-                "CC-BY-SA-4.0 OR BSD-2-Clause",
-                "copyrights": [
-                    "Copyright (C) 2020 embedded brains GmbH "
-                    "(http://www.embedded-brains.de)"
-                ],
-                "spec-description":
-                None,
-                "spec-example":
-                None,
+                "SPDX-License-Identifier": "CC-BY-SA-4.0 OR BSD-2-Clause",
+                "copyrights":
+                ["Copyright (C) 2020 embedded brains GmbH & Co. KG"],
+                "spec-description": None,
+                "spec-example": None,
                 "spec-info": {
                     "str": {
                         "description": description
                     }
                 },
-                "spec-name":
-                name,
-                "spec-type":
-                type_name,
+                "spec-name": name,
+                "spec-type": type_name,
             }), documenter_map, config)
 
 

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Unit tests for the rtemsspec.items module. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -279,7 +279,7 @@ def test_save_and_load_json(tmpdir):
         assert src.read() == """{
   "SPDX-License-Identifier": "CC-BY-SA-4.0 OR BSD-2-Clause",
   "copyrights": [
-    "Copyright (C) 2022 embedded brains GmbH (http://www.embedded-brains.de)"
+    "Copyright (C) 2022 embedded brains GmbH & Co. KG
   ],
   "enabled-by": false,
   "links": [],

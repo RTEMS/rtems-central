@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Unit tests for the rtemsspec.applconfig module. """
 
-# Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+# Copyright (C) 2020 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -48,7 +48,7 @@ def test_applconfig(tmpdir):
     with open(g_rst, "r") as src:
         content = """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+.. Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
 
 .. This file is part of the RTEMS quality process and was automatically
 .. generated.  If you find something that needs to be fixed or
@@ -456,7 +456,7 @@ description m
  */
 
 /*
- * Copyright (C) 2020, 2021 embedded brains GmbH (http://www.embedded-brains.de)
+ * Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

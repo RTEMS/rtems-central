@@ -34,7 +34,7 @@ notes: |
   * ${unspec-type-2:/name}
 appl-config-option-type: feature
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
 enabled-by: true
 interface-type: appl-config-option
 links:
