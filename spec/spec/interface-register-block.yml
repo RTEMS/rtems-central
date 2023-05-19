@@ -63,8 +63,7 @@ spec-info:
       ${interface-register-bits:/spec-name}.  The register block members are
       placed into the address space of the device relative to the base address
       of the register block.  Register member offsets and the register block
-      size are specified in units of the address space granule.  The address
-      space granule is usually 8-bits also known as one byte.
+      size are specified in units of the address space granule.
     mandatory-attributes: all
 spec-name: Register Block Item Type
 spec-type: interface-register-block
