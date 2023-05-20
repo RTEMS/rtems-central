@@ -279,7 +279,7 @@ def test_save_and_load_json(tmpdir):
         assert src.read() == """{
   "SPDX-License-Identifier": "CC-BY-SA-4.0 OR BSD-2-Clause",
   "copyrights": [
-    "Copyright (C) 2022 embedded brains GmbH & Co. KG
+    "Copyright (C) 2022 embedded brains GmbH & Co. KG"
   ],
   "enabled-by": false,
   "links": [],
