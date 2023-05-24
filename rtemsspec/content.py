@@ -1208,8 +1208,10 @@ def get_integer_type(value: int) -> str:
     return f"uint{power}_t"
 
 
-def duration(value: float) -> str:
+def duration(value: Union[float, str]) -> str:
     """ Converts a duration in seconds into a value with unit string. """
+    if isinstance(value, str):
+        return value
     assert value >= 0.0
     if value == 0.0:
         return "0s"

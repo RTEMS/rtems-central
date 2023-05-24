@@ -333,6 +333,7 @@ def test_enabled_by_to_python_exp():
 
 
 def test_duration():
+    assert duration("abc") == "abc"
     assert duration(1.0) == "1.000s"
     assert duration(0.0) == "0s"
     assert duration(0.001) == "1.000ms"
