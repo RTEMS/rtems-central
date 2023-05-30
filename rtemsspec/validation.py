@@ -1176,7 +1176,7 @@ def _gather(
         item_cache: ItemCache) -> Tuple[Dict[str, _SourceFile], _CaseToSuite]:
     source_files: Dict[str, _SourceFile] = {}
     test_programs: List[_TestProgram] = []
-    for item in item_cache.all.values():
+    for item in item_cache.values():
         _GATHER.get(item.type, _gather_default)(item, source_files,
                                                 test_programs)
 

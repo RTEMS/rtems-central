@@ -284,7 +284,7 @@ def _gather_design_components(item: Item, components: List[Item]) -> bool:
 
 
 def _design(item_cache: ItemCache) -> None:
-    for item in item_cache.all.values():
+    for item in item_cache.values():
         if not item.enabled:
             continue
         components: List[Item] = []
@@ -476,7 +476,7 @@ def main() -> None:
             _action_list(item_cache[uid])
     elif args.filter == "orphan":
         _validate(root)
-        for item in item_cache.all.values():
+        for item in item_cache.values():
             if item["type"] in ["build", "spec"]:
                 continue
             if item.enabled and "_validated" not in item:

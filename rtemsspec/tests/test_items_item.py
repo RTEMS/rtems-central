@@ -182,10 +182,10 @@ def test_parents():
     child["_enabled"] = True
     parent = Item(item_cache, "p", {"links": []})
     parent["_enabled"] = True
-    item_cache._items["p"] = parent
+    item_cache["p"] = parent
     parent_2 = Item(EmptyItemCache(), "p2", {})
     parent_2["_enabled"] = False
-    item_cache._items["p2"] = parent_2
+    item_cache["p2"] = parent_2
     child.init_parents(item_cache)
     for link in child.links_to_parents():
         link.item.add_link_to_child(Link.create(link, child))

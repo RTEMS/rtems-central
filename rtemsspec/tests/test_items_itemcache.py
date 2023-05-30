@@ -49,7 +49,7 @@ def test_load(tmpdir):
     assert item_cache.enabled == ["foobar"]
     assert len(item_cache.types) == 1
     assert list(item_cache.types)[0] == ""
-    assert item_count == len(item_cache.all)
+    assert item_count == len(item_cache)
     assert item_cache.updates
     cache_dir = config["cache-directory"]
     assert os.path.exists(os.path.join(cache_dir, "0", "spec", "spec.pickle"))
@@ -63,10 +63,9 @@ def test_load(tmpdir):
     assert p["v"] == "p"
     assert p.map("/p") == p
     assert p.map("p") == p
-    a = item_cache.all
-    assert len(a) == 7
-    assert a["/p"]["v"] == "p"
-    assert a["/d/c"]["v"] == "c"
+    assert len(item_cache) == 7
+    assert item_cache["/p"]["v"] == "p"
+    assert item_cache["/d/c"]["v"] == "c"
     item_cache.set_enabled([])
     assert p.enabled
     item_cache_2 = ItemCache(config)

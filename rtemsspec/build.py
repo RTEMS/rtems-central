@@ -84,7 +84,7 @@ def _gather_source_files(item: Item, enabled: List[str],
 
 def _gather_test_header(item_cache: ItemCache, enabled: List[str],
                         source_files: List[str]) -> None:
-    for item in item_cache.all.values():
+    for item in item_cache.values():
         tests = ["test-case", "requirement/functional/action"]
         if item.type in tests and item["test-header"] and item.is_enabled(
                 enabled):
@@ -96,7 +96,7 @@ def gather_files(config: dict,
                  test_header: bool = True) -> List[str]:
     """ Generates a list of files form the build specification. """
     bsps: BSPMap = {}
-    for item in item_cache.all.values():
+    for item in item_cache.values():
         if item["type"] == "build" and item["build-type"] == "bsp":
             arch_bsps = bsps.setdefault(item["arch"].strip(), {})
             arch_bsps[item["bsp"].strip()] = item

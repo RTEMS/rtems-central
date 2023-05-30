@@ -755,7 +755,7 @@ def _resolve_proxy(proxy: Item, is_link_enabled: Callable[[Link],
         proxy._links_to_parents = member._links_to_parents
 
 
-class ItemCache:
+class ItemCache(dict):
     """ This class provides a cache of specification items. """
 
     # pylint: disable=too-many-instance-attributes
@@ -764,17 +764,17 @@ class ItemCache:
                  post_process_load: Optional[Callable[[ItemMap], None]] = None,
                  is_item_enabled: Callable[[List[str], Item],
                                            bool] = _is_item_enabled):
+        super().__init__()
         self._cache_index: int = 0
         self._cache_directory: str = os.path.abspath(
             config.get("cache-directory", "cache"))
-        self._items: ItemMap = {}
         self._types: Set[str] = set()
         self.items_by_type: Dict[str, List[Item]] = {}
         self._updates = 0
         for path in config["paths"]:
             self.load_items(path)
         if post_process_load:
-            post_process_load(self._items)
+            post_process_load(self)
         if config.get("initialize-links", True):
             self._init_parents()
             self._init_children()
@@ -785,14 +785,11 @@ class ItemCache:
             self._root_type = None
         self._enabled = config.get("enabled", [])
         self._is_enabled = is_item_enabled
-        for item in self._items.values():
+        for item in self.values():
             self._set_type(item)
             item["_enabled"] = is_item_enabled(self._enabled, item)
         if config.get("resolve-proxies", False):
             self.resolve_proxies()
-
-    def __getitem__(self, uid: str) -> Item:
-        return self._items[uid]
 
     @property
     def updates(self) -> bool:
@@ -801,11 +798,6 @@ class ItemCache:
         or removed files.
         """
         return self._updates > 0
-
-    @property
-    def all(self) -> ItemMap:
-        """ Returns the map of all specification items. """
-        return self._items
 
     @property
     def types(self) -> Set[str]:
@@ -827,7 +819,7 @@ class ItemCache:
         """
         self._enabled = enabled
         self._is_enabled = is_item_enabled
-        for item in self._items.values():
+        for item in self.values():
             item["_enabled"] = is_item_enabled(enabled, item)
 
     def resolve_proxies(
@@ -861,7 +853,7 @@ class ItemCache:
 
     def _add_item(self, uid: str, data: Any) -> Item:
         item = Item(self, uid, data)
-        self._items[uid] = item
+        self[uid] = item
         return item
 
     def _load_items_in_dir(self, base: str, path: str, cache_file: str,
@@ -930,12 +922,12 @@ class ItemCache:
             self._save_data(file, data2)
 
     def _init_parents(self) -> None:
-        for item in self._items.values():
+        for item in self.values():
             item.init_parents(self)
 
     def _init_children(self) -> None:
-        for uid in sorted(self._items):
-            self._items[uid].init_children()
+        for item in sorted(self.values()):
+            item.init_children()
 
     def _set_type(self, item: Item) -> None:
         spec_type = self._root_type

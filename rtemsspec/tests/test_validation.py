@@ -2414,7 +2414,7 @@ void Action2_Run( int *a, int b, int *c )
 def _add_item(item_cache, uid, data, item_type):
     item = Item(item_cache, uid, data)
     item["_type"] = item_type
-    item_cache.all[item.uid] = item
+    item_cache[item.uid] = item
     return item
 
 

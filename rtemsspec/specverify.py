@@ -528,7 +528,7 @@ class SpecVerifier:
                 logging.error("root type item does not exist in item cache")
             else:
                 logging.info("start specification item verification")
-                for key in sorted(item_cache.all):
+                for key in sorted(item_cache):
                     item = item_cache[key]
                     self._root_verifier.verify(_Path(item, f"{item.uid}:"),
                                                item.data)
