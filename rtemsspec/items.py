@@ -757,16 +757,21 @@ def _resolve_proxy(proxy: Item, is_link_enabled: Callable[[Link],
 class ItemCache:
     """ This class provides a cache of specification items. """
 
+    # pylint: disable=too-many-instance-attributes
     def __init__(self,
                  config: Any,
                  post_process_load: Optional[Callable[[ItemMap], None]] = None,
                  is_item_enabled: Callable[[List[str], Item],
                                            bool] = _is_item_enabled):
+        self._cache_index: int = 0
+        self._cache_directory: str = os.path.abspath(
+            config.get("cache-directory", "cache"))
         self._items: ItemMap = {}
         self._types: Set[str] = set()
         self.items_by_type: Dict[str, List[Item]] = {}
         self._updates = 0
-        self._load_items(config)
+        for path in config["paths"]:
+            self.load_items(path)
         if post_process_load:
             post_process_load(self._items)
         if config.get("initialize-links", True):
@@ -899,10 +904,12 @@ class ItemCache:
                 self._load_items_recursive(index, base, path2, cache_dir)
         self._load_items_in_dir(base, path, cache_file, update_cache)
 
-    def _load_items(self, config: Any):
-        cache_dir = os.path.abspath(config["cache-directory"])
-        for index, path in enumerate(config["paths"]):
-            self._load_items_recursive(str(index), path, path, cache_dir)
+    def load_items(self, path: str):
+        """ Recursively loads the items in the directory path. """
+        index = self._cache_index
+        self._cache_index = index + 1
+        self._load_items_recursive(str(index), path, path,
+                                   self._cache_directory)
 
     def load_data(self, path: str, uid: str) -> Any:
         """ Loads the item data from the file specified by path. """
@@ -966,9 +973,8 @@ class JSONItemCache(ItemCache):
             elif stat.S_ISDIR(os.lstat(path2).st_mode):
                 self._load_json_items(base, path2)
 
-    def _load_items(self, config: Any):
-        for path in config["paths"]:
-            self._load_json_items(path, path)
+    def load_items(self, path: str):
+        self._load_json_items(path, path)
 
     def load_data(self, path: str, uid: str) -> Any:
         return _load_json_data(path, uid)
