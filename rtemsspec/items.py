@@ -207,6 +207,7 @@ class Item:
 
     # pylint: disable=too-many-public-methods
     def __init__(self, item_cache: "ItemCache", uid: str, data: Any):
+        data["_type"] = ""
         self._cache = item_cache
         self._ident = _UID_TO_UPPER.sub(_match_to_upper, uid)
         self._uid = uid

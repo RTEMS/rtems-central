@@ -84,7 +84,7 @@ def test_data():
     data = {}
     data["x"] = "y"
     item = Item(EmptyItemCache(), "z", data)
-    assert item.data == {"x": "y"}
+    assert item.data == {"_type": "", "x": "y"}
 
 
 def test_cache():
