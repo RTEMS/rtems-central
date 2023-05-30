@@ -838,7 +838,7 @@ class ItemCache(dict):
 
         The item is not added to the persistent cache storage.
         """
-        item = self._add_item(uid, data)
+        item = self.create_item(uid, data)
         item.init_parents(self)
         item.init_children()
         self.set_type(item)
@@ -853,7 +853,10 @@ class ItemCache(dict):
         """
         return self.add_volatile_item(uid, self.load_data(path, uid))
 
-    def _add_item(self, uid: str, data: Any) -> Item:
+    def create_item(self, uid: str, data: Any) -> Item:
+        """
+        Creates an item for the UID with the data and adds it to the cache.
+        """
         item = Item(self, uid, data)
         self[uid] = item
         return item
@@ -876,7 +879,7 @@ class ItemCache(dict):
             with open(cache_file, "rb") as pickle_src:
                 data_by_uid = pickle.load(pickle_src)
         for uid, data in iter(data_by_uid.items()):
-            self._add_item(uid, data)
+            self.create_item(uid, data)
         return set(data_by_uid.keys())
 
     def _load_items_recursive(self, index: str, base: str, path: str,
@@ -979,7 +982,7 @@ class JSONItemCache(ItemCache):
             path2 = os.path.join(path, name)
             if name.endswith(".json") and not name.startswith("."):
                 uid = "/" + os.path.relpath(path2, base).replace(".json", "")
-                self._add_item(uid, _load_json_data(path2, uid))
+                self.create_item(uid, _load_json_data(path2, uid))
             elif stat.S_ISDIR(os.lstat(path2).st_mode):
                 uids.update(self._load_json_items(base, path2))
         return uids
