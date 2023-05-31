@@ -778,8 +778,7 @@ class ItemCache(dict):
         if post_process_load:
             post_process_load(self)
         if config.get("initialize-links", True):
-            self._init_parents()
-            self._init_children()
+            self.initialize_links()
         spec_root = config["spec-type-root-uid"]
         if spec_root:
             self._root_type = _gather_spec_refinements(self[spec_root])
@@ -931,11 +930,10 @@ class ItemCache(dict):
                     data2[key] = value
             self._save_data(file, data2)
 
-    def _init_parents(self) -> None:
+    def initialize_links(self) -> None:
+        """ Initializes the links to parents and children. """
         for item in self.values():
             item.init_parents(self)
-
-    def _init_children(self) -> None:
         for item in sorted(self.values()):
             item.init_children()
 
