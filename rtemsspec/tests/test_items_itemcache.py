@@ -130,6 +130,9 @@ def test_item_mapper(tmpdir):
     config["resolve-proxies"] = True
     item_cache = ItemCache(config)
     item = item_cache["/p"]
+    assert item.type == "other"
+    item_cache.set_types("/spec/root")
+    assert item.type == "other"
     base_mapper = ItemMapper(item)
     assert base_mapper["d/c:v"] == "c"
     mapper = ItemMapper(item)

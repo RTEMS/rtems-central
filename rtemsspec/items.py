@@ -24,6 +24,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# pylint: disable=too-many-lines
+
 from contextlib import contextmanager
 import base64
 import hashlib
@@ -786,7 +788,7 @@ class ItemCache(dict):
         self._enabled = config.get("enabled", [])
         self._is_enabled = is_item_enabled
         for item in self.values():
-            self._set_type(item)
+            self.set_type(item)
             item["_enabled"] = is_item_enabled(self._enabled, item)
         if config.get("resolve-proxies", False):
             self.resolve_proxies()
@@ -839,7 +841,7 @@ class ItemCache(dict):
         item = self._add_item(uid, data)
         item.init_parents(self)
         item.init_children()
-        self._set_type(item)
+        self.set_type(item)
         item["_enabled"] = self._is_enabled(self._enabled, item)
         return item
 
@@ -929,7 +931,8 @@ class ItemCache(dict):
         for item in sorted(self.values()):
             item.init_children()
 
-    def _set_type(self, item: Item) -> None:
+    def set_type(self, item: Item) -> None:
+        """ Sets the type of the item. """
         spec_type = self._root_type
         value = item.data
         path: List[str] = []
@@ -941,6 +944,14 @@ class ItemCache(dict):
         item["_type"] = the_type
         self._types.add(the_type)
         self.items_by_type.setdefault(the_type, []).append(item)
+
+    def set_types(self, root_type_uid: str) -> None:
+        """
+        Sets the root type of the cache and then sets the type of all items.
+        """
+        self._root_type = _gather_spec_refinements(self[root_type_uid])
+        for item in self.values():
+            self.set_type(item)
 
 
 class EmptyItemCache(ItemCache):
