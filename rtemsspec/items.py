@@ -859,7 +859,7 @@ class ItemCache(dict):
         return item
 
     def _load_items_in_dir(self, base: str, path: str, cache_file: str,
-                           update_cache: bool) -> None:
+                           update_cache: bool) -> Set[str]:
         data_by_uid: Dict[str, Any] = {}
         if update_cache:
             self._updates += 1
@@ -877,9 +877,11 @@ class ItemCache(dict):
                 data_by_uid = pickle.load(pickle_src)
         for uid, data in iter(data_by_uid.items()):
             self._add_item(uid, data)
+        return set(data_by_uid.keys())
 
     def _load_items_recursive(self, index: str, base: str, path: str,
-                              cache_dir: str) -> None:
+                              cache_dir: str) -> Set[str]:
+        uids: Set[str] = set()
         mid = os.path.abspath(path)
         mid = mid.replace(os.path.commonpath([cache_dir, mid]), "").strip("/")
         cache_file = os.path.join(cache_dir, index, mid, "spec.pickle")
@@ -896,15 +898,18 @@ class ItemCache(dict):
                 if not update_cache:
                     update_cache = mtime <= os.path.getmtime(path2)
             elif stat.S_ISDIR(os.lstat(path2).st_mode):
-                self._load_items_recursive(index, base, path2, cache_dir)
-        self._load_items_in_dir(base, path, cache_file, update_cache)
+                uids.update(
+                    self._load_items_recursive(index, base, path2, cache_dir))
+        uids.update(
+            self._load_items_in_dir(base, path, cache_file, update_cache))
+        return uids
 
-    def load_items(self, path: str):
+    def load_items(self, path: str) -> Set[str]:
         """ Recursively loads the items in the directory path. """
         index = self._cache_index
         self._cache_index = index + 1
-        self._load_items_recursive(str(index), path, path,
-                                   self._cache_directory)
+        return self._load_items_recursive(str(index), path, path,
+                                          self._cache_directory)
 
     def load_data(self, path: str, uid: str) -> Any:
         """ Loads the item data from the file specified by path. """
@@ -968,17 +973,19 @@ class EmptyItemCache(ItemCache):
 class JSONItemCache(ItemCache):
     """ This class provides a cache of specification items using JSON. """
 
-    def _load_json_items(self, base: str, path: str) -> None:
+    def _load_json_items(self, base: str, path: str) -> Set[str]:
+        uids: Set[str] = set()
         for name in os.listdir(path):
             path2 = os.path.join(path, name)
             if name.endswith(".json") and not name.startswith("."):
                 uid = "/" + os.path.relpath(path2, base).replace(".json", "")
                 self._add_item(uid, _load_json_data(path2, uid))
             elif stat.S_ISDIR(os.lstat(path2).st_mode):
-                self._load_json_items(base, path2)
+                uids.update(self._load_json_items(base, path2))
+        return uids
 
-    def load_items(self, path: str):
-        self._load_json_items(path, path)
+    def load_items(self, path: str) -> Set[str]:
+        return self._load_json_items(path, path)
 
     def load_data(self, path: str, uid: str) -> Any:
         return _load_json_data(path, uid)
