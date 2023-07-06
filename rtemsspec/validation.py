@@ -54,6 +54,10 @@ def _get_test_context_type(ctx: ItemGetValueContext) -> Any:
     return f"{ctx.item.ident}_Context"
 
 
+def _get_test_ident(ctx: ItemGetValueContext) -> Any:
+    return ctx.item.ident
+
+
 def _get_test_run(ctx: ItemGetValueContext) -> Any:
     return f"{ctx.item.ident}_Run"
 
@@ -87,6 +91,8 @@ class _Mapper(ItemMapper):
             _get_test_context_instance)
         self.add_get_value("requirement/functional/action:/test-context-type",
                            _get_test_context_type)
+        self.add_get_value("requirement/functional/action:/test-ident",
+                           _get_test_ident)
         self.add_get_value("requirement/functional/action:/test-run",
                            _get_test_run)
         self.add_get_value("runtime-measurement-test:/test-context-type",
@@ -96,6 +102,7 @@ class _Mapper(ItemMapper):
                            _get_test_context_instance)
         self.add_get_value("test-case:/test-context-type",
                            _get_test_context_type)
+        self.add_get_value("test-case:/test-ident", _get_test_ident)
         self.add_get_value("test-case:/test-run", _get_test_run)
         self.add_get_value("test-suite:/test-suite-name", _get_test_suite_name)
         for type_name in item.cache.items_by_type.keys():
