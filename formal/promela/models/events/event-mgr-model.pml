@@ -137,12 +137,18 @@ byte recout[TASK_MAX] ; // models receive 'out' location.
  */
 bool semaphore[SEMA_MAX]; // Semaphore
 
-inline outputDeclarations () {
-  printf("@@@ %d DECL byte sendrc 0\n",_pid);
-  printf("@@@ %d DECL byte recrc 0\n",_pid);
+inline outputDeclarations () { 
+  if
+  :: doSend -> printf("@@@ %d DECL byte sendrc 0\n",_pid);
+  :: else
+  fi
+  if 
+  :: doReceive -> printf("@@@ %d DECL byte recrc 0\n",_pid);
+                  printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
+  :: else
+  fi
   // Rather than refine an entire Task array, we refine array 'slices'
   printf("@@@ %d DCLARRAY EvtSet pending TASK_MAX\n",_pid);
-  printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
   printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
 }
 
@@ -754,7 +760,6 @@ proctype System () {
          if
          ::  tasks[taskid].state == OtherWait
              -> tasks[taskid].state = Ready
-                printf("@@@ %d STATE %d Ready\n",_pid,taskid)
          ::  else -> skip
          fi
          liveSeen = true;
@@ -801,7 +806,6 @@ proctype Clock () {
               ::  tix == 0
                   tasks[tid].tout = true
                   tasks[tid].state = Ready
-                  printf("@@@ %d STATE %d Ready\n",_pid,tid)
               ::  else
                   tasks[tid].ticks = tix
               fi
@@ -821,15 +825,11 @@ init {
   printf("Event Manager Model running.\n");
   printf("Setup...\n");
 
-  printf("@@@ %d NAME Event_Manager_TestGen\n",_pid)
   outputDefines();
-  outputDeclarations();
-
-  printf("@@@ %d INIT\n",_pid);
   chooseScenario();
-
-
-
+  outputDeclarations();
+  printf("@@@ %d INIT\n",_pid);
+  
   printf("Run...\n");
 
   run System();

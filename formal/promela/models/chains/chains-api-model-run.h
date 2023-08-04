@@ -1,7 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 
-void RtemsModelChainsAPI_Run{0}(
-)
+static void RtemsModelChainsAPI_Run{0}(void)
 {{
   Context ctx;
 

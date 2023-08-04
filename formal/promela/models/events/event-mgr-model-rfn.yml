@@ -133,13 +133,13 @@ StartLog: |
   log = T_thread_switch_record_4( &ctx->thread_switch_log );
 
 CheckPreemption: |
-  log = &ctx->thread_switch_log;
+  log = (T_thread_switch_log *) &ctx->thread_switch_log;
   T_eq_sz( log->header.recorded, 2 );
   T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
   T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
 
 CheckNoPreemption: |
-  log = &ctx->thread_switch_log;
+  log = (T_thread_switch_log *) &ctx->thread_switch_log;
   T_le_sz( log->header.recorded, 1 );
   for ( size_t i = 0; i < log->header.recorded; ++i ) {
     T_ne_u32( log->events[ i ].executing, ctx->worker_id );

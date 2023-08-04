@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup TestsuitesModel0
+ *
+ * @brief This source file contains test cases related to a formal model.
+ */
+
 /******************************************************************************
  * Chains API model
  *
@@ -36,6 +44,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
+#include "tx-support.h"
 
 typedef struct item
 {

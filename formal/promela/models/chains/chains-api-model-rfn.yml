@@ -27,9 +27,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-NAME: |
-  const char rtems_test_name[] = "Model_Chain_API";
-
 memory_DCL: item {0}[{1}];
 
 nptr_DCL: item *

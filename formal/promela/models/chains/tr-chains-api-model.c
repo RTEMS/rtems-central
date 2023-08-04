@@ -1,5 +1,13 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 
+/**
+ * @file
+ *
+ * @ingroup TestsuitesModel0
+ *
+ * @brief This source file contains test cases related to a formal model.
+ */
+
 /******************************************************************************
  * Chains API Model
  *

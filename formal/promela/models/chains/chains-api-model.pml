@@ -169,7 +169,6 @@ init {
   pid nr;
   atomic{
     printf("\n\n Chain Model running.\n");
-    printf("@@@ 0 NAME Chain_AutoGen\n")
     printf("@@@ 0 DEF MAX_SIZE 8\n");
     printf("@@@ 0 DCLARRAY Node memory MAX_SIZE\n");
     printf("@@@ 0 DECL unsigned nptr NULL\n")
