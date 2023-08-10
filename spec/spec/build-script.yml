@@ -89,6 +89,9 @@ spec-info:
       stlib:
         description: null
         spec-type: build-stlib-list
+      target:
+        description: null
+        spec-type: build-target
       use-after:
         description: null
         spec-type: build-use-after-list
