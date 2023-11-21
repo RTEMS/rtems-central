@@ -45,33 +45,63 @@ GenericContentIterable = Union[Iterable[str], Iterable[List[str]],
                                Iterable[GenericContent]]
 
 
+def split_copyright_statement(statement: str) -> Tuple[str, Set[int]]:
+    """ Splits the copyright statement into the holder and year set. """
+    match = re.search(
+        r"^\s*Copyright\s+\(C\)\s+([0-9]+),\s*([0-9]+)\s+(.+)\s*$",
+        statement,
+        flags=re.I,
+    )
+    if match:
+        return match.group(3), set((int(match.group(1)), int(match.group(2))))
+    match = re.search(
+        r"^\s*Copyright\s+\(C\)\s+([0-9]+)\s+(.+)\s*$",
+        statement,
+        flags=re.I,
+    )
+    if match:
+        return match.group(2), set((int(match.group(1)), ))
+    raise ValueError(statement)
+
+
+def make_copyright_statement(holder: str,
+                             years: Set[int],
+                             line: str = "Copyright (C)") -> str:
+    """ Makes the copyright statement from the holder and year set. """
+    year_count = len(years)
+    line += f" {min(years)}"
+    if year_count > 1:
+        line += f", {max(years)}"
+    line += f" {holder}"
+    return line
+
+
 class Copyright:
     """
     This class represents a copyright holder with its years of substantial
     contributions.
     """
 
-    def __init__(self, holder: str):
+    @classmethod
+    def from_statement(cls, statement: str) -> "Copyright":
+        """ Makes a copyright from the statement. """
+        holder, years = split_copyright_statement(statement)
+        return Copyright(holder, years)
+
+    def __init__(self, holder: str, years: Optional[Set[int]] = None):
         self.holder = holder
-        self.years: Set[int] = set()
+        self.years = years if years is not None else set()
 
     def add_year(self, year: int):
         """
-        Adds a year to the set of substantial contributions of this copyright
+        Adds the year to the set of substantial contributions of this copyright
         holder.
         """
         self.years.add(year)
 
-    def get_statement(self) -> str:
-        """ Returns a copyright statement. """
-        line = "Copyright (C)"
-        year_count = len(self.years)
-        if year_count == 1:
-            line += f" {min(self.years)}"
-        else:
-            line += f" {min(self.years)}, {max(self.years)}"
-        line += f" {self.holder}"
-        return line
+    def get_statement(self, line: str = "Copyright (C)") -> str:
+        """ Returns the associated copyright statement. """
+        return make_copyright_statement(self.holder, self.years, line)
 
     def __lt__(self, other: "Copyright") -> bool:
         return (min(self.years), max(self.years),
@@ -79,45 +109,27 @@ class Copyright:
                                  self.holder)
 
 
-class Copyrights:
+def _copyright_key(holder_years):
+    return (-min(holder_years[1]), -max(holder_years[1]), holder_years[0])
+
+
+class Copyrights(dict):
     """ This class represents a set of copyright holders. """
 
-    def __init__(self):
-        self.copyrights = {}
+    def register(self, statements: Union[str, Iterable[str]]) -> None:
+        """ Registers the copyright statement. """
+        if isinstance(statements, str):
+            statements = [statements]
+        for statement in statements:
+            holder, years = split_copyright_statement(statement)
+            self.setdefault(holder, set()).update(years)
 
-    def register(self, statement):
-        """ Registers a copyright statement. """
-        match = re.search(
-            r"^\s*Copyright\s+\(C\)\s+([0-9]+),\s*([0-9]+)\s+(.+)\s*$",
-            statement,
-            flags=re.I,
-        )
-        if match:
-            holder = match.group(3)
-            the_copyright = self.copyrights.setdefault(holder,
-                                                       Copyright(holder))
-            the_copyright.add_year(int(match.group(1)))
-            the_copyright.add_year(int(match.group(2)))
-            return
-        match = re.search(
-            r"^\s*Copyright\s+\(C\)\s+([0-9]+)\s+(.+)\s*$",
-            statement,
-            flags=re.I,
-        )
-        if match:
-            holder = match.group(2)
-            the_copyright = self.copyrights.setdefault(holder,
-                                                       Copyright(holder))
-            the_copyright.add_year(int(match.group(1)))
-            return
-        raise ValueError(statement)
-
-    def get_statements(self):
+    def get_statements(self, line: str = "Copyright (C)") -> List[str]:
         """ Returns all registered copyright statements as a sorted list. """
-        statements = []
-        for the_copyright in sorted(self.copyrights.values(), reverse=True):
-            statements.append(the_copyright.get_statement())
-        return statements
+        return [
+            make_copyright_statement(holder, years, line)
+            for holder, years in sorted(self.items(), key=_copyright_key)
+        ]
 
 
 def make_lines(content: GenericContent) -> List[str]:

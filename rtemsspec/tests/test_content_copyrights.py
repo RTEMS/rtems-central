@@ -30,6 +30,11 @@ from rtemsspec.content import Copyright
 from rtemsspec.content import Copyrights
 
 
+def test_copyright_from_statement():
+    c = Copyright.from_statement("Copyright (C) 42 John Doe")
+    assert "Copyright (C) 42 John Doe" == c.get_statement()
+
+
 def test_copyright_get_statement():
     c = Copyright("John Doe")
     c.add_year(3)
@@ -64,7 +69,7 @@ def test_copyrights_register():
     c = Copyrights()
     with pytest.raises(ValueError):
         c.register("abc")
-    c.register("Copyright (C) 2 A")
+    c.register(["Copyright (C) 2 A"])
     c.register("Copyright (C) 2, 3 A")
     c.register("Copyright (C) 2, 4 C")
     c.register("Copyright (C) 3 E")
