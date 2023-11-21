@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      action:
+        description: |
+          It shall be the action performed by the contributors.
+        spec-type: str
+      contributors:
+        description: null
+        spec-type: qdp-sphinx-contributor-list
+    description: |
+      This set of attributes specifies document contributors which performed a
+      common action.
+    mandatory-attributes: all
+spec-name: Sphinx Document Contributors by Action
+spec-type: qdp-sphinx-contributor-action
+type: spec

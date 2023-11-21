@@ -1,0 +1,52 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: add-to-index
+  uid: qdp-sphinx-component
+- role: spec-refinement
+  spec-key: action
+  spec-value: known-problems
+  uid: qdp-sphinx-component
+- role: spec-refinement
+  spec-key: action
+  spec-value: requirements
+  uid: qdp-sphinx-component
+- role: spec-refinement
+  spec-key: action
+  spec-value: requirements-and-design
+  uid: qdp-sphinx-component
+- role: spec-refinement
+  spec-key: action
+  spec-value: test-cases
+  uid: qdp-sphinx-component
+- role: spec-refinement
+  spec-key: action
+  spec-value: traceability
+  uid: qdp-sphinx-component
+- role: spec-refinement
+  spec-key: action
+  spec-value: validation
+  uid: qdp-sphinx-component
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      destination:
+        description: |
+          It shall be the destination path of a Sphinx source file relative to
+          the build directory.
+        spec-type: str
+    description: |
+      This set of attributes specifies that a generic action which produces a
+      Sphinx source file for a document using Sphinx documentation framework.
+    mandatory-attributes: all
+spec-name: Sphinx Document Component Generic
+spec-type: qdp-sphinx-component-generic
+type: spec

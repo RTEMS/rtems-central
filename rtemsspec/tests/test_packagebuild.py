@@ -42,6 +42,7 @@ from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
 from rtemsspec.packagebuildfactory import create_build_item_factory
 from rtemsspec.rtems import RTEMSItemCache
 from rtemsspec.specverify import verify
+import rtemsspec.sphinxbuilder
 import rtemsspec.testrunner
 from rtemsspec.testrunner import Executable, Report, TestRunner
 from rtemsspec.tests.util import get_and_clear_log
@@ -128,6 +129,31 @@ def _gather_object_sizes(item_cache, path, gdb):
 
 def _gather_sections(item_cache, path, objdump, gdb):
     return {}
+
+
+def _sphinx_builder_run_command(args, cwd=None, stdout=None):
+    if args == ["python3", "-msphinx", "-M", "clean", "source", "build"]:
+        return 0
+    if args == ["python3", "-msphinx", "-M", "latexpdf", "source", "build"]:
+        os.makedirs(os.path.join(cwd, "build/latex"))
+        open(os.path.join(cwd, "build/latex/document.pdf"), "w+").close()
+        return 0
+    if args == ["python3", "-msphinx", "-M", "html", "source", "build"]:
+        os.makedirs(os.path.join(cwd, "build/html"))
+        open(os.path.join(cwd, "build/html/index.html"), "w+").close()
+        return 0
+    if args == ["make", "super", "clean"]:
+        return 0
+    if args == ["make"]:
+        stdout.append("example")
+        return 0
+    if "pkg-config" in args:
+        stdout.append(" ".join(args))
+        return 0
+    if args[0].endswith("verify"):
+        stdout.append("verify")
+        return 0
+    return 1
 
 
 def test_packagebuild(caplog, tmpdir, monkeypatch):
@@ -444,3 +470,192 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     monkeypatch.undo()
     log = get_and_clear_log(caplog)
     assert f"/qdp/steps/membench: get memory benchmarks for build-label from: arch/bsp" in log
+
+    # Test SphinxBuilder
+    variant["enabled"] = ["sphinx-builder"]
+    doc = director["/qdp/steps/doc"]
+    doc.substitute("${.:/document-author}") == "embedded brains GmbH & Co. KG"
+    doc.substitute("${.:/document-year}") == "2020"
+    doc.substitute(
+        "${.:/document-copyright}") == "2020 embedded brains GmbH & Co. KG"
+    doc.item["document-copyrights"].append("Copyright (C) 2023 John Doe")
+    doc.substitute("${.:/document-author}"
+                   ) == "embedded brains GmbH & Co. KG and contributors"
+    doc.substitute("${.:/document-copyright}"
+                   ) == "2020 embedded brains GmbH & Co. KG and contributors"
+    doc.item["document-copyrights"].pop()
+    doc_src = director["/qdp/source/doc"]
+    doc_src.load()
+    doc_build = Path(director["/qdp/build/doc"].directory)
+    assert not (doc_build / "source" / "copy.rst").exists()
+    assert not (doc_build / "other" / "copy.rst").exists()
+    monkeypatch.setattr(rtemsspec.sphinxbuilder, "run_command",
+                        _sphinx_builder_run_command)
+    director.build_package(None, None)
+    monkeypatch.undo()
+    assert (doc_build / "source" / "copy.rst").is_file()
+    assert (doc_build / "other" / "copy.rst").is_file()
+    doc_result = doc_build / "source" / "copy-and-substitute.rst"
+    with open(doc_result, "r", encoding="utf-8") as src:
+        assert src.read() == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2023 embedded brains GmbH & Co. KG
+
+. Contract
+Contract
+The Title
+The \\break \\break Title
+2
+2020 embedded brains GmbH \\& Co. KG
+The Title
+:term:`Term`
+:term:`Terms <Term>`
+:c:func:`identity`
+spec:/qdp/steps/doc
+.. _SectionHeader:
+
+Section Header
+--------------
+
+Section content:
+
+.. _SubsectionHeader:
+
+Subsection Header
+^^^^^^^^^^^^^^^^^
+
+Subsection content.
+"""
+    doc_index = doc_build / "source" / "index.rst"
+    with open(doc_index, "r", encoding="utf-8") as src:
+        assert src.read() == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2023 embedded brains GmbH & Co. KG
+
+2020 embedded brains GmbH & Co. KG
+
+embedded brains GmbH & Co. KG
+
+| © 2023 Alice
+| © 2020, 2023 embedded brains GmbH & Co. KG
+
+| © 2023 Bob
+| © 2023 embedded brains GmbH & Co. KG
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+The Title
+*********
+
+.. topic:: Release: 2, Date: 2020-10-26, Status: Draft
+
+    * 2020 embedded brains GmbH & Co. KG
+
+    * e
+
+.. topic:: Release: 1, Date: 1970-01-01, Status: Replaced
+
+    Initial release.
+
+.. table::
+    :class: longtable
+    :widths: 16 26 30 28
+
+    +--------------+---------------------+-------------------+-----------+
+    | Action       | Name                | Organization      | Signature |
+    +==============+=====================+===================+===========+
+    | Written by   | John Doe            | Some Organization |           |
+    +              +---------------------+-------------------+-----------+
+    |              | Foo                 | Bár Organization  |           |
+    +--------------+---------------------+-------------------+-----------+
+    | Super Action | This is a Long Name | Short             |           |
+    +--------------+---------------------+-------------------+-----------+
+
+.. toctree::
+    :maxdepth: 4
+    :numbered:
+
+    copy-and-substitute
+    glossary
+"""
+    doc_glossary = doc_build / "source" / "glossary.rst"
+    with open(doc_glossary, "r", encoding="utf-8") as src:
+        assert src.read() == """.. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2023 Alice
+.. Copyright (C) 2020 embedded brains GmbH & Co. KG
+
+Terms, definitions and abbreviated terms
+****************************************
+
+.. glossary::
+    :sorted:
+
+    Term
+        This is the term.
+"""
+    doc_deployment = director["/qdp/deployment/doc"]
+    assert doc_deployment["copyrights-by-license"] == {
+        "BSD-2-Clause": [
+            "Copyright (C) 2023 Bob",
+            "Copyright (C) 2023 embedded brains GmbH & Co. KG"
+        ]
+    }
+
+    variant["enabled"] = ["sphinx-builder-2"]
+    doc_2 = director["/qdp/steps/doc-2"]
+    doc_2.substitute("${.:/document-bsd-2-clause-copyrights}") == "\n"
+
+    with pytest.raises(NotImplementedError):
+        doc_2.mapper.get_link(doc_2.mapper.item)
+
+    with doc_2.section_level(
+            ItemGetValueContext(doc_2.item, "", "", "", -1,
+                                "")) as (section_level, args):
+        assert section_level == 3
+        assert args == None
+    with doc_2.section_level(
+            ItemGetValueContext(doc_2.item, "", "", "", -1,
+                                "-1")) as (section_level, args):
+        assert section_level == 1
+        assert args == None
+    with doc_2.section_level(
+            ItemGetValueContext(doc_2.item, "", "", "", -1,
+                                "2:mo:re")) as (section_level, args):
+        assert section_level == 4
+        assert args == "mo:re"
+
+    doc_2.item["document-components"].append({
+        "action": "foobar",
+        "add-to-index": False,
+        "value": 123
+    })
+    action_run = 0
+
+    def action(component):
+        nonlocal action_run
+        action_run += 1
+        assert component["value"] == 123
+
+    doc_2.add_component_action("foobar", action)
+    director.build_package(None, None)
+    assert action_run == 1

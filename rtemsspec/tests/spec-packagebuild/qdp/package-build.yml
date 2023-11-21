@@ -22,6 +22,10 @@ links:
 - role: build-step
   uid: steps/membench
 - role: build-step
+  uid: steps/doc
+- role: build-step
+  uid: steps/doc-2
+- role: build-step
   uid: steps/archive
 qdp-type: package-build
 type: qdp

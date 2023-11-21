@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      changes:
+        description: |
+          It shall be a summary of the document changes for this release in
+          Sphinx format.  A variable substitution is performed.
+        spec-type: str
+      date:
+        description: |
+          It shall be a document release date.
+        spec-type: str
+      status:
+        description: |
+          It shall be a document release status.
+        spec-type: str
+    description: |
+      This set of attributes specifies a document release.
+    mandatory-attributes: all
+spec-name: Sphinx Document Release
+spec-type: qdp-sphinx-release
+type: spec

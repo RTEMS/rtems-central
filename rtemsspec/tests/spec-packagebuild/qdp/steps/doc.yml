@@ -1,0 +1,102 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: sphinx
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+description: |
+  Builds a Sphinx document.
+document-title: The\breakTitle
+document-toctree-maxdepth: 4
+document-html-help-base-name: Base
+document-components:
+- action: copy-and-substitute
+  add-to-index: true
+  source: copy-and-substitute.rst
+  destination: source/copy-and-substitute.rst
+- action: copy
+  add-to-index: false
+  source: copy.rst
+  destination: source/copy.rst
+- action: copy
+  add-to-index: false
+  enabled-by: false
+  source: nil.rst
+  destination: source/nada.rst
+- action: copy
+  add-to-index: false
+  source: some.txt
+  destination: source/some.txt
+- action: copy-and-substitute
+  add-to-index: false
+  source: some.txt
+  destination: source/some.txt
+- action: copy-files
+  add-to-index: false
+  source: .
+  destination: other
+  files:
+  - copy.rst
+- action: add-to-index
+  add-to-index: true
+  destination: source/glossary.rst
+- action: copy-and-substitute
+  add-to-index: false
+  source: index.rst
+  destination: source/index.rst
+- action: glossary
+  add-to-index: false
+  destination: source/glossary.rst
+  glossary-groups:
+  - /glossary-general
+document-contract: Contract
+document-copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+document-key: blub
+document-releases:
+- date: '1970-01-01'
+  status: Replaced
+  changes: Initial release.
+- date: '2020-10-26'
+  status: Draft
+  changes: |
+    * ${.:/document-copyright}
+
+    * e
+document-contributors:
+- action: Written by
+  contributors:
+  - name: John Doe
+    organization: Some Organization
+  - name: Foo
+    organization: Bár Organization
+- action: Super Action
+  contributors:
+  - name: This is a Long Name
+    organization: Short
+document-license: CC-BY-SA-4.0
+document-license-map:
+  CC-BY-SA-4.0 OR BSD-2-Clause: CC-BY-SA-4.0
+document-type: generic
+enabled-by: sphinx-builder
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doc
+- hash: null
+  name: section
+  role: input
+  uid: ../source/doc-section
+- hash: null
+  name: subsection
+  role: input
+  uid: ../source/doc-subsection
+- name: build
+  role: output
+  uid: ../build/doc
+- name: destination
+  role: output
+  uid: ../deployment/doc
+output-pdf: doc.pdf
+output-html: html
+qdp-type: build-step
+type: qdp

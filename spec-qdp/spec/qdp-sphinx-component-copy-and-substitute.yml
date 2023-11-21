@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: copy-and-substitute
+  uid: qdp-sphinx-component
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      destination:
+        description: |
+          It shall be the destination path of a Sphinx source file relative to
+          the build directory.
+        spec-type: str
+      source:
+        description: |
+          It shall be the source path of a Sphinx source file relative to the
+          base directory of the directory state dependency.
+        spec-type: str
+    description: |
+      This set of attributes specifies a file to copy for a document using the
+      Sphinx documentation framework.  A variable substitution is performed on
+      the source file.
+    mandatory-attributes: all
+spec-name: Sphinx Document Component Copy and Substitute Action
+spec-type: qdp-sphinx-component-copy-and-substitute
+type: spec

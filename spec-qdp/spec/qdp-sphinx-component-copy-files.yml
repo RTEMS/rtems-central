@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: copy-files
+  uid: qdp-sphinx-component
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      destination:
+        description: |
+          It shall be the path to the destination directory.
+        spec-type: str
+      files:
+        description: |
+          It shall be the list of the files to copy from the source directory
+          to the destination directory.  The files may be specified by a path
+          relative to the source directory.  This relative path is preserved in
+          the destination directory.
+        spec-type: list-str
+      source:
+        description: |
+          It shall be the path to the source directory.
+        spec-type: str
+    description: |
+      This set of attributes specifies a list of files to copy from the source
+      directory to the destination directory.
+    mandatory-attributes: all
+spec-name: Sphinx Document Component Copy Files Action
+spec-type: qdp-sphinx-component-copy-files
+type: spec

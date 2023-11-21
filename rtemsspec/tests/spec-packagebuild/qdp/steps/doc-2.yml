@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: sphinx
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Builds a Sphinx document 2.
+document-title: The Title
+document-toctree-maxdepth: 4
+document-html-help-base-name: Puh
+document-components: []
+document-contract: ''
+document-copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+document-key: bla
+document-releases: []
+document-contributors: []
+document-license: CC-BY-SA-4.0
+document-license-map:
+  BSD-2-Clause: CC-BY-SA-4.0 OR BSD-2-Clause
+document-type: generic
+enabled-by: sphinx-builder-2
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doc
+- name: build
+  role: output
+  uid: ../build/doc-2
+- name: destination
+  role: output
+  uid: ../deployment/doc-2
+output-pdf: null
+output-html: null
+qdp-type: build-step
+type: qdp

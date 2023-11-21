@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+content: |
+  Subsection content.
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+header: Subsection Header
+label: SubsectionHeader
+links:
+- hash: null
+  name: spec
+  role: input
+  uid: ../steps/rtems-item-cache
+qdp-type: sphinx-section
+type: qdp

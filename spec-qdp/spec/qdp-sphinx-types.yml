@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: document-type
+  spec-value: generic
+  uid: qdp-sphinx-build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This empty set of attributes is used for refined Sphinx document types
+      which do not need extra attributes.
+    mandatory-attributes: all
+spec-name: Build Sphinx Simple Document Item Types
+spec-type: qdp-sphinx-types
+type: spec
