@@ -26,11 +26,17 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import sys
+from typing import Dict, List, Optional
 
-from rtemsspec.items import ItemCache, item_is_enabled
-from rtemsspec.membench import generate
+from rtemsspec.items import ItemCache
+from rtemsspec.membench import gather_sections, generate, \
+    generate_variants_table, MembenchVariant, SectionsByUID
 from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
 from rtemsspec.util import create_argument_parser, init_logging, load_config
+
+
+def _split(value: Optional[str]) -> List[str]:
+    return value.split(",") if value else []
 
 
 def main() -> None:
@@ -39,17 +45,38 @@ def main() -> None:
     parser.add_argument(
         "builddir",
         metavar="BUILDDIR",
-        nargs=1,
+        nargs="+",
         help="the build directory containing the memory benchmark executables")
+    parser.add_argument(
+        "--enabled",
+        help=("a comma separated list of enabled options used to evaluate "
+              "enabled-by expressions"))
+    parser.add_argument("--variants",
+                        help="a comma separated list of variant names")
     args = parser.parse_args(sys.argv[1:])
     init_logging(args)
-    config = load_config("config.yml")
-    item_cache = ItemCache(config["spec"])
-    item_cache.set_enabled([], item_is_enabled)
+    config = load_config("config.yml")["spec"]
+    config["enabled"] = _split(args.enabled)
+    item_cache = ItemCache(config)
     content = SphinxContent()
     root = item_cache["/rtems/req/mem-basic"]
-    table_pivots = ["/rtems/req/mem-basic", "/rtems/req/mem-smp-1"]
-    generate(content, root, SphinxMapper(root), table_pivots, args.builddir[0])
+    table_pivots = ["/rtems/req/mem-smp-1"]
+    if len(args.builddir) == 1:
+        sections_by_uid = gather_sections(item_cache, args.builddir[0],
+                                          "objdump", "gdb")
+        generate(content, sections_by_uid, root, table_pivots,
+                 SphinxMapper(root))
+    else:
+        names = _split(args.variants)
+        assert len(names) == len(args.builddir)
+        sections_by_build_label: Dict[str, Dict[str, SectionsByUID]] = {}
+        variants: List[MembenchVariant] = []
+        for name, builddir in zip(names, args.builddir):
+            sections_by_build_label[name]["membench"] = gather_sections(
+                item_cache, builddir, "objdump", "gdb")
+            variants.append(MembenchVariant(name, name))
+        generate_variants_table(content, sections_by_build_label, root,
+                                variants)
     print(str(content))
 
 

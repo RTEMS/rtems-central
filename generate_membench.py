@@ -31,7 +31,7 @@ import textwrap
 from typing import NamedTuple, List, Optional
 
 from rtemsspec.items import ItemCache
-from rtemsspec.membench import generate
+from rtemsspec.membench import gather_sections, generate
 from rtemsspec.sphinxcontent import SphinxContent, SphinxMapper
 from rtemsspec.util import create_argument_parser, init_logging, load_config
 
@@ -823,9 +823,10 @@ def _post_process(path: str) -> None:
     config = load_config("config.yml")
     item_cache = ItemCache(config["spec"])
     root = item_cache["/rtems/req/mem-basic"]
+    sections_by_uid = gather_sections(item_cache, path, "objdump", "gdb")
     content = SphinxContent()
     table_pivots = ["/rtems/req/mem-basic", "/rtems/req/mem-smp-1"]
-    generate(content, root, SphinxMapper(root), table_pivots, path)
+    generate(content, sections_by_uid, root, table_pivots, SphinxMapper(root))
     print(content)
 
 

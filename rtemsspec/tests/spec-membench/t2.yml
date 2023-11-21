@@ -7,7 +7,7 @@ description: The Blue Green description.
 enabled-by: true
 links:
 - role: validation
-  uid: r1
+  uid: r2
 test-brief: The Blue Green brief description.
 test-code: |
   /* Blue green code */
@@ -16,5 +16,5 @@ test-includes:
 - blue.h
 test-local-includes:
 - green.h
-test-target: t1.c
+test-target: t2.c
 type: memory-benchmark
