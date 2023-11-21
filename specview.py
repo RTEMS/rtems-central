@@ -30,6 +30,7 @@ import itertools
 import sys
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from rtemsspec.build import gather_files
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext
 from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
@@ -372,7 +373,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--filter',
                         choices=[
-                            "none", "api", "orphan", "no-validation",
+                            "none", "api", "build", "orphan", "no-validation",
                             "action-table", "action-list", "design", "types"
                         ],
                         type=str.lower,
@@ -392,9 +393,12 @@ def main() -> None:
                         nargs="*",
                         help="an UID of a specification item")
     args = parser.parse_args(sys.argv[1:])
-    config = load_config("config.yml")["spec"]
-    config["enabled"] = args.enabled.split(",") if args.enabled else []
-    item_cache = ItemCache(config, is_item_enabled=recursive_is_enabled)
+    config = load_config("config.yml")
+    item_cache_config = config["spec"]
+    item_cache_config["enabled"] = args.enabled.split(
+        ",") if args.enabled else []
+    item_cache = ItemCache(item_cache_config,
+                           is_item_enabled=recursive_is_enabled)
     augment_with_test_links(item_cache)
     augment_with_test_case_links(item_cache)
     root = item_cache["/req/root"]
@@ -425,6 +429,9 @@ def main() -> None:
         _design(item_cache)
     elif args.filter == "types":
         for name in sorted(item_cache.items_by_type.keys()):
+            print(name)
+    elif args.filter == "build":
+        for name in gather_files(config["build"], item_cache, False):
             print(name)
 
 
