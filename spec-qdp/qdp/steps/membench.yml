@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: membench-collector
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Collects the memory usage benchmarks.
+enabled-by: true
+gdb: ${../variant:/deployment-directory}/bin/${.:/arch}-rtems${../variant:/rtems-version}-gdb
+links:
+- hash: null
+  name: spec
+  role: input
+  uid: rtems-item-cache
+- name: log
+  role: output
+  uid: ../test-logs/membench
+objdump: ${../variant:/deployment-directory}/bin/${.:/arch}-rtems${../variant:/rtems-version}-objdump
+qdp-type: build-step
+type: qdp
