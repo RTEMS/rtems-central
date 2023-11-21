@@ -30,6 +30,8 @@ links:
 - role: build-step
   uid: steps/doc-ddf-sdd
 - role: build-step
+  uid: steps/doc-rtems
+- role: build-step
   uid: steps/archive
 qdp-type: package-build
 type: qdp

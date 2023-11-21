@@ -10,6 +10,7 @@ coverage>=6.2
 cPyparsing>=2.4.7.1.2.0
 dataclasses>=0.8;python_version<"3.7"
 dill>=0.3.4
+distro>=1.8.0
 docutils>=0.17.1
 entrypoints>=0.4
 flake8>=5.0.4

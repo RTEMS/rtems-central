@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: run-actions
+actions:
+- action: remove-glob
+  enabled-by: true
+  remove-tree: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - build
+  - .lock-waf*
+  - .waf*
+- action: subprocess
+  command:
+  - ./waf
+  - configure
+  - --prefix=${../deployment/doc-rtems:/directory}
+  - --pdf
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: subprocess
+  command:
+  - ./waf
+  - build
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: subprocess
+  command:
+  - ./waf
+  - install
+  - --destdir=${.:/params/intermediate-directory}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/intermediate-directory}
+- action: remove-glob
+  enabled-by: true
+  remove-tree: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - build
+  - .lock-waf*
+  - .waf*
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+description: |
+  Builds the RTEMS documentation.
+enabled-by: true
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rtems-docs
+- name: deployment
+  role: output
+  uid: ../deployment/doc-rtems
+params:
+  intermediate-directory: ${.:/params/working-directory}/destdir
+  working-directory: ${../source/rtems-docs:/directory}
+qdp-type: build-step
+type: qdp
