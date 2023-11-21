@@ -11,6 +11,10 @@ links:
   role: input
   uid: ../variant
 - hash: null
+  name: spec
+  role: input
+  uid: rtems-item-cache
+- hash: null
   name: bar
   role: input-to
   uid: c

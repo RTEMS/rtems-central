@@ -4,6 +4,8 @@ copyrights:
 enabled-by: true
 links:
 - role: build-step
+  uid: steps/rtems-item-cache
+- role: build-step
   uid: steps/a
 - role: build-step
   uid: steps/b

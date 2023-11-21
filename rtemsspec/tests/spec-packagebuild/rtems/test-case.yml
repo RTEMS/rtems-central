@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links: []
+test-actions:
+- action-brief: |
+    Brief.
+  action-code: |
+    int i;
+  checks:
+  - brief: |
+      Check.
+    code: |
+      T_eq_int( identity( i ), i );
+    links:
+    - role: validation
+      uid: req
+  links: []
+test-brief: |
+  Brief.
+test-context: []
+test-context-support: null
+test-description: null
+test-header: null
+test-includes:
+- header.h
+test-local-includes: []
+test-setup: null
+test-stop: null
+test-support: null
+test-target: testsuites/validation/tc-identity.c
+test-teardown: null
+type: test-case

@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-step-type
+  spec-value: rtems-item-cache
+  uid: qdp-build-step
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      spec-root-uid:
+        description: |
+          It shall be the UID of the root specification item.
+        spec-type: str
+    description: |
+      This set of attributes specifies a build step to augment the items with
+      RTEMS-specific attributes and links.
+    mandatory-attributes: all
+spec-name: RTEMS Item Cache Item Type
+spec-type: qdp-rtems-item-cache
+type: spec

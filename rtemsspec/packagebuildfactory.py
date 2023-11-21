@@ -28,6 +28,7 @@ from rtemsspec.archiver import Archiver
 from rtemsspec.directorystate import DirectoryState
 from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
 from rtemsspec.reposubset import RepositorySubset
+from rtemsspec.rtems import RTEMSItemCache
 from rtemsspec.runactions import RunActions
 from rtemsspec.runtests import RunTests, TestLog
 from rtemsspec.testrunner import DummyTestRunner, GRMONManualTestRunner, \
@@ -40,6 +41,7 @@ def create_build_item_factory() -> BuildItemFactory:
     factory.add_constructor("qdp/build-step/archive", Archiver)
     factory.add_constructor("qdp/build-step/repository-subset",
                             RepositorySubset)
+    factory.add_constructor("qdp/build-step/rtems-item-cache", RTEMSItemCache)
     factory.add_constructor("qdp/build-step/run-actions", RunActions)
     factory.add_constructor("qdp/build-step/run-tests", RunTests)
     factory.add_constructor("qdp/directory-state/generic", DirectoryState)

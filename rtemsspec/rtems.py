@@ -24,10 +24,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import base64
+import hashlib
 import itertools
 from typing import Any, List, Tuple, Union
 
 from rtemsspec.items import create_unique_link, Item, ItemCache, Link
+from rtemsspec.glossary import augment_glossary_terms
+from rtemsspec.packagebuild import BuildItem, PackageBuildDirector
+from rtemsspec.validation import augment_with_test_case_links
 
 _NOT_PRE_QUALIFIED = set([
     "/acfg/constraint/option-not-pre-qualified",
@@ -83,6 +88,19 @@ def augment_with_test_links(item_cache: ItemCache) -> None:
                     _add_link(item_cache, item, link)
             for link in actions["links"]:
                 _add_link(item_cache, item, link)
+
+
+def _visit_domain(item: Item, domain: Item) -> None:
+    for item_2 in itertools.chain(item.children("interface-placement"),
+                                  item.parents("interface-enumerator")):
+        item_2["_interface_domain"] = domain
+        _visit_domain(item_2, domain)
+
+
+def _augment_with_interface_domains(item_cache: ItemCache) -> None:
+    """ Augments the interface items with their interface domain. """
+    for item in item_cache.items_by_type["interface/domain"]:
+        _visit_domain(item, item)
 
 
 _SELF_VALIDATION = {
@@ -220,3 +238,44 @@ def validate(item: Item) -> None:
                          ["interface-ingroup", "interface-ingroup-hidden"])
     _fixup_pre_qualified(item, ["interface/header-file"],
                          "interface-placement")
+
+
+def _is_proxy_link_enabled(link: Link) -> bool:
+    return link.item.is_enabled(link.item.cache.enabled)
+
+
+class RTEMSItemCache(BuildItem):
+    """
+    This build step augments the items with RTEMS-specific attributes and
+    links.
+    """
+
+    def __init__(self, director: PackageBuildDirector, item: Item):
+        super().__init__(director, item)
+        self.item_cache = self.item.cache
+
+        # It is crucial to resolve the proxies before we use the recursive
+        # enabled below since unresolved proxy items have no links.
+        self.item_cache.resolve_proxies(_is_proxy_link_enabled)
+        self.item_cache.set_enabled(self.enabled_set, recursive_is_enabled)
+
+        augment_with_test_links(self.item_cache)
+        augment_with_test_case_links(self.item_cache)
+        _augment_with_interface_domains(self.item_cache)
+        for glossary in ["/glossary-general", "/req/glossary"]:
+            augment_glossary_terms(self.item_cache[glossary], [])
+        validate(self.item_cache[self["spec-root-uid"]])
+
+        # Calculate the overall item cache hash.  Ignore QDP configuration
+        # items and specification type changes.
+        state = hashlib.sha512()
+        for item_2 in sorted(self.item_cache.values()):
+            if not item_2.type.startswith(("qdp", "spec")):
+                state.update(item_2.digest.encode("ascii"))
+        self._hash = base64.urlsafe_b64encode(state.digest()).decode("ascii")
+
+    def has_changed(self, link: Link) -> bool:
+        return link["hash"] is None or self._hash != link["hash"]
+
+    def refresh_link(self, link: Link) -> None:
+        link["hash"] = self._hash
