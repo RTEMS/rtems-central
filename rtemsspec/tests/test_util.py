@@ -27,18 +27,30 @@
 import os
 import logging
 
-from rtemsspec.util import copy_files, create_argument_parser, base64_to_hex, \
-    init_logging, load_config, run_command
+from rtemsspec.util import copy_file, copy_files, create_argument_parser, \
+    base64_to_hex, init_logging, load_config, run_command
 from rtemsspec.tests.util import get_and_clear_log
 
 
-def test_copy_files(tmpdir):
+def test_copy_files(caplog, tmpdir):
+    caplog.set_level(logging.INFO)
     src_dir = os.path.dirname(__file__)
-    copy_files(src_dir, tmpdir, [])
+    copy_files(src_dir, tmpdir, [], "uid")
     filename = "config/c/d.yml"
-    assert not os.path.exists(os.path.join(tmpdir, filename))
-    copy_files(src_dir, tmpdir, [filename])
-    assert os.path.exists(os.path.join(tmpdir, filename))
+    dst_dir = os.path.join(tmpdir, "1")
+    assert not os.path.exists(os.path.join(dst_dir, filename))
+    copy_files(src_dir, dst_dir, [filename], "uid")
+    assert os.path.exists(os.path.join(dst_dir, filename))
+    assert get_and_clear_log(caplog) == (
+        f"INFO uid: copy '{src_dir}"
+        f"/config/c/d.yml' to '{dst_dir}/config/c/d.yml'")
+    src_file = os.path.join(src_dir, filename)
+    dst_file = os.path.join(tmpdir, "2", filename)
+    assert not os.path.exists(dst_file)
+    copy_file(src_file, dst_file, "uid")
+    assert os.path.exists(dst_file)
+    assert get_and_clear_log(
+        caplog) == f"INFO uid: copy '{src_file}' to '{dst_file}'"
 
 
 def test_base64_to_hex():

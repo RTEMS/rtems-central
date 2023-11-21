@@ -41,17 +41,26 @@ def base64_to_hex(data: str) -> str:
     return binascii.hexlify(binary).decode('ascii')
 
 
-def copy_files(src_dir: str, dst_dir: str, files: List[str]) -> None:
+def copy_file(src_file: str, dst_file: str, log_context: str) -> None:
+    """ Copies the source file to the destination file. """
+    os.makedirs(os.path.dirname(dst_file), exist_ok=True)
+    logging.info("%s: copy '%s' to '%s'", log_context, src_file, dst_file)
+    shutil.copy2(src_file, dst_file)
+
+
+def copy_files(src_dir: str, dst_dir: str, files: List[str],
+               log_context: str) -> None:
     """
     Copies a list of files in the source directory to the destination
     directory preserving the directory of the files relative to the source
     directory.
     """
     for a_file in files:
-        src = os.path.join(src_dir, a_file)
-        dst = os.path.join(dst_dir, a_file)
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copy2(src, dst)
+        src_file = os.path.join(src_dir, a_file)
+        dst_file = os.path.join(dst_dir, a_file)
+        os.makedirs(os.path.dirname(dst_file), exist_ok=True)
+        logging.info("%s: copy '%s' to '%s'", log_context, src_file, dst_file)
+        shutil.copy2(src_file, dst_file)
 
 
 def load_config(config_filename: str) -> Any:

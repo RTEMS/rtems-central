@@ -39,7 +39,7 @@ def _run_pre_qualified_only_build(config: dict, item_cache: ItemCache) -> None:
     files = rtemsspec.build.gather_files(config, item_cache)
     source_dir = config["source-directory"]
     workspace_dir = config["workspace-directory"]
-    rtemsspec.util.copy_files(source_dir, workspace_dir, files)
+    rtemsspec.util.copy_files(source_dir, workspace_dir, files, "workspace")
     with open(os.path.join(workspace_dir, "config.ini"), "w",
               encoding="utf-8") as config_ini:
         content = string.Template(config["config-ini"]).substitute(config)
