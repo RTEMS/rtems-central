@@ -539,6 +539,7 @@ class ItemMapper:
         self._recursive = recursive
         self._prefix = [""]
         self._get_value_map: Dict[str, ItemGetValueMap] = {}
+        self.copyrights_by_license: Dict[str, Set[str]] = {}
 
     @property
     def item(self) -> Item:
@@ -621,6 +622,8 @@ class ItemMapper:
                 parts[0], (_get_value, {}))
             value = get_value(ctx)
             path = os.path.join(path, key)
+        self.copyrights_by_license.setdefault(item["SPDX-License-Identifier"],
+                                              set()).update(item["copyrights"])
         return value
 
     def map(self,
