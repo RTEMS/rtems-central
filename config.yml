@@ -5,7 +5,6 @@ build:
     [${arch}/${bsp}]
     RTEMS_SMP = True
     RTEMS_QUAL = True
-    RTEMS_QUAL_ONLY = True
     BUILD_TESTS = False
     BUILD_MEMBENCH = True
     BUILD_UNITTESTS = True
@@ -16,7 +15,6 @@ build:
   - bsps/sparc/leon3
   - INSTALL_LEGACY_MAKEFILES
   - RTEMS_QUAL
-  - RTEMS_QUAL_ONLY
   - RTEMS_SMP
   - sparc/gr712rc
   source-directory: modules/rtems
@@ -24,12 +22,19 @@ build:
   - bsps/shared/doxygen.h
   - bsps/shared/cache/cacheimpl.h
   - bsps/shared/dev/clock/clockimpl.h
+  - bsps/sparc/leon3/include/tm27.h
   - bsps/sparc/shared/doxygen.h
+  - cpukit/compiler-rt/lib/builtins/int_div_impl.inc
+  - cpukit/compiler-rt/lib/builtins/int_endianness.h
+  - cpukit/compiler-rt/lib/builtins/int_lib.h
+  - cpukit/compiler-rt/lib/builtins/int_types.h
+  - cpukit/compiler-rt/lib/builtins/int_util.h
   - cpukit/doxygen.h
   - cpukit/doxygen/appl-config.h
+  - cpukit/doxygen/build.h
+  - cpukit/doxygen/hash-algorithms.h
   - cpukit/doxygen/top-level-groups.h
   - cpukit/libc/string/local.h
-  - cpukit/libcsupport/src/malloc_p.h
   - cpukit/libmisc/cpuuse/cpuuseimpl.h
   - cpukit/libtest/t-test-rtems.h
   - cpukit/score/cpu/sparc/syscall.h
