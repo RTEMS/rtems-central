@@ -8,7 +8,13 @@ links:
 - role: build-step
   uid: steps/create-config-files
 - role: build-step
+  uid: steps/create-ddf-sdd-doxyfile-build
+- role: build-step
+  uid: steps/create-ddf-sdd-doxyfile-deployment
+- role: build-step
   uid: steps/run-rsb
+- role: build-step
+  uid: steps/build-doxygen
 - role: build-step
   uid: steps/bsp-qual-only
 - role: build-step
@@ -19,6 +25,10 @@ links:
   uid: steps/bsp-extra-coverage
 - role: build-step
   uid: steps/membench
+- role: build-step
+  uid: steps/doxygen-tagfile
+- role: build-step
+  uid: steps/doc-ddf-sdd
 - role: build-step
   uid: steps/archive
 qdp-type: package-build

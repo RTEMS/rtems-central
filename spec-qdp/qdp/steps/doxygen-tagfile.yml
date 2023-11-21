@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: subprocess
+  enabled-by: true
+  command:
+  - ${../variant:/deployment-directory}/bin/doxygen
+  - ${../build/doc-ddf-sdd-doxyfile:/file}
+  env: []
+  expected-return-code: 0
+  working-directory: ${../source/rtems-qual-only:/directory}
+build-step-type: run-actions
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Builds the Doxygen tagfile.
+enabled-by: true
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../deployment/doxygen
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rtems-qual-only
+- hash: null
+  name: config
+  role: input
+  uid: ../build/doc-ddf-sdd-doxyfile
+- name: destination
+  role: output
+  uid: ../build/doc-ddf-sdd
+- name: tagfile
+  role: output
+  uid: ../build/doc-ddf-sdd-tagfile
+params: {}
+qdp-type: build-step
+type: qdp

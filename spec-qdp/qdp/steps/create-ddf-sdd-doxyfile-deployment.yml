@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: copy-and-substitute
+  enabled-by: true
+  input-name: source
+  output-name: destination
+  source: null
+  target: null
+build-step-type: run-actions
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Creates the DJF SDD Doxygen file.
+enabled-by: true
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doc-ddf-sdd-doxyfile
+- name: destination
+  role: output
+  uid: ../deployment/doc-ddf-sdd-doxyfile
+params:
+  generate-html: 'YES'
+  generate-latex: 'NO'
+  input: ''
+  output-directory: ${../deployment/doc-ddf-sdd:/directory}
+  tagfile: ${../deployment/doc-ddf-sdd-tagfile:/file}
+qdp-type: build-step
+type: qdp

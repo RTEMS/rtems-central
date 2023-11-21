@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: copy-and-substitute
+  enabled-by: true
+  input-name: source
+  output-name: destination
+  source: null
+  target: null
+build-step-type: run-actions
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Creates the Doxygen file used to produce the tagfile.
+enabled-by: true
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doc-ddf-sdd-doxyfile
+- name: destination
+  role: output
+  uid: ../build/doc-ddf-sdd-doxyfile
+params:
+  generate-html: 'NO'
+  generate-latex: 'NO'
+  input: ''
+  output-directory: ${../build/doc-ddf-sdd:/directory}
+  tagfile: ${../build/doc-ddf-sdd-tagfile:/file}
+qdp-type: build-step
+type: qdp

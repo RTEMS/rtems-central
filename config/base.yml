@@ -57,6 +57,47 @@ workspace-actions:
     include: qdp_build.py
   source-directory: ${.:/toolchain-directory}
   uid: /qdp/source/qt-modules
+- action-name: base-doxygen
+  action-type: unpack-archive
+  action-when: 4000
+  archive-file: ${.:/toolchain-directory}/src/doxygen-1.9.7.src.tar.gz
+  archive-hash: YY_1iqbwouuJ-VtXCZXqPrvNpk9QLKvOzZvilnq_-1bQ1nR94MBt9CJwWRl1fmr5xuWlbKYDsd33oJp-55sYAw==
+  archive-patches: []
+  archive-symbolic-links: []
+  archive-url: https://www.doxygen.nl/files/doxygen-1.9.7.src.tar.gz
+  copyrights-by-license:
+    description: |
+      The Doxygen sources are used to provide host tools to generate software
+      documentations.
+    files:
+    - LICENSE
+  description: |
+    Doxygen sources.
+  destination-directory: ${../variant:/deployment-directory}/src
+  enabled-by: true
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  uid: /qdp/source/doxygen
+- action-name: base-ddf-sdd-doxyfile
+  action-type: copy-directory
+  action-when: 4000
+  copyrights-by-license: {}
+  destination-directory: ${../variant:/build-directory}/docs/rtems/ddf/sdd
+  enabled-by: true
+  files:
+  - file: Doxyfile
+    hash: null
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  patterns: []
+  source-directory: ${.:/toolchain-directory}/docs/rtems/ddf/sdd
+  uid: /qdp/source/doc-ddf-sdd-doxyfile
 - action-name: base-rsb
   action-type: git-clone
   action-when: 4000

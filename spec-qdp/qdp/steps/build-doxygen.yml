@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${.:/params/build-directory}
+- action: subprocess
+  enabled-by: true
+  command:
+  - cmake
+  - -DCMAKE_INSTALL_PREFIX=${../variant:/deployment-directory}
+  - -G
+  - Unix Makefiles
+  - ${../source/doxygen:/directory}
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  enabled-by: true
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: subprocess
+  enabled-by: true
+  command:
+  - make
+  - -j
+  - ${.:/host-processor-count}
+  - install
+  - DESTDIR=${.:/params/build-directory}/destdir
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/build-directory}
+- action: directory-state-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: deployment
+  prefix: null
+  root: ${.:/params/build-directory}/destdir/${../variant:/deployment-directory}
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${.:/params/build-directory}
+build-step-type: run-actions
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Builds and installs Doxygen.
+enabled-by: true
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doxygen
+- name: deployment
+  role: output
+  uid: ../deployment/doxygen
+params:
+  build-directory: ${../variant:/build-directory}/build-doxygen
+qdp-type: build-step
+type: qdp
