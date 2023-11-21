@@ -698,6 +698,52 @@ links:
       min-lower-bound: 1.3912e-05
   role: performance-runtime-limits
   uid: /rtems/task/req/perf-start-preempt
+- limits:
+    DirtyCache:
+      max-upper-bound: 6.116e-07
+      median-lower-bound: 5.004e-07
+      median-upper-bound: 6.116e-07
+      min-lower-bound: 4.968e-07
+    FullCache:
+      max-upper-bound: 6.6e-07
+      median-lower-bound: 5.7600000000000006e-08
+      median-upper-bound: 7.040000000000001e-08
+      min-lower-bound: 5.7600000000000006e-08
+    HotCache:
+      max-upper-bound: 4.532e-07
+      median-lower-bound: 5.7600000000000006e-08
+      median-upper-bound: 7.040000000000001e-08
+      min-lower-bound: 5.7600000000000006e-08
+    Load/1:
+      max-upper-bound: 9.68e-07
+      median-lower-bound: 6.948e-07
+      median-upper-bound: 8.492000000000001e-07
+      min-lower-bound: 6.912e-07
+  role: performance-runtime-limits
+  uid: /score/cpu/req/perf-empty
+- limits:
+    DirtyCache:
+      max-upper-bound: 2.56564e-05
+      median-lower-bound: 2.09124e-05
+      median-upper-bound: 2.5559600000000002e-05
+      min-lower-bound: 2.0908800000000002e-05
+    FullCache:
+      max-upper-bound: 4.728680000000001e-05
+      median-lower-bound: 3.6576000000000004e-06
+      median-upper-bound: 4.4704000000000004e-06
+      min-lower-bound: 3.6576000000000004e-06
+    HotCache:
+      max-upper-bound: 4.7652000000000006e-06
+      median-lower-bound: 3.6576000000000004e-06
+      median-upper-bound: 4.4704000000000004e-06
+      min-lower-bound: 3.6576000000000004e-06
+    Load/1:
+      max-upper-bound: 2.60304e-05
+      median-lower-bound: 2.1167999999999998e-05
+      median-upper-bound: 2.5872e-05
+      min-lower-bound: 2.11572e-05
+  role: performance-runtime-limits
+  uid: /score/cpu/req/perf-nops
 non-functional-type: performance-runtime-limits
 rationale: null
 references: []
