@@ -1,8 +1,84 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: null
+brief: |
+  The GR-CPCI-GR740 development board has been designed to support the
+  development and fast prototyping of systems based on the GR740 quad-core
+  32-bit fault-tolerant LEON4FT SPARC V8 processor.
 copyrights:
-- Copyright (C) 2023 embedded brains GmbH & Co. KG
-description: null
+- Copyright (C) 2023 Frontgrade Gaisler AB
+description: |
+  The GR-CPCI-GR740 Development Board comprises a custom designed PCB in a 6U
+  Compact PCI format, making the board suitable for stand-alone bench top
+  development, or if required, to be mounted in a 6U CPCI Rack, or in a
+  bench-top enclosure. The principle interfaces and functions are accessible on
+  the front and back edges of the board, and secondary interfaces via headers
+  on the board. The  GR-CPCI-GR740 Development Board comes as standard with a
+  dedicated accessory board which provides access to additional I/O interfaces.
+
+  Features:
+
+  * GR740 quad-core 32-bit fault-tolerant LEON4FT SPARC V8 processor
+
+  * cPCI interface (32 bit) configurable with jumpers for Host or Peripheral
+    operation
+
+  * PCI arbiter implemented in separate FPGA
+
+  * On-board memory:
+
+    * SDRAM SODIMM module - Delivered with two 256 MiB modules that provide a
+      total 256 MiB of accessible data RAM plus ECC check bits.
+
+    * Parallel Boot Flash 64 Mbit (16 bit wide x 4M or 8 bit wide x 8M)
+
+    * Additional memory via memory expansion connector
+
+  * Power, reset, clock and auxiliary circuits
+
+  * Interfaces at front edge of board:
+
+    * Dual RJ45 10/100/1000 Mbit GMII/MII Ethernet interface (KSZ9021GN)
+
+    * 8 port SpaceWire interface (8x MDM9S)
+
+    * SpaceWire debug communications link (MDM9S)
+
+    * 16-bit General purpose I/O (34 pin 0.1" ribbon cable style connector)
+
+    * FTDI Serial to USB interface (FT4232HL with USB-Mini-AB)
+
+    * LED indicators connected to GPIO signals
+
+    * DIP switch for bootstrap and PLL interface configuration
+
+    * Push button switch for reset and toggle switch (on/off) for DSU break
+
+  * Interfaces at back edge of board:
+
+    * Compact PCI interface (32-bit), configurable for Host or Peripheral slot
+
+    * Input power connector: 5V nominal
+
+  * Interfaces on-board:
+
+    * SPI  interface on pin headers
+
+    * JTAG Debug interface
+
+    * 4-pin IDE style power connector
+
+    * Assorted jumpers and Test Points for configuration and test of the board
+
+  * To accommodate the optional/alternative I/O interfaces the accompanying
+    accessory board provides
+
+    * Dual MIL-1553 Interface (Transceiver/Transformer and D-sub 9 Male
+      connector)
+
+    * Dual CAN Interface (CAN Transceivers and two D-sub 9 Male connectors)
+
+    * Two Serial UART (RS232 transceivers and two D-sub 9 female connectors)
+
+    * SPI interface (available via 10 pin header)
 enabled-by:
   and:
   - sparc/gr740

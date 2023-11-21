@@ -1,8 +1,76 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
-brief: null
+brief: |
+  The GR712RC development board has been designed to support the development
+  and fast prototyping of systems based on the GR712RC dual-core 32-bit fault
+  tolerant LEON3FT SPARC V8 processor.
 copyrights:
-- Copyright (C) 2023 embedded brains GmbH & Co. KG
-description: null
+- Copyright (C) 2023 Frontgrade Gaisler AB
+description: |
+  The GR712RC development board comprises a custom designed PCB in a Double
+  Eurocard format (233.5 mm x 160 mm) making the board suitable for stand-alone
+  bench top development, or suitable for mounting in a housing. The principle
+  interfaces and functions are accessible on the front and back edges of the
+  the board.
+
+  The GR712RC device incorporates an internal programmable switch matrix which
+  means that the same input/output pin can be used for multiple functions. This
+  board therefore has a large number of configuration features in order to be
+  able to exercise and configure the functions of the device.
+
+  Features:
+
+  * GR712RC dual-core 32-bit fault tolerant LEON3-FT SPARC V8 processor
+
+  * On-board memory:
+
+    * SDRAM SODIMM (supports up 512 Mbyte devices. Delivered with 256 Mbyte
+      module -  128 Mbyte 32-bit wide data & 64 Mbyte BCH 8-bit wide or
+      Reed-Solomon 16-bit wide checksum)
+
+    * SRAM (1 bank x 2 Mword x 40 bit, optional second bank not fitted as
+      standard)
+
+    * FLASH PROM (8 Mword x 8 bit)
+
+    * Additional memory via memory expansion connector
+
+  * Power, reset, clock and auxiliary circuits
+
+  * Interfaces at front edge of board:
+
+    * Two serial UART interfaces (RS232) with DSUB9 connectors
+
+    * Ethernet 10/100 Mbps RMII interface with RJ45 connector
+
+    * Two CAN bus interfaces (ISO 11898) with DSUB9 connectors
+
+    * Two SpaceWire interfaces with MDM9 connectors
+
+    * Four optional SpaceWire interfaces with MDM9 connectors
+
+    * JTAG debug interface
+
+  * Interfaces at back edge of board:
+
+    * +5 V power connector
+
+    * 26 input and 38 input/output general purpose pins
+
+    * 20 RS422 transmit pairs
+
+    * 20 RS422 receiver pairs
+
+  * Interfaces on-board:
+
+    * Dual MIL-STD-1553B communication interfaces on DSUB9 connector
+
+    * I2C master interface on pin headers
+
+    * SPI master interface on pin headers
+
+    * Headers and jumpers
+
+    * Reset push button and LED indicators
 enabled-by:
   and:
   - sparc/gr712rc
