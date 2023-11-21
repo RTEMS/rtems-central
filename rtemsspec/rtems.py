@@ -161,16 +161,23 @@ _VALIDATOR = {
 }
 
 
-def _validate_tree(item: Item, related_items: Set[Item]) -> bool:
+def _validate_tree(item: Item, order: Tuple[int, ...],
+                   related_items: Set[Item]) -> bool:
+    item["_order"] = order
     related_items.add(item)
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     validated = True
     validation_dependencies: List[Tuple[str, str]] = []
-    for link in itertools.chain(item.links_to_children(_CHILD_ROLES),
-                                item.links_to_parents(_PARENT_ROLES)):
+    for index, link in enumerate(
+            sorted(
+                itertools.chain(item.links_to_children(_CHILD_ROLES),
+                                item.links_to_parents(_PARENT_ROLES)))):
         item_2 = link.item
-        validated = _validate_tree(item_2, related_items) and validated
+        related_items.add(item)
+        validated = _validate_tree(item_2, order[:-1] +
+                                   (order[-1] + index + 1, 0),
+                                   related_items) and validated
         if link.role == "validation":
             role = _VALIDATION_METHOD[item_2.type]
         elif link.role == "requirement-refinement":
@@ -237,7 +244,7 @@ def validate(root: Item) -> Set[Item]:
     Returns the set of items related to the root item.
     """
     related_items: Set[Item] = set()
-    _validate_tree(root, related_items)
+    _validate_tree(root, (0, ), related_items)
     _validate_containers(root)
     _fixup_pre_qualified(root,
                          ["interface/appl-config-group", "interface/group"],
