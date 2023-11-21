@@ -113,6 +113,13 @@ class SphinxContent(Content):
         """ Pops the top from the label stack. """
         self._label_stack.pop()
 
+    @contextmanager
+    def label_scope(self, label: str) -> Iterator[None]:
+        """ Opens a label scope context. """
+        self.push_label(label)
+        yield
+        self.pop_label()
+
     def add_label(self, label: str) -> None:
         """ Adds a label. """
         self.add(".. _" + label.strip() + ":")

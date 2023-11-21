@@ -40,6 +40,18 @@ def test_add_label():
 """
 
 
+def test_label_scope():
+    content = SphinxContent()
+    with content.label_scope("x"):
+        with content.section("y"):
+            pass
+    assert str(content) == """.. _xY:
+
+y
+=
+"""
+
+
 def test_directive():
     content = SphinxContent()
     with content.directive("x"):
