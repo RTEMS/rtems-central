@@ -38,6 +38,7 @@ from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext
 from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
     build_item_input, PackageBuildDirector
 from rtemsspec.packagebuildfactory import create_build_item_factory
+from rtemsspec.rtems import RTEMSItemCache
 from rtemsspec.specverify import verify
 import rtemsspec.testrunner
 from rtemsspec.testrunner import Executable, Report, TestRunner
@@ -143,6 +144,29 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     assert "INFO /qdp/steps/b: create build item" not in log
     assert "INFO /qdp/steps/b: is disabled" in log
     assert "INFO /qdp/steps/c: output is disabled: /qdp/output/b" in log
+
+    rtems_item_cache = director["/qdp/steps/rtems-item-cache"]
+    assert isinstance(rtems_item_cache, RTEMSItemCache)
+    related_items = rtems_item_cache.get_related_items_by_type("test-case")
+    assert [item.uid for item in related_items] == ["/rtems/test-case"]
+    related_items = rtems_item_cache.get_related_items_by_type(["test-case"])
+    assert [item.uid for item in related_items] == ["/rtems/test-case"]
+    related_types = rtems_item_cache.get_related_types_by_prefix("requirement")
+    assert related_types == [
+        "requirement/functional/function", "requirement/non-functional/design"
+    ]
+    related_items = rtems_item_cache.get_related_interfaces()
+    assert [item.uid for item in related_items] == [
+        "/rtems/domain", "/rtems/group", "/rtems/group-acfg", "/rtems/header",
+        "/rtems/if"
+    ]
+    related_items = rtems_item_cache.get_related_requirements()
+    assert [item.uid for item in related_items] == ["/req/root", "/rtems/req"]
+    related_items = rtems_item_cache.get_related_interfaces_and_requirements()
+    assert [item.uid for item in related_items] == [
+        "/req/root", "/rtems/domain", "/rtems/group", "/rtems/group-acfg",
+        "/rtems/header", "/rtems/if", "/rtems/req"
+    ]
 
     director.build_package(None, ["/qdp/steps/a"])
     log = get_and_clear_log(caplog)

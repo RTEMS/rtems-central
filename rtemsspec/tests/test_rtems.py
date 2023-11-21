@@ -124,7 +124,10 @@ def test_validate(tmpdir):
     item_cache_config = create_item_cache_config_and_copy_spec(
         tmpdir, "spec-rtems", with_spec_types=True)
     item_cache = ItemCache(item_cache_config)
-    assert not validate(item_cache["/req/root"])
+    root = item_cache["/req/root"]
+    assert "_validated" not in root
+    validate(root)
+    assert not root["_validated"]
     api_items = {}
     gather_api_items(item_cache, api_items)
     assert [

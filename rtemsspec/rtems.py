@@ -27,7 +27,7 @@
 import base64
 import hashlib
 import itertools
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Set, Tuple, Union
 
 from rtemsspec.items import create_unique_link, Item, ItemCache, Link
 from rtemsspec.glossary import augment_glossary_terms
@@ -161,7 +161,8 @@ _VALIDATOR = {
 }
 
 
-def _validate_tree(item: Item) -> bool:
+def _validate_tree(item: Item, related_items: Set[Item]) -> bool:
+    related_items.add(item)
     pre_qualified = is_pre_qualified(item)
     item["_pre_qualified"] = pre_qualified
     validated = True
@@ -169,7 +170,7 @@ def _validate_tree(item: Item) -> bool:
     for link in itertools.chain(item.links_to_children(_CHILD_ROLES),
                                 item.links_to_parents(_PARENT_ROLES)):
         item_2 = link.item
-        validated = _validate_tree(item_2) and validated
+        validated = _validate_tree(item_2, related_items) and validated
         if link.role == "validation":
             role = _VALIDATION_METHOD[item_2.type]
         elif link.role == "requirement-refinement":
@@ -229,15 +230,21 @@ def _fixup_pre_qualified(item: Item, types: List[str],
                 item_2["_pre_qualified"] = False
 
 
-def validate(item: Item) -> None:
-    """ Validates the item tree starting at the root item. """
-    _validate_tree(item)
-    _validate_containers(item)
-    _fixup_pre_qualified(item,
+def validate(root: Item) -> Set[Item]:
+    """
+    Validates the item tree starting at the root item.
+
+    Returns the set of items related to the root item.
+    """
+    related_items: Set[Item] = set()
+    _validate_tree(root, related_items)
+    _validate_containers(root)
+    _fixup_pre_qualified(root,
                          ["interface/appl-config-group", "interface/group"],
                          ["interface-ingroup", "interface-ingroup-hidden"])
-    _fixup_pre_qualified(item, ["interface/header-file"],
+    _fixup_pre_qualified(root, ["interface/header-file"],
                          "interface-placement")
+    return related_items
 
 
 _API_INTERFACES = [
@@ -302,7 +309,11 @@ class RTEMSItemCache(BuildItem):
         _augment_with_interface_domains(self.item_cache)
         for glossary in ["/glossary-general", "/req/glossary"]:
             augment_glossary_terms(self.item_cache[glossary], [])
-        validate(self.item_cache[self["spec-root-uid"]])
+        self.related_items = validate(self.item_cache[self["spec-root-uid"]])
+        self.related_items_by_type: Dict[str, List[Item]] = {}
+        for item_2 in self.related_items:
+            self.related_items_by_type.setdefault(item_2.type,
+                                                  []).append(item_2)
 
         # Calculate the overall item cache hash.  Ignore QDP configuration
         # items and specification type changes.
@@ -317,3 +328,39 @@ class RTEMSItemCache(BuildItem):
 
     def refresh_link(self, link: Link) -> None:
         link["hash"] = self._hash
+
+    def get_related_items_by_type(self, types: Union[str,
+                                                     List[str]]) -> List[Item]:
+        """ Gets related items by a list of types. """
+        if isinstance(types, str):
+            types = [types]
+        items: List[Item] = []
+        for type_name in types:
+            items.extend(
+                item for item in self.related_items_by_type.get(type_name, []))
+        return sorted(items)
+
+    def get_related_types_by_prefix(
+            self, prefix: Union[str, Tuple[str, ...]]) -> List[str]:
+        """
+        Gets the types of the related items having one of the type prefixes.
+        """
+        return [
+            type_name for type_name in sorted(self.related_items_by_type)
+            if type_name.startswith(prefix)
+        ]
+
+    def get_related_interfaces(self) -> List[Item]:
+        """ Gets the related interfaces. """
+        return self.get_related_items_by_type(
+            self.get_related_types_by_prefix("interface/"))
+
+    def get_related_requirements(self) -> List[Item]:
+        """ Gets the related requirements. """
+        return self.get_related_items_by_type(
+            self.get_related_types_by_prefix("requirement/"))
+
+    def get_related_interfaces_and_requirements(self) -> List[Item]:
+        """ Gets the related interfaces and requirements. """
+        return self.get_related_items_by_type(
+            self.get_related_types_by_prefix(("interface/", "requirement/")))
