@@ -33,7 +33,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from rtemsspec.build import gather_files
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext
-from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
+from rtemsspec.rtems import augment_with_test_links, gather_api_items, \
     recursive_is_enabled, validate
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.transitionmap import Transition, TransitionMap
@@ -326,44 +326,13 @@ def _action_list(item: Item) -> None:
             print("    * " + ", ".join(entries))
 
 
-_API_INTERFACES = [
-    "interface/appl-config-option/feature",
-    "interface/appl-config-option/feature-enable",
-    "interface/appl-config-option/initializer",
-    "interface/appl-config-option/integer",
-    "interface/function",
-    "interface/macro",
-    "interface/unspecified-function",
-]
-
-_API_ROLES = [
-    "requirement-refinement",
-    "interface-ingroup",
-]
-
-
-def _gather_api_names(item: Item, names: Dict[str, List[str]]) -> None:
-    if item.type in _API_INTERFACES and is_pre_qualified(item):
-        try:
-            name = item.parent(_API_ROLES)["name"]
-        except KeyError:
-            name = item.parent(_API_ROLES).spec
-        group = names.setdefault(name, [])
-        group.append(item["name"])
-    for child in item.children(_API_ROLES):
-        _gather_api_names(child, names)
-
-
 def _list_api(item_cache: ItemCache) -> None:
-    names: Dict[str, List[str]] = {}
-    _gather_api_names(item_cache["/req/applconfig"], names)
-    _gather_api_names(item_cache["/if/group"], names)
-    _gather_api_names(item_cache["/c/if/group"], names)
-    _gather_api_names(item_cache["/newlib/if/group"], names)
-    for group in sorted(names.keys()):
+    items: Dict[str, List[Item]] = {}
+    gather_api_items(item_cache, items)
+    for group, group_items in sorted(items.items()):
         print(group)
-        for name in sorted(names[group]):
-            print(f"\t{name}")
+        for item in group_items:
+            print(f"\t{item['name']}")
 
 
 def main() -> None:

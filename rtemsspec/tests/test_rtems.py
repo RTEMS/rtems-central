@@ -27,8 +27,8 @@
 import pytest
 
 from rtemsspec.items import EmptyItemCache, Item, ItemCache
-from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
-    recursive_is_enabled, validate
+from rtemsspec.rtems import augment_with_test_links, gather_api_items, \
+    is_pre_qualified, recursive_is_enabled, validate
 from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
@@ -125,3 +125,9 @@ def test_validate(tmpdir):
         tmpdir, "spec-rtems", with_spec_types=True)
     item_cache = ItemCache(item_cache_config)
     assert not validate(item_cache["/req/root"])
+    api_items = {}
+    gather_api_items(item_cache, api_items)
+    assert [
+        (group, [item.uid for item in group_items])
+        for group, group_items in sorted(api_items.items())
+    ] == [("General System Configuration", ["/if/disable-newlib-reentrancy"])]

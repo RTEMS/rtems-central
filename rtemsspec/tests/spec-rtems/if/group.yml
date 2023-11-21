@@ -7,7 +7,7 @@ index-entries: []
 interface-type: group
 links:
 - role: requirement-refinement
-  uid: ../req/root
+  uid: ../req/api
 - role: interface-placement
   uid: domain
 name: Application Configuration

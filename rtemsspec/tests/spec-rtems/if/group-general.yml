@@ -10,7 +10,7 @@ links:
 - role: interface-placement
   uid: domain
 - role: requirement-refinement
-  uid: ../req/root
+  uid: ../req/api
 name: General System Configuration
 text: ''
 type: interface

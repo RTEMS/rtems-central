@@ -27,7 +27,7 @@
 import base64
 import hashlib
 import itertools
-from typing import Any, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 from rtemsspec.items import create_unique_link, Item, ItemCache, Link
 from rtemsspec.glossary import augment_glossary_terms
@@ -238,6 +238,44 @@ def validate(item: Item) -> None:
                          ["interface-ingroup", "interface-ingroup-hidden"])
     _fixup_pre_qualified(item, ["interface/header-file"],
                          "interface-placement")
+
+
+_API_INTERFACES = [
+    "interface/appl-config-option/feature",
+    "interface/appl-config-option/feature-enable",
+    "interface/appl-config-option/initializer",
+    "interface/appl-config-option/integer",
+    "interface/function",
+    "interface/macro",
+    "interface/unspecified-function",
+    "interface/unspecified-macro",
+]
+
+_API_ROLES = [
+    "requirement-refinement",
+    "interface-ingroup",
+]
+
+
+def _gather_api_items(item: Item, items: Dict[str, List[Item]]) -> None:
+    if item.type in _API_INTERFACES and item["_pre_qualified"]:
+        parent = item.parent(_API_ROLES)
+        group = items.setdefault(parent.get("name", parent.spec), [])
+        group.append(item)
+    for child in item.children(_API_ROLES):
+        _gather_api_items(child, items)
+
+
+def gather_api_items(item_cache: ItemCache, items: Dict[str,
+                                                        List[Item]]) -> None:
+    """
+    Gathers all API related items and groups them by the associated interface
+    group name.
+
+    If a group has no name, then the UID is used instead.
+    """
+    for group in item_cache["/req/api"].children("requirement-refinement"):
+        _gather_api_items(group, items)
 
 
 def _is_proxy_link_enabled(link: Link) -> bool:

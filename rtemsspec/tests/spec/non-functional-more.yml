@@ -15,6 +15,10 @@ links:
   uid: non-functional
 - role: spec-refinement
   spec-key: non-functional-type
+  spec-value: interface-requirement
+  uid: non-functional
+- role: spec-refinement
+  spec-key: non-functional-type
   spec-value: performance-runtime
   uid: non-functional
 - role: spec-refinement
