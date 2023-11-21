@@ -584,6 +584,14 @@ class ItemMapper:
         yield
         self.pop_prefix()
 
+    @contextmanager
+    def scope(self, item: Item) -> Iterator[None]:
+        """ Opens an item scope context. """
+        previous = self._item
+        self._item = item
+        yield
+        self._item = previous
+
     def get_value_map(self, item: Item) -> ItemGetValueMap:
         """ Returns the get value map for the item. """
         return self._get_value_map.get(item.type, {})

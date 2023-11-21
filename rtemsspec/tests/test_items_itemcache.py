@@ -146,6 +146,10 @@ def test_item_mapper(tmpdir):
         assert key_path_2 == "/v"
         assert value_2 == "p"
         assert mapper.substitute("$$${.:.}") == "$p"
+    assert mapper.item == item
+    with mapper.scope(item_cache["/spec/root"]):
+        assert mapper.item == item_cache["/spec/root"]
+    assert mapper.item == item
     assert mapper.substitute("$$${.:.}", prefix="v") == "$p"
     with mapper.prefix("x"):
         with mapper.prefix("y"):
