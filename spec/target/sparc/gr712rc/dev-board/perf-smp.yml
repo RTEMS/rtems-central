@@ -4,7 +4,7 @@ copyrights:
 enabled-by:
   and:
   - RTEMS_SMP
-  - target-hash/NDvyW8PTjD_thgV3P8TV_7MXVFP9EFvrevMzUX574lY=
+  - target-hash/cpI09Ju6orF2eoJcmJi4igeIarypsRNwUxTrZSs9LMg=
 links:
 - role: requirement-refinement
   uid: ../dev-board

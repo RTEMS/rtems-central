@@ -4,7 +4,7 @@ copyrights:
 enabled-by:
   and:
   - not: RTEMS_SMP
-  - target-hash/5zrudgccHYC6azWEU3SRYUnkVXCeq9MufBd5zmfMeEg=
+  - target-hash/qYOFDHUGg5--JyB28V7llk_t6WYeA3VAogeqwGLZeCM=
 links:
 - role: requirement-refinement
   uid: ../sis
