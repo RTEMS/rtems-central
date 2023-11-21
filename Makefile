@@ -27,5 +27,8 @@ coverage-report:
 .PHONY: env
 
 env:
+	test -z "$$VIRTUAL_ENV"
 	python3 -m venv env
 	. env/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
+	echo -e "#!/bin/sh\n$$(which python3-config) "'$$@' > env/bin/python3-config
+	chmod +x env/bin/python3-config
