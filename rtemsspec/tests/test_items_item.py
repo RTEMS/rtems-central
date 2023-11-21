@@ -154,6 +154,9 @@ def test_children():
     assert len(children) == 0
     links = [link for link in parent.links_to_children()]
     assert len(links) == 1
+    assert not links[0] < links[0]
+    with pytest.raises(TypeError):
+        links[0] < 0
     assert links[0].item == child
     assert links[0]["a"] == "b"
     assert links[0].role == "c"

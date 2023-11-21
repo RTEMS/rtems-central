@@ -133,6 +133,12 @@ class Link:
     def __setitem__(self, key: str, value: Any) -> None:
         self._data[key] = value
 
+    def __lt__(self, other: Any) -> bool:
+        if not isinstance(other, Link):
+            return NotImplemented
+        # pylint: disable=protected-access
+        return self._item.uid < other._item.uid
+
     @property
     def item(self) -> "Item":
         """ The item referenced by this link. """
