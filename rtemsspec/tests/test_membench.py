@@ -77,8 +77,16 @@ def test_membench(tmpdir, monkeypatch):
 Benchmarks Based on: spec:/t0
 =============================
 
-The following memory benchmarks are based on the memory benchmark defined by
+The following static memory benchmarks are based on the
+reference memory benchmark specified by
 :ref:`spec:/t0 <MembenchT0>`.
+The numbers of the first row represent the section sizes of the reference
+memory benchmark program in bytes.  The numbers in the following rows indicate
+the change in bytes of the section sizes with respect to the reference memory
+benchmark program of the first row.  A ``+`` indicates a size increase and a
+``-`` indicates a size decrease.  This hints how the static memory usage
+changes when the feature set changes with respect to the reference memory
+benchmark.
 
 .. table::
     :class: longtable
@@ -97,8 +105,16 @@ The following memory benchmarks are based on the memory benchmark defined by
 Benchmarks Based on: spec:/t0
 =============================
 
-The following memory benchmarks are based on the memory benchmark defined by
+The following static memory benchmarks are based on the
+reference memory benchmark specified by
 :ref:`spec:/t0 <MembenchT0>`.
+The numbers of the first row represent the section sizes of the reference
+memory benchmark program in bytes.  The numbers in the following rows indicate
+the change in bytes of the section sizes with respect to the reference memory
+benchmark program of the first row.  A ``+`` indicates a size increase and a
+``-`` indicates a size decrease.  This hints how the static memory usage
+changes when the feature set changes with respect to the reference memory
+benchmark.
 
 .. table::
     :class: longtable
@@ -186,8 +202,16 @@ The Blue Green description.
 Benchmarks Based on: spec:/t0
 =============================
 
-The following memory benchmarks are based on the memory benchmark defined by
+The following static memory benchmarks are based on the
+reference memory benchmark specified by
 :ref:`spec:/t0 <MembenchT0>`.
+The numbers of the first row represent the section sizes of the reference
+memory benchmark program in bytes.  The numbers in the following rows indicate
+the change in bytes of the section sizes with respect to the reference memory
+benchmark program of the first row.  A ``+`` indicates a size increase and a
+``-`` indicates a size decrease.  This hints how the static memory usage
+changes when the feature set changes with respect to the reference memory
+benchmark.
 
 .. table::
     :class: longtable
@@ -206,8 +230,16 @@ The following memory benchmarks are based on the memory benchmark defined by
 Benchmarks Based on: spec:/t0
 =============================
 
-The following memory benchmarks are based on the memory benchmark defined by
+The following static memory benchmarks are based on the
+reference memory benchmark specified by
 :ref:`spec:/t0 <MembenchT0>`.
+The numbers of the first row represent the section sizes of the reference
+memory benchmark program in bytes.  The numbers in the following rows indicate
+the change in bytes of the section sizes with respect to the reference memory
+benchmark program of the first row.  A ``+`` indicates a size increase and a
+``-`` indicates a size decrease.  This hints how the static memory usage
+changes when the feature set changes with respect to the reference memory
+benchmark.
 
 .. table::
     :class: longtable

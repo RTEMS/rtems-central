@@ -382,9 +382,16 @@ def _generate_table(content: SphinxContent, sections_by_uid: SectionsByUID,
     pivot = items[0]
     section = f"Benchmarks Based on: {pivot.spec}"
     with content.section(section):
-        content.wrap(f"""The following memory benchmarks are based on the
-memory benchmark defined by
-{get_reference(_make_label(pivot), pivot.spec)}.""")
+        content.add(f"""The following static memory benchmarks are based on the
+reference memory benchmark specified by
+{get_reference(_make_label(pivot), pivot.spec)}.
+The numbers of the first row represent the section sizes of the reference
+memory benchmark program in bytes.  The numbers in the following rows indicate
+the change in bytes of the section sizes with respect to the reference memory
+benchmark program of the first row.  A ``+`` indicates a size increase and a
+``-`` indicates a size decrease.  This hints how the static memory usage
+changes when the feature set changes with respect to the reference memory
+benchmark.""")
         content.add_simple_table(rows)
 
 
