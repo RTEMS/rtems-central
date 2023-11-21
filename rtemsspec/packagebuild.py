@@ -328,6 +328,13 @@ class PackageVariant(BuildItem):
         BuildItem.prepare_factory(factory, type_name)
         factory.add_get_value(f"{type_name}:/config/dash", _get_dash)
         factory.add_get_value(f"{type_name}:/config/slash", _get_slash)
+        factory.add_get_value(f"{type_name}:/params/bsp-extra/dash", _get_dash)
+        factory.add_get_value(f"{type_name}:/params/bsp-extra/slash",
+                              _get_slash)
+        factory.add_get_value(f"{type_name}:/params/bsp-qual-only/dash",
+                              _get_dash)
+        factory.add_get_value(f"{type_name}:/params/bsp-qual-only/slash",
+                              _get_slash)
 
 
 class BuildItemFactory:

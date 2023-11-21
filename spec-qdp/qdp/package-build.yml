@@ -6,6 +6,8 @@ links:
 - role: build-step
   uid: steps/create-pre-qualified-only-sources
 - role: build-step
+  uid: steps/create-config-files
+- role: build-step
   uid: steps/run-rsb
 - role: build-step
   uid: steps/archive

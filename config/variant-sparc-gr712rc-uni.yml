@@ -32,6 +32,8 @@ workspace-actions:
     package-directory: rtems-${.:/rtems-version}-${.:/name}
     package-version: '0'
     params:
+      bsp-extra: extra
+      bsp-qual-only: qual-only
       makefile-run-command: sparc-rtems$$(RTEMS_API)-sis -${.:sis-target} -extirq
         ${.:sis-extirq} -dumbio -r $$<
       sis-cpus: '1'

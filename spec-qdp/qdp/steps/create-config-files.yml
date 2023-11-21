@@ -1,0 +1,199 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: run-actions
+actions:
+- action: create-ini-file
+  enabled-by: true
+  output-name: config-extra
+  sections:
+  - enabled-by: true
+    key-value-pairs:
+    - enabled-by: RTEMS_QUAL
+      key: INHERIT
+      value: ${../variant:/bsp}
+    - enabled-by: true
+      key: RTEMS_BUILD_LABEL
+      value: ${../variant:/ident}${../variant:/params/bsp-extra/slash}
+    - enabled-by: RTEMS_SMP
+      key: RTEMS_SMP
+      value: 'True'
+    - enabled-by: true
+      key: BUILD_TESTS
+      value: 'True'
+    - enabled-by: true
+      key: BUILD_LIBDL_TESTS
+      value: 'False'
+    - enabled-by: true
+      key: BSP_PRINT_EXCEPTION_CONTEXT
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_VERBOSE_FATAL_EXTENSION
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_START_COPY_FDT_FROM_U_BOOT
+      value: 'False'
+    name: ${../variant:/arch}/${../variant:/bsp}${../variant:/params/bsp-extra/dash}
+  target: null
+- action: create-ini-file
+  enabled-by: true
+  output-name: config-extra-coverage
+  sections:
+  - enabled-by: true
+    key-value-pairs:
+    - enabled-by: RTEMS_QUAL
+      key: INHERIT
+      value: ${../variant:/bsp}
+    - enabled-by: true
+      key: RTEMS_BUILD_LABEL
+      value: ${../variant:/ident}${../variant:/params/bsp-extra/slash}/coverage
+    - enabled-by: RTEMS_SMP
+      key: RTEMS_SMP
+      value: 'True'
+    - enabled-by: true
+      key: BUILD_TESTS
+      value: 'True'
+    - enabled-by: true
+      key: BUILD_LIBDL_TESTS
+      value: 'False'
+    - enabled-by: true
+      key: BSP_PRINT_EXCEPTION_CONTEXT
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_VERBOSE_FATAL_EXTENSION
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_START_COPY_FDT_FROM_U_BOOT
+      value: 'False'
+    - enabled-by: true
+      key: RTEMS_GCOV_COVERAGE
+      value: 'True'
+    - enabled-by: true
+      key: BSP_OPTIMIZATION_FLAGS
+      value: -O0 -g -ffunction-sections -fdata-sections -frandom-seed=0
+    - enabled-by: true
+      key: CPUKIT_OPTIMIZATION_FLAGS
+      value: -O0 -g -ffunction-sections -fdata-sections -frandom-seed=0
+    name: ${../variant:/arch}/${../variant:/bsp}${../variant:/params/bsp-extra/dash}-coverage
+  target: null
+- action: create-ini-file
+  enabled-by: true
+  output-name: config-qual-only
+  sections:
+  - enabled-by: true
+    key-value-pairs:
+    - enabled-by: true
+      key: INHERIT
+      value: ${../variant:/bsp}
+    - enabled-by: true
+      key: RTEMS_BUILD_LABEL
+      value: ${../variant:/ident}/qual-only
+    - enabled-by: RTEMS_SMP
+      key: RTEMS_SMP
+      value: 'True'
+    - enabled-by: true
+      key: RTEMS_QUAL
+      value: 'True'
+    - enabled-by: true
+      key: BUILD_TESTS
+      value: 'True'
+    - enabled-by: true
+      key: BSP_PRINT_EXCEPTION_CONTEXT
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_VERBOSE_FATAL_EXTENSION
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_START_COPY_FDT_FROM_U_BOOT
+      value: 'False'
+    - enabled-by: true
+      key: OPTIMIZATION_FLAGS
+      value: -O2 -g -ffunction-sections -fdata-sections -save-temps=obj
+    name: ${../variant:/arch}/${../variant:/bsp}-qual-only
+  target: null
+- action: create-ini-file
+  enabled-by: true
+  output-name: config-qual-only-coverage
+  sections:
+  - enabled-by: true
+    key-value-pairs:
+    - enabled-by: true
+      key: INHERIT
+      value: ${../variant:/bsp}
+    - enabled-by: true
+      key: RTEMS_BUILD_LABEL
+      value: ${../variant:/ident}/qual-only-coverage
+    - enabled-by: RTEMS_SMP
+      key: RTEMS_SMP
+      value: 'True'
+    - enabled-by: true
+      key: RTEMS_QUAL
+      value: 'True'
+    - enabled-by: true
+      key: BUILD_TESTS
+      value: 'True'
+    - enabled-by: true
+      key: BSP_PRINT_EXCEPTION_CONTEXT
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_VERBOSE_FATAL_EXTENSION
+      value: 'False'
+    - enabled-by: riscv
+      key: BSP_START_COPY_FDT_FROM_U_BOOT
+      value: 'False'
+    - enabled-by: true
+      key: RTEMS_GCOV_COVERAGE
+      value: 'True'
+    - enabled-by: true
+      key: BSP_OPTIMIZATION_FLAGS
+      value: -O0 -g -ffunction-sections -fdata-sections -frandom-seed=0
+    - enabled-by: true
+      key: CPUKIT_OPTIMIZATION_FLAGS
+      value: -O0 -g -ffunction-sections -fdata-sections -frandom-seed=0
+    name: ${../variant:/arch}/${../variant:/bsp}-qual-only-coverage
+  target: null
+- action: create-ini-file
+  enabled-by: true
+  output-name: config-qual-only-version
+  sections:
+  - enabled-by: true
+    key-value-pairs:
+    - enabled-by: true
+      key: RTEMS_VERSION_CONTROL_KEY
+      value: ${../source/rtems:/commit}
+    name: RTEMS_VERSION
+  target: null
+copyrights:
+- Copyright (C) 2022, 2023 embedded brains GmbH & Co. KG
+description: |
+  Generate configuration files.
+enabled-by: true
+links:
+- hash: null
+  name: variant
+  role: input
+  uid: ../variant
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rtems
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rtems-qual-only
+- name: config-extra
+  role: output
+  uid: ../deployment/config-extra
+- name: config-extra-coverage
+  role: output
+  uid: ../deployment/config-extra-coverage
+- name: config-qual-only
+  role: output
+  uid: ../deployment/config-qual-only
+- name: config-qual-only-coverage
+  role: output
+  uid: ../deployment/config-qual-only-coverage
+- name: config-qual-only-version
+  role: output
+  uid: ../deployment/config-qual-only-version
+params: {}
+qdp-type: build-step
+type: qdp

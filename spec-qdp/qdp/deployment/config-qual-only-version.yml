@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${../source/rtems-qual-only:/directory}
+directory-state-type: generic
+enabled-by: true
+files:
+- file: VERSION
+  hash: null
+hash: null
+links:
+- hash: null
+  name: member
+  role: input-to
+  uid: ../steps/archive
+patterns: []
+qdp-type: directory-state
+type: qdp
