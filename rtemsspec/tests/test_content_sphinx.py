@@ -276,12 +276,12 @@ def test_license_and_copyrights():
     content = SphinxContent()
     with pytest.raises(ValueError):
         content.register_license("x")
-    content.register_copyright("Copyright (C) A")
+    content.register_copyright("Copyright (C) 123 A")
     assert str(content) == ""
     content.add_licence_and_copyrights()
     assert str(content) == """.. SPDX-License-Identifier: CC-BY-SA-4.0
 
-.. Copyright (C) A
+.. Copyright (C) 123 A
 
 """
 

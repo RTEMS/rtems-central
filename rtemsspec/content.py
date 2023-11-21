@@ -51,40 +51,32 @@ class Copyright:
     contributions.
     """
 
-    def __init__(self, holder):
-        self._holder = holder
-        self._years = set()
+    def __init__(self, holder: str):
+        self.holder = holder
+        self.years: Set[int] = set()
 
-    def add_year(self, year: str):
+    def add_year(self, year: int):
         """
         Adds a year to the set of substantial contributions of this copyright
         holder.
         """
-        self._years.add(year)
+        self.years.add(year)
 
     def get_statement(self) -> str:
         """ Returns a copyright statement. """
         line = "Copyright (C)"
-        years = sorted(self._years)
-        year_count = len(years)
+        year_count = len(self.years)
         if year_count == 1:
-            line += " " + years[0]
-        elif year_count > 1:
-            line += " " + years[0] + ", " + years[-1]
-        line += " " + self._holder
+            line += f" {min(self.years)}"
+        else:
+            line += f" {min(self.years)}, {max(self.years)}"
+        line += f" {self.holder}"
         return line
 
     def __lt__(self, other: "Copyright") -> bool:
-        # pylint: disable=protected-access
-        if self._years and other._years:
-            self_first_year = sorted(self._years)[0]
-            other_first_year = sorted(other._years)[0]
-            if self_first_year == other_first_year:
-                return self._holder > other._holder
-            return self_first_year > other_first_year
-        if self._years or other._years:
-            return True
-        return self._holder > other._holder
+        return (min(self.years), max(self.years),
+                other.holder) < (min(other.years), max(other.years),
+                                 self.holder)
 
 
 class Copyrights:
@@ -104,8 +96,8 @@ class Copyrights:
             holder = match.group(3)
             the_copyright = self.copyrights.setdefault(holder,
                                                        Copyright(holder))
-            the_copyright.add_year(match.group(1))
-            the_copyright.add_year(match.group(2))
+            the_copyright.add_year(int(match.group(1)))
+            the_copyright.add_year(int(match.group(2)))
             return
         match = re.search(
             r"^\s*Copyright\s+\(C\)\s+([0-9]+)\s+(.+)\s*$",
@@ -116,21 +108,14 @@ class Copyrights:
             holder = match.group(2)
             the_copyright = self.copyrights.setdefault(holder,
                                                        Copyright(holder))
-            the_copyright.add_year(match.group(1))
-            return
-        match = re.search(r"^\s*Copyright\s+\(C\)\s+(.+)\s*$",
-                          statement,
-                          flags=re.I)
-        if match:
-            holder = match.group(1)
-            self.copyrights.setdefault(holder, Copyright(holder))
+            the_copyright.add_year(int(match.group(1)))
             return
         raise ValueError(statement)
 
     def get_statements(self):
         """ Returns all registered copyright statements as a sorted list. """
         statements = []
-        for the_copyright in sorted(self.copyrights.values()):
+        for the_copyright in sorted(self.copyrights.values(), reverse=True):
             statements.append(the_copyright.get_statement())
         return statements
 

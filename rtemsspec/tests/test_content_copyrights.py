@@ -32,16 +32,15 @@ from rtemsspec.content import Copyrights
 
 def test_copyright_get_statement():
     c = Copyright("John Doe")
-    assert "Copyright (C) John Doe" == c.get_statement()
-    c.add_year("3")
+    c.add_year(3)
     assert "Copyright (C) 3 John Doe" == c.get_statement()
-    c.add_year("3")
+    c.add_year(3)
     assert "Copyright (C) 3 John Doe" == c.get_statement()
-    c.add_year("5")
+    c.add_year(5)
     assert "Copyright (C) 3, 5 John Doe" == c.get_statement()
-    c.add_year("4")
+    c.add_year(4)
     assert "Copyright (C) 3, 5 John Doe" == c.get_statement()
-    c.add_year("2")
+    c.add_year(2)
     assert "Copyright (C) 2, 5 John Doe" == c.get_statement()
 
 
@@ -49,30 +48,34 @@ def test_copyright_lt():
     a = Copyright("A")
     b = Copyright("B")
     c = Copyright("C")
+    a.add_year(2)
+    b.add_year(2)
+    c.add_year(2)
     assert b < a
     assert c < a
     assert c < b
-    b.add_year("1")
-    assert b < c
-    a.add_year("2")
-    assert a < b
+    b.add_year(3)
+    assert c < b
+    b.add_year(1)
+    assert b < a
 
 
 def test_copyrights_register():
     c = Copyrights()
     with pytest.raises(ValueError):
         c.register("abc")
-    c.register("Copyright (C) A")
     c.register("Copyright (C) 2 A")
     c.register("Copyright (C) 2, 3 A")
-    c.register("Copyright (C) D")
+    c.register("Copyright (C) 2, 4 C")
+    c.register("Copyright (C) 3 E")
+    c.register("Copyright (C) 2, 4 E")
     c.register("Copyright (C) 1 D")
     c.register("Copyright (C) 1, 4 D")
-    c.register("Copyright (C) C")
     c.register("Copyright (C) 1 B")
     s = c.get_statements()
-    assert 4 == len(s)
-    assert "Copyright (C) C" == s[0]
-    assert "Copyright (C) 2, 3 A" == s[1]
-    assert "Copyright (C) 1, 4 D" == s[2]
-    assert "Copyright (C) 1 B" == s[3]
+    assert 5 == len(s)
+    assert "Copyright (C) 2, 4 C" == s[0]
+    assert "Copyright (C) 2, 4 E" == s[1]
+    assert "Copyright (C) 2, 3 A" == s[2]
+    assert "Copyright (C) 1, 4 D" == s[3]
+    assert "Copyright (C) 1 B" == s[4]
