@@ -467,7 +467,9 @@ class Content:
                  items: GenericContentIterable,
                  prologue: Optional[GenericContent] = None,
                  epilogue: Optional[GenericContent] = None,
-                 add_blank_line: bool = False) -> None:
+                 add_blank_line: bool = False,
+                 empty: Optional[GenericContent] = None) -> None:
+        # pylint: disable=too-many-arguments
         """ Adds a list with introduction. """
         if items:
             self.wrap(prologue)
@@ -476,6 +478,8 @@ class Content:
             if add_blank_line:
                 self.add_blank_line()
             self.wrap(epilogue)
+        else:
+            self.wrap(empty)
 
     def open_list_item(self, content: GenericContent) -> None:
         """ Opens a list item. """

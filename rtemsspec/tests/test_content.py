@@ -218,6 +218,13 @@ def test_add_blank_line():
 """
 
 
+def test_add_list_empty():
+    content = Content("BSD-2-Clause", True)
+    content.add_list([], empty="empty")
+    assert str(content) == """empty
+"""
+
+
 def test_ensure_blank_line():
     content = Content("BSD-2-Clause", True)
     content.ensure_blank_line()
