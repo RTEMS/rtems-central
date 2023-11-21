@@ -745,6 +745,7 @@ def _generate_files() -> None:
         base = f"testsuites/membench/mem-{module}-{test.name}"
         source = f"{base}.c"
         build_spec = f"modules/rtems/spec/build/{base}.yml"
+        enabled_by = "RTEMS_SMP" if "smp" in base else "true"
         with open(build_spec, "w", encoding="utf-8") as out:
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 build-type: test-program
@@ -753,7 +754,7 @@ copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
 cppflags: []
 cxxflags: []
-enabled-by: true
+enabled-by: {enabled_by}
 features: c cprogram
 includes: []
 ldflags: []
@@ -772,7 +773,7 @@ use-before: []
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
-enabled-by: true
+enabled-by: {enabled_by}
 links:
 {_links(test.links)}
 non-functional-type: quality
@@ -789,7 +790,7 @@ type: requirement
             out.write(f"""SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2021 embedded brains GmbH & Co. KG
-enabled-by: true
+enabled-by: {enabled_by}
 links:
 - role: requirement-refinement
   uid: /testsuites/membench
