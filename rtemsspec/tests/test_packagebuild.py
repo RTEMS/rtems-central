@@ -35,6 +35,7 @@ import tarfile
 from typing import List, NamedTuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext
+import rtemsspec.gcdaproducer
 from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
     build_item_input, PackageBuildDirector
 from rtemsspec.packagebuildfactory import create_build_item_factory
@@ -111,6 +112,13 @@ def _test_runner_subprocess(command, check, stdin, stdout, timeout):
     if command[2] == "c.exe":
         raise subprocess.TimeoutExpired(command[2], timeout, None)
     return _Subprocess(b"u\r\nv\nw\n")
+
+
+def _gcov_tool(command, check, cwd, input):
+    assert command == ["foo", "merge-stream"]
+    assert check
+    assert input == b"gcfnB04R\x00\x00\x00\x95/opt"
+    (Path(cwd) / "file.gcda").touch()
 
 
 def test_packagebuild(caplog, tmpdir, monkeypatch):
@@ -403,3 +411,16 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     director.build_package(None, ["/qdp/steps/run-tests"])
     log = get_and_clear_log(caplog)
     assert f"use previous report for: {build_bsp.directory}/a.exe"
+
+    # Test GCDAProducer
+    variant["enabled"] = ["gcda-producer"]
+    test_log_coverage = director["/qdp/test-logs/coverage"]
+    test_log_coverage.load()
+    monkeypatch.setattr(rtemsspec.gcdaproducer, "subprocess_run", _gcov_tool)
+    director.build_package(None, None)
+    monkeypatch.undo()
+    log = get_and_clear_log(caplog)
+    assert f"/qdp/steps/gcda-producer: copy *.gcno files from '{tmp_dir}/pkg/build/bsp' to '{tmp_dir}/pkg/build/gcda'" in log
+    assert f"/qdp/steps/gcda-producer: remove unexpected *.gcda file in build directory: '{tmp_dir}/pkg/build/bsp/f.gcda'" in log
+    assert f"/qdp/steps/gcda-producer: process: ts-unit-no-clock-0.exe" in log
+    assert f"/qdp/steps/gcda-producer: move *.gcda files from '{tmp_dir}/pkg/build/bsp' to '{tmp_dir}/pkg/build/gcda'" in log

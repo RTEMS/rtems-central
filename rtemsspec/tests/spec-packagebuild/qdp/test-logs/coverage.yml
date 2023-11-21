@@ -2,17 +2,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
 - Copyright (C) 2023 embedded brains GmbH & Co. KG
 copyrights-by-license: {}
-directory: ${../variant:/build-directory}/bsp
+directory: ${../variant:/deployment-directory}
 directory-state-type: generic
 enabled-by: true
 files:
-- file: a.exe
-  hash: null
-- file: b.exe
-  hash: null
-- file: b.norun.exe
-  hash: null
-- file: f.gcno
+- file: test-log-coverage.json
   hash: null
 hash: null
 links: []

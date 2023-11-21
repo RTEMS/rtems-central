@@ -26,6 +26,7 @@
 
 from rtemsspec.archiver import Archiver
 from rtemsspec.directorystate import DirectoryState
+from rtemsspec.gcdaproducer import GCDAProducer
 from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
 from rtemsspec.reposubset import RepositorySubset
 from rtemsspec.rtems import RTEMSItemCache
@@ -39,6 +40,7 @@ def create_build_item_factory() -> BuildItemFactory:
     """ Creates the default build item factory. """
     factory = BuildItemFactory()
     factory.add_constructor("qdp/build-step/archive", Archiver)
+    factory.add_constructor("qdp/build-step/gcda-producer", GCDAProducer)
     factory.add_constructor("qdp/build-step/repository-subset",
                             RepositorySubset)
     factory.add_constructor("qdp/build-step/rtems-item-cache", RTEMSItemCache)

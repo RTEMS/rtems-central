@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: gcda-producer
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Produces gcda files.
+enabled-by: gcda-producer
+gcov-tool: foo
+links:
+- hash: null
+  name: build
+  role: input
+  uid: ../build/bsp
+- hash: null
+  name: log
+  role: input
+  uid: ../test-logs/coverage
+- name: destination
+  role: output
+  uid: ../build/gcda
+qdp-type: build-step
+type: qdp
+working-directory: ${../build/bsp:/directory}

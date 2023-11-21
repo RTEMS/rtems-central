@@ -1,0 +1,167 @@
+{
+  "duration": 272.82567146699876,
+  "end-time": "2023-07-11T09:52:01.875951",
+  "reports": [
+    {
+      "command-line": [
+        "sparc-rtems6-sis",
+        "-leon3",
+        "-extirq",
+        "12",
+        "-dumbio",
+        "-r",
+        "-m",
+        "2",
+        "ts-unit-no-clock-0.exe"
+      ],
+      "data-ranges": [
+        [
+          41,
+          2081
+        ]
+      ],
+      "duration": 11.234533725000801,
+      "executable": "ts-unit-no-clock-0.exe",
+      "executable-sha512": "605858485568eff4a0e4ebccbc979d113b226127a9e13bffd4d650255074a5cbeeb0ca671742038a365ded9f049ae750752b4ef3d757d13a3ee44f866f4e9271",
+      "info": {
+        "build": [
+          "RTEMS_SMP"
+        ],
+        "line-begin-of-test": 9,
+        "line-build": 12,
+        "line-end-of-test": 37,
+        "line-state": 11,
+        "line-tools": 13,
+        "line-version": 10,
+        "name": "TestsuitesUnitNoClock0",
+        "state": "EXPECTED_PASS",
+        "tools": "10.4.0 20220628 (RTEMS 6, RSB f8d79ee51187d98b88b8b7400ad77a991f53c8c0, Newlib b9898fc)",
+        "version": "6.0.0.1c46841ad34939632fee92894e8c73b4ea92f979"
+      },
+      "line-gcov-info-base64-begin": 40,
+      "line-gcov-info-base64-end": 42,
+      "output": [
+        "",
+        " SIS - SPARC/RISCV instruction simulator 2.30,  copyright Jiri Gaisler 2020",
+        " Bug-reports to jiri@gaisler.se",
+        "",
+        " LEON3 emulation enabled, 2 cpus online, delta 50 clocks",
+        "",
+        " Loaded ts-unit-no-clock-0.exe, entry 0x40000000",
+        "",
+        "",
+        "*** BEGIN OF TEST TestsuitesUnitNoClock0 ***",
+        "*** TEST VERSION: 6.0.0.1c46841ad34939632fee92894e8c73b4ea92f979",
+        "*** TEST STATE: EXPECTED_PASS",
+        "*** TEST BUILD: RTEMS_SMP",
+        "*** TEST TOOLS: 10.4.0 20220628 (RTEMS 6, RSB f8d79ee51187d98b88b8b7400ad77a991f53c8c0, Newlib b9898fc)",
+        "A:TestsuitesUnitNoClock0",
+        "S:Platform:RTEMS",
+        "S:Compiler:10.4.0 20220628 (RTEMS 6, RSB f8d79ee51187d98b88b8b7400ad77a991f53c8c0, Newlib b9898fc)",
+        "S:Version:6.0.0.1c46841ad34939632fee92894e8c73b4ea92f979",
+        "S:BSP:gr712rc",
+        "S:BuildLabel:sparc/gr712rc/smp/qual-only-coverage",
+        "S:TargetHash:SHA256:5zrudgccHYC6azWEU3SRYUnkVXCeq9MufBd5zmfMeEg=",
+        "S:RTEMS_DEBUG:0",
+        "S:RTEMS_MULTIPROCESSING:0",
+        "S:RTEMS_POSIX_API:0",
+        "S:RTEMS_PROFILING:0",
+        "S:RTEMS_SMP:1",
+        "B:ScoreRbtreeUnitRbtree",
+        "E:ScoreRbtreeUnitRbtree:N:495132:F:0:D:1.164048",
+        "B:ScoreMsgqUnitMsgq",
+        "E:ScoreMsgqUnitMsgq:N:41:F:0:D:0.010895",
+        "B:RtemsConfigUnitConfig",
+        "E:RtemsConfigUnitConfig:N:1:F:0:D:0.001789",
+        "B:MisalignedBuiltinMemcpy",
+        "E:MisalignedBuiltinMemcpy:N:1:F:0:D:0.001803",
+        "Z:TestsuitesUnitNoClock0:C:4:N:495175:F:0:D:1.185642",
+        "Y:ReportHash:SHA256:a8e6RdqXa7Pt_SGpe7s2ezaVCSSY-j5PFEj6JTjrB4A=",
+        "",
+        "*** END OF TEST TestsuitesUnitNoClock0 ***",
+        "",
+        "",
+        "*** BEGIN OF GCOV INFO BASE64 ***",
+        "Z2NmbkIwNFIAAACVL29wdC==",
+        "*** END OF GCOV INFO BASE64 ***",
+        "cpu 0 in error mode (tt = 0x80)",
+        " 804542950  4003a5a0:  91d02000   ta  0x0"
+      ],
+      "start-time": "2023-07-11T09:47:29.059658"
+    },
+    {
+      "command-line": [
+        "sparc-rtems6-sis",
+        "-leon3",
+        "-extirq",
+        "12",
+        "-dumbio",
+        "-r",
+        "-m",
+        "2",
+        "ts-fatal-sparc-leon3-cache-snooping-disabled-boot.exe"
+      ],
+      "data-ranges": [
+        [
+          35,
+          1559
+        ]
+      ],
+      "duration": 1.5510155570082134,
+      "executable": "ts-fatal-sparc-leon3-cache-snooping-disabled-boot.exe",
+      "executable-sha512": "69f7d8cabeb23bba8c5b43fd658803f479d19a83cc858485ffc54bb727a0810bddb8ae61493839b4ade11094990e27c064426e45beaac3eadba01643ef120366",
+      "info": {
+        "build": [
+          "RTEMS_SMP"
+        ],
+        "line-begin-of-test": 9,
+        "line-build": 12,
+        "line-state": 11,
+        "line-tools": 13,
+        "line-version": 10,
+        "name": "TestsuitesBspsFatalSparcLeon3CacheSnoopingDisabledBoot",
+        "state": "EXPECTED_PASS",
+        "tools": "10.4.0 20220628 (RTEMS 6, RSB f8d79ee51187d98b88b8b7400ad77a991f53c8c0, Newlib b9898fc)",
+        "version": "6.0.0.1c46841ad34939632fee92894e8c73b4ea92f979"
+      }
+    },
+    {
+      "command-line": [
+        "sparc-rtems6-sis",
+        "-leon3",
+        "-extirq",
+        "12",
+        "-dumbio",
+        "-r",
+        "-m",
+        "2",
+        "ts-fatal-sparc-leon3-cache-snooping-disabled-boot.exe"
+      ],
+      "data-ranges": [
+        [
+          35,
+          1559
+        ]
+      ],
+      "duration": 1.5510155570082134,
+      "executable": "ts-fatal-sparc-leon3-cache-snooping-disabled-boot.exe",
+      "executable-sha512": "69f7d8cabeb23bba8c5b43fd658803f479d19a83cc858485ffc54bb727a0810bddb8ae61493839b4ade11094990e27c064426e45beaac3eadba01643ef120366",
+      "info": {
+        "build": [
+          "RTEMS_SMP"
+        ],
+        "line-begin-of-test": 9,
+        "line-end-of-test": 14,
+        "line-build": 12,
+        "line-state": 11,
+        "line-tools": 13,
+        "line-version": 10,
+        "name": "TestsuitesBspsFatalSparcLeon3CacheSnoopingDisabledBoot",
+        "state": "EXPECTED_PASS",
+        "tools": "10.4.0 20220628 (RTEMS 6, RSB f8d79ee51187d98b88b8b7400ad77a991f53c8c0, Newlib b9898fc)",
+        "version": "6.0.0.1c46841ad34939632fee92894e8c73b4ea92f979"
+      }
+    }
+  ],
+  "start-time": "2023-07-11T09:47:29.050266"
+}

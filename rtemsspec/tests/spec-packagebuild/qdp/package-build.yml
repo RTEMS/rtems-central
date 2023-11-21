@@ -18,6 +18,8 @@ links:
 - role: build-step
   uid: steps/run-tests
 - role: build-step
+  uid: steps/gcda-producer
+- role: build-step
   uid: steps/archive
 qdp-type: package-build
 type: qdp
