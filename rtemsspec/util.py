@@ -28,6 +28,7 @@ import argparse
 import base64
 import binascii
 import logging
+import hashlib
 import os
 from pathlib import Path
 import shutil
@@ -40,6 +41,20 @@ def base64_to_hex(data: str) -> str:
     """ Converts the data from base64 to hex. """
     binary = base64.urlsafe_b64decode(data)
     return binascii.hexlify(binary).decode('ascii')
+
+
+def hash_file(path: str) -> str:
+    """ Return a hash of the file specified by path. """
+    file_hash = hashlib.sha512()
+    if os.path.islink(path):
+        file_hash.update(os.readlink(path).encode("utf-8"))
+    else:
+        buf = bytearray(65536)
+        memview = memoryview(buf)
+        with open(path, "rb", buffering=0) as src:
+            for size in iter(lambda: src.readinto(memview), 0):  # type: ignore
+                file_hash.update(memview[:size])
+    return base64.urlsafe_b64encode(file_hash.digest()).decode("ascii")
 
 
 def copy_file(src_file: str, dst_file: str, log_context: str) -> None:

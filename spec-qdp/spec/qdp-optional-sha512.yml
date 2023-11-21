@@ -1,0 +1,20 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  none: null
+  str:
+    assert:
+    - re: ^[A-Za-z0-9+_=-]{88}$
+    description: |
+      If the value is present, then it shall be a SHA512 hash value encoded in
+      base64url.
+spec-name: Optional SHA512
+spec-type: qdp-optional-sha512
+type: spec

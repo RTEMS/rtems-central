@@ -1,0 +1,50 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: directory-state-type
+  spec-value: repository
+  uid: qdp-directory-state
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      branch:
+        description: |
+          It shall be a branch in the source repository for the commit.
+        spec-type: str
+      commit:
+        description: |
+          It shall be the commit of the branch in the source repository.
+        spec-type: qdp-git-hash
+      description:
+        description: |
+          It shall be the description of the repository.
+        spec-type: str
+      origin-branch:
+        description: |
+          It shall be the origin branch name.
+        spec-type: optional-str
+      origin-commit:
+        description: |
+          It shall be the commit of the origin branch.
+        spec-type: qdp-optional-git-hash
+      origin-commit-url:
+        description: |
+          It shall be the URL of the commit web page at the origin.
+        spec-type: optional-str
+      origin-url:
+        description: |
+          It shall be the repository URL of the origin.
+        spec-type: optional-str
+    description: |
+      This set of attributes specifies a repository.
+    mandatory-attributes: all
+spec-name: Repository Item Type
+spec-type: qdp-repository
+type: spec

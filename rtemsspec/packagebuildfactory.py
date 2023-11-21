@@ -24,11 +24,16 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from rtemsspec.directorystate import DirectoryState
 from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
 
 
 def create_build_item_factory() -> BuildItemFactory:
     """ Creates the default build item factory. """
     factory = BuildItemFactory()
+    factory.add_constructor("qdp/directory-state/generic", DirectoryState)
+    factory.add_constructor("qdp/directory-state/repository", DirectoryState)
+    factory.add_constructor("qdp/directory-state/unpacked-archive",
+                            DirectoryState)
     factory.add_constructor("qdp/variant", PackageVariant)
     return factory

@@ -1,0 +1,46 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: directory-state-type
+  spec-value: unpacked-archive
+  uid: qdp-directory-state
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      description:
+        description: |
+          It shall be the description of the unpacked archive.
+        spec-type: str
+      archive-file:
+        description: |
+          It shall be the archive file.
+        spec-type: str
+      archive-hash:
+        description: |
+          It shall be the archive hash.
+        spec-type: qdp-sha512
+      archive-patches:
+        description: |
+          It shall be the list of patches applied to the archive.
+        spec-type: any
+      archive-symbolic-links:
+        description: |
+          It shall be the list of symbolic links added to the archive.
+        spec-type: any
+      archive-url:
+        description: |
+          It shall be the archive URL.
+        spec-type: optional-str
+    description: |
+      This set of attributes specifies an unpacked archive.
+    mandatory-attributes: all
+spec-name: Unpacked Archive Item Type
+spec-type: qdp-unpacked-archive
+type: spec

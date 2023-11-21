@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: directory-state-type
+  spec-value: generic
+  uid: qdp-directory-state
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes specifies a generic directory state.
+    mandatory-attributes: all
+spec-name: Generic Directory State Item Type
+spec-type: qdp-directory-state-generic
+type: spec

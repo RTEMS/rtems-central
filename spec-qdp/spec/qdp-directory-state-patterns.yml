@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      include:
+        description: |
+          It shall be a Python ``fnmatch`` pattern.  If a file path relative to
+          the base directory of the directory state matches with the pattern,
+          then the file is added to the directory state if it is not rejected
+          by an exclude pattern.
+        spec-type: str
+      exclude:
+        description: |
+          It shall be a list of Python ``fnmatch`` patterns.  If a file path
+          matches with the pattern, then the file is not added to the directory
+          state.  The file paths are absolute paths relative to the base
+          directory of the directory state.  For example, if the directory
+          state has a base of ``/base`` and a file to include has the path
+          ``/base/abc``, then the file path ``/abc`` is used to match with the
+          exclude patterns.
+        spec-type: list-str
+    description: |
+      This set of attributes specifies a set of patterns used to load the file
+      list of the directory state.
+    mandatory-attributes: all
+  none: null
+spec-name: Directory State Patterns
+spec-type: qdp-directory-state-patterns
+type: spec

@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: repository
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      It defines the repository role of links and is used to define the
+      deployed repositories of a package variant.
+    mandatory-attributes: all
+spec-name: Repository Link Role
+spec-type: qdp-repository-role
+type: spec

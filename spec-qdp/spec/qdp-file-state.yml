@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      file:
+        description: |
+          It shall be the path to the file.  A variable substitution is
+          performed on the value.  For example, you can use
+          ``$${/variant:/build-directory}/some/path/in/build/file`` or
+          ``$${/variant:/deployment-directory}/some/path/in/deployment/file``.
+        spec-type: str
+      hash:
+        description: |
+          If the value is present, then it shall be the hash of the file,
+          otherwise the file state is invalid.
+        spec-type: qdp-optional-sha512
+    description: |
+      This set of attributes specifies a file state.
+    mandatory-attributes: all
+spec-name: File State
+spec-type: qdp-file-state
+type: spec

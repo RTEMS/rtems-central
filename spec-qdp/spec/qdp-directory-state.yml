@@ -1,0 +1,48 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: directory-state
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      copyrights-by-license:
+        description: null
+        spec-type: qdp-copyrights-by-license
+      directory:
+        description: |
+          It shall be the path to the directory.  A variable substitution is
+          performed on the value.  For example, you can use
+          ``$${/variant:/build-directory}/some/path/in/build/directory`` or
+          ``$${/variant:/deployment-directory}/some/path/in/deployment/directory``.
+        spec-type: str
+      directory-state-type:
+        description: |
+          It shall be the directory state type.
+        spec-type: name
+      patterns:
+        description: null
+        spec-type: qdp-directory-state-pattern-list
+      files:
+        description: null
+        spec-type: qdp-file-state-list
+      hash:
+        description: |
+          If the value is present, then it shall be the hash of the file state
+          list and the directory path, otherwise the directory state is
+          invalid.
+        spec-type: qdp-optional-sha512
+    description: |
+      This set of attributes specifies a directory state.
+    mandatory-attributes: all
+spec-name: Directory State Item Type
+spec-type: qdp-directory-state
+type: spec

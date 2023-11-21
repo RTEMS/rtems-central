@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  list:
+    description: null
+    spec-type: qdp-directory-state-patterns
+spec-name: Directory State Pattern List
+spec-type: qdp-directory-state-pattern-list
+type: spec
