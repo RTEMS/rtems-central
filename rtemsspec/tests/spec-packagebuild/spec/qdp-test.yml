@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-step-type
+  spec-value: test
+  uid: qdp-build-step
+- role: spec-refinement
+  spec-key: build-step-type
+  spec-value: test-mapper
+  uid: qdp-build-step
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      values:
+        description: Values.
+        spec-type: any
+    description: Test.
+    mandatory-attributes: none
+spec-name: Test Item Type
+spec-type: qdp-test
+type: spec

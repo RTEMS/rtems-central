@@ -1,0 +1,88 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: variant
+  uid: qdp-root
+spec-description: |
+  Items of this type shall have the following links:
+
+  * There shall be exactly one link to a ${qdp-package-build:/spec-name} item
+    with the ${qdp-package-build-role:/spec-name}.  This link defines the
+    package build process.
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      arch:
+        description: |
+          It shall be the name of the target architecture.
+        spec-type: str
+      bsp:
+        description: |
+          It shall be the name of the Board Support Package (BSP).
+        spec-type: str
+      bsp-family:
+        description: |
+          It shall be the name of the BSP family.
+        spec-type: str
+      build-directory:
+        description: |
+          It shall be the path to the package build directory.
+        spec-type: str
+      config:
+        description: |
+          It shall be the BSP configuration name.  It may be the empty string,
+          if the BSP has no specific configuration.
+        spec-type: str
+      deployment-directory:
+        description: |
+          It shall be the path to the package deployment directory.
+        spec-type: str
+      enabled:
+        description: |
+          It shall be the expression which defines under which conditions
+          the specification items or parts of it are enabled.
+        spec-type: enabled-by
+      ident:
+        description: |
+          It shall be the package-specific identifier.
+        spec-type: str
+      name:
+        description: |
+          It shall be the name for package-specific file or directory names.
+        spec-type: str
+      package-directory:
+        description: |
+          It shall be the package directory.
+        spec-type: str
+      package-version:
+        description: |
+          It shall be the package version.
+        spec-type: str
+      params:
+        description: |
+          It shall be an optional set of parameters which may be used for
+          variable subsitution.
+        spec-type: any
+      prefix-directory:
+        description: |
+          It shall be the path to the package prefix directory.  The deployment
+          directory should start with this prefix.  The prefix should be
+          stripped from members of the package archive.
+        spec-type: str
+      rtems-version:
+        description: |
+          It shall be the RTEMS version.
+        spec-type: str
+    description: |
+      This set of attributes specifies a package variant configuration.
+    mandatory-attributes: all
+spec-name: Variant Item Type
+spec-type: qdp-variant
+type: spec

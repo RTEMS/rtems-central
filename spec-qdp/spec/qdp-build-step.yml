@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: build-step
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      build-step-type:
+        description: |
+          It shall be the build step type.
+        spec-type: name
+      description:
+        description: |
+          It shall be the description of the build step.
+        spec-type: str
+    description: |
+      This set of attributes specifies a build step to produce a component of
+      the QDP.
+    mandatory-attributes: all
+spec-name: Build Step Item Type
+spec-type: qdp-build-step
+type: spec

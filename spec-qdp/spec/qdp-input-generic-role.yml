@@ -1,0 +1,73 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: name
+  spec-value: archive
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: build
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: config
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: example
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: log
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: member
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: section
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: subsection
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: source
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: spec
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: test-log
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: tools
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: variant
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
+  spec-value: verify-package
+  uid: qdp-input-role
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: null
+    mandatory-attributes: all
+spec-name: Generic Input Link Role
+spec-type: qdp-input-generic-role
+type: spec

@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: test-mapper
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  C.
+enabled-by: true
+links:
+- hash: null
+  name: variant
+  role: input
+  uid: ../variant
+- hash: null
+  name: foo
+  role: input
+  uid: a
+- name: blub
+  role: output
+  uid: ../output/a
+- name: moo
+  role: output
+  uid: ../output/b
+qdp-type: build-step
+type: qdp
+values:
+  a: a
+  b:
+  - b1
+  - b2
+  c: c
+  list:
+  - ${.:/values/a}
+  - ${.:/values/b}
+  - - d
+    - e
+  - ${.:/values/c}

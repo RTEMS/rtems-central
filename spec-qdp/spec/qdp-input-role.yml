@@ -1,0 +1,37 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: input
+  uid: link
+- role: spec-refinement
+  spec-key: role
+  spec-value: input-to
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      hash:
+        description: |
+          If the value is present, then it shall be the expected hash of the
+          input, otherwise the input dependency is not yet initialized.
+        spec-type: qdp-optional-hash
+      name:
+        description: |
+          If shall be the name of the input dependency.  The name may be used
+          to distinguish it from other dependencies of the same item.
+        spec-type: str
+    description: |
+      It defines the input role of links and is used to define an input
+      dependency of a build item.
+    mandatory-attributes: all
+spec-name: Input Link Role
+spec-type: qdp-input-role
+type: spec

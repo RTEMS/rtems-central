@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: test
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  A.
+enabled-by: true
+links:
+- hash: null
+  name: variant
+  role: input
+  uid: ../variant
+- hash: null
+  name: bar
+  role: input-to
+  uid: c
+qdp-type: build-step
+type: qdp

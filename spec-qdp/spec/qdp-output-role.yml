@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: output
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: |
+          If shall be the name of the output production.  The name may be used
+          to distinguish it from other productions of the same item.
+        spec-type: str
+    description: |
+      It defines the output production role of links and is used to define that
+      an item is the producer of an output.
+    mandatory-attributes: all
+spec-name: Output Link Role
+spec-type: qdp-output-role
+type: spec

@@ -1,0 +1,24 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: package-build
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes specifies the package build process.  There shall
+      be links to ${qdp-build-step:/spec-name} items.  The links shall have the
+      ${qdp-build-step-role:/spec-name}.
+    mandatory-attributes: all
+spec-name: Package Build Item Type
+spec-type: qdp-package-build
+type: spec

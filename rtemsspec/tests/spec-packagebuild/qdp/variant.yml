@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: sparc
+bsp: gr712rc
+bsp-family: leon3
+build-directory: ${.:/deployment-directory}/build
+config: smp
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+deployment-directory: ${.:/prefix-directory}/${.:/package-directory}
+enabled: []
+enabled-by: true
+ident: ${.:/arch}/${.:/bsp}${.:/config/slash}/${.:/package-version}
+links:
+- role: package-build
+  uid: package-build
+name: ${.:/arch}-${.:/bsp}${.:/config/dash}-${.:/package-version}
+package-directory: pkg
+package-version: '4'
+params: {}
+prefix-directory: ${.:/tmpdir}
+qdp-type: variant
+rtems-version: '6'
+type: qdp
