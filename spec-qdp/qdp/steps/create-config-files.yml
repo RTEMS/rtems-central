@@ -17,6 +17,9 @@ actions:
       key: RTEMS_SMP
       value: 'True'
     - enabled-by: true
+      key: RTEMS_PPS_SYNC
+      value: 'False'
+    - enabled-by: true
       key: BUILD_TESTS
       value: 'True'
     - enabled-by: true
@@ -48,6 +51,9 @@ actions:
     - enabled-by: RTEMS_SMP
       key: RTEMS_SMP
       value: 'True'
+    - enabled-by: true
+      key: RTEMS_PPS_SYNC
+      value: 'False'
     - enabled-by: true
       key: BUILD_TESTS
       value: 'True'
@@ -90,6 +96,9 @@ actions:
       key: RTEMS_SMP
       value: 'True'
     - enabled-by: true
+      key: RTEMS_PPS_SYNC
+      value: 'False'
+    - enabled-by: true
       key: RTEMS_QUAL
       value: 'True'
     - enabled-by: true
@@ -124,6 +133,9 @@ actions:
     - enabled-by: RTEMS_SMP
       key: RTEMS_SMP
       value: 'True'
+    - enabled-by: true
+      key: RTEMS_PPS_SYNC
+      value: 'False'
     - enabled-by: true
       key: RTEMS_QUAL
       value: 'True'
