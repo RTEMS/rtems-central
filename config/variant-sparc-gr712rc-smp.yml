@@ -1,0 +1,45 @@
+workspace-actions:
+- action-name: sparc-gr712rc-smp
+  action-type: make-item
+  action-when: 500
+  data:
+    SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+    arch: sparc
+    bsp: gr712rc
+    bsp-family: leon3
+    build-directory: ${.:/deployment-directory}/build
+    config: smp
+    copyrights:
+    - Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+    deployment-directory: ${.:/prefix-directory}/${.:/package-directory}
+    enabled:
+    - ${.:/arch}
+    - bsps/${.:/arch}/${.:/bsp-family}
+    - ${.:/arch}/${.:/bsp}
+    - RTEMS_QUAL
+    - RTEMS_SMP
+    - __GNUC__
+    - target/evaluation-board
+    - target-hash/cpI09Ju6orF2eoJcmJi4igeIarypsRNwUxTrZSs9LMg=
+    - target/simulator
+    - target-hash/qYOFDHUGg5--JyB28V7llk_t6WYeA3VAogeqwGLZeCM=
+    enabled-by: true
+    ident: ${.:/arch}/${.:/bsp}${.:/config/slash}/${.:/package-version}
+    links:
+    - role: package-build
+      uid: package-build
+    name: ${.:/arch}-${.:/bsp}${.:/config/dash}-${.:/package-version}
+    package-directory: rtems-${.:/rtems-version}-${.:/name}
+    package-version: '0'
+    params:
+      makefile-run-command: sparc-rtems$$(RTEMS_API)-sis -${.:sis-target} -extirq
+        ${.:sis-extirq} -dumbio -r $$<
+      sis-cpus: '2'
+      sis-extirq: '12'
+      sis-target: leon3
+    prefix-directory: /opt/rtems
+    qdp-type: variant
+    rtems-version: '6'
+    type: qdp
+  enabled-by: true
+  uid: /qdp/variant

@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${../variant:/build-directory}
+directory-state-type: generic
+enabled-by: true
+files: []
+hash: null
+links: []
+patterns: []
+qdp-type: directory-state
+type: qdp

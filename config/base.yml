@@ -1,0 +1,146 @@
+workspace-actions:
+- action-name: base-load-items
+  action-type: load-items
+  action-when: 1000
+  enabled-by: true
+  paths:
+  - ${.:/toolchain-directory}/spec-spec
+  - ${.:/toolchain-directory}/spec-glossary
+  - ${.:/toolchain-directory}/spec-qdp
+  - ${.:/toolchain-directory}/spec
+  set-types:
+  - type: qdp/variant
+    uid: /qdp/variant
+- action-name: base-deployment-directory
+  action-type: make-deployment-directory
+  action-when: 3000
+  enabled-by: true
+- action-name: base-workspace-items-load
+  action-type: load-workspace-items
+  action-when: 3000
+  enabled-by: true
+  path: ${/qdp/variant:/build-directory}/spec
+  set-types:
+  - type: qdp/variant
+    uid: /qdp/variant
+- action-name: base-make-uuid
+  action-type: make-uuid-item
+  action-when: 3000
+  enabled-by: true
+  uid: /qdp/uuid
+- action-name: base-gitignore
+  action-type: copy-directory
+  action-when: 4000
+  copyrights-by-license: {}
+  destination-directory: ${../variant:/deployment-directory}
+  enabled-by: true
+  files:
+  - file: .gitignore
+    hash: null
+  links: []
+  patterns: []
+  source-directory: ${.:/toolchain-directory}/workspace
+  uid: /qdp/source/gitignore
+- action-name: qt-modules
+  action-type: copy-directory
+  action-when: 4000
+  copyrights-by-license: {}
+  destination-directory: ${../variant:/build-directory}
+  enabled-by: true
+  files: []
+  links: []
+  patterns:
+  - exclude:
+    - '*/.*'
+    include: rtemsspec/*.py
+  - exclude: []
+    include: qdp_build.py
+  source-directory: ${.:/toolchain-directory}
+  uid: /qdp/source/qt-modules
+- action-name: base-rtems
+  action-type: git-clone
+  action-when: 4000
+  branch: qdp
+  commit: 42c9cdf35f6aa27f41d20b9b170d6e4e83a76913
+  copyrights-by-license:
+    description: |
+      RTEMS and all third-party software distributed with RTEMS which may be
+      linked to the application is licensed under permissive open source
+      licenses.  This means that the licenses do not propagate to the
+      application software.  Most of the original RTEMS code is now under the
+      BSD-2-Clause license.  Some code of RTEMS is under a legacy license, the
+      modified GPL-2.0 or later license with an exception for static linking.
+      It exposes no license requirements on application code.  RTMES is a
+      collection of software from several sources.  Each file may have its own
+      copyright/license that is embedded in the source file.
+    files:
+    - LICENSE
+    - LICENSE.Apache-2.0
+    - LICENSE.BSD-2-Clause
+    - LICENSE.BSD-3-Clause
+    - LICENSE.CC-BY-SA-4.0
+    - LICENSE.Freescale
+    - LICENSE.GPL-2.0
+    - LICENSE.JFFS2
+    - LICENSE.LLVM
+  description: |
+    This repository contains the RTEMS sources.  It is used to provide the BSPs
+    shipped with the QDP.
+  destination-directory: ${../variant:/deployment-directory}/src/rtems
+  directory-state-invalidates: []
+  enabled-by: true
+  links:
+  - role: repository
+    uid: ../variant
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  origin-branch: master
+  origin-commit: 71c024eaca2b16c32447a0d9d712310717d17af8
+  origin-commit-url: https://git.rtems.org/rtems/commit/?id=${.:/origin-commit}
+  origin-fetch: []
+  origin-url: git://git.rtems.org/rtems.git
+  post-clone-commands: []
+  source-directory: ${.:/toolchain-directory}/modules/rtems
+  uid: /qdp/source/rtems
+- action-name: base-rtems-load-spec
+  action-type: load-items
+  action-when: 4000
+  enabled-by: true
+  paths:
+  - ${/qdp/variant:/deployment-directory}/src/rtems/spec
+  set-types: []
+- action-name: base-rtems-docs
+  action-type: git-clone
+  action-when: 4000
+  branch: qdp
+  commit: 2c88912893ebbcc3b9fa14d4fcc100c42252d0df
+  copyrights-by-license: {}
+  description: |
+    This repository contains the RTEMS Documentation sources.  It is used to
+    provide the RTEMS Documentation shipped with the QDP.
+  destination-directory: ${../variant:/deployment-directory}/src/rtems-docs
+  directory-state-invalidates: []
+  enabled-by: true
+  links:
+  - role: repository
+    uid: ../variant
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  origin-branch: master
+  origin-commit: 2c88912893ebbcc3b9fa14d4fcc100c42252d0df
+  origin-commit-url: https://git.rtems.org/rtems-docs/commit/?id=${.:/origin-commit}
+  origin-fetch: []
+  origin-url: git://git.rtems.org/rtems-docs.git
+  post-clone-commands: []
+  source-directory: ${.:/toolchain-directory}/modules/rtems-docs
+  uid: /qdp/source/rtems-docs
+- action-name: base-workspace-items-finalize
+  action-type: finalize-workspace-items
+  action-when: 6000
+  enabled-by: true
+  spec-type-root-uid: /spec/root
+  verify: true

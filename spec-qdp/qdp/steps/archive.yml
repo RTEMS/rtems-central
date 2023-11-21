@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: rtems-${../variant:/rtems-version}-${../variant:/name}.tar.xz
+archive-strip-prefix: ${../variant:/prefix-directory}/
+build-step-type: archive
+copyrights:
+- Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
+description: |
+  Packs all deployed components into the archive file handed over to end users.
+enabled-by: true
+links:
+- name: archive
+  role: output
+  uid: ../deployment/archive
+- name: verify-package
+  role: output
+  uid: ../deployment/verify-package
+qdp-type: build-step
+type: qdp
+verification-script: verify_package.py

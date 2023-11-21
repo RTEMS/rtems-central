@@ -1,0 +1,44 @@
+workspace-actions:
+- action-name: sparc-gr740-uni
+  action-type: make-item
+  action-when: 500
+  data:
+    SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+    arch: sparc
+    bsp: gr740
+    bsp-family: leon3
+    build-directory: ${.:/deployment-directory}/build
+    config: uni
+    copyrights:
+    - Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+    deployment-directory: ${.:/prefix-directory}/${.:/package-directory}
+    enabled:
+    - ${.:/arch}
+    - bsps/${.:/arch}/${.:/bsp-family}
+    - ${.:/arch}/${.:/bsp}
+    - RTEMS_QUAL
+    - __GNUC__
+    - target/evaluation-board
+    - target-hash/c1ZkBOsUIJ-siPI7pK7knk0z6uni1pxOFlZ2eLDflYc=
+    - target/simulator
+    - target-hash/_xQeTNJwSla2bVbhWPVcI0emLk2bE_GVQfvzt9CN84k=
+    enabled-by: true
+    ident: ${.:/arch}/${.:/bsp}${.:/config/slash}/${.:/package-version}
+    links:
+    - role: package-build
+      uid: package-build
+    name: ${.:/arch}-${.:/bsp}${.:/config/dash}-${.:/package-version}
+    package-directory: rtems-${.:/rtems-version}-${.:/name}
+    package-version: '0'
+    params:
+      makefile-run-command: sparc-rtems$$(RTEMS_API)-sis -${.:sis-target} -extirq
+        ${.:sis-extirq} -dumbio -r $$<
+      sis-cpus: '1'
+      sis-extirq: '10'
+      sis-target: gr740
+    prefix-directory: /opt/rtems
+    qdp-type: variant
+    rtems-version: '6'
+    type: qdp
+  enabled-by: true
+  uid: /qdp/variant

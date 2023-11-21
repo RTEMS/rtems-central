@@ -32,3 +32,59 @@ env:
 	. env/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
 	echo -e "#!/bin/sh\n$$(which python3-config) "'$$@' > env/bin/python3-config
 	chmod +x env/bin/python3-config
+
+PREFIX = /opt/rtems
+
+PACKAGE_VERSION = 0
+
+RTEMS_API = 6
+
+LOG_LEVEL = DEBUG
+
+GR712RC_SMP_PKG = $(PREFIX)/rtems-$(RTEMS_API)-sparc-gr712rc-smp-$(PACKAGE_VERSION)
+
+GR712RC_SMP_LOG = $(GR712RC_SMP_PKG)-log.txt
+
+gr712rc-smp-clean:
+	rm -rf $(GR712RC_SMP_PKG) $(GR712RC_SMP_LOG)
+
+gr712rc-smp-update:
+	./qdp_workspace.py --prefix $(PREFIX) --log-file=$(GR712RC_SMP_LOG) --log-level=$(LOG_LEVEL) config/base.yml config/variant-sparc-gr712rc-smp.yml
+
+gr712rc-smp-new: gr712rc-smp-clean gr712rc-smp-update
+
+GR712RC_UNI_PKG = $(PREFIX)/rtems-$(RTEMS_API)-sparc-gr712rc-uni-$(PACKAGE_VERSION)
+
+GR712RC_UNI_LOG = $(GR712RC_UNI_PKG)-log.txt
+
+gr712rc-uni-clean:
+	rm -rf $(GR712RC_UNI_PKG) $(GR712RC_UNI_LOG)
+
+gr712rc-uni-update:
+	./qdp_workspace.py --prefix $(PREFIX) --log-file=$(GR712RC_UNI_LOG) --log-level=$(LOG_LEVEL) config/base.yml config/variant-sparc-gr712rc-uni.yml
+
+gr712rc-uni-new: gr712rc-uni-clean gr712rc-uni-update
+
+GR740_SMP_PKG = $(PREFIX)/rtems-$(RTEMS_API)-sparc-gr740-smp-$(PACKAGE_VERSION)
+
+GR740_SMP_LOG = $(GR740_SMP_PKG)-log.txt
+
+gr740-smp-clean:
+	rm -rf $(GR740_SMP_PKG) $(GR740_SMP_LOG)
+
+gr740-smp-update:
+	./qdp_workspace.py --prefix $(PREFIX) --log-file=$(GR740_SMP_LOG) --log-level=$(LOG_LEVEL) config/base.yml config/variant-sparc-gr740-smp.yml
+
+gr740-smp-new: gr740-smp-clean gr740-smp-update
+
+GR740_UNI_PKG = $(PREFIX)/rtems-$(RTEMS_API)-sparc-gr740-uni-$(PACKAGE_VERSION)
+
+GR740_UNI_LOG = $(GR740_UNI_PKG)-log.txt
+
+gr740-uni-clean:
+	rm -rf $(GR740_UNI_PKG) $(GR740_UNI_LOG)
+
+gr740-uni-update:
+	./qdp_workspace.py --prefix $(PREFIX) --log-file=$(GR740_UNI_LOG) --log-level=$(LOG_LEVEL) config/base.yml config/variant-sparc-gr740-uni.yml
+
+gr740-uni-new: gr740-uni-clean gr740-uni-update

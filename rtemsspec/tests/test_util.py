@@ -28,7 +28,8 @@ import os
 import logging
 
 from rtemsspec.util import copy_file, copy_files, create_argument_parser, \
-    base64_to_hex, init_logging, load_config, run_command
+    create_build_argument_parser, base64_to_hex, init_logging, load_config, \
+    run_command
 from rtemsspec.tests.util import get_and_clear_log
 
 
@@ -79,13 +80,22 @@ DEBUG A"""
 
 
 def test_args():
-    parser = create_argument_parser()
+    parser = create_build_argument_parser()
     args = parser.parse_args([])
-    init_logging(args)
     assert args.log_level == "INFO"
     assert args.log_file is None
+    assert args.only is None
+    assert args.force is None
+    assert not args.no_spec_verify
+    init_logging(args)
     log_file = "log.txt"
-    args = parser.parse_args(["--log-level=DEBUG", f"--log-file={log_file}"])
+    args = parser.parse_args([
+        "--log-level=DEBUG", f"--log-file={log_file}", "--only", "abc",
+        "--force", "def", "--no-spec-verify"
+    ])
     assert args.log_level == "DEBUG"
     assert args.log_file == log_file
+    assert args.only == ["abc"]
+    assert args.force == ["def"]
+    assert args.no_spec_verify
     init_logging(args)

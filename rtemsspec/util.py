@@ -188,6 +188,26 @@ def create_argument_parser(
     return parser
 
 
+def create_build_argument_parser(
+        default_log_level: str = "INFO") -> argparse.ArgumentParser:
+    """ Creates an argument parser with default build options. """
+    parser = create_argument_parser(default_log_level)
+    parser.add_argument('--only',
+                        type=str,
+                        nargs='*',
+                        default=None,
+                        help="build only these steps")
+    parser.add_argument('--force',
+                        type=str,
+                        nargs='*',
+                        default=None,
+                        help="force to build these steps")
+    parser.add_argument('--no-spec-verify',
+                        action="store_true",
+                        help="do not verify the specification")
+    return parser
+
+
 def init_logging(args: argparse.Namespace) -> None:
     """ Initializes the logging module. """
     handlers: List[Any] = [logging.StreamHandler()]
