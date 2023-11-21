@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: gcda-producer
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Produce gcda files from the test log.
+enabled-by: target/simulator
+gcov-tool: ${../deployment/rtems-tool-suite:/directory}/bin/${../variant:/arch}-rtems${../variant:/rtems-version}-gcov-tool
+links:
+- hash: null
+  name: build
+  role: input
+  uid: ../build/bsp-qual-only-coverage
+- hash: null
+  name: tools
+  role: input
+  uid: ../deployment/rtems-tool-suite
+- hash: null
+  name: log
+  role: input
+  uid: ../test-logs/qual-only-coverage-simulator
+- name: destination
+  role: output
+  uid: ../build/gcda-qual-only-simulator
+qdp-type: build-step
+type: qdp
+working-directory: ${../variant:/build-directory}

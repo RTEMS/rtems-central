@@ -40,6 +40,14 @@ links:
 - role: build-step
   uid: steps/test-extra-board
 - role: build-step
+  uid: steps/gcda-qual-only-board
+- role: build-step
+  uid: steps/gcda-qual-only-simulator
+- role: build-step
+  uid: steps/gcovr-qual-only-board
+- role: build-step
+  uid: steps/gcovr-qual-only-simulator
+- role: build-step
   uid: steps/doxygen-tagfile
 - role: build-step
   uid: steps/doc-ddf-sdd

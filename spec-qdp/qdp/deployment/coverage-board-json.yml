@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${../variant:/deployment-directory}/doc/coverage
+directory-state-type: generic
+enabled-by: target/evaluation-board
+files:
+- file: board.json
+  hash: null
+hash: null
+links:
+- hash: null
+  name: member
+  role: input-to
+  uid: ../steps/archive
+patterns: []
+qdp-type: directory-state
+type: qdp

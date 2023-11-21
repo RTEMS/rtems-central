@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${../variant:/build-directory}/gcov-bsp-qual-only-simulator
+directory-state-type: generic
+enabled-by: true
+files: []
+hash: null
+links: []
+patterns:
+- exclude: []
+  include: '**/*.gc??'
+qdp-type: directory-state
+type: qdp

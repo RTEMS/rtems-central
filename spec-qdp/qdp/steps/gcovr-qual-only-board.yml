@@ -1,0 +1,51 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: subprocess
+  enabled-by: true
+  command:
+  - mkdir
+  - -p
+  - ${../deployment/coverage-board-html:/directory}
+  env: []
+  expected-return-code: null
+  working-directory: ${../source/rtems-qual-only:/directory}
+- action: subprocess
+  enabled-by: true
+  command:
+  - gcovr
+  - --json-summary
+  - ${../deployment/coverage-board-json:/file}
+  - --json-summary-pretty
+  - --gcov-executable=${../deployment/rtems-tool-suite:/directory}/bin/${../variant:/arch}-rtems${../variant:/rtems-version}-gcov
+  - --html-details
+  - ${../deployment/coverage-board-html:/directory}/index.html
+  - --html-medium-threshold
+  - '80.0'
+  - --html-high-threshold
+  - '100.0'
+  - --object-directory
+  - ${../build/gcda-qual-only-board:/directory}/${../variant:/arch}/${../variant:/bsp}-qual-only-coverage
+  - ${../build/gcda-qual-only-board:/directory}/${../variant:/arch}/${../variant:/bsp}-qual-only-coverage
+  env: []
+  expected-return-code: 0
+  working-directory: ${../source/rtems-qual-only:/directory}
+build-step-type: run-actions
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Runs gcovr to produce a coverage report.
+enabled-by: target/evaluation-board
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../build/gcda-qual-only-board
+- name: html
+  role: output
+  uid: ../deployment/coverage-board-html
+- name: json
+  role: output
+  uid: ../deployment/coverage-board-json
+params: {}
+qdp-type: build-step
+type: qdp
