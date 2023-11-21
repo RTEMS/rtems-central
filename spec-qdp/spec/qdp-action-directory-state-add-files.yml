@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: directory-state-add-files
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      output-name:
+        description: |
+          It shall be name of the output directory state.
+        spec-type: str
+      pattern:
+        description: |
+          It shall be the pattern to match the files.
+        spec-type: str
+      path:
+        description: |
+          It shall be the path to start the search for files.
+        spec-type: str
+    description: |
+      This set of attributes specifies a directory state add files action.
+    mandatory-attributes: all
+spec-name: Directory State Add Files Action
+spec-type: qdp-action-directory-state-add-files
+type: spec

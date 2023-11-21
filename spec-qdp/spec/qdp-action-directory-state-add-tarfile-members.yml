@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: directory-state-add-tarfile-members
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      extract:
+        description: |
+          It shall be true, to extract the archive file.
+        spec-type: bool
+      output-name:
+        description: |
+          It shall be name of the output directory state.
+        spec-type: str
+      pattern:
+        description: |
+          It shall be the pattern to match the tarfiles.
+        spec-type: str
+      prefix-path:
+        description: |
+          It shall be prefix path for tarfile members.
+        spec-type: str
+      search-path:
+        description: |
+          It shall be the path to start the search for tarfiles.
+        spec-type: str
+    description: |
+      This set of attributes specifies a directory state add tarfile members
+      action.
+    mandatory-attributes: all
+spec-name: Directory State Add Tarfile Members Action
+spec-type: qdp-action-directory-state-add-tarfile-members
+type: spec

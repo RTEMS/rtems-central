@@ -27,12 +27,14 @@
 from rtemsspec.archiver import Archiver
 from rtemsspec.directorystate import DirectoryState
 from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
+from rtemsspec.runactions import RunActions
 
 
 def create_build_item_factory() -> BuildItemFactory:
     """ Creates the default build item factory. """
     factory = BuildItemFactory()
     factory.add_constructor("qdp/build-step/archive", Archiver)
+    factory.add_constructor("qdp/build-step/run-actions", RunActions)
     factory.add_constructor("qdp/directory-state/generic", DirectoryState)
     factory.add_constructor("qdp/directory-state/repository", DirectoryState)
     factory.add_constructor("qdp/directory-state/unpacked-archive",

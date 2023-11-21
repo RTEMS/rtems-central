@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: mkdir
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      exist-ok:
+        description: |
+          It shall be true, if the directory may already exist, otherwise false.
+        spec-type: bool
+      parents:
+        description: |
+          It shall be true, if missing parent directories shall be created,
+          otherwise false.
+        spec-type: bool
+      path:
+        description: |
+          It shall be the path to the directory to make.
+        spec-type: str
+    description: |
+      This set of attributes specifies a make directory action.
+    mandatory-attributes: all
+spec-name: Make Directory Action
+spec-type: qdp-action-mkdir
+type: spec

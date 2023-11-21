@@ -1,0 +1,49 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: directory-state-add-tree
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      excludes:
+        description: |
+          It shall be a list of Python ``fnmatch`` patterns.  If a file path
+          matches with the pattern, then the file is not added to the directory
+          state.  The file paths are absolute paths relative to the base
+          directory of the directory state.  For example, if the directory
+          state has a base of ``/base`` and a file to include has the path
+          ``/base/abc``, then the file path ``/abc`` is used to match with the
+          exclude patterns.
+        spec-type: list-str
+      output-name:
+        description: |
+          It shall be the name of the output directory state.
+        spec-type: str
+      root:
+        description: |
+          It shall be the root directory of the directory tree to add.
+        spec-type: str
+      prefix:
+        description: |
+          If the value is present, then it shall be the prefix path.
+        spec-type: optional-str
+    description: |
+      This set of attributes specifies a directory state add tree action.  The
+      files of the directory tree starting at the root directory are added to
+      the file set of the directory state.  The added file path is relative to
+      the root directory.  The prefix is prepended to the file path for each
+      file before it is added to the directory state.  The files are not copied
+      or moved.
+    mandatory-attributes: all
+spec-name: Directory State Add Tree Action
+spec-type: qdp-action-directory-state-add-tree
+type: spec

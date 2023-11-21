@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: subprocess
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      command:
+        description: |
+          It shall be the command and argument list to run as a subprocess.  A
+          variable substitution is performed on the list elements.  For
+          example, you can use
+          ``$${/variant:/build-directory}/some/path/to/build/file`` or
+          ``$${/variant:/deployment-directory}/some/path/to/deployment/file``.
+        spec-type: list-str
+      env:
+        description: null
+        spec-type: qdp-action-subprocess-env-list
+      expected-return-code:
+        description: |
+          If the value is present, then it shall be the expected return code of
+          the command.
+        spec-type: optional-int
+      working-directory:
+        description: |
+          It shall be the working directory to run the command.
+        spec-type: str
+    description: |
+      This set of attributes specifies a subprocess action.
+    mandatory-attributes: all
+spec-name: Subprocess Action
+spec-type: qdp-action-subprocess
+type: spec

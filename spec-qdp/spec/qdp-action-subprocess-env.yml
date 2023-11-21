@@ -1,0 +1,33 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      action:
+        description: |
+          It shall be the action execution environment modification action.
+        spec-type: str
+      name:
+        description: |
+          If the value is present, then it shall be the environment variable
+          name.
+        spec-type: optional-str
+      value:
+        description: |
+          If the value is present, then it shall be the environment variable
+          value.
+        spec-type: optional-str
+    description: |
+      This set of attributes specifies an action to alter the action execution
+      environment.
+    mandatory-attributes: all
+spec-name: Subprocess Action Environment Action
+spec-type: qdp-action-subprocess-env
+type: spec

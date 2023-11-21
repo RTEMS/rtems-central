@@ -1,0 +1,28 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: remove-empty-directories
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      path:
+        description: |
+          It shall be the path to the base directory of the removal action.
+        spec-type: str
+    description: |
+      This set of attributes specifies a removal of empty directories action.
+      The action recursively removes all empty subdirectories of the base
+      directory and the base directory itself if it gets empty.
+    mandatory-attributes: all
+spec-name: Remove Empty Directories Action
+spec-type: qdp-action-remove-empty-directories
+type: spec

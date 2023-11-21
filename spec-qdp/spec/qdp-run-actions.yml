@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-step-type
+  spec-value: run-actions
+  uid: qdp-build-step
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      actions:
+        description: |
+          It shall be the list of actions to run as a subprocess.
+        spec-type: qdp-action-list
+      params:
+        description: |
+          It shall be an optional set of parameters which may be used for
+          variable subsitution.
+        spec-type: any
+    description: |
+      This set of attributes specifies actions to run as a subprocess.
+    mandatory-attributes: all
+spec-name: Run Actions Item Type
+spec-type: qdp-run-actions
+type: spec

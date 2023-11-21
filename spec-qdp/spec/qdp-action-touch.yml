@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: touch
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      exist-ok:
+        description: |
+          It shall be true, if the file may already exist, otherwise false.
+        spec-type: bool
+      path:
+        description: |
+          It shall be the path to the file to touch.
+        spec-type: str
+    description: |
+      This set of attributes specifies a touch file action.
+    mandatory-attributes: all
+spec-name: Touch File Action
+spec-type: qdp-action-touch
+type: spec

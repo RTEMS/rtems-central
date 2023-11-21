@@ -101,6 +101,8 @@ def test_packagebuild(caplog, tmpdir):
     director.clear()
     variant = director["/qdp/variant"]
     prefix_dir = Path(variant["prefix-directory"])
+    status = run_command(["git", "init"], str(prefix_dir))
+    assert status == 0
 
     director.build_package(None, None)
     log = get_and_clear_log(caplog)
@@ -199,3 +201,15 @@ def test_packagebuild(caplog, tmpdir):
         "dir/subdir/c.txt\t663049a20dfea6b8da28b2eb90eddd10ccf28ef2519563310b9bde25b7268444014c48c4384ee5c5a54e7830e45fcd87df7910a7fda77b68c2efdd75f8de25e8",
         "dir/subdir/d.txt\t48fb10b15f3d44a09dc82d02b06581e0c0c69478c9fd2cf8f9093659019a1687baecdbb38c9e72b12169dc4148690f87467f9154f5931c5df665c6496cbfd5f5"
     ]
+
+    # Test RunActions
+    variant["enabled"] = ["run-actions"]
+    director.build_package(None, None)
+    log = get_and_clear_log(caplog)
+    assert f"/qdp/steps/run-actions: make directory: {tmp_dir}/pkg/build/some/more/dirs" in log
+    assert f"/qdp/steps/run-actions: remove empty directory: {tmp_dir}/pkg/build/some/more/dirs" in log
+    assert f"/qdp/steps/run-actions: remove empty directory: {tmp_dir}/pkg/build/some/more" in log
+    assert f"/qdp/steps/run-actions: remove empty directory: {tmp_dir}/pkg/build/some" in log
+    assert f"/qdp/steps/run-actions: remove directory tree: {tmp_dir}/pkg/build/some" in log
+    assert f"/qdp/steps/run-actions: run in '{tmp_dir}/pkg/build': 'git' 'foobar'" in log
+    assert f"/qdp/steps/run-actions: run in '{tmp_dir}/pkg/build': 'git' 'status'" in log

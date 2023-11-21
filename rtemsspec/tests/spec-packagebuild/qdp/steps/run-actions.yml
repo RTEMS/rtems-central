@@ -1,0 +1,282 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+actions:
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: touch
+  enabled-by: false
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: touch
+  enabled-by: true
+  exist-ok: true
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove
+  enabled-by: true
+  missing-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove
+  enabled-by: true
+  missing-ok: true
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove
+  enabled-by: true
+  missing-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: remove
+  enabled-by: true
+  missing-ok: true
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: false
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove-empty-directories
+  enabled-by: true
+  path: ${../variant:/build-directory}/some
+- action: remove
+  enabled-by: true
+  missing-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove-empty-directories
+  enabled-by: true
+  path: ${../variant:/build-directory}/some
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${../variant:/build-directory}/some/more
+- action: remove-tree
+  enabled-by: true
+  missing-ok: true
+  path: ${../variant:/build-directory}/some/more
+- action: remove-tree
+  enabled-by: true
+  missing-ok: false
+  path: ${../variant:/build-directory}/some
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove-glob
+  enabled-by: true
+  remove-tree: false
+  path: ${../variant:/build-directory}/some/more/dirs
+  patterns:
+  - foobar
+- action: remove-glob
+  enabled-by: true
+  remove-tree: false
+  path: ${../variant:/build-directory}/some/more/dirs
+  patterns:
+  - file
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: remove-glob
+  enabled-by: true
+  remove-tree: true
+  path: ${../variant:/build-directory}/some
+  patterns:
+  - more
+- action: remove-glob
+  enabled-by: true
+  remove-tree: false
+  path: ${../variant:/build-directory}
+  patterns:
+  - some
+- action: directory-state-clear
+  enabled-by: true
+  output-name: destination
+- action: directory-state-clear
+  enabled-by: true
+  output-name: disabled
+- action: directory-state-add-tarfile-members
+  enabled-by: true
+  extract: true
+  output-name: destination
+  prefix-path: ${../variant:/deployment-directory}
+  search-path: ${../variant:/prefix-directory}
+  pattern: archive.tar.xz
+- action: directory-state-clear
+  enabled-by: true
+  output-name: destination
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${../variant:/build-directory}/some/more/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../variant:/build-directory}/some/more/dirs/file
+- action: directory-state-add-files
+  enabled-by: true
+  output-name: destination
+  path: ${../variant:/prefix-directory}
+  pattern: archive.tar.xz
+- action: directory-state-add-tree
+  enabled-by: true
+  excludes: []
+  output-name: destination
+  prefix: null
+  root: ${../variant:/build-directory}/some/more
+- action: mkdir
+  enabled-by: true
+  exist-ok: false
+  parents: true
+  path: ${../output/run-actions:/directory}/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../output/run-actions:/directory}/dirs/file
+- action: directory-state-copy-tree
+  enabled-by: true
+  excludes: []
+  output-name: destination
+  prefix: "u"
+  root: ${../variant:/build-directory}/some/more
+- action: directory-state-move-tree
+  enabled-by: true
+  excludes: []
+  output-name: destination
+  prefix: "v"
+  root: ${../output/run-actions:/directory}/u/dirs
+- action: touch
+  enabled-by: true
+  exist-ok: false
+  path: ${../output/run-actions:/directory}/u/dirs/file
+- action: create-ini-file
+  enabled-by: true
+  output-name: destination
+  sections:
+  - enabled-by: true
+    key-value-pairs:
+    - enabled-by: true
+      key: KA
+      value: VA
+    - enabled-by: false
+      key: KB
+      value: VB
+    name: AA
+  - enabled-by: false
+    key-value-pairs: []
+    name: SB
+  target: null
+- action: create-ini-file
+  enabled-by: true
+  output-name: destination
+  sections: []
+  target: foo.ini
+- action: copy-and-substitute
+  enabled-by: true
+  input-name: source
+  output-name: destination
+  source: null
+  target: null
+- action: copy-and-substitute
+  enabled-by: true
+  input-name: source
+  output-name: destination
+  source: dir/subdir/c.txt
+  target: null
+- action: copy-and-substitute
+  enabled-by: true
+  input-name: source
+  output-name: destination
+  source: null
+  target: some/other
+- action: copy-and-substitute
+  enabled-by: true
+  input-name: source
+  output-name: destination
+  source: dir/subdir/c.txt
+  target: some/other/file.txt
+- action: subprocess
+  command:
+  - git
+  - foobar
+  enabled-by: true
+  env: []
+  expected-return-code: null
+  working-directory: ${../variant:/build-directory}
+- action: subprocess
+  command:
+  - git
+  - status
+  enabled-by: true
+  env:
+  - action: clear
+    name: PATH
+    value: null
+  - action: set
+    name: FOOBAR
+    value: foo
+  - action: path-append
+    name: FOOBAR
+    value: bar
+  - action: path-prepend
+    name: FOOBAR
+    value: ${.:/host-processor-count}
+  - action: unset
+    name: FOOBAR
+    value: null
+  expected-return-code: null
+  working-directory: ${../variant:/build-directory}
+- action: subprocess
+  command:
+  - git
+  - status
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${../variant:/build-directory}
+build-step-type: run-actions
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: Description.
+enabled-by: run-actions
+links:
+- hash: null
+  name: variant
+  role: input
+  uid: ../variant
+- hash: null
+  name: source
+  role: input
+  uid: ../source/a
+- name: destination
+  role: output
+  uid: ../output/run-actions
+- name: disabled
+  role: output
+  uid: ../output/b
+params: {}
+qdp-type: build-step
+type: qdp
+

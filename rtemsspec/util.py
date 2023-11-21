@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ This module provides utility functions. """
 
-# Copyright (C) 2020, 2021 embedded brains GmbH & Co. KG
+# Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -33,8 +33,10 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Set, Union
 import yaml
+
+from rtemsspec.items import ItemMapper
 
 
 def base64_to_hex(data: str) -> str:
@@ -77,6 +79,42 @@ def copy_files(src_dir: str, dst_dir: str, files: List[str],
         os.makedirs(os.path.dirname(dst_file), exist_ok=True)
         logging.info("%s: copy '%s' to '%s'", log_context, src_file, dst_file)
         shutil.copy2(src_file, dst_file)
+
+
+def copy_and_substitute(src_file: str, dst_file: str, mapper: ItemMapper,
+                        log_context: str) -> None:
+    """
+    Copies the file from the source to the destination path and performs a
+    variable substitution on the file content using the item mapper.
+    """
+    logging.info("%s: read: %s", log_context, src_file)
+    with open(src_file, "r", encoding="utf-8") as src:
+        logging.info("%s: substitute using mapper of item %s", log_context,
+                     mapper.item.uid)
+        content = mapper.substitute(src.read())
+        logging.info("%s: write: %s", log_context, dst_file)
+        os.makedirs(os.path.dirname(dst_file), exist_ok=True)
+        with open(dst_file, "w+", encoding="utf-8") as dst:
+            dst.write(content)
+
+
+def remove_empty_directories(scope: str, base: str) -> None:
+    """
+    Recursively removes all empty subdirectories of base and base itself if it
+    gets empty.
+
+    The scope is used for log messages.
+    """
+    removed: Set[str] = set()
+    for root, subdirs, files in os.walk(base, topdown=False):
+        if files:
+            continue
+        if any(subdir for subdir in subdirs
+               if os.path.join(root, subdir) not in removed):
+            continue
+        logging.info("%s: remove empty directory: %s", scope, root)
+        os.rmdir(root)
+        removed.add(root)
 
 
 def load_config(config_filename: str) -> Any:

@@ -1,0 +1,42 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: copy-and-substitute
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      input-name:
+        description: |
+          It shall be name of the input directory state.
+        spec-type: str
+      output-name:
+        description: |
+          It shall be name of the output directory state.
+        spec-type: str
+      source:
+        description: |
+          If the value is present, then it shall be the source file relative to
+          the base directory of the input directory state, otherwise the
+          source file is the first file of the input directory state.
+        spec-type: optional-str
+      target:
+        description: |
+          If the value is present, then it shall be the target file relative to
+          the base directory of the output directory state, otherwise the
+          target file is the first file of the output directory state.
+        spec-type: optional-str
+    description: |
+      This set of attributes specifies a copy and substitute action.
+    mandatory-attributes: all
+spec-name: Copy and Substitute Action
+spec-type: qdp-action-copy-and-substitute
+type: spec

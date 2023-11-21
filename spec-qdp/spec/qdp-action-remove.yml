@@ -1,0 +1,31 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: remove
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      missing-ok:
+        description: |
+          It shall be true, if the file or directory may be missing, otherwise
+          false.
+        spec-type: bool
+      path:
+        description: |
+          It shall be the path to the file or directory to remove.
+        spec-type: str
+    description: |
+      This set of attributes specifies a file or directory remove action.
+    mandatory-attributes: all
+spec-name: Remove File or Directory Action
+spec-type: qdp-action-remove
+type: spec

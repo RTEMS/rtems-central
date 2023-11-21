@@ -1,0 +1,38 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: action
+  spec-value: remove-glob
+  uid: qdp-action
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      path:
+        description: |
+          It shall be the path to start the search for files and directories to
+          remove.
+        spec-type: str
+      patterns:
+        description: |
+          It shall be the list of patterns to match the files and directories
+          to remove.
+        spec-type: list-str
+      remove-tree:
+        description: |
+          It shall be true, if matching directories shall be removed as a
+          directory tree, otherwise false.
+        spec-type: bool
+    description: |
+      This set of attributes specifies a pattern based removal of files and
+      directories action.
+    mandatory-attributes: all
+spec-name: Remove Matching Files and Directories Action
+spec-type: qdp-action-remove-glob
+type: spec
