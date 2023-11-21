@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+created: '2019-04-02T15:06:29.497Z'
+copyrights: []
+enabled-by: true
+identifier: '2365'
+labels: []
+links:
+- role: issue-member
+  uid: database
+milestone: null
+qdp-type: issue
+status: assigned
+subject: Task pre-emption disable is broken due to pseudo ISR tasks
+type: qdp
+updated: '2019-04-02T15:06:29.497Z'

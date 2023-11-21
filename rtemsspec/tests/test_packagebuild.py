@@ -41,7 +41,9 @@ from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
     build_item_input, PackageBuildDirector
 from rtemsspec.packagebuildfactory import create_build_item_factory
 from rtemsspec.rtems import RTEMSItemCache
+import rtemsspec.packagemanual
 from rtemsspec.specverify import verify
+from rtemsspec.sphinxcontent import make_label
 import rtemsspec.sphinxbuilder
 import rtemsspec.testrunner
 from rtemsspec.testrunner import Executable, Report, TestRunner
@@ -150,14 +152,43 @@ def _sphinx_builder_run_command(args, cwd=None, stdout=None):
     if "pkg-config" in args:
         stdout.append(" ".join(args))
         return 0
-    if args[0].endswith("verify"):
-        stdout.append("verify")
+    if args[0].endswith("verify_package.py"):
+        stdout.append("verify_package.py")
         return 0
     return 1
 
 
+def _package_manual_generate(content, sections_by_uid, root, table_pivots,
+                             mapper):
+    content.add([root.uid, mapper.item.uid] + table_pivots +
+                list(sections_by_uid.keys()))
+
+
+def _clear_benchmark_variants(ctx: ItemGetValueContext) -> str:
+    ctx.item["benchmark-variants"] = [{
+        "description": "Description",
+        "build-label": "foobar",
+        "name": "Name",
+        "test-log-uid": "../build/disabled"
+    }]
+    return "clear benchmark variants"
+
+
+def _clear_copyrights_by_license(ctx: ItemGetValueContext) -> str:
+    ctx.item.cache["/qdp/source/a"]["copyrights-by-license"] = {}
+    return "clear copyrights by license"
+
+
+def _format_path(path: Path) -> str:
+    path_2 = str(path)
+    for char in "/-_.":
+        path_2 = path_2.replace(char, f"{char}\u200b")
+    return path_2
+
+
 def test_packagebuild(caplog, tmpdir, monkeypatch):
     tmp_dir = Path(tmpdir)
+    tmp_dir_len = len(str(tmp_dir))
     item_cache = _create_item_cache(tmp_dir, Path("spec-packagebuild"))
 
     caplog.set_level(logging.WARN)
@@ -196,7 +227,11 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     assert [item.uid for item in related_items] == ["/rtems/test-case"]
     related_types = rtems_item_cache.get_related_types_by_prefix("requirement")
     assert related_types == [
-        "requirement/functional/function", "requirement/non-functional/design"
+        "requirement/functional/function", "requirement/non-functional/design",
+        "requirement/non-functional/design-target",
+        "requirement/non-functional/interface-requirement",
+        "requirement/non-functional/performance-runtime",
+        "requirement/non-functional/quality"
     ]
     related_items = rtems_item_cache.get_related_interfaces()
     assert [item.uid for item in related_items] == [
@@ -204,11 +239,15 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
         "/rtems/if"
     ]
     related_items = rtems_item_cache.get_related_requirements()
-    assert [item.uid for item in related_items] == ["/req/root", "/rtems/req"]
+    assert [item.uid for item in related_items] == [
+        "/req/api", "/req/root", "/rtems/req", "/rtems/req/mem-basic",
+        "/rtems/req/perf", "/rtems/target-a"
+    ]
     related_items = rtems_item_cache.get_related_interfaces_and_requirements()
     assert [item.uid for item in related_items] == [
-        "/req/root", "/rtems/domain", "/rtems/group", "/rtems/group-acfg",
-        "/rtems/header", "/rtems/if", "/rtems/req"
+        "/req/api", "/req/root", "/rtems/domain", "/rtems/group",
+        "/rtems/group-acfg", "/rtems/header", "/rtems/if", "/rtems/req",
+        "/rtems/req/mem-basic", "/rtems/req/perf", "/rtems/target-a"
     ]
 
     director.build_package(None, ["/qdp/steps/a"])
@@ -236,6 +275,9 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     assert c["blub"] == "bar"
     assert c.substitute(c.item["blub"], c.item) == "bar"
     assert c.substitute("${/qdp/variant:/spec}") == "spec:/qdp/variant"
+    assert c.substitute(
+        "${/qdp/issue/rtems/2189:/name}"
+    ) == "`RTEMS Ticket #2189 <https://devel.rtems.org/ticket/2189>`__"
     assert c.variant.uid == "/qdp/variant"
     variant_config = c.variant["config"]
     c.variant["config"] = ""
@@ -659,3 +701,401 @@ Terms, definitions and abbreviated terms
     doc_2.add_component_action("foobar", action)
     director.build_package(None, None)
     assert action_run == 1
+
+    # Test SRelDBuilder
+    variant["enabled"] = ["ddf-sreld"]
+    director["/qdp/source/doc-ddf-sreld"].load()
+    director.build_package(None, None)
+    ddf_sreld_build = Path(director["/qdp/build/doc-ddf-sreld"].directory)
+    ddf_sreld_index = ddf_sreld_build / "source" / "index.rst"
+    with open(ddf_sreld_index, "r", encoding="utf-8") as src:
+        assert src.read() == f""".. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2023 embedded brains GmbH & Co. KG
+
+Description 2.
+
+.. _NewIssues:
+
+New issues
+----------
+
+When the QDP of this package version was produced, there were the following new issues associated:
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+---------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                                 |
+    +==============+===============================================+=========================================================+
+    | RTEMS Ticket | `2548 <https://devel.rtems.org/ticket/2548>`_ | Problematic integer conversion in rtems_clock_get_tod() |
+    +--------------+-----------------------------------------------+---------------------------------------------------------+
+
+.. _OpenIssues:
+
+Open issues
+-----------
+
+When the QDP of this package version was produced, there were the following open issues associated:
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                                    |
+    +==============+===============================================+============================================================+
+    | RTEMS Ticket | `2365 <https://devel.rtems.org/ticket/2365>`_ | Task pre-emption disable is broken due to pseudo ISR tasks |
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+
+.. _ClosedIssues:
+
+Closed issues
+-------------
+
+The following issues were closed for this package version.
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                              |
+    +==============+===============================================+======================================================+
+    | RTEMS Ticket | `2189 <https://devel.rtems.org/ticket/2189>`_ | Insufficient documentation for rtems_clock_get_tod() |
+    +--------------+-----------------------------------------------+------------------------------------------------------+
+"""
+
+    # Test PackageManualBuilder
+    variant["enabled"] = ["package-manual"]
+    director["/qdp/source/archive"].load()
+    director["/qdp/source/doc-package-manual"].load()
+    director["/qdp/test-logs/membench-2"].load()
+    pm = director["/qdp/steps/doc-package-manual"]
+    pm.mapper.add_get_value(f"{pm.item.type}:/clear-benchmark-variants",
+                            _clear_benchmark_variants)
+    pm.mapper.add_get_value(f"{pm.item.type}:/clear-copyrights-by-license",
+                            _clear_copyrights_by_license)
+    monkeypatch.setattr(rtemsspec.packagemanual, "run_command",
+                        _sphinx_builder_run_command)
+    monkeypatch.setattr(rtemsspec.packagemanual, "generate",
+                        _package_manual_generate)
+    director.build_package(None, None)
+    monkeypatch.undo()
+    pm_build = Path(director["/qdp/build/doc-package-manual"].directory)
+    pm_index = pm_build / "source" / "index.rst"
+    with open(pm_index, "r", encoding="utf-8") as src:
+        assert src.read() == f""".. SPDX-License-Identifier: CC-BY-SA-4.0
+
+.. Copyright (C) 2023 embedded brains GmbH & Co. KG
+
+archive.tar.xz
+6\u200b6\u200b3\u200b0\u200b4\u200b9\u200ba\u200b2\u200b0\u200bd\u200bf\u200be\u200ba\u200b6\u200bb\u200b8\u200bd\u200ba\u200b2\u200b8\u200bb\u200b2\u200be\u200bb\u200b9\u200b0\u200be\u200bd\u200bd\u200bd\u200b1\u200b0\u200bc\u200bc\u200bf\u200b2\u200b8\u200be\u200bf\u200b2\u200b5\u200b1\u200b9\u200b5\u200b6\u200b3\u200b3\u200b1\u200b0\u200bb\u200b9\u200bb\u200bd\u200be\u200b2\u200b5\u200bb\u200b7\u200b2\u200b6\u200b8\u200b4\u200b4\u200b4\u200b0\u200b1\u200b4\u200bc\u200b4\u200b8\u200bc\u200b4\u200b3\u200b8\u200b4\u200be\u200be\u200b5\u200bc\u200b5\u200ba\u200b5\u200b4\u200be\u200b7\u200b8\u200b3\u200b0\u200be\u200b4\u200b5\u200bf\u200bc\u200bd\u200b8\u200b7\u200bd\u200bf\u200b7\u200b9\u200b1\u200b0\u200ba\u200b7\u200bf\u200bd\u200ba\u200b7\u200b7\u200bb\u200b6\u200b8\u200bc\u200b2\u200be\u200bf\u200bd\u200bd\u200b7\u200b5\u200bf\u200b8\u200bd\u200be\u200b2\u200b5\u200be\u200b8
+.. code-block:: none
+
+    $ pkg-config --variable=ABI_FLAGS {tmp_dir}/pkg/lib/pkgconfig/sparc-rtems6-gr712rc-qual-only.pc
+    pkg-config --variable=ABI_FLAGS {tmp_dir}/pkg/lib/pkgconfig/sparc-rtems6-gr712rc-qual-only.pc
+
+    $ pkg-config --cflags {tmp_dir}/pkg/lib/pkgconfig/sparc-rtems6-gr712rc-qual-only.pc
+    pkg-config --cflags {tmp_dir}/pkg/lib/pkgconfig/sparc-rtems6-gr712rc-qual-only.pc
+
+    $ pkg-config --libs {tmp_dir}/pkg/lib/pkgconfig/sparc-rtems6-gr712rc-qual-only.pc
+    pkg-config --libs {tmp_dir}/pkg/lib/pkgconfig/sparc-rtems6-gr712rc-qual-only.pc
+verify_package.py
+.. code-block:: none
+
+    $ cd {tmp_dir}
+    $ ./verify_package.py --help
+    verify_package.py
+b​6​3​5​4​f​6​4​a​1​a​2​6​1​a​2​e​7​1​0​1​5​a​b​5​1​f​c​5​d​3​c​a​8​7​6​3​0​5​c​b​a​2​7​3​3​5​5​7​e​b​f​e​3​e​2​c​0​a​0​9​5​1​e​2​c​6​1​e​7​6​3​d​8​a​9​e​d​d​b​b​4​d​4​1​e​5​6​c​e​f​3​d​d​f​8​a​8​0​2​3​e​a​7​e​f​7​a​a​f​e​9​9​6​b​b​b​1​f​a​4​5​4​7​3​3​5​0
+.. code-block:: none
+
+    ​example
+4
+Name 1
+    Description 1
+
+Name 2
+    Description 2
+
+Name 3
+    Description 3
+/rtems/req/mem-basic
+/rtems/req/mem-basic
+/rtems/req/mem-smp-1
+/rtems/val/mem-basic
+123
++0
+.. raw:: latex
+
+    \\begin{{scriptsize}}
+
+.. table::
+    :class: longtable
+    :widths: 35,20,9,9,9,9,9
+
+    +---------------+---------+-------+---------+-------+------+---------+
+    | Specification | Variant | .text | .rodata | .data | .bss | .noinit |
+    +===============+=========+=======+=========+=======+======+=========+
+    +---------------+---------+-------+---------+-------+------+---------+
+
+.. raw:: latex
+
+    \\end{{scriptsize}}
+.. raw:: latex
+
+    \\begin{{scriptsize}}
+
+.. table::
+    :class: longtable
+    :widths: 31,14,19,12,12,12
+
+    +----------------------+-------------{'-' * tmp_dir_len}------------------------------------------------------------------------------------------+---------+----------+-------------+----------+
+    | Specification        | Environment {' ' * tmp_dir_len}                                                                                          | Variant | Min [μs] | Median [μs] | Max [μs] |
+    +======================+============={'=' * tmp_dir_len}==========================================================================================+=========+==========+=============+==========+
+    | spec:/rtems/req/perf | `HotCache <{tmp_dir}/pkg/doc/ts/srs/html/requirements.html#spec-req-perf-runtime-environment-hot-cache>`__     | Name 1  | 0.275    | 0.275       | 0.275    |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 2  | +0 %     | +0 %        | +0 %     |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 3  | ?        | ?           | ?        |
+    +                      +-------------{'-' * tmp_dir_len}------------------------------------------------------------------------------------------+---------+----------+-------------+----------+
+    |                      | `FullCache <{tmp_dir}/pkg/doc/ts/srs/html/requirements.html#spec-req-perf-runtime-environment-full-cache>`__   | Name 1  | 0.275    | 0.275       | 0.475    |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 2  | +0 %     | +0 %        | +0 %     |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 3  | ?        | ?           | ?        |
+    +                      +-------------{'-' * tmp_dir_len}------------------------------------------------------------------------------------------+---------+----------+-------------+----------+
+    |                      | `DirtyCache <{tmp_dir}/pkg/doc/ts/srs/html/requirements.html#spec-req-perf-runtime-environment-dirty-cache>`__ | Name 1  | 2.125    | 2.125       | 2.125    |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 2  | +0 %     | +0 %        | +0 %     |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 3  | ?        | ?           | ?        |
+    +                      +-------------{'-' * tmp_dir_len}------------------------------------------------------------------------------------------+---------+----------+-------------+----------+
+    |                      | `Load/1 <{tmp_dir}/pkg/doc/ts/srs/html/requirements.html#spec-req-perf-runtime-environment-load>`__            | Name 1  | 1.062    | 1.062       | 1.062    |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 2  | +0 %     | +0 %        | +0 %     |
+    +                      +             {' ' * tmp_dir_len}                                                                                          +---------+----------+-------------+----------+
+    |                      |             {' ' * tmp_dir_len}                                                                                          | Name 3  | ?        | ?           | ?        |
+    +----------------------+-------------{'-' * tmp_dir_len}------------------------------------------------------------------------------------------+---------+----------+-------------+----------+
+
+.. raw:: latex
+
+    \\end{{scriptsize}}
+clear benchmark variants
+.. raw:: latex
+
+    \\begin{{scriptsize}}
+
+.. table::
+    :class: longtable
+    :widths: 35,20,9,9,9,9,9
+
+    +---------------+---------+-------+---------+-------+------+---------+
+    | Specification | Variant | .text | .rodata | .data | .bss | .noinit |
+    +===============+=========+=======+=========+=======+======+=========+
+    +---------------+---------+-------+---------+-------+------+---------+
+
+.. raw:: latex
+
+    \\end{{scriptsize}}
+There is no performance variants table available.
+.. _GitRepositoryBuildSrcB:
+
+Git Repository: build/src/b
+---------------------------
+
+B
+
+The ``qdp`` branch with
+commit ``52f06822b8921ad825cb593b792eab7640e26cde``
+was used to build the QDP.  This branch is checked out after unpacking the
+archive.  It is based on
+commit `bcef89f2360b97005e490c92fe624ab9dec789e6 <https://git.rtems.org/rtems/commit/?id=bcef89f2360b97005e490c92fe624ab9dec789e6>`_
+of the ``master`` branch of the ``origin`` remote repository.
+.. _Name:
+
+Name
+----
+
+* identity
+.. _NameTargetA:
+
+Name Target A
+-------------
+
+Brief target A.
+
+Description target A.
+
+.. _Name2:
+
+Name 2
+------
+
+Description 2.
+
+.. _Name2NewIssues:
+
+New issues
+^^^^^^^^^^
+
+When the QDP of this package version was produced, there were the following new issues associated:
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+---------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                                 |
+    +==============+===============================================+=========================================================+
+    | RTEMS Ticket | `2548 <https://devel.rtems.org/ticket/2548>`_ | Problematic integer conversion in rtems_clock_get_tod() |
+    +--------------+-----------------------------------------------+---------------------------------------------------------+
+
+.. _Name2OpenIssues:
+
+Open issues
+^^^^^^^^^^^
+
+When the QDP of this package version was produced, there were the following open issues associated:
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                                    |
+    +==============+===============================================+============================================================+
+    | RTEMS Ticket | `2365 <https://devel.rtems.org/ticket/2365>`_ | Task pre-emption disable is broken due to pseudo ISR tasks |
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+
+.. _Name2ClosedIssues:
+
+Closed issues
+^^^^^^^^^^^^^
+
+The following issues were closed for this package version.
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                              |
+    +==============+===============================================+======================================================+
+    | RTEMS Ticket | `2189 <https://devel.rtems.org/ticket/2189>`_ | Insufficient documentation for rtems_clock_get_tod() |
+    +--------------+-----------------------------------------------+------------------------------------------------------+
+
+.. _Name1:
+
+Name 1
+------
+
+Description 1.
+
+.. _Name1NewIssues:
+
+New issues
+^^^^^^^^^^
+
+When the QDP of this package version was produced, there were the following new issues associated:
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                                    |
+    +==============+===============================================+============================================================+
+    | RTEMS Ticket | `2189 <https://devel.rtems.org/ticket/2189>`_ | Insufficient documentation for rtems_clock_get_tod()       |
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+    | RTEMS Ticket | `2365 <https://devel.rtems.org/ticket/2365>`_ | Task pre-emption disable is broken due to pseudo ISR tasks |
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+
+.. _Name1OpenIssues:
+
+Open issues
+^^^^^^^^^^^
+
+When the QDP of this package version was produced,
+there were no open issues associated.
+
+.. _Name1ClosedIssues:
+
+Closed issues
+^^^^^^^^^^^^^
+
+When the QDP of this package version was produced,
+there were no closed issues associated.
+.. _OpenIssues:
+
+Open issues
+-----------
+
+When the QDP of this package version was produced, there were the following open issues associated:
+
+.. table::
+    :class: longtable
+    :widths: 27,14,59
+
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+    | Database     | Identifier                                    | Subject                                                    |
+    +==============+===============================================+============================================================+
+    | RTEMS Ticket | `2365 <https://devel.rtems.org/ticket/2365>`_ | Task pre-emption disable is broken due to pseudo ISR tasks |
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+    | RTEMS Ticket | `2548 <https://devel.rtems.org/ticket/2548>`_ | Problematic integer conversion in rtems_clock_get_tod()    |
+    +--------------+-----------------------------------------------+------------------------------------------------------------+
+All directories and file paths in this section are
+relative to :file:`{_format_path(tmp_dir / 'pkg')}`.
+
+.. _Directory:
+
+Directory - ..
+--------------
+
+.. _Directory FileDirATxt:
+
+File - dir/a.txt
+^^^^^^^^^^^^^^^^
+
+The license file
+:file:`.​.​/​dir/​a.​txt`
+is applicable to this directory or parts of the directory:
+
+.. code-block:: none
+
+    ​A
+
+.. _BSD2ClauseCopyrights:
+
+BSD-2-Clause copyrights
+-----------------------
+
+| © 2023 Alice
+
+.. code-block:: none
+
+    ​Redistribution and use in source and binary forms, with or without
+    ​modification, are permitted provided that the following conditions
+    ​are met:
+    ​1. Redistributions of source code must retain the above copyright
+    ​   notice, this list of conditions and the following disclaimer.
+    ​2. Redistributions in binary form must reproduce the above copyright
+    ​   notice, this list of conditions and the following disclaimer in the
+    ​   documentation and/or other materials provided with the distribution.
+    ​
+    ​THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    ​AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    ​IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ​ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+    ​LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    ​CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    ​SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    ​INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    ​CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ​ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    ​POSSIBILITY OF SUCH DAMAGE.
+clear copyrights by license
+All directories and file paths in this section are
+relative to :file:`{_format_path(tmp_dir / 'pkg')}`.
+"""

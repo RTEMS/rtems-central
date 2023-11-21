@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+branch: qdp
+commit: 52f06822b8921ad825cb593b792eab7640e26cde
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+description: B
+directory: ${../variant:/deployment-directory}/build/src/b
+directory-state-type: repository
+enabled-by: true
+files: []
+hash: null
+links:
+- role: repository
+  uid: ../variant
+origin-branch: master
+origin-commit: bcef89f2360b97005e490c92fe624ab9dec789e6
+origin-commit-url: https://git.rtems.org/rtems/commit/?id=${.:/origin-commit}
+origin-url: git://git.rtems.org/rtems.git
+patterns: []
+qdp-type: directory-state
+type: qdp

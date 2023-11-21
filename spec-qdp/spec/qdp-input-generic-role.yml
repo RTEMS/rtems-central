@@ -35,6 +35,10 @@ links:
   uid: qdp-input-role
 - role: spec-refinement
   spec-key: name
+  spec-value: package-changes
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
   spec-value: runner
   uid: qdp-input-role
 - role: spec-refinement

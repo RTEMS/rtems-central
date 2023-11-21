@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+change-list:
+- description: |
+    Description 1.
+  name: Name 1
+  package-status: package-status/test-1
+- description: |
+    Description 2.
+  name: Name 2
+  package-status: package-status/test-2
+links: []
+qdp-type: package-changes
+type: qdp

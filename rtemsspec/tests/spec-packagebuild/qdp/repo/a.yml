@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+branch: qdp
+commit: a412700fd90e6195c255aea2048ae2ef37244df5
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+description: A
+directory: ${../variant:/deployment-directory}/build/src/a
+directory-state-type: repository
+enabled-by: true
+files: []
+hash: null
+links:
+- role: repository
+  uid: ../variant
+origin-branch: null
+origin-commit: null
+origin-commit-url: null
+origin-url: null
+patterns: []
+qdp-type: directory-state
+type: qdp

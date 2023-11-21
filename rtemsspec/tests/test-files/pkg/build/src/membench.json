@@ -1,0 +1,16 @@
+{
+  "arch/bsp": {
+    "membench": {
+      "/rtems/val/mem-basic": {
+        ".bss": 0,
+        ".data": 8,
+        ".noinit": 1,
+        ".rodata": 5,
+        ".text": 123
+      }
+    },
+    "object-sizes": {
+      "/rtems/task/obj": 4
+    }
+  }
+}

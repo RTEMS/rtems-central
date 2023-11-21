@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+archive-file: archive.tar.xz
+archive-strip-prefix: ${../variant:/prefix-directory}/
+build-step-type: archive
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Description.
+enabled-by: true
+links:
+- hash: null
+  name: member
+  role: input
+  uid: ../source/a
+- name: archive
+  role: output
+  uid: ../source/archive
+- name: verify-package
+  role: output
+  uid: ../deployment/verify-package
+qdp-type: build-step
+type: qdp
+verification-script: verify_package.py

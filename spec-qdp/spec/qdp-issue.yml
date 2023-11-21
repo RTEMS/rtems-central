@@ -1,0 +1,50 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 EDISOFT
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: issue
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      created:
+        description: |
+          It shall be time when the issue was created.
+        spec-type: str
+      identifier:
+        description: |
+          It shall be identifier of the issue in relation to its database.
+        spec-type: str
+      labels:
+        description: |
+          It shall be the list of labels of the issue.
+        spec-type: list-str
+      milestone:
+        description: |
+          If the value is present, then it shall be the milestone the issue.
+        spec-type: optional-str
+      status:
+        description: |
+          It shall be the status of the issue at the update time.
+        spec-type: str
+      subject:
+        description: |
+          It shall be the subject of the issue.
+        spec-type: str
+      updated:
+        description: |
+          It shall be time of the last known issue update.
+        spec-type: str
+    description: |
+      This set of attributes specifies an issue.
+    mandatory-attributes: all
+spec-name: Issue Item Type
+spec-type: qdp-issue
+type: spec

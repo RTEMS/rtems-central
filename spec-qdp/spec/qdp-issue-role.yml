@@ -1,0 +1,27 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: role
+  spec-value: issue
+  uid: link
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      status:
+        description: |
+          If shall be the status of the issue with respect to the package.
+        spec-type: qdp-issue-status
+    description: |
+      It defines the issue role of links and is used to associate issues with a
+      packages status.
+    mandatory-attributes: all
+spec-name: Issue Link Role
+spec-type: qdp-issue-role
+type: spec

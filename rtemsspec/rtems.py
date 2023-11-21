@@ -29,9 +29,11 @@ import hashlib
 import itertools
 from typing import Any, Dict, List, Set, Tuple, Union
 
-from rtemsspec.items import create_unique_link, Item, ItemCache, Link
+from rtemsspec.items import create_unique_link, Item, ItemCache, \
+    ItemGetValueContext, ItemMapper, Link
 from rtemsspec.glossary import augment_glossary_terms
-from rtemsspec.packagebuild import BuildItem, PackageBuildDirector
+from rtemsspec.packagebuild import BuildItem, BuildItemFactory, \
+    PackageBuildDirector
 from rtemsspec.validation import augment_with_test_case_links
 
 _NOT_PRE_QUALIFIED = set([
@@ -296,11 +298,25 @@ def _is_proxy_link_enabled(link: Link) -> bool:
     return link.item.is_enabled(link.item.cache.enabled)
 
 
+def _get_issue(ctx: ItemGetValueContext) -> Any:
+    database = ctx.item.parent("issue-member")
+    mapper = ItemMapper(ctx.item)
+    url = mapper.substitute(database["url"])
+    identifier = mapper.substitute(database["format-identifier"])
+    return f"`{database['name']} {identifier} <{url}>`__"
+
+
 class RTEMSItemCache(BuildItem):
     """
     This build step augments the items with RTEMS-specific attributes and
     links.
     """
+
+    @classmethod
+    def prepare_factory(cls, factory: BuildItemFactory,
+                        type_name: str) -> None:
+        BuildItem.prepare_factory(factory, type_name)
+        factory.add_get_value("qdp/issue:/name", _get_issue)
 
     def __init__(self, director: PackageBuildDirector, item: Item):
         super().__init__(director, item)

@@ -1,0 +1,18 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  str:
+    assert:
+    - re: ^[0-9a-f]{5,40}$
+    description: |
+      It shall be a Git hash.
+spec-name: Git Hash
+spec-type: qdp-git-hash
+type: spec

@@ -1,0 +1,84 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: sphinx
+benchmark-variants:
+- description:
+    Description 1
+  build-label: arch/bsp
+  name: Name 1
+  test-log-uid: ../test-logs/perf
+- description: |
+    Description 2
+  build-label: arch/bsp
+  name: Name 2
+  test-log-uid: ../test-logs/perf
+- description: |
+    Description 3
+  build-label: arch/bsp
+  name: Name 3
+  test-log-uid: ../build/disabled
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+description: |
+  Builds the package manual.
+document-type: package-manual
+document-title: Package Manual
+document-toctree-maxdepth: 4
+document-html-help-base-name: PM
+document-components:
+- action: add-to-index
+  add-to-index: true
+  destination: source/glossary.rst
+- action: copy-and-substitute
+  add-to-index: false
+  source: index.rst
+  destination: source/index.rst
+- action: glossary
+  add-to-index: false
+  destination: source/glossary.rst
+  glossary-groups:
+  - /glossary-general
+document-contract: Contract
+document-copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+document-key: blub
+document-releases: []
+document-contributors: []
+enabled-by: package-manual
+links:
+- hash: null
+  name: spec
+  role: input
+  uid: rtems-item-cache
+- hash: null
+  name: membench-results
+  role: input
+  uid: ../test-logs/membench-2
+- hash: null
+  name: package-changes
+  role: input
+  uid: ../package-changes
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doc-package-manual
+- hash: null
+  name: archive
+  role: input
+  uid: ../source/archive
+- hash: null
+  name: verify-package
+  role: input
+  uid: ../deployment/verify-package
+- name: destination
+  role: output
+  uid: ../deployment/doc-package-manual
+- name: build
+  role: output
+  uid: ../build/doc-package-manual
+document-license: CC-BY-SA-4.0
+document-license-map: {}
+memory-benchmark-build-label: arch/bsp
+output-html: null
+output-pdf: null
+qdp-type: build-step
+type: qdp

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: package-changes
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      change-list:
+        description: |
+          It shall be the package change list.
+        spec-type: qdp-package-change-list
+    description: |
+      This set of attributes specifies a list of package changes.
+    mandatory-attributes: all
+spec-name: Package Changes Item Type
+spec-type: qdp-package-changes
+type: spec

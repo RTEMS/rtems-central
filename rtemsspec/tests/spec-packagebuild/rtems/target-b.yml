@@ -1,0 +1,19 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+brief: |
+  Brief target B.
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: target-b
+description: |
+  Description target B.
+links:
+- role: requirement-refinement
+  uid: ../req/root
+name: Name Target B
+non-functional-type: design-target
+rationale: null
+references: []
+requirement-type: non-functional
+text: |
+  The ${.:/name} shall be a target.
+type: requirement

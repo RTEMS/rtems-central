@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: document-type
+  spec-value: package-manual
+  uid: qdp-sphinx-build
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      benchmark-variants:
+        description: |
+          It shall be the benchmark variant list.
+        spec-type: any
+      memory-benchmark-build-label:
+        description: |
+          It shall be the build label to get the memory benchmarks.
+        spec-type: str
+    description: |
+      This set of attributes specifies a package manual.
+    mandatory-attributes: all
+spec-name: Package Manual Item Type
+spec-type: qdp-package-manual
+type: spec

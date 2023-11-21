@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: package-status
+  uid: qdp-root
+spec-description: |
+  Items of this type shall have the following links:
+
+  * There shall be links to ${qdp-issue:/spec-name} items
+    with the ${qdp-issue-role:/spec-name}.
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes specifies a package status.
+    mandatory-attributes: all
+spec-name: Package Status Item Type
+spec-type: qdp-package-status
+type: spec

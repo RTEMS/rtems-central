@@ -1,0 +1,47 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: sphinx
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Builds the SRelD.
+document-type: ddf-sreld
+document-title: SRelD
+document-toctree-maxdepth: 4
+document-html-help-base-name: SRelD
+document-components:
+- action: copy-and-substitute
+  add-to-index: false
+  source: index.rst
+  destination: source/index.rst
+document-contract: Contract
+document-key: blub
+document-releases: []
+document-contributors: []
+document-copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+document-license: CC-BY-SA-4.0
+document-license-map: {}
+enabled-by: ddf-sreld
+links:
+- hash: null
+  name: spec
+  role: input
+  uid: rtems-item-cache
+- hash: null
+  name: package-changes
+  role: input
+  uid: ../package-changes
+- hash: null
+  name: source
+  role: input
+  uid: ../source/doc-ddf-sreld
+- name: destination
+  role: output
+  uid: ../deployment/doc-ddf-sreld
+- name: build
+  role: output
+  uid: ../build/doc-ddf-sreld
+output-html: null
+output-pdf: null
+qdp-type: build-step
+type: qdp

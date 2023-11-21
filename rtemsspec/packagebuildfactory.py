@@ -29,11 +29,14 @@ from rtemsspec.directorystate import DirectoryState
 from rtemsspec.gcdaproducer import GCDAProducer
 from rtemsspec.membenchcollector import MembenchCollector
 from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
+from rtemsspec.packagechanges import PackageChanges
+from rtemsspec.packagemanual import PackageManualBuilder
 from rtemsspec.reposubset import RepositorySubset
 from rtemsspec.rtems import RTEMSItemCache
 from rtemsspec.runactions import RunActions
 from rtemsspec.runtests import RunTests, TestLog
 from rtemsspec.sphinxbuilder import SphinxBuilder, SphinxSection
+from rtemsspec.sreldbuilder import SRelDBuilder
 from rtemsspec.testrunner import DummyTestRunner, GRMONManualTestRunner, \
     SubprocessTestRunner
 
@@ -50,12 +53,16 @@ def create_build_item_factory() -> BuildItemFactory:
     factory.add_constructor("qdp/build-step/rtems-item-cache", RTEMSItemCache)
     factory.add_constructor("qdp/build-step/run-actions", RunActions)
     factory.add_constructor("qdp/build-step/run-tests", RunTests)
+    factory.add_constructor("qdp/build-step/sphinx/ddf-sreld", SRelDBuilder)
     factory.add_constructor("qdp/build-step/sphinx/generic", SphinxBuilder)
+    factory.add_constructor("qdp/build-step/sphinx/package-manual",
+                            PackageManualBuilder)
     factory.add_constructor("qdp/directory-state/generic", DirectoryState)
     factory.add_constructor("qdp/directory-state/repository", DirectoryState)
     factory.add_constructor("qdp/directory-state/test-log", TestLog)
     factory.add_constructor("qdp/directory-state/unpacked-archive",
                             DirectoryState)
+    factory.add_constructor("qdp/package-changes", PackageChanges)
     factory.add_constructor("qdp/sphinx-section", SphinxSection)
     factory.add_constructor("qdp/test-runner/dummy", DummyTestRunner)
     factory.add_constructor("qdp/test-runner/grmon-manual",

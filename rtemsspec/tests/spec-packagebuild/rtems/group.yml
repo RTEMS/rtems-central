@@ -12,7 +12,7 @@ links:
 - role: interface-placement
   uid: header
 - role: requirement-refinement
-  uid: ../req/root
+  uid: ../req/api
 name: Name
 text: |
   Text.

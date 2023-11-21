@@ -1,0 +1,30 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      description:
+        description: |
+          It shall be the package change description.
+        spec-type: str
+      name:
+        description: |
+          It shall be the package change name.
+        spec-type: str
+      package-status:
+        description: |
+          It shall be package status UID.
+        spec-type: uid
+    description: |
+      This set of attributes specifies a package change.
+    mandatory-attributes: all
+spec-name: Package Change Release
+spec-type: qdp-package-change
+type: spec

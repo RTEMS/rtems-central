@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: issue-database
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      name:
+        description: |
+          It shall be the name of the issue database.
+        spec-type: str
+      format-identifier:
+        description: |
+          It shall be the format of an issue identifier in a document.
+        spec-type: str
+      url:
+        description: |
+          It shall be URL to issues of the database.
+        spec-type: str
+    description: |
+      This set of attributes specifies an issue database.
+    mandatory-attributes: all
+spec-name: Issue Database Item Type
+spec-type: qdp-issue-database
+type: spec

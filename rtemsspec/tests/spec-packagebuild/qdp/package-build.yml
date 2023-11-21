@@ -26,6 +26,10 @@ links:
 - role: build-step
   uid: steps/doc-2
 - role: build-step
+  uid: steps/doc-ddf-sreld
+- role: build-step
   uid: steps/archive
+- role: build-step
+  uid: steps/doc-package-manual
 qdp-type: package-build
 type: qdp
