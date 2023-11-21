@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: run-tests
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Run the tests for the qual-only BSP configuration on the board.
+enabled-by: target/evaluation-board
+links:
+- role: test-procedure
+  uid: ../variant
+- hash: null
+  name: source
+  role: input
+  uid: ../deployment/bsp-qual-only
+- hash: null
+  name: runner
+  role: input
+  uid: ../test-runner/board
+- name: log
+  role: output
+  uid: ../test-logs/qual-only-board
+qdp-type: build-step
+type: qdp

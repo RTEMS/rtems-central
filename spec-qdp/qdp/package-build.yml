@@ -4,6 +4,8 @@ copyrights:
 enabled-by: true
 links:
 - role: build-step
+  uid: steps/rtems-item-cache
+- role: build-step
   uid: steps/create-pre-qualified-only-sources
 - role: build-step
   uid: steps/create-config-files
@@ -25,6 +27,18 @@ links:
   uid: steps/bsp-extra-coverage
 - role: build-step
   uid: steps/membench
+- role: build-step
+  uid: steps/test-qual-only-simulator
+- role: build-step
+  uid: steps/test-qual-only-coverage-simulator
+- role: build-step
+  uid: steps/test-qual-only-board
+- role: build-step
+  uid: steps/test-qual-only-coverage-board
+- role: build-step
+  uid: steps/test-extra-simulator
+- role: build-step
+  uid: steps/test-extra-board
 - role: build-step
   uid: steps/doxygen-tagfile
 - role: build-step

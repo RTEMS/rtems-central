@@ -215,6 +215,84 @@ workspace-actions:
   post-clone-commands: []
   source-directory: ${.:/toolchain-directory}/modules/rtems-docs
   uid: /qdp/source/rtems-docs
+- action-name: base-test-log-extra-board
+  action-type: copy-test-log
+  action-when: 4000
+  destination-directory: ${../variant:/deployment-directory}/doc/test-logs
+  destination-file: log-extra-board.json
+  enabled-by: target/evaluation-board
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  source-file: ${.:/toolchain-directory}/test-logs/${/qdp/variant:/arch}/${/qdp/variant:/bsp}/${/qdp/variant:/config}/extra-board.json
+  uid: /qdp/test-logs/extra-board
+- action-name: base-test-log-extra-simulator
+  action-type: copy-test-log
+  action-when: 4000
+  destination-directory: ${../variant:/deployment-directory}/doc/test-logs
+  destination-file: log-extra-simulator.json
+  enabled-by: target/simulator
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  source-file: ${.:/toolchain-directory}/test-logs/${/qdp/variant:/arch}/${/qdp/variant:/bsp}/${/qdp/variant:/config}/extra-simulator.json
+  uid: /qdp/test-logs/extra-simulator
+- action-name: base-test-log-qual-only-board
+  action-type: copy-test-log
+  action-when: 4000
+  destination-directory: ${../variant:/deployment-directory}/doc/test-logs
+  destination-file: log-qual-only-board.json
+  enabled-by: target/evaluation-board
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  source-file: ${.:/toolchain-directory}/test-logs/${/qdp/variant:/arch}/${/qdp/variant:/bsp}/${/qdp/variant:/config}/qual-only-board.json
+  uid: /qdp/test-logs/qual-only-board
+- action-name: base-test-log-qual-only-simulator
+  action-type: copy-test-log
+  action-when: 4000
+  destination-directory: ${../variant:/deployment-directory}/doc/test-logs
+  destination-file: log-qual-only-simulator.json
+  enabled-by: target/simulator
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  source-file: ${.:/toolchain-directory}/test-logs/${/qdp/variant:/arch}/${/qdp/variant:/bsp}/${/qdp/variant:/config}/qual-only-simulator.json
+  uid: /qdp/test-logs/qual-only-simulator
+- action-name: base-test-log-qual-only-coverage-board
+  action-type: copy-test-log
+  action-when: 4000
+  destination-directory: ${../variant:/deployment-directory}/doc/test-logs
+  destination-file: log-qual-only-coverage-board.json
+  enabled-by: target/evaluation-board
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  source-file: ${.:/toolchain-directory}/test-logs/${/qdp/variant:/arch}/${/qdp/variant:/bsp}/${/qdp/variant:/config}/qual-only-coverage-board.json
+  uid: /qdp/test-logs/qual-only-coverage-board
+- action-name: base-test-log-qual-only-coverage-simulator
+  action-type: copy-test-log
+  action-when: 4000
+  destination-directory: ${../variant:/deployment-directory}/doc/test-logs
+  destination-file: log-qual-only-coverage-simulator.json
+  enabled-by: target/simulator
+  links:
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  source-file: ${.:/toolchain-directory}/test-logs/${/qdp/variant:/arch}/${/qdp/variant:/bsp}/${/qdp/variant:/config}/qual-only-coverage-simulator.json
+  uid: /qdp/test-logs/qual-only-coverage-simulator
 - action-name: base-workspace-items-finalize
   action-type: finalize-workspace-items
   action-when: 6000

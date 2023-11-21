@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+description: |
+  Generates a GRMON script to run the tests on the board.
+enabled-by: false
+grmon-script: |
+  cpu disable 1
+
+  set tests [list \
+  ${.:/test-executables-grmon}
+  ]
+
+  foreach t $$tests {
+          load $$t
+          run
+  }
+
+  quit
+links:
+- role: proxy-member
+  uid: board
+- hash: null
+  name: variant
+  role: input
+  uid: ../variant
+params: {}
+qdp-type: test-runner
+script-base-path: ${../variant:/build-directory}/grmon
+shell-script: |
+  #/bin/sh -x
+  grmon -eth 192.168.180.100 -u -c run.grmon
+test-runner-type: grmon-manual
+type: qdp
