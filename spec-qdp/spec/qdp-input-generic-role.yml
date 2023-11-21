@@ -27,6 +27,10 @@ links:
   uid: qdp-input-role
 - role: spec-refinement
   spec-key: name
+  spec-value: membench-results
+  uid: qdp-input-role
+- role: spec-refinement
+  spec-key: name
   spec-value: member
   uid: qdp-input-role
 - role: spec-refinement

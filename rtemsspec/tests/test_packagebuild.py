@@ -36,6 +36,7 @@ from typing import List, NamedTuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext
 import rtemsspec.gcdaproducer
+import rtemsspec.membenchcollector
 from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
     build_item_input, PackageBuildDirector
 from rtemsspec.packagebuildfactory import create_build_item_factory
@@ -119,6 +120,14 @@ def _gcov_tool(command, check, cwd, input):
     assert check
     assert input == b"gcfnB04R\x00\x00\x00\x95/opt"
     (Path(cwd) / "file.gcda").touch()
+
+
+def _gather_object_sizes(item_cache, path, gdb):
+    return {}
+
+
+def _gather_sections(item_cache, path, objdump, gdb):
+    return {}
 
 
 def test_packagebuild(caplog, tmpdir, monkeypatch):
@@ -424,3 +433,14 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     assert f"/qdp/steps/gcda-producer: remove unexpected *.gcda file in build directory: '{tmp_dir}/pkg/build/bsp/f.gcda'" in log
     assert f"/qdp/steps/gcda-producer: process: ts-unit-no-clock-0.exe" in log
     assert f"/qdp/steps/gcda-producer: move *.gcda files from '{tmp_dir}/pkg/build/bsp' to '{tmp_dir}/pkg/build/gcda'" in log
+
+    # Test MembenchCollector
+    variant["enabled"] = ["membench-collector"]
+    monkeypatch.setattr(rtemsspec.membenchcollector, "gather_object_sizes",
+                        _gather_object_sizes)
+    monkeypatch.setattr(rtemsspec.membenchcollector, "gather_sections",
+                        _gather_sections)
+    director.build_package(None, None)
+    monkeypatch.undo()
+    log = get_and_clear_log(caplog)
+    assert f"/qdp/steps/membench: get memory benchmarks for build-label from: arch/bsp" in log
