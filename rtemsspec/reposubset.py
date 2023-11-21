@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: BSD-2-Clause
-""" This module provides the default build item factory. """
+""" Build step to create a subset of a repository. """
 
-# Copyright (C) 2023 embedded brains GmbH & Co. KG
+# Copyright (C) 2021 EDISOFT (https://www.edisoft.pt/)
+# Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -24,23 +25,42 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rtemsspec.archiver import Archiver
+import logging
+from typing import List
+
+from rtemsspec.build import gather_files
 from rtemsspec.directorystate import DirectoryState
-from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
-from rtemsspec.reposubset import RepositorySubset
-from rtemsspec.runactions import RunActions
+from rtemsspec.packagebuild import BuildItem
 
 
-def create_build_item_factory() -> BuildItemFactory:
-    """ Creates the default build item factory. """
-    factory = BuildItemFactory()
-    factory.add_constructor("qdp/build-step/archive", Archiver)
-    factory.add_constructor("qdp/build-step/repository-subset",
-                            RepositorySubset)
-    factory.add_constructor("qdp/build-step/run-actions", RunActions)
-    factory.add_constructor("qdp/directory-state/generic", DirectoryState)
-    factory.add_constructor("qdp/directory-state/repository", DirectoryState)
-    factory.add_constructor("qdp/directory-state/unpacked-archive",
-                            DirectoryState)
-    factory.add_constructor("qdp/variant", PackageVariant)
-    return factory
+class RepositorySubset(BuildItem):
+    """
+    Creates a directory containing only the specified subset of the
+    repository.
+    """
+
+    def gather_files(self) -> List[str]:
+        """ Gathers the files of the repository subset. """
+        variant = self.input("variant")
+
+        logging.info("%s: gather repository subset", self.uid)
+        config = {
+            "bsp": variant["bsp"],
+            "arch": variant["arch"],
+            "extra-files": self["extra-files"],
+            "enabled": self.enabled_set + self["enabled"],
+            "build-uids": self["build-uids"]
+        }
+        return gather_files(config, self.item.cache)
+
+    def run(self):
+        source = self.input("source")
+        assert isinstance(source, DirectoryState)
+
+        destination = self.output("destination")
+        assert isinstance(destination, DirectoryState)
+
+        destination.clear()
+
+        logging.info("%s: copy gathered files", self.uid)
+        destination.copy_files(source.directory, self.gather_files())

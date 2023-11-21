@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: repository-subset
+build-uids: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: Description.
+enabled: []
+enabled-by: repository-subset
+extra-files: []
+links:
+- hash: null
+  name: variant
+  role: input
+  uid: ../variant
+- hash: null
+  name: source
+  role: input
+  uid: ../source/repo
+- name: destination
+  role: output
+  uid: ../source/sub-repo
+qdp-type: build-step
+type: qdp

@@ -1,0 +1,17 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+arch: sparc
+bsp: gr712rc
+build-type: bsp
+cflags: []
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+cppflags: []
+enabled-by: true
+family: leon3
+includes: []
+enabled-by: true
+install: []
+links: []
+source:
+- bsp.c
+type: build

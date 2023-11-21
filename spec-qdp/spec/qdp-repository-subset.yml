@@ -1,0 +1,54 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: build-step-type
+  spec-value: repository-subset
+  uid: qdp-build-step
+spec-description: |
+  Items of this type shall have the following links:
+
+  * There shall be exactly one link to a ${qdp-directory-state:/spec-name} item
+    with the ${qdp-input-role:/spec-name} and the name ``variant``.  This link
+    defines the package variant.
+
+  * There shall be exactly one link to a ${qdp-directory-state:/spec-name} item
+    with the ${qdp-input-role:/spec-name} and the name ``source``.  This link
+    defines the source repository.
+
+  * There shall be exactly one link to a ${qdp-directory-state:/spec-name} item
+    with the ${qdp-output-role:/spec-name} and the name ``destination``.  The
+    link target directory state item defines the location of the subset of the
+    repository.
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      build-uids:
+        description: |
+          It shall be the list of UIDs to build items.  The source files of
+          enabled build items are included in the source subset.
+        spec-type: list-str
+      enabled:
+        description: |
+          It shall be the list of enable values used to evaluate the
+          ${enabled-by:/spec-name} of the visited build items.
+        spec-type: list-str
+      extra-files:
+        description: |
+          It shall be the list of extra files copied from the source directory.
+        spec-type: list-str
+    description: |
+      This set of attributes specifies a subset of repository files.  It may be
+      used to create a subset of the RTEMS sources which contains only the
+      pre-qualified feature set.  These sources can be used to verify the build
+      of the pre-qualified libraries.  It can be also used to build the SDD
+      with Doxygen restricted to the pre-qualified feature set.
+    mandatory-attributes: all
+spec-name: Repository Subset Item Type
+spec-type: qdp-repository-subset
+type: spec

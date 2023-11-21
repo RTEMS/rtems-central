@@ -10,6 +10,8 @@ links:
 - role: build-step
   uid: steps/c
 - role: build-step
+  uid: steps/repository-subset
+- role: build-step
   uid: steps/run-actions
 - role: build-step
   uid: steps/archive

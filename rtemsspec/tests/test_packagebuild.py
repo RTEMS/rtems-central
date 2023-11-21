@@ -57,6 +57,7 @@ def _create_item_cache(tmp_dir: Path, spec_dir: Path) -> ItemCache:
     _copy_dir(test_dir / spec_dir, spec_dst)
     _copy_dir(test_dir / "test-files", tmp_dir)
     _copy_dir(test_dir.parent.parent / "spec-spec", spec_dst)
+    _copy_dir(test_dir.parent.parent / "spec" / "spec", spec_dst / "spec")
     _copy_dir(test_dir.parent.parent / "spec-qdp" / "spec", spec_dst / "spec")
     cache_dir = os.path.join(tmp_dir, "cache")
     config = {
@@ -213,3 +214,10 @@ def test_packagebuild(caplog, tmpdir):
     assert f"/qdp/steps/run-actions: remove directory tree: {tmp_dir}/pkg/build/some" in log
     assert f"/qdp/steps/run-actions: run in '{tmp_dir}/pkg/build': 'git' 'foobar'" in log
     assert f"/qdp/steps/run-actions: run in '{tmp_dir}/pkg/build': 'git' 'status'" in log
+
+    # Test RepositorySubset
+    variant["enabled"] = ["repository-subset"]
+    director["/qdp/source/repo"].load()
+    assert not os.path.exists(os.path.join(tmpdir, "pkg", "sub-repo", "bsp.c"))
+    director.build_package(None, None)
+    assert os.path.exists(os.path.join(tmpdir, "pkg", "sub-repo", "bsp.c"))
