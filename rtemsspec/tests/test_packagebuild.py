@@ -32,7 +32,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import tarfile
-from typing import NamedTuple
+from typing import List, NamedTuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext
 from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
@@ -40,9 +40,11 @@ from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
 from rtemsspec.packagebuildfactory import create_build_item_factory
 from rtemsspec.specverify import verify
 import rtemsspec.testrunner
-from rtemsspec.testrunner import Executable
+from rtemsspec.testrunner import Executable, Report, TestRunner
 from rtemsspec.tests.util import get_and_clear_log
 from rtemsspec.util import run_command
+
+TestRunner.__test__ = False
 
 
 def _copy_dir(src, dst):
@@ -83,6 +85,17 @@ class _TestItem(BuildItem):
 
     def __init__(self, director: PackageBuildDirector, item: Item):
         super().__init__(director, item, BuildItemMapper(item, recursive=True))
+
+
+class _TestRunner(TestRunner):
+
+    def run_tests(self, executables: List[Executable]) -> List[Report]:
+        logging.info("executables: %s", executables)
+        super().run_tests(executables)
+        return [{
+            "executable": executable.path,
+            "executable-sha512": executable.digest
+        } for executable in executables]
 
 
 class _Subprocess(NamedTuple):
@@ -349,3 +362,20 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
         "start-time":
         "f"
     }]
+
+    # Test RunTests
+    variant["enabled"] = ["run-tests"]
+    factory.add_constructor("qdp/test-runner/test", _TestRunner)
+    build_bsp = director["/qdp/build/bsp"]
+    build_bsp.load()
+    director.build_package(None, None)
+    log = get_and_clear_log(caplog)
+    assert (f"executables: [Executable(path='{build_bsp.directory}"
+            "/a.exe', digest='z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8"
+            "XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==', timeout=1800), "
+            f"Executable(path='{build_bsp.directory}/b.exe', "
+            "digest='hopqxuHQKT10-tB_bZWVKz4B09MVPbZ3p12Ad5g_1OMNtr_Im3YIqT-yZ"
+            "GkjOp8aCVctaHqcXaeLID6xUQQKFQ==', timeout=1800)]") in log
+    director.build_package(None, ["/qdp/steps/run-tests"])
+    log = get_and_clear_log(caplog)
+    assert f"use previous report for: {build_bsp.directory}/a.exe"

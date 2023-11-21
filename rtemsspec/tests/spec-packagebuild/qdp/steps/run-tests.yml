@@ -1,0 +1,23 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: run-tests
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: |
+  Run the tests.
+enabled-by: run-tests
+links:
+- role: test-procedure
+  uid: ../variant
+- hash: null
+  name: source
+  role: input
+  uid: ../build/bsp
+- hash: null
+  name: runner
+  role: input
+  uid: ../test-runner/test
+- name: log
+  role: output
+  uid: ../test-logs/bsp
+qdp-type: build-step
+type: qdp

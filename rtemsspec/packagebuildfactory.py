@@ -29,6 +29,7 @@ from rtemsspec.directorystate import DirectoryState
 from rtemsspec.packagebuild import BuildItemFactory, PackageVariant
 from rtemsspec.reposubset import RepositorySubset
 from rtemsspec.runactions import RunActions
+from rtemsspec.runtests import RunTests, TestLog
 from rtemsspec.testrunner import DummyTestRunner, GRMONManualTestRunner, \
     SubprocessTestRunner
 
@@ -40,8 +41,10 @@ def create_build_item_factory() -> BuildItemFactory:
     factory.add_constructor("qdp/build-step/repository-subset",
                             RepositorySubset)
     factory.add_constructor("qdp/build-step/run-actions", RunActions)
+    factory.add_constructor("qdp/build-step/run-tests", RunTests)
     factory.add_constructor("qdp/directory-state/generic", DirectoryState)
     factory.add_constructor("qdp/directory-state/repository", DirectoryState)
+    factory.add_constructor("qdp/directory-state/test-log", TestLog)
     factory.add_constructor("qdp/directory-state/unpacked-archive",
                             DirectoryState)
     factory.add_constructor("qdp/test-runner/dummy", DummyTestRunner)
