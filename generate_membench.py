@@ -311,7 +311,9 @@ ${../if/receive:/name}""",
         """(void) rtems_message_queue_construct( NULL, NULL );
 (void) rtems_message_queue_send( 0, NULL, 0 );
 (void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/message",
         "ugt-rcv",
@@ -323,7 +325,9 @@ ${../if/receive:/name}""",
         """(void) rtems_message_queue_construct( NULL, NULL );
 (void) rtems_message_queue_urgent( 0, NULL, 0 );
 (void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/message",
         "bcst-rcv",
@@ -335,7 +339,9 @@ ${../if/receive:/name}""",
         """(void) rtems_message_queue_construct( NULL, NULL );
 (void) rtems_message_queue_broadcast( 0, NULL, 0, NULL );
 (void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/message",
         "snd-rcv-del",
@@ -348,7 +354,9 @@ ${../if/receive:/name}, and ${../if/delete:/name}""",
 (void) rtems_message_queue_send( 0, NULL, 0 );
 (void) rtems_message_queue_receive( 0, NULL, NULL, 0, 0 );
 (void) rtems_message_queue_delete( 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_MESSAGE_QUEUES 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/part",
         "get-ret",
@@ -593,7 +601,9 @@ ${../if/create:/name} and ${../if/fire-after:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_fire_after( 0, 0, NULL, NULL );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "when",
@@ -603,7 +613,9 @@ ${../if/create:/name} and ${../if/fire-when:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_fire_when( 0, NULL, NULL, NULL );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "cancel",
@@ -613,7 +625,9 @@ ${../if/create:/name} and ${../if/cancel:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_cancel( 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "reset",
@@ -623,7 +637,9 @@ ${../if/create:/name} and ${../if/reset:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_reset( 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "delete",
@@ -633,7 +649,9 @@ ${../if/create:/name} and ${../if/delete:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_delete( 0 );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "srv-init",
@@ -657,6 +675,8 @@ static void task_stack_deallocate( void *stack )
 
 #define CONFIGURE_TASK_STACK_DEALLOCATOR task_stack_deallocate
 
+#define CONFIGURE_MAXIMUM_TIMERS 1
+
 """ + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
@@ -667,7 +687,9 @@ ${../if/create:/name} and ${../if/server-fire-after:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_server_fire_after( 0, 0, NULL, NULL );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/timer",
         "srv-when",
@@ -677,7 +699,9 @@ ${../if/create:/name} and ${../if/server-fire-when:/name}""",
         None,
         """(void) rtems_timer_create( 0, NULL );
 (void) rtems_timer_server_fire_when( 0, NULL, NULL, NULL );""",
-        _CONFIG_DEFAULT),
+        """#define CONFIGURE_MAXIMUM_TIMERS 1
+
+""" + _CONFIG_DEFAULT),
     _Test(
         "rtems/userext",
         "create",
