@@ -45,7 +45,7 @@ class VerifyStatus(NamedTuple):
 
 class _Filter(logging.Filter):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._counts: Dict[int, int] = {}
 
