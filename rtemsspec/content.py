@@ -196,6 +196,9 @@ class Content:
         self._empty_line_indent = ""
         self._pop_indent_gap = pop_indent_gap
 
+    def __iter__(self):
+        yield from self._lines
+
     def __str__(self):
         return "\n".join(itertools.chain(self._lines, [""]))
 

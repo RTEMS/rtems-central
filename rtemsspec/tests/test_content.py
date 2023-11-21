@@ -169,6 +169,13 @@ b c
 """
 
 
+def test_iter():
+    content = Content("BSD-2-Clause", True)
+    assert "".join(content) == ""
+    content.add("a")
+    assert "".join(content) == "a"
+
+
 def test_paste():
     content = Content("BSD-2-Clause", True)
     content.paste("")
