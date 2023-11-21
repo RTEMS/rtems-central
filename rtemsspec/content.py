@@ -511,7 +511,7 @@ class Content:
             out.write(str(self))
 
 
-_BSD_2_CLAUSE_LICENSE = """Redistribution and use in source and binary \
+BSD_2_CLAUSE_LICENSE = """Redistribution and use in source and binary \
 forms, with or without
 modification, are permitted provided that the following conditions
 are met:
@@ -647,7 +647,7 @@ class CContent(Content):
         """
         with self.comment_block():
             self.add(self._copyrights.get_statements())
-            self.add(_BSD_2_CLAUSE_LICENSE)
+            self.add(BSD_2_CLAUSE_LICENSE)
 
     def prepend_copyrights_and_licenses(self):
         """
@@ -657,7 +657,7 @@ class CContent(Content):
         content = CContent()
         with content.comment_block():
             content.add(self._copyrights.get_statements())
-            content.add(_BSD_2_CLAUSE_LICENSE)
+            content.add(BSD_2_CLAUSE_LICENSE)
         content.append("")
         self.prepend(content)
 
