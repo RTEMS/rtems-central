@@ -24,18 +24,23 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import json
 import logging
 import os
 import pytest
 from pathlib import Path
 import shutil
+import subprocess
 import tarfile
+from typing import NamedTuple
 
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemGetValueContext
 from rtemsspec.packagebuild import BuildItem, BuildItemMapper, \
     build_item_input, PackageBuildDirector
 from rtemsspec.packagebuildfactory import create_build_item_factory
 from rtemsspec.specverify import verify
+import rtemsspec.testrunner
+from rtemsspec.testrunner import Executable
 from rtemsspec.tests.util import get_and_clear_log
 from rtemsspec.util import run_command
 
@@ -80,7 +85,21 @@ class _TestItem(BuildItem):
         super().__init__(director, item, BuildItemMapper(item, recursive=True))
 
 
-def test_packagebuild(caplog, tmpdir):
+class _Subprocess(NamedTuple):
+    stdout: bytes
+
+
+def _test_runner_subprocess(command, check, stdin, stdout, timeout):
+    if command[2] == "a.exe":
+        raise Exception
+    if command[2] == "b.exe":
+        raise subprocess.TimeoutExpired(command[2], timeout, b"")
+    if command[2] == "c.exe":
+        raise subprocess.TimeoutExpired(command[2], timeout, None)
+    return _Subprocess(b"u\r\nv\nw\n")
+
+
+def test_packagebuild(caplog, tmpdir, monkeypatch):
     tmp_dir = Path(tmpdir)
     item_cache = _create_item_cache(tmp_dir, Path("spec-packagebuild"))
 
@@ -221,3 +240,112 @@ def test_packagebuild(caplog, tmpdir):
     assert not os.path.exists(os.path.join(tmpdir, "pkg", "sub-repo", "bsp.c"))
     director.build_package(None, None)
     assert os.path.exists(os.path.join(tmpdir, "pkg", "sub-repo", "bsp.c"))
+
+    # Test DummyTestRunner
+    dummy_runner = director["/qdp/test-runner/dummy"]
+    with pytest.raises(IOError):
+        dummy_runner.run_tests([])
+
+    # Test GRMONManualTestRunner
+    grmon_manual_runner = director["/qdp/test-runner/grmon-manual"]
+    exe = tmp_dir / "a.exe"
+    exe.touch()
+    with pytest.raises(IOError):
+        grmon_manual_runner.run_tests([
+            Executable(
+                str(exe), "QvahP3YJU9bvpd7DYxJDkRBLJWbEFMEoH5Ncwu6UtxA"
+                "_l9EQ1zLW9yQTprx96BTyYE2ew7vV3KECjlRg95Ya6A==", 456)
+        ])
+    with tarfile.open(tmp_dir / "tests.tar.xz", "r:*") as archive:
+        assert archive.getnames() == [
+            "tests/run.grmon", "tests/run.sh", "tests/a.exe"
+        ]
+        with archive.extractfile("tests/run.grmon") as src:
+            assert src.read() == b"a.exe\n"
+        with archive.extractfile("tests/run.sh") as src:
+            assert src.read() == b"abc\n"
+
+    # Test SubprocessTestRunner
+    subprocess_runner = director["/qdp/test-runner/subprocess"]
+    monkeypatch.setattr(rtemsspec.testrunner, "subprocess_run",
+                        _test_runner_subprocess)
+    reports = subprocess_runner.run_tests([
+        Executable(
+            "a.exe", "QvahP3YJU9bvpd7DYxJDkRBLJWbEFMEoH5Ncwu6UtxA"
+            "_l9EQ1zLW9yQTprx96BTyYE2ew7vV3KECjlRg95Ya6A==", 1),
+        Executable(
+            "b.exe", "4VgX6KGWuDyG5vmlO4J-rdbHpOJoIIYLn_3oSk2BKAc"
+            "Au5RXTg1IxhHjiPO6Yzl8u4GsWBh0qc3flRwEFcD8_A==", 2),
+        Executable(
+            "c.exe", "YtTC0r1DraKOn9vNGppBAVFVTnI9IqS6jFDRBKVucU_"
+            "W_dpQF0xtC_mRjGV7t5RSQKhY7l3iDGbeBZJ-lV37bg==", 3),
+        Executable(
+            "d.exe", "ZtTC0r1DraKOn9vNGppBAVFVTnI9IqS6jFDRBKVucU_"
+            "W_dpQF0xtC_mRjGV7t5RSQKhY7l3iDGbeBZJ-lV37bg==", 4)
+    ])
+    monkeypatch.undo()
+    reports[0]["start-time"] = "c"
+    reports[0]["duration"] = 2.
+    reports[1]["start-time"] = "d"
+    reports[1]["duration"] = 3.
+    reports[2]["start-time"] = "e"
+    reports[2]["duration"] = 4.
+    reports[3]["start-time"] = "f"
+    reports[3]["duration"] = 5.
+    assert reports == [{
+        "command-line": ["foo", "bar", "a.exe"],
+        "data-ranges": [],
+        "duration":
+        2.0,
+        "executable":
+        "a.exe",
+        "executable-sha512":
+        "QvahP3YJU9bvpd7DYxJDkRBLJWbEFMEoH5Ncwu6UtxA_"
+        "l9EQ1zLW9yQTprx96BTyYE2ew7vV3KECjlRg95Ya6A==",
+        "info": {},
+        "output": [""],
+        "start-time":
+        "c"
+    }, {
+        "command-line": ["foo", "bar", "b.exe"],
+        "data-ranges": [],
+        "duration":
+        3.,
+        "executable":
+        "b.exe",
+        "executable-sha512":
+        "4VgX6KGWuDyG5vmlO4J-rdbHpOJoIIYLn_3oSk2BKAcA"
+        "u5RXTg1IxhHjiPO6Yzl8u4GsWBh0qc3flRwEFcD8_A==",
+        "info": {},
+        "output": [""],
+        "start-time":
+        "d"
+    }, {
+        "command-line": ["foo", "bar", "c.exe"],
+        "data-ranges": [],
+        "duration":
+        4.,
+        "executable":
+        "c.exe",
+        "executable-sha512":
+        "YtTC0r1DraKOn9vNGppBAVFVTnI9IqS6jFDRBKVucU_W"
+        "_dpQF0xtC_mRjGV7t5RSQKhY7l3iDGbeBZJ-lV37bg==",
+        "info": {},
+        "output": [""],
+        "start-time":
+        "e"
+    }, {
+        "command-line": ["foo", "bar", "d.exe"],
+        "data-ranges": [],
+        "duration":
+        5.,
+        "executable":
+        "d.exe",
+        "executable-sha512":
+        "ZtTC0r1DraKOn9vNGppBAVFVTnI9IqS6jFDRBKVucU_W"
+        "_dpQF0xtC_mRjGV7t5RSQKhY7l3iDGbeBZJ-lV37bg==",
+        "info": {},
+        "output": ["u", "v", "w"],
+        "start-time":
+        "f"
+    }]

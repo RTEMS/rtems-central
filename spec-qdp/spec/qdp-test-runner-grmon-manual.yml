@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: test-runner-type
+  spec-value: grmon-manual
+  uid: qdp-test-runner
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      script-base-path:
+        description: |
+          It shall be the base path for scripts.
+        spec-type: str
+      grmon-script:
+        description: |
+          It shall be the GRMON script to run the tests.
+        spec-type: str
+      shell-script:
+        description: |
+          It shall be the shell script to run the GRMON script.
+        spec-type: str
+    description: |
+      This set of attributes specifies a GRMON manual test runner.
+    mandatory-attributes: all
+spec-name: GRMON Manual Test Runner Item Type
+spec-type: qdp-test-runner-grmon-manual
+type: spec

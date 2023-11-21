@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: test-runner-type
+  spec-value: dummy
+  uid: qdp-test-runner
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes: {}
+    description: |
+      This set of attributes specifies a test runner which cannot run tests.
+    mandatory-attributes: all
+spec-name: Dummy Test Runner Item Type
+spec-type: qdp-test-runner-dummy
+type: spec

@@ -1,0 +1,26 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: test-runner-type
+  spec-value: subprocess
+  uid: qdp-test-runner
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      command:
+        description: |
+          It shall be the test runner subprocess command.
+        spec-type: list-str
+    description: |
+      This set of attributes specifies a subprocess test runner.
+    mandatory-attributes: all
+spec-name: Subprocess Test Runner Item Type
+spec-type: qdp-test-runner-subprocess
+type: spec

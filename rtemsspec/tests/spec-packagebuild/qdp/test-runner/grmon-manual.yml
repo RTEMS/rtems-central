@@ -1,0 +1,16 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+script-base-path: ${../variant:/prefix-directory}/tests
+grmon-script: |
+  ${.:/test-executables-grmon}
+shell-script: |
+  ${.:/params/x}
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+description: Description.
+enabled-by: true
+links: []
+params:
+  x: abc
+qdp-type: test-runner
+test-runner-type: grmon-manual
+type: qdp

@@ -1,0 +1,35 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: spec-member
+  uid: root
+- role: spec-refinement
+  spec-key: qdp-type
+  spec-value: test-runner
+  uid: qdp-root
+spec-description: null
+spec-example: null
+spec-info:
+  dict:
+    attributes:
+      description:
+        description: |
+          It shall be the test runner description.
+        spec-type: str
+      params:
+        description: |
+          It shall be an optional set of parameters which may be used for
+          variable subsitution.
+        spec-type: any
+      test-runner-type:
+        description: |
+          It shall be the test runner type.
+        spec-type: name
+    description: |
+      This set of attributes specifies a test runner.
+    mandatory-attributes: all
+spec-name: Test Runner Item Type
+spec-type: qdp-test-runner
+type: spec
