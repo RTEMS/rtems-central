@@ -1,0 +1,22 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${../variant:/build-directory}/bsp-qual-only
+directory-state-type: generic
+enabled-by: true
+files: []
+hash: null
+links:
+- arch: ${../variant:/arch}
+  build-label: ${../variant:/ident}/qual-only
+  hash: null
+  name: membench-build
+  path: ${.:/directory}/${../variant:/arch}/${../variant:/bsp}${../variant:/params/bsp-qual-only/dash}
+  role: input-to
+  uid: ../steps/membench
+patterns:
+- exclude: []
+  include: '**/*'
+qdp-type: directory-state
+type: qdp

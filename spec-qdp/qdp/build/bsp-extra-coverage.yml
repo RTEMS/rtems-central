@@ -1,0 +1,15 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+copyrights-by-license: {}
+directory: ${../variant:/build-directory}/bsp-extra-coverage
+directory-state-type: generic
+enabled-by: true
+files: []
+hash: null
+links: []
+patterns:
+- exclude: []
+  include: '**/*'
+qdp-type: directory-state
+type: qdp
