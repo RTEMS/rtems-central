@@ -29,9 +29,10 @@ import base64
 import binascii
 import logging
 import os
+from pathlib import Path
 import shutil
 import subprocess
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 import yaml
 
 
@@ -87,7 +88,7 @@ def load_config(config_filename: str) -> Any:
 
 
 def run_command(args: List[str],
-                cwd: str = ".",
+                cwd: Union[str, Path] = ".",
                 stdout: Optional[List[str]] = None,
                 env=None) -> int:
     """
