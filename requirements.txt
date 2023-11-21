@@ -45,7 +45,7 @@ PyYAML>=6.0
 requests>=2.27.1
 six>=1.16.0
 snowballstemmer>=2.2.0
-Sphinx>=4.3.2
+Sphinx<6.0.0
 sphinxcontrib-applehelp>=1.0.2
 sphinxcontrib-bibtex>=2.5.0
 sphinxcontrib-devhelp>=1.0.2
