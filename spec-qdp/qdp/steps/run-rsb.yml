@@ -1,0 +1,70 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-step-type: run-actions
+actions:
+- action: remove-glob
+  enabled-by: true
+  remove-tree: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - build
+  - patches
+  - rsb-log*
+  - sources
+  - tar
+- action: subprocess
+  command:
+  - ../source-builder/sb-set-builder
+  - --trace
+  - --pkg-tar-files
+  - --no-install
+  - --prefix
+  - ${../deployment/rtems-tool-suite:/directory}
+  - ${../variant:/rtems-version}/rtems-${../variant:/arch}
+  enabled-by: true
+  env: []
+  expected-return-code: 0
+  working-directory: ${.:/params/working-directory}
+- action: directory-state-clear
+  enabled-by: true
+  output-name: deployment
+- action: directory-state-add-tarfile-members
+  enabled-by: true
+  extract: true
+  output-name: deployment
+  prefix-path: /
+  search-path: ${.:/params/working-directory}/tar
+  pattern: '*.tar.*'
+- action: directory-state-add-files
+  enabled-by: true
+  output-name: deployment
+  path: ${.:/params/working-directory}/patches
+  pattern: '**/*'
+- action: directory-state-add-files
+  enabled-by: true
+  output-name: deployment
+  path: ${.:/params/working-directory}/sources
+  pattern: '**/*'
+- action: remove-glob
+  enabled-by: true
+  remove-tree: true
+  path: ${.:/params/working-directory}
+  patterns:
+  - build
+  - tar
+copyrights:
+- Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
+description: |
+  Runs the RSB to build and install the RTEMS tool suite.
+enabled-by: QDP_RSB
+links:
+- hash: null
+  name: source
+  role: input
+  uid: ../source/rsb
+- name: deployment
+  role: output
+  uid: ../deployment/rtems-tool-suite
+params:
+  working-directory: ${../source/rsb:/directory}/rtems
+qdp-type: build-step
+type: qdp

@@ -4,6 +4,8 @@ copyrights:
 enabled-by: true
 links:
 - role: build-step
+  uid: steps/run-rsb
+- role: build-step
   uid: steps/archive
 qdp-type: package-build
 type: qdp

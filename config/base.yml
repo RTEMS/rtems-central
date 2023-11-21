@@ -57,6 +57,42 @@ workspace-actions:
     include: qdp_build.py
   source-directory: ${.:/toolchain-directory}
   uid: /qdp/source/qt-modules
+- action-name: base-rsb
+  action-type: git-clone
+  action-when: 4000
+  branch: qdp
+  commit: ae81810adcfef8bd3ab8cfca2ed5ba4ac4b9779f
+  copyrights-by-license:
+    files:
+    - LICENSE
+    - source-builder/sb/markdown/LICENSE.md
+  description: |
+    This repository contains the RTEMS Source Builder.  It was used to provide
+    the RTEMS tool suite shipped with the QDP.  The QDP contains a binary
+    distribution of the RTEMS tools suite.  The :file:`rtems/patches` and
+    :file:`rtems/sources` directories in the RSB directory contain the patches
+    and sources of the tool suite used to build the binary distribution.  This
+    helps you to meet the GPL requirements of some tools.  You do not have to
+    run the RSB on your own.  For example, you may run the RSB to adopt the QDP
+    to a different host computer platform.
+  destination-directory: ${../variant:/deployment-directory}/src/rsb
+  directory-state-invalidates: []
+  enabled-by: true
+  links:
+  - role: repository
+    uid: ../variant
+  - hash: null
+    name: member
+    role: input-to
+    uid: ../steps/archive
+  origin-branch: master
+  origin-commit: ae81810adcfef8bd3ab8cfca2ed5ba4ac4b9779f
+  origin-commit-url: https://git.rtems.org/rtems-source-builder/commit/?id=${.:/origin-commit}
+  origin-fetch: []
+  origin-url: git://git.rtems.org/rtems-source-builder.git
+  post-clone-commands: []
+  source-directory: ${.:/toolchain-directory}/modules/rsb
+  uid: /qdp/source/rsb
 - action-name: base-rtems
   action-type: git-clone
   action-when: 4000

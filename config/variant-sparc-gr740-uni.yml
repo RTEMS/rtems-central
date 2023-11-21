@@ -13,6 +13,7 @@ workspace-actions:
     - Copyright (C) 2020, 2023 embedded brains GmbH & Co. KG
     deployment-directory: ${.:/prefix-directory}/${.:/package-directory}
     enabled:
+    - QDP_RSB
     - ${.:/arch}
     - bsps/${.:/arch}/${.:/bsp-family}
     - ${.:/arch}/${.:/bsp}
