@@ -33,7 +33,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from rtemsspec.items import EmptyItem, Item, ItemCache, ItemMapper, \
     ItemGetValueContext
 from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
-    recursive_is_enabled
+    recursive_is_enabled, validate
 from rtemsspec.sphinxcontent import SphinxContent
 from rtemsspec.transitionmap import Transition, TransitionMap
 from rtemsspec.util import load_config
@@ -167,72 +167,6 @@ def _view(item: Item, level: int, role: Optional[str],
         _view(link.item, level + 1, link.role, validated_filter)
     for link in item.links_to_parents(_PARENT_ROLES):
         _view(link.item, level + 1, link.role, validated_filter)
-
-
-_VALIDATION_LEAF = [
-    "constraint",
-    "glossary/group",
-    "glossary/term",
-    "interface/domain",
-    "interface/enum",
-    "interface/enumerator",
-    "interface/forward-declaration",
-    "interface/header-file",
-    "interface/register-block",
-    "interface/struct",
-    "interface/typedef",
-    "interface/union",
-    "interface/unspecified-define",
-    "interface/unspecified-enum",
-    "interface/unspecified-enumerator",
-    "interface/unspecified-function",
-    "interface/unspecified-group",
-    "interface/unspecified-macro",
-    "interface/unspecified-object",
-    "interface/unspecified-struct",
-    "interface/unspecified-typedef",
-    "interface/unspecified-union",
-    "memory-benchmark",
-    "requirement/functional/action",
-    "requirement/non-functional/performance-runtime",
-    "runtime-measurement-test",
-    "test-case",
-    "validation/by-analysis",
-    "validation/by-inspection",
-    "validation/by-review-of-design",
-]
-
-_VALIDATION_ROLES = _CHILD_ROLES + ["validation"]
-
-
-def _validate_tree(item: Item) -> bool:
-    pre_qualified = is_pre_qualified(item)
-    item["_pre_qualified"] = pre_qualified
-    validated = True
-    count = 0
-    for link in itertools.chain(item.links_to_children(_VALIDATION_ROLES),
-                                item.links_to_parents(_PARENT_ROLES)):
-        validated = _validate_tree(link.item) and validated
-        count += 1
-    if count == 0:
-        validated = (not pre_qualified) or (item.type in _VALIDATION_LEAF)
-    item["_validated"] = validated
-    return validated
-
-
-def _validate_containers(item: Item) -> None:
-    for item_2 in itertools.chain(
-            item.cache.items_by_type["interface/domain"],
-            item.cache.items_by_type["interface/header-file"]):
-        for item_3 in item_2.children("interface-placement"):
-            if not item_3["_validated"]:
-                item_2["_validated"] = False
-                break
-
-
-def _validate(item: Item) -> None:
-    _validate_tree(item)
-    _validate_containers(item)
 
 
 def _validation_count(item: Item) -> int:
@@ -466,7 +400,7 @@ def main() -> None:
     root = item_cache["/req/root"]
 
     if args.filter == "none":
-        _validate(root)
+        validate(root)
         _view(root, 0, None, args.validated)
     elif args.filter == "action-table":
         for uid in args.UIDs:
@@ -475,17 +409,17 @@ def main() -> None:
         for uid in args.UIDs:
             _action_list(item_cache[uid])
     elif args.filter == "orphan":
-        _validate(root)
+        validate(root)
         for item in item_cache.values():
             if item["type"] in ["build", "spec"]:
                 continue
             if item.enabled and "_validated" not in item:
                 print(item.uid)
     elif args.filter == "no-validation":
-        _validate(root)
+        validate(root)
         _no_validation(root, [])
     elif args.filter == "api":
-        _validate(root)
+        validate(root)
         _list_api(item_cache)
     elif args.filter == "design":
         _design(item_cache)

@@ -1,0 +1,25 @@
+SPDX-License-Identifier: CC-BY-SA-4.0
+copyrights:
+- Copyright (C) 2022 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: validation
+  uid: ../req/disable-newlib-reentrancy
+method: by-inspection
+references: []
+text: |
+  Defining ${../if/disable-newlib-reentrancy:/name} is mandatory for
+  applications using only the pre-qualified feature set.  The reason is to get
+  linker errors in case such applications are linked if they depend on the
+  Newlib reentrancy support.  Thus no validation test case can be used.
+  Inspection of the referenced ${/glossary/sourcecode:/term} files showed that
+  an initial extension set is registered, if
+  ${../if/disable-newlib-reentrancy:/name} is not defined.  For the
+  pre-qualified only build of RTEMS, this would lead to an unresolved reference
+  linker error.  If ${../if/disable-newlib-reentrancy:/name} is defined, then
+  the ``__getreent()`` function is not provided by RTEMS.  If
+  ${../if/disable-newlib-reentrancy:/name} is defined, then the Newlib
+  reentrancy structure is not contained in the ${/glossary/tcb:/term}.  This
+  shows that the ${../req/disable-newlib-reentrancy:/spec} requirement is implemented
+  as specified.
+type: validation

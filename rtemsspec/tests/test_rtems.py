@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """ Unit tests for the rtemsspec.rtems module. """
 
-# Copyright (C) 2022 embedded brains GmbH & Co. KG
+# Copyright (C) 2022, 2023 embedded brains GmbH & Co. KG
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -26,9 +26,10 @@
 
 import pytest
 
-from rtemsspec.items import EmptyItemCache, Item
+from rtemsspec.items import EmptyItemCache, Item, ItemCache
 from rtemsspec.rtems import augment_with_test_links, is_pre_qualified, \
-    recursive_is_enabled
+    recursive_is_enabled, validate
+from rtemsspec.tests.util import create_item_cache_config_and_copy_spec
 
 
 def test_is_pre_qualified():
@@ -117,3 +118,10 @@ def test_recursive_is_enabled():
     item_cache.set_enabled([], recursive_is_enabled)
     assert d.enabled
     assert not e.enabled
+
+
+def test_validate(tmpdir):
+    item_cache_config = create_item_cache_config_and_copy_spec(
+        tmpdir, "spec-rtems", with_spec_types=True)
+    item_cache = ItemCache(item_cache_config)
+    assert not validate(item_cache["/req/root"])

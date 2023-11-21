@@ -1,0 +1,36 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+- limits:
+    DirtyCache:
+      max-upper-bound: 6.36e-06
+      median-lower-bound: 1.57e-06
+      median-upper-bound: 6.28e-06
+      min-lower-bound: 1.57e-06
+    FullCache:
+      max-upper-bound: 5.96e-06
+      median-lower-bound: 1.48e-06
+      median-upper-bound: 5.92e-06
+      min-lower-bound: 1.48e-06
+    HotCache:
+      max-upper-bound: 5.88e-06
+      median-lower-bound: 1.47e-06
+      median-upper-bound: 5.88e-06
+      min-lower-bound: 1.47e-06
+    Load/1:
+      max-upper-bound: 1.596e-05
+      median-lower-bound: 3.99e-06
+      median-upper-bound: 1.596e-05
+      min-lower-bound: 3.98e-06
+  role: performance-runtime-limits
+  uid: perf-runtime
+non-functional-type: performance-runtime-limits
+rationale: null
+references: []
+requirement-type: non-functional
+text: ${.:text-template}
+type: requirement

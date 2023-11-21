@@ -1,0 +1,13 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+description: |
+  This interface domain contains the application configuration.
+enabled-by: true
+index-entries: []
+interface-type: domain
+links:
+- role: requirement-refinement
+  uid: ../req/root
+name: Application Configuration
+type: interface

@@ -1,0 +1,59 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2021 embedded brains GmbH & Co. KG
+enabled-by: true
+links:
+- role: requirement-refinement
+  uid: root
+- role: runtime-measurement-request
+  uid: ../val/perf
+non-functional-type: performance-runtime
+params: {}
+rationale: null
+references: []
+requirement-type: non-functional
+test-body:
+  brief: |
+    Automatically release the barrier.
+  code: |
+    ctx->status = rtems_barrier_wait( ctx->barrier_id, RTEMS_NO_TIMEOUT );
+  description: null
+test-cleanup:
+  brief: |
+    Delete the barrier and the worker.
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_barrier_delete( ctx->barrier_id );
+    T_rsc_success( sc );
+  description: null
+test-prepare:
+  brief: |
+    Create an automatic release barrier.
+  code: |
+    rtems_status_code sc;
+
+    sc = rtems_barrier_create(
+      OBJECT_NAME,
+      RTEMS_BARRIER_AUTOMATIC_RELEASE,
+      1,
+      &ctx->barrier_id
+    );
+    T_rsc_success( sc );
+  description: null
+test-setup: null
+test-teardown:
+  brief: |
+    Discard samples interrupted by a clock tick.
+  code: |
+    T_quiet_rsc_success( ctx->status );
+
+    return tic == toc;
+  description: null
+text: |
+  While the execution environment is ${.:/environment}, while the barrier is an
+  automatic release barrier, while the measurement sample is the runtime of
+  exactly one successful call to ${../if/wait:/name} which automatically
+  releases the barrier, when exactly ${../val/perf:/params/sample-count}
+  samples are collected, the ${.:/limit-kind} shall be ${.:/limit-condition}.
+type: requirement

@@ -1,18 +1,14 @@
 SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
 copyrights:
-- Copyright (C) 2020 embedded brains GmbH & Co. KG
+- Copyright (C) 2023 embedded brains GmbH & Co. KG
 enabled-by: true
 links:
 - role: spec-member
   uid: root
 - role: spec-refinement
-  spec-key: functional-type
-  spec-value: action
-  uid: functional
-- role: spec-refinement
-  spec-key: functional-type
-  spec-value: function
-  uid: functional
+  spec-key: method
+  spec-value: by-inspection
+  uid: validation
 spec-description: null
 spec-example: null
 spec-info:
@@ -20,6 +16,6 @@ spec-info:
     attributes: {}
     description: null
     mandatory-attributes: all
-spec-name: Functional More
-spec-type: functional-more
+spec-name: Validation More
+spec-type: validation-more
 type: spec
