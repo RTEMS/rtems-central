@@ -27,8 +27,8 @@
 import os
 import logging
 
-from rtemsspec.util import copy_files, create_argument_parser, init_logging, \
-    load_config, run_command
+from rtemsspec.util import copy_files, create_argument_parser, base64_to_hex, \
+    init_logging, load_config, run_command
 from rtemsspec.tests.util import get_and_clear_log
 
 
@@ -39,6 +39,10 @@ def test_copy_files(tmpdir):
     assert not os.path.exists(os.path.join(tmpdir, filename))
     copy_files(src_dir, tmpdir, [filename])
     assert os.path.exists(os.path.join(tmpdir, filename))
+
+
+def test_base64_to_hex():
+    assert base64_to_hex("ABCD") == "001083"
 
 
 def test_load_config():

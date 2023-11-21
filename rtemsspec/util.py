@@ -25,12 +25,20 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import argparse
+import base64
+import binascii
 import logging
 import os
 import shutil
 import subprocess
 from typing import Any, List, Optional
 import yaml
+
+
+def base64_to_hex(data: str) -> str:
+    """ Converts the data from base64 to hex. """
+    binary = base64.urlsafe_b64decode(data)
+    return binascii.hexlify(binary).decode('ascii')
 
 
 def copy_files(src_dir: str, dst_dir: str, files: List[str]) -> None:
