@@ -434,6 +434,17 @@ class _TestItem:
                 for param in header["run-params"]
             ])
 
+    def _add_fixture_node_and_remark(self, content: CContent,
+                                     epilogue: CContent) -> None:
+        content.add(f"static T_fixture_node {self.ident}_Node;")
+        content.add([
+            f"static T_remark {self.ident}_Remark = {{", "  .next = NULL,",
+            f"  .remark = \"{self.ident}\"", "};"
+        ])
+        epilogue.call_function(None, "T_add_remark", [f"&{self.ident}_Remark"])
+        epilogue.gap = False
+        epilogue.add("T_pop_fixture();")
+
     def _add_runner_prologue_and_epilogue(self, content: CContent,
                                           prologue: CContent,
                                           epilogue: CContent,
@@ -450,10 +461,9 @@ class _TestItem:
                                    [f"\"{self.ident}\"", fixture])
             epilogue.add("T_case_end();")
         else:
-            content.add(f"static T_fixture_node {self.ident}_Node;")
             prologue.call_function(result, "T_push_fixture",
                                    [f"&{self.ident}_Node", fixture])
-            epilogue.add("T_pop_fixture();")
+            self._add_fixture_node_and_remark(content, epilogue)
 
     def generate(self, content: CContent, base_directory: str,
                  test_case_to_suites: _CaseToSuite) -> None:
@@ -764,7 +774,6 @@ class _ActionRequirementTestItem(_TestItem):
         if self._pre_co_skip:
             map_members_initialization.append("ctx->Map.skip = false;")
         if header:
-            content.add(f"static T_fixture_node {self.ident}_Node;")
             ret = "void"
             name = f"{self.ident}_Run"
             params = self._get_run_params(header)
@@ -773,7 +782,7 @@ class _ActionRequirementTestItem(_TestItem):
             prologue.call_function("ctx =", "T_push_fixture",
                                    [f"&{self.ident}_Node", f"&{fixture}"])
             prologue.append(map_members_initialization)
-            epilogue.add("T_pop_fixture();")
+            self._add_fixture_node_and_remark(content, epilogue)
             align = True
         else:
             with content.function_block(

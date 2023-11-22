@@ -1468,6 +1468,11 @@ static void Tc7_Action_0( void )
 
 static T_fixture_node Tc7_Node;
 
+static T_remark Tc7_Remark = {
+  .next = NULL,
+  .remark = "Tc7"
+};
+
 void Tc7_Run( void )
 {
   T_push_fixture( &Tc7_Node, &T_empty_fixture );
@@ -1476,6 +1481,7 @@ void Tc7_Run( void )
 
   Tc7_Action_0();
 
+  T_add_remark( &Tc7_Remark );
   T_pop_fixture();
 }
 
@@ -1521,6 +1527,11 @@ static void Tc8_Action_0( Tc8_Context *ctx )
 
 static T_fixture_node Tc8_Node;
 
+static T_remark Tc8_Remark = {
+  .next = NULL,
+  .remark = "Tc8"
+};
+
 void Tc8_Run( void )
 {
   Tc8_Context *ctx;
@@ -1531,6 +1542,7 @@ void Tc8_Run( void )
 
   Tc8_Action_0( ctx );
 
+  T_add_remark( &Tc8_Remark );
   T_pop_fixture();
 }
 
@@ -2363,6 +2375,11 @@ static void Action2_TestVariant( Action2_Context *ctx )
 
 static T_fixture_node Action2_Node;
 
+static T_remark Action2_Remark = {
+  .next = NULL,
+  .remark = "Action2"
+};
+
 void Action2_Run( int *a, int b, int *c )
 {
   Action2_Context *ctx;
@@ -2406,6 +2423,7 @@ void Action2_Run( int *a, int b, int *c )
     }
   }
 
+  T_add_remark( &Action2_Remark );
   T_pop_fixture();
 }
 
