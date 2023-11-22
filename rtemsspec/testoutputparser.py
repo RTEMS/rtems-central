@@ -51,6 +51,7 @@ _TS_RTEMS_MULTIPROCESSING = re.compile(r"S:RTEMS_MULTIPROCESSING:([01])$")
 _TS_RTEMS_POSIX_API = re.compile(r"S:RTEMS_POSIX_API:([01])$")
 _TS_RTEMS_PROFILING = re.compile(r"S:RTEMS_PROFILING:([01])$")
 _TS_RTEMS_SMP = re.compile(r"S:RTEMS_SMP:([01])$")
+_TS_REMARK = re.compile(r"R:(.+)")
 _TS_REPORT_HASH = re.compile(r"Y:ReportHash:SHA256:(.+)")
 
 _M_BEGIN = re.compile(r"M:B:(.+)")
@@ -335,14 +336,27 @@ class TestOutputParser:
             self._test_case = {
                 "line-begin": index,
                 "name": mobj.group(1),
+                "remarks": [],
                 "runtime-measurements": []
             }
             self.consume = self._test_case_body
             return True
         return self._extra(index, line)
 
+    def _remark(self, index: int, line: str) -> bool:
+        mobj = _TS_REMARK.match(line)
+        if mobj:
+            self._test_case["remarks"].append({
+                "line": index,
+                "remark": mobj.group(1)
+            })
+            return True
+        return False
+
     def _test_case_body(self, index: int, line: str) -> bool:
         if self._measurement_begin(index, line):
+            return True
+        if self._remark(index, line):
             return True
         mobj = _TS_CASE_END.match(line)
         if mobj:
@@ -372,7 +386,7 @@ class TestOutputParser:
             }
             self.consume = self._measurement_variant
             return True
-        return self._extra(index, line)
+        return False
 
     def _measurement_variant(self, index: int, line: str) -> bool:
         mobj = _M_V.match(line)

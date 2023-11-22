@@ -46,7 +46,7 @@ _OUTPUT = [
     "M:Q1:0.000006460", "M:Q2:0.000006460", "M:Q3:0.000006460",
     "M:P99:0.000006460", "M:MX:0.000006460", "M:MAD:0.000000000",
     "M:D:0.000908880", "M:E:RtemsTaskReqPerfConstruct:D:0.013368190",
-    "E:RtemsTaskValPerf:N:1007:F:0:D:0.293161",
+    "R:Remark", "E:RtemsTaskValPerf:N:1007:F:0:D:0.293161",
     "Z:TestsuitesUnitNoClock0:C:3:N:495175:F:0:D:0.897917",
     "Y:ReportHash:SHA256:ZNUhinVyKcmR1PY5VSQVJIxxvXK5LMnG9Zf9JU5nOoE=", "",
     "*** END OF TEST TestsuitesUnitNoClock0 ***", "",
@@ -114,6 +114,7 @@ def _test_case_0(tc_begin_0: int = 17) -> None:
         "line-failed-steps-count": tc_begin_0 + 1,
         "line-step-count": tc_begin_0 + 1,
         "name": "ScoreRbtreeUnitRbtree",
+        "remarks": [],
         "runtime-measurements": [],
         "step-count": 495132
     }
@@ -129,6 +130,7 @@ def _test_case_1(tc_begin_1: int = 19) -> None:
         "line-failed-steps-count": tc_begin_1 + 1,
         "line-step-count": tc_begin_1 + 1,
         "name": "RtemsConfigUnitConfig",
+        "remarks": [],
         "runtime-measurements": [],
         "step-count": 1
     }
@@ -143,15 +145,19 @@ def _test_case_2(tc_begin_2: int = 21) -> None:
         "line-begin":
         tc_begin_2,
         "line-duration":
-        tc_begin_2 + 15,
+        tc_begin_2 + 16,
         "line-end":
-        tc_begin_2 + 15,
+        tc_begin_2 + 16,
         "line-failed-steps-count":
-        tc_begin_2 + 15,
+        tc_begin_2 + 16,
         "line-step-count":
-        tc_begin_2 + 15,
+        tc_begin_2 + 16,
         "name":
         "RtemsTaskValPerf",
+        "remarks": [{
+            'line': 36,
+            'remark': 'Remark'
+        }],
         "runtime-measurements": [{
             "duration-sum":
             0.00090888,
@@ -215,15 +221,15 @@ def _test_suite(ts_begin: int = 5,
         "line-compiler":
         ts_begin + 2,
         "line-duration":
-        ts_begin + 32,
+        ts_begin + 33,
         "line-end":
-        ts_begin + 32,
+        ts_begin + 33,
         "line-failed-steps-count":
-        ts_begin + 32,
+        ts_begin + 33,
         "line-platform":
         ts_begin + 1,
         "line-report-hash":
-        ts_begin + 33,
+        ts_begin + 34,
         "line-rtems-debug":
         ts_begin + 7,
         "line-rtems-multiprocessing":
@@ -235,7 +241,7 @@ def _test_suite(ts_begin: int = 5,
         "line-rtems-smp":
         ts_begin + 11,
         "line-step-count":
-        ts_begin + 32,
+        ts_begin + 33,
         "line-target-hash":
         ts_begin + 6,
         "line-version":
@@ -247,7 +253,7 @@ def _test_suite(ts_begin: int = 5,
         "report-hash":
         "ZNUhinVyKcmR1PY5VSQVJIxxvXK5LMnG9Zf9JU5nOoE=",
         "report-hash-calculated":
-        "8pQUQEPgSxq0ks4vr8V6icgamZb31yx1Ung90Ri3Gww=",
+        "m47nvOy9BV70dpdyy-EkN_L7GqWiGgmdM4uDFP2mPnk=",
         "rtems-debug":
         False,
         "rtems-multiprocessing":
@@ -279,12 +285,12 @@ def _data_ranges(range_begin: int = 43) -> list:
 
 
 def _report(t_begin: int = 0,
-            t_end: int = 40,
+            t_end: int = 41,
             ts_begin: int = 5,
             tc_begin_0: int = 17,
             tc_begin_1: int = 19,
             tc_begin_2: int = 21,
-            data_begin: int = 42,
+            data_begin: int = 43,
             error: int = -1) -> None:
     report = {
         "data-ranges": _data_ranges(data_begin + 1),
@@ -327,7 +333,7 @@ def test_testoutputparser():
     _OUTPUT[24] = "M:N:6"
     expected = _report()
     expected["test-suite"][
-        "report-hash-calculated"] = "VxsveAz1TOzA1UY0rQzNouamPctwlLI0t3V23R7ahKc="
+        "report-hash-calculated"] = "SgqwqrpqjV5dZ3kPQWBgWmOD-V7bXRFQ7LGVMoaHtXc="
     expected["test-suite"]["test-cases"][2]["runtime-measurements"][0][
         "sample-count"] = 0
     expected["test-suite"]["test-cases"][2]["runtime-measurements"][0][
@@ -476,8 +482,8 @@ def test_testoutputparser():
     assert report == expected
 
     report = _check("*** END OF TEST TestsuitesUnitNoClock0 ***",
-                    "*** END OF TEST FooBar ***", 40, -1)
-    expected = _report(t_end=-1, error=40)
+                    "*** END OF TEST FooBar ***", 41, -1)
+    expected = _report(t_end=-1, error=41)
     assert report == expected
 
     report = _check("S:Platform:RTEMS", "?", 6, 6)
@@ -810,20 +816,20 @@ def test_testoutputparser():
     assert report == expected
 
     report = _check("Z:TestsuitesUnitNoClock0:C:3:N:495175:F:0:D:0.897917",
-                    "Z:FooBar:C:3:N:495175:F:0:D:0.897917", 37, 37)
-    expected = _report(t_end=-1, error=37)
+                    "Z:FooBar:C:3:N:495175:F:0:D:0.897917", 38, 38)
+    expected = _report(t_end=-1, error=38)
     expected["test-suite"].update(_INCOMPLETE_TEST_SUITE)
     assert report == expected
 
     report = _check("Z:TestsuitesUnitNoClock0:C:3:N:495175:F:0:D:0.897917",
-                    "?", 37, -1)
+                    "?", 38, -1)
     expected = _report(t_end=-1)
     expected["test-suite"].update(_INCOMPLETE_TEST_SUITE)
     assert report == expected
 
     report = _check(
         "Y:ReportHash:SHA256:ZNUhinVyKcmR1PY5VSQVJIxxvXK5LMnG9Zf9JU5nOoE=",
-        "?", 38, -1)
+        "?", 39, -1)
     expected = _report(t_end=-1)
     expected["test-suite"]["line-report-hash"] = "?"
     expected["test-suite"]["report-hash"] = "?"
