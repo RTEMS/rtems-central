@@ -69,13 +69,13 @@ _M_MX = re.compile(r"M:MX:(.+)")
 _M_MAD = re.compile(r"M:MAD:(.+)")
 _M_D = re.compile(r"M:D:(.+)")
 
-_GCOV_BEGIN = re.compile(r"\*\*\* BEGIN OF GCOV INFO BASE64 \*\*\*")
-_GCOV_END = re.compile(r"\*\*\* END OF GCOV INFO BASE64 \*\*\*")
+_GCOV_BEGIN = "*** BEGIN OF GCOV INFO BASE64 ***"
+_GCOV_END = "*** END OF GCOV INFO BASE64 ***"
 
-_RECORDS_BEGIN = re.compile(r"\*\*\* BEGIN OF RECORDS BASE64 \*\*\*")
-_RECORDS_END = re.compile(r"\*\*\* END OF RECORDS BASE64 \*\*\*")
-_RECORDS_ZLIB_BEGIN = re.compile(r"\*\*\* BEGIN OF RECORDS BASE64 ZLIB \*\*\*")
-_RECORDS_ZLIB_END = re.compile(r"\*\*\* END OF RECORDS BASE64 ZLIB \*\*\*")
+_RECORDS_BEGIN = "*** BEGIN OF RECORDS BASE64 ***"
+_RECORDS_END = "*** END OF RECORDS BASE64 ***"
+_RECORDS_ZLIB_BEGIN = "*** BEGIN OF RECORDS BASE64 ZLIB ***"
+_RECORDS_ZLIB_END = "*** END OF RECORDS BASE64 ZLIB ***"
 
 
 def _are_samples_valid(measurement) -> bool:
@@ -515,8 +515,7 @@ class TestOutputParser:
         return self._extra(index, line)
 
     def _gcov_begin(self, index: int, line: str) -> bool:
-        mobj = _GCOV_BEGIN.match(line)
-        if mobj:
+        if line in _GCOV_BEGIN:
             self.level += 1
             self.data["line-gcov-info-base64-begin"] = index
             self.consume = self._gcov_end
@@ -524,8 +523,7 @@ class TestOutputParser:
         return False
 
     def _gcov_end(self, index: int, line: str) -> bool:
-        mobj = _GCOV_END.match(line)
-        if mobj:
+        if line in _GCOV_END:
             self.level -= 1
             self.data["line-gcov-info-base64-end"] = index
             self.data["data-ranges"].append(
@@ -535,8 +533,7 @@ class TestOutputParser:
         return False
 
     def _records_begin(self, index: int, line: str) -> bool:
-        mobj = _RECORDS_BEGIN.match(line)
-        if mobj:
+        if line in _RECORDS_BEGIN:
             self.level += 1
             self.data["line-records-base64-begin"] = index
             self.consume = self._records_end
@@ -544,8 +541,7 @@ class TestOutputParser:
         return False
 
     def _records_end(self, index: int, line: str) -> bool:
-        mobj = _RECORDS_END.match(line)
-        if mobj:
+        if line in _RECORDS_END:
             self.level -= 1
             self.data["line-records-base64-end"] = index
             self.data["data-ranges"].append(
@@ -555,8 +551,7 @@ class TestOutputParser:
         return False
 
     def _records_zlib_begin(self, index: int, line: str) -> bool:
-        mobj = _RECORDS_ZLIB_BEGIN.match(line)
-        if mobj:
+        if line in _RECORDS_ZLIB_BEGIN:
             self.level += 1
             self.data["line-records-base64-zlib-begin"] = index
             self.consume = self._records_zlib_end
@@ -564,8 +559,7 @@ class TestOutputParser:
         return False
 
     def _records_zlib_end(self, index: int, line: str) -> bool:
-        mobj = _RECORDS_ZLIB_END.match(line)
-        if mobj:
+        if line in _RECORDS_ZLIB_END:
             self.level -= 1
             self.data["line-records-base64-zlib-end"] = index
             self.data["data-ranges"].append(
