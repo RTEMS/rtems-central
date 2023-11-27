@@ -107,21 +107,34 @@ class _TestRunner(TestRunner):
             return []
         if self.run_count == 2:
             return [{
-                "executable": executables[0].path,
-                "gcov-info-hash": "a",
-                "gcov-info-hash-calculated": "b"
+                "executable":
+                executables[0].path,
+                "output": [
+                    "*** BEGIN OF GCOV INFO BASE64 ***", "foobar",
+                    "*** END OF GCOV INFO BASE64 ***"
+                ]
             }]
         if self.run_count == 3:
             return [{
-                "executable": executables[0].path,
-                "test-suite": {
-                    "report-hash": "c",
-                    "report-hash-calculated": "d"
-                }
+                "executable":
+                executables[0].path,
+                "output": [
+                    "*** BEGIN OF TEST TS ***", "*** TEST VERSION: V",
+                    "*** TEST STATE: EXPECTED_PASS", "*** TEST BUILD:",
+                    "*** TEST TOOLS: C", "A:TS", "S:Platform:RTEMS",
+                    "S:Compiler:C", "S:Version:V", "S:BSP:bsp",
+                    "S:BuildLabel:DEFAULT",
+                    "S:TargetHash:SHA256:qYOFDHUGg5--JyB28V7llk_t6WYeA3VAogeqwGLZeCM=",
+                    "S:RTEMS_DEBUG:0", "S:RTEMS_MULTIPROCESSING:0",
+                    "S:RTEMS_POSIX_API:0", "S:RTEMS_PROFILING:0",
+                    "S:RTEMS_SMP:0", "Z:TS:C:0:N:0:F:0:D:0.014590",
+                    "Y:ReportHash:SHA256:JlS-9kM8jYqTjFvRbuUDzHpfph6PznxFxCLx30NkcoI="
+                ]
             }]
         return [{
             "executable": executable.path,
-            "executable-sha512": executable.digest
+            "executable-sha512": executable.digest,
+            "output": []
         } for executable in executables]
 
 
@@ -437,7 +450,6 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     reports[3]["duration"] = 5.
     assert reports == [{
         "command-line": ["foo", "bar", "a.exe"],
-        "data-ranges": [],
         "duration":
         2.0,
         "executable":
@@ -445,13 +457,11 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
         "executable-sha512":
         "QvahP3YJU9bvpd7DYxJDkRBLJWbEFMEoH5Ncwu6UtxA_"
         "l9EQ1zLW9yQTprx96BTyYE2ew7vV3KECjlRg95Ya6A==",
-        "info": {},
         "output": [""],
         "start-time":
         "c"
     }, {
         "command-line": ["foo", "bar", "b.exe"],
-        "data-ranges": [],
         "duration":
         3.,
         "executable":
@@ -459,13 +469,11 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
         "executable-sha512":
         "4VgX6KGWuDyG5vmlO4J-rdbHpOJoIIYLn_3oSk2BKAcA"
         "u5RXTg1IxhHjiPO6Yzl8u4GsWBh0qc3flRwEFcD8_A==",
-        "info": {},
         "output": [""],
         "start-time":
         "d"
     }, {
         "command-line": ["foo", "bar", "c.exe"],
-        "data-ranges": [],
         "duration":
         4.,
         "executable":
@@ -473,13 +481,11 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
         "executable-sha512":
         "YtTC0r1DraKOn9vNGppBAVFVTnI9IqS6jFDRBKVucU_W"
         "_dpQF0xtC_mRjGV7t5RSQKhY7l3iDGbeBZJ-lV37bg==",
-        "info": {},
         "output": [""],
         "start-time":
         "e"
     }, {
         "command-line": ["foo", "bar", "d.exe"],
-        "data-ranges": [],
         "duration":
         5.,
         "executable":
@@ -487,7 +493,6 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
         "executable-sha512":
         "ZtTC0r1DraKOn9vNGppBAVFVTnI9IqS6jFDRBKVucU_W"
         "_dpQF0xtC_mRjGV7t5RSQKhY7l3iDGbeBZJ-lV37bg==",
-        "info": {},
         "output": ["u", "v", "w"],
         "start-time":
         "f"

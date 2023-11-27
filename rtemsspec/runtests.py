@@ -34,6 +34,7 @@ from typing import Dict, List
 from rtemsspec.directorystate import DirectoryState
 from rtemsspec.items import Item
 from rtemsspec.packagebuild import BuildItem, PackageBuildDirector
+from rtemsspec.testoutputparser import augment_report
 from rtemsspec.testrunner import Executable, Report, TestRunner
 
 
@@ -119,6 +120,8 @@ class RunTests(BuildItem):
         reports_by_path: Dict[str, Report] = {}
         while executables and max_run_count:
             for new_report in runner.run_tests(executables):
+                augment_report(new_report, new_report["output"])
+                logging.warning("%s: report: %s", self.uid, new_report)
                 reports_by_path[new_report["executable"]] = new_report
             next_executables: List[Executable] = []
             for executable in executables:

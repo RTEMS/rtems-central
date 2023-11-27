@@ -38,7 +38,6 @@ from typing import Any, Dict, List, NamedTuple
 
 from rtemsspec.items import Item, ItemGetValueContext
 from rtemsspec.packagebuild import BuildItem, PackageBuildDirector
-from rtemsspec.testoutputparser import augment_report
 
 Report = Dict[str, Any]
 
@@ -151,7 +150,6 @@ def _worker(work_queue: queue.Queue, item: BuildItem):
             except Exception:  # pylint: disable=broad-exception-caught
                 stdout = ""
             output = stdout.rstrip().replace("\r\n", "\n").split("\n")
-            augment_report(job.report, output)
             job.report["output"] = output
             job.report["duration"] = time.monotonic() - begin
             logging.debug("%s: done: %s", item.uid, job.report["executable"])
