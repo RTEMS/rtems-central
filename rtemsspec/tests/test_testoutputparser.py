@@ -59,7 +59,8 @@ _OUTPUT = [
     "", "*** BEGIN OF RECORDS BASE64 ZLIB ***",
     "bmZjZ1I0MEKUAAAAL29wdC9ydGVtcy9ydGVtcy02LXNhZmVzdC0xL2J1aWxkL2JzcC1xdWFsLW9u",
     "AAAAOi+8CuS72SFYlu6BAAChAcD///8AAAAA",
-    "*** END OF RECORDS BASE64 ZLIB ***"
+    "*** END OF RECORDS BASE64 ZLIB ***", "",
+    "*** GCOV INFO SHA256 y-0n6RjPnOwLUxXEKlPzx_g92tNGWHSzta_WYyGe5-g= ***"
 ]
 
 _INCOMPLETE_TEST_SUITE = {
@@ -294,9 +295,13 @@ def _report(t_begin: int = 0,
             error: int = -1) -> None:
     report = {
         "data-ranges": _data_ranges(data_begin + 1),
+        "gcov-info-hash": "y-0n6RjPnOwLUxXEKlPzx_g92tNGWHSzta_WYyGe5-g=",
+        "gcov-info-hash-calculated":
+        "y-0n6RjPnOwLUxXEKlPzx_g92tNGWHSzta_WYyGe5-g=",
         "info": _info(t_begin, t_end),
         "line-gcov-info-base64-begin": data_begin,
         "line-gcov-info-base64-end": data_begin + 3,
+        "line-gcov-info-hash": data_begin + 13,
         "line-records-base64-begin": data_begin + 4,
         "line-records-base64-end": data_begin + 7,
         "line-records-base64-zlib-begin": data_begin + 8,

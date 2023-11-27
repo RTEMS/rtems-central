@@ -71,6 +71,7 @@ _M_D = re.compile(r"M:D:(.+)")
 
 _GCOV_BEGIN = "*** BEGIN OF GCOV INFO BASE64 ***"
 _GCOV_END = "*** END OF GCOV INFO BASE64 ***"
+_GCOV_HASH = re.compile(r"\*\*\* GCOV INFO SHA256 (.*) \*\*\*")
 
 _RECORDS_BEGIN = "*** BEGIN OF RECORDS BASE64 ***"
 _RECORDS_END = "*** END OF RECORDS BASE64 ***"
@@ -116,6 +117,16 @@ class TestOutputParser:
 
     def _hash_sha256(self, line: str) -> None:
         self._hash_state.update(f"{line}\n".encode("ascii"))
+
+    def _hash_sha256_skip_one(self, line: str) -> None:
+        # pylint: disable=unused-argument
+        self.hash_line = self._hash_sha256
+
+    def _hash_finalize(self) -> str:
+        self.hash_line = self._hash_none
+        digest = base64.urlsafe_b64encode(
+            self._hash_state.digest()).decode("ascii")
+        return digest
 
     def _test_begin(self, index: int, line: str) -> bool:
         mobj = _TEST_BEGIN.match(line)
@@ -201,6 +212,7 @@ class TestOutputParser:
                 "test-cases": []
             }
             self.consume = self._test_suite_platform
+            self._hash_state = hashlib.sha256()
             self.hash_line = self._hash_sha256
             return True
         return self._extra(index, line)
@@ -503,14 +515,11 @@ class TestOutputParser:
     def _report_hash(self, index: int, line: str) -> bool:
         mobj = _TS_REPORT_HASH.match(line)
         if mobj:
-            digest = base64.urlsafe_b64encode(
-                self._hash_state.digest()).decode("ascii")
-            self._hash_state = hashlib.sha256()
-            self.data["test-suite"]["report-hash-calculated"] = digest
+            self.data["test-suite"][
+                "report-hash-calculated"] = self._hash_finalize()
             self.data["test-suite"]["report-hash"] = mobj.group(1)
             self.data["test-suite"]["line-report-hash"] = index
             self.consume = self._test_body
-            self.hash_line = self._hash_none
             return True
         return self._extra(index, line)
 
@@ -519,16 +528,27 @@ class TestOutputParser:
             self.level += 1
             self.data["line-gcov-info-base64-begin"] = index
             self.consume = self._gcov_end
+            self._hash_state = hashlib.sha256()
+            self.hash_line = self._hash_sha256_skip_one
             return True
         return False
 
     def _gcov_end(self, index: int, line: str) -> bool:
         if line in _GCOV_END:
             self.level -= 1
+            self.data["gcov-info-hash-calculated"] = self._hash_finalize()
             self.data["line-gcov-info-base64-end"] = index
             self.data["data-ranges"].append(
                 (self.data["line-gcov-info-base64-begin"] + 1, index))
             self.consume = self._extra
+            return True
+        return False
+
+    def _gcov_hash(self, index: int, line: str) -> bool:
+        mobj = _GCOV_HASH.match(line)
+        if mobj:
+            self.data["gcov-info-hash"] = mobj.group(1)
+            self.data["line-gcov-info-hash"] = index
             return True
         return False
 
@@ -570,6 +590,8 @@ class TestOutputParser:
 
     def _extra(self, index: int, line: str) -> bool:
         if self._gcov_begin(index, line):
+            return True
+        if self._gcov_hash(index, line):
             return True
         if self._records_begin(index, line):
             return True
