@@ -99,9 +99,7 @@ class RunTests(BuildItem):
 
         # Run the tests with changed executables
         if executables:
-            runner = self.input("runner")
-            assert isinstance(runner, TestRunner)
-            reports.extend(runner.run_tests(executables))
+            reports.extend(self._run_tests(executables))
 
         # Save the reports
         os.makedirs(os.path.dirname(log.file), exist_ok=True)
@@ -113,3 +111,37 @@ class RunTests(BuildItem):
                 "start-time": start_time
             }
             json.dump(data, dst, sort_keys=True, indent=2)
+
+    def _run_tests(self, executables: List[Executable]) -> List[Report]:
+        runner = self.input("runner")
+        assert isinstance(runner, TestRunner)
+        max_run_count = runner["max-retry-count-per-executable"] + 1
+        reports_by_path: Dict[str, Report] = {}
+        while executables and max_run_count:
+            for new_report in runner.run_tests(executables):
+                reports_by_path[new_report["executable"]] = new_report
+            next_executables: List[Executable] = []
+            for executable in executables:
+                report = reports_by_path.get(executable.path, None)
+                if report is None:
+                    logging.warning("%s: no report for: %s", self.uid,
+                                    executable.path)
+                    next_executables.append(executable)
+                    continue
+                if report.get("gcov-info-hash",
+                              "") != report.get("gcov-info-hash-calculated",
+                                                ""):
+                    next_executables.append(executable)
+                    logging.warning("%s: gcov info is corrupt for: %s",
+                                    self.uid, executable.path)
+                    continue
+                test_suite = report.get("test-suite", {})
+                if test_suite.get("report-hash", "") != test_suite.get(
+                        "report-hash-calculated", ""):
+                    next_executables.append(executable)
+                    logging.warning("%s: test suite report is corrupt for: %s",
+                                    self.uid, executable.path)
+                    continue
+            executables = next_executables
+            max_run_count -= 1
+        return list(reports_by_path.values())

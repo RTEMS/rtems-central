@@ -23,6 +23,7 @@ links:
   name: variant
   role: input
   uid: ../variant
+max-retry-count-per-executable: 0
 params: {}
 qdp-type: test-runner
 test-runner-type: subprocess

@@ -9,6 +9,7 @@ copyrights:
 description: Description.
 enabled-by: true
 links: []
+max-retry-count-per-executable: 0
 params:
   x: abc
 qdp-type: test-runner

@@ -7,6 +7,7 @@ enabled-by: true
 links:
 - role: proxy-member
   uid: board
+max-retry-count-per-executable: 0
 params: {}
 qdp-type: test-runner
 test-runner-type: dummy

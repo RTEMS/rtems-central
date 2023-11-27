@@ -34,13 +34,13 @@ from subprocess import run as subprocess_run
 import tarfile
 import time
 import threading
-from typing import Any, Dict, List, NamedTuple, Union
+from typing import Any, Dict, List, NamedTuple
 
 from rtemsspec.items import Item, ItemGetValueContext
 from rtemsspec.packagebuild import BuildItem, PackageBuildDirector
 from rtemsspec.testoutputparser import augment_report
 
-Report = Dict[str, Union[str, List[str]]]
+Report = Dict[str, Any]
 
 
 class Executable(NamedTuple):

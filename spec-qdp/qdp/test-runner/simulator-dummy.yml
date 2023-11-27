@@ -8,6 +8,7 @@ enabled-by:
 links:
 - role: proxy-member
   uid: simulator
+max-retry-count-per-executable: 0
 params: {}
 qdp-type: test-runner
 test-runner-type: dummy

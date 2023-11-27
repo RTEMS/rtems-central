@@ -95,9 +95,30 @@ class _TestItem(BuildItem):
 
 class _TestRunner(TestRunner):
 
+    def __init__(self, director: PackageBuildDirector, item: Item):
+        super().__init__(director, item)
+        self.run_count = 0
+
     def run_tests(self, executables: List[Executable]) -> List[Report]:
         logging.info("executables: %s", executables)
         super().run_tests(executables)
+        self.run_count += 1
+        if self.run_count == 1:
+            return []
+        if self.run_count == 2:
+            return [{
+                "executable": executables[0].path,
+                "gcov-info-hash": "a",
+                "gcov-info-hash-calculated": "b"
+            }]
+        if self.run_count == 3:
+            return [{
+                "executable": executables[0].path,
+                "test-suite": {
+                    "report-hash": "c",
+                    "report-hash-calculated": "d"
+                }
+            }]
         return [{
             "executable": executable.path,
             "executable-sha512": executable.digest
@@ -479,6 +500,9 @@ def test_packagebuild(caplog, tmpdir, monkeypatch):
     build_bsp.load()
     director.build_package(None, None)
     log = get_and_clear_log(caplog)
+    assert "no report for" in log
+    assert "gcov info is corrupt for" in log
+    assert "test suite report is corrupt for" in log
     assert (f"executables: [Executable(path='{build_bsp.directory}"
             "/a.exe', digest='z4PhNX7vuL3xVChQ1m2AB9Yg5AULVxXcg_SpIdNs6c5H0NE8"
             "XYXysP-DGNKHfuwvY7kxvUdBeoGlODJ6-SfaPg==', timeout=1800), "
